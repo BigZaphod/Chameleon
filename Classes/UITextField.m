@@ -4,6 +4,7 @@
 #import "UIWindow.h"
 #import "UIScreen.h"
 #import "UIFont.h"
+#import "UIImage.h"
 #import "UIKit+Private.h"
 #import <AppKit/AppKit.h>
 
@@ -50,8 +51,8 @@
 @end
 
 @implementation UITextField
-@synthesize delegate=_delegate, font=_font, textColor=_textColor;
-@synthesize clearButtonMode=_clearButtonMode;
+@synthesize delegate=_delegate, font=_font, textColor=_textColor, background=_background, disabledBackground=_disabledBackground;
+@synthesize clearButtonMode=_clearButtonMode, leftView=_leftView, rightView=_rightView, leftViewMode=_leftViewMode, rightViewMode=_rightViewMode;
 
 - (void)_configureTextField:(NSTextField *)textField
 {
@@ -79,6 +80,8 @@
 		self.borderStyle = UITextBorderStyleNone;
 		self.textColor = [UIColor blackColor];
 		self.clearButtonMode = UITextFieldViewModeNever;
+		self.leftViewMode = UITextFieldViewModeNever;
+		self.rightViewMode = UITextFieldViewModeNever;
 	}
 	return self;
 }
@@ -89,6 +92,10 @@
 	[_font release];
 	[_textColor release];
 	[_textField release];
+	[_leftView release];
+	[_rightView release];
+	[_background release];
+	[_disabledBackground release];
 	[super dealloc];
 }
 
@@ -356,6 +363,11 @@
 		// this is ignoring the return value.. and I don't know if this is the right spot to trigger this, but it'll work for now I suppose
 		[_delegate textFieldShouldReturn:self];
 	}
+}
+
+- (CGRect)clearButtonRectForBounds:(CGRect)bounds
+{
+	return CGRectZero;
 }
 
 @end

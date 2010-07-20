@@ -3,6 +3,7 @@
 #import "UIView.h"
 #import "UIKit+Private.h"
 #import "UINavigationItem.h"
+#import "UIBarButtonItem.h"
 
 @implementation UIViewController
 @synthesize view=_view, wantsFullScreenLayout=_wantsFullScreenLayout, title=_title, contentSizeForViewInPopover=_contentSizeForViewInPopover;
@@ -133,6 +134,12 @@
 - (void)setEditing:(BOOL)editing
 {
 	[self setEditing:editing animated:NO];
+}
+
+- (UIBarButtonItem *)editButtonItem
+{
+	// this should really return a fancy bar button item that toggles between edit/done and sends setEditing:animated: messages to this controller
+	return nil;
 }
 
 - (void)presentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated

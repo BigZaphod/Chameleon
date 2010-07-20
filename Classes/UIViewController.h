@@ -9,7 +9,7 @@ typedef enum {
 	UIModalPresentationCurrentContext,
 } UIModalPresentationStyle;
 
-@class UINavigationItem, UINavigationController;
+@class UINavigationItem, UINavigationController, UIBarButtonItem;
 
 @interface UIViewController : UIResponder {
 @private
@@ -43,6 +43,7 @@ typedef enum {
 
 - (void)setToolbarItems:(NSArray *)toolbarItems animated:(BOOL)animated;
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated;
+- (UIBarButtonItem *)editButtonItem;	// not implemented
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration;
 

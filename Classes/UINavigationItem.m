@@ -2,7 +2,7 @@
 #import "UINavigationItem.h"
 
 @implementation UINavigationItem
-@synthesize title=_title, rightBarButtonItem=_rightBarButtonItem, titleView=_titleView;
+@synthesize title=_title, rightBarButtonItem=_rightBarButtonItem, titleView=_titleView, hidesBackButton=_hidesBackButton;
 
 - (id)initWithTitle:(NSString *)theTitle
 {
@@ -26,6 +26,16 @@
 
 - (void)setRightBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated
 {
+}
+
+- (void)setHidesBackButton:(BOOL)hidesBackButton animated:(BOOL)animated
+{
+	_hidesBackButton = hidesBackButton;
+}
+
+- (void)setHidesBackButton:(BOOL)hidesBackButton
+{
+	[self setHidesBackButton:hidesBackButton animated:NO];
 }
 
 @end

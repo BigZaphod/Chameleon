@@ -69,6 +69,10 @@ typedef enum {
 - (UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier;
 - (UITableViewCell *)cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (CGRect)rectForRowAtIndexPath:(NSIndexPath *)indexPath;
+- (CGRect)rectForSection:(NSInteger)section;	// not correctly implemented
+
+- (void)insertRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation;	// not implemented
+- (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation;	// not implemented
 
 - (NSIndexPath *)indexPathForSelectedRow;
 - (void)deselectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated;

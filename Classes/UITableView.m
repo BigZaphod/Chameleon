@@ -81,6 +81,11 @@ static const CGFloat kDefaultRowHeight = 43;
 	}
 }
 
+- (CGRect)rectForSection:(NSInteger)section
+{
+	return CGRectZero;
+}
+
 - (UITableViewCell *)cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// this is allowed to return nil if the cell isn't visible and is not restricted to only returning visible cells
@@ -284,6 +289,14 @@ static const CGFloat kDefaultRowHeight = 43;
 - (void)setEditing:(BOOL)editing
 {
 	[self setEditing:editing animated:NO];
+}
+
+- (void)insertRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation
+{
+}
+
+- (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation
+{
 }
 
 @end

@@ -8,14 +8,17 @@
 	NSString *_title;
 	UIBarButtonItem *_rightBarButtonItem;
 	UIView *_titleView;
+	BOOL _hidesBackButton;
 }
 
 - (id)initWithTitle:(NSString *)title;
 - (void)setLeftBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated;
 - (void)setRightBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated;
+- (void)setHidesBackButton:(BOOL)hidesBackButton animated:(BOOL)animated;
 
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, retain) UIBarButtonItem *rightBarButtonItem;
 @property (nonatomic, retain) UIView *titleView;
+@property (nonatomic, assign) BOOL hidesBackButton;
 
 @end

@@ -4,8 +4,18 @@
 #import "UIGraphics.h"
 #import <QuartzCore/QuartzCore.h>
 
+static NSArray *CGImagesWithUIImages(NSArray *images)
+{
+	NSMutableArray *CGImages = [NSMutableArray arrayWithCapacity:[images count]];
+	for (UIImage *img in images) {
+		[CGImages addObject:(id)[img CGImage]];
+	}
+	return CGImages;
+}
+
 @implementation UIImageView
 @synthesize image=_image, animationImages=_animationImages, animationDuration=_animationDuration, highlightedImage=_highlightedImage, highlighted=_highlighted;
+@synthesize animationRepeatCount=_animationRepeatCount, highlightedAnimationImages=_highlightedAnimationImages;
 
 + (BOOL)_instanceImplementsDrawRect
 {
@@ -35,6 +45,7 @@
 	[_animationImages release];
 	[_image release];
 	[_highlightedImage release];
+	[_highlightedAnimationImages release];
 	[super dealloc];
 }
 
@@ -48,6 +59,10 @@
 	if (h != _highlighted) {
 		_highlighted = h;
 		[self setNeedsDisplay];
+
+		if ([self isAnimating]) {
+			[self startAnimating];
+		}
 	}
 }
 
@@ -117,10 +132,25 @@
 
 - (void)startAnimating
 {
+	NSArray *images = _highlighted? _highlightedAnimationImages : _animationImages;
+
+	CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"contents"];
+	animation.calculationMode = kCAAnimationDiscrete;
+	animation.duration = self.animationDuration ?: ([images count] * (1/30.0));
+	animation.repeatCount = self.animationRepeatCount ?: HUGE_VALF;
+	animation.values = CGImagesWithUIImages(images);
+
+	[self.layer addAnimation:animation forKey:@"contents"];
 }
 
 - (void)stopAnimating
 {
+	[self.layer removeAnimationForKey:@"contents"];
+}
+
+- (BOOL)isAnimating
+{
+	return ([self.layer animationForKey:@"contents"] != nil);
 }
 
 @end
