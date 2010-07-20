@@ -150,31 +150,43 @@ static const CGFloat kDefaultRowHeight = 43;
 - (void)_layoutCells
 {
 	NSMutableDictionary *newActiveCells = [NSMutableDictionary dictionaryWithCapacity:[_activeCells count]];
-	NSArray *indexesSortedByOffset = [_cellOffsets keysSortedByValueUsingSelector:@selector(compare:)];
-	const CGFloat currentOffset = self.contentOffset.y;
-	const CGFloat maxOffset = currentOffset + self.bounds.size.height;
-	
-	for (NSIndexPath *index in indexesSortedByOffset) {
-		const CGFloat cellOffset = [[_cellOffsets objectForKey:index] floatValue];
-		const CGFloat cellHeight = [[_cellHeights objectForKey:index] floatValue];
+	const CGRect bounds = self.bounds;
+	const CGFloat boundsWidth = bounds.size.width-_UIScrollViewScrollerSize-self.scrollIndicatorInsets.right;
 
-		if (cellOffset > maxOffset) {
-			break;
-		} else if ((cellOffset+cellHeight) >= currentOffset) {
-			UITableViewCell *theCell = [_activeCells objectForKey:index];
+	_tableHeaderView.frame = CGRectMake(0,0,boundsWidth,_tableHeaderView.frame.size.height);
 
-			if (!theCell) {
-				theCell = [self.dataSource tableView:self cellForRowAtIndexPath:index];
-			} else {
-				[_activeCells removeObjectForKey:index];
-			}
-			
-			if (theCell && cellHeight > 0) {
-				theCell.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-				theCell.frame = [self rectForRowAtIndexPath:index];
-				[theCell _setSeparatorStyle:_separatorStyle color:_separatorColor];
-				[self addSubview:theCell];
-				[newActiveCells setObject:theCell forKey:index];
+	if ([_cellOffsets count] == 0) {
+		_tableFooterView.frame = CGRectMake(0,_tableHeaderView.frame.size.height,boundsWidth,_tableFooterView.frame.size.height);
+	} else {
+		NSArray *indexesSortedByOffset = [_cellOffsets keysSortedByValueUsingSelector:@selector(compare:)];
+		const CGFloat currentOffset = self.contentOffset.y;
+		const CGFloat maxOffset = currentOffset + bounds.size.height;
+		
+		CGRect lastCellRect = [self rectForRowAtIndexPath:[indexesSortedByOffset lastObject]];
+		_tableFooterView.frame = CGRectMake(0,lastCellRect.origin.y+lastCellRect.size.height,boundsWidth,_tableFooterView.frame.size.height);
+		
+		for (NSIndexPath *index in indexesSortedByOffset) {
+			const CGFloat cellOffset = [[_cellOffsets objectForKey:index] floatValue];
+			const CGFloat cellHeight = [[_cellHeights objectForKey:index] floatValue];
+
+			if (cellOffset > maxOffset) {
+				break;
+			} else if ((cellOffset+cellHeight) >= currentOffset) {
+				UITableViewCell *theCell = [_activeCells objectForKey:index];
+
+				if (!theCell) {
+					theCell = [self.dataSource tableView:self cellForRowAtIndexPath:index];
+				} else {
+					[_activeCells removeObjectForKey:index];
+				}
+				
+				if (theCell && cellHeight > 0) {
+					theCell.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+					theCell.frame = [self rectForRowAtIndexPath:index];
+					[theCell _setSeparatorStyle:_separatorStyle color:_separatorColor];
+					[self addSubview:theCell];
+					[newActiveCells setObject:theCell forKey:index];
+				}
 			}
 		}
 	}
@@ -190,7 +202,7 @@ static const CGFloat kDefaultRowHeight = 43;
 {
 	[_cellOffsets removeAllObjects];
 	
-	CGFloat offset = 0;
+	CGFloat offset = _tableHeaderView.frame.size.height;
 	
 	for (NSIndexPath *index in [[_cellHeights allKeys] sortedArrayUsingSelector:@selector(compare:)] ) {
 		[_cellOffsets setObject:[NSNumber numberWithFloat:offset] forKey:index];
@@ -201,7 +213,33 @@ static const CGFloat kDefaultRowHeight = 43;
 			offset += 1;
 	}
 	
+	offset += _tableFooterView.frame.size.height;
+	
 	self.contentSize = CGSizeMake(0,offset);
+
+	[self setNeedsLayout];
+}
+
+- (void)setTableHeaderView:(UIView *)newHeader
+{
+	if (newHeader != _tableHeaderView) {
+		[_tableHeaderView removeFromSuperview];
+		[_tableHeaderView release];
+		_tableHeaderView = [newHeader retain];
+		[self _recalculateCellOffsets];
+		[self addSubview:_tableHeaderView];
+	}
+}
+
+- (void)setTableFooterView:(UIView *)newFooter
+{
+	if (newFooter != _tableFooterView) {
+		[_tableFooterView removeFromSuperview];
+		[_tableFooterView release];
+		_tableFooterView = [newFooter retain];
+		[self _recalculateCellOffsets];
+		[self addSubview:_tableFooterView];
+	}
 }
 
 - (NSInteger)numberOfSections
@@ -235,7 +273,6 @@ static const CGFloat kDefaultRowHeight = 43;
 	}
 	
 	[self _recalculateCellOffsets];
-	[self _layoutCells];
 	_needsReload = NO;
 }
 
@@ -243,10 +280,8 @@ static const CGFloat kDefaultRowHeight = 43;
 {
 	if (_needsReload) {
 		[self reloadData];
-	} else {
-		[self _layoutCells];
 	}
-	
+	[self _layoutCells];
 	[super layoutSubviews];
 }
 
