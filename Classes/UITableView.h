@@ -30,6 +30,16 @@ typedef enum {
 	UITableViewScrollPositionBottom
 } UITableViewScrollPosition;
 
+typedef enum {
+	UITableViewRowAnimationFade,
+	UITableViewRowAnimationRight,
+	UITableViewRowAnimationLeft,
+	UITableViewRowAnimationTop,
+	UITableViewRowAnimationBottom,
+	UITableViewRowAnimationNone,
+	UITableViewRowAnimationMiddle
+} UITableViewRowAnimation;
+
 @interface UITableView : UIScrollView {
 @private
 	UITableViewStyle _style;
@@ -44,6 +54,7 @@ typedef enum {
 	UIView *_tableHeaderView;
 	UIView *_tableFooterView;
 	BOOL _allowsSelection;
+	BOOL _editing;
 }
 
 - (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style;
@@ -65,6 +76,8 @@ typedef enum {
 - (void)scrollToNearestSelectedRowAtScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated;
 - (void)scrollToRowAtIndexPath:(NSIndexPath *)indexPath atScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated;
 
+- (void)setEditing:(BOOL)editing animated:(BOOL)animate;
+
 @property (nonatomic, readonly) UITableViewStyle style;
 @property (nonatomic, assign) id<UITableViewDelegate> delegate;
 @property (nonatomic, assign) id<UITableViewDataSource> dataSource;
@@ -74,6 +87,7 @@ typedef enum {
 @property (nonatomic, retain) UIView *tableHeaderView;
 @property (nonatomic, retain) UIView *tableFooterView;
 @property (nonatomic) BOOL allowsSelection;
+@property (nonatomic, getter=isEditing) BOOL editing;
 
 @end
 

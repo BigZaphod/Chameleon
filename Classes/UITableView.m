@@ -11,7 +11,7 @@ static const CGFloat kDefaultRowHeight = 43;
 
 @implementation UITableView
 @synthesize style=_style, dataSource=_dataSource, rowHeight=_rowHeight, separatorStyle=_separatorStyle, separatorColor=_separatorColor;
-@synthesize tableHeaderView=_tableHeaderView, tableFooterView=_tableFooterView, allowsSelection=_allowsSelection;
+@synthesize tableHeaderView=_tableHeaderView, tableFooterView=_tableFooterView, allowsSelection=_allowsSelection, editing=_editing;
 @dynamic delegate;
 
 - (id)initWithFrame:(CGRect)frame
@@ -274,6 +274,16 @@ static const CGFloat kDefaultRowHeight = 43;
 - (UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier
 {
 	return nil;
+}
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animate
+{
+	_editing = editing;
+}
+
+- (void)setEditing:(BOOL)editing
+{
+	[self setEditing:editing animated:NO];
 }
 
 @end

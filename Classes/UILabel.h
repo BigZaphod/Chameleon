@@ -19,6 +19,7 @@
 	UIBaselineAdjustment _baselineAdjustment;
 	BOOL _adjustsFontSizeToFitWidth;
 	CGFloat _minimumFontSize;
+	BOOL _highlighted;
 }
 
 @property (nonatomic, copy) NSString *text;
@@ -34,6 +35,7 @@
 @property (nonatomic) UIBaselineAdjustment baselineAdjustment;	// not implemented
 @property (nonatomic) BOOL adjustsFontSizeToFitWidth;			// not implemented
 @property (nonatomic) CGFloat minimumFontSize;					// not implemented
+@property (nonatomic, getter=isHighlighted) BOOL highlighted;	// not implemented
 
 
 - (CGRect)textRectForBounds:(CGRect)bounds limitedToNumberOfLines:(NSInteger)numberOfLines;

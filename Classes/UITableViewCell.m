@@ -80,6 +80,16 @@
 	[self setSelected:selected animated:NO];
 }
 
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
+{
+	_highlighted = highlighted;
+}
+
+- (void)setHighlighted:(BOOL)highlighted
+{
+	[self setHighlighted:highlighted animated:NO];
+}
+
 - (void)setBackgroundView:(UIView *)theBackgroundView
 {
 	if (theBackgroundView != _backgroundView) {

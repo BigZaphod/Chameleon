@@ -27,6 +27,12 @@ typedef enum {
 	UITableViewCellSelectionStyleGray
 } UITableViewCellSelectionStyle;
 
+typedef enum {
+	UITableViewCellEditingStyleNone,
+	UITableViewCellEditingStyleDelete,
+	UITableViewCellEditingStyleInsert
+} UITableViewCellEditingStyle;
+
 @class _UITableViewCellSeparator, UILabel, UIImageView;
 
 @interface UITableViewCell : UIView {
@@ -47,6 +53,7 @@ typedef enum {
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated;
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated;
 
 @property (nonatomic, readonly, retain) UIView *contentView;
 @property (nonatomic, readonly, retain) UILabel *textLabel;

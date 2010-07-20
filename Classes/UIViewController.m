@@ -6,7 +6,7 @@
 
 @implementation UIViewController
 @synthesize view=_view, wantsFullScreenLayout=_wantsFullScreenLayout, title=_title, contentSizeForViewInPopover=_contentSizeForViewInPopover;
-@synthesize modalInPopover=_modalInPopover, toolbarItems=_toolbarItems, modalPresentationStyle=_modalPresentationStyle;
+@synthesize modalInPopover=_modalInPopover, toolbarItems=_toolbarItems, modalPresentationStyle=_modalPresentationStyle, editing=_editing;
 
 - (id)init
 {
@@ -123,6 +123,16 @@
 - (void)setToolbarItems:(NSArray *)theToolbarItems
 {
 	[self setToolbarItems:theToolbarItems animated:NO];
+}
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated
+{
+	_editing = editing;
+}
+
+- (void)setEditing:(BOOL)editing
+{
+	[self setEditing:editing animated:NO];
 }
 
 - (void)presentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated

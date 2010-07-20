@@ -21,6 +21,7 @@ typedef enum {
 	UINavigationItem *_navigationItem;
 	NSArray *_toolbarItems;
 	UIModalPresentationStyle _modalPresentationStyle;
+	BOOL _editing;
 }
 
 - (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)nibBundle;	// won't load a nib no matter what you do!
@@ -41,7 +42,7 @@ typedef enum {
 - (void)didReceiveMemoryWarning;	// doesn't do anything at all right.
 
 - (void)setToolbarItems:(NSArray *)toolbarItems animated:(BOOL)animated;
-
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated;
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration;
 
@@ -58,5 +59,6 @@ typedef enum {
 @property (nonatomic, readonly, retain) UINavigationController *navigationController;
 @property (nonatomic, retain) NSArray *toolbarItems;
 @property (nonatomic, assign) UIModalPresentationStyle modalPresentationStyle;
+@property (nonatomic, getter=isEditing) BOOL editing;
 
 @end
