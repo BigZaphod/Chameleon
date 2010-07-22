@@ -2,6 +2,7 @@
 #import "UISplitViewController.h"
 #import "UIView.h"
 #import "UITouch.h"
+#import "UIColor.h"
 #import <AppKit/NSCursor.h>
 
 static const CGFloat SplitterPadding = 3;
@@ -23,6 +24,7 @@ static const CGFloat SplitterPadding = 3;
 	if ((self=[super initWithFrame:CGRectZero])) {
 		splitViewController = theController;
 		leftWidth = 320;
+		self.backgroundColor = [UIColor blackColor];
 	}
 	return self;
 }
