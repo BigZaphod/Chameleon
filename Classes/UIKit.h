@@ -50,3 +50,4 @@
 #import "UIGestureRecognizer.h"
 #import "UITapGestureRecognizer.h"
 #import "UILongPressGestureRecognizer.h"
+#import "UISplitViewController.h"

@@ -11,8 +11,10 @@
 
 - (void)_setTouch:(UITouch *)theTouch
 {
-	[_touch autorelease];
-	_touch = [theTouch retain];
+	if (theTouch != _touch) {
+		[_touch release];
+		_touch = [theTouch retain];
+	}
 }
 
 - (NSEvent *)_NSEvent
@@ -22,8 +24,10 @@
 
 - (void)_setNSEvent:(NSEvent *)theEvent
 {
-	[_event autorelease];
-	_event = [theEvent retain];
+	if (theEvent != _event) {
+		[_event release];
+		_event = [theEvent retain];
+	}
 }
 
 - (void)dealloc
@@ -50,7 +54,16 @@
 
 - (UIEventType)type
 {
-	return UIEventTypeTouches;
+	switch ([_event type]) {
+		case NSScrollWheel:
+			return _UIEventTypeMouseScroll;
+
+		case NSMouseMoved:
+			return _UIEventTypeMouseMoved;
+			
+		default:
+			return UIEventTypeTouches;
+	}
 }
 
 - (UIEventSubtype)subtype

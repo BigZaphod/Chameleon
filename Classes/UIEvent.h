@@ -4,6 +4,8 @@
 typedef enum {
 	UIEventTypeTouches,
 	UIEventTypeMotion,
+	_UIEventTypeMouseScroll,
+	_UIEventTypeMouseMoved,
 } UIEventType;
 
 typedef enum {

@@ -60,14 +60,47 @@
 	return nil;
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event			{}
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event			{}
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event			{}
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event		{}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+	[[self nextResponder] touchesBegan:touches withEvent:event];
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+	[[self nextResponder] touchesMoved:touches withEvent:event];
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+	[[self nextResponder] touchesEnded:touches withEvent:event];
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+	[[self nextResponder] touchesCancelled:touches withEvent:event];
+}
+
 - (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event		{}
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event		{}
 - (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event	{}
 
-- (void)_scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event			{}
+@end
+
+@implementation UIResponder (OSXExtensions)
+
+- (void)scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event
+{
+	[[self nextResponder] scrollWheelMoved:delta withEvent:event];
+}
+
+- (void)mouseMoved:(CGPoint)delta withEvent:(UIEvent *)event
+{
+}
+
+- (id)mouseCursorForEvent:(UIEvent *)event
+{
+	return nil;
+}
 
 @end

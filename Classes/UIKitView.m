@@ -38,6 +38,19 @@
 	[_screen _setNSView:self.superview? self : nil];
 }
 
+- (void)updateTrackingAreas
+{
+	[self removeTrackingArea:_trackingArea];
+	[_trackingArea release];
+	_trackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds options:NSTrackingCursorUpdate|NSTrackingMouseMoved|NSTrackingInVisibleRect|NSTrackingActiveInActiveApp owner:self userInfo:nil];
+	[self addTrackingArea:_trackingArea];
+}
+
+- (void)mouseMoved:(NSEvent *)theEvent
+{
+	[[UIApplication sharedApplication] _screen:_screen didReceiveNSEvent:theEvent];
+}
+
 - (void)mouseDown:(NSEvent *)theEvent
 {
 	[[UIApplication sharedApplication] _screen:_screen didReceiveNSEvent:theEvent];

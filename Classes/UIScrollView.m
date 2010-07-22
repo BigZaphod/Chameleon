@@ -186,7 +186,7 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 	return (_draggingScroller != nil);
 }
 
-- (void)_scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event
+- (void)scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event
 {
 	if (self.scrollEnabled) {
 		// Increasing the delta because it just seems to feel better to me right now.

@@ -238,6 +238,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 {
 	NSSet *allTouches = [event allTouches];
 	UITouch *touch = (UITouch *)[allTouches anyObject];
+	const CGPoint delta = CGPointMake([[event _NSEvent] deltaX],[[event _NSEvent] deltaY]);
 	
 	if (event.type == UIEventTypeTouches) {
 		switch (touch.phase) {
@@ -253,15 +254,16 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 			case UITouchPhaseCancelled:
 				[touch.view touchesCancelled:allTouches withEvent:event];
 				break;
-			case _UITouchPhaseScrolled:
-			{
-				const CGPoint delta = CGPointMake([[event _NSEvent] deltaX],[[event _NSEvent] deltaY]);
-				if ((delta.x != 0 || delta.y != 0) && [touch.view respondsToSelector:@selector(_scrollWheelMoved:withEvent:)]) {
-					[touch.view _scrollWheelMoved:delta withEvent:event];
-				}
-				break;
-			}
 		}
+	} else if (event.type == _UIEventTypeMouseScroll) {
+		[touch.view scrollWheelMoved:delta withEvent:event];
+	} else if (event.type == _UIEventTypeMouseMoved) {
+		[touch.view mouseMoved:delta withEvent:event];
+	}
+
+	NSCursor *newCursor = [touch.view mouseCursorForEvent:event] ?: [NSCursor arrowCursor];
+	if ([NSCursor currentCursor] != newCursor) {
+		[newCursor set];
 	}
 }
 

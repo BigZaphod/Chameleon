@@ -35,8 +35,8 @@
 			newTapCount = [theEvent clickCount];
 			break;
 			
-		case NSScrollWheel:
-			newPhase = _UITouchPhaseScrolled;
+		default:
+			newPhase = UITouchPhaseStationary;
 			break;
 	}
 	

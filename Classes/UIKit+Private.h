@@ -1,7 +1,6 @@
 //  Created by Sean Heber on 5/27/10.
 #import "UIApplication.h"
 #import "UIWindow.h"
-#import "UIResponder.h"
 #import "UIEvent.h"
 #import "UITouch.h"
 #import "UIScreen.h"
@@ -25,10 +24,6 @@
 - (void)_makeVisible;
 - (UIResponder *)_firstResponder;
 - (void)_setFirstResponder:(UIResponder *)newFirstResponder;
-@end
-
-@interface UIResponder (Private)
-- (void)_scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event;
 @end
 
 @interface UIEvent (Private)

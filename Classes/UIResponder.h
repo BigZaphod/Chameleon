@@ -24,3 +24,9 @@
 @property (readonly) NSUndoManager *undoManager;
 
 @end
+
+@interface UIResponder (OSXExtensions)
+- (void)scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event;
+- (void)mouseMoved:(CGPoint)delta withEvent:(UIEvent *)event;
+- (id)mouseCursorForEvent:(UIEvent *)event;	// return an NSCursor if you want to modify it, return nil to use default
+@end

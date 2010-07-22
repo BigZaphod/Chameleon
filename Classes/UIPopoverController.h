@@ -12,7 +12,7 @@ enum {
 };
 typedef NSUInteger UIPopoverArrowDirection;
 
-@class UIView, UIViewController, UIPopoverController;
+@class UIView, UIViewController, UIPopoverController, UIBarButtonItem;
 
 @protocol UIPopoverControllerDelegate <NSObject>
 @optional
@@ -30,6 +30,7 @@ typedef NSUInteger UIPopoverArrowDirection;
 - (id)initWithContentViewController:(UIViewController *)viewController;
 
 - (void)presentPopoverFromRect:(CGRect)rect inView:(UIView *)view permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated;
+- (void)presentPopoverFromBarButtonItem:(UIBarButtonItem *)item permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated;
 - (void)dismissPopoverAnimated:(BOOL)animated;
 
 @property (nonatomic, assign) id <UIPopoverControllerDelegate> delegate;

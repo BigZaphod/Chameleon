@@ -214,6 +214,7 @@ static UIApplication *_theApplication = nil;
 			break;
 
 		case NSScrollWheel:
+		case NSMouseMoved:
 			if (![_currentEvent _touch]) {
 				[self _beginNewTouchForEvent:_currentEvent atScreen:theScreen location:clickPoint];
 				[self sendEvent:_currentEvent];

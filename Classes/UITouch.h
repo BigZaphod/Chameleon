@@ -7,7 +7,6 @@ typedef enum {
 	UITouchPhaseStationary,
 	UITouchPhaseEnded,
 	UITouchPhaseCancelled,
-	_UITouchPhaseScrolled,
 } UITouchPhase;
 
 @class UIView, UIWindow;

@@ -594,31 +594,6 @@ static BOOL _animationsEnabled = YES;
 	}
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-	[[self nextResponder] touchesBegan:touches withEvent:event];
-}
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-	[[self nextResponder] touchesMoved:touches withEvent:event];
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-	[[self nextResponder] touchesEnded:touches withEvent:event];
-}
-
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
-{
-	[[self nextResponder] touchesCancelled:touches withEvent:event];
-}
-
-- (void)_scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event
-{
-	[[self nextResponder] _scrollWheelMoved:delta withEvent:event];
-}
-
 - (void)setContentMode:(UIViewContentMode)mode
 {
 	if (mode != _contentMode) {

@@ -5,6 +5,7 @@
 
 @interface UIKitView : NSView {
 	UIScreen *_screen;
+	id _trackingArea;
 }
 
 @property (nonatomic, retain, readonly) UIScreen *screen;

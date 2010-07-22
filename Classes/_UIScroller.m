@@ -224,7 +224,7 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 }
 
 /*
-- (void)_scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event
+- (void)scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event
 {
 	if (orientation == _UIScrollerOrientationVertical) {
 		[self setContentOffset:contentOffset-delta.y];
