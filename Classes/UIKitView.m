@@ -41,6 +41,11 @@
 	[self setWantsLayer:YES];
 }
 
+- (BOOL)isOpaque
+{
+	return YES;
+}
+
 - (BOOL)isFlipped
 {
 	return YES;
