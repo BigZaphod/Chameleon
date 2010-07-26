@@ -698,6 +698,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = UIKit;
+				SYMROOT = ../build;
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -716,6 +717,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = UIKit;
+				SYMROOT = ../build;
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
