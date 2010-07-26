@@ -5,7 +5,7 @@
 #import "UIKit+Private.h"
 
 @implementation UIKitView
-@synthesize screen=_screen;
+@synthesize UIScreen=_screen;
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -20,7 +20,20 @@
 - (void)dealloc
 {
 	[_screen release];
+	[_mainWindow release];
 	[super dealloc];
+}
+
+- (UIWindow *)UIWindow
+{
+	if (!_mainWindow) {
+		_mainWindow = [(UIWindow *)[UIWindow alloc] initWithFrame:_screen.bounds];
+		_mainWindow.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		_mainWindow.screen = _screen;
+		[_mainWindow makeKeyAndVisible];
+	}
+	
+	return _mainWindow;
 }
 
 - (void)awakeFromNib
