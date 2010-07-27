@@ -97,9 +97,9 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
 {
 	UIImage *sourceImage = (_highlighted && _highlightedImage)? _highlightedImage : _image;
 	UIImage *displayImage = nil;
+	const CGRect bounds = self.bounds;
 	
-	if (self._hasResizableImage) {
-		CGRect bounds = self.bounds;
+	if (self._hasResizableImage && bounds.size.width > 0 && bounds.size.height > 0) {
 		UIGraphicsBeginImageContext(bounds.size);
 		[sourceImage drawInRect:bounds];
 		displayImage = UIGraphicsGetImageFromCurrentImageContext();

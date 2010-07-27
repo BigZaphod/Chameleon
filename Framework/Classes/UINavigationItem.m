@@ -1,8 +1,10 @@
 //  Created by Sean Heber on 6/25/10.
 #import "UINavigationItem.h"
+#import "UIBarButtonItem.h"
 
 @implementation UINavigationItem
 @synthesize title=_title, rightBarButtonItem=_rightBarButtonItem, titleView=_titleView, hidesBackButton=_hidesBackButton;
+@synthesize leftBarButtonItem=_leftBarButtonItem, backBarButtonItem=_backBarButtonItem;
 
 - (id)initWithTitle:(NSString *)theTitle
 {
@@ -14,6 +16,8 @@
 
 - (void)dealloc
 {
+	[_backBarButtonItem release];
+	[_leftBarButtonItem release];
 	[_rightBarButtonItem release];
 	[_title release];
 	[_titleView release];
@@ -36,6 +40,15 @@
 - (void)setHidesBackButton:(BOOL)hidesBackButton
 {
 	[self setHidesBackButton:hidesBackButton animated:NO];
+}
+
+- (UIBarButtonItem *)backBarButtonItem
+{
+	if (_backBarButtonItem) {
+		return _backBarButtonItem;
+	} else {
+		return [[[UIBarButtonItem alloc] initWithTitle:(self.title ?: @"Back") style:UIBarButtonItemStylePlain target:nil action:nil] autorelease];
+	}
 }
 
 @end

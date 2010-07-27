@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		141927A211F8A88E00051ABD /* UISplitViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 141927A011F8A88E00051ABD /* UISplitViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		141927A311F8A88E00051ABD /* UISplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 141927A111F8A88E00051ABD /* UISplitViewController.m */; };
+		1464960B11FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */; };
+		1464960C11FF7AE500ECEC7A /* <UINavigationBar> back.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */; };
+		1464960D11FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */; };
+		1464960E11FF7AE500ECEC7A /* <UINavigationBar> button.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */; };
 		14CC83B311EFA8AF005988CC /* _UIImageTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC833D11EFA8AF005988CC /* _UIImageTools.h */; };
 		14CC83B411EFA8AF005988CC /* _UIImageTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC833E11EFA8AF005988CC /* _UIImageTools.m */; };
 		14CC83B511EFA8AF005988CC /* _UINinePartImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC833F11EFA8AF005988CC /* _UINinePartImage.h */; };
@@ -146,6 +150,10 @@
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		141927A011F8A88E00051ABD /* UISplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UISplitViewController.h; path = Classes/UISplitViewController.h; sourceTree = "<group>"; };
 		141927A111F8A88E00051ABD /* UISplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UISplitViewController.m; path = Classes/UISplitViewController.m; sourceTree = "<group>"; };
+		1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> back-highlighted.png"; path = "Resources/<UINavigationBar> back-highlighted.png"; sourceTree = "<group>"; };
+		1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> back.png"; path = "Resources/<UINavigationBar> back.png"; sourceTree = "<group>"; };
+		1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> button-highlighted.png"; path = "Resources/<UINavigationBar> button-highlighted.png"; sourceTree = "<group>"; };
+		1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> button.png"; path = "Resources/<UINavigationBar> button.png"; sourceTree = "<group>"; };
 		14CC833D11EFA8AF005988CC /* _UIImageTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _UIImageTools.h; path = Classes/_UIImageTools.h; sourceTree = "<group>"; };
 		14CC833E11EFA8AF005988CC /* _UIImageTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _UIImageTools.m; path = Classes/_UIImageTools.m; sourceTree = "<group>"; };
 		14CC833F11EFA8AF005988CC /* _UINinePartImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _UINinePartImage.h; path = Classes/_UINinePartImage.h; sourceTree = "<group>"; };
@@ -328,6 +336,10 @@
 		089C1665FE841158C02AAC07 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */,
+				1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */,
+				1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */,
+				1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */,
 				14CC842911EFA8BA005988CC /* <_UIScroller> horizontal-knob-dark.png */,
 				14CC842A11EFA8BA005988CC /* <_UIScroller> horizontal-track-dark.png */,
 				14CC842B11EFA8BA005988CC /* <_UIScroller> vertical-knob-dark.png */,
@@ -607,6 +619,10 @@
 				14CC843611EFA8BA005988CC /* <UIRoundedRectButton> normal.png in Resources */,
 				14CC843711EFA8BA005988CC /* <UIScreen> grabber.png in Resources */,
 				14CC843811EFA8BA005988CC /* <UIScrollView> grabber-dark.png in Resources */,
+				1464960B11FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png in Resources */,
+				1464960C11FF7AE500ECEC7A /* <UINavigationBar> back.png in Resources */,
+				1464960D11FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png in Resources */,
+				1464960E11FF7AE500ECEC7A /* <UINavigationBar> button.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

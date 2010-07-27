@@ -204,7 +204,7 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 
 - (CGRect)titleRectForContentRect:(CGRect)contentRect
 {
-	return contentRect;
+	return UIEdgeInsetsInsetRect(contentRect,_titleEdgeInsets);
 }
 
 - (CGRect)imageRectForContentRect:(CGRect)contentRect
@@ -227,6 +227,22 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 {
 	[self _updateContent];
 	[super _stateDidChange];
+}
+
+- (CGSize)sizeThatFits:(CGSize)size
+{
+	// this needs to take into account the various insets and stuff, I suspect.. and maybe the image?
+	// will have to do a fair bit of reverse engineering to see how the real UIKit does this, if it is needed.
+
+	size.width -= _titleEdgeInsets.left + _titleEdgeInsets.right;
+	size.height -= _titleEdgeInsets.top + _titleEdgeInsets.bottom;
+	
+	CGSize fitSize = [[self titleForState:UIControlStateNormal] sizeWithFont:_titleLabel.font constrainedToSize:size];
+	
+	fitSize.width += _titleEdgeInsets.left + _titleEdgeInsets.right;
+	fitSize.height += _titleEdgeInsets.top + _titleEdgeInsets.bottom;
+	
+	return fitSize;
 }
 
 @end
