@@ -17,7 +17,7 @@ NSString *const UITrackingRunLoopMode = @"UITrackingRunLoopMode";
 static UIApplication *_theApplication = nil;
 
 @implementation UIApplication
-@synthesize keyWindow=_keyWindow;
+@synthesize keyWindow=_keyWindow, delegate=_delegate;
 
 + (void)initialize
 {
@@ -45,6 +45,11 @@ static UIApplication *_theApplication = nil;
 	[_currentEvent release];
 	[_visibleWindows release];
 	[super dealloc];
+}
+
+- (UIResponder *)nextResponder
+{
+	return _delegate;
 }
 
 - (NSTimeInterval)statusBarOrientationAnimationDuration

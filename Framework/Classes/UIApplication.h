@@ -29,11 +29,15 @@ typedef enum {
 
 @class UIWindow;
 
+@protocol UIApplicationDelegate <NSObject>
+@end
+
 @interface UIApplication : UIResponder {
 @private
 	UIEvent *_currentEvent;
 	__weak UIWindow *_keyWindow;
 	NSMutableSet *_visibleWindows;
+	id<UIApplicationDelegate> _delegate;
 }
 
 + (UIApplication *)sharedApplication;
@@ -51,5 +55,6 @@ typedef enum {
 @property (nonatomic, getter=isNetworkActivityIndicatorVisible) BOOL networkActivityIndicatorVisible;	// does nothing, always returns NO
 @property (nonatomic) UIInterfaceOrientation statusBarOrientation;
 @property (nonatomic, readonly) NSTimeInterval statusBarOrientationAnimationDuration;
+@property (nonatomic, assign) id<UIApplicationDelegate> delegate;
 
 @end
