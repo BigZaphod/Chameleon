@@ -127,13 +127,15 @@ static UIApplication *_theApplication = nil;
 		// is the first UIResponder (including the UIControl itself) that responds to the action. It starts with the UIControl (sender) and not with
 		// whatever UIResponder may have been set with becomeFirstResponder.
 		
-		UIResponder *responder = sender;
+		id responder = sender;
 		while (responder) {
 			if ([responder respondsToSelector:action]) {
 				target = responder;
 				break;
-			} else {
+			} else if ([responder respondsToSelector:@selector(nextResponder)]) {
 				responder = [responder nextResponder];
+			} else {
+				responder = nil;
 			}
 		}
 	}
