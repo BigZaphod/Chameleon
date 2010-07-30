@@ -51,3 +51,4 @@
 #import "UITapGestureRecognizer.h"
 #import "UILongPressGestureRecognizer.h"
 #import "UISplitViewController.h"
+#import "UITabBarController.h"

@@ -13,7 +13,7 @@
 		1464960C11FF7AE500ECEC7A /* <UINavigationBar> back.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */; };
 		1464960D11FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */; };
 		1464960E11FF7AE500ECEC7A /* <UINavigationBar> button.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */; };
-		14B1140812033FA6009D9376 /* UITabBarController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14B1140612033FA6009D9376 /* UITabBarController.h */; };
+		14B1140812033FA6009D9376 /* UITabBarController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14B1140612033FA6009D9376 /* UITabBarController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14B1140912033FA6009D9376 /* UITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14B1140712033FA6009D9376 /* UITabBarController.m */; };
 		14CC83B311EFA8AF005988CC /* _UIImageTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC833D11EFA8AF005988CC /* _UIImageTools.h */; };
 		14CC83B411EFA8AF005988CC /* _UIImageTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC833E11EFA8AF005988CC /* _UIImageTools.m */; };
