@@ -13,6 +13,8 @@
 		1464960C11FF7AE500ECEC7A /* <UINavigationBar> back.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */; };
 		1464960D11FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */; };
 		1464960E11FF7AE500ECEC7A /* <UINavigationBar> button.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */; };
+		14B1140812033FA6009D9376 /* UITabBarController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14B1140612033FA6009D9376 /* UITabBarController.h */; };
+		14B1140912033FA6009D9376 /* UITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14B1140712033FA6009D9376 /* UITabBarController.m */; };
 		14CC83B311EFA8AF005988CC /* _UIImageTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC833D11EFA8AF005988CC /* _UIImageTools.h */; };
 		14CC83B411EFA8AF005988CC /* _UIImageTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC833E11EFA8AF005988CC /* _UIImageTools.m */; };
 		14CC83B511EFA8AF005988CC /* _UINinePartImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC833F11EFA8AF005988CC /* _UINinePartImage.h */; };
@@ -154,6 +156,8 @@
 		1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> back.png"; path = "Resources/<UINavigationBar> back.png"; sourceTree = "<group>"; };
 		1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> button-highlighted.png"; path = "Resources/<UINavigationBar> button-highlighted.png"; sourceTree = "<group>"; };
 		1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> button.png"; path = "Resources/<UINavigationBar> button.png"; sourceTree = "<group>"; };
+		14B1140612033FA6009D9376 /* UITabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UITabBarController.h; path = Classes/UITabBarController.h; sourceTree = "<group>"; };
+		14B1140712033FA6009D9376 /* UITabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UITabBarController.m; path = Classes/UITabBarController.m; sourceTree = "<group>"; };
 		14CC833D11EFA8AF005988CC /* _UIImageTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _UIImageTools.h; path = Classes/_UIImageTools.h; sourceTree = "<group>"; };
 		14CC833E11EFA8AF005988CC /* _UIImageTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _UIImageTools.m; path = Classes/_UIImageTools.m; sourceTree = "<group>"; };
 		14CC833F11EFA8AF005988CC /* _UINinePartImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _UINinePartImage.h; path = Classes/_UINinePartImage.h; sourceTree = "<group>"; };
@@ -451,6 +455,8 @@
 				141927A111F8A88E00051ABD /* UISplitViewController.m */,
 				14CC839811EFA8AF005988CC /* UIStringDrawing.h */,
 				14CC839911EFA8AF005988CC /* UIStringDrawing.m */,
+				14B1140612033FA6009D9376 /* UITabBarController.h */,
+				14B1140712033FA6009D9376 /* UITabBarController.m */,
 				14CC839A11EFA8AF005988CC /* UITableView.h */,
 				14CC839B11EFA8AF005988CC /* UITableView.m */,
 				14CC839C11EFA8AF005988CC /* UITableViewCell.h */,
@@ -557,6 +563,7 @@
 				14CC842511EFA8AF005988CC /* UIWebView.h in Headers */,
 				14CC842711EFA8AF005988CC /* UIWindow.h in Headers */,
 				141927A211F8A88E00051ABD /* UISplitViewController.h in Headers */,
+				14B1140812033FA6009D9376 /* UITabBarController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -691,6 +698,7 @@
 				14CC842611EFA8AF005988CC /* UIWebView.m in Sources */,
 				14CC842811EFA8AF005988CC /* UIWindow.m in Sources */,
 				141927A311F8A88E00051ABD /* UISplitViewController.m in Sources */,
+				14B1140912033FA6009D9376 /* UITabBarController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
