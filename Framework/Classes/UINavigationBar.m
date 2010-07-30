@@ -116,6 +116,7 @@ static UIImage *BackButtonHighlightedImage = nil;
 		[self addSubview:_leftView];
 
 		_rightView = [isa _buttonWithBarButtonItem:topItem.rightBarButtonItem];
+		_rightView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		CGSize rightSize = [_rightView sizeThatFits:CGSizeMake(maxButtonWidth,maxButtonHeight)];
 		rightSize.height = maxButtonHeight;
 		rightSize.width = MAX(rightSize.width,minButtonWidth);
@@ -134,6 +135,7 @@ static UIImage *BackButtonHighlightedImage = nil;
 			_centerView = titleLabel;
 		}
 
+		_centerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		_centerView.frame = CGRectMake(leftSize.width+edgePadding.left,edgePadding.top,self.bounds.size.width-leftSize.width-rightSize.width-edgePadding.left-edgePadding.right,maxButtonHeight);
 		[self addSubview:_centerView];
 	} else {
