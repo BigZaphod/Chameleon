@@ -22,6 +22,7 @@ typedef enum {
 	NSArray *_toolbarItems;
 	UIModalPresentationStyle _modalPresentationStyle;
 	BOOL _editing;
+	UINavigationController *_navigationController;
 }
 
 - (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)nibBundle;	// won't load a nib no matter what you do!

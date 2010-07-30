@@ -8,6 +8,7 @@
 @implementation UIViewController
 @synthesize view=_view, wantsFullScreenLayout=_wantsFullScreenLayout, title=_title, contentSizeForViewInPopover=_contentSizeForViewInPopover;
 @synthesize modalInPopover=_modalInPopover, toolbarItems=_toolbarItems, modalPresentationStyle=_modalPresentationStyle, editing=_editing;
+@synthesize navigationController=_navigationController;
 
 - (id)init
 {
@@ -108,9 +109,9 @@
 	return _navigationItem;
 }
 
-- (UINavigationController *)navigationController
+- (void)_setNavigationController:(UINavigationController *)navController
 {
-	return nil;
+	_navigationController = navController;
 }
 
 - (void)setToolbarItems:(NSArray *)theToolbarItems animated:(BOOL)animated

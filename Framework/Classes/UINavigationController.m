@@ -2,6 +2,7 @@
 #import "UINavigationController.h"
 #import "UITabBarController.h"
 #import "UINavigationBar.h"
+#import "UIKit+Private.h"
 
 static const CGFloat NavigationBarHeight = 32;
 //static const CGFloat ToolbarHeight = 32;
@@ -23,6 +24,7 @@ static const CGFloat NavigationBarHeight = 32;
 - (id)initWithRootViewController:(UIViewController *)rootViewController
 {
 	if ((self=[self initWithNibName:nil bundle:nil])) {
+		[rootViewController _setNavigationController:self];
 		[_viewControllers addObject:rootViewController];
 		[_navigationBar pushNavigationItem:rootViewController.navigationItem animated:NO];
 	}
@@ -78,7 +80,15 @@ static const CGFloat NavigationBarHeight = 32;
 		
 		[_viewControllers release];
 		_viewControllers = [newViewControllers mutableCopy];
-		[_navigationBar setItems:[_viewControllers valueForKey:@"navigationItem"] animated:animated];
+		
+		NSMutableArray *items = [NSMutableArray arrayWithCapacity:[_viewControllers count]];
+		
+		for (UIViewController *controller in _viewControllers) {
+			[controller _setNavigationController:self];
+			[items addObject:controller.navigationItem];
+		}
+		
+		[_navigationBar setItems:items animated:animated];
 		
 		UIViewController *newTopController = self.topViewController;
 		[newTopController viewWillAppear:animated];
@@ -105,6 +115,7 @@ static const CGFloat NavigationBarHeight = 32;
 	
 	UIViewController *previousViewController = self.topViewController;
 
+	[viewController _setNavigationController:self];
 	[_viewControllers addObject:viewController];
 
 	[previousViewController viewWillDisappear:animated];
@@ -125,6 +136,8 @@ static const CGFloat NavigationBarHeight = 32;
 		UIViewController *oldViewController = [self.topViewController retain];
 		
 		[_viewControllers removeLastObject];
+		[oldViewController _setNavigationController:nil];
+
 		UIViewController *nextViewController = self.topViewController;
 		
 		[oldViewController viewWillDisappear:animate];
