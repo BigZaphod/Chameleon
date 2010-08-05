@@ -166,6 +166,7 @@
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
+	size = CGSizeMake(CGFLOAT_MAX,CGFLOAT_MAX);
 	if (_numberOfLines <= 0) {
 		return [_text sizeWithFont:_font constrainedToSize:size lineBreakMode:_lineBreakMode];
 	} else {

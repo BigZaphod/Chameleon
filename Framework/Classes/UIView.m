@@ -350,6 +350,7 @@ static BOOL _animationsEnabled = YES;
 	const BOOL shouldSmoothFonts = (_backgroundColor && (CGColorGetAlpha(_backgroundColor.CGColor) == 1));
 	CGContextSetShouldSmoothFonts(ctx, shouldSmoothFonts);
 	
+	[[UIColor blackColor] set];
 	[self drawRect:bounds];
 
 	CGContextRestoreGState(ctx);
