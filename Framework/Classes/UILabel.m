@@ -134,7 +134,11 @@
 	CGRect drawRect = CGRectZero;
 	
 	// find out the actual size of the text given the size of our bounds
-	drawRect.size = [self sizeThatFits:bounds.size];
+	CGSize maxSize = self.bounds.size;
+	if (_numberOfLines > 0) {
+		maxSize.height = _font.leading * _numberOfLines;
+	}
+	drawRect.size = [_text sizeWithFont:_font constrainedToSize:maxSize lineBreakMode:_lineBreakMode];
 	
 	// now vertically center it
 	drawRect.origin.y = floorf((bounds.size.height - drawRect.size.height) / 2.f);
@@ -166,12 +170,8 @@
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
-	size = CGSizeMake(CGFLOAT_MAX,CGFLOAT_MAX);
-	if (_numberOfLines <= 0) {
-		return [_text sizeWithFont:_font constrainedToSize:size lineBreakMode:_lineBreakMode];
-	} else {
-		return [_text sizeWithFont:_font forWidth:size.width lineBreakMode:_lineBreakMode];
-	}
+	size = CGSizeMake(CGFLOAT_MAX, _numberOfLines <= 0? CGFLOAT_MAX : (_font.leading*_numberOfLines));
+	return [_text sizeWithFont:_font constrainedToSize:size lineBreakMode:_lineBreakMode];
 }
 
 @end
