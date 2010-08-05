@@ -41,7 +41,7 @@
 
 - (void)setText:(NSString *)newText
 {
-	if (![_text isEqualToString:newText]) {
+	if (_text != newText) {
 		[_text release];
 		_text = [newText copy];
 		[self setNeedsDisplay];
@@ -143,7 +143,7 @@
 	// this might be cheating somehow and not how the real thing does it...
 	// I didn't spend a ton of time investigating the sizes that it sends the drawTextInRect: method
 	drawRect.origin.x = 0;
-	drawRect.size.width = rect.size.width;
+	drawRect.size.width = bounds.size.width;
 	
 	// if there's a shadow, let's draw that first
 	if (!CGSizeEqualToSize(_shadowOffset,CGSizeZero) && _shadowColor) {

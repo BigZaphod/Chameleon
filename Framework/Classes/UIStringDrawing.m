@@ -164,7 +164,9 @@ static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToS
 				case UITextAlignmentLeft:
 				default:					flush = 0;		break;
 			}
-			CGContextSetTextPosition(ctx, CTLineGetPenOffsetForFlush(line, flush, rect.size.width), textOffset);
+			
+			CGFloat penOffset = CTLineGetPenOffsetForFlush(line, flush, rect.size.width);
+			CGContextSetTextPosition(ctx, penOffset, textOffset);
 			CTLineDraw(line, ctx);
 			textOffset += fontLeading;
 		}
