@@ -17,7 +17,10 @@ typedef enum {
 	_UIUserInterfaceIdiomDesktop,
 } UIUserInterfaceIdiom;
 
-#define UI_USER_INTERFACE_IDIOM() _UIUserInterfaceIdiomDesktop
+//#define UI_USER_INTERFACE_IDIOM() _UIUserInterfaceIdiomDesktop
+
+// for now, pretend to be an iPad.. but I think this should really be using it's own desktop setting instead
+#define UI_USER_INTERFACE_IDIOM() UIUserInterfaceIdiomPad
 
 @interface UIDevice : NSObject {
 }
