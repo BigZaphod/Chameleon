@@ -23,6 +23,8 @@ typedef enum {
 	UIModalPresentationStyle _modalPresentationStyle;
 	BOOL _editing;
 	UINavigationController *_navigationController;
+	UIViewController *_modalViewController;
+	UIViewController *_parentViewController;
 }
 
 - (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)nibBundle;	// won't load a nib no matter what you do!
@@ -37,8 +39,8 @@ typedef enum {
 - (void)viewWillDisappear:(BOOL)animated;
 - (void)viewDidDisappear:(BOOL)animated;
 
-- (void)presentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated;
-- (void)dismissModalViewControllerAnimated:(BOOL)animated;
+- (void)presentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated;		// works, but not exactly correctly.
+- (void)dismissModalViewControllerAnimated:(BOOL)animated;												// see comments in dismissModalViewController
 
 - (void)didReceiveMemoryWarning;	// doesn't do anything at all right.
 
@@ -60,9 +62,10 @@ typedef enum {
 @property (nonatomic, readonly) UIInterfaceOrientation interfaceOrientation;	// always returns UIInterfaceOrientationLandscapeLeft
 @property (nonatomic, readonly, retain) UINavigationItem *navigationItem;
 @property (nonatomic, readonly, retain) UINavigationController *navigationController;
+@property (nonatomic, readonly) UIViewController *parentViewController;
 @property (nonatomic, retain) NSArray *toolbarItems;
 @property (nonatomic, assign) UIModalPresentationStyle modalPresentationStyle;
 @property (nonatomic, getter=isEditing) BOOL editing;
-@property (nonatomic, readonly) UIViewController *modalViewController;		// always nil
+@property (nonatomic, readonly) UIViewController *modalViewController;
 
 @end

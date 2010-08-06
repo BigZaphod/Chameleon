@@ -8,7 +8,7 @@
 @implementation UIViewController
 @synthesize view=_view, wantsFullScreenLayout=_wantsFullScreenLayout, title=_title, contentSizeForViewInPopover=_contentSizeForViewInPopover;
 @synthesize modalInPopover=_modalInPopover, toolbarItems=_toolbarItems, modalPresentationStyle=_modalPresentationStyle, editing=_editing;
-@synthesize navigationController=_navigationController;
+@synthesize navigationController=_navigationController, modalViewController=_modalViewController, parentViewController=_parentViewController;
 
 - (id)init
 {
@@ -25,6 +25,7 @@
 
 - (void)dealloc
 {
+	[_modalViewController release];
 	[_navigationItem release];
 	[_title release];
 	[_view release];
@@ -114,6 +115,11 @@
 	_navigationController = navController;
 }
 
+- (void)_setParentViewController:(UIViewController *)parentController
+{
+	_parentViewController = parentController;
+}
+
 - (void)setToolbarItems:(NSArray *)theToolbarItems animated:(BOOL)animated
 {
 	if (_toolbarItems != theToolbarItems) {
@@ -145,10 +151,50 @@
 
 - (void)presentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated
 {
+	if (!_modalViewController && _modalViewController != self) {
+		[modalViewController viewWillAppear:animated];
+		[self viewWillDisappear:animated];
+
+		_modalViewController = [modalViewController retain];
+		[_modalViewController _setParentViewController:self];
+
+		UIWindow *window = self.view.window;
+		UIView *selfView = self.view;
+		UIView *newView = modalViewController.view;
+		
+		newView.autoresizingMask = selfView.autoresizingMask;
+		newView.frame = _wantsFullScreenLayout? window.screen.bounds : window.screen.applicationFrame;
+		[window addSubview:newView];
+		selfView.hidden = YES;		// I think the real one may actually remove it, which would mean needing to remember the superview, I guess? Not sure...
+		
+		[modalViewController viewDidAppear:animated];
+		[self viewDidDisappear:animated];
+	}
 }
 
 - (void)dismissModalViewControllerAnimated:(BOOL)animated
 {
+	// NOTE: This is not implemented entirely correctly - the actual dismissModalViewController is somewhat subtle.
+	// There is supposed to be a stack of modal view controllers that dismiss in a specific way,e tc.
+	// The whole system of related view controllers is not really right - not just with modals, but everything else like
+	// navigationController, too, which is supposed to return the nearest nav controller down the chain and it doesn't right now.
+
+	if (_modalViewController) {
+		[_modalViewController viewWillDisappear:animated];
+		[self viewWillAppear:animated];
+		
+		[_modalViewController.view removeFromSuperview];
+		self.view.hidden = NO;
+
+		[_modalViewController _setParentViewController:nil];
+		[_modalViewController release];
+		_modalViewController = nil;
+
+		[_modalViewController viewDidDisappear:animated];
+		[self viewDidAppear:animated];
+	} else {
+		[self.parentViewController dismissModalViewControllerAnimated:animated];
+	}
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -158,11 +204,6 @@
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-}
-
-- (UIViewController *)modalViewController
-{
-	return nil;
 }
 
 @end
