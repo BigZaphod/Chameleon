@@ -69,6 +69,7 @@ typedef enum {
 - (id)initWithFrame:(CGRect)frame;
 - (void)addSubview:(UIView *)subview;
 - (void)insertSubview:(UIView *)subview atIndex:(NSInteger)index;
+- (void)insertSubview:(UIView *)subview belowSubview:(UIView *)below;
 - (void)removeFromSuperview;
 - (void)bringSubviewToFront:(UIView *)subview;
 - (void)sendSubviewToBack:(UIView *)subview;

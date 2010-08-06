@@ -14,12 +14,10 @@ typedef enum {
 typedef enum {
 	UIUserInterfaceIdiomPhone,
 	UIUserInterfaceIdiomPad,
+	_UIUserInterfaceIdiomDesktop,
 } UIUserInterfaceIdiom;
 
-#define UI_USER_INTERFACE_IDIOM() \
-([[UIDevice currentDevice] respondsToSelector:@selector(userInterfaceIdiom)] ? \
-[[UIDevice currentDevice] userInterfaceIdiom] : \
-UIUserInterfaceIdiomPhone)
+#define UI_USER_INTERFACE_IDIOM() _UIUserInterfaceIdiomDesktop
 
 @interface UIDevice : NSObject {
 }
@@ -29,6 +27,9 @@ UIUserInterfaceIdiomPhone)
 @property (nonatomic, readonly, retain) NSString *name;
 @property (nonatomic,readonly) UIUserInterfaceIdiom userInterfaceIdiom;
 @property (nonatomic, readonly) UIDeviceOrientation orientation;							// always returns UIDeviceOrientationPortrait
-@property(nonatomic,readonly,getter=isMultitaskingSupported) BOOL multitaskingSupported;	// always returns YES
+@property (nonatomic,readonly,getter=isMultitaskingSupported) BOOL multitaskingSupported;	// always returns YES
+@property (nonatomic, readonly, retain) NSString *systemName;
+@property (nonatomic, readonly, retain) NSString *systemVersion;
+@property (nonatomic, readonly, retain) NSString *model;
 
 @end

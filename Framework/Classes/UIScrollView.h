@@ -32,6 +32,7 @@ typedef enum {
 	UIScrollViewIndicatorStyle _indicatorStyle;
 	BOOL _delaysContentTouches;
 	id _delegate;
+	BOOL _pagingEnabled;
 }
 
 - (void)setContentOffset:(CGPoint)theOffset animated:(BOOL)animated;
@@ -49,6 +50,7 @@ typedef enum {
 @property (nonatomic) BOOL scrollsToTop;
 @property (nonatomic) BOOL delaysContentTouches;	// no effect
 @property (nonatomic, readonly, getter=isDecelerating) BOOL decelerating;	// always returns NO
+@property (nonatomic, assign) BOOL pagingEnabled;	// not implemented
 
 - (void)setZoomScale:(float)scale animated:(BOOL)animated;
 @property (nonatomic) float maximumZoomScale;

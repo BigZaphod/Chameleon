@@ -126,6 +126,11 @@ static BOOL _animationsEnabled = YES;
 	[self insertSubview:subview atIndex:[_subviews count]];
 }
 
+- (void)insertSubview:(UIView *)subview belowSubview:(UIView *)below
+{
+	[self insertSubview:subview atIndex:[_subviews indexOfObject:below]];
+}
+
 - (void)removeFromSuperview
 {
 	if (_superview) {

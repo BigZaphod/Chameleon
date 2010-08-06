@@ -51,4 +51,19 @@ static UIDevice *theDevice;
 	return YES;
 }
 
+- (NSString *)systemName
+{
+	return [[NSProcessInfo processInfo] operatingSystemName];
+}
+
+- (NSString *)systemVersion
+{
+	return [[NSProcessInfo processInfo] operatingSystemVersionString];
+}
+
+- (NSString *)model
+{
+	return @"Mac";
+}
+
 @end

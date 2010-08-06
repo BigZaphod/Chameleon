@@ -17,7 +17,7 @@ NSString *const UITrackingRunLoopMode = @"UITrackingRunLoopMode";
 static UIApplication *_theApplication = nil;
 
 @implementation UIApplication
-@synthesize keyWindow=_keyWindow, delegate=_delegate;
+@synthesize keyWindow=_keyWindow, delegate=_delegate, idleTimerDisabled=_idleTimerDisabled;
 
 + (void)initialize
 {

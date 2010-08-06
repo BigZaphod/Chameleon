@@ -37,3 +37,8 @@ NSString *NSStringFromCGSize(CGSize s);
 - (CGRect)CGRectValue;
 - (CGSize)CGSizeValue;
 @end
+
+@interface NSCoder (NSCoderUIGeometryExtensions)
+- (void)encodeCGPoint:(CGPoint)point forKey:(NSString *)key;
+- (CGPoint)decodeCGPointForKey:(NSString *)key;
+@end

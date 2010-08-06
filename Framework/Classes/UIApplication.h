@@ -27,9 +27,11 @@ typedef enum {
 ((orientation) == UIInterfaceOrientationLandscapeLeft || \
 (orientation) == UIInterfaceOrientationLandscapeRight)
 
-@class UIWindow;
+@class UIWindow, UIApplication;
 
 @protocol UIApplicationDelegate <NSObject>
+@optional
+- (void)applicationDidFinishLaunching:(UIApplication *)application;
 @end
 
 @interface UIApplication : UIResponder {
@@ -38,6 +40,7 @@ typedef enum {
 	__weak UIWindow *_keyWindow;
 	NSMutableSet *_visibleWindows;
 	id<UIApplicationDelegate> _delegate;
+	BOOL _idleTimerDisabled;
 }
 
 + (UIApplication *)sharedApplication;
@@ -56,5 +59,6 @@ typedef enum {
 @property (nonatomic) UIInterfaceOrientation statusBarOrientation;
 @property (nonatomic, readonly) NSTimeInterval statusBarOrientationAnimationDuration;
 @property (nonatomic, assign) id<UIApplicationDelegate> delegate;
+@property (nonatomic, getter=isIdleTimerDisabled) BOOL idleTimerDisabled;	// has no actual affect
 
 @end

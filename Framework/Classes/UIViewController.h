@@ -46,6 +46,7 @@ typedef enum {
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated;
 - (UIBarButtonItem *)editButtonItem;	// not implemented
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration;
 
 
@@ -62,5 +63,6 @@ typedef enum {
 @property (nonatomic, retain) NSArray *toolbarItems;
 @property (nonatomic, assign) UIModalPresentationStyle modalPresentationStyle;
 @property (nonatomic, getter=isEditing) BOOL editing;
+@property (nonatomic, readonly) UIViewController *modalViewController;		// always nil
 
 @end

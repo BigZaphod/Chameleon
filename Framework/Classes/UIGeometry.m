@@ -48,5 +48,18 @@ NSString *NSStringFromCGSize(CGSize s)
 {
 	return NSSizeToCGSize([self sizeValue]);
 }
-
 @end
+
+@implementation NSCoder (NSCoderUIGeometryExtensions)
+- (void)encodeCGPoint:(CGPoint)point forKey:(NSString *)key
+{
+	[self encodePoint:NSPointFromCGPoint(point) forKey:key];
+}
+
+- (CGPoint)decodeCGPointForKey:(NSString *)key
+{
+	return NSPointToCGPoint([self decodePointForKey:key]);
+}
+@end
+
+

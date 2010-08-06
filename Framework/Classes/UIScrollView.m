@@ -16,7 +16,7 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 @synthesize contentOffset=_contentOffset, contentInset=_contentInset, scrollIndicatorInsets=_scrollIndicatorInsets, scrollEnabled=_scrollEnabled;
 @synthesize showsHorizontalScrollIndicator=_showsHorizontalScrollIndicator, showsVerticalScrollIndicator=_showsVerticalScrollIndicator, contentSize=_contentSize;
 @synthesize maximumZoomScale=_maximumZoomScale, minimumZoomScale=_minimumZoomScale, zoomScale=_zoomScale, scrollsToTop=_scrollsToTop;
-@synthesize indicatorStyle=_indicatorStyle, delaysContentTouches=_delaysContentTouches, delegate=_delegate;
+@synthesize indicatorStyle=_indicatorStyle, delaysContentTouches=_delaysContentTouches, delegate=_delegate, pagingEnabled=_pagingEnabled;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -39,6 +39,7 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 		self.showsHorizontalScrollIndicator = YES;
 		self.scrollsToTop = YES;
 		self.delaysContentTouches = YES;
+		self.pagingEnabled = NO;
 	}
 	return self;
 }
