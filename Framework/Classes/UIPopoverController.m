@@ -57,18 +57,16 @@
 
 - (void)presentPopoverFromRect:(CGRect)rect inView:(UIView *)view permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated
 {
+	// convert the rect into OSX screen coords
+	CGRect windowRect = [view convertRect:rect toView:nil];
+	CGRect screenRect = [view.window convertRect:windowRect toWindow:nil];
+	CGRect desktopScreenRect = [view.window.screen convertRect:screenRect toScreen:nil];
+
 	// the real popover points to the edge of the given rectangle.
 	// since we're just using a point (for not) I'll just point to the center of it.
 	// not ideal, sure, but works.
-	CGPoint centerPoint = CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect));
-
-	// convert the rectangle into OSX screen coords
-	CGPoint windowPoint = [view convertPoint:centerPoint toView:nil];
-	CGPoint screenPoint = [view.window convertPoint:windowPoint toWindow:nil];
-	CGPoint desktopScreenPoint = [view.window.screen convertPoint:screenPoint toScreen:nil];
-	NSPoint desktopWindowPoint = [[_UIKitView window] convertScreenToBase:NSPointFromCGPoint(desktopScreenPoint)];
-	
-	//NSPoint desktopWindowPoint = NSPointFromCGPoint(desktopScreenPoint);
+	CGPoint centerPoint = CGPointMake(CGRectGetMidX(desktopScreenRect), CGRectGetMidY(desktopScreenRect));
+	NSPoint desktopWindowPoint = [[_UIKitView window] convertScreenToBase:NSPointFromCGPoint(centerPoint)];
 	
 	[(_UIPopoverWindow *)[_popoverWindowController window] setFrameForContentSize:NSMakeSize(320.0f, 480.0f) atPoint:desktopWindowPoint inWindow:[_UIKitView window]];
 

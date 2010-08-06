@@ -35,4 +35,6 @@ extern NSString *const UIScreenModeDidChangeNotification;
 // Using a nil screen will convert to OSX screen coordinates.
 - (CGPoint)convertPoint:(CGPoint)toConvert toScreen:(UIScreen *)toScreen;
 - (CGPoint)convertPoint:(CGPoint)toConvert fromScreen:(UIScreen *)fromScreen;
+- (CGRect)convertRect:(CGRect)toConvert toScreen:(UIScreen *)toScreen;
+- (CGRect)convertRect:(CGRect)toConvert fromScreen:(UIScreen *)fromScreen;
 @end
