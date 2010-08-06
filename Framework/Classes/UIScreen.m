@@ -174,8 +174,12 @@ static NSMutableArray *_allScreens = nil;
 		// Go all the way through OSX screen coordinates.
 		NSPoint screenCoords = [[_NSView window] convertBaseToScreen:[_NSView convertPoint:NSPointFromCGPoint(toConvert) toView:nil]];
 		
-		// Now from there back to the toScreen's window's base
-		return NSPointToCGPoint([[toScreen _NSView] convertPoint:[[[toScreen _NSView] window] convertScreenToBase:screenCoords] fromView:nil]);
+		if (toScreen) {
+			// Now from there back to the toScreen's window's base
+			return NSPointToCGPoint([[toScreen _NSView] convertPoint:[[[toScreen _NSView] window] convertScreenToBase:screenCoords] fromView:nil]);
+		} else {
+			return NSPointToCGPoint(screenCoords);
+		}
 	}
 }
 

@@ -25,6 +25,8 @@ typedef NSUInteger UIPopoverArrowDirection;
 	id _delegate;
 	UIViewController *_contentViewController;
 	BOOL _popoverVisible;
+	id _popoverWindowController;
+	id _UIKitView;
 }
 
 - (id)initWithContentViewController:(UIViewController *)viewController;
