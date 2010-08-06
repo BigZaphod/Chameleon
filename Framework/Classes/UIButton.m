@@ -209,7 +209,13 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 
 - (CGRect)imageRectForContentRect:(CGRect)contentRect
 {
-	return contentRect;
+	CGRect imageRect;
+
+	// I think the origin would change based on contentHorizontalAlignment, and contentVerticalAlignment properties
+	imageRect.origin = contentRect.origin;
+	imageRect.size = [self imageForState:UIControlStateNormal].size;
+	
+	return imageRect;
 }
 
 - (void)layoutSubviews

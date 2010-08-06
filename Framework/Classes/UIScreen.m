@@ -76,7 +76,7 @@ static NSMutableArray *_allScreens = nil;
 {
 	NSWindow *realWindow = [_NSView window];
 
-	if (realWindow) {
+	if (realWindow && ([realWindow styleMask] & NSResizableWindowMask) && [realWindow showsResizeIndicator] ) {
 		NSView *contentView = [realWindow contentView];
 		
 		const CGRect myBounds = NSRectToCGRect([_NSView bounds]);
