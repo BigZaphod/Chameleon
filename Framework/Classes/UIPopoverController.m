@@ -71,6 +71,9 @@
 	//NSPoint desktopWindowPoint = NSPointFromCGPoint(desktopScreenPoint);
 	
 	[(_UIPopoverWindow *)[_popoverWindowController window] setFrameForContentSize:NSMakeSize(320.0f, 480.0f) atPoint:desktopWindowPoint inWindow:[_UIKitView window]];
+
+	_contentViewController.view.frame = [_UIKitView UIWindow].bounds;
+	
 	[_popoverWindowController showWindow:self];
 }
 
