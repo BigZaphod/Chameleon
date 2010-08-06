@@ -244,6 +244,12 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 	fitSize.width += _titleEdgeInsets.left + _titleEdgeInsets.right;
 	fitSize.height += _titleEdgeInsets.top + _titleEdgeInsets.bottom;
 	
+	fitSize.width = MAX(fitSize.width, [self imageForState:UIControlStateNormal].size.width);
+	fitSize.height = MAX(fitSize.height, [self imageForState:UIControlStateNormal].size.height);
+	
+	fitSize.width = MAX(fitSize.width, [self backgroundImageForState:UIControlStateNormal].size.width);
+	fitSize.height = MAX(fitSize.height, [self backgroundImageForState:UIControlStateNormal].size.height);
+	
 	return fitSize;
 }
 
