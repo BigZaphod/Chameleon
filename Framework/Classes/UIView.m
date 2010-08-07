@@ -94,6 +94,8 @@ static BOOL _animationsEnabled = YES;
 
 - (void)insertSubview:(UIView *)subview atIndex:(NSInteger)index
 {
+	// this isn't exactly right - see notes in insertSubview:below: for why.
+
 	if (subview && subview.superview != self) {
 		const BOOL changingWindows = (subview.window != self.window);
 		
@@ -128,6 +130,10 @@ static BOOL _animationsEnabled = YES;
 
 - (void)insertSubview:(UIView *)subview belowSubview:(UIView *)below
 {
+	// This doesn't work right because if the subview is already a subview, this has no effect.
+	// I don't think it's right to just remove it and re-add it. This needs to be more clever.
+	// Note that the same problem would apply to insertSubview:atIndex: which is assumed to
+	// move the subview (even if it is already added) to the proper index.
 	[self insertSubview:subview atIndex:[_subviews indexOfObject:below]];
 }
 

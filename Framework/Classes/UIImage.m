@@ -5,7 +5,16 @@
 #import "UIGraphics.h"
 #import <AppKit/NSImage.h>
 
+NSMutableDictionary *imageCache = nil;
+
 @implementation UIImage
+
++ (void)initialize
+{
+	if (self == [UIImage class]) {
+		imageCache = [NSMutableDictionary new];
+	}
+}
 
 - (id)_initWithNSImage:(NSImage *)theImage
 {
@@ -42,7 +51,17 @@
 
 + (UIImage *)imageNamed:(NSString *)name
 {
-	return [[[self alloc] _initWithNSImage:[NSImage imageNamed:name]] autorelease];
+	if ([name length] > 0) {
+		UIImage *cachedImage = [imageCache objectForKey:name];
+		if (!cachedImage) {
+			if ((cachedImage = [[[self alloc] _initWithNSImage:[NSImage imageNamed:name]] autorelease])) {
+				[imageCache setObject:cachedImage forKey:name];
+			}
+		}
+		return cachedImage;
+	} else {
+		return nil;
+	}
 }
 
 + (UIImage *)imageWithData:(NSData *)data

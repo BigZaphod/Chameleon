@@ -18,7 +18,7 @@ typedef enum {
 	CGImageRef _image;
 }
 
-+ (UIImage *)imageNamed:(NSString *)name;
++ (UIImage *)imageNamed:(NSString *)name;			// Note, this caches the images somewhat like iPhone OS 2ish in that it never releases them. :)
 + (UIImage *)imageWithData:(NSData *)data;
 + (UIImage *)imageWithContentsOfFile:(NSString *)path;
 + (UIImage *)imageWithCGImage:(CGImageRef)imageRef;
