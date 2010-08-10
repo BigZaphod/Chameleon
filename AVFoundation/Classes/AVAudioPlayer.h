@@ -19,6 +19,7 @@
 	NSInteger _currentLoop;
 	NSURL *_url;
 	NSData *_data;
+	BOOL _isPaused;
 }
 
 - (id)initWithContentsOfURL:(NSURL *)url error:(NSError **)outError;

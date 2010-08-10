@@ -48,23 +48,40 @@
 
 - (BOOL)play
 {
-	return [_player play];
+	BOOL r = NO;
+	@synchronized (self) {
+		r = _isPaused? [_player resume] : [_player play];
+		_isPaused = NO;
+	}
+	return r;
 }
 
 - (void)pause
 {
-	[(NSSound *)_player pause];
+	@synchronized (self) {
+		if (!_isPaused) {
+			_isPaused = YES;
+			[(NSSound *)_player pause];
+		}
+	}
 }
 
 - (void)stop
 {
-	[(NSSound *)_player stop];
-	_currentLoop = 0;
+	@synchronized (self) {
+		[(NSSound *)_player stop];
+		_currentLoop = 0;
+		_isPaused = NO;
+	}
 }
 
 - (BOOL)isPlaying
 {
-	return [_player isPlaying];
+	BOOL is = NO;
+	@synchronized (self) {
+		is = [_player isPlaying];
+	}
+	return is;
 }
 
 - (float)volume
@@ -121,6 +138,8 @@
 	@synchronized (self) {
 		if (sound == _player) {
 			const BOOL notifyDelegate = [_delegate respondsToSelector:@selector(audioPlayerDidFinishPlaying:successfully:)];
+			
+			_isPaused = NO;
 			
 			if (finishedPlaying) {
 				_currentLoop++;
