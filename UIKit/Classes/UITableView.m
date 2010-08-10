@@ -43,6 +43,7 @@ static const CGFloat kDefaultRowHeight = 43;
 
 - (void)dealloc
 {
+	[_selectedRow release];
 	[_cellHeights release];
 	[_cellOffsets release];
 	[_activeCells release];
@@ -99,19 +100,15 @@ static const CGFloat kDefaultRowHeight = 43;
 	// For now I'm assuming the cells stretch all the way across the view. It's not clear to me if the real
 	// implementation gets anal about this or not (haven't tested it).
 	
-	NSMutableArray *results = nil;
+	NSMutableArray *results = [[NSMutableArray new] autorelease];
 	
-	if (CGRectContainsRect(self.bounds, rect)) {
-		results = [[NSMutableArray new] autorelease];
-		
-		for (NSIndexPath *index in [_cellOffsets allKeys]) {
-			CGFloat offset = [[_cellOffsets objectForKey:index] floatValue];
-			if (CGRectContainsPoint(rect,CGPointMake(rect.origin.x,offset))) {
-				[results addObject:index];
-			}
+	for (NSIndexPath *index in [_cellOffsets allKeys]) {
+		CGRect cellRect = [self rectForRowAtIndexPath:index];
+		if (CGRectIntersectsRect(rect,cellRect)) {
+			[results addObject:index];
 		}
-	}
-	
+	}	
+
 	return results;
 }
 
@@ -181,6 +178,7 @@ static const CGFloat kDefaultRowHeight = 43;
 				}
 				
 				if (theCell && cellHeight > 0) {
+					theCell.selected = [_selectedRow isEqual:index];
 					theCell.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 					theCell.frame = [self rectForRowAtIndexPath:index];
 					[theCell _setSeparatorStyle:_separatorStyle color:_separatorColor];
@@ -258,6 +256,7 @@ static const CGFloat kDefaultRowHeight = 43;
 
 - (void)reloadData
 {
+	_selectedRow = nil;
 	[_cellHeights removeAllObjects];
 	const BOOL delegateProvidesHeight = [self.delegate respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)];
 	const CGFloat defaultRowHeight = self.rowHeight ?: kDefaultRowHeight;
@@ -287,7 +286,7 @@ static const CGFloat kDefaultRowHeight = 43;
 
 - (NSIndexPath *)indexPathForSelectedRow
 {
-	return nil;
+	return _selectedRow;
 }
 
 - (NSIndexPath *)indexPathForCell:(UITableViewCell *)cell
@@ -297,10 +296,20 @@ static const CGFloat kDefaultRowHeight = 43;
 
 - (void)deselectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated
 {
+	if (indexPath == _selectedRow) {
+		[self cellForRowAtIndexPath:_selectedRow].selected = NO;
+		[_selectedRow release];
+		_selectedRow = nil;
+	}
 }
 
 - (void)selectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition
 {
+	if (_selectedRow != indexPath) {
+		[_selectedRow release];
+		_selectedRow = [indexPath retain];
+		[self cellForRowAtIndexPath:_selectedRow].selected = YES;
+	}
 }
 
 - (void)scrollToNearestSelectedRowAtScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated
@@ -331,6 +340,48 @@ static const CGFloat kDefaultRowHeight = 43;
 }
 
 - (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation
+{
+}
+
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+	UITouch *touch = [touches anyObject];
+	CGPoint location = [touch locationInView:self];
+	NSIndexPath *touchedRow = [self indexPathForRowAtPoint:location];
+	
+	if (touchedRow) {
+		NSIndexPath *selectedRow = [self indexPathForSelectedRow];
+
+		if (selectedRow) {
+			NSIndexPath *rowToDeselect = selectedRow;
+			
+			if ([_delegate respondsToSelector:@selector(tableView:willDeselectRowAtIndexPath:)]) {
+				rowToDeselect = [_delegate tableView:self willDeselectRowAtIndexPath:rowToDeselect];
+			}
+			
+			[self deselectRowAtIndexPath:rowToDeselect animated:NO];
+			
+			if ([_delegate respondsToSelector:@selector(tableView:didDeselectRowAtIndexPath:)]) {
+				[_delegate tableView:self didDeselectRowAtIndexPath:rowToDeselect];
+			}
+		}
+
+		NSIndexPath *rowToSelect = touchedRow;
+		
+		if ([_delegate respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)]) {
+			rowToSelect = [_delegate tableView:self willSelectRowAtIndexPath:rowToSelect];
+		}
+
+		[self selectRowAtIndexPath:rowToSelect animated:NO scrollPosition:UITableViewScrollPositionNone];
+		
+		if ([_delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
+			[_delegate tableView:self didSelectRowAtIndexPath:rowToSelect];
+		}
+	}
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
 }
 

@@ -8,6 +8,10 @@
 @protocol UITableViewDelegate <UIScrollViewDelegate>
 @optional
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
+- (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath;
 @end
 
 @protocol UITableViewDataSource <NSObject>
@@ -55,6 +59,7 @@ typedef enum {
 	UIView *_tableFooterView;
 	BOOL _allowsSelection;
 	BOOL _editing;
+	NSIndexPath *_selectedRow;
 }
 
 - (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style;

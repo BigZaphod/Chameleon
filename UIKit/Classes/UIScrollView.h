@@ -13,6 +13,8 @@ typedef enum {
 @end
 
 @interface UIScrollView : UIView {
+@package
+	id _delegate;
 @private
 	CGPoint _contentOffset;
 	CGSize _contentSize;
@@ -31,7 +33,6 @@ typedef enum {
 	BOOL _scrollsToTop;
 	UIScrollViewIndicatorStyle _indicatorStyle;
 	BOOL _delaysContentTouches;
-	id _delegate;
 	BOOL _pagingEnabled;
 }
 
