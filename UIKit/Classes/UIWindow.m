@@ -3,6 +3,7 @@
 #import "UIScreen.h"
 #import "UIKit+Private.h"
 #import "UIScreenMode.h"
+#import "UIApplication.h"
 #import <Cocoa/Cocoa.h>
 
 const UIWindowLevel UIWindowLevelNormal = 0;
@@ -238,29 +239,36 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 {
 	NSSet *allTouches = [event allTouches];
 	UITouch *touch = (UITouch *)[allTouches anyObject];
-	const CGPoint delta = CGPointMake([[event _NSEvent] deltaX],[[event _NSEvent] deltaY]);
+	NSValue *delta = [NSValue valueWithCGPoint:CGPointMake([[event _NSEvent] deltaX],[[event _NSEvent] deltaY])];
 	
 	if (event.type == UIEventTypeTouches) {
+		SEL action = NULL;
+		
 		switch (touch.phase) {
 			case UITouchPhaseBegan:
-				[touch.view touchesBegan:allTouches withEvent:event];
+				action = @selector(touchesBegan:withEvent:);
 				break;
 			case UITouchPhaseMoved:
-				[touch.view touchesMoved:allTouches withEvent:event];
+				action = @selector(touchesMoved:withEvent:);
 				break;
 			case UITouchPhaseEnded:
-				[touch.view touchesEnded:allTouches withEvent:event];
+				action = @selector(touchesEnded:withEvent:);
 				break;
 			case UITouchPhaseCancelled:
-				[touch.view touchesCancelled:allTouches withEvent:event];
+				action = @selector(touchesCancelled:withEvent:);
 				break;
 		}
+		
+		[[UIApplication sharedApplication] sendAction:action to:touch.view from:allTouches forEvent:event];
 	} else if (event.type == _UIEventTypeMouseScroll) {
-		[touch.view scrollWheelMoved:delta withEvent:event];
+		[[UIApplication sharedApplication] sendAction:@selector(scrollWheelMoved:withEvent:) to:touch.view from:delta forEvent:event];
 	} else if (event.type == _UIEventTypeMouseMoved) {
+		// NOTE: mouseMoved:withEvent: does not follow the responder chain right now because that seems unecessarily heavy
+		// and probably not super useful for the types of things you'd likely need mouse tracking for.
 		[touch.view mouseMoved:delta withEvent:event];
 	}
 
+	// NOTE: mouseCursorForEvent: does not follow the responder chain for the same basic reasoning as for mouseMoved:withEvent:.
 	NSCursor *newCursor = [touch.view mouseCursorForEvent:event] ?: [NSCursor arrowCursor];
 	if ([NSCursor currentCursor] != newCursor) {
 		[newCursor set];

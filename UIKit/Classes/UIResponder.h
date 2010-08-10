@@ -26,7 +26,16 @@
 @end
 
 @interface UIResponder (OSXExtensions)
-- (void)scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event;
-- (void)mouseMoved:(CGPoint)delta withEvent:(UIEvent *)event;
-- (id)mouseCursorForEvent:(UIEvent *)event;	// return an NSCursor if you want to modify it, return nil to use default
+// This message is sent down the responder chain so that views behind other views can make use of the scroll wheel (such as UIScrollView).
+// delta is a CGPoint wrapped by NSValue.
+- (void)scrollWheelMoved:(NSValue *)delta withEvent:(UIEvent *)event;
+
+// NOTE: mouseMoved:withEvent: does not follow the responder chain because that seems unecessarily heavy for something that happens so often
+// and probably is not super useful for the types of things you'd likely need mouse tracking for.
+// delta is a CGPoint wrapped by NSValue.
+- (void)mouseMoved:(NSValue *)delta withEvent:(UIEvent *)event;
+
+// Return an NSCursor if you want to modify it or nil to use the default arrow.
+// NOTE: mouseCursorForEvent: does not follow the responder chain (see mouseMoved:withEvent: above for some reasoning).
+- (id)mouseCursorForEvent:(UIEvent *)event;
 @end

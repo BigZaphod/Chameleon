@@ -223,17 +223,4 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 	}
 }
 
-/*
-- (void)scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event
-{
-	if (orientation == _UIScrollerOrientationVertical) {
-		[self setContentOffset:contentOffset-delta.y];
-	} else {
-		[self setContentOffset:contentOffset-delta.x];
-	}
-
-	[delegate _UIScroller:self contentOffsetDidChange:contentOffset];
-}
-*/
-
 @end
