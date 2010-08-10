@@ -180,6 +180,13 @@
 	// navigationController, too, which is supposed to return the nearest nav controller down the chain and it doesn't right now.
 
 	if (_modalViewController) {
+		
+		// if the modalViewController being dismissed has a modalViewController of its own, then we need to go dismiss that, too.
+		// otherwise things can be left hanging around.
+		if (_modalViewController.modalViewController) {
+			[_modalViewController dismissModalViewControllerAnimated:animated];
+		}
+		
 		[_modalViewController viewWillDisappear:animated];
 		[self viewWillAppear:animated];
 		
