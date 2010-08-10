@@ -47,11 +47,6 @@ static UIApplication *_theApplication = nil;
 	[super dealloc];
 }
 
-- (UIResponder *)nextResponder
-{
-	return _delegate;
-}
-
 - (NSTimeInterval)statusBarOrientationAnimationDuration
 {
 	return 0.3;

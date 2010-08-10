@@ -187,11 +187,9 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 	return (_draggingScroller != nil);
 }
 
-- (void)scrollWheelMoved:(NSValue *)deltaValue withEvent:(UIEvent *)event
+- (void)scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event
 {
 	if (self.scrollEnabled) {
-		CGPoint delta = [deltaValue CGPointValue];
-		
 		// Increasing the delta because it just seems to feel better to me right now.
 		// Dunno if this is something standard that OSX is doing or if OSX actually scales it somehow based on content size.
 		delta.x *= 2.5f;
