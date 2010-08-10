@@ -35,6 +35,7 @@
 
 - (void)dealloc
 {
+	[(NSSound *)_player stop];	// I swear the docs say that NSSound should stop itself when released, but I don't think it's doing that. Or else something else bad is going on. This helps for now.
 	[_player release];
 	[_data release];
 	[_url release];
