@@ -48,8 +48,8 @@ typedef enum {
 
 @interface UIView : UIResponder {
 @private
-	UIView *_superview;
-	NSMutableArray *_subviews;
+	__weak UIView *_superview;
+	NSMutableSet *_subviews;
 	BOOL _clearsContextBeforeDrawing;
 	BOOL _autoresizesSubviews;
 	BOOL _userInteractionEnabled;

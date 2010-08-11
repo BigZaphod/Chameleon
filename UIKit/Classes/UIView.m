@@ -12,7 +12,7 @@ static NSMutableArray *_animationGroups;
 static BOOL _animationsEnabled = YES;
 
 @implementation UIView
-@synthesize layer=_layer, subviews=_subviews, superview=_superview, clearsContextBeforeDrawing=_clearsContextBeforeDrawing, autoresizesSubviews=_autoresizesSubviews;
+@synthesize layer=_layer, superview=_superview, clearsContextBeforeDrawing=_clearsContextBeforeDrawing, autoresizesSubviews=_autoresizesSubviews;
 @synthesize tag=_tag, userInteractionEnabled=_userInteractionEnabled, contentMode=_contentMode, backgroundColor=_backgroundColor;
 @synthesize multipleTouchEnabled=_multipleTouchEnabled, exclusiveTouch=_exclusiveTouch, autoresizingMask=_autoresizingMask;
 
@@ -41,9 +41,9 @@ static BOOL _animationsEnabled = YES;
 - (id)initWithFrame:(CGRect)theFrame
 {
 	if ((self=[super init])) {
-		_implementsDrawRect = [isa _instanceImplementsDrawRect];
+		_implementsDrawRect = [[self class] _instanceImplementsDrawRect];
 
-		_subviews = [NSMutableArray new];
+		_subviews = [NSMutableSet new];
 		_layer = [[[[self class] layerClass] alloc] init];
 		_layer.delegate = self;
 		_layer.layoutManager = [_UIViewLayoutManager layoutManager];
@@ -61,7 +61,7 @@ static BOOL _animationsEnabled = YES;
 
 - (void)dealloc
 {
-	[_subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+	[_subviews makeObjectsPerformSelector:@selector(_setNilSuperview)];
 	[_subviews release];
 	_layer.layoutManager = nil;
 	_layer.delegate = nil;
@@ -81,20 +81,28 @@ static BOOL _animationsEnabled = YES;
 
 - (UIResponder *)nextResponder
 {
-	// NOTE: Once view controllers are implemented, this should return the view controller that owns this view (if there is one)
-	// and then the view controller itself would return this view's superview instead (this inserts the controller into the chain)
 	return _viewController ? (UIResponder *)_viewController : (UIResponder *)_superview;
 }
 
 - (NSArray *)subviews
 {
-	return [[_subviews copy] autorelease];
+	NSArray *sublayers = _layer.sublayers;
+	NSMutableArray *subviews = [NSMutableArray arrayWithCapacity:[sublayers count]];
+
+	// This builds the results from the layer instead of just using _subviews because I want the results to match
+	// the order that CALayer has them. It's unclear in the docs if the returned order from this method is guarenteed or not.
+	for (CALayer *layer in sublayers) {
+		id potentialView = [layer delegate];
+		if ([_subviews containsObject:potentialView]) {
+			[subviews addObject:potentialView];
+		}
+	}
+	
+	return subviews;
 }
 
-- (void)insertSubview:(UIView *)subview atIndex:(NSInteger)index
+- (void)addSubview:(UIView *)subview
 {
-	// this isn't exactly right - see notes in insertSubview:below: for why.
-
 	if (subview && subview.superview != self) {
 		const BOOL changingWindows = (subview.window != self.window);
 		
@@ -103,13 +111,16 @@ static BOOL _animationsEnabled = YES;
 		[subview willMoveToSuperview:self];
 		
 		[subview retain];
+	
 		if (subview.superview) {
 			[subview.layer removeFromSuperlayer];
 			[subview.superview->_subviews removeObject:subview];
 		}
-		[_subviews insertObject:subview atIndex:index];
+		
+		[_subviews addObject:subview];
 		subview->_superview = self;
-		[_layer insertSublayer:subview.layer atIndex:index];
+		[_layer addSublayer:subview.layer];
+	
 		[subview release];
 		
 		if (subview->_viewController) [subview->_viewController viewDidAppear:NO];
@@ -122,46 +133,21 @@ static BOOL _animationsEnabled = YES;
 	}
 }
 
-- (void)addSubview:(UIView *)subview
+- (void)insertSubview:(UIView *)subview atIndex:(NSInteger)index
 {
-	[self insertSubview:subview atIndex:[_subviews count]];
+	[self addSubview:subview];
+	[_layer insertSublayer:subview.layer atIndex:index];
 }
 
 - (void)insertSubview:(UIView *)subview belowSubview:(UIView *)below
 {
-	// This doesn't work right because if the subview is already a subview, this has no effect.
-	// I don't think it's right to just remove it and re-add it. This needs to be more clever.
-	// Note that the same problem would apply to insertSubview:atIndex: which is assumed to
-	// move the subview (even if it is already added) to the proper index.
-	[self insertSubview:subview atIndex:[_subviews indexOfObject:below]];
-}
-
-- (void)removeFromSuperview
-{
-	if (_superview) {
-		[self retain];
-		if (_viewController) [_viewController viewWillDisappear:NO];
-		[_superview willRemoveSubview:self];
-		[self willMoveToWindow:nil];
-		[self willMoveToSuperview:nil];
-		[_layer removeFromSuperlayer];
-		[_superview->_subviews removeObject:self];
-		_superview = nil;
-		if (_viewController) [_viewController viewDidDisappear:NO];
-		[self didMoveToWindow];
-		[self didMoveToSuperview];
-		[self _hierarchyPositionDidChange];
-		[self release];
-	}
+	[self addSubview:subview];
+	[_layer insertSublayer:subview.layer below:below.layer];
 }
 
 - (void)bringSubviewToFront:(UIView *)subview
 {
 	if (subview.superview == self) {
-		[subview retain];
-		[_subviews removeObject:subview];
-		[_subviews addObject:subview];
-		[subview release];
 		[_layer insertSublayer:subview.layer above:[[_layer sublayers] lastObject]];
 	}
 }
@@ -169,11 +155,35 @@ static BOOL _animationsEnabled = YES;
 - (void)sendSubviewToBack:(UIView *)subview
 {
 	if (subview.superview == self) {
-		[subview retain];
-		[_subviews removeObject:subview];
-		[_subviews insertObject:subview atIndex:0];
-		[subview release];
 		[_layer insertSublayer:subview.layer atIndex:0];
+	}
+}
+
+- (void)_setNilSuperview
+{
+	_superview = nil;
+}
+
+- (void)removeFromSuperview
+{
+	if (_superview) {
+		[self retain];
+
+		if (_viewController) [_viewController viewWillDisappear:NO];
+		[_superview willRemoveSubview:self];
+		[self willMoveToWindow:nil];
+		[self willMoveToSuperview:nil];
+
+		[_layer removeFromSuperlayer];
+		[_superview->_subviews removeObject:self];
+		[self _setNilSuperview];
+		
+		if (_viewController) [_viewController viewDidDisappear:NO];
+		[self didMoveToWindow];
+		[self didMoveToSuperview];
+		[self _hierarchyPositionDidChange];
+
+		[self release];
 	}
 }
 
@@ -422,7 +432,7 @@ static BOOL _animationsEnabled = YES;
 	if (!CGSizeEqualToSize(oldSize, newSize)) {
 		[self _boundsSizeDidChange];
 		if (_autoresizesSubviews) {
-			for (UIView *subview in _subviews) {
+			for (UIView *subview in self.subviews) {
 				[subview _superviewSizeDidChangeFrom:oldSize to:newSize];
 			}
 		}
@@ -431,7 +441,7 @@ static BOOL _animationsEnabled = YES;
 
 - (void)_hierarchyPositionDidChange
 {
-	for (UIView *subview in _subviews) {
+	for (UIView *subview in self.subviews) {
 		[subview _hierarchyPositionDidChange];
 	}
 }
