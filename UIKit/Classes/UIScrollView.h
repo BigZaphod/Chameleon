@@ -7,9 +7,11 @@ typedef enum {
 	UIScrollViewIndicatorStyleWhite
 } UIScrollViewIndicatorStyle;
 
-@class _UIScroller, UIImageView;
+@class _UIScroller, UIImageView, UIScrollView;
 
 @protocol UIScrollViewDelegate <NSObject>
+@optional
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView;
 @end
 
 @interface UIScrollView : UIView {

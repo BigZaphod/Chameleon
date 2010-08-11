@@ -175,6 +175,9 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 {
 	_contentOffset = theOffset;
 	[self _constrainContentOffset:animated];
+	if ([_delegate respondsToSelector:@selector(scrollViewDidScroll:)]) {
+		[_delegate scrollViewDidScroll:self];
+	}
 }
 
 - (void)setContentOffset:(CGPoint)theOffset
