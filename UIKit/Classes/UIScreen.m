@@ -1,5 +1,5 @@
 //  Created by Sean Heber on 5/27/10.
-#import "UIScreen+UIPrivate.h"
+#import "UIScreen.h"
 #import "UIImage+UIPrivate.h"
 #import "UIImageView.h"
 #import "UIApplication.h"
@@ -69,6 +69,27 @@ static NSMutableArray *_allScreens = nil;
 	[_grabber release];
 	[_layer release];
 	[super dealloc];
+}
+
+- (BOOL)_hasResizeIndicator
+{
+	NSWindow *realWindow = [_NSView window];
+
+	if (realWindow && ([realWindow styleMask] & NSResizableWindowMask) && [realWindow showsResizeIndicator] ) {
+		NSView *contentView = [realWindow contentView];
+		
+		const CGRect myBounds = NSRectToCGRect([_NSView bounds]);
+		const CGPoint myLowerRight = CGPointMake(CGRectGetMaxX(myBounds),CGRectGetMaxY(myBounds));
+		const CGRect contentViewBounds = NSRectToCGRect([contentView frame]);
+		const CGPoint contentViewLowerRight = CGPointMake(CGRectGetMaxX(contentViewBounds),0);
+		const CGPoint convertedPoint = NSPointToCGPoint([_NSView convertPoint:NSPointFromCGPoint(myLowerRight) toView:contentView]);
+		
+		if (CGPointEqualToPoint(convertedPoint,contentViewLowerRight) && [realWindow showsResizeIndicator]) {
+			return YES;
+		}
+	}
+
+	return NO;
 }
 
 - (void)_layoutSubviews
