@@ -2,6 +2,7 @@
 #import "UIImageView.h"
 #import "UIImage.h"
 #import "UIGraphics.h"
+#import "UIKit+Private.h"
 #import <QuartzCore/QuartzCore.h>
 
 static NSArray *CGImagesWithUIImages(NSArray *images)
@@ -25,6 +26,7 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
 - (id)initWithFrame:(CGRect)frame
 {
 	if ((self=[super initWithFrame:frame])) {
+		_drawMode = _UIImageViewDrawModeNormal;
 		self.userInteractionEnabled = NO;
 		self.opaque = NO;
 	}
@@ -93,10 +95,18 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
 	return (_image.topCapHeight > 0 || _image.leftCapWidth > 0);
 }
 
+- (void)_setDrawMode:(NSInteger)drawMode
+{
+	if (drawMode != _drawMode) {
+		_drawMode = drawMode;
+		[self setNeedsDisplay];
+	}
+}
+
 - (void)displayLayer:(CALayer *)theLayer
 {
 	UIImage *sourceImage = (_highlighted && _highlightedImage)? _highlightedImage : _image;
-	UIImage *displayImage = nil;
+	UIImage *displayImage = sourceImage;
 	const CGRect bounds = self.bounds;
 	
 	if (self._hasResizableImage && bounds.size.width > 0 && bounds.size.height > 0) {
@@ -104,8 +114,33 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
 		[sourceImage drawInRect:bounds];
 		displayImage = UIGraphicsGetImageFromCurrentImageContext();
 		UIGraphicsEndImageContext();
-	} else {
-		displayImage = sourceImage;
+	}
+	
+	// adjust the image if required.
+	// this will likely only ever be used UIButton, but it seemed a good place for it.
+	// I wonder how the real UIKit does this...
+	if (displayImage && (_drawMode != _UIImageViewDrawModeNormal)) {
+		CGRect imageBounds;
+		imageBounds.origin = CGPointZero;
+		imageBounds.size = displayImage.size;
+
+		UIGraphicsBeginImageContext(imageBounds.size);
+		
+		CGBlendMode blendMode = kCGBlendModeNormal;
+		CGFloat alpha = 1;
+		
+		if (_drawMode == _UIImageViewDrawModeDisabled) {
+			alpha = 0.5;
+		} else if (_drawMode == _UIImageViewDrawModeHighlighted) {
+			[[[UIColor blackColor] colorWithAlphaComponent:0.4] setFill];
+			UIRectFill(imageBounds);
+			blendMode = kCGBlendModeDestinationAtop;
+		}
+		
+		[displayImage drawInRect:imageBounds blendMode:blendMode alpha:alpha];
+		displayImage = UIGraphicsGetImageFromCurrentImageContext();
+
+		UIGraphicsEndImageContext();
 	}
 
 	theLayer.contents = (id)[displayImage CGImage];

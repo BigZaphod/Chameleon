@@ -27,6 +27,8 @@ typedef enum {
 	UIEdgeInsets _titleEdgeInsets;
 	UIEdgeInsets _imageEdgeInsets;
 	NSMutableDictionary *_content;
+	UIImage *_adjustedHighlightImage;
+	UIImage *_adjustedDisabledImage;
 }
 
 + (id)buttonWithType:(UIButtonType)buttonType;
@@ -54,7 +56,7 @@ typedef enum {
 @property (nonatomic) BOOL reversesTitleShadowWhenHighlighted;
 @property (nonatomic) BOOL adjustsImageWhenHighlighted;
 @property (nonatomic) BOOL adjustsImageWhenDisabled;
-@property (nonatomic) BOOL showsTouchWhenHighlighted;
+@property (nonatomic) BOOL showsTouchWhenHighlighted;		// no effect
 @property (nonatomic) UIEdgeInsets contentEdgeInsets;
 @property (nonatomic) UIEdgeInsets titleEdgeInsets;
 @property (nonatomic) UIEdgeInsets imageEdgeInsets;

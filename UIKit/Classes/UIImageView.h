@@ -12,6 +12,7 @@
 	NSInteger _animationRepeatCount;
 	UIImage *_highlightedImage;
 	BOOL _highlighted;
+	NSInteger _drawMode;
 }
 
 - (id)initWithImage:(UIImage *)theImage;

@@ -10,6 +10,7 @@
 #import "UIFont.h"
 #import "UIColor.h"
 #import "UIViewController.h"
+#import "UIImageView.h"
 
 @class NSColor, NSFont, NSImage;
 
@@ -79,5 +80,14 @@
 - (void)_setNavigationController:(UINavigationController *)navController;
 @end
 
+@interface UIImageView (_Private)
+- (void)_setDrawMode:(NSInteger)drawMode;
+@end
+
+enum {
+	_UIImageViewDrawModeNormal,
+	_UIImageViewDrawModeHighlighted,
+	_UIImageViewDrawModeDisabled,
+};
 
 extern const CGFloat _UIScrollViewScrollerSize;

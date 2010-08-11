@@ -64,6 +64,8 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 	[_titleLabel release];
 	[_imageView release];
 	[_backgroundImageView release];
+	[_adjustedHighlightImage release];
+	[_adjustedDisabledImage release];
 	[super dealloc];
 }
 
@@ -102,20 +104,45 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 	return [UIColor whiteColor];
 }
 
+- (id)_contentForState:(UIControlState)state type:(NSString *)type
+{
+	return [[_content objectForKey:type] objectForKey:[NSNumber numberWithInt:state]];
+}
+
+- (id)_normalContentForState:(UIControlState)state type:(NSString *)type
+{
+	return [self _contentForState:state type:type] ?: [self _contentForState:UIControlStateNormal type:type];
+}
+
 - (void)_updateContent
 {
 	const UIControlState state = self.state;
 	_titleLabel.text = [self titleForState:state];
 	_titleLabel.textColor = [self titleColorForState:state] ?: [self _defaultTitleColor];
 	_titleLabel.shadowColor = [self titleShadowColorForState:state] ?: [self _defaultTitleShadowColor];
-	_imageView.image = [self imageForState:state];
 	_backgroundImageView.image = [self backgroundImageForState:state];
+	
+	// Setting the image is a bit trickier because we may need to adjust it...
+	UIImage *image = [self _contentForState:state type:UIButtonContentTypeImage];
+	if (!image) {
+		image = [self imageForState:state];	// find the correct default image to show
+		if (_adjustsImageWhenDisabled && state & UIControlStateDisabled) {
+			[_imageView _setDrawMode:_UIImageViewDrawModeDisabled];
+		} else if (_adjustsImageWhenHighlighted && state & UIControlStateHighlighted) {
+			[_imageView _setDrawMode:_UIImageViewDrawModeHighlighted];
+		} else {
+			[_imageView _setDrawMode:_UIImageViewDrawModeNormal];
+		}
+	} else {
+		[_imageView _setDrawMode:_UIImageViewDrawModeNormal];
+	}
+	_imageView.image = image;
 }
 
 - (void)_setContent:(id)value forState:(UIControlState)state type:(NSString *)type
 {
 	NSMutableDictionary *typeContent = [_content objectForKey:type];
-
+	
 	if (!typeContent) {
 		typeContent = [[NSMutableDictionary new] autorelease];
 		[_content setObject:typeContent forKey:type];
@@ -129,17 +156,6 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 	}
 	
 	[self _updateContent];
-}
-
-- (id)_contentForState:(UIControlState)state type:(NSString *)type
-{
-	id object = [[_content objectForKey:type] objectForKey:[NSNumber numberWithInt:state]];
-
-	if (!object) {
-		object = [[_content objectForKey:type] objectForKey:[NSNumber numberWithInt:UIControlStateNormal]];
-	}
-
-	return object;
 }
 
 - (void)setTitle:(NSString *)title forState:(UIControlState)state
@@ -164,32 +180,35 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 
 - (void)setImage:(UIImage *)image forState:(UIControlState)state
 {
+	[_adjustedHighlightImage release];
+	[_adjustedDisabledImage release];
+	_adjustedDisabledImage = _adjustedHighlightImage = nil;
 	[self _setContent:image forState:state type:UIButtonContentTypeImage];
 }
 
 - (NSString *)titleForState:(UIControlState)state
 {
-	return [self _contentForState:state type:UIButtonContentTypeTitle];
+	return [self _normalContentForState:state type:UIButtonContentTypeTitle];
 }
 
 - (UIColor *)titleColorForState:(UIControlState)state
 {
-	return [self _contentForState:state type:UIButtonContentTypeTitleColor];
+	return [self _normalContentForState:state type:UIButtonContentTypeTitleColor];
 }
 
 - (UIColor *)titleShadowColorForState:(UIControlState)state
 {
-	return [self _contentForState:state type:UIButtonContentTypeTitleShadowColor];
+	return [self _normalContentForState:state type:UIButtonContentTypeTitleShadowColor];
 }
 
 - (UIImage *)backgroundImageForState:(UIControlState)state
 {
-	return [self _contentForState:state type:UIButtonContentTypeBackgroundImage];
+	return [self _normalContentForState:state type:UIButtonContentTypeBackgroundImage];
 }
 
 - (UIImage *)imageForState:(UIControlState)state
 {
-	return [self _contentForState:state type:UIButtonContentTypeImage];
+	return [self _normalContentForState:state type:UIButtonContentTypeImage];
 }
 
 - (CGRect)backgroundRectForBounds:(CGRect)bounds
