@@ -113,6 +113,7 @@ NSMutableDictionary *imageCache = nil;
 	CGContextTranslateCTM(ctx, rect.origin.x, rect.origin.y+rect.size.height);
 	CGContextScaleCTM(ctx, 1.0, -1.0);
 	CGContextSetBlendMode(ctx, blendMode);
+	CGContextSetAlpha(ctx, alpha);
 	CGContextDrawImage(ctx, CGRectMake(0,0,rect.size.width,rect.size.height), _image);
 	CGContextRestoreGState(ctx);
 }
