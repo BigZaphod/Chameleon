@@ -120,10 +120,10 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 	_titleLabel.text = [self titleForState:state];
 	_titleLabel.textColor = [self titleColorForState:state] ?: [self _defaultTitleColor];
 	_titleLabel.shadowColor = [self titleShadowColorForState:state] ?: [self _defaultTitleShadowColor];
-	_backgroundImageView.image = [self backgroundImageForState:state];
 	
-	// Setting the image is a bit trickier because we may need to adjust it...
 	UIImage *image = [self _contentForState:state type:UIButtonContentTypeImage];
+	UIImage *backgroundImage = [self _contentForState:state type:UIButtonContentTypeBackgroundImage];
+	
 	if (!image) {
 		image = [self imageForState:state];	// find the correct default image to show
 		if (_adjustsImageWhenDisabled && state & UIControlStateDisabled) {
@@ -136,7 +136,22 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 	} else {
 		[_imageView _setDrawMode:_UIImageViewDrawModeNormal];
 	}
+
+	if (!backgroundImage) {
+		backgroundImage = [self backgroundImageForState:state];
+		if (_adjustsImageWhenDisabled && state & UIControlStateDisabled) {
+			[_backgroundImageView _setDrawMode:_UIImageViewDrawModeDisabled];
+		} else if (_adjustsImageWhenHighlighted && state & UIControlStateHighlighted) {
+			[_backgroundImageView _setDrawMode:_UIImageViewDrawModeHighlighted];
+		} else {
+			[_backgroundImageView _setDrawMode:_UIImageViewDrawModeNormal];
+		}
+	} else {
+		[_backgroundImageView _setDrawMode:_UIImageViewDrawModeNormal];
+	}
+	
 	_imageView.image = image;
+	_backgroundImageView.image = backgroundImage;
 }
 
 - (void)_setContent:(id)value forState:(UIControlState)state type:(NSString *)type
