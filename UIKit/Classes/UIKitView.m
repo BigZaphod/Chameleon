@@ -2,6 +2,8 @@
 #import "UIKitView.h"
 #import "UIScreen.h"
 #import "UIApplication.h"
+#import "UIImage.h"
+#import "UIImageView.h"
 #import "UIKit+Private.h"
 
 @implementation UIKitView
@@ -87,6 +89,33 @@
 - (void)scrollWheel:(NSEvent *)theEvent
 {
 	[[UIApplication sharedApplication] _screen:_screen didReceiveNSEvent:theEvent];
+}
+
+- (void)_launchApplicationDelegate:(id<UIApplicationDelegate>)appDelegate
+{
+	[[UIApplication sharedApplication] setDelegate:appDelegate];
+	[appDelegate applicationDidFinishLaunching:[UIApplication sharedApplication]];
+}
+
+- (void)launchApplicationWithDelegate:(id<UIApplicationDelegate>)appDelegate afterDelay:(NSTimeInterval)delay
+{
+	if (delay) {
+		UIImage *defaultImage = [UIImage imageNamed:@"Default-Landscape.png"];
+		UIImageView *defaultImageView = [[[UIImageView alloc] initWithImage:defaultImage] autorelease];
+		defaultImageView.contentMode = UIViewContentModeCenter;
+		
+		UIWindow *defaultWindow = [(UIWindow *)[UIWindow alloc] initWithFrame:_screen.bounds];
+		defaultWindow.screen = _screen;
+		defaultWindow.backgroundColor = [UIColor blackColor];	// dunno..
+		defaultWindow.opaque = YES;
+		[defaultWindow addSubview:defaultImageView];
+		[defaultWindow makeKeyAndVisible];
+		
+		[self performSelector:@selector(_launchApplicationDelegate:) withObject:appDelegate afterDelay:delay];
+		[defaultWindow performSelector:@selector(release) withObject:nil afterDelay:delay];
+	} else {
+		[self _launchApplicationDelegate:appDelegate];
+	}
 }
 
 @end

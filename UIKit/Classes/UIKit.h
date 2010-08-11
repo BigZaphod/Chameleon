@@ -2,6 +2,7 @@
 #define IBAction void
 #define IBOutlet
 
+#import "UIApplicationDelegate.h"
 #import "UIScreen.h"
 #import "UIGeometry.h"
 #import "UIGraphics.h"

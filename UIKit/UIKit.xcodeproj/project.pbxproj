@@ -19,6 +19,7 @@
 		147A8396120C905000422EDC /* _UIPopoverWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 147A8390120C905000422EDC /* _UIPopoverWindowController.m */; };
 		147A8397120C905000422EDC /* _UIPopoverWindowFrameView.h in Headers */ = {isa = PBXBuildFile; fileRef = 147A8391120C905000422EDC /* _UIPopoverWindowFrameView.h */; };
 		147A8398120C905000422EDC /* _UIPopoverWindowFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 147A8392120C905000422EDC /* _UIPopoverWindowFrameView.m */; };
+		14869DB1121303C60019B134 /* UIApplicationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14869DB0121303C60019B134 /* UIApplicationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14B1140812033FA6009D9376 /* UITabBarController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14B1140612033FA6009D9376 /* UITabBarController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14B1140912033FA6009D9376 /* UITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14B1140712033FA6009D9376 /* UITabBarController.m */; };
 		14CC83B311EFA8AF005988CC /* _UIImageTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC833D11EFA8AF005988CC /* _UIImageTools.h */; };
@@ -168,6 +169,7 @@
 		147A8390120C905000422EDC /* _UIPopoverWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _UIPopoverWindowController.m; path = Classes/_UIPopoverWindowController.m; sourceTree = "<group>"; };
 		147A8391120C905000422EDC /* _UIPopoverWindowFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _UIPopoverWindowFrameView.h; path = Classes/_UIPopoverWindowFrameView.h; sourceTree = "<group>"; };
 		147A8392120C905000422EDC /* _UIPopoverWindowFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _UIPopoverWindowFrameView.m; path = Classes/_UIPopoverWindowFrameView.m; sourceTree = "<group>"; };
+		14869DB0121303C60019B134 /* UIApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIApplicationDelegate.h; path = Classes/UIApplicationDelegate.h; sourceTree = "<group>"; };
 		14B1140612033FA6009D9376 /* UITabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UITabBarController.h; path = Classes/UITabBarController.h; sourceTree = "<group>"; };
 		14B1140712033FA6009D9376 /* UITabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UITabBarController.m; path = Classes/UITabBarController.m; sourceTree = "<group>"; };
 		14CC833D11EFA8AF005988CC /* _UIImageTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _UIImageTools.h; path = Classes/_UIImageTools.h; sourceTree = "<group>"; };
@@ -389,6 +391,7 @@
 				14CC835811EFA8AF005988CC /* UIAlertView.m */,
 				14CC835911EFA8AF005988CC /* UIApplication.h */,
 				14CC835A11EFA8AF005988CC /* UIApplication.m */,
+				14869DB0121303C60019B134 /* UIApplicationDelegate.h */,
 				14CC835B11EFA8AF005988CC /* UIBarButtonItem.h */,
 				14CC835C11EFA8AF005988CC /* UIBarButtonItem.m */,
 				14CC835D11EFA8AF005988CC /* UIBarItem.h */,
@@ -593,6 +596,7 @@
 				147A8393120C905000422EDC /* _UIPopoverWindow.h in Headers */,
 				147A8395120C905000422EDC /* _UIPopoverWindowController.h in Headers */,
 				147A8397120C905000422EDC /* _UIPopoverWindowFrameView.h in Headers */,
+				14869DB1121303C60019B134 /* UIApplicationDelegate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

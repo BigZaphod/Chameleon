@@ -1,6 +1,7 @@
 //  Created by Sean Heber on 5/28/10.
 #import "UIResponder.h"
 #import "UIDevice.h"
+#import "UIApplicationDelegate.h"
 
 extern NSString *const UIApplicationWillChangeStatusBarOrientationNotification;
 extern NSString *const UIApplicationDidChangeStatusBarOrientationNotification;
@@ -28,11 +29,6 @@ typedef enum {
 (orientation) == UIInterfaceOrientationLandscapeRight)
 
 @class UIWindow, UIApplication;
-
-@protocol UIApplicationDelegate <NSObject>
-@optional
-- (void)applicationDidFinishLaunching:(UIApplication *)application;
-@end
 
 @interface UIApplication : UIResponder {
 @private
