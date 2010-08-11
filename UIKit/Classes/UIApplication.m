@@ -1,7 +1,9 @@
 //  Created by Sean Heber on 5/28/10.
-#import "UIApplication.h"
-#import "UITouch.h"
-#import "UIKit+Private.h"
+#import "UIApplication+UIPrivate.h"
+#import "UIScreen+UIPrivate.h"
+#import "UIEvent+UIPrivate.h"
+#import "UITouch+UIPrivate.h"
+#import "UIWindow.h"
 #import <Cocoa/Cocoa.h>
 
 NSString *const UIApplicationWillChangeStatusBarOrientationNotification = @"UIApplicationWillChangeStatusBarOrientationNotification";

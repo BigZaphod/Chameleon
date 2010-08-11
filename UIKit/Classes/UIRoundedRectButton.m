@@ -1,8 +1,7 @@
 //  Created by Sean Heber on 6/24/10.
 #import "UIRoundedRectButton.h"
-#import "UIImage.h"
+#import "UIImage+UIPrivate.h"
 #import "UIColor.h"
-#import "UIKit+Private.h"
 
 static UIImage *highlightedImage = nil;
 static UIImage *normalImage = nil;

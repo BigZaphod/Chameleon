@@ -13,29 +13,43 @@
 		1464960C11FF7AE500ECEC7A /* <UINavigationBar> back.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */; };
 		1464960D11FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */; };
 		1464960E11FF7AE500ECEC7A /* <UINavigationBar> button.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */; };
-		147A8393120C905000422EDC /* _UIPopoverWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 147A838D120C905000422EDC /* _UIPopoverWindow.h */; };
-		147A8394120C905000422EDC /* _UIPopoverWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 147A838E120C905000422EDC /* _UIPopoverWindow.m */; };
-		147A8395120C905000422EDC /* _UIPopoverWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 147A838F120C905000422EDC /* _UIPopoverWindowController.h */; };
-		147A8396120C905000422EDC /* _UIPopoverWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 147A8390120C905000422EDC /* _UIPopoverWindowController.m */; };
-		147A8397120C905000422EDC /* _UIPopoverWindowFrameView.h in Headers */ = {isa = PBXBuildFile; fileRef = 147A8391120C905000422EDC /* _UIPopoverWindowFrameView.h */; };
-		147A8398120C905000422EDC /* _UIPopoverWindowFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 147A8392120C905000422EDC /* _UIPopoverWindowFrameView.m */; };
 		14869DB1121303C60019B134 /* UIApplicationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14869DB0121303C60019B134 /* UIApplicationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		14A726BE1213303400648C9B /* _UIImageTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A7269B1213303400648C9B /* _UIImageTools.h */; };
+		14A726BF1213303400648C9B /* _UIImageTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A7269C1213303400648C9B /* _UIImageTools.m */; };
+		14A726C01213303400648C9B /* _UINinePartImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A7269D1213303400648C9B /* _UINinePartImage.h */; };
+		14A726C11213303400648C9B /* _UINinePartImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A7269E1213303400648C9B /* _UINinePartImage.m */; };
+		14A726C21213303400648C9B /* _UIPopoverWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A7269F1213303400648C9B /* _UIPopoverWindow.h */; };
+		14A726C31213303400648C9B /* _UIPopoverWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A726A01213303400648C9B /* _UIPopoverWindow.m */; };
+		14A726C41213303400648C9B /* _UIPopoverWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726A11213303400648C9B /* _UIPopoverWindowController.h */; };
+		14A726C51213303400648C9B /* _UIPopoverWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A726A21213303400648C9B /* _UIPopoverWindowController.m */; };
+		14A726C61213303400648C9B /* _UIPopoverWindowFrameView.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726A31213303400648C9B /* _UIPopoverWindowFrameView.h */; };
+		14A726C71213303400648C9B /* _UIPopoverWindowFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A726A41213303400648C9B /* _UIPopoverWindowFrameView.m */; };
+		14A726C81213303400648C9B /* _UIScroller.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726A51213303400648C9B /* _UIScroller.h */; };
+		14A726C91213303400648C9B /* _UIScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A726A61213303400648C9B /* _UIScroller.m */; };
+		14A726CA1213303400648C9B /* _UITableViewCellSeparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726A71213303400648C9B /* _UITableViewCellSeparator.h */; };
+		14A726CB1213303400648C9B /* _UITableViewCellSeparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A726A81213303400648C9B /* _UITableViewCellSeparator.m */; };
+		14A726CC1213303400648C9B /* _UIThreePartImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726A91213303400648C9B /* _UIThreePartImage.h */; };
+		14A726CD1213303400648C9B /* _UIThreePartImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A726AA1213303400648C9B /* _UIThreePartImage.m */; };
+		14A726CE1213303400648C9B /* _UIViewAnimationGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726AB1213303400648C9B /* _UIViewAnimationGroup.h */; };
+		14A726CF1213303400648C9B /* _UIViewAnimationGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A726AC1213303400648C9B /* _UIViewAnimationGroup.m */; };
+		14A726D01213303400648C9B /* _UIViewLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726AD1213303400648C9B /* _UIViewLayoutManager.h */; };
+		14A726D11213303400648C9B /* _UIViewLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A726AE1213303400648C9B /* _UIViewLayoutManager.m */; };
+		14A726D21213303400648C9B /* UIApplication+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726AF1213303400648C9B /* UIApplication+UIPrivate.h */; };
+		14A726D31213303400648C9B /* UIColor+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B01213303400648C9B /* UIColor+UIPrivate.h */; };
+		14A726D41213303400648C9B /* UIControl+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B11213303400648C9B /* UIControl+UIPrivate.h */; };
+		14A726D51213303400648C9B /* UIEvent+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B21213303400648C9B /* UIEvent+UIPrivate.h */; };
+		14A726D61213303400648C9B /* UIFont+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B31213303400648C9B /* UIFont+UIPrivate.h */; };
+		14A726D71213303400648C9B /* UIImage+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B41213303400648C9B /* UIImage+UIPrivate.h */; };
+		14A726D81213303400648C9B /* UIImageView+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B51213303400648C9B /* UIImageView+UIPrivate.h */; };
+		14A726DA1213303400648C9B /* UIScreen+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B71213303400648C9B /* UIScreen+UIPrivate.h */; };
+		14A726DB1213303400648C9B /* UIScrollView+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B81213303400648C9B /* UIScrollView+UIPrivate.h */; };
+		14A726DC1213303400648C9B /* UITableViewCell+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B91213303400648C9B /* UITableViewCell+UIPrivate.h */; };
+		14A726DD1213303400648C9B /* UITouch+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BA1213303400648C9B /* UITouch+UIPrivate.h */; };
+		14A726DE1213303400648C9B /* UIView+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BB1213303400648C9B /* UIView+UIPrivate.h */; };
+		14A726DF1213303400648C9B /* UIViewController+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BC1213303400648C9B /* UIViewController+UIPrivate.h */; };
+		14A726E01213303400648C9B /* UIWindow+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BD1213303400648C9B /* UIWindow+UIPrivate.h */; };
 		14B1140812033FA6009D9376 /* UITabBarController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14B1140612033FA6009D9376 /* UITabBarController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14B1140912033FA6009D9376 /* UITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14B1140712033FA6009D9376 /* UITabBarController.m */; };
-		14CC83B311EFA8AF005988CC /* _UIImageTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC833D11EFA8AF005988CC /* _UIImageTools.h */; };
-		14CC83B411EFA8AF005988CC /* _UIImageTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC833E11EFA8AF005988CC /* _UIImageTools.m */; };
-		14CC83B511EFA8AF005988CC /* _UINinePartImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC833F11EFA8AF005988CC /* _UINinePartImage.h */; };
-		14CC83B611EFA8AF005988CC /* _UINinePartImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC834011EFA8AF005988CC /* _UINinePartImage.m */; };
-		14CC83B711EFA8AF005988CC /* _UIScroller.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC834111EFA8AF005988CC /* _UIScroller.h */; };
-		14CC83B811EFA8AF005988CC /* _UIScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC834211EFA8AF005988CC /* _UIScroller.m */; };
-		14CC83B911EFA8AF005988CC /* _UITableViewCellSeparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC834311EFA8AF005988CC /* _UITableViewCellSeparator.h */; };
-		14CC83BA11EFA8AF005988CC /* _UITableViewCellSeparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC834411EFA8AF005988CC /* _UITableViewCellSeparator.m */; };
-		14CC83BB11EFA8AF005988CC /* _UIThreePartImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC834511EFA8AF005988CC /* _UIThreePartImage.h */; };
-		14CC83BC11EFA8AF005988CC /* _UIThreePartImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC834611EFA8AF005988CC /* _UIThreePartImage.m */; };
-		14CC83BD11EFA8AF005988CC /* _UIViewAnimationGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC834711EFA8AF005988CC /* _UIViewAnimationGroup.h */; };
-		14CC83BE11EFA8AF005988CC /* _UIViewAnimationGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC834811EFA8AF005988CC /* _UIViewAnimationGroup.m */; };
-		14CC83BF11EFA8AF005988CC /* _UIViewLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC834911EFA8AF005988CC /* _UIViewLayoutManager.h */; };
-		14CC83C011EFA8AF005988CC /* _UIViewLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC834A11EFA8AF005988CC /* _UIViewLayoutManager.m */; };
 		14CC83C111EFA8AF005988CC /* CALayer+UIKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC834B11EFA8AF005988CC /* CALayer+UIKit.h */; };
 		14CC83C211EFA8AF005988CC /* CALayer+UIKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC834C11EFA8AF005988CC /* CALayer+UIKit.m */; };
 		14CC83C311EFA8AF005988CC /* NSIndexPath+UITableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC834D11EFA8AF005988CC /* NSIndexPath+UITableView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -84,7 +98,6 @@
 		14CC83EE11EFA8AF005988CC /* UIImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC837811EFA8AF005988CC /* UIImageView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14CC83EF11EFA8AF005988CC /* UIImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC837911EFA8AF005988CC /* UIImageView.m */; };
 		14CC83F011EFA8AF005988CC /* UIKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC837A11EFA8AF005988CC /* UIKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		14CC83F111EFA8AF005988CC /* UIKit+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC837B11EFA8AF005988CC /* UIKit+Private.h */; };
 		14CC83F211EFA8AF005988CC /* UIKitView.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC837C11EFA8AF005988CC /* UIKitView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14CC83F311EFA8AF005988CC /* UIKitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC837D11EFA8AF005988CC /* UIKitView.m */; };
 		14CC83F411EFA8AF005988CC /* UILabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC837E11EFA8AF005988CC /* UILabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -163,29 +176,43 @@
 		1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> back.png"; path = "Resources/<UINavigationBar> back.png"; sourceTree = "<group>"; };
 		1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> button-highlighted.png"; path = "Resources/<UINavigationBar> button-highlighted.png"; sourceTree = "<group>"; };
 		1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> button.png"; path = "Resources/<UINavigationBar> button.png"; sourceTree = "<group>"; };
-		147A838D120C905000422EDC /* _UIPopoverWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _UIPopoverWindow.h; path = Classes/_UIPopoverWindow.h; sourceTree = "<group>"; };
-		147A838E120C905000422EDC /* _UIPopoverWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _UIPopoverWindow.m; path = Classes/_UIPopoverWindow.m; sourceTree = "<group>"; };
-		147A838F120C905000422EDC /* _UIPopoverWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _UIPopoverWindowController.h; path = Classes/_UIPopoverWindowController.h; sourceTree = "<group>"; };
-		147A8390120C905000422EDC /* _UIPopoverWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _UIPopoverWindowController.m; path = Classes/_UIPopoverWindowController.m; sourceTree = "<group>"; };
-		147A8391120C905000422EDC /* _UIPopoverWindowFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _UIPopoverWindowFrameView.h; path = Classes/_UIPopoverWindowFrameView.h; sourceTree = "<group>"; };
-		147A8392120C905000422EDC /* _UIPopoverWindowFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _UIPopoverWindowFrameView.m; path = Classes/_UIPopoverWindowFrameView.m; sourceTree = "<group>"; };
 		14869DB0121303C60019B134 /* UIApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIApplicationDelegate.h; path = Classes/UIApplicationDelegate.h; sourceTree = "<group>"; };
+		14A7269B1213303400648C9B /* _UIImageTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _UIImageTools.h; sourceTree = "<group>"; };
+		14A7269C1213303400648C9B /* _UIImageTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _UIImageTools.m; sourceTree = "<group>"; };
+		14A7269D1213303400648C9B /* _UINinePartImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _UINinePartImage.h; sourceTree = "<group>"; };
+		14A7269E1213303400648C9B /* _UINinePartImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _UINinePartImage.m; sourceTree = "<group>"; };
+		14A7269F1213303400648C9B /* _UIPopoverWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _UIPopoverWindow.h; sourceTree = "<group>"; };
+		14A726A01213303400648C9B /* _UIPopoverWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _UIPopoverWindow.m; sourceTree = "<group>"; };
+		14A726A11213303400648C9B /* _UIPopoverWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _UIPopoverWindowController.h; sourceTree = "<group>"; };
+		14A726A21213303400648C9B /* _UIPopoverWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _UIPopoverWindowController.m; sourceTree = "<group>"; };
+		14A726A31213303400648C9B /* _UIPopoverWindowFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _UIPopoverWindowFrameView.h; sourceTree = "<group>"; };
+		14A726A41213303400648C9B /* _UIPopoverWindowFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _UIPopoverWindowFrameView.m; sourceTree = "<group>"; };
+		14A726A51213303400648C9B /* _UIScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _UIScroller.h; sourceTree = "<group>"; };
+		14A726A61213303400648C9B /* _UIScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _UIScroller.m; sourceTree = "<group>"; };
+		14A726A71213303400648C9B /* _UITableViewCellSeparator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _UITableViewCellSeparator.h; sourceTree = "<group>"; };
+		14A726A81213303400648C9B /* _UITableViewCellSeparator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _UITableViewCellSeparator.m; sourceTree = "<group>"; };
+		14A726A91213303400648C9B /* _UIThreePartImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _UIThreePartImage.h; sourceTree = "<group>"; };
+		14A726AA1213303400648C9B /* _UIThreePartImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _UIThreePartImage.m; sourceTree = "<group>"; };
+		14A726AB1213303400648C9B /* _UIViewAnimationGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _UIViewAnimationGroup.h; sourceTree = "<group>"; };
+		14A726AC1213303400648C9B /* _UIViewAnimationGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _UIViewAnimationGroup.m; sourceTree = "<group>"; };
+		14A726AD1213303400648C9B /* _UIViewLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _UIViewLayoutManager.h; sourceTree = "<group>"; };
+		14A726AE1213303400648C9B /* _UIViewLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _UIViewLayoutManager.m; sourceTree = "<group>"; };
+		14A726AF1213303400648C9B /* UIApplication+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+UIPrivate.h"; sourceTree = "<group>"; };
+		14A726B01213303400648C9B /* UIColor+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+UIPrivate.h"; sourceTree = "<group>"; };
+		14A726B11213303400648C9B /* UIControl+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIControl+UIPrivate.h"; sourceTree = "<group>"; };
+		14A726B21213303400648C9B /* UIEvent+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIEvent+UIPrivate.h"; sourceTree = "<group>"; };
+		14A726B31213303400648C9B /* UIFont+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+UIPrivate.h"; sourceTree = "<group>"; };
+		14A726B41213303400648C9B /* UIImage+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+UIPrivate.h"; sourceTree = "<group>"; };
+		14A726B51213303400648C9B /* UIImageView+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+UIPrivate.h"; sourceTree = "<group>"; };
+		14A726B71213303400648C9B /* UIScreen+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScreen+UIPrivate.h"; sourceTree = "<group>"; };
+		14A726B81213303400648C9B /* UIScrollView+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+UIPrivate.h"; sourceTree = "<group>"; };
+		14A726B91213303400648C9B /* UITableViewCell+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+UIPrivate.h"; sourceTree = "<group>"; };
+		14A726BA1213303400648C9B /* UITouch+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITouch+UIPrivate.h"; sourceTree = "<group>"; };
+		14A726BB1213303400648C9B /* UIView+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+UIPrivate.h"; sourceTree = "<group>"; };
+		14A726BC1213303400648C9B /* UIViewController+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+UIPrivate.h"; sourceTree = "<group>"; };
+		14A726BD1213303400648C9B /* UIWindow+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+UIPrivate.h"; sourceTree = "<group>"; };
 		14B1140612033FA6009D9376 /* UITabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UITabBarController.h; path = Classes/UITabBarController.h; sourceTree = "<group>"; };
 		14B1140712033FA6009D9376 /* UITabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UITabBarController.m; path = Classes/UITabBarController.m; sourceTree = "<group>"; };
-		14CC833D11EFA8AF005988CC /* _UIImageTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _UIImageTools.h; path = Classes/_UIImageTools.h; sourceTree = "<group>"; };
-		14CC833E11EFA8AF005988CC /* _UIImageTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _UIImageTools.m; path = Classes/_UIImageTools.m; sourceTree = "<group>"; };
-		14CC833F11EFA8AF005988CC /* _UINinePartImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _UINinePartImage.h; path = Classes/_UINinePartImage.h; sourceTree = "<group>"; };
-		14CC834011EFA8AF005988CC /* _UINinePartImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _UINinePartImage.m; path = Classes/_UINinePartImage.m; sourceTree = "<group>"; };
-		14CC834111EFA8AF005988CC /* _UIScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _UIScroller.h; path = Classes/_UIScroller.h; sourceTree = "<group>"; };
-		14CC834211EFA8AF005988CC /* _UIScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _UIScroller.m; path = Classes/_UIScroller.m; sourceTree = "<group>"; };
-		14CC834311EFA8AF005988CC /* _UITableViewCellSeparator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _UITableViewCellSeparator.h; path = Classes/_UITableViewCellSeparator.h; sourceTree = "<group>"; };
-		14CC834411EFA8AF005988CC /* _UITableViewCellSeparator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _UITableViewCellSeparator.m; path = Classes/_UITableViewCellSeparator.m; sourceTree = "<group>"; };
-		14CC834511EFA8AF005988CC /* _UIThreePartImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _UIThreePartImage.h; path = Classes/_UIThreePartImage.h; sourceTree = "<group>"; };
-		14CC834611EFA8AF005988CC /* _UIThreePartImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _UIThreePartImage.m; path = Classes/_UIThreePartImage.m; sourceTree = "<group>"; };
-		14CC834711EFA8AF005988CC /* _UIViewAnimationGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _UIViewAnimationGroup.h; path = Classes/_UIViewAnimationGroup.h; sourceTree = "<group>"; };
-		14CC834811EFA8AF005988CC /* _UIViewAnimationGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _UIViewAnimationGroup.m; path = Classes/_UIViewAnimationGroup.m; sourceTree = "<group>"; };
-		14CC834911EFA8AF005988CC /* _UIViewLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _UIViewLayoutManager.h; path = Classes/_UIViewLayoutManager.h; sourceTree = "<group>"; };
-		14CC834A11EFA8AF005988CC /* _UIViewLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _UIViewLayoutManager.m; path = Classes/_UIViewLayoutManager.m; sourceTree = "<group>"; };
 		14CC834B11EFA8AF005988CC /* CALayer+UIKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CALayer+UIKit.h"; path = "Classes/CALayer+UIKit.h"; sourceTree = "<group>"; };
 		14CC834C11EFA8AF005988CC /* CALayer+UIKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CALayer+UIKit.m"; path = "Classes/CALayer+UIKit.m"; sourceTree = "<group>"; };
 		14CC834D11EFA8AF005988CC /* NSIndexPath+UITableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSIndexPath+UITableView.h"; path = "Classes/NSIndexPath+UITableView.h"; sourceTree = "<group>"; };
@@ -234,7 +261,6 @@
 		14CC837811EFA8AF005988CC /* UIImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIImageView.h; path = Classes/UIImageView.h; sourceTree = "<group>"; };
 		14CC837911EFA8AF005988CC /* UIImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIImageView.m; path = Classes/UIImageView.m; sourceTree = "<group>"; };
 		14CC837A11EFA8AF005988CC /* UIKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIKit.h; path = Classes/UIKit.h; sourceTree = "<group>"; };
-		14CC837B11EFA8AF005988CC /* UIKit+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIKit+Private.h"; path = "Classes/UIKit+Private.h"; sourceTree = "<group>"; };
 		14CC837C11EFA8AF005988CC /* UIKitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIKitView.h; path = Classes/UIKitView.h; sourceTree = "<group>"; };
 		14CC837D11EFA8AF005988CC /* UIKitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIKitView.m; path = Classes/UIKitView.m; sourceTree = "<group>"; };
 		14CC837E11EFA8AF005988CC /* UILabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UILabel.h; path = Classes/UILabel.h; sourceTree = "<group>"; };
@@ -490,29 +516,43 @@
 		147A838C120C902C00422EDC /* Private Classes */ = {
 			isa = PBXGroup;
 			children = (
-				14CC837B11EFA8AF005988CC /* UIKit+Private.h */,
-				14CC833D11EFA8AF005988CC /* _UIImageTools.h */,
-				14CC833E11EFA8AF005988CC /* _UIImageTools.m */,
-				14CC833F11EFA8AF005988CC /* _UINinePartImage.h */,
-				14CC834011EFA8AF005988CC /* _UINinePartImage.m */,
-				147A838D120C905000422EDC /* _UIPopoverWindow.h */,
-				147A838E120C905000422EDC /* _UIPopoverWindow.m */,
-				147A838F120C905000422EDC /* _UIPopoverWindowController.h */,
-				147A8390120C905000422EDC /* _UIPopoverWindowController.m */,
-				147A8391120C905000422EDC /* _UIPopoverWindowFrameView.h */,
-				147A8392120C905000422EDC /* _UIPopoverWindowFrameView.m */,
-				14CC834111EFA8AF005988CC /* _UIScroller.h */,
-				14CC834211EFA8AF005988CC /* _UIScroller.m */,
-				14CC834311EFA8AF005988CC /* _UITableViewCellSeparator.h */,
-				14CC834411EFA8AF005988CC /* _UITableViewCellSeparator.m */,
-				14CC834511EFA8AF005988CC /* _UIThreePartImage.h */,
-				14CC834611EFA8AF005988CC /* _UIThreePartImage.m */,
-				14CC834711EFA8AF005988CC /* _UIViewAnimationGroup.h */,
-				14CC834811EFA8AF005988CC /* _UIViewAnimationGroup.m */,
-				14CC834911EFA8AF005988CC /* _UIViewLayoutManager.h */,
-				14CC834A11EFA8AF005988CC /* _UIViewLayoutManager.m */,
+				14A7269B1213303400648C9B /* _UIImageTools.h */,
+				14A7269C1213303400648C9B /* _UIImageTools.m */,
+				14A7269D1213303400648C9B /* _UINinePartImage.h */,
+				14A7269E1213303400648C9B /* _UINinePartImage.m */,
+				14A7269F1213303400648C9B /* _UIPopoverWindow.h */,
+				14A726A01213303400648C9B /* _UIPopoverWindow.m */,
+				14A726A11213303400648C9B /* _UIPopoverWindowController.h */,
+				14A726A21213303400648C9B /* _UIPopoverWindowController.m */,
+				14A726A31213303400648C9B /* _UIPopoverWindowFrameView.h */,
+				14A726A41213303400648C9B /* _UIPopoverWindowFrameView.m */,
+				14A726A51213303400648C9B /* _UIScroller.h */,
+				14A726A61213303400648C9B /* _UIScroller.m */,
+				14A726A71213303400648C9B /* _UITableViewCellSeparator.h */,
+				14A726A81213303400648C9B /* _UITableViewCellSeparator.m */,
+				14A726A91213303400648C9B /* _UIThreePartImage.h */,
+				14A726AA1213303400648C9B /* _UIThreePartImage.m */,
+				14A726AB1213303400648C9B /* _UIViewAnimationGroup.h */,
+				14A726AC1213303400648C9B /* _UIViewAnimationGroup.m */,
+				14A726AD1213303400648C9B /* _UIViewLayoutManager.h */,
+				14A726AE1213303400648C9B /* _UIViewLayoutManager.m */,
+				14A726AF1213303400648C9B /* UIApplication+UIPrivate.h */,
+				14A726B01213303400648C9B /* UIColor+UIPrivate.h */,
+				14A726B11213303400648C9B /* UIControl+UIPrivate.h */,
+				14A726B21213303400648C9B /* UIEvent+UIPrivate.h */,
+				14A726B31213303400648C9B /* UIFont+UIPrivate.h */,
+				14A726B41213303400648C9B /* UIImage+UIPrivate.h */,
+				14A726B51213303400648C9B /* UIImageView+UIPrivate.h */,
+				14A726B71213303400648C9B /* UIScreen+UIPrivate.h */,
+				14A726B81213303400648C9B /* UIScrollView+UIPrivate.h */,
+				14A726B91213303400648C9B /* UITableViewCell+UIPrivate.h */,
+				14A726BA1213303400648C9B /* UITouch+UIPrivate.h */,
+				14A726BB1213303400648C9B /* UIView+UIPrivate.h */,
+				14A726BC1213303400648C9B /* UIViewController+UIPrivate.h */,
+				14A726BD1213303400648C9B /* UIWindow+UIPrivate.h */,
 			);
 			name = "Private Classes";
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		32C88DFF0371C24200C91783 /* Other Sources */ = {
@@ -530,13 +570,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14CC83B311EFA8AF005988CC /* _UIImageTools.h in Headers */,
-				14CC83B511EFA8AF005988CC /* _UINinePartImage.h in Headers */,
-				14CC83B711EFA8AF005988CC /* _UIScroller.h in Headers */,
-				14CC83B911EFA8AF005988CC /* _UITableViewCellSeparator.h in Headers */,
-				14CC83BB11EFA8AF005988CC /* _UIThreePartImage.h in Headers */,
-				14CC83BD11EFA8AF005988CC /* _UIViewAnimationGroup.h in Headers */,
-				14CC83BF11EFA8AF005988CC /* _UIViewLayoutManager.h in Headers */,
 				14CC83C111EFA8AF005988CC /* CALayer+UIKit.h in Headers */,
 				14CC83C311EFA8AF005988CC /* NSIndexPath+UITableView.h in Headers */,
 				14CC83C511EFA8AF005988CC /* UIAccessibility.h in Headers */,
@@ -562,7 +595,6 @@
 				14CC83EC11EFA8AF005988CC /* UIImagePickerController.h in Headers */,
 				14CC83EE11EFA8AF005988CC /* UIImageView.h in Headers */,
 				14CC83F011EFA8AF005988CC /* UIKit.h in Headers */,
-				14CC83F111EFA8AF005988CC /* UIKit+Private.h in Headers */,
 				14CC83F211EFA8AF005988CC /* UIKitView.h in Headers */,
 				14CC83F411EFA8AF005988CC /* UILabel.h in Headers */,
 				14CC83F611EFA8AF005988CC /* UILongPressGestureRecognizer.h in Headers */,
@@ -593,10 +625,31 @@
 				14CC842711EFA8AF005988CC /* UIWindow.h in Headers */,
 				141927A211F8A88E00051ABD /* UISplitViewController.h in Headers */,
 				14B1140812033FA6009D9376 /* UITabBarController.h in Headers */,
-				147A8393120C905000422EDC /* _UIPopoverWindow.h in Headers */,
-				147A8395120C905000422EDC /* _UIPopoverWindowController.h in Headers */,
-				147A8397120C905000422EDC /* _UIPopoverWindowFrameView.h in Headers */,
 				14869DB1121303C60019B134 /* UIApplicationDelegate.h in Headers */,
+				14A726BE1213303400648C9B /* _UIImageTools.h in Headers */,
+				14A726C01213303400648C9B /* _UINinePartImage.h in Headers */,
+				14A726C21213303400648C9B /* _UIPopoverWindow.h in Headers */,
+				14A726C41213303400648C9B /* _UIPopoverWindowController.h in Headers */,
+				14A726C61213303400648C9B /* _UIPopoverWindowFrameView.h in Headers */,
+				14A726C81213303400648C9B /* _UIScroller.h in Headers */,
+				14A726CA1213303400648C9B /* _UITableViewCellSeparator.h in Headers */,
+				14A726CC1213303400648C9B /* _UIThreePartImage.h in Headers */,
+				14A726CE1213303400648C9B /* _UIViewAnimationGroup.h in Headers */,
+				14A726D01213303400648C9B /* _UIViewLayoutManager.h in Headers */,
+				14A726D21213303400648C9B /* UIApplication+UIPrivate.h in Headers */,
+				14A726D31213303400648C9B /* UIColor+UIPrivate.h in Headers */,
+				14A726D41213303400648C9B /* UIControl+UIPrivate.h in Headers */,
+				14A726D51213303400648C9B /* UIEvent+UIPrivate.h in Headers */,
+				14A726D61213303400648C9B /* UIFont+UIPrivate.h in Headers */,
+				14A726D71213303400648C9B /* UIImage+UIPrivate.h in Headers */,
+				14A726D81213303400648C9B /* UIImageView+UIPrivate.h in Headers */,
+				14A726DA1213303400648C9B /* UIScreen+UIPrivate.h in Headers */,
+				14A726DB1213303400648C9B /* UIScrollView+UIPrivate.h in Headers */,
+				14A726DC1213303400648C9B /* UITableViewCell+UIPrivate.h in Headers */,
+				14A726DD1213303400648C9B /* UITouch+UIPrivate.h in Headers */,
+				14A726DE1213303400648C9B /* UIView+UIPrivate.h in Headers */,
+				14A726DF1213303400648C9B /* UIViewController+UIPrivate.h in Headers */,
+				14A726E01213303400648C9B /* UIWindow+UIPrivate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -673,13 +726,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14CC83B411EFA8AF005988CC /* _UIImageTools.m in Sources */,
-				14CC83B611EFA8AF005988CC /* _UINinePartImage.m in Sources */,
-				14CC83B811EFA8AF005988CC /* _UIScroller.m in Sources */,
-				14CC83BA11EFA8AF005988CC /* _UITableViewCellSeparator.m in Sources */,
-				14CC83BC11EFA8AF005988CC /* _UIThreePartImage.m in Sources */,
-				14CC83BE11EFA8AF005988CC /* _UIViewAnimationGroup.m in Sources */,
-				14CC83C011EFA8AF005988CC /* _UIViewLayoutManager.m in Sources */,
 				14CC83C211EFA8AF005988CC /* CALayer+UIKit.m in Sources */,
 				14CC83C411EFA8AF005988CC /* NSIndexPath+UITableView.m in Sources */,
 				14CC83C611EFA8AF005988CC /* UIAccessibility.m in Sources */,
@@ -732,9 +778,16 @@
 				14CC842811EFA8AF005988CC /* UIWindow.m in Sources */,
 				141927A311F8A88E00051ABD /* UISplitViewController.m in Sources */,
 				14B1140912033FA6009D9376 /* UITabBarController.m in Sources */,
-				147A8394120C905000422EDC /* _UIPopoverWindow.m in Sources */,
-				147A8396120C905000422EDC /* _UIPopoverWindowController.m in Sources */,
-				147A8398120C905000422EDC /* _UIPopoverWindowFrameView.m in Sources */,
+				14A726BF1213303400648C9B /* _UIImageTools.m in Sources */,
+				14A726C11213303400648C9B /* _UINinePartImage.m in Sources */,
+				14A726C31213303400648C9B /* _UIPopoverWindow.m in Sources */,
+				14A726C51213303400648C9B /* _UIPopoverWindowController.m in Sources */,
+				14A726C71213303400648C9B /* _UIPopoverWindowFrameView.m in Sources */,
+				14A726C91213303400648C9B /* _UIScroller.m in Sources */,
+				14A726CB1213303400648C9B /* _UITableViewCellSeparator.m in Sources */,
+				14A726CD1213303400648C9B /* _UIThreePartImage.m in Sources */,
+				14A726CF1213303400648C9B /* _UIViewAnimationGroup.m in Sources */,
+				14A726D11213303400648C9B /* _UIViewLayoutManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

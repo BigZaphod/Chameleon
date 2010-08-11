@@ -1,8 +1,8 @@
 //  Created by Sean Heber on 6/25/10.
 #import "UINavigationController.h"
+#import "UIViewController+UIPrivate.h"
 #import "UITabBarController.h"
 #import "UINavigationBar.h"
-#import "UIKit+Private.h"
 
 static const CGFloat NavigationBarHeight = 32;
 //static const CGFloat ToolbarHeight = 32;

@@ -1,5 +1,5 @@
 //  Created by Sean Heber on 6/1/10.
-#import "UIEvent.h"
+#import "UIEvent+UIPrivate.h"
 #import <Cocoa/Cocoa.h>
 
 @implementation UIEvent

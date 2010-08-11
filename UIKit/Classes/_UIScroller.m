@@ -1,9 +1,8 @@
 //  Created by Sean Heber on 5/28/10.
 #import "_UIScroller.h"
 #import "UIImageView.h"
-#import "UIImage.h"
+#import "UIImage+UIPrivate.h"
 #import "UITouch.h"
-#import "UIKit+Private.h"
 
 static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 

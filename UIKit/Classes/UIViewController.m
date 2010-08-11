@@ -1,7 +1,8 @@
 //  Created by Sean Heber on 6/25/10.
 #import "UIViewController.h"
-#import "UIView.h"
-#import "UIKit+Private.h"
+#import "UIView+UIPrivate.h"
+#import "UIScreen.h"
+#import "UIWindow.h"
 #import "UINavigationItem.h"
 #import "UIBarButtonItem.h"
 

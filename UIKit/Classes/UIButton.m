@@ -1,11 +1,11 @@
 //  Created by Sean Heber on 6/24/10.
 #import "UIButton.h"
+#import "UIControl+UIPrivate.h"
 #import "UILabel.h"
 #import "UIImage.h"
-#import "UIImageView.h"
+#import "UIImageView+UIPrivate.h"
 #import "UIRoundedRectButton.h"
 #import "UIColor.h"
-#import "UIKit+Private.h"
 
 static NSString *UIButtonContentTypeTitle = @"UIButtonContentTypeTitle";
 static NSString *UIButtonContentTypeTitleColor = @"UIButtonContentTypeTitleColor";

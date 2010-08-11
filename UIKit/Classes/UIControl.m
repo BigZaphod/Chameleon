@@ -1,5 +1,5 @@
 //  Created by Sean Heber on 6/24/10.
-#import "UIControl.h"
+#import "UIControl+UIPrivate.h"
 #import "UIEvent.h"
 #import "UITouch.h"
 #import "UIApplication.h"

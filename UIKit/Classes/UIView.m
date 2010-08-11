@@ -1,10 +1,9 @@
 //  Created by Sean Heber on 5/27/10.
-#import "UIView.h"
+#import "UIView+UIPrivate.h"
 #import "UIWindow.h"
 #import "UIGraphics.h"
 #import "UIColor.h"
 #import "_UIViewLayoutManager.h"
-#import "UIKit+Private.h"
 #import "CALayer+UIKit.h"
 #import "_UIViewAnimationGroup.h"
 #import "UIViewController.h"

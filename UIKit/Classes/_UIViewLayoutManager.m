@@ -1,6 +1,6 @@
 //  Created by Sean Heber on 6/2/10.
 #import "_UIViewLayoutManager.h"
-#import "UIKit+Private.h"
+#import "UIView+UIPrivate.h"
 
 static _UIViewLayoutManager *theLayoutManager = nil;
 

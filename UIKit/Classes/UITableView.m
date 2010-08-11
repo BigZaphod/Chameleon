@@ -1,7 +1,9 @@
 //  Created by Sean Heber on 6/4/10.
 #import "UITableView.h"
+#import "UIScrollView+UIPrivate.h"
+#import "UITableViewCell+UIPrivate.h"
 #import "UIColor.h"
-#import "UIKit+Private.h"
+#import "UITouch.h"
 
 static const CGFloat kDefaultRowHeight = 43;
 

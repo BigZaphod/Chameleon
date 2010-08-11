@@ -1,5 +1,5 @@
 //  Created by Sean Heber on 6/1/10.
-#import "UITouch.h"
+#import "UITouch+UIPrivate.h"
 #import "UIWindow.h"
 #import <Cocoa/Cocoa.h>
 

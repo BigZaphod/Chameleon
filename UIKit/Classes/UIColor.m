@@ -1,8 +1,7 @@
 //  Created by Sean Heber on 5/27/10.
-#import "UIColor.h"
+#import "UIColor+UIPrivate.h"
 #import "UIImage.h"
 #import "UIGraphics.h"
-#import "UIKit+Private.h"
 #import <AppKit/AppKit.h>
 
 // callback for CreateImagePattern.

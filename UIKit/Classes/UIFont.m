@@ -1,5 +1,5 @@
 //  Created by Sean Heber on 6/17/10.
-#import "UIFont.h"
+#import "UIFont+UIPrivate.h"
 #import <Cocoa/Cocoa.h>
 
 @implementation UIFont

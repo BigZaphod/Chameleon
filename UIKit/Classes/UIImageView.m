@@ -1,8 +1,8 @@
 //  Created by Sean Heber on 5/27/10.
-#import "UIImageView.h"
+#import "UIImageView+UIPrivate.h"
 #import "UIImage.h"
 #import "UIGraphics.h"
-#import "UIKit+Private.h"
+#import "UIColor.h"
 #import <QuartzCore/QuartzCore.h>
 
 static NSArray *CGImagesWithUIImages(NSArray *images)

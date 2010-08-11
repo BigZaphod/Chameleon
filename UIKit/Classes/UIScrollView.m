@@ -1,10 +1,12 @@
 //  Created by Sean Heber on 5/28/10.
-#import "UIScrollView.h"
+#import "UIScrollView+UIPrivate.h"
+#import "UIView+UIPrivate.h"
 #import "_UIScroller.h"
+#import "UIScreen+UIPrivate.h"
+#import "UIWindow.h"
 #import "UITouch.h"
 #import "UIImageView.h"
-#import "UIImage.h"
-#import "UIKit+Private.h"
+#import "UIImage+UIPrivate.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface UIScrollView () <_UIScrollerDelegate>

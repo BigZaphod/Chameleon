@@ -1,5 +1,5 @@
 //  Created by Sean Heber on 5/27/10.
-#import "UIImage.h"
+#import "UIImage+UIPrivate.h"
 #import "_UIThreePartImage.h"
 #import "_UINinePartImage.h"
 #import "UIGraphics.h"

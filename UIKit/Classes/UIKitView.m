@@ -1,10 +1,11 @@
 //  Created by Sean Heber on 6/19/10.
 #import "UIKitView.h"
-#import "UIScreen.h"
-#import "UIApplication.h"
+#import "UIApplication+UIPrivate.h"
+#import "UIScreen+UIPrivate.h"
+#import "UIWindow.h"
 #import "UIImage.h"
 #import "UIImageView.h"
-#import "UIKit+Private.h"
+#import "UIColor.h"
 
 @implementation UIKitView
 @synthesize UIScreen=_screen;

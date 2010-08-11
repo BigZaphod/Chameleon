@@ -5,10 +5,9 @@
 #import "UILabel.h"
 #import "UINavigationItem.h"
 #import "UIFont.h"
-#import "UIImage.h"
+#import "UIImage+UIPrivate.h"
 #import "UIBarButtonItem.h"
 #import "UIButton.h"
-#import "UIKit+Private.h"
 
 static UIImage *ButtonImage = nil;
 static UIImage *ButtonHighlightedImage = nil;

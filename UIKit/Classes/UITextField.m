@@ -1,11 +1,11 @@
 //  Created by Sean Heber on 6/25/10.
 #import "UITextField.h"
-#import "UIColor.h"
+#import "UIView+UIPrivate.h"
+#import "UIColor+UIPrivate.h"
 #import "UIWindow.h"
-#import "UIScreen.h"
-#import "UIFont.h"
+#import "UIScreen+UIPrivate.h"
+#import "UIFont+UIPrivate.h"
 #import "UIImage.h"
-#import "UIKit+Private.h"
 #import <AppKit/AppKit.h>
 
 @interface UITextField () <NSTextFieldDelegate>

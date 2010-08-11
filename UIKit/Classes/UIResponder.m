@@ -1,6 +1,6 @@
 //  Created by Sean Heber on 5/27/10.
 #import "UIResponder.h"
-#import "UIKit+Private.h"
+#import "UIWindow+UIPrivate.h"
 
 @implementation UIResponder
 

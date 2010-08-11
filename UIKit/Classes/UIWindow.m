@@ -1,7 +1,10 @@
 //  Created by Sean Heber on 5/27/10.
-#import "UIWindow.h"
-#import "UIScreen.h"
-#import "UIKit+Private.h"
+#import "UIWindow+UIPrivate.h"
+#import "UIView+UIPrivate.h"
+#import "UIScreen+UIPrivate.h"
+#import "UIApplication+UIPrivate.h"
+#import "UIEvent+UIPrivate.h"
+#import "UITouch.h"
 #import "UIScreenMode.h"
 #import <Cocoa/Cocoa.h>
 

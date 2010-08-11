@@ -1,5 +1,5 @@
 //  Created by Sean Heber on 5/28/10.
-#import "UIImage.h"
+#import "UIImage+UIPrivate.h"
 
 @interface _UIThreePartImage : UIImage {
 @private

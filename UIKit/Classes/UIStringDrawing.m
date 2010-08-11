@@ -1,7 +1,6 @@
 //  Created by Sean Heber on 6/17/10.
 #import "UIStringDrawing.h"
 #import "UIFont.h"
-#import "UIKit+Private.h"
 #import <AppKit/AppKit.h>
 #import "UIGraphics.h"
 

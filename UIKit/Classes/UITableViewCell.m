@@ -1,5 +1,5 @@
 //  Created by Sean Heber on 6/4/10.
-#import "UITableViewCell.h"
+#import "UITableViewCell+UIPrivate.h"
 #import "_UITableViewCellSeparator.h"
 #import "UIColor.h"
 

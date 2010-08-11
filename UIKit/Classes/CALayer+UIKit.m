@@ -1,6 +1,6 @@
 //  Created by Sean Heber on 6/1/10.
 #import "CALayer+UIKit.h"
-#import "UIKit+Private.h"
+#import "UIView+UIPrivate.h"
 #import <objc/runtime.h>
 
 static IMP originalResizeMethod = NULL;
