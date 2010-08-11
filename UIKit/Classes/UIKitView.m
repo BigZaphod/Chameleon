@@ -98,6 +98,11 @@
 	[appDelegate applicationDidFinishLaunching:[UIApplication sharedApplication]];
 }
 
+- (void)_releaseDefaultWindow:(UIWindow *)defaultWindow
+{
+	[defaultWindow release];
+}
+
 - (void)launchApplicationWithDelegate:(id<UIApplicationDelegate>)appDelegate afterDelay:(NSTimeInterval)delay
 {
 	if (delay) {
@@ -113,7 +118,7 @@
 		[defaultWindow makeKeyAndVisible];
 		
 		[self performSelector:@selector(_launchApplicationDelegate:) withObject:appDelegate afterDelay:delay];
-		[defaultWindow performSelector:@selector(release) withObject:nil afterDelay:delay];
+		[self performSelector:@selector(_releaseDefaultWindow:) withObject:defaultWindow];
 	} else {
 		[self _launchApplicationDelegate:appDelegate];
 	}
