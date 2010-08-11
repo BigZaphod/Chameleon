@@ -14,44 +14,44 @@
 		1464960D11FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */; };
 		1464960E11FF7AE500ECEC7A /* <UINavigationBar> button.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */; };
 		14869DB1121303C60019B134 /* UIApplicationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14869DB0121303C60019B134 /* UIApplicationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		14A726BE1213303400648C9B /* _UIImageTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A7269B1213303400648C9B /* _UIImageTools.h */; };
+		14A726BE1213303400648C9B /* _UIImageTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A7269B1213303400648C9B /* _UIImageTools.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726BF1213303400648C9B /* _UIImageTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A7269C1213303400648C9B /* _UIImageTools.m */; };
-		14A726C01213303400648C9B /* _UINinePartImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A7269D1213303400648C9B /* _UINinePartImage.h */; };
+		14A726C01213303400648C9B /* _UINinePartImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A7269D1213303400648C9B /* _UINinePartImage.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726C11213303400648C9B /* _UINinePartImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A7269E1213303400648C9B /* _UINinePartImage.m */; };
-		14A726C21213303400648C9B /* _UIPopoverWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A7269F1213303400648C9B /* _UIPopoverWindow.h */; };
+		14A726C21213303400648C9B /* _UIPopoverWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A7269F1213303400648C9B /* _UIPopoverWindow.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726C31213303400648C9B /* _UIPopoverWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A726A01213303400648C9B /* _UIPopoverWindow.m */; };
-		14A726C41213303400648C9B /* _UIPopoverWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726A11213303400648C9B /* _UIPopoverWindowController.h */; };
+		14A726C41213303400648C9B /* _UIPopoverWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726A11213303400648C9B /* _UIPopoverWindowController.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726C51213303400648C9B /* _UIPopoverWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A726A21213303400648C9B /* _UIPopoverWindowController.m */; };
-		14A726C61213303400648C9B /* _UIPopoverWindowFrameView.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726A31213303400648C9B /* _UIPopoverWindowFrameView.h */; };
+		14A726C61213303400648C9B /* _UIPopoverWindowFrameView.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726A31213303400648C9B /* _UIPopoverWindowFrameView.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726C71213303400648C9B /* _UIPopoverWindowFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A726A41213303400648C9B /* _UIPopoverWindowFrameView.m */; };
-		14A726C81213303400648C9B /* _UIScroller.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726A51213303400648C9B /* _UIScroller.h */; };
+		14A726C81213303400648C9B /* _UIScroller.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726A51213303400648C9B /* _UIScroller.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726C91213303400648C9B /* _UIScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A726A61213303400648C9B /* _UIScroller.m */; };
-		14A726CA1213303400648C9B /* _UITableViewCellSeparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726A71213303400648C9B /* _UITableViewCellSeparator.h */; };
+		14A726CA1213303400648C9B /* _UITableViewCellSeparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726A71213303400648C9B /* _UITableViewCellSeparator.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726CB1213303400648C9B /* _UITableViewCellSeparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A726A81213303400648C9B /* _UITableViewCellSeparator.m */; };
-		14A726CC1213303400648C9B /* _UIThreePartImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726A91213303400648C9B /* _UIThreePartImage.h */; };
+		14A726CC1213303400648C9B /* _UIThreePartImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726A91213303400648C9B /* _UIThreePartImage.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726CD1213303400648C9B /* _UIThreePartImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A726AA1213303400648C9B /* _UIThreePartImage.m */; };
-		14A726CE1213303400648C9B /* _UIViewAnimationGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726AB1213303400648C9B /* _UIViewAnimationGroup.h */; };
+		14A726CE1213303400648C9B /* _UIViewAnimationGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726AB1213303400648C9B /* _UIViewAnimationGroup.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726CF1213303400648C9B /* _UIViewAnimationGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A726AC1213303400648C9B /* _UIViewAnimationGroup.m */; };
-		14A726D01213303400648C9B /* _UIViewLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726AD1213303400648C9B /* _UIViewLayoutManager.h */; };
+		14A726D01213303400648C9B /* _UIViewLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726AD1213303400648C9B /* _UIViewLayoutManager.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726D11213303400648C9B /* _UIViewLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A726AE1213303400648C9B /* _UIViewLayoutManager.m */; };
-		14A726D21213303400648C9B /* UIApplication+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726AF1213303400648C9B /* UIApplication+UIPrivate.h */; };
-		14A726D31213303400648C9B /* UIColor+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B01213303400648C9B /* UIColor+UIPrivate.h */; };
-		14A726D41213303400648C9B /* UIControl+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B11213303400648C9B /* UIControl+UIPrivate.h */; };
-		14A726D51213303400648C9B /* UIEvent+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B21213303400648C9B /* UIEvent+UIPrivate.h */; };
-		14A726D61213303400648C9B /* UIFont+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B31213303400648C9B /* UIFont+UIPrivate.h */; };
-		14A726D71213303400648C9B /* UIImage+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B41213303400648C9B /* UIImage+UIPrivate.h */; };
-		14A726D81213303400648C9B /* UIImageView+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B51213303400648C9B /* UIImageView+UIPrivate.h */; };
-		14A726DA1213303400648C9B /* UIScreen+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B71213303400648C9B /* UIScreen+UIPrivate.h */; };
-		14A726DB1213303400648C9B /* UIScrollView+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B81213303400648C9B /* UIScrollView+UIPrivate.h */; };
-		14A726DC1213303400648C9B /* UITableViewCell+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B91213303400648C9B /* UITableViewCell+UIPrivate.h */; };
-		14A726DD1213303400648C9B /* UITouch+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BA1213303400648C9B /* UITouch+UIPrivate.h */; };
-		14A726DE1213303400648C9B /* UIView+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BB1213303400648C9B /* UIView+UIPrivate.h */; };
-		14A726DF1213303400648C9B /* UIViewController+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BC1213303400648C9B /* UIViewController+UIPrivate.h */; };
-		14A726E01213303400648C9B /* UIWindow+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BD1213303400648C9B /* UIWindow+UIPrivate.h */; };
+		14A726D21213303400648C9B /* UIApplication+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726AF1213303400648C9B /* UIApplication+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		14A726D31213303400648C9B /* UIColor+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B01213303400648C9B /* UIColor+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		14A726D41213303400648C9B /* UIControl+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B11213303400648C9B /* UIControl+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		14A726D51213303400648C9B /* UIEvent+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B21213303400648C9B /* UIEvent+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		14A726D61213303400648C9B /* UIFont+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B31213303400648C9B /* UIFont+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		14A726D71213303400648C9B /* UIImage+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B41213303400648C9B /* UIImage+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		14A726D81213303400648C9B /* UIImageView+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B51213303400648C9B /* UIImageView+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		14A726DA1213303400648C9B /* UIScreen+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B71213303400648C9B /* UIScreen+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		14A726DB1213303400648C9B /* UIScrollView+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B81213303400648C9B /* UIScrollView+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		14A726DC1213303400648C9B /* UITableViewCell+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B91213303400648C9B /* UITableViewCell+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		14A726DD1213303400648C9B /* UITouch+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BA1213303400648C9B /* UITouch+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		14A726DE1213303400648C9B /* UIView+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BB1213303400648C9B /* UIView+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		14A726DF1213303400648C9B /* UIViewController+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BC1213303400648C9B /* UIViewController+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		14A726E01213303400648C9B /* UIWindow+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BD1213303400648C9B /* UIWindow+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14B1140812033FA6009D9376 /* UITabBarController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14B1140612033FA6009D9376 /* UITabBarController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14B1140912033FA6009D9376 /* UITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14B1140712033FA6009D9376 /* UITabBarController.m */; };
-		14CC83C111EFA8AF005988CC /* CALayer+UIKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC834B11EFA8AF005988CC /* CALayer+UIKit.h */; };
-		14CC83C211EFA8AF005988CC /* CALayer+UIKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC834C11EFA8AF005988CC /* CALayer+UIKit.m */; };
+		14CC83C111EFA8AF005988CC /* CALayer+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC834B11EFA8AF005988CC /* CALayer+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		14CC83C211EFA8AF005988CC /* CALayer+UIPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC834C11EFA8AF005988CC /* CALayer+UIPrivate.m */; };
 		14CC83C311EFA8AF005988CC /* NSIndexPath+UITableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC834D11EFA8AF005988CC /* NSIndexPath+UITableView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14CC83C411EFA8AF005988CC /* NSIndexPath+UITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC834E11EFA8AF005988CC /* NSIndexPath+UITableView.m */; };
 		14CC83C511EFA8AF005988CC /* UIAccessibility.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC834F11EFA8AF005988CC /* UIAccessibility.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -213,8 +213,8 @@
 		14A726BD1213303400648C9B /* UIWindow+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+UIPrivate.h"; sourceTree = "<group>"; };
 		14B1140612033FA6009D9376 /* UITabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UITabBarController.h; path = Classes/UITabBarController.h; sourceTree = "<group>"; };
 		14B1140712033FA6009D9376 /* UITabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UITabBarController.m; path = Classes/UITabBarController.m; sourceTree = "<group>"; };
-		14CC834B11EFA8AF005988CC /* CALayer+UIKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CALayer+UIKit.h"; path = "Classes/CALayer+UIKit.h"; sourceTree = "<group>"; };
-		14CC834C11EFA8AF005988CC /* CALayer+UIKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CALayer+UIKit.m"; path = "Classes/CALayer+UIKit.m"; sourceTree = "<group>"; };
+		14CC834B11EFA8AF005988CC /* CALayer+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+UIPrivate.h"; sourceTree = "<group>"; };
+		14CC834C11EFA8AF005988CC /* CALayer+UIPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+UIPrivate.m"; sourceTree = "<group>"; };
 		14CC834D11EFA8AF005988CC /* NSIndexPath+UITableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSIndexPath+UITableView.h"; path = "Classes/NSIndexPath+UITableView.h"; sourceTree = "<group>"; };
 		14CC834E11EFA8AF005988CC /* NSIndexPath+UITableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSIndexPath+UITableView.m"; path = "Classes/NSIndexPath+UITableView.m"; sourceTree = "<group>"; };
 		14CC834F11EFA8AF005988CC /* UIAccessibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIAccessibility.h; path = Classes/UIAccessibility.h; sourceTree = "<group>"; };
@@ -357,7 +357,7 @@
 			isa = PBXGroup;
 			children = (
 				147A838C120C902C00422EDC /* Private Classes */,
-				08FB77AEFE84172EC02AAC07 /* Classes */,
+				08FB77AEFE84172EC02AAC07 /* Public Classes */,
 				089C1665FE841158C02AAC07 /* Resources */,
 				32C88DFF0371C24200C91783 /* Other Sources */,
 				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
@@ -398,11 +398,9 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
-		08FB77AEFE84172EC02AAC07 /* Classes */ = {
+		08FB77AEFE84172EC02AAC07 /* Public Classes */ = {
 			isa = PBXGroup;
 			children = (
-				14CC834B11EFA8AF005988CC /* CALayer+UIKit.h */,
-				14CC834C11EFA8AF005988CC /* CALayer+UIKit.m */,
 				14CC834D11EFA8AF005988CC /* NSIndexPath+UITableView.h */,
 				14CC834E11EFA8AF005988CC /* NSIndexPath+UITableView.m */,
 				14CC834F11EFA8AF005988CC /* UIAccessibility.h */,
@@ -510,7 +508,7 @@
 				14CC83B111EFA8AF005988CC /* UIWindow.h */,
 				14CC83B211EFA8AF005988CC /* UIWindow.m */,
 			);
-			name = Classes;
+			name = "Public Classes";
 			sourceTree = "<group>";
 		};
 		147A838C120C902C00422EDC /* Private Classes */ = {
@@ -536,6 +534,8 @@
 				14A726AC1213303400648C9B /* _UIViewAnimationGroup.m */,
 				14A726AD1213303400648C9B /* _UIViewLayoutManager.h */,
 				14A726AE1213303400648C9B /* _UIViewLayoutManager.m */,
+				14CC834B11EFA8AF005988CC /* CALayer+UIPrivate.h */,
+				14CC834C11EFA8AF005988CC /* CALayer+UIPrivate.m */,
 				14A726AF1213303400648C9B /* UIApplication+UIPrivate.h */,
 				14A726B01213303400648C9B /* UIColor+UIPrivate.h */,
 				14A726B11213303400648C9B /* UIControl+UIPrivate.h */,
@@ -570,7 +570,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14CC83C111EFA8AF005988CC /* CALayer+UIKit.h in Headers */,
+				14CC83C111EFA8AF005988CC /* CALayer+UIPrivate.h in Headers */,
 				14CC83C311EFA8AF005988CC /* NSIndexPath+UITableView.h in Headers */,
 				14CC83C511EFA8AF005988CC /* UIAccessibility.h in Headers */,
 				14CC83C711EFA8AF005988CC /* UIAccessibilityElement.h in Headers */,
@@ -726,7 +726,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14CC83C211EFA8AF005988CC /* CALayer+UIKit.m in Sources */,
+				14CC83C211EFA8AF005988CC /* CALayer+UIPrivate.m in Sources */,
 				14CC83C411EFA8AF005988CC /* NSIndexPath+UITableView.m in Sources */,
 				14CC83C611EFA8AF005988CC /* UIAccessibility.m in Sources */,
 				14CC83C811EFA8AF005988CC /* UIAccessibilityElement.m in Sources */,

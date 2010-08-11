@@ -5,7 +5,6 @@
 // There might be some better way to do this using constraints on the layer or the layout manager or
 // something.. but this works for now, I suppose.
 
-@interface CALayer (UIKit)
-- (void)UIKitResizeSublayersWithOldSize:(CGSize)size;
-//+ (CALayer *)UIKitCommonParentForLayers:(NSArray *)layers;
+@interface CALayer (UIPrivate)
+- (void)UIPrivateResizeSublayersWithOldSize:(CGSize)size;
 @end
