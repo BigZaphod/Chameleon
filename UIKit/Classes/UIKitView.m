@@ -118,7 +118,7 @@
 		[defaultWindow makeKeyAndVisible];
 		
 		[self performSelector:@selector(_launchApplicationDelegate:) withObject:appDelegate afterDelay:delay];
-		[self performSelector:@selector(_releaseDefaultWindow:) withObject:defaultWindow];
+		[self performSelector:@selector(_releaseDefaultWindow:) withObject:defaultWindow afterDelay:delay];
 	} else {
 		[self _launchApplicationDelegate:appDelegate];
 	}
