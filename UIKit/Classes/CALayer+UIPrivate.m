@@ -23,7 +23,9 @@ static IMP MethodSwizzle(Class c, SEL origSEL, SEL overrideSEL)
 
 + (void)load
 {
+	NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	originalResizeMethod = MethodSwizzle(self, @selector(resizeSublayersWithOldSize:), @selector(UIKitResizeSublayersWithOldSize:));
+	[pool release];
 }
 
 - (void)UIPrivateResizeSublayersWithOldSize:(CGSize)size
