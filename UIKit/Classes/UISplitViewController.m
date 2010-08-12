@@ -26,9 +26,13 @@ static const CGFloat SplitterPadding = 3;
 		leftPanel = [[UIView alloc] initWithFrame:CGRectMake(0,0,320,frame.size.height)];
 		rightPanel = [[UIView alloc] initWithFrame:CGRectMake(321,0,MAX(0,frame.size.width-321),frame.size.height)];
 		leftPanel.clipsToBounds = rightPanel.clipsToBounds = YES;
-		leftPanel.autoresizingMask = rightPanel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		leftPanel.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+		rightPanel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		[self addSubview:leftPanel];
 		[self addSubview:rightPanel];
+		
+		leftPanel.backgroundColor = [UIColor yellowColor];
+		
 		self.backgroundColor = [UIColor blackColor];
 	}
 	return self;
@@ -60,11 +64,13 @@ static const CGFloat SplitterPadding = 3;
 	if (newWidth != leftPanel.frame.size.width) {
 		CGRect leftFrame = leftPanel.frame;
 		CGRect rightFrame = rightPanel.frame;
+		const CGFloat height = self.bounds.size.height;
 		
-		leftFrame.size.width = newWidth;
+		leftFrame.origin = CGPointZero;
+		leftFrame.size = CGSizeMake(newWidth, height);
 
-		rightFrame.origin.x = newWidth+1;
-		rightFrame.size.width = MAX(self.bounds.size.width-newWidth-1,0);
+		rightFrame.origin = CGPointMake(newWidth+1,0);
+		rightFrame.size = CGSizeMake(MAX(self.bounds.size.width-newWidth-1,0), height);
 		
 		leftPanel.frame = leftFrame;
 		rightPanel.frame = rightFrame;
@@ -73,13 +79,12 @@ static const CGFloat SplitterPadding = 3;
 
 - (CGFloat)leftWidth
 {
-	return leftPanel.frame.size.width;
+	return CGRectGetMaxX(leftPanel.frame);
 }
 
 - (CGRect)splitterHitRect
 {
-	const CGRect bounds = self.bounds;
-	return CGRectMake(self.leftWidth-SplitterPadding,0,SplitterPadding+SplitterPadding+1,bounds.size.height);
+	return CGRectMake(self.leftWidth-SplitterPadding,0,SplitterPadding+SplitterPadding+1,self.bounds.size.height);
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
