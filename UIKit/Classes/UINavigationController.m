@@ -24,7 +24,7 @@ static const CGFloat NavigationBarHeight = 32;
 - (id)initWithRootViewController:(UIViewController *)rootViewController
 {
 	if ((self=[self initWithNibName:nil bundle:nil])) {
-		[rootViewController _setNavigationController:self];
+		[rootViewController _setParentViewController:self];
 		[_viewControllers addObject:rootViewController];
 		[_navigationBar pushNavigationItem:rootViewController.navigationItem animated:NO];
 	}
@@ -84,7 +84,7 @@ static const CGFloat NavigationBarHeight = 32;
 		NSMutableArray *items = [NSMutableArray arrayWithCapacity:[_viewControllers count]];
 		
 		for (UIViewController *controller in _viewControllers) {
-			[controller _setNavigationController:self];
+			[controller _setParentViewController:self];
 			[items addObject:controller.navigationItem];
 		}
 		
@@ -115,7 +115,7 @@ static const CGFloat NavigationBarHeight = 32;
 	
 	UIViewController *previousViewController = self.topViewController;
 
-	[viewController _setNavigationController:self];
+	[viewController _setParentViewController:self];
 	[_viewControllers addObject:viewController];
 
 	[previousViewController viewWillDisappear:animated];
@@ -136,7 +136,7 @@ static const CGFloat NavigationBarHeight = 32;
 		UIViewController *oldViewController = [self.topViewController retain];
 		
 		[_viewControllers removeLastObject];
-		[oldViewController _setNavigationController:nil];
+		[oldViewController _setParentViewController:nil];
 
 		UIViewController *nextViewController = self.topViewController;
 		

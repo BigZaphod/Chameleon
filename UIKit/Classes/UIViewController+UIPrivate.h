@@ -2,5 +2,5 @@
 #import "UIViewController.h"
 
 @interface UIViewController (UIPrivate)
-- (void)_setNavigationController:(UINavigationController *)navController;
+- (void)_setParentViewController:(UIViewController *)controller;
 @end

@@ -1,5 +1,6 @@
 //  Created by Sean Heber on 7/22/10.
 #import "UISplitViewController.h"
+#import "UIViewController+UIPrivate.h"
 #import "UIView.h"
 #import "UITouch.h"
 #import "UIColor.h"
@@ -140,6 +141,7 @@ static const CGFloat SplitterPadding = 3;
 	
 	if (![newControllers isEqualToArray:_viewControllers]) {
 		for (UIViewController *c in _viewControllers) {
+			[c _setParentViewController:nil];
 			[c.view removeFromSuperview];
 		}
 		
@@ -147,6 +149,7 @@ static const CGFloat SplitterPadding = 3;
 		_viewControllers = [newControllers copy];
 		
 		for (UIViewController *c in _viewControllers) {
+			[c _setParentViewController:self];
 			[self.view addSubview:c.view];
 		}
 	}

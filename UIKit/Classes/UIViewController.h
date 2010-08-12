@@ -29,9 +29,8 @@ typedef enum {
 	NSArray *_toolbarItems;
 	UIModalPresentationStyle _modalPresentationStyle;
 	BOOL _editing;
-	UINavigationController *_navigationController;
-	UIViewController *_modalViewController;
 	UIViewController *_parentViewController;
+	UIViewController *_modalViewController;
 	UIModalTransitionStyle _modalTransitionStyle;
 }
 
@@ -50,7 +49,7 @@ typedef enum {
 - (void)presentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated;		// works, but not exactly correctly.
 - (void)dismissModalViewControllerAnimated:(BOOL)animated;												// see comments in dismissModalViewController
 
-- (void)didReceiveMemoryWarning;	// doesn't do anything at all right.
+- (void)didReceiveMemoryWarning;	// doesn't do anything and is never called...
 
 - (void)setToolbarItems:(NSArray *)toolbarItems animated:(BOOL)animated;
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated;
@@ -65,17 +64,20 @@ typedef enum {
 @property (nonatomic, retain) UIView *view;
 @property (nonatomic, assign) BOOL wantsFullScreenLayout;		// doesn't do anything right now
 @property (nonatomic, copy) NSString *title;
-@property (nonatomic, readwrite) CGSize contentSizeForViewInPopover;
-@property (nonatomic,readwrite,getter=isModalInPopover) BOOL modalInPopover;
-@property (nonatomic, assign) UIModalTransitionStyle modalTransitionStyle;		// not used right now
 @property (nonatomic, readonly) UIInterfaceOrientation interfaceOrientation;	// always returns UIInterfaceOrientationLandscapeLeft
 @property (nonatomic, readonly, retain) UINavigationItem *navigationItem;
-@property (nonatomic, readonly, retain) UINavigationController *navigationController;
-@property (nonatomic, readonly) UIViewController *parentViewController;
 @property (nonatomic, retain) NSArray *toolbarItems;
-@property (nonatomic, assign) UIModalPresentationStyle modalPresentationStyle;
 @property (nonatomic, getter=isEditing) BOOL editing;
+
+@property (nonatomic, readwrite) CGSize contentSizeForViewInPopover;
+@property (nonatomic,readwrite,getter=isModalInPopover) BOOL modalInPopover;
+
 @property (nonatomic, readonly) UIViewController *modalViewController;
-@property (nonatomic, readonly, retain) UISplitViewController *splitViewController;		// currently returns nil
+@property (nonatomic, assign) UIModalPresentationStyle modalPresentationStyle;
+@property (nonatomic, assign) UIModalTransitionStyle modalTransitionStyle;		// not used right now
+
+@property (nonatomic, readonly) UIViewController *parentViewController;
+@property (nonatomic, readonly, retain) UINavigationController *navigationController;
+@property (nonatomic, readonly, retain) UISplitViewController *splitViewController;
 
 @end

@@ -5,11 +5,13 @@
 #import "UIWindow.h"
 #import "UINavigationItem.h"
 #import "UIBarButtonItem.h"
+#import "UINavigationController.h"
+#import "UISplitViewController.h"
 
 @implementation UIViewController
 @synthesize view=_view, wantsFullScreenLayout=_wantsFullScreenLayout, title=_title, contentSizeForViewInPopover=_contentSizeForViewInPopover;
 @synthesize modalInPopover=_modalInPopover, toolbarItems=_toolbarItems, modalPresentationStyle=_modalPresentationStyle, editing=_editing;
-@synthesize navigationController=_navigationController, modalViewController=_modalViewController, parentViewController=_parentViewController;
+@synthesize modalViewController=_modalViewController, parentViewController=_parentViewController;
 @synthesize modalTransitionStyle=_modalTransitionStyle;
 
 - (id)init
@@ -112,11 +114,6 @@
 	return _navigationItem;
 }
 
-- (void)_setNavigationController:(UINavigationController *)navController
-{
-	_navigationController = navController;
-}
-
 - (void)_setParentViewController:(UIViewController *)parentController
 {
 	_parentViewController = parentController;
@@ -215,9 +212,25 @@
 {
 }
 
+- (id)_nearestParentViewControllerThatIsKindOf:(Class)c
+{
+	UIViewController *controller = _parentViewController;
+
+	while (controller && ![controller isKindOfClass:c]) {
+		controller = [controller parentViewController];
+	}
+
+	return controller;
+}
+
+- (UINavigationController *)navigationController
+{
+	return [self _nearestParentViewControllerThatIsKindOf:[UINavigationController class]];
+}
+
 - (UISplitViewController *)splitViewController
 {
-	return nil;
+	return [self _nearestParentViewControllerThatIsKindOf:[UISplitViewController class]];
 }
 
 @end
