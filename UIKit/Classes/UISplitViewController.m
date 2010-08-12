@@ -4,53 +4,82 @@
 #import "UIView.h"
 #import "UITouch.h"
 #import "UIColor.h"
+#import "UIScreen.h"
 #import <AppKit/NSCursor.h>
 
 static const CGFloat SplitterPadding = 3;
 
 @interface _UISplitViewControllerView : UIView {
 	BOOL dragging;
-	UISplitViewController *splitViewController;
-	CGFloat leftWidth;
+	UIView *leftPanel;
+	UIView *rightPanel;
 }
-- (id)initWithSplitViewController:(UISplitViewController *)theController;
 @property (nonatomic, assign) CGFloat leftWidth;
+- (void)addViewControllers:(NSArray *)viewControllers;
 @end
 
 @implementation _UISplitViewControllerView
-@synthesize leftWidth;
 
-- (id)initWithSplitViewController:(UISplitViewController *)theController
+- (id)initWithFrame:(CGRect)frame
 {
-	if ((self=[super initWithFrame:CGRectZero])) {
-		splitViewController = theController;
-		leftWidth = 320;
+	if ((self=[super initWithFrame:frame])) {
+		leftPanel = [[UIView alloc] initWithFrame:CGRectMake(0,0,320,frame.size.height)];
+		rightPanel = [[UIView alloc] initWithFrame:CGRectMake(321,0,MAX(0,frame.size.width-321),frame.size.height)];
+		leftPanel.clipsToBounds = rightPanel.clipsToBounds = YES;
+		leftPanel.autoresizingMask = rightPanel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		[self addSubview:leftPanel];
+		[self addSubview:rightPanel];
 		self.backgroundColor = [UIColor blackColor];
 	}
 	return self;
 }
 
-- (void)setLeftWidth:(CGFloat)newWidth
+- (void)dealloc
 {
-	if (newWidth != leftWidth) {
-		leftWidth = newWidth;
-		[self setNeedsLayout];
+	[leftPanel release];
+	[rightPanel release];
+	[super dealloc];
+}
+
+- (void)addViewControllers:(NSArray *)viewControllers
+{
+	if ([viewControllers count] == 2) {
+		UIView *leftView = [[viewControllers objectAtIndex:0] view];
+		UIView *rightView = [[viewControllers objectAtIndex:1] view];
+		
+		leftView.frame = leftPanel.bounds;
+		rightView.frame = rightPanel.bounds;
+		
+		[leftPanel addSubview:leftView];
+		[rightPanel addSubview:rightView];
 	}
 }
 
-- (void)layoutSubviews
+- (void)setLeftWidth:(CGFloat)newWidth
 {
-	NSArray *viewControllers = splitViewController.viewControllers;
-	const CGRect bounds = self.bounds;
-	const CGFloat dividerWidth = 1;
-	[[[viewControllers objectAtIndex:0] view] setFrame:CGRectMake(0,0,leftWidth,bounds.size.height)];
-	[[[viewControllers objectAtIndex:1] view] setFrame:CGRectMake(leftWidth+dividerWidth,0,MAX(0,(bounds.size.width-leftWidth-dividerWidth)),bounds.size.height)];
+	if (newWidth != leftPanel.frame.size.width) {
+		CGRect leftFrame = leftPanel.frame;
+		CGRect rightFrame = rightPanel.frame;
+		
+		leftFrame.size.width = newWidth;
+
+		rightFrame.origin.x = newWidth+1;
+		rightFrame.size.width = MAX(self.bounds.size.width-newWidth-1,0);
+		
+		leftPanel.frame = leftFrame;
+		rightPanel.frame = rightFrame;
+	}
+}
+
+- (CGFloat)leftWidth
+{
+	return leftPanel.frame.size.width;
 }
 
 - (CGRect)splitterHitRect
 {
 	const CGRect bounds = self.bounds;
-	return CGRectMake(leftWidth-SplitterPadding,0,SplitterPadding+SplitterPadding+1,bounds.size.height);
+	return CGRectMake(self.leftWidth-SplitterPadding,0,SplitterPadding+SplitterPadding+1,bounds.size.height);
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
@@ -131,8 +160,10 @@ static const CGFloat SplitterPadding = 3;
 
 - (void)loadView
 {
-	self.view = [[[_UISplitViewControllerView alloc] initWithSplitViewController:self] autorelease];
-	self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	_UISplitViewControllerView *splitview = [[[_UISplitViewControllerView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame] autorelease];
+	splitview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	[splitview addViewControllers:_viewControllers];
+	self.view = splitview;
 }
 
 - (void)setViewControllers:(NSArray *)newControllers
@@ -150,8 +181,9 @@ static const CGFloat SplitterPadding = 3;
 		
 		for (UIViewController *c in _viewControllers) {
 			[c _setParentViewController:self];
-			[self.view addSubview:c.view];
 		}
+		
+		[(_UISplitViewControllerView *)self.view addViewControllers:_viewControllers];
 	}
 }
 
