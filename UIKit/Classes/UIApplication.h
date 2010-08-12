@@ -10,6 +10,7 @@ extern NSString *const UIApplicationWillTerminateNotification;
 extern NSString *const UIApplicationWillResignActiveNotification;
 extern NSString *const UIApplicationDidEnterBackgroundNotification;
 extern NSString *const UIApplicationDidBecomeActiveNotification;
+extern NSString *const UIApplicationDidFinishLaunchingNotification;
 
 extern NSString *const UIApplicationLaunchOptionsURLKey;
 extern NSString *const UIApplicationLaunchOptionsSourceApplicationKey;
