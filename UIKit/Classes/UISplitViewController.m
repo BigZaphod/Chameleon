@@ -49,6 +49,8 @@ static const CGFloat SplitterPadding = 3;
 		UIView *leftView = [[viewControllers objectAtIndex:0] view];
 		UIView *rightView = [[viewControllers objectAtIndex:1] view];
 		
+		leftView.autoresizingMask = rightView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		
 		leftView.frame = leftPanel.bounds;
 		rightView.frame = rightPanel.bounds;
 		
