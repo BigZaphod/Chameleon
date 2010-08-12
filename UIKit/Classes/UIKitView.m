@@ -94,8 +94,22 @@
 
 - (void)_launchApplicationDelegate:(id<UIApplicationDelegate>)appDelegate
 {
-	[[UIApplication sharedApplication] setDelegate:appDelegate];
-	[appDelegate applicationDidFinishLaunching:[UIApplication sharedApplication]];
+	UIApplication *app = [UIApplication sharedApplication];
+	[app setDelegate:appDelegate];
+
+	if ([appDelegate respondsToSelector:@selector(application:didFinishLaunchingWithOptions:)]) {
+		[appDelegate application:app didFinishLaunchingWithOptions:nil];
+	} else if ([appDelegate respondsToSelector:@selector(applicationDidFinishLaunching:)]) {
+		[appDelegate applicationDidFinishLaunching:app];
+	}
+
+	[[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidFinishLaunchingNotification object:app];
+
+	if ([appDelegate respondsToSelector:@selector(applicationDidBecomeActive:)]) {
+		[appDelegate applicationDidBecomeActive:app];
+	}
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidBecomeActiveNotification object:app];
 }
 
 - (void)_releaseDefaultWindow:(UIWindow *)defaultWindow
