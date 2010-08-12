@@ -31,8 +31,6 @@ static const CGFloat SplitterPadding = 3;
 		[self addSubview:leftPanel];
 		[self addSubview:rightPanel];
 		
-		leftPanel.backgroundColor = [UIColor yellowColor];
-		
 		self.backgroundColor = [UIColor blackColor];
 	}
 	return self;
