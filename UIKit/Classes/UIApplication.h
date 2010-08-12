@@ -11,6 +11,13 @@ extern NSString *const UIApplicationWillResignActiveNotification;
 extern NSString *const UIApplicationDidEnterBackgroundNotification;
 extern NSString *const UIApplicationDidBecomeActiveNotification;
 
+extern NSString *const UIApplicationLaunchOptionsURLKey;
+extern NSString *const UIApplicationLaunchOptionsSourceApplicationKey;
+extern NSString *const UIApplicationLaunchOptionsRemoteNotificationKey;
+extern NSString *const UIApplicationLaunchOptionsAnnotationKey;
+extern NSString *const UIApplicationLaunchOptionsLocalNotificationKey;
+extern NSString *const UIApplicationLaunchOptionsLocationKey;
+
 extern NSString *const UITrackingRunLoopMode;
 
 typedef enum {

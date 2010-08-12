@@ -53,3 +53,4 @@
 #import "UILongPressGestureRecognizer.h"
 #import "UISplitViewController.h"
 #import "UITabBarController.h"
+#import "UISwitch.h"

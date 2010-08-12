@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		141927A211F8A88E00051ABD /* UISplitViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 141927A011F8A88E00051ABD /* UISplitViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		141927A311F8A88E00051ABD /* UISplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 141927A111F8A88E00051ABD /* UISplitViewController.m */; };
+		1436CF96121476A1001DFEFB /* UISwitch.h in Headers */ = {isa = PBXBuildFile; fileRef = 1436CF94121476A1001DFEFB /* UISwitch.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1436CF97121476A1001DFEFB /* UISwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 1436CF95121476A1001DFEFB /* UISwitch.m */; };
 		1464960B11FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */; };
 		1464960C11FF7AE500ECEC7A /* <UINavigationBar> back.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */; };
 		1464960D11FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */; };
@@ -172,6 +174,8 @@
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		141927A011F8A88E00051ABD /* UISplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UISplitViewController.h; path = Classes/UISplitViewController.h; sourceTree = "<group>"; };
 		141927A111F8A88E00051ABD /* UISplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UISplitViewController.m; path = Classes/UISplitViewController.m; sourceTree = "<group>"; };
+		1436CF94121476A1001DFEFB /* UISwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UISwitch.h; path = Classes/UISwitch.h; sourceTree = "<group>"; };
+		1436CF95121476A1001DFEFB /* UISwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UISwitch.m; path = Classes/UISwitch.m; sourceTree = "<group>"; };
 		1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> back-highlighted.png"; path = "Resources/<UINavigationBar> back-highlighted.png"; sourceTree = "<group>"; };
 		1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> back.png"; path = "Resources/<UINavigationBar> back.png"; sourceTree = "<group>"; };
 		1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> button-highlighted.png"; path = "Resources/<UINavigationBar> button-highlighted.png"; sourceTree = "<group>"; };
@@ -480,6 +484,8 @@
 				141927A111F8A88E00051ABD /* UISplitViewController.m */,
 				14CC839811EFA8AF005988CC /* UIStringDrawing.h */,
 				14CC839911EFA8AF005988CC /* UIStringDrawing.m */,
+				1436CF94121476A1001DFEFB /* UISwitch.h */,
+				1436CF95121476A1001DFEFB /* UISwitch.m */,
 				14B1140612033FA6009D9376 /* UITabBarController.h */,
 				14B1140712033FA6009D9376 /* UITabBarController.m */,
 				14CC839A11EFA8AF005988CC /* UITableView.h */,
@@ -650,6 +656,7 @@
 				14A726DE1213303400648C9B /* UIView+UIPrivate.h in Headers */,
 				14A726DF1213303400648C9B /* UIViewController+UIPrivate.h in Headers */,
 				14A726E01213303400648C9B /* UIWindow+UIPrivate.h in Headers */,
+				1436CF96121476A1001DFEFB /* UISwitch.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -788,6 +795,7 @@
 				14A726CD1213303400648C9B /* _UIThreePartImage.m in Sources */,
 				14A726CF1213303400648C9B /* _UIViewAnimationGroup.m in Sources */,
 				14A726D11213303400648C9B /* _UIViewLayoutManager.m in Sources */,
+				1436CF97121476A1001DFEFB /* UISwitch.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
