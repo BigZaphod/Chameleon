@@ -145,8 +145,8 @@ static NSBezierPath *BezierPathForWindowTitle(NSRect aRect)
 
 	NSRect bounds = self.bounds;
 	
-	NSRect titleRect;
-	NSRect borderRect;
+	NSRect titleRect = NSZeroRect;
+	NSRect borderRect = NSZeroRect;
 
 	switch (edge) {
 		case _UIPopoverWindowFrameEdgeLeft:
@@ -218,8 +218,9 @@ static NSBezierPath *BezierPathForWindowTitle(NSRect aRect)
 	//[[NSColor whiteColor] set];
 	//[framePath stroke];
 
-	NSPoint arrowBaseStart;
-	NSPoint arrowBaseEnd;
+	NSPoint arrowBaseStart = NSZeroPoint;
+	NSPoint arrowBaseEnd = NSZeroPoint;
+
 	switch (edge) {
 		case _UIPopoverWindowFrameEdgeLeft:
 			arrowBaseStart = NSMakePoint(borderRect.size.width, point.y + (popoverWindowFrameArrowWidth / 2.0f));

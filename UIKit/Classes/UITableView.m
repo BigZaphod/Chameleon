@@ -390,8 +390,4 @@ static const CGFloat kDefaultRowHeight = 43;
 	}
 }
 
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
-{
-}
-
 @end
