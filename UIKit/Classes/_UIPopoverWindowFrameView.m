@@ -199,8 +199,11 @@ static NSBezierPath *BezierPathForWindowTitle(NSRect aRect)
 	NSColor *startColor = nil;
 	NSColor *endColor = nil;
 	if (isMainWindow) {
-		startColor = [NSColor colorWithCalibratedRed:0.0f green:0.125f blue:0.25f alpha:0.8f];
-		endColor = [NSColor colorWithCalibratedRed:0.0f green:0.25f blue:0.5f alpha:0.8f];
+		//startColor = [NSColor colorWithCalibratedRed:0.0f green:0.125f blue:0.25f alpha:0.8f];
+		//endColor = [NSColor colorWithCalibratedRed:0.0f green:0.25f blue:0.5f alpha:0.8f];
+		
+		startColor = [NSColor colorWithCalibratedRed:43/255.f green:43/255.f blue:43/255.f alpha:0.9];
+		endColor = [NSColor colorWithCalibratedRed:60/255.f green:60/255.f blue:60/255.f alpha:0.9];
 	}
 	else {
 		startColor = [NSColor colorWithCalibratedRed:0.0f green:0.125f blue:0.25f alpha:1.0f];
