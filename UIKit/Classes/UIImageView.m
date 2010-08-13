@@ -105,13 +105,12 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
 
 - (void)displayLayer:(CALayer *)theLayer
 {
-	UIImage *sourceImage = (_highlighted && _highlightedImage)? _highlightedImage : _image;
-	UIImage *displayImage = sourceImage;
+	UIImage *displayImage = (_highlighted && _highlightedImage)? _highlightedImage : _image;
 	const CGRect bounds = self.bounds;
 	
-	if (self._hasResizableImage && bounds.size.width > 0 && bounds.size.height > 0) {
+	if (displayImage && self._hasResizableImage && bounds.size.width > 0 && bounds.size.height > 0) {
 		UIGraphicsBeginImageContext(bounds.size);
-		[sourceImage drawInRect:bounds];
+		[displayImage drawInRect:bounds];
 		displayImage = UIGraphicsGetImageFromCurrentImageContext();
 		UIGraphicsEndImageContext();
 	}
