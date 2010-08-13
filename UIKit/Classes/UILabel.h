@@ -35,7 +35,7 @@
 @property (nonatomic) UIBaselineAdjustment baselineAdjustment;	// not implemented
 @property (nonatomic) BOOL adjustsFontSizeToFitWidth;			// not implemented
 @property (nonatomic) CGFloat minimumFontSize;					// not implemented
-@property (nonatomic, getter=isHighlighted) BOOL highlighted;	// not implemented
+@property (nonatomic, getter=isHighlighted) BOOL highlighted;
 
 
 - (CGRect)textRectForBounds:(CGRect)bounds limitedToNumberOfLines:(NSInteger)numberOfLines;

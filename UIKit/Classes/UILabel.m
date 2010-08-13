@@ -156,7 +156,8 @@
 	}
 
 	// finally, draw the real label
-	[_textColor setFill];
+	UIColor *drawColor = (_highlighted && _highlightedTextColor)? _highlightedTextColor : _textColor;
+	[drawColor setFill];
 	[self drawTextInRect:drawRect];
 }
 
@@ -172,6 +173,14 @@
 {
 	size = CGSizeMake(CGFLOAT_MAX, _numberOfLines <= 0? CGFLOAT_MAX : (_font.leading*_numberOfLines));
 	return [_text sizeWithFont:_font constrainedToSize:size lineBreakMode:_lineBreakMode];
+}
+
+- (void)setHighlighted:(BOOL)highlighted
+{
+	if (highlighted != _highlighted) {
+		_highlighted = highlighted;
+		[self setNeedsDisplay];
+	}
 }
 
 @end
