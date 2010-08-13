@@ -59,13 +59,14 @@ static const CGFloat NavigationBarHeight = 32;
 - (void)loadView
 {
 	self.view = [[[UIView alloc] initWithFrame:CGRectMake(0,0,320,480)] autorelease];
-	
-	_navigationBar.frame = CGRectMake(0,0,320,NavigationBarHeight);
-	[self.view addSubview:_navigationBar];
-	
+	self.view.clipsToBounds = YES;
+
 	UIViewController *topViewController = self.topViewController;
 	topViewController.view.frame = [self _controllerFrame];
 	[self.view addSubview:topViewController.view];
+
+	_navigationBar.frame = CGRectMake(0,0,320,NavigationBarHeight);
+	[self.view addSubview:_navigationBar];
 }
 
 - (void)setViewControllers:(NSArray *)newViewControllers animated:(BOOL)animated
@@ -94,6 +95,7 @@ static const CGFloat NavigationBarHeight = 32;
 		[newTopController viewWillAppear:animated];
 		newTopController.view.frame = [self _controllerFrame];
 		[self.view addSubview:newTopController.view];
+		[self.view bringSubviewToFront:_navigationBar];
 		[newTopController viewDidAppear:animated];
 	}
 }
