@@ -18,10 +18,10 @@
 		_UIKitView = [[UIKitView alloc] initWithFrame:defaultFrame];
 		
 		_UIPopoverWindow *popoverWindow = [[[_UIPopoverWindow alloc] initWithContentRect:defaultFrame styleMask:NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES] autorelease];
-		_popoverWindowController = [[_UIPopoverWindowController alloc] initWithWindow:popoverWindow];
-		
+		_popoverWindowController = [[_UIPopoverWindowController alloc] initWithPopoverWindow:popoverWindow controller:self];
+
 		[popoverWindow setDelegate:_popoverWindowController];
-		[popoverWindow setTitle:@"Popover"];
+		//[popoverWindow setTitle:@"Popover"];
 		[popoverWindow setContentView:_UIKitView];
 		[popoverWindow setLevel:NSFloatingWindowLevel];
 		[popoverWindow setHidesOnDeactivate:YES];		

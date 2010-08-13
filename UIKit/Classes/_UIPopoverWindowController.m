@@ -7,9 +7,18 @@
 //
 
 #import "_UIPopoverWindowController.h"
-
+#import "_UIPopoverWindow.h"
+#import "UIPopoverController.h"
 
 @implementation _UIPopoverWindowController
+
+- (id)initWithPopoverWindow:(_UIPopoverWindow *)popoverWindow controller:(UIPopoverController *)controller
+{
+	if ((self=[super initWithWindow:popoverWindow])) {
+		popoverController = controller;
+	}
+	return self;
+}
 
 #pragma mark Actions
 
@@ -38,14 +47,28 @@ NOTE: These methods are only called when loading from a NIB file.
 
 - (void)windowWillClose:(NSNotification *)notification
 {
+	if ([notification object] == [self window]) {
+		if ([popoverController.delegate respondsToSelector:@selector(popoverControllerDidDismissPopover:)]) {
+			[popoverController.delegate popoverControllerDidDismissPopover:popoverController];
+		}
+	}
 }
 
 - (BOOL)windowShouldClose:(id)sender
 {
-	// grab any pending editing changes in the text fields
-	[self.window makeFirstResponder:self.window];
+	BOOL shouldClose = YES;
+	
+	if ([popoverController.delegate respondsToSelector:@selector(popoverControllerShouldDismissPopover:)]) {
+		shouldClose = [popoverController.delegate popoverControllerShouldDismissPopover:popoverController];
+	}
 
-	return YES;
+	if (shouldClose) {
+		// grab any pending editing changes in the text fields
+		[self.window makeFirstResponder:self.window];
+		return YES;
+	} else {
+		return NO;
+	}
 }
 
 - (void)windowDidBecomeKey:(NSNotification *)notification
