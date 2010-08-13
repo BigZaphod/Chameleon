@@ -183,6 +183,7 @@ static const CGFloat kDefaultRowHeight = 43;
 					theCell.selected = [_selectedRow isEqual:index];
 					theCell.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 					theCell.frame = [self rectForRowAtIndexPath:index];
+					theCell.backgroundColor = self.backgroundColor;
 					[theCell _setSeparatorStyle:_separatorStyle color:_separatorColor];
 					[self addSubview:theCell];
 					[newActiveCells setObject:theCell forKey:index];
