@@ -19,7 +19,6 @@
 		_contentView = [UIView new];
 		[self addSubview:_contentView];
 		
-		self.backgroundColor = [UIColor whiteColor];
 		self.accessoryType = UITableViewCellAccessoryNone;
 		self.editingAccessoryType = UITableViewCellAccessoryNone;
 	}
@@ -72,11 +71,22 @@
 	[_seperatorView setSeparatorStyle:theStyle color:theColor];
 }
 
+- (void)_setHighlighted:(BOOL)highlighted forViews:(id)subviews
+{
+	for (id view in subviews) {
+		if ([view respondsToSelector:@selector(setHighlighted:)]) {
+			[view setHighlighted:highlighted];
+		}
+		[self _setHighlighted:highlighted forViews:[view subviews]];
+	}
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
 	if (selected != _selected) {
 		_selected = selected;
 		_selectedBackgroundView.hidden = !_selected;
+		[self _setHighlighted:_selected forViews:[self subviews]];
 	}
 }
 
@@ -87,7 +97,10 @@
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
 {
-	_highlighted = highlighted;
+	if (_highlighted != highlighted) {
+		_highlighted = highlighted;
+		[self _setHighlighted:_highlighted forViews:[self subviews]];
+	}
 }
 
 - (void)setHighlighted:(BOOL)highlighted
