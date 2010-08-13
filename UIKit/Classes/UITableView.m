@@ -293,6 +293,12 @@ static const CGFloat kDefaultRowHeight = 43;
 
 - (NSIndexPath *)indexPathForCell:(UITableViewCell *)cell
 {
+	for (NSIndexPath *index in [_activeCells allKeys]) {
+		if ([_activeCells objectForKey:index] == cell) {
+			return index;
+		}
+	}
+	
 	return nil;
 }
 
