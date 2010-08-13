@@ -86,7 +86,7 @@
 	if (selected != _selected) {
 		_selected = selected;
 		_selectedBackgroundView.hidden = !_selected;
-		[self _setHighlighted:_selected forViews:[self subviews]];
+		[self _setHighlighted:(_highlighted || _selected) forViews:[self subviews]];
 	}
 }
 
@@ -99,7 +99,7 @@
 {
 	if (_highlighted != highlighted) {
 		_highlighted = highlighted;
-		[self _setHighlighted:_highlighted forViews:[self subviews]];
+		[self _setHighlighted:(_highlighted || _selected) forViews:[self subviews]];
 	}
 }
 
