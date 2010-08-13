@@ -2,6 +2,8 @@
 #import "UITableViewCell+UIPrivate.h"
 #import "_UITableViewCellSeparator.h"
 #import "UIColor.h"
+#import "UILabel.h"
+#import "UIImageView.h"
 
 @implementation UITableViewCell
 @synthesize contentView=_contentView, accessoryType=_accessoryType, textLabel=_textLabel, selectionStyle=_selectionStyle, indentationLevel=_indentationLevel;
@@ -72,7 +74,10 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
-	_selected = selected;
+	if (selected != _selected) {
+		_selected = selected;
+		_selectedBackgroundView.hidden = !_selected;
+	}
 }
 
 - (void)setSelected:(BOOL)selected
@@ -107,9 +112,28 @@
 		[_selectedBackgroundView removeFromSuperview];
 		[_selectedBackgroundView release];
 		_selectedBackgroundView = [theSelectedBackgroundView retain];
-		_selectedBackgroundView.hidden = !self.selected;
+		_selectedBackgroundView.hidden = !_selected;
 		[self addSubview:_selectedBackgroundView];
 	}
+}
+
+- (UILabel *)textLabel
+{
+	if (!_textLabel) {
+		_textLabel = [UILabel new];
+		_textLabel.backgroundColor = [UIColor clearColor];
+		[_contentView addSubview:_textLabel];
+	}
+	return _textLabel;
+}
+
+- (UIImageView *)imageView
+{
+	if (!_imageView) {
+		_imageView = [UIImageView new];
+		[_contentView addSubview:_imageView];
+	}
+	return _imageView;
 }
 
 @end
