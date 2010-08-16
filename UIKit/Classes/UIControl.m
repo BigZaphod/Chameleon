@@ -140,6 +140,8 @@
 	_touchInside = YES;
 	_tracking = [self beginTrackingWithTouch:touch withEvent:event];
 
+	self.highlighted = YES;
+
 	if (_tracking) {
 		UIControlEvents currentEvents = UIControlEventTouchDown;
 
@@ -149,8 +151,6 @@
 
 		[self _sendActionsForControlEvents:currentEvents withEvent:event];
 	}
-
-	self.highlighted = YES;
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
@@ -158,6 +158,8 @@
 	UITouch *touch = [touches anyObject];
 	const BOOL wasTouchInside = _touchInside;
 	_touchInside = [self pointInside:[touch locationInView:self] withEvent:event];
+
+	self.highlighted = _touchInside;
 
 	if (_tracking) {
 		_tracking = [self continueTrackingWithTouch:touch withEvent:event];
@@ -173,14 +175,14 @@
 			[self _sendActionsForControlEvents:currentEvents withEvent:event];
 		}
 	}
-	
-	self.highlighted = _touchInside;
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
 	UITouch *touch = [touches anyObject];
 	_touchInside = [self pointInside:[touch locationInView:self] withEvent:event];
+
+	self.highlighted = NO;
 
 	if (_tracking) {
 		[self endTrackingWithTouch:touch withEvent:event];
@@ -189,7 +191,6 @@
 
 	_tracking = NO;
 	_touchInside = NO;
-	self.highlighted = NO;
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
