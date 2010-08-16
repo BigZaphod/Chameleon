@@ -305,7 +305,7 @@ static const CGFloat kDefaultRowHeight = 43;
 
 - (void)deselectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated
 {
-	if (indexPath == _selectedRow) {
+	if ([indexPath isEqual:_selectedRow]) {
 		[self cellForRowAtIndexPath:_selectedRow].selected = NO;
 		[_selectedRow release];
 		_selectedRow = nil;
@@ -314,7 +314,7 @@ static const CGFloat kDefaultRowHeight = 43;
 
 - (void)selectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition
 {
-	if (_selectedRow != indexPath) {
+	if (![_selectedRow isEqual:indexPath]) {
 		[_selectedRow release];
 		_selectedRow = [indexPath retain];
 		[self cellForRowAtIndexPath:_selectedRow].selected = YES;
@@ -352,16 +352,14 @@ static const CGFloat kDefaultRowHeight = 43;
 {
 }
 
-
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
 	UITouch *touch = [touches anyObject];
 	CGPoint location = [touch locationInView:self];
 	NSIndexPath *touchedRow = [self indexPathForRowAtPoint:location];
+	NSIndexPath *selectedRow = [self indexPathForSelectedRow];
 	
-	if (touchedRow) {
-		NSIndexPath *selectedRow = [self indexPathForSelectedRow];
-
+	if (touchedRow && ![touchedRow isEqual:selectedRow]) {
 		if (selectedRow) {
 			NSIndexPath *rowToDeselect = selectedRow;
 			
