@@ -6,8 +6,6 @@
 #import "UIViewController.h"
 #import "UIPopoverController.h"
 
-#import "UIColor.h"
-
 @interface UIActionSheet () <UIPopoverControllerDelegate>
 @end
 
@@ -20,9 +18,6 @@
 		_buttons = [NSMutableArray new];
 		_destructiveButtonIndex = -1;
 		_cancelButtonIndex = -1;
-		
-		// TEMP
-		self.backgroundColor = [UIColor redColor];
 	}
 	return self;
 }
