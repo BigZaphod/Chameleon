@@ -1,19 +1,29 @@
 //  Created by Sean Heber on 6/25/10.
 #import "UIView.h"
 
+@class UIActionSheet, UIPopoverController;
+
 @protocol UIActionSheetDelegate <NSObject>
+@optional
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;
+- (void)willPresentActionSheet:(UIActionSheet *)actionSheet;
+- (void)didPresentActionSheet:(UIActionSheet *)actionSheet;
+- (void)actionSheet:(UIActionSheet *)actionSheet willDismissWithButtonIndex:(NSInteger)buttonIndex;
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex;
+- (void)actionSheetCancel:(UIActionSheet *)actionSheet;
 @end
 
 @interface UIActionSheet : UIView {
 @private
-	id _delegate;
+	id<UIActionSheetDelegate> _delegate;
 	NSInteger _destructiveButtonIndex;
-	BOOL _visible;
 	NSInteger _cancelButtonIndex;
 	NSString *_title;
+	NSMutableArray *_buttons;
+	UIPopoverController *_popoverController;
 }
 
-- (id)initWithTitle:(NSString *)title delegate:(id < UIActionSheetDelegate >)delegate cancelButtonTitle:(NSString *)cancelButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ...;
+- (id)initWithTitle:(NSString *)title delegate:(id<UIActionSheetDelegate>)delegate cancelButtonTitle:(NSString *)cancelButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ...;
 - (NSInteger)addButtonWithTitle:(NSString *)title;
 
 - (void)showInView:(UIView *)view;
