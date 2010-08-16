@@ -81,12 +81,18 @@
 	}
 }
 
+- (void)_updateSelectionState
+{
+	BOOL shouldHighlight = (_highlighted || _selected);
+	_selectedBackgroundView.hidden = !shouldHighlight;
+	[self _setHighlighted:shouldHighlight forViews:[self subviews]];
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
 	if (selected != _selected) {
 		_selected = selected;
-		_selectedBackgroundView.hidden = !_selected;
-		[self _setHighlighted:(_highlighted || _selected) forViews:[self subviews]];
+		[self _updateSelectionState];
 	}
 }
 
@@ -99,7 +105,7 @@
 {
 	if (_highlighted != highlighted) {
 		_highlighted = highlighted;
-		[self _setHighlighted:(_highlighted || _selected) forViews:[self subviews]];
+		[self _updateSelectionState];
 	}
 }
 
