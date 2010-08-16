@@ -52,6 +52,7 @@
 
 - (BOOL)resignFirstResponder
 {
+	[[self window] _setFirstResponder:nil];
 	return YES;
 }
 
