@@ -357,9 +357,10 @@ static const CGFloat kDefaultRowHeight = 43;
 	UITouch *touch = [touches anyObject];
 	CGPoint location = [touch locationInView:self];
 	NSIndexPath *touchedRow = [self indexPathForRowAtPoint:location];
-	NSIndexPath *selectedRow = [self indexPathForSelectedRow];
 	
-	if (touchedRow && ![touchedRow isEqual:selectedRow]) {
+	if (touchedRow) {
+		NSIndexPath *selectedRow = [self indexPathForSelectedRow];
+
 		if (selectedRow) {
 			NSIndexPath *rowToDeselect = selectedRow;
 			
