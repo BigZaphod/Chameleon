@@ -6,4 +6,6 @@
 - (NSView *)_NSView;
 - (CALayer *)_layer;
 - (BOOL)_hasResizeIndicator;
+- (void)_setPopoverController:(UIPopoverController *)controller;
+- (UIPopoverController *)_popoverController;
 @end

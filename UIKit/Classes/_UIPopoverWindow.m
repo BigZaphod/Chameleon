@@ -394,4 +394,10 @@ const CGFloat popoverWindowCloseButtonSize = 13.0f;
 	}
 }
 
+- (void)setTitle:(NSString *)title
+{
+	[super setTitle:title];
+	[[super contentView] setNeedsDisplay:YES];
+}
+
 @end

@@ -6,7 +6,7 @@ extern NSString *const UIScreenDidConnectNotification;
 extern NSString *const UIScreenDidDisconnectNotification;
 extern NSString *const UIScreenModeDidChangeNotification;
 
-@class UIImageView, CALayer, NSView, UIScreenMode;
+@class UIImageView, CALayer, NSView, UIScreenMode, UIPopoverController;
 
 @interface UIScreen : NSObject {
 @private
@@ -14,6 +14,7 @@ extern NSString *const UIScreenModeDidChangeNotification;
 	CALayer *_layer;
 	NSView *_NSView;
 	UIScreenMode *_currentMode;
+	__weak UIPopoverController *_popoverController;
 }
 
 + (UIScreen *)mainScreen;

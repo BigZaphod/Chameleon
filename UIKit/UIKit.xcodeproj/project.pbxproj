@@ -16,6 +16,7 @@
 		1464960D11FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */; };
 		1464960E11FF7AE500ECEC7A /* <UINavigationBar> button.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */; };
 		14869DB1121303C60019B134 /* UIApplicationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14869DB0121303C60019B134 /* UIApplicationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1490AFE01219C31C00774286 /* UIPopoverController+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */; };
 		14A726BE1213303400648C9B /* _UIImageTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A7269B1213303400648C9B /* _UIImageTools.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726BF1213303400648C9B /* _UIImageTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A7269C1213303400648C9B /* _UIImageTools.m */; };
 		14A726C01213303400648C9B /* _UINinePartImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A7269D1213303400648C9B /* _UINinePartImage.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -181,6 +182,7 @@
 		1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> button-highlighted.png"; path = "Resources/<UINavigationBar> button-highlighted.png"; sourceTree = "<group>"; };
 		1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> button.png"; path = "Resources/<UINavigationBar> button.png"; sourceTree = "<group>"; };
 		14869DB0121303C60019B134 /* UIApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIApplicationDelegate.h; path = Classes/UIApplicationDelegate.h; sourceTree = "<group>"; };
+		1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIPopoverController+UIPrivate.h"; sourceTree = "<group>"; };
 		14A7269B1213303400648C9B /* _UIImageTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _UIImageTools.h; sourceTree = "<group>"; };
 		14A7269C1213303400648C9B /* _UIImageTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _UIImageTools.m; sourceTree = "<group>"; };
 		14A7269D1213303400648C9B /* _UINinePartImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _UINinePartImage.h; sourceTree = "<group>"; };
@@ -556,6 +558,7 @@
 				14A726BB1213303400648C9B /* UIView+UIPrivate.h */,
 				14A726BC1213303400648C9B /* UIViewController+UIPrivate.h */,
 				14A726BD1213303400648C9B /* UIWindow+UIPrivate.h */,
+				1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */,
 			);
 			name = "Private Classes";
 			path = Classes;
@@ -657,6 +660,7 @@
 				14A726DF1213303400648C9B /* UIViewController+UIPrivate.h in Headers */,
 				14A726E01213303400648C9B /* UIWindow+UIPrivate.h in Headers */,
 				1436CF96121476A1001DFEFB /* UISwitch.h in Headers */,
+				1490AFE01219C31C00774286 /* UIPopoverController+UIPrivate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

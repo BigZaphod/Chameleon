@@ -71,6 +71,16 @@ static NSMutableArray *_allScreens = nil;
 	[super dealloc];
 }
 
+- (void)_setPopoverController:(UIPopoverController *)controller
+{
+	_popoverController = controller;
+}
+
+- (UIPopoverController *)_popoverController
+{
+	return _popoverController;
+}
+
 - (BOOL)_hasResizeIndicator
 {
 	NSWindow *realWindow = [_NSView window];
