@@ -17,6 +17,10 @@
 		1464960E11FF7AE500ECEC7A /* <UINavigationBar> button.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */; };
 		14869DB1121303C60019B134 /* UIApplicationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14869DB0121303C60019B134 /* UIApplicationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1490AFE01219C31C00774286 /* UIPopoverController+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */; };
+		1490B0411219CA2F00774286 /* UIAccelerometer.h in Headers */ = {isa = PBXBuildFile; fileRef = 1490B03F1219CA2F00774286 /* UIAccelerometer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1490B0421219CA2F00774286 /* UIAccelerometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1490B0401219CA2F00774286 /* UIAccelerometer.m */; };
+		1490B04B1219CAE800774286 /* UIAcceleration.h in Headers */ = {isa = PBXBuildFile; fileRef = 1490B0491219CAE800774286 /* UIAcceleration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1490B04C1219CAE800774286 /* UIAcceleration.m in Sources */ = {isa = PBXBuildFile; fileRef = 1490B04A1219CAE800774286 /* UIAcceleration.m */; };
 		14A726BE1213303400648C9B /* _UIImageTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A7269B1213303400648C9B /* _UIImageTools.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726BF1213303400648C9B /* _UIImageTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A7269C1213303400648C9B /* _UIImageTools.m */; };
 		14A726C01213303400648C9B /* _UINinePartImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A7269D1213303400648C9B /* _UINinePartImage.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -183,6 +187,10 @@
 		1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> button.png"; path = "Resources/<UINavigationBar> button.png"; sourceTree = "<group>"; };
 		14869DB0121303C60019B134 /* UIApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIApplicationDelegate.h; path = Classes/UIApplicationDelegate.h; sourceTree = "<group>"; };
 		1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIPopoverController+UIPrivate.h"; sourceTree = "<group>"; };
+		1490B03F1219CA2F00774286 /* UIAccelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIAccelerometer.h; path = Classes/UIAccelerometer.h; sourceTree = "<group>"; };
+		1490B0401219CA2F00774286 /* UIAccelerometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIAccelerometer.m; path = Classes/UIAccelerometer.m; sourceTree = "<group>"; };
+		1490B0491219CAE800774286 /* UIAcceleration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIAcceleration.h; path = Classes/UIAcceleration.h; sourceTree = "<group>"; };
+		1490B04A1219CAE800774286 /* UIAcceleration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIAcceleration.m; path = Classes/UIAcceleration.m; sourceTree = "<group>"; };
 		14A7269B1213303400648C9B /* _UIImageTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _UIImageTools.h; sourceTree = "<group>"; };
 		14A7269C1213303400648C9B /* _UIImageTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _UIImageTools.m; sourceTree = "<group>"; };
 		14A7269D1213303400648C9B /* _UINinePartImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _UINinePartImage.h; sourceTree = "<group>"; };
@@ -409,6 +417,10 @@
 			children = (
 				14CC834D11EFA8AF005988CC /* NSIndexPath+UITableView.h */,
 				14CC834E11EFA8AF005988CC /* NSIndexPath+UITableView.m */,
+				1490B03F1219CA2F00774286 /* UIAccelerometer.h */,
+				1490B0401219CA2F00774286 /* UIAccelerometer.m */,
+				1490B0491219CAE800774286 /* UIAcceleration.h */,
+				1490B04A1219CAE800774286 /* UIAcceleration.m */,
 				14CC834F11EFA8AF005988CC /* UIAccessibility.h */,
 				14CC835011EFA8AF005988CC /* UIAccessibility.m */,
 				14CC835111EFA8AF005988CC /* UIAccessibilityElement.h */,
@@ -661,6 +673,8 @@
 				14A726E01213303400648C9B /* UIWindow+UIPrivate.h in Headers */,
 				1436CF96121476A1001DFEFB /* UISwitch.h in Headers */,
 				1490AFE01219C31C00774286 /* UIPopoverController+UIPrivate.h in Headers */,
+				1490B0411219CA2F00774286 /* UIAccelerometer.h in Headers */,
+				1490B04B1219CAE800774286 /* UIAcceleration.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -800,6 +814,8 @@
 				14A726CF1213303400648C9B /* _UIViewAnimationGroup.m in Sources */,
 				14A726D11213303400648C9B /* _UIViewLayoutManager.m in Sources */,
 				1436CF97121476A1001DFEFB /* UISwitch.m in Sources */,
+				1490B0421219CA2F00774286 /* UIAccelerometer.m in Sources */,
+				1490B04C1219CAE800774286 /* UIAcceleration.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

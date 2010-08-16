@@ -54,3 +54,5 @@
 #import "UISplitViewController.h"
 #import "UITabBarController.h"
 #import "UISwitch.h"
+#import "UIAcceleration.h"
+#import "UIAccelerometer.h"
