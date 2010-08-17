@@ -233,7 +233,7 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 
 - (CGRect)contentRectForBounds:(CGRect)bounds
 {
-	return bounds;
+	return UIEdgeInsetsInsetRect(bounds,_contentEdgeInsets);
 }
 
 - (CGRect)titleRectForContentRect:(CGRect)contentRect
@@ -274,16 +274,16 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 	// this needs to take into account the various insets and stuff, I suspect.. and maybe the image?
 	// will have to do a fair bit of reverse engineering to see how the real UIKit does this, if it is needed.
 	CGSize fitSize = [[self titleForState:UIControlStateNormal] sizeWithFont:_titleLabel.font constrainedToSize:CGSizeMake(CGFLOAT_MAX,CGFLOAT_MAX)];
-	
-	fitSize.width += _titleEdgeInsets.left + _titleEdgeInsets.right;
-	fitSize.height += _titleEdgeInsets.top + _titleEdgeInsets.bottom;
-	
+
 	fitSize.width = MAX(fitSize.width, [self imageForState:UIControlStateNormal].size.width);
 	fitSize.height = MAX(fitSize.height, [self imageForState:UIControlStateNormal].size.height);
 	
 	fitSize.width = MAX(fitSize.width, [self backgroundImageForState:UIControlStateNormal].size.width);
 	fitSize.height = MAX(fitSize.height, [self backgroundImageForState:UIControlStateNormal].size.height);
-	
+
+	fitSize.width += _titleEdgeInsets.left + _titleEdgeInsets.right + _contentEdgeInsets.left + _contentEdgeInsets.right;
+	fitSize.height += _titleEdgeInsets.top + _titleEdgeInsets.bottom + _contentEdgeInsets.top + _contentEdgeInsets.bottom;
+
 	return fitSize;
 }
 
