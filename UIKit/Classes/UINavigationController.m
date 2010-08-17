@@ -78,6 +78,10 @@ static const CGFloat NavigationBarHeight = 32;
 		[previousTopController viewWillDisappear:animated];
 		[previousTopController.view removeFromSuperview];
 		[previousTopController viewDidDisappear:animated];
+
+		for (UIViewController *controller in _viewControllers) {
+			[controller _setParentViewController:nil];
+		}
 		
 		[_viewControllers release];
 		_viewControllers = [newViewControllers mutableCopy];
@@ -88,14 +92,15 @@ static const CGFloat NavigationBarHeight = 32;
 			[controller _setParentViewController:self];
 			[items addObject:controller.navigationItem];
 		}
-		
-		[_navigationBar setItems:items animated:animated];
-		
+
 		UIViewController *newTopController = self.topViewController;
 		[newTopController viewWillAppear:animated];
 		newTopController.view.frame = [self _controllerFrame];
 		[self.view addSubview:newTopController.view];
 		[self.view bringSubviewToFront:_navigationBar];
+		
+		[_navigationBar setItems:items animated:animated];
+		
 		[newTopController viewDidAppear:animated];
 	}
 }
@@ -123,10 +128,10 @@ static const CGFloat NavigationBarHeight = 32;
 	[previousViewController viewWillDisappear:animated];
 	[viewController viewWillAppear:animated];
 
-	[_navigationBar pushNavigationItem:viewController.navigationItem animated:animated];
 	[previousViewController.view removeFromSuperview];
 	viewController.view.frame = [self _controllerFrame];
 	[self.view addSubview:viewController.view];
+	[_navigationBar pushNavigationItem:viewController.navigationItem animated:animated];
 	
 	[previousViewController viewDidDisappear:animated];
 	[viewController viewDidAppear:animated];
