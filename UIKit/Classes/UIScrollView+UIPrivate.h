@@ -2,3 +2,7 @@
 #import "UIScrollView.h"
 
 extern const CGFloat _UIScrollViewScrollerSize;
+
+@interface UIScrollView (UIPrivate)
+- (BOOL)_canScrollVertical;
+@end

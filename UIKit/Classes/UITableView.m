@@ -76,11 +76,13 @@ static const CGFloat kDefaultRowHeight = 43;
 {
 	NSNumber *cellOffset = [_cellOffsets objectForKey:indexPath];
 	NSNumber *cellHeight = [_cellHeights objectForKey:indexPath];
-	
+
+	const CGFloat boundsAdjustment = [self _canScrollVertical]? (_UIScrollViewScrollerSize-self.scrollIndicatorInsets.right) : 0;
+
 	if (!cellHeight || !cellHeight) {
 		return CGRectZero;
 	} else {
-		return CGRectMake(0,[cellOffset floatValue],self.bounds.size.width-_UIScrollViewScrollerSize-self.scrollIndicatorInsets.right,[cellHeight floatValue]);
+		return CGRectMake(0,[cellOffset floatValue],self.bounds.size.width-boundsAdjustment,[cellHeight floatValue]);
 	}
 }
 
@@ -150,7 +152,8 @@ static const CGFloat kDefaultRowHeight = 43;
 {
 	NSMutableDictionary *newActiveCells = [NSMutableDictionary dictionaryWithCapacity:[_activeCells count]];
 	const CGRect bounds = self.bounds;
-	const CGFloat boundsWidth = bounds.size.width-_UIScrollViewScrollerSize-self.scrollIndicatorInsets.right;
+	const CGFloat boundsAdjustment = [self _canScrollVertical]? (_UIScrollViewScrollerSize-self.scrollIndicatorInsets.right) : 0;
+	const CGFloat boundsWidth = bounds.size.width - boundsAdjustment;
 
 	_tableHeaderView.frame = CGRectMake(0,0,boundsWidth,_tableHeaderView.frame.size.height);
 
@@ -283,8 +286,8 @@ static const CGFloat kDefaultRowHeight = 43;
 	if (_needsReload) {
 		[self reloadData];
 	}
-	[self _layoutCells];
 	[super layoutSubviews];
+	[self _layoutCells];
 }
 
 - (NSIndexPath *)indexPathForSelectedRow

@@ -74,12 +74,12 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 
 - (BOOL)_canScrollHorizontal
 {
-	return self.scrollEnabled && self.showsHorizontalScrollIndicator;
+	return self.scrollEnabled && self.showsHorizontalScrollIndicator && (_contentSize.width > self.bounds.size.width);
 }
 
 - (BOOL)_canScrollVertical
 {
-	return self.scrollEnabled && self.showsVerticalScrollIndicator;
+	return self.scrollEnabled && self.showsVerticalScrollIndicator && (_contentSize.height > self.bounds.size.height);
 }
 
 - (void)_setContentPositionAnimated:(BOOL)animated
