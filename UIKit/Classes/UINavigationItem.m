@@ -26,10 +26,28 @@
 
 - (void)setLeftBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated
 {
+	if (item != _leftBarButtonItem) {
+		[_leftBarButtonItem release];
+		_leftBarButtonItem = [item retain];
+	}
+}
+
+- (void)setLeftBarButtonItem:(UIBarButtonItem *)item
+{
+	[self setLeftBarButtonItem:item animated:NO];
 }
 
 - (void)setRightBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated
 {
+	if (item != _rightBarButtonItem) {
+		[_rightBarButtonItem release];
+		_rightBarButtonItem = [item retain];
+	}
+}
+
+- (void)setRightBarButtonItem:(UIBarButtonItem *)item
+{
+	[self setRightBarButtonItem:item animated:NO];
 }
 
 - (void)setHidesBackButton:(BOOL)hidesBackButton animated:(BOOL)animated
