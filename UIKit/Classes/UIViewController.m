@@ -193,7 +193,7 @@
 		self.view.hidden = NO;
 
 		[_modalViewController _setParentViewController:nil];
-		[_modalViewController release];
+		[_modalViewController autorelease];
 		_modalViewController = nil;
 
 		[_modalViewController viewDidDisappear:animated];
