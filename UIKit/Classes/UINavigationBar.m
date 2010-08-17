@@ -14,8 +14,12 @@ static UIImage *ButtonHighlightedImage = nil;
 static UIImage *BackButtonImage = nil;
 static UIImage *BackButtonHighlightedImage = nil;
 
+static const CGFloat kMinButtonWidth = 30;
+static const CGFloat kMaxButtonWidth = 200;
+static const CGFloat kMaxButtonHeight = 28;
+
 @implementation UINavigationBar
-@synthesize tintColor=_tintColor, delegate=_delegate, items=_items;
+@synthesize tintColor=_tintColor, delegate=_delegate, items=_navStack;
 
 + (void)initialize
 {
@@ -27,6 +31,15 @@ static UIImage *BackButtonHighlightedImage = nil;
 	}
 }
 
++ (void)_setBarButtonSize:(UIView *)view
+{
+	CGRect frame = view.frame;
+	frame.size = [view sizeThatFits:CGSizeMake(kMaxButtonWidth,kMaxButtonHeight)];
+	frame.size.height = kMaxButtonHeight;
+	frame.size.width = MAX(frame.size.width,kMinButtonWidth);
+	view.frame = frame;
+}
+
 + (UIButton *)_backButtonWithBarButtonItem:(UIBarButtonItem *)item
 {
 	if (!item) return nil;
@@ -36,23 +49,30 @@ static UIImage *BackButtonHighlightedImage = nil;
 	[backButton setBackgroundImage:BackButtonHighlightedImage forState:UIControlStateHighlighted];
 	[backButton setTitle:item.title forState:UIControlStateNormal];
 	backButton.titleLabel.font = [UIFont systemFontOfSize:11];
-	backButton.titleEdgeInsets = UIEdgeInsetsMake(4,15,4,4);
+	backButton.titleEdgeInsets = UIEdgeInsetsMake(8,15,4,4);
 	[backButton addTarget:nil action:@selector(_backButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+	[self _setBarButtonSize:backButton];
 	return backButton;
 }
 
-+ (UIButton *)_buttonWithBarButtonItem:(UIBarButtonItem *)item
++ (UIView *)_viewWithBarButtonItem:(UIBarButtonItem *)item
 {
 	if (!item) return nil;
-	
-	UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-	[button setBackgroundImage:ButtonImage forState:UIControlStateNormal];
-	[button setBackgroundImage:ButtonHighlightedImage forState:UIControlStateHighlighted];
-	[button setTitle:item.title forState:UIControlStateNormal];
-	button.titleLabel.font = [UIFont systemFontOfSize:11];
-	button.titleEdgeInsets = UIEdgeInsetsMake(4,4,4,4);
-	[button addTarget:item.target action:item.action forControlEvents:UIControlEventTouchUpInside];
-	return button;
+
+	if (item.customView) {
+		return item.customView;
+	} else {
+		UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+		[button setBackgroundImage:ButtonImage forState:UIControlStateNormal];
+		[button setBackgroundImage:ButtonHighlightedImage forState:UIControlStateHighlighted];
+		[button setTitle:item.title forState:UIControlStateNormal];
+		[button setImage:item.image forState:UIControlStateNormal];
+		button.titleLabel.font = [UIFont systemFontOfSize:11];
+		button.titleEdgeInsets = UIEdgeInsetsMake(8,4,4,4);
+		[button addTarget:item.target action:item.action forControlEvents:UIControlEventTouchUpInside];
+		[self _setBarButtonSize:button];
+		return button;
+	}
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -66,7 +86,6 @@ static UIImage *BackButtonHighlightedImage = nil;
 
 - (void)dealloc
 {
-	[_items release];
 	[_navStack release];
 	[_tintColor release];
 	[super dealloc];
@@ -97,30 +116,33 @@ static UIImage *BackButtonHighlightedImage = nil;
 	UINavigationItem *backItem = self.backItem;
 	
 	if (topItem) {
-		const CGFloat minButtonWidth = 30;
-		const CGFloat maxButtonWidth = 200;
-		const CGFloat maxButtonHeight = 24;
-		UIEdgeInsets edgePadding = UIEdgeInsetsMake(4,4,0,4);
+		const CGFloat leftPadding = 4;
+		const CGFloat rightPadding = 4;
+		CGRect leftFrame = CGRectZero;
+		CGRect rightFrame = CGRectZero;
 		
 		if (backItem) {
 			_leftView = [isa _backButtonWithBarButtonItem:backItem.backBarButtonItem];
 		} else {
-			_leftView = [isa _buttonWithBarButtonItem:topItem.leftBarButtonItem];
+			_leftView = [isa _viewWithBarButtonItem:topItem.leftBarButtonItem];
 		}
 
-		CGSize leftSize = [_leftView sizeThatFits:CGSizeMake(maxButtonWidth,maxButtonHeight)];
-		leftSize.height = maxButtonHeight;
-		leftSize.width = MAX(leftSize.width,minButtonWidth);
-		_leftView.frame = CGRectMake(edgePadding.left,edgePadding.top,leftSize.width,leftSize.height);
-		[self addSubview:_leftView];
+		if (_leftView) {
+			leftFrame = _leftView.frame;
+			leftFrame.origin = CGPointMake(leftPadding,0);
+			_leftView.frame = leftFrame;
+			[self addSubview:_leftView];
+		}
 
-		_rightView = [isa _buttonWithBarButtonItem:topItem.rightBarButtonItem];
-		_rightView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-		CGSize rightSize = [_rightView sizeThatFits:CGSizeMake(maxButtonWidth,maxButtonHeight)];
-		rightSize.height = maxButtonHeight;
-		rightSize.width = MAX(rightSize.width,minButtonWidth);
-		_rightView.frame = CGRectMake(self.bounds.size.width-rightSize.width-edgePadding.right,edgePadding.top,rightSize.width,rightSize.height);
-		[self addSubview:_rightView];
+		_rightView = [isa _viewWithBarButtonItem:topItem.rightBarButtonItem];
+
+		if (_rightView) {
+			_rightView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+			rightFrame = _rightView.frame;
+			rightFrame.origin = CGPointMake(self.bounds.size.width-rightFrame.size.width-rightPadding,0);
+			_rightView.frame = rightFrame;
+			[self addSubview:_rightView];
+		}
 		
 		_centerView = topItem.titleView;
 
@@ -135,7 +157,7 @@ static UIImage *BackButtonHighlightedImage = nil;
 		}
 
 		_centerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		_centerView.frame = CGRectMake(leftSize.width+edgePadding.left,edgePadding.top,self.bounds.size.width-leftSize.width-rightSize.width-edgePadding.left-edgePadding.right,maxButtonHeight);
+		_centerView.frame = CGRectMake(leftFrame.size.width+leftPadding,0,self.bounds.size.width-leftFrame.size.width-rightFrame.size.width-leftPadding-rightPadding,kMaxButtonHeight);
 		[self addSubview:_centerView];
 	} else {
 		_leftView = _centerView = _rightView = nil;
@@ -153,9 +175,9 @@ static UIImage *BackButtonHighlightedImage = nil;
 
 - (void)setItems:(NSArray *)items animated:(BOOL)animated
 {
-	if (items != _items) {
-		[_items release];
-		_items = [items copy];
+	if (![_navStack isEqualToArray:items]) {
+		[_navStack removeAllObjects];
+		[_navStack addObjectsFromArray:items];
 		[self _updateViews:animated];
 	}
 }

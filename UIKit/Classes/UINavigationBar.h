@@ -15,7 +15,6 @@
 @private
 	NSMutableArray *_navStack;
 	UIColor *_tintColor;
-	NSArray *_items;
 	id _delegate;
 	UIView *_leftView;
 	UIView *_centerView;
