@@ -94,7 +94,7 @@
 {
 	if (index != _destructiveButtonIndex) {
 		if (index >= 0) {
-			NSAssert([_buttons count]<index,nil,nil);
+			NSAssert(index<[_buttons count],nil,nil);
 		} else {
 			index = -1;
 		}
@@ -107,7 +107,7 @@
 {
 	if (index != _cancelButtonIndex) {
 		if (index >= 0) {
-			NSAssert([_buttons count]<index,nil,nil);
+			NSAssert(index<[_buttons count],nil,nil);
 		} else {
 			index = -1;
 		}
