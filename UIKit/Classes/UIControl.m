@@ -27,8 +27,8 @@
 	if ((self=[super initWithFrame:frame])) {
 		_registeredActions = [NSMutableArray new];
 		self.enabled = YES;
-		self.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-		self.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
+		self.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+		self.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 	}
 	return self;
 }
@@ -207,6 +207,7 @@
 - (void)_stateDidChange
 {
 	[self setNeedsDisplay];
+	[self setNeedsLayout];
 }
 
 - (void)setEnabled:(BOOL)newEnabled

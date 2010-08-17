@@ -243,17 +243,33 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 
 - (CGRect)imageRectForContentRect:(CGRect)contentRect
 {
-	CGRect imageRect;
+	CGRect imageRect = CGRectZero;
 
-	// I think the origin would change based on contentHorizontalAlignment, and contentVerticalAlignment properties
-	imageRect.origin = contentRect.origin;
-	imageRect.size = [self imageForState:UIControlStateNormal].size;
+	imageRect.size = [self imageForState:self.state].size;
+	
+	// only supporting left horizontal alignment, for now...
+	if (self.contentHorizontalAlignment == UIControlContentHorizontalAlignmentLeft) {
+		imageRect.origin.x = contentRect.origin.x;
+	} else {
+		// center it..
+		imageRect.origin.x = roundf((contentRect.size.width/2.f) - (imageRect.size.width/2.f));
+	}
+	
+	// only supporting top vertical alignment, for now...
+	if (self.contentVerticalAlignment == UIControlContentVerticalAlignmentTop) {
+		imageRect.origin.y = contentRect.origin.y;
+	} else {
+		// center it
+		imageRect.origin.y = roundf((contentRect.size.height/2.f) - (imageRect.size.height/2.f));
+	}
 	
 	return imageRect;
 }
 
 - (void)layoutSubviews
 {
+	[super layoutSubviews];
+
 	CGRect bounds = self.bounds;
 	CGRect backgroundRect = [self backgroundRectForBounds:bounds];
 	CGRect contentRect = [self contentRectForBounds:bounds];
@@ -265,21 +281,23 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 
 - (void)_stateDidChange
 {
-	[self _updateContent];
 	[super _stateDidChange];
+	[self _updateContent];
 }
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
+	const UIControlState state = self.state;
+	
 	// this needs to take into account the various insets and stuff, I suspect.. and maybe the image?
 	// will have to do a fair bit of reverse engineering to see how the real UIKit does this, if it is needed.
-	CGSize fitSize = [[self titleForState:UIControlStateNormal] sizeWithFont:_titleLabel.font constrainedToSize:CGSizeMake(CGFLOAT_MAX,CGFLOAT_MAX)];
+	CGSize fitSize = [[self titleForState:state] sizeWithFont:_titleLabel.font constrainedToSize:CGSizeMake(CGFLOAT_MAX,CGFLOAT_MAX)];
 
-	fitSize.width = MAX(fitSize.width, [self imageForState:UIControlStateNormal].size.width);
-	fitSize.height = MAX(fitSize.height, [self imageForState:UIControlStateNormal].size.height);
+	fitSize.width = MAX(fitSize.width, [self imageForState:state].size.width);
+	fitSize.height = MAX(fitSize.height, [self imageForState:state].size.height);
 	
-	fitSize.width = MAX(fitSize.width, [self backgroundImageForState:UIControlStateNormal].size.width);
-	fitSize.height = MAX(fitSize.height, [self backgroundImageForState:UIControlStateNormal].size.height);
+	fitSize.width = MAX(fitSize.width, [self backgroundImageForState:state].size.width);
+	fitSize.height = MAX(fitSize.height, [self backgroundImageForState:state].size.height);
 
 	fitSize.width += _titleEdgeInsets.left + _titleEdgeInsets.right + _contentEdgeInsets.left + _contentEdgeInsets.right;
 	fitSize.height += _titleEdgeInsets.top + _titleEdgeInsets.bottom + _contentEdgeInsets.top + _contentEdgeInsets.bottom;
