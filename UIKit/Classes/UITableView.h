@@ -12,6 +12,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath;
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section;
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section;
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section;
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section;
 @end
 
 @protocol UITableViewDataSource <NSObject>
@@ -20,6 +25,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 @optional
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView;
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section;
 @end
 
 typedef enum {
@@ -52,14 +59,17 @@ typedef enum {
 	CGFloat _rowHeight;
 	UIColor *_separatorColor;
 	UITableViewCellSeparatorStyle _separatorStyle;
-	NSMutableDictionary *_cellHeights;
-	NSMutableDictionary *_cellOffsets;
-	NSMutableDictionary *_activeCells;
 	UIView *_tableHeaderView;
 	UIView *_tableFooterView;
 	BOOL _allowsSelection;
 	BOOL _editing;
 	NSIndexPath *_selectedRow;
+	NSMutableDictionary *_cachedCells;
+	NSMutableArray *_sections;
+	CGFloat _sectionHeaderHeight;
+	CGFloat _sectionFooterHeight;
+	CGFloat _previousBoundsHeight;
+	CGFloat _previousContentOffset;
 }
 
 - (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style;
@@ -73,8 +83,11 @@ typedef enum {
 - (NSArray *)visibleCells;
 - (UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier;
 - (UITableViewCell *)cellForRowAtIndexPath:(NSIndexPath *)indexPath;
+
+- (CGRect)rectForSection:(NSInteger)section;
+- (CGRect)rectForHeaderInSection:(NSInteger)section;
+- (CGRect)rectForFooterInSection:(NSInteger)section;
 - (CGRect)rectForRowAtIndexPath:(NSIndexPath *)indexPath;
-- (CGRect)rectForSection:(NSInteger)section;	// not correctly implemented
 
 - (void)insertRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation;	// not implemented
 - (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation;	// not implemented
@@ -97,6 +110,8 @@ typedef enum {
 @property (nonatomic, retain) UIView *tableFooterView;
 @property (nonatomic) BOOL allowsSelection;
 @property (nonatomic, getter=isEditing) BOOL editing;
+@property (nonatomic) CGFloat sectionHeaderHeight;
+@property (nonatomic) CGFloat sectionFooterHeight;
 
 @end
 

@@ -37,6 +37,7 @@ typedef enum {
 
 @interface UITableViewCell : UIView {
 @private
+	UITableViewCellStyle _style;
 	_UITableViewCellSeparator *_seperatorView;
 	UIView *_contentView;
 	UILabel *_textLabel;

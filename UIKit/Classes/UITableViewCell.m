@@ -4,6 +4,9 @@
 #import "UIColor.h"
 #import "UILabel.h"
 #import "UIImageView.h"
+#import "UIFont.h"
+
+extern CGFloat _UITableViewDefaultRowHeight;
 
 @implementation UITableViewCell
 @synthesize contentView=_contentView, accessoryType=_accessoryType, textLabel=_textLabel, selectionStyle=_selectionStyle, indentationLevel=_indentationLevel;
@@ -13,11 +16,24 @@
 - (id)initWithFrame:(CGRect)frame
 {
 	if ((self=[super initWithFrame:frame])) {
+		_style = UITableViewCellStyleDefault;
+
 		_seperatorView = [_UITableViewCellSeparator new];
 		[self addSubview:_seperatorView];
 		
 		_contentView = [UIView new];
 		[self addSubview:_contentView];
+		
+		_imageView = [UIImageView new];
+		_imageView.contentMode = UIViewContentModeCenter;
+		[_contentView addSubview:_imageView];
+
+		_textLabel = [UILabel new];
+		_textLabel.backgroundColor = [UIColor clearColor];
+		_textLabel.textColor = [UIColor blackColor];
+		_textLabel.highlightedTextColor = [UIColor whiteColor];
+		_textLabel.font = [UIFont boldSystemFontOfSize:17];
+		[_contentView addSubview:_textLabel];
 		
 		self.accessoryType = UITableViewCellAccessoryNone;
 		self.editingAccessoryType = UITableViewCellAccessoryNone;
@@ -27,7 +43,8 @@
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
-	if ((self=[self initWithFrame:CGRectZero])) {
+	if ((self=[self initWithFrame:CGRectMake(0,0,320,_UITableViewDefaultRowHeight)])) {
+		_style = style;
 	}
 	return self;
 }
@@ -63,6 +80,18 @@
 	if (showingSeperator) {
 		_seperatorView.frame = CGRectMake(0,bounds.size.height-1,bounds.size.width,1);
 		[self bringSubviewToFront:_seperatorView];
+	}
+	
+	if (_style == UITableViewCellStyleDefault) {
+		const CGFloat padding = 5;
+
+		BOOL showImage = (_imageView.image != nil);
+		_imageView.frame = CGRectMake(padding,0,(showImage? 30:0),contentFrame.size.height);
+		
+		CGRect textRect;
+		textRect.origin = CGPointMake(padding+_imageView.frame.size.width+padding,0);
+		textRect.size = CGSizeMake(MAX(0,contentFrame.size.width-textRect.origin.x-padding),contentFrame.size.height);
+		_textLabel.frame = textRect;
 	}
 }
 
@@ -134,25 +163,6 @@
 		_selectedBackgroundView.hidden = !_selected;
 		[self addSubview:_selectedBackgroundView];
 	}
-}
-
-- (UILabel *)textLabel
-{
-	if (!_textLabel) {
-		_textLabel = [UILabel new];
-		_textLabel.backgroundColor = [UIColor clearColor];
-		[_contentView addSubview:_textLabel];
-	}
-	return _textLabel;
-}
-
-- (UIImageView *)imageView
-{
-	if (!_imageView) {
-		_imageView = [UIImageView new];
-		[_contentView addSubview:_imageView];
-	}
-	return _imageView;
 }
 
 @end
