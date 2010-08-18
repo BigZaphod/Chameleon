@@ -130,6 +130,7 @@
 - (void)drawRect:(CGRect)rect
 {
 	const CGRect bounds = self.bounds;
+	const BOOL hasShadow = !CGSizeEqualToSize(_shadowOffset,CGSizeZero) && _shadowColor;
 	
 	CGRect drawRect = CGRectZero;
 	
@@ -139,9 +140,9 @@
 		maxSize.height = _font.leading * _numberOfLines;
 	}
 	drawRect.size = [_text sizeWithFont:_font constrainedToSize:maxSize lineBreakMode:_lineBreakMode];
-	
+
 	// now vertically center it
-	drawRect.origin.y = floorf((bounds.size.height - drawRect.size.height) / 2.f);
+	drawRect.origin.y = roundf(((bounds.size.height - drawRect.size.height) / 2.f) + ((hasShadow? _shadowOffset.height : 0)/2.f));
 	
 	// now position it correctly for the width
 	// this might be cheating somehow and not how the real thing does it...
@@ -150,7 +151,7 @@
 	drawRect.size.width = bounds.size.width;
 	
 	// if there's a shadow, let's draw that first
-	if (!CGSizeEqualToSize(_shadowOffset,CGSizeZero) && _shadowColor) {
+	if (hasShadow) {
 		[_shadowColor setFill];
 		[self drawTextInRect:CGRectOffset(drawRect,_shadowOffset.width,_shadowOffset.height)];
 	}
