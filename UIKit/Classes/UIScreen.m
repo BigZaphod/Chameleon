@@ -5,7 +5,7 @@
 #import "UIApplication.h"
 #import <QuartzCore/QuartzCore.h>
 #import <AppKit/AppKit.h>
-#import "_UIViewLayoutManager.h"
+#import "UIViewLayoutManager.h"
 #import "UIColor.h"
 #import "UIScreenMode.h"
 
@@ -51,7 +51,7 @@ static NSMutableArray *_allScreens = nil;
 		_layer = [[CALayer layer] retain];
 		_layer.delegate = self;
 		_layer.geometryFlipped = YES;
-		_layer.layoutManager = [_UIViewLayoutManager layoutManager];
+		_layer.layoutManager = [UIViewLayoutManager layoutManager];
 		
 		_layer.backgroundColor = [UIColor whiteColor].CGColor;
 		

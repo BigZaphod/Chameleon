@@ -1,6 +1,6 @@
 //  Created by Sean Heber on 6/4/10.
 #import "UITableViewCell+UIPrivate.h"
-#import "_UITableViewCellSeparator.h"
+#import "UITableViewCellSeparator.h"
 #import "UIColor.h"
 #import "UILabel.h"
 #import "UIImageView.h"
@@ -18,7 +18,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	if ((self=[super initWithFrame:frame])) {
 		_style = UITableViewCellStyleDefault;
 
-		_seperatorView = [_UITableViewCellSeparator new];
+		_seperatorView = [UITableViewCellSeparator new];
 		[self addSubview:_seperatorView];
 		
 		_contentView = [UIView new];

@@ -1,9 +1,9 @@
 //  Created by Sean Heber on 5/28/10.
-#import "_UIThreePartImage.h"
-#import "_UIImageTools.h"
+#import "UIThreePartImage.h"
+#import "UIImageTools.h"
 #import <AppKit/AppKit.h>
 
-@implementation _UIThreePartImage
+@implementation UIThreePartImage
 
 - (id)initWithNSImage:(id)theImage capSize:(NSInteger)capSize vertical:(BOOL)isVertical
 {

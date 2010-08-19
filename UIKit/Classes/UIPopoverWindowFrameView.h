@@ -16,7 +16,7 @@ typedef enum
 	_UIPopoverWindowFrameEdgeBottom,
 } _UIPopoverWindowFrameEdge;
 
-@interface _UIPopoverWindowFrameView : NSView
+@interface UIPopoverWindowFrameView : NSView
 {
 	NSPoint point;
 	_UIPopoverWindowFrameEdge edge;

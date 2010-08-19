@@ -4,8 +4,8 @@
 #import "UIWindow.h"
 #import "UIGraphics.h"
 #import "UIColor.h"
-#import "_UIViewLayoutManager.h"
-#import "_UIViewAnimationGroup.h"
+#import "UIViewLayoutManager.h"
+#import "UIViewAnimationGroup.h"
 #import "UIViewController.h"
 
 static NSMutableArray *_animationGroups;
@@ -46,7 +46,7 @@ static BOOL _animationsEnabled = YES;
 		_subviews = [NSMutableSet new];
 		_layer = [[[[self class] layerClass] alloc] init];
 		_layer.delegate = self;
-		_layer.layoutManager = [_UIViewLayoutManager layoutManager];
+		_layer.layoutManager = [UIViewLayoutManager layoutManager];
 
 		self.frame = theFrame;
 		self.alpha = 1;
@@ -696,7 +696,7 @@ static BOOL _animationsEnabled = YES;
 
 + (void)beginAnimations:(NSString *)animationID context:(void *)context
 {
-	[_animationGroups addObject:[_UIViewAnimationGroup animationGroupWithName:animationID context:context]];
+	[_animationGroups addObject:[UIViewAnimationGroup animationGroupWithName:animationID context:context]];
 }
 
 + (void)commitAnimations

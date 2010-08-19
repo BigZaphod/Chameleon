@@ -7,7 +7,7 @@ typedef enum {
 	UIScrollViewIndicatorStyleWhite
 } UIScrollViewIndicatorStyle;
 
-@class _UIScroller, UIImageView, UIScrollView;
+@class UIScroller, UIImageView, UIScrollView;
 
 @protocol UIScrollViewDelegate <NSObject>
 @optional
@@ -22,9 +22,9 @@ typedef enum {
 	CGSize _contentSize;
 	UIEdgeInsets _contentInset;
 	UIEdgeInsets _scrollIndicatorInsets;
-	_UIScroller *_verticalScroller;
-	_UIScroller *_horizontalScroller;
-	_UIScroller *_draggingScroller;
+	UIScroller *_verticalScroller;
+	UIScroller *_horizontalScroller;
+	UIScroller *_draggingScroller;
 	UIImageView *_grabber;
 	BOOL _scrollEnabled;
 	BOOL _showsVerticalScrollIndicator;

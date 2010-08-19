@@ -6,9 +6,9 @@
 //  Copyright 2010 The Iconfactory. All rights reserved.
 //
 
-#import "_UIPopoverWindow.h"
+#import "UIPopoverWindow.h"
 
-#import "_UIPopoverWindowFrameView.h"
+#import "UIPopoverWindowFrameView.h"
 
 extern const CGFloat popoverWindowFrameTitleHeight;
 extern const CGFloat popoverWindowFrameBorderWidth;
@@ -16,7 +16,7 @@ extern const CGFloat popoverWindowFrameEdgeWidth;
 
 const CGFloat popoverWindowCloseButtonSize = 13.0f;
 
-@implementation _UIPopoverWindow
+@implementation UIPopoverWindow
 
 - (id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)windowStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation
 {
@@ -47,7 +47,7 @@ const CGFloat popoverWindowCloseButtonSize = 13.0f;
 	sizeDelta.width -= childBoundsSize.width;
 	sizeDelta.height -= childBoundsSize.height;
 	
-	_UIPopoverWindowFrameView *frameView = [super contentView];
+	UIPopoverWindowFrameView *frameView = [super contentView];
 	NSSize newFrameSize = frameView.bounds.size;
 	newFrameSize.width += sizeDelta.width;
 	newFrameSize.height += sizeDelta.height;
@@ -72,9 +72,9 @@ const CGFloat popoverWindowCloseButtonSize = 13.0f;
 	NSRect bounds = [self frame];
 	bounds.origin = NSZeroPoint;
 
-	_UIPopoverWindowFrameView *frameView = [super contentView];
+	UIPopoverWindowFrameView *frameView = [super contentView];
 	if (! frameView) {
-		frameView = [[[_UIPopoverWindowFrameView alloc] initWithFrame:bounds] autorelease];
+		frameView = [[[UIPopoverWindowFrameView alloc] initWithFrame:bounds] autorelease];
 		
 		[super setContentView:frameView];
 
@@ -143,7 +143,7 @@ const CGFloat popoverWindowCloseButtonSize = 13.0f;
 	contentRect.size.height = frameRect.size.height - popoverWindowFrameTitleHeight - popoverWindowFrameBorderWidth;
 	contentRect.size.width = frameRect.size.width - popoverWindowFrameBorderWidth - popoverWindowFrameBorderWidth;
 
-	_UIPopoverWindowFrameView *frameView = [super contentView];
+	UIPopoverWindowFrameView *frameView = [super contentView];
 	switch (frameView.edge) {
 		case _UIPopoverWindowFrameEdgeLeft:
 			contentRect.size.width -= popoverWindowFrameEdgeWidth;
@@ -204,9 +204,9 @@ const CGFloat popoverWindowCloseButtonSize = 13.0f;
 //+ (NSRect)frameRectForContentRect:(NSRect)contentRect styleMask:(NSUInteger)windowStyle
 - (NSRect)frameRectForContentRect:(NSRect)contentRect
 {
-	NSRect frameRect = [_UIPopoverWindow rawFrameRectForContentRect:contentRect];
+	NSRect frameRect = [UIPopoverWindow rawFrameRectForContentRect:contentRect];
 	
-	_UIPopoverWindowFrameView *frameView = [super contentView];
+	UIPopoverWindowFrameView *frameView = [super contentView];
 	frameRect = [self adjustFrameRect:frameRect forEdge:frameView.edge];
 
 	return frameRect;
@@ -247,7 +247,7 @@ const CGFloat popoverWindowCloseButtonSize = 13.0f;
 
 	NSRect rawContentRect = NSZeroRect;
 	rawContentRect.size = size;
-	NSRect rawFrameRect = [_UIPopoverWindow rawFrameRectForContentRect:rawContentRect];
+	NSRect rawFrameRect = [UIPopoverWindow rawFrameRectForContentRect:rawContentRect];
 
 	NSRect offsetFrameRect = rawFrameRect;
 	_UIPopoverWindowFrameEdge edge;
@@ -342,7 +342,7 @@ const CGFloat popoverWindowCloseButtonSize = 13.0f;
 	[self setFrame:adjustedFrameRect display:YES];
 
 	// update frame view so it can draw the arrow
-	_UIPopoverWindowFrameView *frameView = [super contentView];
+	UIPopoverWindowFrameView *frameView = [super contentView];
 	frameView.point = [self convertScreenToBase:point];
 	frameView.edge = edge;
 	[frameView setNeedsDisplay:YES];

@@ -1,7 +1,7 @@
 //  Created by Sean Heber on 5/28/10.
 #import "UIView.h"
 
-@class UIImageView, _UIScroller;
+@class UIImageView, UIScroller;
 
 typedef enum {
 	_UIScrollerOrientationVertical,
@@ -9,10 +9,10 @@ typedef enum {
 } _UIScrollerOrientation;
 
 @protocol _UIScrollerDelegate
-- (void)_UIScroller:(_UIScroller *)scroller contentOffsetDidChange:(CGFloat)newOffset;
+- (void)_UIScroller:(UIScroller *)scroller contentOffsetDidChange:(CGFloat)newOffset;
 @end
 
-@interface _UIScroller : UIView {
+@interface UIScroller : UIView {
 @private
 	id _delegate;
 	_UIScrollerOrientation _orientation;

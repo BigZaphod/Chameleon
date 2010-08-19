@@ -1,7 +1,7 @@
 //  Created by Sean Heber on 5/27/10.
 #import "UIImage+UIPrivate.h"
-#import "_UIThreePartImage.h"
-#import "_UINinePartImage.h"
+#import "UIThreePartImage.h"
+#import "UINinePartImage.h"
 #import "UIGraphics.h"
 #import <AppKit/NSImage.h>
 
@@ -92,11 +92,11 @@ NSMutableDictionary *imageCache = nil;
 	if ((leftCapWidth == 0 && topCapHeight == 0) || (leftCapWidth >= size.width && topCapHeight >= size.height)) {
 		return self;
 	} else if (leftCapWidth <= 0 || leftCapWidth >= size.width) {
-		return [[[_UIThreePartImage alloc] initWithNSImage:[[[NSImage alloc] initWithCGImage:_image size:NSZeroSize] autorelease] capSize:MIN(topCapHeight,size.height) vertical:YES] autorelease];
+		return [[[UIThreePartImage alloc] initWithNSImage:[[[NSImage alloc] initWithCGImage:_image size:NSZeroSize] autorelease] capSize:MIN(topCapHeight,size.height) vertical:YES] autorelease];
 	} else if (topCapHeight <= 0 || topCapHeight >= size.height) {
-		return [[[_UIThreePartImage alloc] initWithNSImage:[[[NSImage alloc] initWithCGImage:_image size:NSZeroSize] autorelease] capSize:MIN(leftCapWidth,size.width) vertical:NO] autorelease];
+		return [[[UIThreePartImage alloc] initWithNSImage:[[[NSImage alloc] initWithCGImage:_image size:NSZeroSize] autorelease] capSize:MIN(leftCapWidth,size.width) vertical:NO] autorelease];
 	} else {
-		return [[[_UINinePartImage alloc] initWithNSImage:[[[NSImage alloc] initWithCGImage:_image size:NSZeroSize] autorelease] leftCapWidth:leftCapWidth topCapHeight:topCapHeight] autorelease];
+		return [[[UINinePartImage alloc] initWithNSImage:[[[NSImage alloc] initWithCGImage:_image size:NSZeroSize] autorelease] leftCapWidth:leftCapWidth topCapHeight:topCapHeight] autorelease];
 	}
 }
 

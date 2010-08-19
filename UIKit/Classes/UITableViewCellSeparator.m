@@ -1,9 +1,9 @@
 //  Created by Sean Heber on 6/4/10.
-#import "_UITableViewCellSeparator.h"
+#import "UITableViewCellSeparator.h"
 #import "UIColor.h"
 #import "UIGraphics.h"
 
-@implementation _UITableViewCellSeparator
+@implementation UITableViewCellSeparator
 
 - (id)initWithFrame:(CGRect)frame
 {

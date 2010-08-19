@@ -8,13 +8,13 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class _UIPopoverWindow, UIPopoverController;
+@class UIPopoverWindow, UIPopoverController;
 
-@interface _UIPopoverWindowController : NSWindowController <NSWindowDelegate>
+@interface UIPopoverWindowController : NSWindowController <NSWindowDelegate>
 {
 	__weak UIPopoverController *popoverController;
 }
 
-- (id)initWithPopoverWindow:(_UIPopoverWindow *)popoverWindow controller:(UIPopoverController *)controller;
+- (id)initWithPopoverWindow:(UIPopoverWindow *)popoverWindow controller:(UIPopoverController *)controller;
 
 @end

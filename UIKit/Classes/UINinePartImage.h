@@ -1,7 +1,7 @@
 //  Created by Sean Heber on 5/28/10.
 #import "UIImage+UIPrivate.h"
 
-@interface _UINinePartImage : UIImage {
+@interface UINinePartImage : UIImage {
 @private
 	id _topLeftCorner;
 	id _topEdgeFill;

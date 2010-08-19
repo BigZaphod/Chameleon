@@ -1,9 +1,9 @@
 //  Created by Sean Heber on 5/28/10.
-#import "_UINinePartImage.h"
-#import "_UIImageTools.h"
+#import "UINinePartImage.h"
+#import "UIImageTools.h"
 #import <AppKit/AppKit.h>
 
-@implementation _UINinePartImage
+@implementation UINinePartImage
 
 - (id)initWithNSImage:(id)theImage leftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight
 {

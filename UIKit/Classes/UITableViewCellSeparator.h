@@ -4,7 +4,7 @@
 
 @class UIColor;
 
-@interface _UITableViewCellSeparator : UIView {
+@interface UITableViewCellSeparator : UIView {
 @private
 	UITableViewCellSeparatorStyle _style;
 	UIColor *_color;

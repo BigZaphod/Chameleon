@@ -6,13 +6,13 @@
 //  Copyright 2010 The Iconfactory. All rights reserved.
 //
 
-#import "_UIPopoverWindowController.h"
-#import "_UIPopoverWindow.h"
+#import "UIPopoverWindowController.h"
+#import "UIPopoverWindow.h"
 #import "UIPopoverController.h"
 
-@implementation _UIPopoverWindowController
+@implementation UIPopoverWindowController
 
-- (id)initWithPopoverWindow:(_UIPopoverWindow *)popoverWindow controller:(UIPopoverController *)controller
+- (id)initWithPopoverWindow:(UIPopoverWindow *)popoverWindow controller:(UIPopoverController *)controller
 {
 	if ((self=[super initWithWindow:popoverWindow])) {
 		popoverController = controller;

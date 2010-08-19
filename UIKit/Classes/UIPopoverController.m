@@ -1,7 +1,7 @@
 //  Created by Sean Heber on 6/25/10.
 #import "UIPopoverController+UIPrivate.h"
-#import "_UIPopoverWindow.h"
-#import "_UIPopoverWindowController.h"
+#import "UIPopoverWindow.h"
+#import "UIPopoverWindowController.h"
 #import "UIViewController.h"
 #import "UIWindow.h"
 #import "UIScreen+UIPrivate.h"
@@ -18,8 +18,8 @@
 		_UIKitView = [[UIKitView alloc] initWithFrame:defaultFrame];
 		[[_UIKitView UIScreen] _setPopoverController:self];
 		
-		_UIPopoverWindow *popoverWindow = [[[_UIPopoverWindow alloc] initWithContentRect:defaultFrame styleMask:NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES] autorelease];
-		_popoverWindowController = [[_UIPopoverWindowController alloc] initWithPopoverWindow:popoverWindow controller:self];
+		UIPopoverWindow *popoverWindow = [[[UIPopoverWindow alloc] initWithContentRect:defaultFrame styleMask:NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES] autorelease];
+		_popoverWindowController = [[UIPopoverWindowController alloc] initWithPopoverWindow:popoverWindow controller:self];
 
 		[popoverWindow setDelegate:_popoverWindowController];
 		[popoverWindow setContentView:_UIKitView];
@@ -68,7 +68,7 @@
 	CGPoint centerPoint = CGPointMake(CGRectGetMidX(desktopScreenRect), CGRectGetMidY(desktopScreenRect));
 	NSPoint desktopWindowPoint = [[_UIKitView window] convertScreenToBase:NSPointFromCGPoint(centerPoint)];
 
-	[(_UIPopoverWindow *)[_popoverWindowController window] setFrameForContentSize:NSMakeSize(320.0f, 480.0f) atPoint:desktopWindowPoint inWindow:[_UIKitView window]];
+	[(UIPopoverWindow *)[_popoverWindowController window] setFrameForContentSize:NSMakeSize(320.0f, 480.0f) atPoint:desktopWindowPoint inWindow:[_UIKitView window]];
 
 	_contentViewController.view.frame = [_UIKitView UIWindow].bounds;
 	

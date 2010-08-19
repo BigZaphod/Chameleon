@@ -1,7 +1,7 @@
 //  Created by Sean Heber on 5/28/10.
 #import "UIImage+UIPrivate.h"
 
-@interface _UIThreePartImage : UIImage {
+@interface UIThreePartImage : UIImage {
 @private
 	id _startCap;
 	id _centerFill;

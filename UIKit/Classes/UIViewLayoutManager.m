@@ -1,19 +1,19 @@
 //  Created by Sean Heber on 6/2/10.
-#import "_UIViewLayoutManager.h"
+#import "UIViewLayoutManager.h"
 #import "UIView+UIPrivate.h"
 
-static _UIViewLayoutManager *theLayoutManager = nil;
+static UIViewLayoutManager *theLayoutManager = nil;
 
-@implementation _UIViewLayoutManager
+@implementation UIViewLayoutManager
 
 + (void)initialize
 {
-	if (self == [_UIViewLayoutManager class]) {
+	if (self == [UIViewLayoutManager class]) {
 		theLayoutManager = [self new];
 	}
 }
 
-+ (_UIViewLayoutManager *)layoutManager
++ (UIViewLayoutManager *)layoutManager
 {
 	return theLayoutManager;
 }

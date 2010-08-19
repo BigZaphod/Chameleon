@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface _UIPopoverWindow : NSWindow
+@interface UIPopoverWindow : NSWindow
 {
 	NSView *childContentView;
 	NSButton *closeButton;

@@ -1,5 +1,5 @@
 //  Created by Sean Heber on 6/19/10
-#import "_UIImageTools.h"
+#import "UIImageTools.h"
 #import <AppKit/AppKit.h>
 
 NSImage *_NSImageCreateSubimage(NSImage *theImage, CGRect rect)

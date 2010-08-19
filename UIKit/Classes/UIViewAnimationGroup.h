@@ -1,7 +1,7 @@
 //  Created by Sean Heber on 6/22/10.
 #import "UIView.h"
 
-@interface _UIViewAnimationGroup : NSObject {
+@interface UIViewAnimationGroup : NSObject {
 @private
 	NSString *_name;
 	void *_context;

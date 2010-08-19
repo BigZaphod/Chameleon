@@ -1,7 +1,7 @@
 //  Created by Sean Heber on 5/28/10.
 #import "UIScrollView+UIPrivate.h"
 #import "UIView+UIPrivate.h"
-#import "_UIScroller.h"
+#import "UIScroller.h"
 #import "UIScreen+UIPrivate.h"
 #import "UIWindow.h"
 #import "UITouch.h"
@@ -23,11 +23,11 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 - (id)initWithFrame:(CGRect)frame
 {
 	if ((self=[super initWithFrame:frame])) {
-		_verticalScroller = [[_UIScroller alloc] initWithOrientation:_UIScrollerOrientationVertical];
+		_verticalScroller = [[UIScroller alloc] initWithOrientation:_UIScrollerOrientationVertical];
 		_verticalScroller.delegate = self;
 		[self addSubview:_verticalScroller];
 
-		_horizontalScroller = [[_UIScroller alloc] initWithOrientation:_UIScrollerOrientationHorizontal];
+		_horizontalScroller = [[UIScroller alloc] initWithOrientation:_UIScrollerOrientationHorizontal];
 		_horizontalScroller.delegate = self;
 		[self addSubview:_horizontalScroller];
 		
@@ -207,7 +207,7 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 	}
 }
 
-- (void)_UIScroller:(_UIScroller *)scroller contentOffsetDidChange:(CGFloat)newOffset
+- (void)_UIScroller:(UIScroller *)scroller contentOffsetDidChange:(CGFloat)newOffset
 {
 	if (self.scrollEnabled) {
 		if (scroller == _verticalScroller) {

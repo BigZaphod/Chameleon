@@ -1,5 +1,5 @@
 //  Created by Sean Heber on 6/22/10.
-#import "_UIViewAnimationGroup.h"
+#import "UIViewAnimationGroup.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor.h"
 
@@ -14,7 +14,7 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 	return nil;
 }
 
-@implementation _UIViewAnimationGroup
+@implementation UIViewAnimationGroup
 
 - (id)initWithGroupName:(NSString *)theName context:(void *)theContext
 {

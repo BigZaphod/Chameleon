@@ -33,12 +33,12 @@ typedef enum {
 	UITableViewCellEditingStyleInsert
 } UITableViewCellEditingStyle;
 
-@class _UITableViewCellSeparator, UILabel, UIImageView;
+@class UITableViewCellSeparator, UILabel, UIImageView;
 
 @interface UITableViewCell : UIView {
 @private
 	UITableViewCellStyle _style;
-	_UITableViewCellSeparator *_seperatorView;
+	UITableViewCellSeparator *_seperatorView;
 	UIView *_contentView;
 	UILabel *_textLabel;
 	UIImageView *_imageView;

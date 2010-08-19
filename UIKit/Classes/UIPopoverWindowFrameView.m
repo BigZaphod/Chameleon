@@ -6,7 +6,7 @@
 //  Copyright 2010 The Iconfactory. All rights reserved.
 //
 
-#import "_UIPopoverWindowFrameView.h"
+#import "UIPopoverWindowFrameView.h"
 
 const CGFloat popoverWindowFrameTitleHeight = 21.0f;
 const CGFloat popoverWindowFrameBorderWidth = 4.0f;
@@ -40,7 +40,7 @@ static NSBezierPath *BezierPathForWindowTitle(NSRect aRect)
 }
 
 
-@implementation _UIPopoverWindowFrameView
+@implementation UIPopoverWindowFrameView
 
 @synthesize point;
 @synthesize edge;

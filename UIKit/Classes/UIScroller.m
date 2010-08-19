@@ -1,12 +1,12 @@
 //  Created by Sean Heber on 5/28/10.
-#import "_UIScroller.h"
+#import "UIScroller.h"
 #import "UIImageView.h"
 #import "UIImage+UIPrivate.h"
 #import "UITouch.h"
 
 static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 
-@implementation _UIScroller
+@implementation UIScroller
 @synthesize delegate=_delegate, contentOffset=_contentOffset, contentSize=_contentSize;
 
 - (id)initWithOrientation:(_UIScrollerOrientation)theOrientation
@@ -17,11 +17,11 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 		UIImage *knobImage, *trackImage;
 		
 		if (_orientation == _UIScrollerOrientationVertical) {
-			trackImage = [[UIImage _frameworkImageNamed:@"<_UIScroller> vertical-track-dark.png"] stretchableImageWithLeftCapWidth:7 topCapHeight:15];
-			knobImage = [[UIImage _frameworkImageNamed:@"<_UIScroller> vertical-knob-dark.png"] stretchableImageWithLeftCapWidth:7 topCapHeight:10];
+			trackImage = [[UIImage _frameworkImageNamed:@"<UIScroller> vertical-track-dark.png"] stretchableImageWithLeftCapWidth:7 topCapHeight:15];
+			knobImage = [[UIImage _frameworkImageNamed:@"<UIScroller> vertical-knob-dark.png"] stretchableImageWithLeftCapWidth:7 topCapHeight:10];
 		} else {
-			trackImage = [[UIImage _frameworkImageNamed:@"<_UIScroller> horizontal-track-dark.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:7];
-			knobImage = [[UIImage _frameworkImageNamed:@"<_UIScroller> horizontal-knob-dark.png"] stretchableImageWithLeftCapWidth:10 topCapHeight:7];
+			trackImage = [[UIImage _frameworkImageNamed:@"<UIScroller> horizontal-track-dark.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:7];
+			knobImage = [[UIImage _frameworkImageNamed:@"<UIScroller> horizontal-knob-dark.png"] stretchableImageWithLeftCapWidth:10 topCapHeight:7];
 		}
 
 		[self addSubview:(_track = [[UIImageView alloc] initWithImage:trackImage])];
