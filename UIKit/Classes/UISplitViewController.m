@@ -165,10 +165,8 @@ static const CGFloat SplitterPadding = 3;
 
 - (void)loadView
 {
-	_UISplitViewControllerView *splitview = [[[_UISplitViewControllerView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame] autorelease];
-	splitview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	[splitview addViewControllers:_viewControllers];
-	self.view = splitview;
+	self.view = [[[_UISplitViewControllerView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame] autorelease];
+	self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 
 - (void)setViewControllers:(NSArray *)newControllers
@@ -178,7 +176,9 @@ static const CGFloat SplitterPadding = 3;
 	if (![newControllers isEqualToArray:_viewControllers]) {
 		for (UIViewController *c in _viewControllers) {
 			[c _setParentViewController:nil];
-			[c.view removeFromSuperview];
+			if ([c isViewLoaded]) {
+				[c.view removeFromSuperview];
+			}
 		}
 		
 		[_viewControllers release];
@@ -188,13 +188,26 @@ static const CGFloat SplitterPadding = 3;
 			[c _setParentViewController:self];
 		}
 		
-		[(_UISplitViewControllerView *)self.view addViewControllers:_viewControllers];
+		if ([self isViewLoaded]) {
+			[(_UISplitViewControllerView *)self.view addViewControllers:_viewControllers];
+		}
 	}
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
+
+	// IMPORTANT
+	// addSubview: can trigger viewWillAppear: messages which means that the views in _viewControllers
+	// might possibly get multiple viewWillAppear: messages due to the following line. That could be a problem.
+	// More investigation and testing will be necessary to find out if that's the case or not. I know the real
+	// UISplitViewController has/had a number of oddities with these messages, and this might be why. (It appears that
+	// the real UIView does actually send willAppear/etc. messages if the view has a view controller associated with
+	// it. However there might be exceptions to that rule or maybe that rule only applies under certain conditions
+	// which I'm not presently emulating - who knows.)
+	[(_UISplitViewControllerView *)self.view addViewControllers:_viewControllers];
+
 	for (UIViewController *c in _viewControllers) {
 		[c viewWillAppear:animated];
 	}
