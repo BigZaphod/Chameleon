@@ -90,7 +90,8 @@ static BOOL _animationsEnabled = YES;
 	NSMutableArray *subviews = [NSMutableArray arrayWithCapacity:[sublayers count]];
 
 	// This builds the results from the layer instead of just using _subviews because I want the results to match
-	// the order that CALayer has them. It's unclear in the docs if the returned order from this method is guarenteed or not.
+	// the order that CALayer has them. It's unclear in the docs if the returned order from this method is guarenteed or not,
+	// however several other aspects of the system (namely the hit testing) depends on this order being correct.
 	for (CALayer *layer in sublayers) {
 		id potentialView = [layer delegate];
 		if ([_subviews containsObject:potentialView]) {
@@ -285,7 +286,7 @@ static BOOL _animationsEnabled = YES;
 	if (self.tag == tagToFind) {
 		foundView = self;
 	} else {
-		for (UIView *view in self.subviews) {
+		for (UIView *view in [self.subviews reverseObjectEnumerator]) {
 			foundView = [view viewWithTag:tagToFind];
 			if (foundView)
 				break;
@@ -432,7 +433,7 @@ static BOOL _animationsEnabled = YES;
 	if (!CGSizeEqualToSize(oldSize, newSize)) {
 		[self _boundsSizeDidChange];
 		if (_autoresizesSubviews) {
-			for (UIView *subview in self.subviews) {
+			for (UIView *subview in _subviews) {
 				[subview _superviewSizeDidChangeFrom:oldSize to:newSize];
 			}
 		}
@@ -441,7 +442,7 @@ static BOOL _animationsEnabled = YES;
 
 - (void)_hierarchyPositionDidChange
 {
-	for (UIView *subview in self.subviews) {
+	for (UIView *subview in _subviews) {
 		[subview _hierarchyPositionDidChange];
 	}
 }
