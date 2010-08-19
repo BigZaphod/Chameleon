@@ -290,7 +290,7 @@
 
 - (void)setText:(NSString *)newText
 {
-	[_textField setStringValue:newText];
+	[_textField setStringValue:newText ?: @""];
 }
 
 - (BOOL)canBecomeFirstResponder
