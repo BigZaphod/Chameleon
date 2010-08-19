@@ -46,12 +46,14 @@ static UIApplication *_theApplication = nil;
 	if ((self=[super init])) {
 		_currentEvent = [UIEvent new];
 		_visibleWindows = [NSMutableSet new];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
 	}
 	return self;
 }
 
 - (void)dealloc
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[_currentEvent release];
 	[_visibleWindows release];
 	[super dealloc];
@@ -241,6 +243,15 @@ static UIApplication *_theApplication = nil;
 			}
 			break;
 	}
+}
+
+- (void)_applicationWillTerminate:(NSNotification *)note
+{
+	if ([_delegate respondsToSelector:@selector(applicationWillTerminate:)]) {
+		[_delegate applicationWillTerminate:self];
+	}
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationWillTerminateNotification object:self];
 }
 
 @end
