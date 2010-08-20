@@ -1,12 +1,12 @@
 //  Created by Sean Heber on 5/27/10.
 #import "UIView+UIPrivate.h"
-#import "CALayer+UIPrivate.h"
 #import "UIWindow.h"
 #import "UIGraphics.h"
 #import "UIColor.h"
 #import "UIViewLayoutManager.h"
 #import "UIViewAnimationGroup.h"
 #import "UIViewController.h"
+#import <QuartzCore/CALayer.h>
 
 static NSMutableArray *_animationGroups;
 static BOOL _animationsEnabled = YES;
@@ -428,13 +428,18 @@ static BOOL _animationsEnabled = YES;
 {
 }
 
-- (void)_boundsSizeDidChangeFrom:(CGSize)oldSize to:(CGSize)newSize
+- (void)_boundsDidChangeFrom:(CGRect)oldBounds to:(CGRect)newBounds
 {
-	if (!CGSizeEqualToSize(oldSize, newSize)) {
-		[self _boundsSizeDidChange];
-		if (_autoresizesSubviews) {
-			for (UIView *subview in _subviews) {
-				[subview _superviewSizeDidChangeFrom:oldSize to:newSize];
+	if (!CGRectEqualToRect(oldBounds, newBounds)) {
+		[self setNeedsLayout]; /// THIS SHOULD NOT BE NECCESSARY!
+		if (!CGSizeEqualToSize(oldBounds.size, newBounds.size)) {
+			[self _boundsSizeDidChange];
+			if (_autoresizesSubviews) {
+				for (UIView *subview in _subviews) {
+					if (subview.autoresizingMask != UIViewAutoresizingNone) {
+						[subview _superviewSizeDidChangeFrom:oldBounds.size to:newBounds.size];
+					}
+				}
 			}
 		}
 	}
@@ -461,13 +466,15 @@ static BOOL _animationsEnabled = YES;
 
 - (void)setFrame:(CGRect)newFrame
 {
-	CGSize oldSize = _layer.bounds.size;
-	CGPoint oldPosition = _layer.position;
-	
-	_layer.frame = newFrame;
-	
-	[self _boundsSizeDidChangeFrom:oldSize to:_layer.bounds.size];
-	[self _positionDidChangeFrom:oldPosition to:_layer.position];
+	if (!CGRectEqualToRect(newFrame,_layer.frame)) {
+		CGRect oldBounds = _layer.bounds;
+		CGPoint oldPosition = _layer.position;
+		
+		_layer.frame = newFrame;
+		
+		[self _boundsDidChangeFrom:oldBounds to:_layer.bounds];
+		[self _positionDidChangeFrom:oldPosition to:_layer.position];
+	}
 }
 
 - (CGRect)bounds
@@ -477,13 +484,15 @@ static BOOL _animationsEnabled = YES;
 
 - (void)setBounds:(CGRect)newBounds
 {
-	CGSize oldSize = _layer.bounds.size;
-	CGPoint oldPosition = _layer.position;
+	if (!CGRectEqualToRect(newBounds,_layer.bounds)) {
+		CGRect oldBounds = _layer.bounds;
+		CGPoint oldPosition = _layer.position;
 
-	_layer.bounds = newBounds;
-	
-	[self _boundsSizeDidChangeFrom:oldSize to:_layer.bounds.size];
-	[self _positionDidChangeFrom:oldPosition to:_layer.position];
+		_layer.bounds = newBounds;
+		
+		[self _boundsDidChangeFrom:oldBounds to:newBounds];
+		[self _positionDidChangeFrom:oldPosition to:_layer.position];
+	}
 }
 
 - (CGPoint)center
@@ -493,11 +502,13 @@ static BOOL _animationsEnabled = YES;
 
 - (void)setCenter:(CGPoint)newCenter
 {
-	CGPoint oldPosition = _layer.position;
+	if (!CGPointEqualToPoint(newCenter,_layer.position)) {
+		CGPoint oldPosition = _layer.position;
 
-	_layer.position = newCenter;
+		_layer.position = newCenter;
 
-	[self _positionDidChangeFrom:oldPosition to:_layer.position];
+		[self _positionDidChangeFrom:oldPosition to:_layer.position];
+	}
 }
 
 - (CGAffineTransform)transform
@@ -507,7 +518,9 @@ static BOOL _animationsEnabled = YES;
 
 - (void)setTransform:(CGAffineTransform)transform
 {
-	_layer.affineTransform = transform;
+	if (!CGAffineTransformEqualToTransform(transform,_layer.affineTransform)) {
+		_layer.affineTransform = transform;
+	}
 }
 
 - (CGFloat)alpha
@@ -517,7 +530,9 @@ static BOOL _animationsEnabled = YES;
 
 - (void)setAlpha:(CGFloat)newAlpha
 {
-	_layer.opacity = newAlpha;
+	if (newAlpha != _layer.opacity) {
+		_layer.opacity = newAlpha;
+	}
 }
 
 - (BOOL)isOpaque
@@ -527,7 +542,9 @@ static BOOL _animationsEnabled = YES;
 
 - (void)setOpaque:(BOOL)newO
 {
-	_layer.opaque = newO;
+	if (newO != _layer.opaque) {
+		_layer.opaque = newO;
+	}
 }
 
 - (void)setBackgroundColor:(UIColor *)newColor
@@ -555,12 +572,16 @@ static BOOL _animationsEnabled = YES;
 
 - (void)setClipsToBounds:(BOOL)clips
 {
-	_layer.masksToBounds = clips;
+	if (clips != _layer.masksToBounds) {
+		_layer.masksToBounds = clips;
+	}
 }
 
 - (void)setContentStretch:(CGRect)rect
 {
-	_layer.contentsRect = rect;
+	if (!CGRectEqualToRect(rect,_layer.contentsRect)) {
+		_layer.contentsRect = rect;
+	}
 }
 
 - (CGRect)contentStretch
@@ -570,7 +591,9 @@ static BOOL _animationsEnabled = YES;
 
 - (void)setHidden:(BOOL)h
 {
-	_layer.hidden = h;
+	if (h != _layer.hidden) {
+		_layer.hidden = h;
+	}
 }
 
 - (BOOL)isHidden
@@ -590,11 +613,6 @@ static BOOL _animationsEnabled = YES;
 
 - (void)layoutSubviews
 {
-}
-
-- (void)_layoutSubviews
-{
-	[self layoutSubviews];
 }
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event

@@ -11,6 +11,7 @@
 		141927A311F8A88E00051ABD /* UISplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 141927A111F8A88E00051ABD /* UISplitViewController.m */; };
 		1436CF96121476A1001DFEFB /* UISwitch.h in Headers */ = {isa = PBXBuildFile; fileRef = 1436CF94121476A1001DFEFB /* UISwitch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1436CF97121476A1001DFEFB /* UISwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 1436CF95121476A1001DFEFB /* UISwitch.m */; };
+		1443DF24121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1443DF23121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h */; };
 		1464960B11FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */; };
 		1464960C11FF7AE500ECEC7A /* <UINavigationBar> back.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */; };
 		1464960D11FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */; };
@@ -37,8 +38,6 @@
 		14A726E01213303400648C9B /* UIWindow+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BD1213303400648C9B /* UIWindow+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14B1140812033FA6009D9376 /* UITabBarController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14B1140612033FA6009D9376 /* UITabBarController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14B1140912033FA6009D9376 /* UITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14B1140712033FA6009D9376 /* UITabBarController.m */; };
-		14CC83C111EFA8AF005988CC /* CALayer+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC834B11EFA8AF005988CC /* CALayer+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		14CC83C211EFA8AF005988CC /* CALayer+UIPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC834C11EFA8AF005988CC /* CALayer+UIPrivate.m */; };
 		14CC83C311EFA8AF005988CC /* NSIndexPath+UITableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC834D11EFA8AF005988CC /* NSIndexPath+UITableView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14CC83C411EFA8AF005988CC /* NSIndexPath+UITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC834E11EFA8AF005988CC /* NSIndexPath+UITableView.m */; };
 		14CC83C511EFA8AF005988CC /* UIAccessibility.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC834F11EFA8AF005988CC /* UIAccessibility.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -185,6 +184,7 @@
 		141927A111F8A88E00051ABD /* UISplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UISplitViewController.m; path = Classes/UISplitViewController.m; sourceTree = "<group>"; };
 		1436CF94121476A1001DFEFB /* UISwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UISwitch.h; path = Classes/UISwitch.h; sourceTree = "<group>"; };
 		1436CF95121476A1001DFEFB /* UISwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UISwitch.m; path = Classes/UISwitch.m; sourceTree = "<group>"; };
+		1443DF23121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScreenMode+UIPrivate.h"; sourceTree = "<group>"; };
 		1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> back-highlighted.png"; path = "Resources/<UINavigationBar> back-highlighted.png"; sourceTree = "<group>"; };
 		1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> back.png"; path = "Resources/<UINavigationBar> back.png"; sourceTree = "<group>"; };
 		1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> button-highlighted.png"; path = "Resources/<UINavigationBar> button-highlighted.png"; sourceTree = "<group>"; };
@@ -211,8 +211,6 @@
 		14A726BD1213303400648C9B /* UIWindow+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+UIPrivate.h"; sourceTree = "<group>"; };
 		14B1140612033FA6009D9376 /* UITabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UITabBarController.h; path = Classes/UITabBarController.h; sourceTree = "<group>"; };
 		14B1140712033FA6009D9376 /* UITabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UITabBarController.m; path = Classes/UITabBarController.m; sourceTree = "<group>"; };
-		14CC834B11EFA8AF005988CC /* CALayer+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+UIPrivate.h"; sourceTree = "<group>"; };
-		14CC834C11EFA8AF005988CC /* CALayer+UIPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+UIPrivate.m"; sourceTree = "<group>"; };
 		14CC834D11EFA8AF005988CC /* NSIndexPath+UITableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSIndexPath+UITableView.h"; path = "Classes/NSIndexPath+UITableView.h"; sourceTree = "<group>"; };
 		14CC834E11EFA8AF005988CC /* NSIndexPath+UITableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSIndexPath+UITableView.m"; path = "Classes/NSIndexPath+UITableView.m"; sourceTree = "<group>"; };
 		14CC834F11EFA8AF005988CC /* UIAccessibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIAccessibility.h; path = Classes/UIAccessibility.h; sourceTree = "<group>"; };
@@ -575,8 +573,6 @@
 		14FA8C44121DA47500C4264B /* Private Categories */ = {
 			isa = PBXGroup;
 			children = (
-				14CC834B11EFA8AF005988CC /* CALayer+UIPrivate.h */,
-				14CC834C11EFA8AF005988CC /* CALayer+UIPrivate.m */,
 				14A726AF1213303400648C9B /* UIApplication+UIPrivate.h */,
 				14A726B01213303400648C9B /* UIColor+UIPrivate.h */,
 				14A726B11213303400648C9B /* UIControl+UIPrivate.h */,
@@ -584,14 +580,15 @@
 				14A726B31213303400648C9B /* UIFont+UIPrivate.h */,
 				14A726B41213303400648C9B /* UIImage+UIPrivate.h */,
 				14A726B51213303400648C9B /* UIImageView+UIPrivate.h */,
+				1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */,
 				14A726B71213303400648C9B /* UIScreen+UIPrivate.h */,
+				1443DF23121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h */,
 				14A726B81213303400648C9B /* UIScrollView+UIPrivate.h */,
 				14A726B91213303400648C9B /* UITableViewCell+UIPrivate.h */,
 				14A726BA1213303400648C9B /* UITouch+UIPrivate.h */,
 				14A726BB1213303400648C9B /* UIView+UIPrivate.h */,
 				14A726BC1213303400648C9B /* UIViewController+UIPrivate.h */,
 				14A726BD1213303400648C9B /* UIWindow+UIPrivate.h */,
-				1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */,
 			);
 			name = "Private Categories";
 			path = Classes;
@@ -612,7 +609,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14CC83C111EFA8AF005988CC /* CALayer+UIPrivate.h in Headers */,
 				14CC83C311EFA8AF005988CC /* NSIndexPath+UITableView.h in Headers */,
 				14CC83C511EFA8AF005988CC /* UIAccessibility.h in Headers */,
 				14CC83C711EFA8AF005988CC /* UIAccessibilityElement.h in Headers */,
@@ -698,6 +694,7 @@
 				14FA8C6F121DA4A000C4264B /* UIThreePartImage.h in Headers */,
 				14FA8C71121DA4A000C4264B /* UIViewAnimationGroup.h in Headers */,
 				14FA8C73121DA4A000C4264B /* UIViewLayoutManager.h in Headers */,
+				1443DF24121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -774,7 +771,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14CC83C211EFA8AF005988CC /* CALayer+UIPrivate.m in Sources */,
 				14CC83C411EFA8AF005988CC /* NSIndexPath+UITableView.m in Sources */,
 				14CC83C611EFA8AF005988CC /* UIAccessibility.m in Sources */,
 				14CC83C811EFA8AF005988CC /* UIAccessibilityElement.m in Sources */,

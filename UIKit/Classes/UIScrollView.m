@@ -152,10 +152,8 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 	}
 }
 
-- (void)_layoutSubviews
+- (void)_didLayoutSubviews
 {
-	[super _layoutSubviews];
-
 	[self _constrainContentOffset:NO];
 
 	const BOOL showingGrabber = [self _shouldShowGrabber];

@@ -68,8 +68,6 @@ typedef enum {
 	NSMutableArray *_sections;
 	CGFloat _sectionHeaderHeight;
 	CGFloat _sectionFooterHeight;
-	CGFloat _previousBoundsHeight;
-	CGFloat _previousContentOffset;
 }
 
 - (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style;

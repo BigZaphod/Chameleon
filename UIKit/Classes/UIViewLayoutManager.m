@@ -1,6 +1,6 @@
 //  Created by Sean Heber on 6/2/10.
 #import "UIViewLayoutManager.h"
-#import "UIView+UIPrivate.h"
+#import <QuartzCore/CALayer.h>
 
 static UIViewLayoutManager *theLayoutManager = nil;
 
@@ -20,8 +20,12 @@ static UIViewLayoutManager *theLayoutManager = nil;
 
 - (void)layoutSublayersOfLayer:(CALayer *)theLayer
 {
-	if ([[theLayer delegate] respondsToSelector:@selector(_layoutSubviews)]) {
-		[[theLayer delegate] _layoutSubviews];
+	id<UIViewLayoutManagerProtocol> view = [theLayer delegate];
+
+	[view layoutSubviews];
+
+	if ([view respondsToSelector:@selector(_didLayoutSubviews)]) {
+		[view _didLayoutSubviews];
 	}
 }
 

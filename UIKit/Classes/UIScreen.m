@@ -7,17 +7,13 @@
 #import <AppKit/AppKit.h>
 #import "UIViewLayoutManager.h"
 #import "UIColor.h"
-#import "UIScreenMode.h"
+#import "UIScreenMode+UIPrivate.h"
 
 NSString *const UIScreenDidConnectNotification = @"UIScreenDidConnectNotification";
 NSString *const UIScreenDidDisconnectNotification = @"UIScreenDidDisconnectNotification";
 NSString *const UIScreenModeDidChangeNotification = @"UIScreenModeDidChangeNotification";
 
 static NSMutableArray *_allScreens = nil;
-
-@interface UIScreenMode ()
-+ (id)screenModeWithNSView:(NSView *)theNSView;
-@end
 
 @implementation UIScreen
 @synthesize currentMode=_currentMode;
@@ -102,7 +98,7 @@ static NSMutableArray *_allScreens = nil;
 	return NO;
 }
 
-- (void)_layoutSubviews
+- (void)layoutSubviews
 {
 	if ([self _hasResizeIndicator]) {
 		const CGSize grabberSize = _grabber.frame.size;

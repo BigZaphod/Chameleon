@@ -223,7 +223,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		[_tableHeaderView removeFromSuperview];
 		[_tableHeaderView release];
 		_tableHeaderView = [newHeader retain];
-		_tableHeaderView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		[self _updateContentSize];
 		[self addSubview:_tableHeaderView];
 	}
@@ -235,7 +234,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		[_tableFooterView removeFromSuperview];
 		[_tableFooterView release];
 		_tableFooterView = [newFooter retain];
-		_tableFooterView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		[self _updateContentSize];
 		[self addSubview:_tableFooterView];
 	}
@@ -298,7 +296,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		
 		// if there's a view, then we need to set the height, otherwise it's going to be zero
 		if (sectionRecord.headerView) {
-			sectionRecord.headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 			[self addSubview:sectionRecord.headerView];
 			sectionRecord.headerHeight = delegateProvidesSectionHeaderHeight? [self.delegate tableView:self heightForHeaderInSection:section] : _sectionHeaderHeight;
 		} else {
@@ -306,7 +303,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		}
 
 		if (sectionRecord.footerView) {
-			sectionRecord.footerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 			[self addSubview:sectionRecord.footerView];
 			sectionRecord.footerHeight = delegateProvidesSectionFooterHeight? [self.delegate tableView:self heightForFooterInSection:section] : _sectionFooterHeight;
 		} else {
@@ -330,7 +326,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		[rowHeights release];
 	}
 	
-	_previousBoundsHeight = 0;
 	_needsReload = NO;
 	[self _updateContentSize];
 	[self setNeedsLayout];
@@ -338,98 +333,95 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void)layoutSubviews
 {
+	[super layoutSubviews];
+
 	if (_needsReload) {
 		[self reloadData];
 	}
-
-	[super layoutSubviews];
 	
 	// DO FANCY-PANTS STUFF HERE!
 	const CGSize boundsSize = self.bounds.size;
 	const CGFloat contentOffset = self.contentOffset.y;
+	const CGRect visibleBounds = CGRectMake(0,contentOffset,boundsSize.width,boundsSize.height);
+	CGFloat tableHeight = 0;
+		
+	if (_tableHeaderView) {
+		CGRect tableHeaderFrame = _tableHeaderView.frame;
+		tableHeaderFrame.origin = CGPointZero;
+		tableHeaderFrame.size.width = boundsSize.width;
+		_tableHeaderView.frame = tableHeaderFrame;
+		_tableHeaderView.hidden = !CGRectIntersectsRect(tableHeaderFrame, visibleBounds);
+		tableHeight += tableHeaderFrame.size.height;
+	}
 	
-	if (_previousBoundsHeight != boundsSize.height || _previousContentOffset != contentOffset) {
-		_previousBoundsHeight = boundsSize.height;
-		_previousContentOffset = contentOffset;
+	// layout sections and rows
+	NSMutableDictionary *availableCells = [_cachedCells mutableCopy];
+	const NSInteger numberOfSections = [_sections count];
+	[_cachedCells removeAllObjects];
 
-		const CGRect visibleBounds = CGRectMake(0,contentOffset,boundsSize.width,boundsSize.height);
-		CGFloat tableHeight = 0;
-		
-		if (_tableHeaderView) {
-			CGRect tableHeaderFrame = _tableHeaderView.frame;
-			tableHeaderFrame.origin = CGPointZero;
-			tableHeaderFrame.size.width = boundsSize.width;
-			_tableHeaderView.frame = tableHeaderFrame;
-			_tableHeaderView.hidden = !CGRectIntersectsRect(tableHeaderFrame, visibleBounds);
-			tableHeight += tableHeaderFrame.size.height;
-		}
-		
-		// layout sections and rows
-		NSMutableDictionary *availableCells = [_cachedCells mutableCopy];
-		const NSInteger numberOfSections = [_sections count];
-		[_cachedCells removeAllObjects];
+	for (NSInteger section=0; section<numberOfSections; section++) {
+		NSAutoreleasePool *sectionPool = [NSAutoreleasePool new];
+		CGRect sectionRect = [self rectForSection:section];
+		tableHeight += sectionRect.size.height;
+		if (CGRectIntersectsRect(sectionRect, visibleBounds)) {
+			const CGRect headerRect = [self rectForHeaderInSection:section];
+			const CGRect footerRect = [self rectForFooterInSection:section];
+			UITableViewSection *sectionRecord = [_sections objectAtIndex:section];
+			const NSInteger numberOfRows = sectionRecord.numberOfRows;
 
-		for (NSInteger section=0; section<numberOfSections; section++) {
-			NSAutoreleasePool *sectionPool = [NSAutoreleasePool new];
-			CGRect sectionRect = [self rectForSection:section];
-			tableHeight += sectionRect.size.height;
-			if (CGRectIntersectsRect(sectionRect, visibleBounds)) {
-				const CGRect headerRect = [self rectForHeaderInSection:section];
-				const CGRect footerRect = [self rectForFooterInSection:section];
-				UITableViewSection *sectionRecord = [_sections objectAtIndex:section];
-				const NSInteger numberOfRows = sectionRecord.numberOfRows;
-
+			if (sectionRecord.headerView) {
 				if (CGRectIntersectsRect(headerRect,visibleBounds)) {
 					sectionRecord.headerView.frame = headerRect;
 					sectionRecord.headerView.hidden = NO;
 				} else {
 					sectionRecord.headerView.hidden = YES;
 				}
-
+			}
+			
+			if (sectionRecord.footerView) {
 				if (CGRectIntersectsRect(footerRect,visibleBounds)) {
 					sectionRecord.footerView.frame = footerRect;
 					sectionRecord.footerView.hidden = NO;
 				} else {
 					sectionRecord.footerView.hidden = YES;
 				}
-
-				for (NSInteger row=0; row<numberOfRows; row++) {
-					NSAutoreleasePool *rowPool = [NSAutoreleasePool new];
-					NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-					CGRect rowRect = [self rectForRowAtIndexPath:indexPath];
-					if (CGRectIntersectsRect(rowRect,visibleBounds) && rowRect.size.height > 0) {
-						UITableViewCell *cell = [availableCells objectForKey:indexPath] ?: [self.dataSource tableView:self cellForRowAtIndexPath:indexPath];
-						if (cell) {
-							[_cachedCells setObject:cell forKey:indexPath];
-							[availableCells removeObjectForKey:indexPath];
-							cell.selected = [_selectedRow isEqual:indexPath];
-							cell.frame = rowRect;
-							cell.backgroundColor = self.backgroundColor;
-							cell.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-							[cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
-							[self addSubview:cell];
-						}
-					}
-					[rowPool release];
-				}
 			}
-			[sectionPool release];
-		}
-		
-		// remove old cells
-		for (UITableViewCell *cell in [availableCells allValues]) {
-			[cell removeFromSuperview];
-		}
 
-		[availableCells release];
-		
-		if (_tableHeaderView) {
-			CGRect tableFooterFrame = _tableFooterView.frame;
-			tableFooterFrame.origin = CGPointMake(0,tableHeight);
-			tableFooterFrame.size.width = boundsSize.width;
-			_tableFooterView.frame = tableFooterFrame;
-			_tableFooterView.hidden = !CGRectIntersectsRect(tableFooterFrame, visibleBounds);
+			for (NSInteger row=0; row<numberOfRows; row++) {
+				NSAutoreleasePool *rowPool = [NSAutoreleasePool new];
+				NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+				CGRect rowRect = [self rectForRowAtIndexPath:indexPath];
+				if (CGRectIntersectsRect(rowRect,visibleBounds) && rowRect.size.height > 0) {
+					UITableViewCell *cell = [availableCells objectForKey:indexPath] ?: [self.dataSource tableView:self cellForRowAtIndexPath:indexPath];
+					if (cell) {
+						[_cachedCells setObject:cell forKey:indexPath];
+						[availableCells removeObjectForKey:indexPath];
+						cell.selected = [_selectedRow isEqual:indexPath];
+						cell.frame = rowRect;
+						cell.backgroundColor = self.backgroundColor;
+						[cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
+						[self addSubview:cell];
+					}
+				}
+				[rowPool release];
+			}
 		}
+		[sectionPool release];
+	}
+	
+	// remove old cells
+	for (UITableViewCell *cell in [availableCells allValues]) {
+		[cell removeFromSuperview];
+	}
+
+	[availableCells release];
+	
+	if (_tableHeaderView) {
+		CGRect tableFooterFrame = _tableFooterView.frame;
+		tableFooterFrame.origin = CGPointMake(0,tableHeight);
+		tableFooterFrame.size.width = boundsSize.width;
+		_tableFooterView.frame = tableFooterFrame;
+		_tableFooterView.hidden = !CGRectIntersectsRect(tableFooterFrame, visibleBounds);
 	}
 }
 
