@@ -189,10 +189,10 @@
 		
 		[self viewWillAppear:animated];
 		
+		[_modalViewController.view removeFromSuperview];
 		[_modalViewController _setParentViewController:nil];
 		[_modalViewController autorelease];
 		_modalViewController = nil;
-		[_modalViewController.view removeFromSuperview];
 		self.view.hidden = NO;
 
 		[self viewDidAppear:animated];
