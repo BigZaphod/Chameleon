@@ -98,9 +98,7 @@ static const CGFloat NavigationBarHeight = 32;
 		UIViewController *previousTopController = self.topViewController;
 
 		if (previousTopController) {
-			[previousTopController viewWillDisappear:animated];
 			[previousTopController.view removeFromSuperview];
-			[previousTopController viewDidDisappear:animated];
 		}
 
 		for (UIViewController *controller in _viewControllers) {
@@ -149,15 +147,12 @@ static const CGFloat NavigationBarHeight = 32;
 	[_viewControllers addObject:viewController];
 
 	if ([self isViewLoaded]) {
-		UIViewController *previousViewController = self.topViewController;
-		[previousViewController viewWillDisappear:animated];
 		[viewController viewWillAppear:animated];
 
-		[previousViewController.view removeFromSuperview];
+		[self.topViewController.view removeFromSuperview];
 		viewController.view.frame = [self _controllerFrame];
 		[self.view addSubview:viewController.view];
 		
-		[previousViewController viewDidDisappear:animated];
 		[viewController viewDidAppear:animated];
 	}
 
@@ -175,14 +170,12 @@ static const CGFloat NavigationBarHeight = 32;
 		if ([self isViewLoaded]) {
 			UIViewController *nextViewController = self.topViewController;
 			
-			[oldViewController viewWillDisappear:animate];
 			[nextViewController viewWillAppear:animate];
 			
 			[oldViewController.view removeFromSuperview];
 			nextViewController.view.frame = [self _controllerFrame];
 			[self.view addSubview:nextViewController.view];
 			
-			[oldViewController viewDidDisappear:animate];
 			[nextViewController viewDidAppear:animate];
 		}
 		

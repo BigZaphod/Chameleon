@@ -107,7 +107,7 @@ static BOOL _animationsEnabled = YES;
 	if (subview && subview.superview != self) {
 		const BOOL changingWindows = (subview.window != self.window);
 		
-		if (subview->_viewController) [subview->_viewController viewWillAppear:NO];
+		if (![subview->_viewController parentViewController]) [subview->_viewController viewWillAppear:NO];
 		if (changingWindows) [subview willMoveToWindow:self.window];
 		[subview willMoveToSuperview:self];
 		
@@ -124,7 +124,7 @@ static BOOL _animationsEnabled = YES;
 	
 		[subview release];
 		
-		if (subview->_viewController) [subview->_viewController viewDidAppear:NO];
+		if (![subview->_viewController parentViewController]) [subview->_viewController viewDidAppear:NO];
 		if (changingWindows) [subview didMoveToWindow];
 		[subview didMoveToSuperview];
 		
