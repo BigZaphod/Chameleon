@@ -195,8 +195,8 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 	if (self.scrollEnabled) {
 		// Increasing the delta because it just seems to feel better to me right now.
 		// Dunno if this is something standard that OSX is doing or if OSX actually scales it somehow based on content size.
-		delta.x *= 2.5f;
-		delta.y *= 2.5f;
+		delta.x *= 15.0f;
+		delta.y *= 15.0f;
 
 		CGPoint offset = self.contentOffset;
 		offset.x -= delta.x;
