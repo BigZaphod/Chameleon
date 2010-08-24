@@ -136,10 +136,12 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 
 - (BOOL)_shouldShowGrabber
 {
-	const BOOL showingBothScrollers = (self._canScrollHorizontal && self._canScrollVertical);
+	const BOOL showingHorizontal = self._canScrollHorizontal;
+	const BOOL showingVertical = self._canScrollVertical;
+	const BOOL showingBothScrollers = showingVertical && showingHorizontal;
 	if (showingBothScrollers) {
 		return YES;
-	} else {
+	} else if (showingVertical || showingHorizontal) {
 		UIWindow *window = self.window;
 		UIScreen *screen = window.screen;
 		const CGRect screenBounds = screen.bounds;
@@ -149,6 +151,8 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 		const CGPoint viewBottomRightScreenPoint = [window convertPoint:[self convertPoint:bottomRightViewPoint toView:window] toWindow:nil];
 		const BOOL viewAtBottomRightOfScreen = CGPointEqualToPoint(viewBottomRightScreenPoint, bottomRightScreenPoint);
 		return (viewAtBottomRightOfScreen && [screen _hasResizeIndicator]);
+	} else {
+		return NO;
 	}
 }
 
