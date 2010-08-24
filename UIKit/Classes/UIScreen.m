@@ -45,10 +45,16 @@ static NSMutableArray *_allScreens = nil;
 {
     if ((self = [super init])) {
 		_layer = [[CALayer layer] retain];
-		_layer.delegate = self;
-		_layer.geometryFlipped = YES;
+		_layer.delegate = self;		// required to get the magic of the UIViewLayoutManager...
 		_layer.layoutManager = [UIViewLayoutManager layoutManager];
-		_layer.backgroundColor = [UIColor whiteColor].CGColor;
+
+		// NOTE: This line adds a 10.6 depedency The commented out line after this would appear to do a similar thing and should work on 10.5,
+		// but ironically, it then makes the UIImageView images render upside down. I suspect this has to do with flipped-ness of images, but
+		// in trying to track that down I noticed that I'm using at least one 10.6-only NSImage method in there already, so I decided it wasn't
+		// worth the effort right now to bother with 10.5 support since there'd be a couple changes there and who knows what other things are
+		// lurking around that only works on 10.6. Got bigger fish to fry right now.
+		_layer.geometryFlipped = YES;
+		//_layer.sublayerTransform = CATransform3DMakeScale(1,-1,1);
 		
 		_grabber = [[UIImageView alloc] initWithImage:[UIImage _frameworkImageNamed:@"<UIScreen> grabber.png"]];
 		_grabber.layer.zPosition = 10000;

@@ -10,12 +10,21 @@
 @implementation UIKitView
 @synthesize UIScreen=_screen;
 
+- (void)configureLayers
+{
+	[self setWantsLayer:YES];
+	[self layer].backgroundColor = [UIColor whiteColor].CGColor;
+
+	[[self layer] insertSublayer:[_screen _layer] atIndex:0];
+	[_screen _layer].frame = [self layer].bounds;
+	[_screen _layer].autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
+}
+
 - (id)initWithFrame:(NSRect)frame
 {
     if ((self = [super initWithFrame:frame])) {
 		_screen = [UIScreen new];
-		[self setLayer:[_screen _layer]];
-		[self setWantsLayer:YES];
+		[self configureLayers];
     }
     return self;
 }
@@ -41,7 +50,7 @@
 
 - (void)awakeFromNib
 {
-	[self setWantsLayer:YES];
+	[self configureLayers];
 }
  
 - (BOOL)isOpaque
