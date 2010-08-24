@@ -88,6 +88,8 @@
 		[textView setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
 		[clipView setDocumentView:textView];
 		 */
+
+		[containerView setNeedsDisplay];
 	}
 	return self;
 }
@@ -180,11 +182,8 @@
 	 */
 
 	
-	if (containerView.window) {
-		[textContainer setContainerSize:NSSizeFromCGSize(containerView.bounds.size)];
-		[containerView setNeedsDisplay];
-	} else {
-	}
+	[textContainer setContainerSize:NSSizeFromCGSize(containerView.bounds.size)];
+	[containerView setNeedsDisplay];
 }
  
 /*
@@ -273,7 +272,7 @@
 	[textView setDrawsBackground:YES];
 	[textView setBackgroundColor:[NSColor yellowColor]];
 	[[containerView.window.screen _NSView] addSubview:textView];
-	*/
+	 */
 
 	//isFirstResponder = YES;
 	//[self updateFrame];
