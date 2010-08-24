@@ -54,13 +54,12 @@
 @synthesize delegate=_delegate, font=_font, textColor=_textColor, background=_background, disabledBackground=_disabledBackground;
 @synthesize clearButtonMode=_clearButtonMode, leftView=_leftView, rightView=_rightView, leftViewMode=_leftViewMode, rightViewMode=_rightViewMode;
 
-/*
 - (void)_configureTextField:(NSTextField *)textField
 {
 	[textField setWantsLayer:YES];
-	[textField setDrawsBackground:YES];
-	[textField setBackgroundColor:[NSColor blueColor]];
-	[[textField layer] setGeometryFlipped:YES];
+	[textField setDrawsBackground:NO];
+	//[textField setBackgroundColor:[NSColor blueColor]];
+	//[[textField layer] setGeometryFlipped:YES];
 	[[textField cell] setFocusRingType:NSFocusRingTypeNone];
 	[[textField cell] setLineBreakMode:NSLineBreakByTruncatingHead];
 	[textField setTarget:self];
@@ -77,13 +76,12 @@
 	[[_textField layer] setFrame:self.bounds];
 	[self.layer insertSublayer:[_textField layer] atIndex:0];
 }
-*/
 
 - (id)initWithFrame:(CGRect)frame
 {
 	if ((self=[super initWithFrame:frame])) {
-		//_textField = [(NSTextField *)[NSTextField alloc] initWithFrame:NSRectFromCGRect(self.bounds)];
-		//[self _configureTextField:_textField];
+		_textField = [(NSTextField *)[NSTextField alloc] initWithFrame:NSRectFromCGRect(self.bounds)];
+		[self _configureTextField:_textField];
 		
 		self.font = [UIFont systemFontOfSize:17];
 		self.borderStyle = UITextBorderStyleNone;
@@ -108,15 +106,6 @@
 	[super dealloc];
 }
 
-/*
-- (void)layoutSubviews
-{
-	[[_textField layer] setFrame:self.bounds];
-	[self.layer insertSublayer:[_textField layer] atIndex:0];
-}
- */
-
-/*
 - (void)_updateNSTextFieldFrame
 {
 	if (self.window) {
@@ -128,16 +117,41 @@
 		[_textField removeFromSuperview];
 	}
 }
+
+- (void)setAlpha:(CGFloat)alpha
+{
+	[super setAlpha:alpha];
+	[_textField setAlphaValue:alpha];
+}
+
+- (void)setHidden:(BOOL)hidden
+{
+	[super setHidden:hidden];
+	[_textField setHidden:hidden];
+}
+
+- (void)didMoveToSuperview
+{
+	[super didMoveToSuperview];
+	[self _updateNSTextFieldFrame];
+}
+
+- (void)layoutSubviews
+{
+//	[[_textField layer] setFrame:self.bounds];
+//	[self.layer insertSublayer:[_textField layer] atIndex:0];
+	[self _updateNSTextFieldFrame];
+}
+
+/*
+- (void)setFrame:(CGRect)frame
+{
+	[super setFrame:frame];
+	[self _updateNSTextFieldFrame];
+}
  */
 
 /*
-- (void)_boundsSizeDidChange
-{
-	NSLog( @"_boundsSizeDidChange" );
-	[self _updateNSTextFieldFrame];
-	[super _boundsSizeDidChange];
-}
-
 - (void)_hierarchyPositionDidChange
 {
 	static int c = 0;
@@ -149,7 +163,7 @@
 		
 	[super _hierarchyPositionDidChange];
 }
-*/
+ */
 
 - (UITextAutocapitalizationType)autocapitalizationType
 {
@@ -212,7 +226,6 @@
 
 - (void)setSecureTextEntry:(BOOL)secure
 {
-	/*
 	if (self.secureTextEntry != secure) {
 		[_textField removeFromSuperview];
 		
@@ -233,7 +246,6 @@
 
 		[self _updateNSTextFieldFrame];
 	}
-	 */
 }
 
 - (NSString *)placeholder
