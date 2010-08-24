@@ -43,7 +43,7 @@
 {
 	[self setWantsLayer:YES];
 }
-
+ 
 - (BOOL)isOpaque
 {
 	return YES;
@@ -61,6 +61,7 @@
 
 - (void)updateTrackingAreas
 {
+	[super updateTrackingAreas];
 	[self removeTrackingArea:_trackingArea];
 	[_trackingArea release];
 	_trackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds options:NSTrackingCursorUpdate|NSTrackingMouseMoved|NSTrackingInVisibleRect|NSTrackingActiveInActiveApp owner:self userInfo:nil];

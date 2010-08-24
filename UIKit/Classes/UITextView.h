@@ -6,15 +6,12 @@
 @protocol UITextViewDelegate <NSObject, UIScrollViewDelegate>
 @end
 
-@class UIColor, UIFont;
+@class UIColor, UIFont, UIText;
 
 @interface UITextView : UIScrollView <UITextInputTraits> {
 @private
-	NSString *_text;
-	UIColor *_textColor;
-	UIFont *_font;
+	UIText *_textContainer;
 	UIDataDetectorTypes _dataDetectorTypes;
-	BOOL _editable;
 }
 
 @property (nonatomic, getter=isEditable) BOOL editable;

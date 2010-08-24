@@ -48,7 +48,6 @@ static NSMutableArray *_allScreens = nil;
 		_layer.delegate = self;
 		_layer.geometryFlipped = YES;
 		_layer.layoutManager = [UIViewLayoutManager layoutManager];
-		
 		_layer.backgroundColor = [UIColor whiteColor].CGColor;
 		
 		_grabber = [[UIImageView alloc] initWithImage:[UIImage _frameworkImageNamed:@"<UIScreen> grabber.png"]];
@@ -89,7 +88,7 @@ static NSMutableArray *_allScreens = nil;
 		const CGRect contentViewBounds = NSRectToCGRect([contentView frame]);
 		const CGPoint contentViewLowerRight = CGPointMake(CGRectGetMaxX(contentViewBounds),0);
 		const CGPoint convertedPoint = NSPointToCGPoint([_NSView convertPoint:NSPointFromCGPoint(myLowerRight) toView:contentView]);
-		
+
 		if (CGPointEqualToPoint(convertedPoint,contentViewLowerRight) && [realWindow showsResizeIndicator]) {
 			return YES;
 		}
@@ -228,5 +227,6 @@ static NSMutableArray *_allScreens = nil;
 	[_allScreens removeObjectAtIndex:index];
 	[_allScreens insertObject:entry atIndex:0];
 }
+
 @end
 

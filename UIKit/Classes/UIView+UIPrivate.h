@@ -4,6 +4,4 @@
 @interface UIView (UIPrivate)
 - (void)_setViewController:(UIViewController *)theViewController;
 - (void)_superviewSizeDidChangeFrom:(CGSize)oldSize to:(CGSize)newSize;
-- (void)_boundsSizeDidChange;
-- (void)_hierarchyPositionDidChange;
 @end

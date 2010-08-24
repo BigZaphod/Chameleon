@@ -164,10 +164,11 @@
 
 - (void)setFrame:(CGRect)newFrame
 {
-	if (!CGSizeEqualToSize(newFrame.size,self.frame.size)) {
+	const BOOL redisplay = !CGSizeEqualToSize(newFrame.size,self.frame.size);
+	[super setFrame:newFrame];
+	if (redisplay) {
 		[self setNeedsDisplay];
 	}
-	[super setFrame:newFrame];
 }
 
 - (CGSize)sizeThatFits:(CGSize)size

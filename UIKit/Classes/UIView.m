@@ -118,17 +118,17 @@ static BOOL _animationsEnabled = YES;
 			[subview.superview->_subviews removeObject:subview];
 		}
 		
+		[subview willChangeValueForKey:@"superview"];
 		[_subviews addObject:subview];
 		subview->_superview = self;
 		[_layer addSublayer:subview.layer];
+		[subview didChangeValueForKey:@"superview"];
 	
 		[subview release];
 		
 		if (![subview->_viewController parentViewController]) [subview->_viewController viewDidAppear:NO];
 		if (changingWindows) [subview didMoveToWindow];
 		[subview didMoveToSuperview];
-		
-		[subview _hierarchyPositionDidChange];
 		
 		[self didAddSubview:subview];
 	}
@@ -162,14 +162,17 @@ static BOOL _animationsEnabled = YES;
 
 - (void)_setNilSuperview
 {
+	[self willChangeValueForKey:@"superview"];
 	_superview = nil;
+	[self didChangeValueForKey:@"superview"];
 }
 
 - (void)removeFromSuperview
 {
 	if (_superview) {
 		[self retain];
-
+		[self willChangeValueForKey:@"superview"];
+		
 		if (_viewController) [_viewController viewWillDisappear:NO];
 		[_superview willRemoveSubview:self];
 		[self willMoveToWindow:nil];
@@ -177,13 +180,13 @@ static BOOL _animationsEnabled = YES;
 
 		[_layer removeFromSuperlayer];
 		[_superview->_subviews removeObject:self];
-		[self _setNilSuperview];
+		_superview = nil;
 		
 		if (_viewController) [_viewController viewDidDisappear:NO];
 		[self didMoveToWindow];
 		[self didMoveToSuperview];
-		[self _hierarchyPositionDidChange];
-
+		
+		[self didChangeValueForKey:@"superview"];
 		[self release];
 	}
 }
@@ -400,63 +403,53 @@ static BOOL _animationsEnabled = YES;
 
 - (void)_superviewSizeDidChangeFrom:(CGSize)oldSize to:(CGSize)newSize
 {
-	CGRect frame = self.frame;
-	CGFloat widthChanges = 0;
-	CGFloat heightChanges = 0;
+	if (_autoresizingMask != UIViewAutoresizingNone) {
+		CGRect frame = self.frame;
+		CGFloat widthChanges = 0;
+		CGFloat heightChanges = 0;
 
-	if (_autoresizingMask & UIViewAutoresizingFlexibleLeftMargin)	widthChanges++;
-	if (_autoresizingMask & UIViewAutoresizingFlexibleWidth)		widthChanges++;
-	if (_autoresizingMask & UIViewAutoresizingFlexibleRightMargin)	widthChanges++;
+		if (_autoresizingMask & UIViewAutoresizingFlexibleLeftMargin)	widthChanges++;
+		if (_autoresizingMask & UIViewAutoresizingFlexibleWidth)		widthChanges++;
+		if (_autoresizingMask & UIViewAutoresizingFlexibleRightMargin)	widthChanges++;
 
-	if (_autoresizingMask & UIViewAutoresizingFlexibleTopMargin)	heightChanges++;
-	if (_autoresizingMask & UIViewAutoresizingFlexibleHeight)		heightChanges++;
-	if (_autoresizingMask & UIViewAutoresizingFlexibleBottomMargin)	heightChanges++;
-	
-	CGFloat widthDelta = (newSize.width-oldSize.width) / widthChanges;
-	CGFloat heightDelta = (newSize.height-oldSize.height) / heightChanges;
-	
-	if (_autoresizingMask & UIViewAutoresizingFlexibleLeftMargin)	frame.origin.x += widthDelta;
-	if (_autoresizingMask & UIViewAutoresizingFlexibleWidth)		frame.size.width += widthDelta;
+		if (_autoresizingMask & UIViewAutoresizingFlexibleTopMargin)	heightChanges++;
+		if (_autoresizingMask & UIViewAutoresizingFlexibleHeight)		heightChanges++;
+		if (_autoresizingMask & UIViewAutoresizingFlexibleBottomMargin)	heightChanges++;
+		
+		CGFloat widthDelta = (newSize.width-oldSize.width) / widthChanges;
+		CGFloat heightDelta = (newSize.height-oldSize.height) / heightChanges;
+		
+		if (_autoresizingMask & UIViewAutoresizingFlexibleLeftMargin)	frame.origin.x += widthDelta;
+		if (_autoresizingMask & UIViewAutoresizingFlexibleWidth)		frame.size.width += widthDelta;
 
-	if (_autoresizingMask & UIViewAutoresizingFlexibleTopMargin)	frame.origin.y += heightDelta;
-	if (_autoresizingMask & UIViewAutoresizingFlexibleHeight)		frame.size.height += heightDelta;
-	
-	self.frame = frame;
-}
-
-- (void)_boundsSizeDidChange
-{
+		if (_autoresizingMask & UIViewAutoresizingFlexibleTopMargin)	frame.origin.y += heightDelta;
+		if (_autoresizingMask & UIViewAutoresizingFlexibleHeight)		frame.size.height += heightDelta;
+		
+		self.frame = frame;
+	}
 }
 
 - (void)_boundsDidChangeFrom:(CGRect)oldBounds to:(CGRect)newBounds
 {
 	if (!CGRectEqualToRect(oldBounds, newBounds)) {
-		[self setNeedsLayout]; /// THIS SHOULD NOT BE NECCESSARY!
+		// setNeedsLayout doesn't seem like it should be necessary, however there was a rendering bug in a table in Flamingo that
+		// went away when this was placed here. There must be some strange ordering issue with how that layout manager stuff works.
+		// I never quite narrowed it down. This was an easy fix, if perhaps not ideal.
+		[self setNeedsLayout];
+
 		if (!CGSizeEqualToSize(oldBounds.size, newBounds.size)) {
-			[self _boundsSizeDidChange];
 			if (_autoresizesSubviews) {
 				for (UIView *subview in _subviews) {
-					if (subview.autoresizingMask != UIViewAutoresizingNone) {
-						[subview _superviewSizeDidChangeFrom:oldBounds.size to:newBounds.size];
-					}
+					[subview _superviewSizeDidChangeFrom:oldBounds.size to:newBounds.size];
 				}
 			}
 		}
 	}
 }
 
-- (void)_hierarchyPositionDidChange
++ (NSSet *)keyPathsForValuesAffectingFrame
 {
-	for (UIView *subview in _subviews) {
-		[subview _hierarchyPositionDidChange];
-	}
-}
-
-- (void)_positionDidChangeFrom:(CGPoint)oldPosition to:(CGPoint)newPosition
-{
-	if (!CGPointEqualToPoint(oldPosition,newPosition)) {
-		[self _hierarchyPositionDidChange];
-	}
+	return [NSSet setWithObject:@"center"];
 }
 
 - (CGRect)frame
@@ -468,12 +461,8 @@ static BOOL _animationsEnabled = YES;
 {
 	if (!CGRectEqualToRect(newFrame,_layer.frame)) {
 		CGRect oldBounds = _layer.bounds;
-		CGPoint oldPosition = _layer.position;
-		
 		_layer.frame = newFrame;
-		
 		[self _boundsDidChangeFrom:oldBounds to:_layer.bounds];
-		[self _positionDidChangeFrom:oldPosition to:_layer.position];
 	}
 }
 
@@ -486,12 +475,8 @@ static BOOL _animationsEnabled = YES;
 {
 	if (!CGRectEqualToRect(newBounds,_layer.bounds)) {
 		CGRect oldBounds = _layer.bounds;
-		CGPoint oldPosition = _layer.position;
-
 		_layer.bounds = newBounds;
-		
 		[self _boundsDidChangeFrom:oldBounds to:newBounds];
-		[self _positionDidChangeFrom:oldPosition to:_layer.position];
 	}
 }
 
@@ -503,11 +488,7 @@ static BOOL _animationsEnabled = YES;
 - (void)setCenter:(CGPoint)newCenter
 {
 	if (!CGPointEqualToPoint(newCenter,_layer.position)) {
-		CGPoint oldPosition = _layer.position;
-
 		_layer.position = newCenter;
-
-		[self _positionDidChangeFrom:oldPosition to:_layer.position];
 	}
 }
 
