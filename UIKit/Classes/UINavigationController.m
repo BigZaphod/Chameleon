@@ -144,18 +144,18 @@ static const CGFloat NavigationBarHeight = 32;
 	NSAssert(![_viewControllers containsObject:viewController], nil);
 	
 	[viewController _setParentViewController:self];
-	[_viewControllers addObject:viewController];
 
 	if ([self isViewLoaded]) {
+		viewController.view.frame = [self _controllerFrame];
 		[viewController viewWillAppear:animated];
 
 		[self.topViewController.view removeFromSuperview];
-		viewController.view.frame = [self _controllerFrame];
+
 		[self.view addSubview:viewController.view];
-		
 		[viewController viewDidAppear:animated];
 	}
 
+	[_viewControllers addObject:viewController];
 	[_navigationBar pushNavigationItem:viewController.navigationItem animated:animated];
 }
 
@@ -170,12 +170,12 @@ static const CGFloat NavigationBarHeight = 32;
 		if ([self isViewLoaded]) {
 			UIViewController *nextViewController = self.topViewController;
 			
+			nextViewController.view.frame = [self _controllerFrame];
 			[nextViewController viewWillAppear:animate];
 			
 			[oldViewController.view removeFromSuperview];
-			nextViewController.view.frame = [self _controllerFrame];
+
 			[self.view addSubview:nextViewController.view];
-			
 			[nextViewController viewDidAppear:animate];
 		}
 		
