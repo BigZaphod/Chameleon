@@ -13,3 +13,6 @@ void UIGraphicsEndImageContext();
 
 void UIRectFill(CGRect rect);
 void UIRectFillUsingBlendMode(CGRect rect, CGBlendMode blendMode);
+
+void UIRectFrame(CGRect rect);
+void UIRectFrameUsingBlendMode(CGRect rect, CGBlendMode blendMode);

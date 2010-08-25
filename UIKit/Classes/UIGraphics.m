@@ -73,3 +73,17 @@ void UIRectFillUsingBlendMode(CGRect rect, CGBlendMode blendMode)
 	UIRectFill(rect);
 	CGContextRestoreGState(c);
 }
+
+void UIRectFrame(CGRect rect)
+{
+	CGContextStrokeRect(UIGraphicsGetCurrentContext(), rect);
+}
+
+void UIRectFrameUsingBlendMode(CGRect rect, CGBlendMode blendMode)
+{
+	CGContextRef c = UIGraphicsGetCurrentContext();
+	CGContextSaveGState(c);
+	CGContextSetBlendMode(c, blendMode);
+	UIRectFrame(rect);
+	CGContextRestoreGState(c);
+}
