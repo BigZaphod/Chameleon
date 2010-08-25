@@ -210,7 +210,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		height += [section sectionHeight];
 	}
 	
-	if (_tableHeaderView) {
+	if (_tableFooterView) {
 		height += _tableFooterView.frame.size.height;
 	}
 	
