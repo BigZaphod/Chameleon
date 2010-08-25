@@ -1,18 +1,43 @@
 //  Created by Sean Heber on 6/25/10.
 #import "UIView.h"
 
-@protocol UIAlertViewDelegate <NSObject>
-@end
+@protocol UIAlertViewDelegate;
 
 @interface UIAlertView : UIView {
 @private
+	NSString *_title;
+	NSString *_message;
+	id<UIAlertViewDelegate> _delegate;
 	NSInteger _cancelButtonIndex;
+	NSMutableArray *_buttonTitles;
 }
 
 - (id)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ...;
 
+- (NSInteger)addButtonWithTitle:(NSString *)title;
+- (NSString *)buttonTitleAtIndex:(NSInteger)buttonIndex;
+@property(nonatomic,readonly) NSInteger numberOfButtons;
+
 - (void)show;
 
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *message;
+@property (nonatomic, assign) id<UIAlertViewDelegate> delegate;
 @property (nonatomic) NSInteger cancelButtonIndex;
+
+@end
+
+@protocol UIAlertViewDelegate <NSObject>
+@optional
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
+
+- (void)alertViewCancel:(UIAlertView *)alertView; // never called
+
+- (void)willPresentAlertView:(UIAlertView *)alertView;  // before animation and showing view
+- (void)didPresentAlertView:(UIAlertView *)alertView;  // after animation
+
+- (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex; // before animation and hiding view
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;  // after animation
 
 @end
