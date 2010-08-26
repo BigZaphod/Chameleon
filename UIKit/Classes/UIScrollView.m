@@ -189,6 +189,14 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 	[self setContentOffset:theOffset animated:NO];
 }
 
+- (void)setContentSize:(CGSize)newSize
+{
+	if (!CGSizeEqualToSize(newSize, _contentSize)) {
+		_contentSize = newSize;
+		[self setNeedsLayout];
+	}
+}
+
 - (BOOL)isDragging
 {
 	return (_draggingScroller != nil);

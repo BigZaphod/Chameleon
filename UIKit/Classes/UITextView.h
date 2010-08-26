@@ -6,11 +6,11 @@
 @protocol UITextViewDelegate <NSObject, UIScrollViewDelegate>
 @end
 
-@class UIColor, UIFont, UIText;
+@class UIColor, UIFont, UITextLayer;
 
 @interface UITextView : UIScrollView <UITextInputTraits> {
 @private
-	UIText *_textContainer;
+	UITextLayer *_textLayer;
 	UIDataDetectorTypes _dataDetectorTypes;
 }
 

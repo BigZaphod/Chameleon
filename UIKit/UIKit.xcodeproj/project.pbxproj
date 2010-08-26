@@ -12,10 +12,14 @@
 		1436CF96121476A1001DFEFB /* UISwitch.h in Headers */ = {isa = PBXBuildFile; fileRef = 1436CF94121476A1001DFEFB /* UISwitch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1436CF97121476A1001DFEFB /* UISwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 1436CF95121476A1001DFEFB /* UISwitch.m */; };
 		1443DF24121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1443DF23121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h */; };
-		144BBCF012233224006986CC /* UIClipNSView.h in Headers */ = {isa = PBXBuildFile; fileRef = 144BBCEE12233224006986CC /* UIClipNSView.h */; };
-		144BBCF112233224006986CC /* UIClipNSView.m in Sources */ = {isa = PBXBuildFile; fileRef = 144BBCEF12233224006986CC /* UIClipNSView.m */; };
-		144BBCF412233244006986CC /* UIText.h in Headers */ = {isa = PBXBuildFile; fileRef = 144BBCF212233244006986CC /* UIText.h */; };
-		144BBCF512233244006986CC /* UIText.m in Sources */ = {isa = PBXBuildFile; fileRef = 144BBCF312233244006986CC /* UIText.m */; };
+		145335651226F03E0005644F /* UITextLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 145335631226F03E0005644F /* UITextLayer.h */; };
+		145335661226F03E0005644F /* UITextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 145335641226F03E0005644F /* UITextLayer.m */; };
+		145335691226F1F90005644F /* UIBulletGlyphGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 145335671226F1F90005644F /* UIBulletGlyphGenerator.h */; };
+		1453356A1226F1F90005644F /* UIBulletGlyphGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 145335681226F1F90005644F /* UIBulletGlyphGenerator.m */; };
+		145335711226F2720005644F /* UICustomNSTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1453356F1226F2720005644F /* UICustomNSTextView.h */; };
+		145335721226F2720005644F /* UICustomNSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 145335701226F2720005644F /* UICustomNSTextView.m */; };
+		145335851226F3490005644F /* UICustomNSClipView.h in Headers */ = {isa = PBXBuildFile; fileRef = 145335831226F3490005644F /* UICustomNSClipView.h */; };
+		145335861226F3490005644F /* UICustomNSClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 145335841226F3490005644F /* UICustomNSClipView.m */; };
 		1464960B11FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */; };
 		1464960C11FF7AE500ECEC7A /* <UINavigationBar> back.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */; };
 		1464960D11FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */; };
@@ -189,10 +193,14 @@
 		1436CF94121476A1001DFEFB /* UISwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UISwitch.h; path = Classes/UISwitch.h; sourceTree = "<group>"; };
 		1436CF95121476A1001DFEFB /* UISwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UISwitch.m; path = Classes/UISwitch.m; sourceTree = "<group>"; };
 		1443DF23121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScreenMode+UIPrivate.h"; sourceTree = "<group>"; };
-		144BBCEE12233224006986CC /* UIClipNSView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIClipNSView.h; sourceTree = "<group>"; };
-		144BBCEF12233224006986CC /* UIClipNSView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIClipNSView.m; sourceTree = "<group>"; };
-		144BBCF212233244006986CC /* UIText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIText.h; sourceTree = "<group>"; };
-		144BBCF312233244006986CC /* UIText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIText.m; sourceTree = "<group>"; };
+		145335631226F03E0005644F /* UITextLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITextLayer.h; sourceTree = "<group>"; };
+		145335641226F03E0005644F /* UITextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITextLayer.m; sourceTree = "<group>"; };
+		145335671226F1F90005644F /* UIBulletGlyphGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBulletGlyphGenerator.h; sourceTree = "<group>"; };
+		145335681226F1F90005644F /* UIBulletGlyphGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBulletGlyphGenerator.m; sourceTree = "<group>"; };
+		1453356F1226F2720005644F /* UICustomNSTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICustomNSTextView.h; sourceTree = "<group>"; };
+		145335701226F2720005644F /* UICustomNSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICustomNSTextView.m; sourceTree = "<group>"; };
+		145335831226F3490005644F /* UICustomNSClipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICustomNSClipView.h; sourceTree = "<group>"; };
+		145335841226F3490005644F /* UICustomNSClipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICustomNSClipView.m; sourceTree = "<group>"; };
 		1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> back-highlighted.png"; path = "Resources/<UINavigationBar> back-highlighted.png"; sourceTree = "<group>"; };
 		1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> back.png"; path = "Resources/<UINavigationBar> back.png"; sourceTree = "<group>"; };
 		1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> button-highlighted.png"; path = "Resources/<UINavigationBar> button-highlighted.png"; sourceTree = "<group>"; };
@@ -549,8 +557,12 @@
 		147A838C120C902C00422EDC /* Private Classes */ = {
 			isa = PBXGroup;
 			children = (
-				144BBCEE12233224006986CC /* UIClipNSView.h */,
-				144BBCEF12233224006986CC /* UIClipNSView.m */,
+				145335671226F1F90005644F /* UIBulletGlyphGenerator.h */,
+				145335681226F1F90005644F /* UIBulletGlyphGenerator.m */,
+				145335831226F3490005644F /* UICustomNSClipView.h */,
+				145335841226F3490005644F /* UICustomNSClipView.m */,
+				1453356F1226F2720005644F /* UICustomNSTextView.h */,
+				145335701226F2720005644F /* UICustomNSTextView.m */,
 				14FA8C45121DA4A000C4264B /* UIImageTools.h */,
 				14FA8C46121DA4A000C4264B /* UIImageTools.m */,
 				14FA8C47121DA4A000C4264B /* UINinePartImage.h */,
@@ -569,8 +581,8 @@
 				14FA8C54121DA4A000C4264B /* UITableViewSection.m */,
 				14FA8C55121DA4A000C4264B /* UITableViewSectionLabel.h */,
 				14FA8C56121DA4A000C4264B /* UITableViewSectionLabel.m */,
-				144BBCF212233244006986CC /* UIText.h */,
-				144BBCF312233244006986CC /* UIText.m */,
+				145335631226F03E0005644F /* UITextLayer.h */,
+				145335641226F03E0005644F /* UITextLayer.m */,
 				14FA8C57121DA4A000C4264B /* UIThreePartImage.h */,
 				14FA8C58121DA4A000C4264B /* UIThreePartImage.m */,
 				14FA8C59121DA4A000C4264B /* UIViewAnimationGroup.h */,
@@ -707,8 +719,10 @@
 				14FA8C71121DA4A000C4264B /* UIViewAnimationGroup.h in Headers */,
 				14FA8C73121DA4A000C4264B /* UIViewLayoutManager.h in Headers */,
 				1443DF24121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h in Headers */,
-				144BBCF012233224006986CC /* UIClipNSView.h in Headers */,
-				144BBCF412233244006986CC /* UIText.h in Headers */,
+				145335651226F03E0005644F /* UITextLayer.h in Headers */,
+				145335691226F1F90005644F /* UIBulletGlyphGenerator.h in Headers */,
+				145335711226F2720005644F /* UICustomNSTextView.h in Headers */,
+				145335851226F3490005644F /* UICustomNSClipView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -851,8 +865,10 @@
 				14FA8C70121DA4A000C4264B /* UIThreePartImage.m in Sources */,
 				14FA8C72121DA4A000C4264B /* UIViewAnimationGroup.m in Sources */,
 				14FA8C74121DA4A000C4264B /* UIViewLayoutManager.m in Sources */,
-				144BBCF112233224006986CC /* UIClipNSView.m in Sources */,
-				144BBCF512233244006986CC /* UIText.m in Sources */,
+				145335661226F03E0005644F /* UITextLayer.m in Sources */,
+				1453356A1226F1F90005644F /* UIBulletGlyphGenerator.m in Sources */,
+				145335721226F2720005644F /* UICustomNSTextView.m in Sources */,
+				145335861226F3490005644F /* UICustomNSClipView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

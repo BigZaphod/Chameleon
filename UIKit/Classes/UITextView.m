@@ -1,18 +1,9 @@
 //  Created by Sean Heber on 6/29/10.
 #import "UITextView.h"
-#import "UIText.h"
 #import "UIColor.h"
 #import "UIFont.h"
-
-/*
-#import <AppKit/AppKit.h>
-#import "UIWindow+UIPrivate.h"
-#import "UIView+UIPrivate.h"
-#import "UIScreen+UIPrivate.h"
-*/
-
-@interface UIView () <UITextContainerViewProtocol>
-@end
+#import "UITextLayer.h"
+#import "UIScrollView+UIPrivate.h"
 
 @implementation UITextView
 @synthesize dataDetectorTypes=_dataDetectorTypes;
@@ -21,12 +12,14 @@
 - (id)initWithFrame:(CGRect)frame
 {
 	if ((self=[super initWithFrame:frame])) {
-		_textContainer = [[UIText alloc] initWithContainerView:self];
+		_textLayer = [[UITextLayer alloc] initWithContainerView:self];
+		[self.layer insertSublayer:_textLayer atIndex:0];
+
 		self.textColor = [UIColor blackColor];
 		self.font = [UIFont systemFontOfSize:17];
 		self.dataDetectorTypes = UIDataDetectorTypeAll;
 		self.editable = YES;
-		self.contentMode = UIViewContentModeLeft;
+		self.contentMode = UIViewContentModeScaleToFill;
 		self.clipsToBounds = YES;
 	}
 	return self;
@@ -34,11 +27,28 @@
 
 - (void)dealloc
 {
-	[_textContainer release];
+	[_textLayer release];
 	[super dealloc];
 }
 
 
+
+- (void)layoutSubviews
+{
+	[super layoutSubviews];
+
+	CGRect textRect = self.bounds;	
+	if ([self _canScrollVertical]) {
+		textRect.size.width -= _UIScrollViewScrollerSize;
+	}
+	_textLayer.frame = textRect;
+}
+
+- (void)setContentOffset:(CGPoint)theOffset animated:(BOOL)animated
+{
+	[super setContentOffset:theOffset animated:animated];
+	[_textLayer setContentOffset:theOffset];
+}
 
 
 
@@ -98,16 +108,16 @@
 
 - (BOOL)isSecureTextEntry
 {
-	return [_textContainer isSecureTextEntry];
+	return [_textLayer isSecureTextEntry];
 }
 
 - (void)setSecureTextEntry:(BOOL)secure
 {
-	[_textContainer setSecureTextEntry:secure];
+	[_textLayer setSecureTextEntry:secure];
 }
 
 
-
+/*
 - (BOOL)canBecomeFirstResponder
 {
 	return [_textContainer containerViewCanBecomeFirstResponder];
@@ -136,85 +146,65 @@
 	return ok;
 }
 
-
-
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
 	[self becomeFirstResponder];
 }
+ */
 
 
 
 - (UIFont *)font
 {
-	return _textContainer.font;
+	return _textLayer.font;
 }
 
 - (void)setFont:(UIFont *)newFont
 {
-	_textContainer.font = newFont;
+	_textLayer.font = newFont;
 }
 
 - (UIColor *)textColor
 {
-	return _textContainer.textColor;
+	return _textLayer.textColor;
 }
 
 - (void)setTextColor:(UIColor *)newColor
 {
-	_textContainer.textColor = newColor;
+	_textLayer.textColor = newColor;
 }
 
 - (NSString *)text
 {
-	return _textContainer.text;
+	return _textLayer.text;
 }
 
 - (void)setText:(NSString *)newText
 {
-	_textContainer.text = newText;
-}
-
-- (void)setFrame:(CGRect)frame
-{
-	[super setFrame:frame];
-	[_textContainer containerViewFrameDidChange];
-}
-
-- (void)willMoveToSuperview:(UIView *)view
-{
-	[_textContainer containerViewWillMoveToSuperview:view];
-}
-
-- (void)didMoveToSuperview
-{
-	[_textContainer containerViewDidMoveToSuperview];
-}
-
-- (void)drawRect:(CGRect)rect
-{
-	[_textContainer drawText];
+	_textLayer.text = newText;
 }
 
 - (void)setHidden:(BOOL)hidden
 {
 	[super setHidden:hidden];
-	[_textContainer setHidden:hidden];
+	_textLayer.hidden = hidden;
 }
 
 - (BOOL)isEditable
 {
-	return _textContainer.editable;
+	return _textLayer.editable;
 }
 
 - (void)setEditable:(BOOL)editable
 {
-	_textContainer.editable = editable;
+	_textLayer.editable = editable;
 }
 
+/*
 - (id)mouseCursorForEvent:(UIEvent *)event
 {
 	return [_textContainer mouseCursorForEvent:event];
 }
+ */
 
 @end
