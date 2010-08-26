@@ -425,7 +425,7 @@ static BOOL _animationsEnabled = YES;
 		if (_autoresizingMask & UIViewAutoresizingFlexibleTopMargin)	frame.origin.y += heightDelta;
 		if (_autoresizingMask & UIViewAutoresizingFlexibleHeight)		frame.size.height += heightDelta;
 		
-		self.frame = frame;
+		self.frame = CGRectIntegral(frame);
 	}
 }
 
