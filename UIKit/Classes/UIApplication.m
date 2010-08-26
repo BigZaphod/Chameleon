@@ -216,15 +216,12 @@ static UIApplication *_theApplication = nil;
 			[self sendEvent:_currentEvent];
 			break;
 
-		case NSLeftMouseDragged:
-			[[_currentEvent _touch] _updateWithNSEvent:theNSEvent screenLocation:clickPoint];
-			[self sendEvent:_currentEvent];
-			break;
-			
 		case NSLeftMouseUp:
-			[[_currentEvent _touch] _updateWithNSEvent:theNSEvent screenLocation:clickPoint];
-			[self sendEvent:_currentEvent];
-			[_currentEvent _setTouch:nil];
+			if ([_currentEvent _touch]) {
+				[[_currentEvent _touch] _updateWithNSEvent:theNSEvent screenLocation:clickPoint];
+				[self sendEvent:_currentEvent];
+				[_currentEvent _setTouch:nil];
+			}
 			break;
 
 		case NSScrollWheel:
