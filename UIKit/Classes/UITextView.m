@@ -11,6 +11,9 @@
 #import "UIScreen+UIPrivate.h"
 */
 
+@interface UIView () <UITextContainerViewProtocol>
+@end
+
 @implementation UITextView
 @synthesize dataDetectorTypes=_dataDetectorTypes;
 @dynamic delegate;
@@ -23,6 +26,8 @@
 		self.font = [UIFont systemFontOfSize:17];
 		self.dataDetectorTypes = UIDataDetectorTypeAll;
 		self.editable = YES;
+		self.contentMode = UIViewContentModeLeft;
+		self.clipsToBounds = YES;
 	}
 	return self;
 }
@@ -93,34 +98,40 @@
 
 - (BOOL)isSecureTextEntry
 {
-	return NO;
+	return [_textContainer isSecureTextEntry];
 }
 
 - (void)setSecureTextEntry:(BOOL)secure
 {
+	[_textContainer setSecureTextEntry:secure];
 }
 
 
 
 - (BOOL)canBecomeFirstResponder
 {
-	return YES;
+	return [_textContainer containerViewCanBecomeFirstResponder];
 }
 
 - (BOOL)becomeFirstResponder
 {
 	BOOL ok = [super becomeFirstResponder];
 	if (ok) {
-		[_textContainer containerViewBecameFirstResponder];
+		[_textContainer containerViewDidBecomeFirstResponder];
 	}
 	return ok;
+}
+
+- (BOOL)canResignFirstResponder
+{
+	return [_textContainer containerViewCanResignFirstResponder];
 }
 
 - (BOOL)resignFirstResponder
 {
 	BOOL ok = [super resignFirstResponder];
 	if (ok) {
-		[_textContainer containerViewResignedFirstResponder];
+		[_textContainer containerViewDidResignFirstResponder];
 	}
 	return ok;
 }
@@ -167,7 +178,7 @@
 - (void)setFrame:(CGRect)frame
 {
 	[super setFrame:frame];
-	[_textContainer updateFrame];
+	[_textContainer containerViewFrameDidChange];
 }
 
 - (void)willMoveToSuperview:(UIView *)view
@@ -182,7 +193,7 @@
 
 - (void)drawRect:(CGRect)rect
 {
-	[_textContainer drawInRect:rect];
+	[_textContainer drawText];
 }
 
 - (void)setHidden:(BOOL)hidden
