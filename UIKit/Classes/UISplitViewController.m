@@ -183,6 +183,9 @@ static const CGFloat SplitterPadding = 3;
 		}
 		
 		if ([self isViewLoaded]) {
+
+			[(_UISplitViewControllerView *)self.view addViewControllers:_viewControllers];
+
 			for (UIViewController *c in newControllers) {
 				[c viewWillAppear:NO];
 			}
@@ -192,8 +195,6 @@ static const CGFloat SplitterPadding = 3;
 					[c.view removeFromSuperview];
 				}
 			}
-			
-			[(_UISplitViewControllerView *)self.view addViewControllers:_viewControllers];
 
 			for (UIViewController *c in newControllers) {
 				[c viewDidAppear:NO];
@@ -208,10 +209,10 @@ static const CGFloat SplitterPadding = 3;
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
+	[(_UISplitViewControllerView *)self.view addViewControllers:_viewControllers];
 	for (UIViewController *c in _viewControllers) {
 		[c viewWillAppear:animated];
 	}
-	[(_UISplitViewControllerView *)self.view addViewControllers:_viewControllers];
 }
 
 - (void)viewDidAppear:(BOOL)animated

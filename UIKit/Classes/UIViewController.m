@@ -161,13 +161,13 @@
 		newView.autoresizingMask = selfView.autoresizingMask;
 		newView.frame = _wantsFullScreenLayout? window.screen.bounds : window.screen.applicationFrame;
 
+		[window addSubview:newView];
 		[_modalViewController viewWillAppear:animated];
 
 		[self viewWillDisappear:animated];
 		selfView.hidden = YES;		// I think the real one may actually remove it, which would mean needing to remember the superview, I guess? Not sure...
 		[self viewDidDisappear:animated];
 
-		[window addSubview:newView];
 
 		[_modalViewController viewDidAppear:animated];
 	}
@@ -188,13 +188,13 @@
 			[_modalViewController dismissModalViewControllerAnimated:animated];
 		}
 		
+		self.view.hidden = NO;
 		[self viewWillAppear:animated];
 		
 		[_modalViewController.view removeFromSuperview];
 		[_modalViewController _setParentViewController:nil];
 		[_modalViewController autorelease];
 		_modalViewController = nil;
-		self.view.hidden = NO;
 
 		[self viewDidAppear:animated];
 	} else {
