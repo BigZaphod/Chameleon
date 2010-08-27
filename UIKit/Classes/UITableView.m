@@ -416,7 +416,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 	[availableCells release];
 	
-	if (_tableHeaderView) {
+	if (_tableFooterView) {
 		CGRect tableFooterFrame = _tableFooterView.frame;
 		tableFooterFrame.origin = CGPointMake(0,tableHeight);
 		tableFooterFrame.size.width = boundsSize.width;
