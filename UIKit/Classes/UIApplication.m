@@ -174,23 +174,16 @@ static UIApplication *_theApplication = nil;
 
 - (void)_beginNewTouchForEvent:(UIEvent *)theEvent atScreen:(UIScreen *)theScreen location:(CGPoint)clickPoint
 {
-	UIView *clickedView = nil;
 	UITouch *newTouch = [UITouch new];
 	
 	[newTouch _updateWithNSEvent:[theEvent _NSEvent] screenLocation:clickPoint];
 	[theEvent _setTouch:newTouch];
-	
-	for (UIWindow *window in [self.windows reverseObjectEnumerator]) {
-		if (window.screen == theScreen) {
-			CGPoint windowPoint = [window convertPoint:clickPoint fromWindow:nil];
-			clickedView = [window hitTest:windowPoint withEvent:theEvent];
-			if (clickedView) {
-				[newTouch _setView:clickedView];
-				break;
-			}
-		}
+
+	UIView *clickedView = [theScreen _hitTest:clickPoint event:theEvent];
+	if (clickedView) {
+		[newTouch _setView:clickedView];
 	}
-	
+
 	[newTouch release];
 }
 

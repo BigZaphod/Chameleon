@@ -8,6 +8,7 @@
 #import "UIViewLayoutManager.h"
 #import "UIColor.h"
 #import "UIScreenMode+UIPrivate.h"
+#import "UIWindow.h"
 
 NSString *const UIScreenDidConnectNotification = @"UIScreenDidConnectNotification";
 NSString *const UIScreenDidDisconnectNotification = @"UIScreenDidDisconnectNotification";
@@ -170,6 +171,21 @@ static NSMutableArray *_allScreens = nil;
 - (NSArray *)availableModes
 {
 	return [NSArray arrayWithObject:self.currentMode];
+}
+
+- (UIView *)_hitTest:(CGPoint)clickPoint event:(UIEvent *)theEvent
+{
+	for (UIWindow *window in [[UIApplication sharedApplication].windows reverseObjectEnumerator]) {
+		if (window.screen == self) {
+			CGPoint windowPoint = [window convertPoint:clickPoint fromWindow:nil];
+			UIView *clickedView = [window hitTest:windowPoint withEvent:theEvent];
+			if (clickedView) {
+				return clickedView;
+			}
+		}
+	}
+	
+	return nil;
 }
 
 @end

@@ -8,4 +8,5 @@
 - (BOOL)_hasResizeIndicator;
 - (void)_setPopoverController:(UIPopoverController *)controller;
 - (UIPopoverController *)_popoverController;
+- (UIView *)_hitTest:(CGPoint)clickPoint event:(UIEvent *)theEvent;
 @end
