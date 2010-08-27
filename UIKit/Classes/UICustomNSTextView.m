@@ -112,4 +112,10 @@ const CGFloat UILargeNumberForText = 1.0e7; // Any larger dimensions and the tex
 	return menu;
 }
 
+- (BOOL)resignFirstResponder
+{
+	[self setSelectedRange:NSMakeRange(0,0)];
+	return [super resignFirstResponder];
+}
+
 @end
