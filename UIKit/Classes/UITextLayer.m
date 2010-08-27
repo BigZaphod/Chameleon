@@ -194,7 +194,7 @@
 		if (![[screen _NSView] isFlipped]) {
 			point.y = screen.bounds.size.height - point.y - 1;
 		}
-		return (containerView == [containerView.window.screen _hitTest:point event:nil]);
+		return (containerView == [containerView.window.screen _hitTest:NSPointToCGPoint(point) event:nil]);
 	}
 
 	return NO;
