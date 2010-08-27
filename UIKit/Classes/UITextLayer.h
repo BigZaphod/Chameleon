@@ -51,7 +51,9 @@
 
 - (id)initWithContainerView:(id<UITextLayerContainerViewProtocol>)aView textDelegate:(id<UITextLayerTextDelegate>)aDelegate;
 - (void)setContentOffset:(CGPoint)contentOffset;
+- (void)scrollRangeToVisible:(NSRange)range;
 
+@property (nonatomic, assign) NSRange selectedRange;
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, retain) UIColor *textColor;
 @property (nonatomic, retain) UIFont *font;

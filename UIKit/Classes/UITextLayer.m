@@ -203,6 +203,22 @@
 	}
 }
 
+- (void)scrollRangeToVisible:(NSRange)range
+{
+	[textView scrollRangeToVisible:range];
+}
+
+- (NSRange)selectedRange
+{
+	return [textView selectedRange];
+}
+
+- (void)setSelectedRange:(NSRange)range
+{
+	[textView setSelectedRange:range];
+}
+
+
 
 // this is used to fake out AppKit when the UIView that owns this layer/editor stuff is actually *behind* another UIView. Since the NSViews are
 // technically above all of the UIViews, they'd normally capture all clicks no matter what might happen to be obscuring them. That would obviously

@@ -5,6 +5,10 @@
 #import "UITextLayer.h"
 #import "UIScrollView+UIPrivate.h"
 
+NSString *const UITextViewTextDidBeginEditingNotification = @"UITextViewTextDidBeginEditingNotification";
+NSString *const UITextViewTextDidChangeNotification = @"UITextViewTextDidChangeNotification";
+NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEndEditingNotification";
+
 @interface UIScrollView () <UITextLayerContainerViewProtocol>
 @end
 
@@ -55,6 +59,11 @@
 {
 	[super setContentOffset:theOffset animated:animated];
 	[_textLayer setContentOffset:theOffset];
+}
+
+- (void)scrollRangeToVisible:(NSRange)range
+{
+	[_textLayer scrollRangeToVisible:range];
 }
 
 
@@ -201,12 +210,24 @@
 	_textLayer.editable = editable;
 }
 
+- (NSRange)selectedRange
+{
+	return _textLayer.selectedRange;
+}
+
+- (void)setSelectedRange:(NSRange)range
+{
+	_textLayer.selectedRange = range;
+}
+
 /*
 - (id)mouseCursorForEvent:(UIEvent *)event
 {
 	return [_textContainer mouseCursorForEvent:event];
 }
  */
+
+
 
 - (void)setDelegate:(id<UITextViewDelegate>)theDelegate
 {
@@ -233,6 +254,7 @@
 	if (_delegateHas.didBeginEditing) {
 		[self.delegate textViewDidBeginEditing:self];
 	}
+	[[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidBeginEditingNotification object:self];
 }
 
 - (BOOL)_textShouldEndEditing
@@ -245,6 +267,7 @@
 	if (_delegateHas.didEndEditing) {
 		[self.delegate textViewDidEndEditing:self];
 	}
+	[[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidEndEditingNotification object:self];
 }
 
 - (BOOL)_textShouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
@@ -257,6 +280,7 @@
 	if (_delegateHas.didChange) {
 		[self.delegate textViewDidChange:self];
 	}
+	[[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidChangeNotification object:self];
 }
 
 - (void)_textDidChangeSelection

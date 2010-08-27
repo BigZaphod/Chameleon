@@ -3,6 +3,10 @@
 #import "UIDataDetectors.h"
 #import "UITextInputTraits.h"
 
+extern NSString *const UITextViewTextDidBeginEditingNotification;
+extern NSString *const UITextViewTextDidChangeNotification;
+extern NSString *const UITextViewTextDidEndEditingNotification;
+
 @class UIColor, UIFont, UITextLayer, UITextView;
 
 @protocol UITextViewDelegate <NSObject, UIScrollViewDelegate>
@@ -32,6 +36,9 @@
 	} _delegateHas;
 }
 
+- (void)scrollRangeToVisible:(NSRange)range;
+
+@property (nonatomic) NSRange selectedRange;
 @property (nonatomic, getter=isEditable) BOOL editable;
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, retain) UIColor *textColor;
