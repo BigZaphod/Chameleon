@@ -9,6 +9,7 @@
 #import "UIFont+UIPrivate.h"
 #import "UIView+UIPrivate.h"
 #import <AppKit/NSLayoutManager.h>
+#import <AppKit/NSWindow.h>
 
 @interface UITextLayer () <UICustomNSClipViewBehaviorDelegate, NSTextViewDelegate>
 - (void)removeNSView;
@@ -86,6 +87,15 @@
 	[clipView removeFromSuperview];
 }
 
+- (void)updateScrollViewContentSize
+{
+	if (containerCanScroll) {
+		// also update the content size in the UIScrollView
+		const NSRect docRect = [clipView documentRect];
+		[containerView setContentSize:CGSizeMake(docRect.size.width+docRect.origin.x, docRect.size.height+docRect.origin.y)];
+	}
+}
+
 - (BOOL)shouldBeVisible
 {
 	return (containerView.window && (self.superlayer == containerView.layer) && !self.hidden && ![containerView isHidden]);
@@ -104,12 +114,7 @@
 		NSRect desiredFrame = NSRectFromCGRect(screenRect);
 
 		[clipView setFrame:desiredFrame];
-
-		if (containerCanScroll) {
-			// also update the content size in the UIScrollView
-			const NSRect docRect = [clipView documentRect];
-			[containerView setContentSize:CGSizeMake(docRect.size.width+docRect.origin.x, docRect.size.height+docRect.origin.y)];
-		}
+		[self updateScrollViewContentSize];
 	} else {
 		[self removeNSView];
 	}
@@ -185,6 +190,7 @@
 - (void)setText:(NSString *)newText
 {
 	[textView setString:newText ?: @""];
+	[self updateScrollViewContentSize];
 }
 
 - (void)setSecureTextEntry:(BOOL)s
@@ -282,6 +288,26 @@
 - (BOOL)textView:(NSTextView *)aTextView shouldChangeTextInRange:(NSRange)affectedCharRange replacementString:(NSString *)replacementString
 {
 	return [textDelegate _textShouldChangeTextInRange:affectedCharRange replacementText:replacementString];
+}
+
+
+
+
+- (BOOL)becomeFirstResponder
+{
+	if ([self shouldBeVisible] && ![clipView superview]) {
+			[self addNSView];
+	}
+	return [[textView window] makeFirstResponder:textView];
+}
+
+- (BOOL)resignFirstResponder
+{
+	if ([[textView window] firstResponder] != textView) {
+		return NO;
+	} else {
+		return [[textView window] makeFirstResponder:nil];
+	}
 }
 
 @end

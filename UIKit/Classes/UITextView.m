@@ -133,40 +133,20 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 }
 
 
-/*
 - (BOOL)canBecomeFirstResponder
 {
-	return [_textContainer containerViewCanBecomeFirstResponder];
+	return (self.window != nil);
 }
 
 - (BOOL)becomeFirstResponder
 {
-	BOOL ok = [super becomeFirstResponder];
-	if (ok) {
-		[_textContainer containerViewDidBecomeFirstResponder];
-	}
-	return ok;
-}
-
-- (BOOL)canResignFirstResponder
-{
-	return [_textContainer containerViewCanResignFirstResponder];
+	return [_textLayer becomeFirstResponder];
 }
 
 - (BOOL)resignFirstResponder
 {
-	BOOL ok = [super resignFirstResponder];
-	if (ok) {
-		[_textContainer containerViewDidResignFirstResponder];
-	}
-	return ok;
+	return [_textLayer resignFirstResponder];
 }
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-	[self becomeFirstResponder];
-}
- */
 
 
 
