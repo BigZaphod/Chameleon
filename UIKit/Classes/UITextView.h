@@ -3,15 +3,33 @@
 #import "UIDataDetectors.h"
 #import "UITextInputTraits.h"
 
-@protocol UITextViewDelegate <NSObject, UIScrollViewDelegate>
-@end
+@class UIColor, UIFont, UITextLayer, UITextView;
 
-@class UIColor, UIFont, UITextLayer;
+@protocol UITextViewDelegate <NSObject, UIScrollViewDelegate>
+@optional
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView;
+- (void)textViewDidBeginEditing:(UITextView *)textView;
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView;
+- (void)textViewDidEndEditing:(UITextView *)textView;
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
+- (void)textViewDidChange:(UITextView *)textView;
+- (void)textViewDidChangeSelection:(UITextView *)textView;
+@end
 
 @interface UITextView : UIScrollView <UITextInputTraits> {
 @private
 	UITextLayer *_textLayer;
 	UIDataDetectorTypes _dataDetectorTypes;
+	
+	struct {
+		unsigned int shouldBeginEditing : 1;
+		unsigned int didBeginEditing : 1;
+		unsigned int shouldEndEditing : 1;
+		unsigned int didEndEditing : 1;
+		unsigned int shouldChangeText : 1;
+		unsigned int didChange : 1;
+		unsigned int didChangeSelection : 1;
+	} _delegateHas;
 }
 
 @property (nonatomic, getter=isEditable) BOOL editable;

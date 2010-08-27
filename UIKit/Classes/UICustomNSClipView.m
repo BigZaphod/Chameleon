@@ -6,11 +6,11 @@
 
 @implementation UICustomNSClipView
 
-- (id)initWithFrame:(NSRect)frame layerParent:(CALayer *)layer hitDelegate:(id<UICustomNSClipViewDelegate>)theDelegate
+- (id)initWithFrame:(NSRect)frame layerParent:(CALayer *)layer behaviorDelegate:(id<UICustomNSClipViewBehaviorDelegate>)aBehaviorDelegate
 {
 	if ((self=[super initWithFrame:frame])) {
 		parentLayer = layer;
-		hitDelegate = theDelegate;
+		behaviorDelegate = aBehaviorDelegate;
 		[self setDrawsBackground:NO];
 		[self setWantsLayer:YES];
 	}
@@ -19,10 +19,12 @@
 
 - (void)scrollWheel:(NSEvent *)event
 {
-	NSPoint offset = [self bounds].origin;
-	offset.x += [event deltaX];
-	offset.y -= [event deltaY];
-	[self scrollToPoint:[self constrainScrollPoint:offset]];
+	if ([behaviorDelegate clipViewShouldScroll]) {
+		NSPoint offset = [self bounds].origin;
+		offset.x += [event deltaX];
+		offset.y -= [event deltaY];
+		[self scrollToPoint:[self constrainScrollPoint:offset]];
+	}
 }
 
 - (void)fixupTheLayer
@@ -73,12 +75,12 @@
 {
 	NSView *hit = [super hitTest:aPoint];
 
-	if (hit && hitDelegate) {
+	if (hit && behaviorDelegate) {
 		// call out to the text layer via a delegate or something and ask if this point should be considered a hit or not.
 		// if not, then we set hit to nil, otherwise we return it like normal.
 		// the purpose of this is to make the NSView act invisible/hidden to clicks when it's visually behind other UIViews.
 		// super tricky, eh?
-		if (![hitDelegate hitTestForClipViewPoint:aPoint]) {
+		if (![behaviorDelegate hitTestForClipViewPoint:aPoint]) {
 			hit = nil;
 		}
 	}

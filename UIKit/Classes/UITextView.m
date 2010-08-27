@@ -5,6 +5,13 @@
 #import "UITextLayer.h"
 #import "UIScrollView+UIPrivate.h"
 
+@interface UIScrollView () <UITextLayerContainerViewProtocol>
+@end
+
+@interface UITextView () <UITextLayerTextDelegate>
+@end
+
+
 @implementation UITextView
 @synthesize dataDetectorTypes=_dataDetectorTypes;
 @dynamic delegate;
@@ -12,7 +19,7 @@
 - (id)initWithFrame:(CGRect)frame
 {
 	if ((self=[super initWithFrame:frame])) {
-		_textLayer = [[UITextLayer alloc] initWithContainerView:self];
+		_textLayer = [[UITextLayer alloc] initWithContainerView:self textDelegate:self];
 		[self.layer insertSublayer:_textLayer atIndex:0];
 
 		self.textColor = [UIColor blackColor];
@@ -200,5 +207,63 @@
 	return [_textContainer mouseCursorForEvent:event];
 }
  */
+
+- (void)setDelegate:(id<UITextViewDelegate>)theDelegate
+{
+	if (theDelegate != self.delegate) {
+		[super setDelegate:theDelegate];
+		_delegateHas.shouldBeginEditing = [theDelegate respondsToSelector:@selector(textViewShouldBeginEditing:)];
+		_delegateHas.didBeginEditing = [theDelegate respondsToSelector:@selector(textViewDidBeginEditing:)];
+		_delegateHas.shouldEndEditing = [theDelegate respondsToSelector:@selector(textViewShouldEndEditing:)];
+		_delegateHas.didEndEditing = [theDelegate respondsToSelector:@selector(textViewDidEndEditing:)];
+		_delegateHas.shouldChangeText = [theDelegate respondsToSelector:@selector(textView:shouldChangeTextInRange:replacementText:)];
+		_delegateHas.didChange = [theDelegate respondsToSelector:@selector(textViewDidChange:)];
+		_delegateHas.didChangeSelection = [theDelegate respondsToSelector:@selector(textViewDidChangeSelection:)];
+	}
+}
+
+
+- (BOOL)_textShouldBeginEditing
+{
+	return _delegateHas.shouldBeginEditing? [self.delegate textViewShouldBeginEditing:self] : YES;
+}
+
+- (void)_textDidBeginEditing
+{
+	if (_delegateHas.didBeginEditing) {
+		[self.delegate textViewDidBeginEditing:self];
+	}
+}
+
+- (BOOL)_textShouldEndEditing
+{
+	return _delegateHas.shouldEndEditing? [self.delegate textViewShouldEndEditing:self] : YES;
+}
+
+- (void)_textDidEndEditing
+{
+	if (_delegateHas.didEndEditing) {
+		[self.delegate textViewDidEndEditing:self];
+	}
+}
+
+- (BOOL)_textShouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+	return _delegateHas.shouldChangeText? [self.delegate textView:self shouldChangeTextInRange:range replacementText:text] : YES;
+}
+
+- (void)_textDidChange
+{
+	if (_delegateHas.didChange) {
+		[self.delegate textViewDidChange:self];
+	}
+}
+
+- (void)_textDidChangeSelection
+{
+	if (_delegateHas.didChangeSelection) {
+		[self.delegate textViewDidChangeSelection:self];
+	}
+}
 
 @end

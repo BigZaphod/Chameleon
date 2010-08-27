@@ -10,23 +10,34 @@
 #import "UIView+UIPrivate.h"
 #import <AppKit/NSLayoutManager.h>
 
-@interface UITextLayer () <UICustomNSClipViewDelegate>
+@interface UITextLayer () <UICustomNSClipViewBehaviorDelegate, NSTextViewDelegate>
 - (void)removeNSView;
 @end
 
 @implementation UITextLayer
 @synthesize textColor, font, editable, secureTextEntry;
 
-- (id)initWithContainerView:(id)aView
+- (id)initWithContainerView:(id<UITextLayerContainerViewProtocol>)aView textDelegate:(id<UITextLayerTextDelegate>)aDelegate
 {
 	if ((self=[super init])) {
 		self.geometryFlipped = YES;
 		self.masksToBounds = NO;
 		
 		containerView = aView;
+		textDelegate = aDelegate;
 
-		clipView = [[UICustomNSClipView alloc] initWithFrame:NSMakeRect(0,0,100,100) layerParent:self hitDelegate:self];
+		textDelegateHas.didChange = [textDelegate respondsToSelector:@selector(_textDidChange)];
+		textDelegateHas.didChangeSelection = [textDelegate respondsToSelector:@selector(_textDidChangeSelection)];
+		
+		containerCanScroll = [containerView respondsToSelector:@selector(setContentOffset:)]
+			&& [containerView respondsToSelector:@selector(contentOffset)]
+			&& [containerView respondsToSelector:@selector(setContentSize:)]
+			&& [containerView respondsToSelector:@selector(contentSize)]
+			&& [containerView respondsToSelector:@selector(isScrollEnabled)];
+		
+		clipView = [[UICustomNSClipView alloc] initWithFrame:NSMakeRect(0,0,100,100) layerParent:self behaviorDelegate:self];
 		textView = [[UICustomNSTextView alloc] initWithFrame:[clipView frame] secureTextEntry:secureTextEntry];
+		[textView setDelegate:self];
 		[clipView setDocumentView:textView];
 		
 		[self setNeedsLayout];
@@ -53,8 +64,14 @@
 
 - (void)addNSView
 {
-	[clipView scrollToPoint:NSPointFromCGPoint([containerView contentOffset])];
+	if (containerCanScroll) {
+		[clipView scrollToPoint:NSPointFromCGPoint([containerView contentOffset])];
+	} else {
+		[clipView scrollToPoint:NSZeroPoint];
+	}
+
 	[[containerView.window.screen _NSView] addSubview:clipView];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateScrollViewContentOffset) name:NSViewBoundsDidChangeNotification object:clipView];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hierarchyDidChangeNotification:) name:UIViewFrameDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hierarchyDidChangeNotification:) name:UIViewDidMoveToSuperviewNotification object:nil];
@@ -65,12 +82,13 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewBoundsDidChangeNotification object:clipView];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewFrameDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewDidMoveToSuperviewNotification object:nil];
+	
 	[clipView removeFromSuperview];
 }
 
 - (BOOL)shouldBeVisible
 {
-	return (containerView.window && (self.superlayer == containerView.layer) && !self.hidden && !containerView.hidden);
+	return (containerView.window && (self.superlayer == containerView.layer) && !self.hidden && ![containerView isHidden]);
 }
 
 - (void)updateNSViews
@@ -87,9 +105,11 @@
 
 		[clipView setFrame:desiredFrame];
 
-		// also update the content size in the UIScrollView
-		const NSRect docRect = [clipView documentRect];
-		[containerView setContentSize:CGSizeMake(docRect.size.width+docRect.origin.x, docRect.size.height+docRect.origin.y)];
+		if (containerCanScroll) {
+			// also update the content size in the UIScrollView
+			const NSRect docRect = [clipView documentRect];
+			[containerView setContentSize:CGSizeMake(docRect.size.width+docRect.origin.x, docRect.size.height+docRect.origin.y)];
+		}
 	} else {
 		[self removeNSView];
 	}
@@ -199,6 +219,53 @@
 	}
 
 	return NO;
+}
+
+- (BOOL)clipViewShouldScroll
+{
+	return containerCanScroll && [containerView isScrollEnabled];
+}
+
+
+
+
+- (BOOL)textShouldBeginEditing:(NSText *)aTextObject
+{
+	return [textDelegate _textShouldBeginEditing];
+}
+
+- (void)textDidBeginEditing:(NSNotification *)aNotification
+{
+	[textDelegate _textDidBeginEditing];
+}
+
+- (BOOL)textShouldEndEditing:(NSText *)aTextObject
+{
+	return [textDelegate _textShouldEndEditing];
+}
+
+- (void)textDidEndEditing:(NSNotification *)aNotification
+{
+	[textDelegate _textDidEndEditing];
+}
+
+- (void)textDidChange:(NSNotification *)aNotification
+{
+	if (textDelegateHas.didChange) {
+		[textDelegate _textDidChange];
+	}
+}
+
+- (void)textViewDidChangeSelection:(NSNotification *)aNotification
+{
+	if (textDelegateHas.didChangeSelection) {
+		[textDelegate _textDidChangeSelection];
+	}
+}
+
+- (BOOL)textView:(NSTextView *)aTextView shouldChangeTextInRange:(NSRange)affectedCharRange replacementString:(NSString *)replacementString
+{
+	return [textDelegate _textShouldChangeTextInRange:affectedCharRange replacementText:replacementString];
 }
 
 @end
