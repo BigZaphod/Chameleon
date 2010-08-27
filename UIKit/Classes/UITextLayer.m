@@ -166,7 +166,8 @@
 
 - (void)setContentOffset:(CGPoint)contentOffset
 {
-	[clipView scrollToPoint:NSPointFromCGPoint(contentOffset)];
+	NSPoint point = [clipView constrainScrollPoint:NSPointFromCGPoint(contentOffset)];
+	[clipView scrollToPoint:point];
 }
 
 - (void)updateScrollViewContentOffset
