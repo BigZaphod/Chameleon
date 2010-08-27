@@ -6,10 +6,13 @@
 
 @implementation UICustomNSClipView
 
-- (id)initWithFrame:(NSRect)frame
+- (id)initWithFrame:(NSRect)frame layerParent:(CALayer *)layer hitDelegate:(id<UICustomNSClipViewDelegate>)theDelegate
 {
 	if ((self=[super initWithFrame:frame])) {
 		[self setDrawsBackground:NO];
+		[self setWantsLayer:YES];
+		parentLayer = layer;
+		hitDelegate = theDelegate;
 	}
 	return self;
 }
@@ -29,12 +32,6 @@
 	[parentLayer addSublayer:[self layer]];
 	[self layer].frame = parentLayer.bounds;
 	[CATransaction commit];
-}
-
-- (void)setLayerParent:(CALayer *)layer
-{
-	parentLayer = layer;
-	[self fixupTheLayer];
 }
 
 - (void)viewDidMoveToSuperview
@@ -59,6 +56,23 @@
 {
 	[super viewDidUnhide];
 	[self fixupTheLayer];
+}
+
+- (NSView *)hitTest:(NSPoint)aPoint
+{
+	NSView *hit = [super hitTest:aPoint];
+
+	if (hit && hitDelegate) {
+		// call out to the text layer via a delegate or something and ask if this point should be considered a hit or not.
+		// if not, then we set hit to nil, otherwise we return it like normal.
+		// the purpose of this is to make the NSView act invisible/hidden to clicks when it's visually behind other UIViews.
+		// super tricky, eh?
+		if (![hitDelegate hitTestForClipViewPoint:aPoint]) {
+			hit = nil;
+		}
+	}
+
+	return hit;
 }
 
 @end

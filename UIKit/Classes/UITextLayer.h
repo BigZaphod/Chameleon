@@ -1,13 +1,12 @@
 //  Created by Sean Heber on 8/26/10.
 #import <QuartzCore/CALayer.h>
 
-@class UICustomNSClipView, UICustomNSTextView, UIColor, UIFont, NSTextStorage, UIScrollView;
+@class UICustomNSClipView, UICustomNSTextView, UIColor, UIFont, UIScrollView;
 
 @interface UITextLayer : CALayer {
 	__weak UIScrollView *containerView;
 	UICustomNSTextView *textView;
 	UICustomNSClipView *clipView;
-	NSTextStorage *textStorage;
 	BOOL secureTextEntry;
 	BOOL editable;
 	UIColor *textColor;
@@ -16,7 +15,6 @@
 
 - (id)initWithContainerView:(UIScrollView *)aView;
 - (void)setContentOffset:(CGPoint)contentOffset;
-- (void)setHidden:(BOOL)hide;
 
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, retain) UIColor *textColor;

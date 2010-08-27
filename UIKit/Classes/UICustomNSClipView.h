@@ -3,12 +3,21 @@
 
 @class CALayer;
 
+@protocol UICustomNSClipViewDelegate
+// the point should be in the clip view's superview coordinate space - aka the "screen" coordinate space because if everything
+// is being done correctly, this view is never nested inside any other kind of NSView.
+- (BOOL)hitTestForClipViewPoint:(NSPoint)point;
+@end
+
 @interface UICustomNSClipView : NSClipView {
 	CALayer *parentLayer;
+	id<UICustomNSClipViewDelegate> hitDelegate;
 }
 
-// This will attempt to force the UICustomNSClipView's layer to always remain attached to the given parent layer.
+// A layer parent is just a layer that UICustonNSClipView will attempt to always remain a sublayer of.
 // Circumventing AppKit for fun and profit!
-- (void)setLayerParent:(CALayer *)layer;
+// The hitDelegate is for faking out the NSView's usual hitTest: checks to handle cases where UIViews are above
+// the UIView that's displaying this layer.
+- (id)initWithFrame:(NSRect)frame layerParent:(CALayer *)layer hitDelegate:(id<UICustomNSClipViewDelegate>)theDelegate;
 
 @end

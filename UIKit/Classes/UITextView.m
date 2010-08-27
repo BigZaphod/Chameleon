@@ -184,12 +184,6 @@
 	_textLayer.text = newText;
 }
 
-- (void)setHidden:(BOOL)hidden
-{
-	[super setHidden:hidden];
-	_textLayer.hidden = hidden;
-}
-
 - (BOOL)isEditable
 {
 	return _textLayer.editable;

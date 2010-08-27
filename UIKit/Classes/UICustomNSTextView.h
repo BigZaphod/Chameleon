@@ -5,7 +5,6 @@
 
 @interface UICustomNSTextView: NSTextView {
 	BOOL secureTextEntry;
-	__weak CALayer *parentLayer;
 }
 
 - (id)initWithFrame:(NSRect)frame secureTextEntry:(BOOL)isSecure;

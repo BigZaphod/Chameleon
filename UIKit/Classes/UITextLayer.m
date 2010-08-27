@@ -7,11 +7,11 @@
 #import "UIScreen+UIPrivate.h"
 #import "UIColor+UIPrivate.h"
 #import "UIFont+UIPrivate.h"
+#import "UIView+UIPrivate.h"
 #import <AppKit/NSLayoutManager.h>
-#import <AppKit/NSTextStorage.h>
 
-@interface UITextLayer ()
-- (void)destroyNSViewsIfNeeded;
+@interface UITextLayer () <UICustomNSClipViewDelegate>
+- (void)removeNSView;
 @end
 
 @implementation UITextLayer
@@ -23,7 +23,11 @@
 		self.geometryFlipped = YES;
 		self.masksToBounds = NO;
 		containerView = aView;
-		textStorage = [NSTextStorage new];
+
+		clipView = [[UICustomNSClipView alloc] initWithFrame:NSMakeRect(0,0,100,100) layerParent:self hitDelegate:self];
+		textView = [[UICustomNSTextView alloc] initWithFrame:[clipView frame] secureTextEntry:secureTextEntry];
+		[clipView setDocumentView:textView];
+		
 		[self setNeedsLayout];
 	}
 	return self;
@@ -31,116 +35,14 @@
 
 - (void)dealloc
 {
-	[self destroyNSViewsIfNeeded];
-	[textStorage release];
+	[self removeNSView];
+	[clipView release];
+	[textView release];
 	[textColor release];
 	[font release];
 	[super dealloc];
 }
 
-
-
-// These hierarchy observers are here because we have to keep the NSView's frame in sync with the UIViews, and they could potentially
-// move out from under us. That would be bad. So these methods setup a chain of observers so that the layer can track where it REALLY
-// is in the world and update the NSView's frame accordingly. All it has to so is set the layer (self) as needing layout because the
-// actually process of syncing/creating/destroying the NSViews is all triggered from there.
-
-- (void)removeHierarchyObservers
-{
-	UIView *view = containerView;
-	while (view) {
-		[view removeObserver:self forKeyPath:@"superview"];
-		[view removeObserver:self forKeyPath:@"frame"];
-		view = view.superview;
-	}
-}
-
-- (void)buildHierarchyObservers
-{
-	UIView *view = containerView;
-	while (view) {
-		[view addObserver:self forKeyPath:@"superview" options:NSKeyValueObservingOptionPrior context:NULL];
-		[view addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NULL];
-		view = view.superview;
-	}
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-	if ([keyPath isEqualToString:@"superview"]) {
-		if ([[change objectForKey:NSKeyValueChangeNotificationIsPriorKey] boolValue]) {
-			[self removeHierarchyObservers];
-		} else {
-			[self buildHierarchyObservers];
-		}
-		[self setNeedsLayout];
-	} else if ([keyPath isEqualToString:@"frame"]) {
-		CGRect oldFrame = [[change objectForKey:NSKeyValueChangeOldKey] CGRectValue];
-		CGRect newFrame = [[change objectForKey:NSKeyValueChangeNewKey] CGRectValue];
-		if (!CGPointEqualToPoint(oldFrame.origin,newFrame.origin)) {
-			[self setNeedsLayout];
-		}
-	}
-}
-
-
-
-- (NSRect)NSViewFrame
-{
-	UIWindow *window = containerView.window;
-	
-	if (window) {
-		const CGRect windowRect = [window convertRect:self.frame fromView:containerView];
-		const CGRect screenRect = [window convertRect:windowRect toWindow:nil];
-		return NSRectFromCGRect(screenRect);
-	} else {
-		return NSZeroRect;
-	}
-}
-
-- (BOOL)createNSViewsIfNeeded
-{
-	if (!clipView && containerView.window) {
-		const NSRect frame = self.NSViewFrame;
-
-		clipView = [[UICustomNSClipView alloc] initWithFrame:frame];
-		[clipView setWantsLayer:YES];
-		[clipView setLayerParent:self];
-		
-		textView = [[UICustomNSTextView alloc] initWithFrame:NSMakeRect(0,0,frame.size.width,frame.size.height) secureTextEntry:secureTextEntry];
-		[[textView layoutManager] replaceTextStorage:textStorage];
-		[textView setWantsLayer:YES];
-		[textView setEditable:editable];
-		[textView setFont:[font _NSFont]];
-		[textView setTextColor:[textColor _NSColor]];
-		[textView sizeToFit];
-		
-		[clipView setDocumentView:textView];
-		[clipView scrollToPoint:NSPointFromCGPoint([containerView contentOffset])];
-		
-		[[containerView.window.screen _NSView] addSubview:clipView];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateScrollViewContentOffset) name:NSViewBoundsDidChangeNotification object:clipView];
-		
-		[self buildHierarchyObservers];
-
-		return YES;
-	} else {
-		return NO;
-	}
-}
-
-- (void)destroyNSViewsIfNeeded
-{
-	if (clipView) {
-		[self removeHierarchyObservers];
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewBoundsDidChangeNotification object:nil];
-		[clipView removeFromSuperview];
-		[clipView release];
-		[textView release];
-		clipView = nil;
-		textView = nil;
-	}
-}
 
 // Need to prevent Core Animation effects from happening... very ugly otherwise.
 - (id < CAAction >)actionForKey:(NSString *)aKey
@@ -148,21 +50,72 @@
 	return nil;
 }
 
-- (void)layoutSublayers
+- (void)addNSView
 {
-	if (containerView.window) {
-		if (![self createNSViewsIfNeeded]) {
-			[clipView setFrame:self.NSViewFrame];
+	[clipView scrollToPoint:NSPointFromCGPoint([containerView contentOffset])];
+	[[containerView.window.screen _NSView] addSubview:clipView];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateScrollViewContentOffset) name:NSViewBoundsDidChangeNotification object:clipView];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hierarchyDidChangeNotification:) name:UIViewFrameDidChangeNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hierarchyDidChangeNotification:) name:UIViewDidMoveToSuperviewNotification object:nil];
+}
+
+- (void)removeNSView
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewBoundsDidChangeNotification object:clipView];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewFrameDidChangeNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewDidMoveToSuperviewNotification object:nil];
+	[clipView removeFromSuperview];
+}
+
+- (void)updateNSViews
+{
+	UIWindow *window = containerView.window;
+	if (window && (self.superlayer == containerView.layer) && !self.hidden) {
+		if (![clipView superview]) {
+			[self addNSView];
 		}
-		// update the content size in the UIScrollView
-		NSRect docRect = [clipView documentRect];
+		
+		const CGRect windowRect = [window convertRect:self.frame fromView:containerView];
+		const CGRect screenRect = [window convertRect:windowRect toWindow:nil];
+		NSRect desiredFrame = NSRectFromCGRect(screenRect);
+
+		[clipView setFrame:desiredFrame];
+
+		// also update the content size in the UIScrollView
+		const NSRect docRect = [clipView documentRect];
 		[containerView setContentSize:CGSizeMake(docRect.size.width+docRect.origin.x, docRect.size.height+docRect.origin.y)];
 	} else {
-		[self destroyNSViewsIfNeeded];
+		[self removeNSView];
 	}
+}
 
+- (void)layoutSublayers
+{
+	[self updateNSViews];
 	[super layoutSublayers];
 }
+
+- (void)removeFromSuperlayer
+{
+	[super removeFromSuperlayer];
+	[self updateNSViews];
+}
+
+- (void)setHidden:(BOOL)hide
+{
+	if (hide != self.hidden) {
+		[super setHidden:hide];
+		[self updateNSViews];
+	}
+}
+
+- (void)hierarchyDidChangeNotification:(NSNotification *)note
+{
+	if ([containerView isDescendantOfView:[note object]]) {
+		[self setNeedsLayout];
+	}
+}
+
 
 - (void)setContentOffset:(CGPoint)contentOffset
 {
@@ -173,12 +126,6 @@
 - (void)updateScrollViewContentOffset
 {
 	[containerView setContentOffset:NSPointToCGPoint([clipView bounds].origin)];
-}
-
-- (void)removeFromSuperlayer
-{
-	[self destroyNSViewsIfNeeded];
-	[super removeFromSuperlayer];
 }
 
 - (void)setFont:(UIFont *)newFont
@@ -202,12 +149,12 @@
 
 - (NSString *)text
 {
-	return [[[textStorage mutableString] copy] autorelease];
+	return [textView string];
 }
 
 - (void)setText:(NSString *)newText
 {
-	[textStorage setAttributedString:[[[NSAttributedString alloc] initWithString:newText] autorelease]];
+	[textView setString:newText ?: @""];
 }
 
 - (void)setSecureTextEntry:(BOOL)s
@@ -226,16 +173,22 @@
 	}
 }
 
-- (void)setHidden:(BOOL)hide
+
+// this is used to fake out AppKit when the UIView that owns this layer/editor stuff is actually *behind* another UIView. Since the NSViews are
+// technically above all of the UIViews, they'd normally capture all clicks no matter what might happen to be obscuring them. That would obviously
+// be less than ideal. This makes it ideal. Awesome.
+- (BOOL)hitTestForClipViewPoint:(NSPoint)point
 {
-	if (hide != self.hidden) {
-		if (hide) {
-			[self destroyNSViewsIfNeeded];
-		} else {
-			[self createNSViewsIfNeeded];
+	UIScreen *screen = containerView.window.screen;
+	
+	if (screen) {
+		if (![[screen _NSView] isFlipped]) {
+			point.y = screen.bounds.size.height - point.y - 1;
 		}
-		[super setHidden:hide];
+		return (containerView == [containerView.window.screen _hitTest:point event:nil]);
 	}
+
+	return NO;
 }
 
 @end
