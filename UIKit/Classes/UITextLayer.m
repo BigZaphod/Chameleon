@@ -67,14 +67,19 @@
 	[clipView removeFromSuperview];
 }
 
+- (BOOL)shouldBeVisible
+{
+	return (containerView.window && (self.superlayer == containerView.layer) && !self.hidden && !containerView.hidden);
+}
+
 - (void)updateNSViews
 {
-	UIWindow *window = containerView.window;
-	if (window && (self.superlayer == containerView.layer) && !self.hidden) {
+	if ([self shouldBeVisible]) {
 		if (![clipView superview]) {
 			[self addNSView];
 		}
 		
+		UIWindow *window = containerView.window;
 		const CGRect windowRect = [window convertRect:self.frame fromView:containerView];
 		const CGRect screenRect = [window convertRect:windowRect toWindow:nil];
 		NSRect desiredFrame = NSRectFromCGRect(screenRect);
@@ -112,7 +117,11 @@
 - (void)hierarchyDidChangeNotification:(NSNotification *)note
 {
 	if ([containerView isDescendantOfView:[note object]]) {
-		[self setNeedsLayout];
+		if ([self shouldBeVisible]) {
+			[self setNeedsLayout];
+		} else {
+			[self removeNSView];
+		}
 	}
 }
 
