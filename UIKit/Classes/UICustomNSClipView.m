@@ -9,10 +9,10 @@
 - (id)initWithFrame:(NSRect)frame layerParent:(CALayer *)layer hitDelegate:(id<UICustomNSClipViewDelegate>)theDelegate
 {
 	if ((self=[super initWithFrame:frame])) {
-		[self setDrawsBackground:NO];
-		[self setWantsLayer:YES];
 		parentLayer = layer;
 		hitDelegate = theDelegate;
+		[self setDrawsBackground:NO];
+		[self setWantsLayer:YES];
 	}
 	return self;
 }
@@ -27,11 +27,22 @@
 
 - (void)fixupTheLayer
 {
-	[CATransaction begin];
-	[CATransaction setAnimationDuration:0];
-	[parentLayer addSublayer:[self layer]];
-	[self layer].frame = parentLayer.bounds;
-	[CATransaction commit];
+	if ([self superview]) {
+		[CATransaction begin];
+		[CATransaction setAnimationDuration:0];
+		
+		CALayer *layer = [self layer];
+
+		if (parentLayer != layer.superlayer) {
+			[parentLayer addSublayer:layer];
+		}
+		
+		if (!CGRectEqualToRect(layer.frame, parentLayer.bounds)) {
+			layer.frame = parentLayer.bounds;
+		}
+		
+		[CATransaction commit];
+	}
 }
 
 - (void)viewDidMoveToSuperview

@@ -12,7 +12,6 @@ const CGFloat UILargeNumberForText = 1.0e7; // Any larger dimensions and the tex
 - (id)initWithFrame:(NSRect)frame secureTextEntry:(BOOL)isSecure
 {
 	if ((self=[super initWithFrame:frame])) {
-		[self setWantsLayer:YES];
 		[self setMaxSize:NSMakeSize(UILargeNumberForText, UILargeNumberForText)];
 		[self setHorizontallyResizable:NO];
 		[self setVerticallyResizable:YES];

@@ -22,6 +22,7 @@
 	if ((self=[super init])) {
 		self.geometryFlipped = YES;
 		self.masksToBounds = NO;
+		
 		containerView = aView;
 
 		clipView = [[UICustomNSClipView alloc] initWithFrame:NSMakeRect(0,0,100,100) layerParent:self hitDelegate:self];
