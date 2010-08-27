@@ -8,6 +8,9 @@
 #import "UIViewController.h"
 #import <QuartzCore/CALayer.h>
 
+NSString *const UIViewFrameDidChangeNotification = @"UIViewFrameDidChangeNotification";
+NSString *const UIViewDidMoveToSuperviewNotification = @"UIViewDidMoveToSuperviewNotification";
+
 static NSMutableArray *_animationGroups;
 static BOOL _animationsEnabled = YES;
 
@@ -129,6 +132,7 @@ static BOOL _animationsEnabled = YES;
 		if (![subview->_viewController parentViewController]) [subview->_viewController viewDidAppear:NO];
 		if (changingWindows) [subview didMoveToWindow];
 		[subview didMoveToSuperview];
+		[[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:subview];
 		
 		[self didAddSubview:subview];
 	}
@@ -185,6 +189,7 @@ static BOOL _animationsEnabled = YES;
 		if (_viewController) [_viewController viewDidDisappear:NO];
 		[self didMoveToWindow];
 		[self didMoveToSuperview];
+		[[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:self];
 		
 		[self didChangeValueForKey:@"superview"];
 		[self release];
@@ -297,6 +302,21 @@ static BOOL _animationsEnabled = YES;
 	}
 	
 	return foundView;
+}
+
+- (BOOL)isDescendantOfView:(UIView *)view
+{
+	if (view) {
+		UIView *testView = self;
+		while (testView) {
+			if (testView == view) {
+				return YES;
+			} else {
+				testView = testView.superview;
+			}
+		}
+	}
+	return NO;
 }
 
 - (void)setNeedsDisplay
@@ -463,6 +483,7 @@ static BOOL _animationsEnabled = YES;
 		CGRect oldBounds = _layer.bounds;
 		_layer.frame = newFrame;
 		[self _boundsDidChangeFrom:oldBounds to:_layer.bounds];
+		[[NSNotificationCenter defaultCenter] postNotificationName:UIViewFrameDidChangeNotification object:self];
 	}
 }
 
@@ -603,14 +624,13 @@ static BOOL _animationsEnabled = YES;
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-	if (![self pointInside:point withEvent:event]) {
+	if (self.hidden || !self.userInteractionEnabled || self.alpha < 0.01 || ![self pointInside:point withEvent:event]) {
 		return nil;
 	} else {
 		for (UIView *subview in [self.subviews reverseObjectEnumerator]) {
-			if (subview.userInteractionEnabled && subview.alpha >= 0.1 && !subview.hidden) {
-				CGPoint subviewPoint = [subview convertPoint:point fromView:self];
-				UIView *hitView = [subview hitTest:subviewPoint withEvent:event];
-				if (hitView) return hitView;
+			UIView *hitView = [subview hitTest:[subview convertPoint:point fromView:self] withEvent:event];
+			if (hitView) {
+				return hitView;
 			}
 		}
 		return self;

@@ -88,6 +88,7 @@ typedef enum {
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event;
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
 - (UIView *)viewWithTag:(NSInteger)tag;
+- (BOOL)isDescendantOfView:(UIView *)view;
 
 - (void)addGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;	// no effect as of now
 
