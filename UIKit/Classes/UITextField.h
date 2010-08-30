@@ -46,6 +46,10 @@ typedef enum {
 	UITextFieldViewMode _rightViewMode;
 	UIImage *_background;
 	UIImage *_disabledBackground;
+	BOOL _editing;
+	BOOL _clearsOnBeginEditing;
+	NSString *_placeholder;
+	UITextBorderStyle _borderStyle;
 	
 	struct {
 		unsigned int shouldBeginEditing : 1;
@@ -58,7 +62,16 @@ typedef enum {
 	} _delegateHas;	
 }
 
+- (CGRect)borderRectForBounds:(CGRect)bounds;
 - (CGRect)clearButtonRectForBounds:(CGRect)bounds;
+- (CGRect)editingRectForBounds:(CGRect)bounds;
+- (CGRect)leftViewRectForBounds:(CGRect)bounds;
+- (CGRect)placeholderRectForBounds:(CGRect)bounds;
+- (CGRect)rightViewRectForBounds:(CGRect)bounds;
+- (CGRect)textRectForBounds:(CGRect)bounds;
+
+- (void)drawPlaceholderInRect:(CGRect)rect;
+- (void)drawTextInRect:(CGRect)rect;
 
 @property (nonatomic, assign) id<UITextFieldDelegate> delegate;
 @property (nonatomic, copy) NSString *placeholder;
@@ -66,6 +79,8 @@ typedef enum {
 @property (nonatomic, retain) UIFont *font;
 @property (nonatomic) UITextBorderStyle borderStyle;
 @property (nonatomic, retain) UIColor *textColor;
+@property (nonatomic, readonly, getter=isEditing) BOOL editing;
+@property (nonatomic) BOOL clearsOnBeginEditing;
 
 @property (nonatomic, retain) UIImage *background;
 @property (nonatomic, retain) UIImage *disabledBackground;

@@ -3,6 +3,7 @@
 #import "UITextLayer.h"
 #import "UIColor.h"
 #import "UIFont.h"
+#import "UIImage.h"
 
 NSString *const UITextFieldTextDidBeginEditingNotification = @"UITextFieldTextDidBeginEditingNotification";
 NSString *const UITextFieldTextDidChangeNotification = @"UITextFieldTextDidChangeNotification";
@@ -15,8 +16,9 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 @end
 
 @implementation UITextField
-@synthesize delegate=_delegate, background=_background, disabledBackground=_disabledBackground;
+@synthesize delegate=_delegate, background=_background, disabledBackground=_disabledBackground, editing=_editing, clearsOnBeginEditing=_clearsOnBeginEditing;
 @synthesize clearButtonMode=_clearButtonMode, leftView=_leftView, rightView=_rightView, leftViewMode=_leftViewMode, rightViewMode=_rightViewMode;
+@synthesize placeholder=_placeholder, borderStyle=_borderStyle;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -30,6 +32,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 		self.clearButtonMode = UITextFieldViewModeNever;
 		self.leftViewMode = UITextFieldViewModeNever;
 		self.rightViewMode = UITextFieldViewModeNever;
+		self.opaque = NO;
 	}
 	return self;
 }
@@ -42,16 +45,44 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 	[_rightView release];
 	[_background release];
 	[_disabledBackground release];
+	[_placeholder release];
 	[super dealloc];
 }
 
+- (BOOL)_isLeftViewVisible
+{
+	return _leftView && (_leftViewMode == UITextFieldViewModeAlways
+						 || (_editing && _leftViewMode == UITextFieldViewModeWhileEditing)
+						 || (!_editing && _leftViewMode == UITextFieldViewModeUnlessEditing));
+}
+
+- (BOOL)_isRightViewVisible
+{
+	return _rightView && (_rightViewMode == UITextFieldViewModeAlways
+						 || (_editing && _rightViewMode == UITextFieldViewModeWhileEditing)
+						 || (!_editing && _rightViewMode == UITextFieldViewModeUnlessEditing));
+}
 
 - (void)layoutSubviews
 {
 	[super layoutSubviews];
-	_textLayer.frame = self.bounds;
-}
+	const CGRect bounds = self.bounds;
+	_textLayer.frame = [self textRectForBounds:bounds];
 
+	if ([self _isLeftViewVisible]) {
+		_leftView.hidden = NO;
+		_leftView.frame = [self leftViewRectForBounds:bounds];
+	} else {
+		_leftView.hidden = YES;
+	}
+
+	if ([self _isRightViewVisible]) {
+		_rightView.hidden = NO;
+		_rightView.frame = [self rightViewRectForBounds:bounds];
+	} else {
+		_rightView.hidden = YES;
+	}
+}
 
 - (void)setDelegate:(id<UITextFieldDelegate>)theDelegate
 {
@@ -67,22 +98,73 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 	}
 }
 
-- (NSString *)placeholder
-{
-	return nil;
-}
-
 - (void)setPlaceholder:(NSString *)thePlaceholder
 {
-}
-
-- (UITextBorderStyle)borderStyle
-{
-	return UITextBorderStyleNone;
+	if (![thePlaceholder isEqualToString:_placeholder]) {
+		[_placeholder release];
+		_placeholder = [thePlaceholder copy];
+		[self setNeedsDisplay];
+	}
 }
 
 - (void)setBorderStyle:(UITextBorderStyle)style
 {
+	if (style != _borderStyle) {
+		_borderStyle = style;
+		[self setNeedsDisplay];
+	}
+}
+
+- (void)setBackground:(UIImage *)aBackground
+{
+	if (aBackground != _background) {
+		[_background release];
+		_background = [aBackground retain];
+		[self setNeedsDisplay];
+	}
+}
+
+- (void)setDisabledBackground:(UIImage *)aBackground
+{
+	if (aBackground != _disabledBackground) {
+		[_disabledBackground release];
+		_disabledBackground = [aBackground retain];
+		[self setNeedsDisplay];
+	}
+}
+
+- (void)setLeftView:(UIView *)leftView
+{
+	if (leftView != _leftView) {
+		[_leftView removeFromSuperview];
+		[_leftView release];
+		_leftView = [leftView retain];
+		[self addSubview:_leftView];
+	}
+}
+
+- (void)setRightView:(UIView *)rightView
+{
+	if (rightView != _rightView) {
+		[_rightView removeFromSuperview];
+		[_rightView release];
+		_rightView = [rightView retain];
+		[self addSubview:_rightView];
+	}
+}
+
+- (void)setFrame:(CGRect)frame
+{
+	if (!CGRectEqualToRect(frame,self.frame)) {
+		[super setFrame:frame];
+		[self setNeedsDisplay];
+	}
+}
+
+
+- (CGRect)borderRectForBounds:(CGRect)bounds
+{
+	return bounds;
 }
 
 - (CGRect)clearButtonRectForBounds:(CGRect)bounds
@@ -90,7 +172,91 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 	return CGRectZero;
 }
 
+- (CGRect)editingRectForBounds:(CGRect)bounds
+{
+	return [self textRectForBounds:bounds];
+}
 
+- (CGRect)leftViewRectForBounds:(CGRect)bounds
+{
+	const CGRect frame = _leftView.frame;
+	bounds.origin.x = 0;
+	bounds.origin.y = (bounds.size.height / 2.f) - (frame.size.height/2.f);
+	bounds.size = frame.size;
+	return CGRectIntegral(bounds);
+}
+
+- (CGRect)placeholderRectForBounds:(CGRect)bounds
+{
+	return [self textRectForBounds:bounds];
+}
+
+- (CGRect)rightViewRectForBounds:(CGRect)bounds
+{
+	const CGRect frame = _rightView.frame;
+	bounds.origin.x = bounds.size.width - frame.size.width;
+	bounds.origin.y = (bounds.size.height / 2.f) - (frame.size.height/2.f);
+	bounds.size = frame.size;
+	return CGRectIntegral(bounds);
+}
+
+- (CGRect)textRectForBounds:(CGRect)bounds
+{
+	// Docs say:
+	// The default implementation of this method returns a rectangle that is derived from the control’s original bounds,
+	// but which does not include the area occupied by the receiver’s border or overlay views.
+	
+	// It appears what happens is something like this:
+	// check border type:
+	//   if no border, skip to next major step
+	//   if has border, set textRect = borderBounds, then inset textRect according to border style
+	// check if textRect overlaps with leftViewRect, if it does, make it smaller
+	// check if textRect overlaps with rightViewRect, if it does, make it smaller
+	// check if textRect overlaps with clearButtonRect (if currently needed?), if it does, make it smaller
+	
+	CGRect textRect = bounds;
+	
+	if (_borderStyle != UITextBorderStyleNone) {
+		textRect = [self borderRectForBounds:bounds];
+		// TODO: inset the bounds based on border types...
+	}
+	
+	// Going to go ahead and assume that the left view is on the left, the right view is on the right, and there's space between..
+	// I imagine this is a dangerous assumption...
+	if ([self _isLeftViewVisible]) {
+		CGRect overlap = CGRectIntersection(textRect,[self leftViewRectForBounds:bounds]);
+		if (!CGRectIsNull(overlap)) {
+			textRect = CGRectOffset(textRect, overlap.size.width, 0);
+			textRect.size.width -= overlap.size.width;
+		}
+	}
+	
+	if ([self _isRightViewVisible]) {
+		CGRect overlap = CGRectIntersection(textRect,[self rightViewRectForBounds:bounds]);
+		if (!CGRectIsNull(overlap)) {
+			textRect = CGRectOffset(textRect, -overlap.size.width, 0);
+			textRect.size.width -= overlap.size.width;
+		}
+	}
+	
+	return CGRectIntegral(bounds);
+}
+
+
+
+- (void)drawPlaceholderInRect:(CGRect)rect
+{
+}
+
+- (void)drawTextInRect:(CGRect)rect
+{
+}
+
+- (void)drawRect:(CGRect)rect
+{
+	UIImage *background = self.enabled? _background : _disabledBackground;
+	[background drawInRect:self.bounds];
+}
 
 
 - (UITextAutocapitalizationType)autocapitalizationType
@@ -215,6 +381,23 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
 - (void)_textDidBeginEditing
 {
+	BOOL shouldClear = _clearsOnBeginEditing;
+
+	if (shouldClear && _delegateHas.shouldClear) {
+		shouldClear = [_delegate textFieldShouldClear:self];
+	}
+
+	if (shouldClear) {
+		// this doesn't work - it can cause an exception to trigger. hrm...
+		// so... rather than worry too much about it right now, just gonna delay it :P
+		//self.text = @"";
+		[self performSelector:@selector(setText:) withObject:@"" afterDelay:0];
+	}
+	
+	_editing = YES;
+	[self setNeedsDisplay];
+	[self setNeedsLayout];
+
 	if (_delegateHas.didBeginEditing) {
 		[_delegate textFieldDidBeginEditing:self];
 	}
@@ -228,6 +411,10 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
 - (void)_textDidEndEditing
 {
+	_editing = NO;
+	[self setNeedsDisplay];
+	[self setNeedsLayout];
+
 	if (_delegateHas.didEndEditing) {
 		[_delegate textFieldDidEndEditing:self];
 	}
