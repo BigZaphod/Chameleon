@@ -2,6 +2,7 @@
 #import "UIView.h"
 
 extern NSString *const UIViewFrameDidChangeNotification;
+extern NSString *const UIViewBoundsDidChangeNotification;
 extern NSString *const UIViewDidMoveToSuperviewNotification;
 
 @interface UIView (UIPrivate)

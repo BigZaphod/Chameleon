@@ -2,6 +2,10 @@
 #import "UIControl.h"
 #import "UITextInputTraits.h"
 
+extern NSString *const UITextFieldTextDidBeginEditingNotification;
+extern NSString *const UITextFieldTextDidChangeNotification;
+extern NSString *const UITextFieldTextDidEndEditingNotification;
+
 typedef enum {
 	UITextBorderStyleNone,
 	UITextBorderStyleLine,
@@ -16,7 +20,7 @@ typedef enum {
 	UITextFieldViewModeAlways
 } UITextFieldViewMode;
 
-@class UIFont, UIColor, NSTextField, UITextField, UIImage;
+@class UIFont, UIColor, UITextField, UIImage, UITextLayer;
 
 @protocol UITextFieldDelegate <NSObject>
 @optional
@@ -32,17 +36,26 @@ typedef enum {
 
 @interface UITextField : UIControl <UITextInputTraits> {
 @private
+	UITextLayer *_textLayer;
+
 	id _delegate;
-	UIFont *_font;
-	UIColor *_textColor;
 	UITextFieldViewMode _clearButtonMode;
-	NSTextField *_textField;
 	UIView *_leftView;
 	UITextFieldViewMode _leftViewMode;
 	UIView *_rightView;
 	UITextFieldViewMode _rightViewMode;
 	UIImage *_background;
 	UIImage *_disabledBackground;
+	
+	struct {
+		unsigned int shouldBeginEditing : 1;
+		unsigned int didBeginEditing : 1;
+		unsigned int shouldEndEditing : 1;
+		unsigned int didEndEditing : 1;
+		unsigned int shouldChangeCharacters : 1;
+		unsigned int shouldClear : 1;
+		unsigned int shouldReturn : 1;
+	} _delegateHas;	
 }
 
 - (CGRect)clearButtonRectForBounds:(CGRect)bounds;

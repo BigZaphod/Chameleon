@@ -7,7 +7,7 @@
 	BOOL secureTextEntry;
 }
 
-- (id)initWithFrame:(NSRect)frame secureTextEntry:(BOOL)isSecure;
+- (id)initWithFrame:(NSRect)frame secureTextEntry:(BOOL)isSecure isField:(BOOL)isField;
 - (void)setSecureTextEntry:(BOOL)isSecure;
 
 @end

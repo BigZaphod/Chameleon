@@ -18,17 +18,17 @@
 @implementation UITextLayer
 @synthesize textColor, font, editable, secureTextEntry;
 
-- (id)initWithContainerView:(id<UITextLayerContainerViewProtocol>)aView textDelegate:(id<UITextLayerTextDelegate>)aDelegate
+- (id)initWithContainer:(id<UITextLayerContainerViewProtocol, UITextLayerTextDelegate>)aView isField:(BOOL)isField
 {
 	if ((self=[super init])) {
 		self.geometryFlipped = YES;
 		self.masksToBounds = NO;
 		
 		containerView = aView;
-		textDelegate = aDelegate;
 
-		textDelegateHas.didChange = [textDelegate respondsToSelector:@selector(_textDidChange)];
-		textDelegateHas.didChangeSelection = [textDelegate respondsToSelector:@selector(_textDidChangeSelection)];
+		textDelegateHas.didChange = [containerView respondsToSelector:@selector(_textDidChange)];
+		textDelegateHas.didChangeSelection = [containerView respondsToSelector:@selector(_textDidChangeSelection)];
+		textDelegateHas.didReturnKey = [containerView respondsToSelector:@selector(_textDidReceiveReturnKey)];
 		
 		containerCanScroll = [containerView respondsToSelector:@selector(setContentOffset:)]
 			&& [containerView respondsToSelector:@selector(contentOffset)]
@@ -37,7 +37,7 @@
 			&& [containerView respondsToSelector:@selector(isScrollEnabled)];
 		
 		clipView = [[UICustomNSClipView alloc] initWithFrame:NSMakeRect(0,0,100,100) layerParent:self behaviorDelegate:self];
-		textView = [[UICustomNSTextView alloc] initWithFrame:[clipView frame] secureTextEntry:secureTextEntry];
+		textView = [[UICustomNSTextView alloc] initWithFrame:[clipView frame] secureTextEntry:secureTextEntry isField:isField];
 		[textView setDelegate:self];
 		[clipView setDocumentView:textView];
 		
@@ -48,6 +48,7 @@
 
 - (void)dealloc
 {
+	[textView setDelegate:nil];
 	[self removeNSView];
 	[clipView release];
 	[textView release];
@@ -55,7 +56,6 @@
 	[font release];
 	[super dealloc];
 }
-
 
 // Need to prevent Core Animation effects from happening... very ugly otherwise.
 - (id < CAAction >)actionForKey:(NSString *)aKey
@@ -75,6 +75,7 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateScrollViewContentOffset) name:NSViewBoundsDidChangeNotification object:clipView];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hierarchyDidChangeNotification:) name:UIViewFrameDidChangeNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hierarchyDidChangeNotification:) name:UIViewBoundsDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hierarchyDidChangeNotification:) name:UIViewDidMoveToSuperviewNotification object:nil];
 }
 
@@ -82,6 +83,7 @@
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewBoundsDidChangeNotification object:clipView];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewFrameDidChangeNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewBoundsDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewDidMoveToSuperviewNotification object:nil];
 	
 	[clipView removeFromSuperview];
@@ -160,7 +162,9 @@
 
 - (void)updateScrollViewContentOffset
 {
-	[containerView setContentOffset:NSPointToCGPoint([clipView bounds].origin)];
+	if (containerCanScroll) {
+		[containerView setContentOffset:NSPointToCGPoint([clipView bounds].origin)];
+	}
 }
 
 - (void)setFont:(UIFont *)newFont
@@ -224,8 +228,6 @@
 	[textView setSelectedRange:range];
 }
 
-
-
 // this is used to fake out AppKit when the UIView that owns this layer/editor stuff is actually *behind* another UIView. Since the NSViews are
 // technically above all of the UIViews, they'd normally capture all clicks no matter what might happen to be obscuring them. That would obviously
 // be less than ideal. This makes it ideal. Awesome.
@@ -253,43 +255,63 @@
 
 - (BOOL)textShouldBeginEditing:(NSText *)aTextObject
 {
-	return [textDelegate _textShouldBeginEditing];
+	return [containerView _textShouldBeginEditing];
 }
 
 - (void)textDidBeginEditing:(NSNotification *)aNotification
 {
-	[textDelegate _textDidBeginEditing];
+	[containerView _textDidBeginEditing];
 }
 
 - (BOOL)textShouldEndEditing:(NSText *)aTextObject
 {
-	return [textDelegate _textShouldEndEditing];
+	return [containerView _textShouldEndEditing];
 }
 
 - (void)textDidEndEditing:(NSNotification *)aNotification
 {
-	[textDelegate _textDidEndEditing];
+	[containerView _textDidEndEditing];
 }
 
 - (void)textDidChange:(NSNotification *)aNotification
 {
 	if (textDelegateHas.didChange) {
-		[textDelegate _textDidChange];
+		[containerView _textDidChange];
 	}
 }
 
 - (void)textViewDidChangeSelection:(NSNotification *)aNotification
 {
 	if (textDelegateHas.didChangeSelection) {
-		[textDelegate _textDidChangeSelection];
+		[containerView _textDidChangeSelection];
 	}
 }
 
 - (BOOL)textView:(NSTextView *)aTextView shouldChangeTextInRange:(NSRange)affectedCharRange replacementString:(NSString *)replacementString
 {
-	return [textDelegate _textShouldChangeTextInRange:affectedCharRange replacementText:replacementString];
+	// always prevent newlines when in field editing mode. this seems like a heavy-handed way of doing it, but it's also easy and quick.
+	// it should really probably be in the UICustomNSTextView class somewhere and not here, but this works okay, too, I guess.
+	// this is also being done in doCommandBySelector: below, but it's done here as well to prevent pasting stuff in with newlines in it.
+	// seems like a hack, I dunno.
+	if ([textView isFieldEditor] && ([replacementString rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]].location != NSNotFound)) {
+		return NO;
+	} else {
+		return [containerView _textShouldChangeTextInRange:affectedCharRange replacementText:replacementString];
+	}
 }
 
+- (BOOL)textView:(NSTextView *)aTextView doCommandBySelector:(SEL)aSelector
+{
+	// this makes sure there's no newlines added when in field editing mode.
+	// it also allows us to handle when return/enter is pressed differently for fields. Dunno if there's a better way or not.
+	if ([textView isFieldEditor] && ((aSelector == @selector(insertNewline:) || (aSelector == @selector(insertNewlineIgnoringFieldEditor:))))) {
+		if (textDelegateHas.didReturnKey) {
+			[containerView _textDidReceiveReturnKey];
+		}
+		return YES;
+	}
+	return NO;
+}
 
 
 

@@ -2,20 +2,42 @@
 #import "UICustomNSTextView.h"
 #import "UIBulletGlyphGenerator.h"
 #import <AppKit/NSLayoutManager.h>
+#import <AppKit/NSTextContainer.h>
 #import <AppKit/NSMenuItem.h>
 #import <AppKit/NSMenu.h>
 
-const CGFloat UILargeNumberForText = 1.0e7; // Any larger dimensions and the text could become blurry.
+static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and the text could become blurry.
 
 @implementation UICustomNSTextView
 
-- (id)initWithFrame:(NSRect)frame secureTextEntry:(BOOL)isSecure
+- (id)initWithFrame:(NSRect)frame secureTextEntry:(BOOL)isSecure isField:(BOOL)isField
 {
 	if ((self=[super initWithFrame:frame])) {
-		[self setMaxSize:NSMakeSize(UILargeNumberForText, UILargeNumberForText)];
-		[self setHorizontallyResizable:NO];
-		[self setVerticallyResizable:YES];
-		[self setAutoresizingMask:NSViewWidthSizable];
+		const NSSize maxSize = NSMakeSize(LargeNumberForText, LargeNumberForText);
+		
+		// this is not ideal, I suspect... but it seems to work for now.
+		// one behavior that's missing is that when a field resigns first responder,
+		// it should really sort of turn back into a non-field that happens to have no word wrapping.
+		// right now I have it scroll to the beginning of the line, at least, but even though the line break
+		// mode is set to truncate on the tail, it doesn't do that because the underlying text container's size
+		// has been sized to something bigger here. I tried to work around this by resetting the modes and such
+		// on resignFirstResponder, but for some reason it just didn't seem to work reliably (especially when
+		// the view was resized - it's like once you turn off setWidthTracksTextView, it doesn't want to turn
+		// back on again). I'm likely missing something important, but it's not crazy important right now.
+		if (isField) {
+			[self setFieldEditor:YES];
+			[self setHorizontallyResizable:YES];
+			[self setVerticallyResizable:NO];
+			[[self textContainer] setWidthTracksTextView:NO];
+			[[self textContainer] setContainerSize:maxSize];
+		} else {
+			[self setFieldEditor:NO];
+			[self setHorizontallyResizable:NO];
+			[self setVerticallyResizable:YES];
+			[self setAutoresizingMask:NSViewWidthSizable];
+		}
+
+		[self setMaxSize:maxSize];
 		[self setDrawsBackground:NO];
 		[self setRichText:NO];
 		[self setUsesFontPanel:NO];
@@ -23,16 +45,13 @@ const CGFloat UILargeNumberForText = 1.0e7; // Any larger dimensions and the tex
 		[self setAllowsImageEditing:NO];
 		[self setDisplaysLinkToolTips:NO];
 		[self setAutomaticDataDetectionEnabled:NO];
-
 		[self setSecureTextEntry:isSecure];
 	}
 	return self;
 }
 
-- (void)setSecureTextEntry:(BOOL)isSecure
+- (void)updateStyles
 {
-	secureTextEntry = isSecure;
-
 	NSMutableParagraphStyle *style = [NSMutableParagraphStyle new];
 	[style setParagraphStyle:[NSParagraphStyle defaultParagraphStyle]];
 	
@@ -54,8 +73,18 @@ const CGFloat UILargeNumberForText = 1.0e7; // Any larger dimensions and the tex
 		[[self layoutManager] setGlyphGenerator:[NSGlyphGenerator sharedGlyphGenerator]];
 	}
 	
+	if ([self isFieldEditor]) {
+		[style setLineBreakMode:NSLineBreakByTruncatingTail];
+	}
+	
 	[self setDefaultParagraphStyle:style];
 	[style release];
+}
+
+- (void)setSecureTextEntry:(BOOL)isSecure
+{
+	secureTextEntry = isSecure;
+	[self updateStyles];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
@@ -113,6 +142,9 @@ const CGFloat UILargeNumberForText = 1.0e7; // Any larger dimensions and the tex
 
 - (BOOL)resignFirstResponder
 {
+	if ([self isFieldEditor]) {
+		[self scrollRangeToVisible:NSMakeRange(0,0)];
+	}
 	[self setSelectedRange:NSMakeRange(0,0)];
 	return [super resignFirstResponder];
 }

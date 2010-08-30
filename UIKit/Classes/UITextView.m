@@ -23,7 +23,7 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 - (id)initWithFrame:(CGRect)frame
 {
 	if ((self=[super initWithFrame:frame])) {
-		_textLayer = [[UITextLayer alloc] initWithContainerView:self textDelegate:self];
+		_textLayer = [[UITextLayer alloc] initWithContainer:self isField:NO];
 		[self.layer insertSublayer:_textLayer atIndex:0];
 
 		self.textColor = [UIColor blackColor];
@@ -38,6 +38,7 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 
 - (void)dealloc
 {
+	[_textLayer removeFromSuperlayer];
 	[_textLayer release];
 	[super dealloc];
 }

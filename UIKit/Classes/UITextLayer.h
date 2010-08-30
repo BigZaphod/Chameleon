@@ -30,11 +30,11 @@
 @optional
 - (void)_textDidChange;
 - (void)_textDidChangeSelection;
+- (void)_textDidReceiveReturnKey;
 @end
 
 @interface UITextLayer : CALayer {
-	id<UITextLayerContainerViewProtocol> containerView;
-	id<UITextLayerTextDelegate> textDelegate;
+	id<UITextLayerContainerViewProtocol, UITextLayerTextDelegate> containerView;
 	BOOL containerCanScroll;
 	UICustomNSTextView *textView;
 	UICustomNSClipView *clipView;
@@ -46,10 +46,11 @@
 	struct {
 		unsigned int didChange : 1;
 		unsigned int didChangeSelection : 1;
+		unsigned int didReturnKey : 1;
 	} textDelegateHas;
 }
 
-- (id)initWithContainerView:(id<UITextLayerContainerViewProtocol>)aView textDelegate:(id<UITextLayerTextDelegate>)aDelegate;
+- (id)initWithContainer:(id<UITextLayerContainerViewProtocol,UITextLayerTextDelegate>)aView isField:(BOOL)isField;
 - (void)setContentOffset:(CGPoint)contentOffset;
 - (void)scrollRangeToVisible:(NSRange)range;
 - (BOOL)becomeFirstResponder;

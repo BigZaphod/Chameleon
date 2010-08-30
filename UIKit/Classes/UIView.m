@@ -9,6 +9,7 @@
 #import <QuartzCore/CALayer.h>
 
 NSString *const UIViewFrameDidChangeNotification = @"UIViewFrameDidChangeNotification";
+NSString *const UIViewBoundsDidChangeNotification = @"UIViewBoundsDidChangeNotification";
 NSString *const UIViewDidMoveToSuperviewNotification = @"UIViewDidMoveToSuperviewNotification";
 
 static NSMutableArray *_animationGroups;
@@ -498,6 +499,7 @@ static BOOL _animationsEnabled = YES;
 		CGRect oldBounds = _layer.bounds;
 		_layer.bounds = newBounds;
 		[self _boundsDidChangeFrom:oldBounds to:newBounds];
+		[[NSNotificationCenter defaultCenter] postNotificationName:UIViewBoundsDidChangeNotification object:self];
 	}
 }
 
