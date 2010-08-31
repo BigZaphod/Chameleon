@@ -14,9 +14,13 @@
 	[super dealloc];
 }
 
-- (UIWindow *)window
+- (UIWindow *)_responderWindow
 {
-	return nil;
+	if ([isa instancesRespondToSelector:@selector(window)]) {
+		return [self performSelector:@selector(window)];
+	} else {
+		return [[self nextResponder] _responderWindow];
+	}
 }
 
 - (UIResponder *)nextResponder
@@ -26,7 +30,7 @@
 
 - (BOOL)isFirstResponder
 {
-	return ([[self window] _firstResponder] == self);
+	return ([[self _responderWindow] _firstResponder] == self);
 }
 
 - (BOOL)canBecomeFirstResponder
@@ -36,9 +40,10 @@
 
 - (BOOL)becomeFirstResponder
 {
-	UIResponder *firstResponder = [[self window] _firstResponder];
-	if ([self canBecomeFirstResponder] && (!firstResponder || ([firstResponder canResignFirstResponder] && [firstResponder resignFirstResponder]))) {
-		[[self window] _setFirstResponder:self];
+	UIWindow *window = [self _responderWindow];
+	UIResponder *firstResponder = [window _firstResponder];
+	if (window && [self canBecomeFirstResponder] && (!firstResponder || ([firstResponder canResignFirstResponder] && [firstResponder resignFirstResponder]))) {
+		[window _setFirstResponder:self];
 		return YES;
 	} else {
 		return NO;
@@ -52,7 +57,7 @@
 
 - (BOOL)resignFirstResponder
 {
-	[[self window] _setFirstResponder:nil];
+	[[self _responderWindow] _setFirstResponder:nil];
 	return YES;
 }
 
