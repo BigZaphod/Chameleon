@@ -56,11 +56,14 @@
 	return YES;
 }
 
-- (NSUndoManager *)undoManager
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
-	return nil;
+	if ([isa instancesRespondToSelector:action]) {
+		return YES;
+	} else {
+		return [[self nextResponder] canPerformAction:action withSender:sender];
+	}
 }
-
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
@@ -85,6 +88,11 @@
 - (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event		{}
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event		{}
 - (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event	{}
+
+- (NSUndoManager *)undoManager
+{
+	return nil;
+}
 
 @end
 
