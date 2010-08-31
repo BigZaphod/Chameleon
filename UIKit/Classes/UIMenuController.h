@@ -1,13 +1,16 @@
 //  Created by Sean Heber on 8/31/10.
 #import <Foundation/Foundation.h>
 
-@class UIView;
+@class UIView, UIWindow;
 
 @interface UIMenuController : NSObject {
 @private
 	NSArray *_menuItems;
 	NSMutableArray *_enabledMenuItems;
 	id _menu;
+	CGRect _menuFrame;
+	CGPoint _menuLocation;
+	UIWindow *_window;
 }
 
 + (UIMenuController *)sharedMenuController;
@@ -18,5 +21,11 @@
 
 @property (nonatomic, getter=isMenuVisible) BOOL menuVisible;
 @property (copy) NSArray *menuItems;
+
+// returned in screen coords of the screen that the view used in setTargetRect:inView: belongs to
+// there's always a value here, but it's not likely to be terribly reliable except immidately after
+// the menu is made visible. I have no intenstively tested what the real UIKit does in all the possible
+// situations. You have been warned.
+@property (nonatomic, readonly) CGRect menuFrame;
 
 @end

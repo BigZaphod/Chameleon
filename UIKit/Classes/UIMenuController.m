@@ -12,7 +12,7 @@
 @end
 
 @implementation UIMenuController
-@synthesize menuItems=_menuItems;
+@synthesize menuItems=_menuItems, menuFrame=_menuFrame;
 
 + (UIMenuController *)sharedMenuController
 {
@@ -82,6 +82,12 @@
 				[theItem release];
 			}
 			
+			// this is offset so that it seems to be aligned on the right of the initial rect given to setTargetRect:inView:
+			// I don't know if this is the best behavior yet or not.
+			_menuFrame.size = NSSizeToCGSize([_menu size]);
+			_menuFrame.origin = _menuLocation;
+			_menuFrame.origin.x -= _menuFrame.size.width;
+			
 			// note that presenting an NSMenu is apparently modal. so, to pretend that it isn't, exactly, I'll delay the presentation
 			// of the menu to the start of a new runloop. At least that way, code that may be expecting to run right after setting the
 			// menu to visible would still run before the menu itself shows up on screen. Of course behavior is going to be pretty different
@@ -109,6 +115,26 @@
 
 - (void)setTargetRect:(CGRect)targetRect inView:(UIView *)targetView
 {
+	// we have to have some window somewhere to use as a basis, so if there isn't a view, we'll just use the
+	// keyWindow and go from there.
+	_window = targetView.window ?: [UIApplication sharedApplication].keyWindow;
+
+	// this will ultimately position the menu under the lower right of the given rectangle.
+	// but it is then shifted in setMenuVisible:animated: so that the menu is right-aligned with the given rect.
+	// this is all rather strange, perhaps, but it made sense at the time. we'll see if it does in practice.
+	targetRect.origin.x += targetRect.size.width;
+	targetRect.origin.y += targetRect.size.height;
+	
+	// first convert to screen coord, otherwise assume it already is, I guess, only the catch with targetView being nil
+	// is that the assumed screen might not be the keyWindow's screen, which is what I'm going to be assuming here.
+	// but bah - who cares? :)
+	if (targetView) {
+		targetRect = [_window convertRect:[_window convertRect:targetRect fromView:targetView] toWindow:nil];
+	}
+	
+	// only the origin is being set here. the size isn't known until the menu is created, which happens in setMenuVisible:animated:
+	// so that's where _menuFrame will actually be configured for now.
+	_menuLocation = targetRect.origin;
 }
 
 - (void)update
@@ -130,9 +156,11 @@
 
 - (void)_presentMenu
 {
-	if (_menu) {
-		NSView *theNSView = [[UIApplication sharedApplication].keyWindow.screen _NSView];
-		[NSMenu popUpContextMenu:_menu withEvent:[NSApp currentEvent] forView:theNSView];
+	if (_menu && _window) {
+		NSView *theNSView = [_window.screen _NSView];
+		if (theNSView) {
+			[_menu popUpMenuPositioningItem:nil atLocation:NSPointFromCGPoint(_menuFrame.origin) inView:theNSView];
+		}
 	}
 }
 
