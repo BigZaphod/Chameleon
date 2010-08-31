@@ -11,7 +11,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 @implementation UITableViewCell
 @synthesize contentView=_contentView, accessoryType=_accessoryType, textLabel=_textLabel, selectionStyle=_selectionStyle, indentationLevel=_indentationLevel;
 @synthesize imageView=_imageView, editingAccessoryType=_editingAccessoryType, selected=_selected, backgroundView=_backgroundView;
-@synthesize selectedBackgroundView=_selectedBackgroundView, highlighted=_highlighted;
+@synthesize selectedBackgroundView=_selectedBackgroundView, highlighted=_highlighted, reuseIdentifier=_reuseIdentifier;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -45,6 +45,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 {
 	if ((self=[self initWithFrame:CGRectMake(0,0,320,_UITableViewDefaultRowHeight)])) {
 		_style = style;
+		_reuseIdentifier = [reuseIdentifier copy];
 	}
 	return self;
 }
@@ -57,6 +58,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	[_imageView release];
 	[_backgroundView release];
 	[_selectedBackgroundView release];
+	[_reuseIdentifier release];
 	[super dealloc];
 }
 
@@ -163,6 +165,10 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		_selectedBackgroundView.hidden = !_selected;
 		[self addSubview:_selectedBackgroundView];
 	}
+}
+
+- (void)prepareForReuse
+{
 }
 
 @end

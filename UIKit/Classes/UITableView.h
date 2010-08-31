@@ -65,6 +65,7 @@ typedef enum {
 	BOOL _editing;
 	NSIndexPath *_selectedRow;
 	NSMutableDictionary *_cachedCells;
+	NSMutableSet *_reusableCells;
 	NSMutableArray *_sections;
 	CGFloat _sectionHeaderHeight;
 	CGFloat _sectionFooterHeight;

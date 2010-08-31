@@ -30,6 +30,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		_style = theStyle;
 		_cachedCells = [NSMutableDictionary new];
 		_sections = [NSMutableArray new];
+		_reusableCells = [NSMutableSet new];
 
 		self.separatorColor = [UIColor colorWithRed:.88f green:.88f blue:.88f alpha:1];
 		self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
@@ -53,6 +54,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	[_tableHeaderView release];
 	[_cachedCells release];
 	[_sections release];
+	[_reusableCells release];
 	[super dealloc];
 }
 
@@ -409,11 +411,15 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		[sectionPool release];
 	}
 	
-	// remove old cells
+	// remove old cells, but save off any that might be reusable
 	for (UITableViewCell *cell in [availableCells allValues]) {
+		if (cell.reuseIdentifier) {
+			[_reusableCells addObject:cell];
+		}
 		[cell removeFromSuperview];
 	}
 
+	// non-reusable cells should end up dealloced after at this point, but reusable ones live on in _reusableCells.
 	[availableCells release];
 	
 	if (_tableFooterView) {
@@ -469,6 +475,15 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier
 {
+	for (UITableViewCell *cell in _reusableCells) {
+		if ([cell.reuseIdentifier isEqualToString:identifier]) {
+			[cell retain];
+			[_reusableCells removeObject:cell];
+			[cell prepareForReuse];
+			return [cell autorelease];
+		}
+	}
+	
 	return nil;
 }
 

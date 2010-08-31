@@ -50,11 +50,13 @@ typedef enum {
 	NSInteger _indentationLevel;
 	BOOL _selected;
 	BOOL _highlighted;
+	NSString *_reuseIdentifier;
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated;
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated;
+- (void)prepareForReuse;
 
 @property (nonatomic, readonly, retain) UIView *contentView;
 @property (nonatomic, readonly, retain) UILabel *textLabel;
@@ -67,5 +69,6 @@ typedef enum {
 @property (nonatomic) UITableViewCellAccessoryType editingAccessoryType;
 @property (nonatomic, getter=isSelected) BOOL selected;
 @property (nonatomic, getter=isHighlighted) BOOL highlighted;
+@property (nonatomic, readonly, copy) NSString *reuseIdentifier;
 
 @end
