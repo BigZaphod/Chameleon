@@ -4,16 +4,6 @@
 
 @implementation UIResponder
 
-- (id)init
-{
-	return [super init];
-}
-
-- (void)dealloc
-{
-	[super dealloc];
-}
-
 - (UIWindow *)_responderWindow
 {
 	if ([isa instancesRespondToSelector:@selector(window)]) {
@@ -96,7 +86,7 @@
 
 - (NSUndoManager *)undoManager
 {
-	return nil;
+	return [[self nextResponder] undoManager];
 }
 
 @end

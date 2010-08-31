@@ -22,6 +22,7 @@ extern NSString *const UIKeyboardBoundsUserInfoKey;
 @private
 	UIScreen *_screen;
 	__weak UIResponder *_firstResponder;
+	NSUndoManager *_undoManager;
 }
 
 - (CGPoint)convertPoint:(CGPoint)toConvert toWindow:(UIWindow *)toWindow;

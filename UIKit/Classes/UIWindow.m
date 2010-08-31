@@ -28,6 +28,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 - (id)initWithFrame:(CGRect)theFrame
 {
 	if ((self=[super initWithFrame:theFrame])) {
+		_undoManager = [NSUndoManager new];
 		[self _makeHidden];	// do this first because before the screen is set, it will prevent any visibility notifications from being sent.
 		self.screen = [UIScreen mainScreen];
 		self.opaque = NO;
@@ -40,6 +41,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[self _makeHidden];	// I don't really like this here, but the real UIKit seems to do something like this on window destruction as it sends a notification and we also need to remove it from the app's list of windows
 	[_screen release];
+	[_undoManager release];
 	[super dealloc];
 }
 
@@ -51,6 +53,11 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 - (void)_setFirstResponder:(UIResponder *)newFirstResponder
 {
 	_firstResponder = newFirstResponder;
+}
+
+- (NSUndoManager *)undoManager
+{
+	return _undoManager;
 }
 
 - (UIView *)superview

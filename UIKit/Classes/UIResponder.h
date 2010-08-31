@@ -3,8 +3,6 @@
 
 @interface UIResponder : NSObject
 
-- (id)init;
-
 - (UIResponder *)nextResponder;
 - (BOOL)isFirstResponder;
 - (BOOL)canBecomeFirstResponder;
