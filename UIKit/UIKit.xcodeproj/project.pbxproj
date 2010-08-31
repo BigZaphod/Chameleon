@@ -24,9 +24,9 @@
 		1464960C11FF7AE500ECEC7A /* <UINavigationBar> back.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */; };
 		1464960D11FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */; };
 		1464960E11FF7AE500ECEC7A /* <UINavigationBar> button.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */; };
-		14690C9F122D79C2005A12A2 /* UIMenuController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14690C9D122D79C2005A12A2 /* UIMenuController.h */; };
+		14690C9F122D79C2005A12A2 /* UIMenuController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14690C9D122D79C2005A12A2 /* UIMenuController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14690CA0122D79C2005A12A2 /* UIMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14690C9E122D79C2005A12A2 /* UIMenuController.m */; };
-		14690CB5122D7B56005A12A2 /* UIMenuItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 14690CB3122D7B56005A12A2 /* UIMenuItem.h */; };
+		14690CB5122D7B56005A12A2 /* UIMenuItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 14690CB3122D7B56005A12A2 /* UIMenuItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14690CB6122D7B56005A12A2 /* UIMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 14690CB4122D7B56005A12A2 /* UIMenuItem.m */; };
 		14869DB1121303C60019B134 /* UIApplicationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14869DB0121303C60019B134 /* UIApplicationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1490AFE01219C31C00774286 /* UIPopoverController+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */; };
