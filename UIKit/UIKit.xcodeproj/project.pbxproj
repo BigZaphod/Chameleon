@@ -24,6 +24,10 @@
 		1464960C11FF7AE500ECEC7A /* <UINavigationBar> back.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */; };
 		1464960D11FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */; };
 		1464960E11FF7AE500ECEC7A /* <UINavigationBar> button.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */; };
+		14690C9F122D79C2005A12A2 /* UIMenuController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14690C9D122D79C2005A12A2 /* UIMenuController.h */; };
+		14690CA0122D79C2005A12A2 /* UIMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14690C9E122D79C2005A12A2 /* UIMenuController.m */; };
+		14690CB5122D7B56005A12A2 /* UIMenuItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 14690CB3122D7B56005A12A2 /* UIMenuItem.h */; };
+		14690CB6122D7B56005A12A2 /* UIMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 14690CB4122D7B56005A12A2 /* UIMenuItem.m */; };
 		14869DB1121303C60019B134 /* UIApplicationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14869DB0121303C60019B134 /* UIApplicationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1490AFE01219C31C00774286 /* UIPopoverController+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */; };
 		1490B0411219CA2F00774286 /* UIAccelerometer.h in Headers */ = {isa = PBXBuildFile; fileRef = 1490B03F1219CA2F00774286 /* UIAccelerometer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -205,6 +209,10 @@
 		1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> back.png"; path = "Resources/<UINavigationBar> back.png"; sourceTree = "<group>"; };
 		1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> button-highlighted.png"; path = "Resources/<UINavigationBar> button-highlighted.png"; sourceTree = "<group>"; };
 		1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> button.png"; path = "Resources/<UINavigationBar> button.png"; sourceTree = "<group>"; };
+		14690C9D122D79C2005A12A2 /* UIMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIMenuController.h; path = Classes/UIMenuController.h; sourceTree = "<group>"; };
+		14690C9E122D79C2005A12A2 /* UIMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIMenuController.m; path = Classes/UIMenuController.m; sourceTree = "<group>"; };
+		14690CB3122D7B56005A12A2 /* UIMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIMenuItem.h; path = Classes/UIMenuItem.h; sourceTree = "<group>"; };
+		14690CB4122D7B56005A12A2 /* UIMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIMenuItem.m; path = Classes/UIMenuItem.m; sourceTree = "<group>"; };
 		14869DB0121303C60019B134 /* UIApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIApplicationDelegate.h; path = Classes/UIApplicationDelegate.h; sourceTree = "<group>"; };
 		1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIPopoverController+UIPrivate.h"; sourceTree = "<group>"; };
 		1490B03F1219CA2F00774286 /* UIAccelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIAccelerometer.h; path = Classes/UIAccelerometer.h; sourceTree = "<group>"; };
@@ -495,6 +503,10 @@
 				14CC837F11EFA8AF005988CC /* UILabel.m */,
 				14CC838011EFA8AF005988CC /* UILongPressGestureRecognizer.h */,
 				14CC838111EFA8AF005988CC /* UILongPressGestureRecognizer.m */,
+				14690C9D122D79C2005A12A2 /* UIMenuController.h */,
+				14690C9E122D79C2005A12A2 /* UIMenuController.m */,
+				14690CB3122D7B56005A12A2 /* UIMenuItem.h */,
+				14690CB4122D7B56005A12A2 /* UIMenuItem.m */,
 				14CC838211EFA8AF005988CC /* UINavigationBar.h */,
 				14CC838311EFA8AF005988CC /* UINavigationBar.m */,
 				14CC838411EFA8AF005988CC /* UINavigationController.h */,
@@ -723,6 +735,8 @@
 				145335691226F1F90005644F /* UIBulletGlyphGenerator.h in Headers */,
 				145335711226F2720005644F /* UICustomNSTextView.h in Headers */,
 				145335851226F3490005644F /* UICustomNSClipView.h in Headers */,
+				14690C9F122D79C2005A12A2 /* UIMenuController.h in Headers */,
+				14690CB5122D7B56005A12A2 /* UIMenuItem.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -869,6 +883,8 @@
 				1453356A1226F1F90005644F /* UIBulletGlyphGenerator.m in Sources */,
 				145335721226F2720005644F /* UICustomNSTextView.m in Sources */,
 				145335861226F3490005644F /* UICustomNSClipView.m in Sources */,
+				14690CA0122D79C2005A12A2 /* UIMenuController.m in Sources */,
+				14690CB6122D7B56005A12A2 /* UIMenuItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
