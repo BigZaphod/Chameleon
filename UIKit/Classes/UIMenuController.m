@@ -2,13 +2,20 @@
 #import "UIMenuController.h"
 
 @implementation UIMenuController
+@synthesize menuItems=_menuItems;
 
 + (UIMenuController *)sharedMenuController
 {
 	return nil;
 }
 
-- (void)setMenuVisible:(BOOL)menuVisibleanimated:(BOOL)animated
+- (void)dealloc
+{
+	[_menuItems release];
+	[super dealloc];
+}
+
+- (void)setMenuVisible:(BOOL)menuVisible animated:(BOOL)animated
 {
 }
 

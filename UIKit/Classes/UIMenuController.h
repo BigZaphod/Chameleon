@@ -4,11 +4,14 @@
 @class UIView;
 
 @interface UIMenuController : NSObject {
+	NSArray *_menuItems;
 }
 
 + (UIMenuController *)sharedMenuController;
 
-- (void)setMenuVisible:(BOOL)menuVisibleanimated:(BOOL)animated;
+- (void)setMenuVisible:(BOOL)menuVisible animated:(BOOL)animated;
 - (void)setTargetRect:(CGRect)targetRect inView:(UIView *)targetView;
+
+@property (copy) NSArray *menuItems;
 
 @end
