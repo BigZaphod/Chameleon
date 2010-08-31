@@ -72,6 +72,7 @@
 			_menu = [[NSMenu alloc] initWithTitle:@""];
 			[_menu setDelegate:self];
 			[_menu setAutoenablesItems:NO];
+			[_menu setAllowsContextMenuPlugIns:NO];
 			
 			for (UIMenuItem *item in _enabledMenuItems) {
 				NSMenuItem *theItem = [[NSMenuItem alloc] initWithTitle:item.title action:@selector(_didSelectMenuItem:) keyEquivalent:@""];
@@ -81,8 +82,13 @@
 				[theItem release];
 			}
 			
-			NSView *theNSView = [[UIApplication sharedApplication].keyWindow.screen _NSView];
-			[NSMenu popUpContextMenu:_menu withEvent:[NSApp currentEvent] forView:theNSView];
+			// note that presenting an NSMenu is apparently modal. so, to pretend that it isn't, exactly, I'll delay the presentation
+			// of the menu to the start of a new runloop. At least that way, code that may be expecting to run right after setting the
+			// menu to visible would still run before the menu itself shows up on screen. Of course behavior is going to be pretty different
+			// after that point since if the app is assuming it can keep on doing normal runloop stuff, it ain't gonna happen.
+			// but since clicks outside of an NSMenu dismiss it, there's not a lot a user can do to an app to change state when a menu
+			// is up in the first place.
+			[self performSelector:@selector(_presentMenu) withObject:nil afterDelay:0];
 		}
 	} else if (!menuVisible && wasVisible) {
 		// make it unhappen
@@ -119,6 +125,14 @@
 				[_enabledMenuItems addObject:item];
 			}
 		}
+	}
+}
+
+- (void)_presentMenu
+{
+	if (_menu) {
+		NSView *theNSView = [[UIApplication sharedApplication].keyWindow.screen _NSView];
+		[NSMenu popUpContextMenu:_menu withEvent:[NSApp currentEvent] forView:theNSView];
 	}
 }
 
