@@ -56,3 +56,5 @@
 #import "UISwitch.h"
 #import "UIAcceleration.h"
 #import "UIAccelerometer.h"
+#import "UIMenuController.h"
+#import "UIMenuItem.h"
