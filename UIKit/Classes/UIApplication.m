@@ -172,16 +172,16 @@ static UIApplication *_theApplication = nil;
 	return [[NSWorkspace sharedWorkspace] openURL:url];
 }
 
-- (void)_beginNewTouchForEvent:(UIEvent *)theEvent atScreen:(UIScreen *)theScreen location:(CGPoint)clickPoint
+- (void)_beginNewTouchForEvent:(UIEvent *)theEvent atScreen:(UIScreen *)theScreen location:(CGPoint)point
 {
 	UITouch *newTouch = [UITouch new];
 	
-	[newTouch _updateWithNSEvent:[theEvent _NSEvent] screenLocation:clickPoint];
+	[newTouch _updateWithNSEvent:[theEvent _NSEvent] screenLocation:point];
 	[theEvent _setTouch:newTouch];
 
-	UIView *clickedView = [theScreen _hitTest:clickPoint event:theEvent];
-	if (clickedView) {
-		[newTouch _setView:clickedView];
+	UIView *touchedView = [theScreen _hitTest:point event:theEvent];
+	if (touchedView) {
+		[newTouch _setView:touchedView];
 	}
 
 	[newTouch release];
@@ -226,6 +226,14 @@ static UIApplication *_theApplication = nil;
 			}
 			break;
 
+		case NSRightMouseDown:
+			if (![_currentEvent _touch]) {
+				[self _beginNewTouchForEvent:_currentEvent atScreen:theScreen location:clickPoint];
+				[self sendEvent:_currentEvent];
+				[_currentEvent _setTouch:nil];
+			}
+			break;
+			
 		default:
 			if ([_currentEvent _touch]) {
 				[[_currentEvent _touch] _updateWithNSEvent:theNSEvent screenLocation:clickPoint];

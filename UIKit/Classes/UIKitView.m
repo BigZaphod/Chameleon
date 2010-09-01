@@ -84,7 +84,17 @@
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
-	[[UIApplication sharedApplication] _screen:_screen didReceiveNSEvent:theEvent];
+	if ([theEvent modifierFlags] & NSControlKeyMask) {
+		// I don't really like this, but it seemed to be necessary.
+		// If I override the menuForEvent: method, when you control-click it *still* sends mouseDown:, so I don't
+		// really win anything by overriding that since I'd still need a check in here to prevent that mouseDown: from being
+		// sent to UIKit as a touch. That seems really wrong, IMO. A right click should be independent of a touch event.
+		// soooo.... here we are. Whatever. Seems to work. Don't really like it.
+		NSEvent *newEvent = [NSEvent mouseEventWithType:NSRightMouseDown location:[theEvent locationInWindow] modifierFlags:0 timestamp:[theEvent timestamp] windowNumber:[theEvent windowNumber] context:[theEvent context] eventNumber:[theEvent eventNumber] clickCount:[theEvent clickCount] pressure:[theEvent pressure]];
+		[self rightMouseDown:newEvent];
+	} else {
+		[[UIApplication sharedApplication] _screen:_screen didReceiveNSEvent:theEvent];
+	}
 }
 
 - (void)mouseUp:(NSEvent *)theEvent
@@ -93,6 +103,11 @@
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent
+{
+	[[UIApplication sharedApplication] _screen:_screen didReceiveNSEvent:theEvent];
+}
+
+- (void)rightMouseDown:(NSEvent *)theEvent
 {
 	[[UIApplication sharedApplication] _screen:_screen didReceiveNSEvent:theEvent];
 }

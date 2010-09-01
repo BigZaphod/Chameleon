@@ -98,13 +98,29 @@
 	[[self nextResponder] scrollWheelMoved:delta withEvent:event];
 }
 
+- (void)rightClick:(UITouch *)touch withEvent:(UIEvent *)event
+{
+	[[self nextResponder] rightClick:touch withEvent:event];
+}
+
+- (void)mouseEntered:(UIView *)view withEvent:(UIEvent *)event
+{
+	[[self nextResponder] mouseEntered:view withEvent:event];
+}
+
+- (void)mouseExited:(UIView *)view withEvent:(UIEvent *)event
+{
+	[[self nextResponder] mouseExited:view withEvent:event];
+}
+
 - (void)mouseMoved:(CGPoint)delta withEvent:(UIEvent *)event
 {
+	[[self nextResponder] mouseMoved:delta withEvent:event];
 }
 
 - (id)mouseCursorForEvent:(UIEvent *)event
 {
-	return nil;
+	return [[self nextResponder] mouseCursorForEvent:event];
 }
 
 @end

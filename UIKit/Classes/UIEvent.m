@@ -4,6 +4,19 @@
 
 @implementation UIEvent
 
+- (UIView *)_previousMouseMovementView
+{
+	return _previousMouseMovementView;
+}
+
+- (void)_setPreviousMouseMovementView:(UIView *)view
+{
+	if (view != _previousMouseMovementView) {
+		[_previousMouseMovementView release];
+		_previousMouseMovementView = [view retain];
+	}
+}
+
 - (UITouch *)_touch
 {
 	return _touch;
@@ -34,6 +47,7 @@
 {
 	[_event release];
 	[_touch release];
+	[_previousMouseMovementView release];
 	[super dealloc];
 }
 
@@ -60,6 +74,9 @@
 
 		case NSMouseMoved:
 			return _UIEventTypeMouseMoved;
+			
+		case NSRightMouseDown:
+			return _UIEventTypeMouseRightClick;
 			
 		default:
 			return UIEventTypeTouches;

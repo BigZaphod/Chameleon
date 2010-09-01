@@ -28,6 +28,7 @@
 		14690CA0122D79C2005A12A2 /* UIMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14690C9E122D79C2005A12A2 /* UIMenuController.m */; };
 		14690CB5122D7B56005A12A2 /* UIMenuItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 14690CB3122D7B56005A12A2 /* UIMenuItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14690CB6122D7B56005A12A2 /* UIMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 14690CB4122D7B56005A12A2 /* UIMenuItem.m */; };
+		146910AF122F003F005A12A2 /* <UIPopoverWindow> close.tif in Resources */ = {isa = PBXBuildFile; fileRef = 146910AE122F003F005A12A2 /* <UIPopoverWindow> close.tif */; };
 		14869DB1121303C60019B134 /* UIApplicationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14869DB0121303C60019B134 /* UIApplicationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1490AFE01219C31C00774286 /* UIPopoverController+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */; };
 		1490B0411219CA2F00774286 /* UIAccelerometer.h in Headers */ = {isa = PBXBuildFile; fileRef = 1490B03F1219CA2F00774286 /* UIAccelerometer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -213,6 +214,7 @@
 		14690C9E122D79C2005A12A2 /* UIMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIMenuController.m; path = Classes/UIMenuController.m; sourceTree = "<group>"; };
 		14690CB3122D7B56005A12A2 /* UIMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIMenuItem.h; path = Classes/UIMenuItem.h; sourceTree = "<group>"; };
 		14690CB4122D7B56005A12A2 /* UIMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIMenuItem.m; path = Classes/UIMenuItem.m; sourceTree = "<group>"; };
+		146910AE122F003F005A12A2 /* <UIPopoverWindow> close.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "<UIPopoverWindow> close.tif"; path = "Resources/<UIPopoverWindow> close.tif"; sourceTree = "<group>"; };
 		14869DB0121303C60019B134 /* UIApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIApplicationDelegate.h; path = Classes/UIApplicationDelegate.h; sourceTree = "<group>"; };
 		1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIPopoverController+UIPrivate.h"; sourceTree = "<group>"; };
 		1490B03F1219CA2F00774286 /* UIAccelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIAccelerometer.h; path = Classes/UIAccelerometer.h; sourceTree = "<group>"; };
@@ -426,6 +428,7 @@
 		089C1665FE841158C02AAC07 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				146910AE122F003F005A12A2 /* <UIPopoverWindow> close.tif */,
 				1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */,
 				1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */,
 				1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */,
@@ -803,6 +806,7 @@
 				1464960C11FF7AE500ECEC7A /* <UINavigationBar> back.png in Resources */,
 				1464960D11FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png in Resources */,
 				1464960E11FF7AE500ECEC7A /* <UINavigationBar> button.png in Resources */,
+				146910AF122F003F005A12A2 /* <UIPopoverWindow> close.tif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

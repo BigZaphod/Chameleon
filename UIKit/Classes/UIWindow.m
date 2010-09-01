@@ -246,29 +246,37 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 
 - (void)sendEvent:(UIEvent *)event
 {
-	NSSet *allTouches = [event allTouches];
-	UITouch *touch = (UITouch *)[allTouches anyObject];
+	UITouch *touch = [event _touch];
 	const CGPoint delta = CGPointMake([[event _NSEvent] deltaX],[[event _NSEvent] deltaY]);
 	
 	if (event.type == UIEventTypeTouches) {
 		switch (touch.phase) {
 			case UITouchPhaseBegan:
-				[touch.view touchesBegan:allTouches withEvent:event];
+				[touch.view touchesBegan:[event allTouches] withEvent:event];
 				break;
 			case UITouchPhaseMoved:
-				[touch.view touchesMoved:allTouches withEvent:event];
+				[touch.view touchesMoved:[event allTouches] withEvent:event];
 				break;
 			case UITouchPhaseEnded:
-				[touch.view touchesEnded:allTouches withEvent:event];
+				[touch.view touchesEnded:[event allTouches] withEvent:event];
 				break;
 			case UITouchPhaseCancelled:
-				[touch.view touchesCancelled:allTouches withEvent:event];
+				[touch.view touchesCancelled:[event allTouches] withEvent:event];
 				break;
 		}
 	} else if (event.type == _UIEventTypeMouseScroll) {
 		[touch.view scrollWheelMoved:delta withEvent:event];
 	} else if (event.type == _UIEventTypeMouseMoved) {
-		[touch.view mouseMoved:delta withEvent:event];
+		UIView *previousView = [event _previousMouseMovementView];
+		UIView *currentView = touch.view;
+		if (currentView != previousView) {
+			[previousView mouseExited:previousView withEvent:event];
+			[currentView mouseEntered:currentView withEvent:event];
+			[event _setPreviousMouseMovementView:currentView];
+		}
+		[currentView mouseMoved:delta withEvent:event];
+	} else if (event.type == _UIEventTypeMouseRightClick) {
+		[touch.view rightClick:touch withEvent:event];
 	}
 
 	NSCursor *newCursor = [touch.view mouseCursorForEvent:event] ?: [NSCursor arrowCursor];

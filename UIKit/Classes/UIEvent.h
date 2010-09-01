@@ -6,6 +6,7 @@ typedef enum {
 	UIEventTypeMotion,
 	_UIEventTypeMouseScroll,
 	_UIEventTypeMouseMoved,
+	_UIEventTypeMouseRightClick,
 } UIEventType;
 
 typedef enum {
@@ -19,6 +20,7 @@ typedef enum {
 @private
 	NSEvent *_event;
 	UITouch *_touch;
+	UIView *_previousMouseMovementView;
 }
 
 @property (nonatomic, readonly) NSTimeInterval timestamp;

@@ -20,6 +20,7 @@
 	
 	switch ([theEvent type]) {
 		case NSLeftMouseDown:
+		case NSRightMouseDown:
 			newPhase = UITouchPhaseBegan;
 			_previousLocation = screenLocation;
 			locationChanged = YES;
@@ -27,10 +28,12 @@
 			break;
 
 		case NSLeftMouseDragged:
+		case NSRightMouseDragged:
 			newPhase = UITouchPhaseMoved;
 			break;
 			
 		case NSLeftMouseUp:
+		case NSRightMouseUp:
 			newPhase = UITouchPhaseEnded;
 			newTapCount = [theEvent clickCount];
 			break;
