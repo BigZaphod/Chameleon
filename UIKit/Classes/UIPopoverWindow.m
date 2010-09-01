@@ -9,6 +9,7 @@
 #import "UIPopoverWindow.h"
 
 #import "UIPopoverWindowFrameView.h"
+#import "UIImage+UIPrivate.h"
 
 extern const CGFloat popoverWindowFrameTitleHeight;
 extern const CGFloat popoverWindowFrameBorderWidth;
@@ -94,7 +95,7 @@ const CGFloat popoverWindowCloseButtonSize = 13.0f;
 		//[closeButton setFrame:NSMakeRect(3.0f, bounds.size.height - 3.0f - 13.0f, 13.0f, 13.0f)];
 		[closeButton setButtonType:NSMomentaryChangeButton];
 		[closeButton setBordered:NO];
-		[closeButton setImage:[NSImage imageNamed:@"close.tif"]];
+		[closeButton setImage:[[UIImage _frameworkImageNamed:@"<UIPopoverWindow> close.tif"] _NSImage]];
 		[closeButton setImagePosition:NSImageOnly];
 		[closeButton setFocusRingType:NSFocusRingTypeNone];
 		[closeButton setTarget:nil];

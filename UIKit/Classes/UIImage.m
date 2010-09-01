@@ -153,6 +153,11 @@ NSMutableDictionary *imageCache = nil;
 	return UIImageOrientationUp;
 }
 
+- (NSImage *)_NSImage
+{
+	return [[[NSImage alloc] initWithCGImage:_image size:self.size] autorelease];
+}
+
 @end
 
 void UIImageWriteToSavedPhotosAlbum(UIImage *image, id completionTarget, SEL completionSelector, void *contextInfo)

@@ -6,4 +6,5 @@
 @interface UIImage (UIPrivate)
 + (UIImage *)_frameworkImageNamed:(NSString *)name;
 - (id)_initWithNSImage:(NSImage *)theImage;
+- (NSImage *)_NSImage;
 @end
