@@ -155,7 +155,7 @@ NSMutableDictionary *imageCache = nil;
 
 - (NSImage *)_NSImage
 {
-	return [[[NSImage alloc] initWithCGImage:_image size:self.size] autorelease];
+	return [[[NSImage alloc] initWithCGImage:_image size:NSSizeFromCGSize(self.size)] autorelease];
 }
 
 @end

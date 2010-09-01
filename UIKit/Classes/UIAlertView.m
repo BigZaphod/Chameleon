@@ -76,14 +76,18 @@
 		[self.delegate didPresentAlertView:self];
 	}
 
-	NSString *defaultButton = [self.buttonTitles objectAtIndex:self.cancelButtonIndex];
+	NSString *defaultButton = nil;
 	NSString *alternateButton = nil;
 	NSString *otherButton = nil;
 	
 	NSMutableArray *otherButtonTitles = nil;
-	if ([self numberOfButtons] > 1) {
+	if ([self numberOfButtons] > 0) {
 		otherButtonTitles = [self.buttonTitles mutableCopy];
-		[otherButtonTitles removeObjectAtIndex:self.cancelButtonIndex];
+		
+		if (self.cancelButtonIndex >= 0) {
+			defaultButton = [otherButtonTitles objectAtIndex:self.cancelButtonIndex];
+			[otherButtonTitles removeObjectAtIndex:self.cancelButtonIndex];
+		}
 		
 		if ([otherButtonTitles count] >= 1) {
 			alternateButton = [otherButtonTitles objectAtIndex:0];
@@ -91,20 +95,31 @@
 		if ([otherButtonTitles count] >= 2) {
 			otherButton = [otherButtonTitles objectAtIndex:1];
 		}
+
+		[otherButtonTitles release];
 	}
+
+	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+
+	if (self.title) [alert setMessageText:self.title];
+	if (self.message) [alert setInformativeText:self.message];
+	if (alternateButton) [alert addButtonWithTitle:alternateButton];
+	if (otherButton) [alert addButtonWithTitle:otherButton];
+	if (defaultButton) [alert addButtonWithTitle:defaultButton];
 	
-	NSAlert *alert = [NSAlert alertWithMessageText:self.title defaultButton:defaultButton alternateButton:alternateButton otherButton:otherButton informativeTextWithFormat:self.message];
 	NSInteger result = [alert runModal];
+
 	NSInteger buttonIndex = -1;
+
 	switch (result) {
 		default:
-		case NSAlertDefaultReturn:
+		case NSAlertFirstButtonReturn:
 			buttonIndex = [self.buttonTitles indexOfObject:defaultButton];
 			break;
-		case NSAlertAlternateReturn:
+		case NSAlertSecondButtonReturn:
 			buttonIndex = [self.buttonTitles indexOfObject:alternateButton];
 			break;
-		case NSAlertOtherReturn:
+		case NSAlertThirdButtonReturn:
 			buttonIndex = [self.buttonTitles indexOfObject:otherButton];
 			break;
 	}
