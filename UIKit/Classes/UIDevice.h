@@ -14,7 +14,7 @@ typedef enum {
 typedef enum {
 	UIUserInterfaceIdiomPhone,
 	UIUserInterfaceIdiomPad,
-	_UIUserInterfaceIdiomDesktop,
+	UIUserInterfaceIdiomDesktop,
 } UIUserInterfaceIdiom;
 
 #define UI_USER_INTERFACE_IDIOM() \

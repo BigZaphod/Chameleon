@@ -31,8 +31,7 @@ static UIDevice *theDevice;
 
 - (UIUserInterfaceIdiom)userInterfaceIdiom
 {
-	// LIES! This might not be the best way at this point, but we'll run with it for now...
-	return UIUserInterfaceIdiomPad;
+	return UIUserInterfaceIdiomDesktop;
 }
 
 - (NSString *)name
