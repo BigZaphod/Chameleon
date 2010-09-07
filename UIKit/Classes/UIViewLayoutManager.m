@@ -20,13 +20,7 @@ static UIViewLayoutManager *theLayoutManager = nil;
 
 - (void)layoutSublayersOfLayer:(CALayer *)theLayer
 {
-	id<UIViewLayoutManagerProtocol> view = [theLayer delegate];
-
-	[view layoutSubviews];
-
-	if ([view respondsToSelector:@selector(_didLayoutSubviews)]) {
-		[view _didLayoutSubviews];
-	}
+	[[theLayer delegate] layoutSubviews];
 }
 
 @end

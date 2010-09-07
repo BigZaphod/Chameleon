@@ -255,98 +255,13 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	return [self.dataSource tableView:self numberOfRowsInSection:section];
 }
 
-- (void)reloadData
+- (void)_layoutCells
 {
-	const BOOL delegateProvidesRowHeight = [self.delegate respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)];
-	const BOOL delegateProvidesSectionHeaderHeight = [self.delegate respondsToSelector:@selector(tableView:heightForHeaderInSection:)];
-	const BOOL delegateProvidesSectionFooterHeight = [self.delegate respondsToSelector:@selector(tableView:heightForFooterInSection:)];
-	const BOOL delegateProvidesSectionHeaderView = [self.delegate respondsToSelector:@selector(tableView:viewForHeaderInSection:)];
-	const BOOL delegateProvidesSectionFooterView = [self.delegate respondsToSelector:@selector(tableView:viewForFooterInSection:)];
-	const BOOL datasourceProvidesSectionHeaderTitle = [self.dataSource respondsToSelector:@selector(tableView:titleForHeaderInSection:)];
-	const BOOL datasourceProvidesSectionFooterTitle = [self.dataSource respondsToSelector:@selector(tableView:titleForFooterInSection:)];
-	const CGFloat defaultRowHeight = _rowHeight ?: _UITableViewDefaultRowHeight;
-
-	// clear prior selection
-	[_selectedRow release];
-	_selectedRow = nil;
-	
-	// empty out previously cached stuff
-	[_sections removeAllObjects];
-	[_cachedCells removeAllObjects];
-	
-	// compute the heights/offsets of everything
-	const NSInteger numberOfSections = [self numberOfSections];
-	for (NSInteger section=0; section<numberOfSections; section++) {
-		const NSInteger numberOfRowsInSection = [self numberOfRowsInSection:section];
-		
-		UITableViewSection *sectionRecord = [UITableViewSection new];
-		sectionRecord.numberOfRows = numberOfRowsInSection;
-		sectionRecord.headerView = delegateProvidesSectionHeaderView? [self.delegate tableView:self viewForHeaderInSection:section] : nil;
-		sectionRecord.footerView = delegateProvidesSectionFooterView? [self.delegate tableView:self viewForFooterInSection:section] : nil;
-		sectionRecord.headerTitle = datasourceProvidesSectionHeaderTitle? [self.dataSource tableView:self titleForHeaderInSection:section] : nil;
-		sectionRecord.footerTitle = datasourceProvidesSectionFooterTitle? [self.dataSource tableView:self titleForFooterInSection:section] : nil;
-		
-		// make a default section header view if there's a title for it and no overriding view
-		if (!sectionRecord.headerView && sectionRecord.headerTitle) {
-			sectionRecord.headerView = [UITableViewSectionLabel sectionLabelWithTitle:sectionRecord.headerTitle];
-		}
-
-		// make a default section footer view if there's a title for it and no overriding view
-		if (!sectionRecord.footerView && sectionRecord.footerTitle) {
-			sectionRecord.footerView = [UITableViewSectionLabel sectionLabelWithTitle:sectionRecord.footerTitle];
-		}
-		
-		// if there's a view, then we need to set the height, otherwise it's going to be zero
-		if (sectionRecord.headerView) {
-			[self addSubview:sectionRecord.headerView];
-			sectionRecord.headerHeight = delegateProvidesSectionHeaderHeight? [self.delegate tableView:self heightForHeaderInSection:section] : _sectionHeaderHeight;
-		} else {
-			sectionRecord.headerHeight = 0;
-		}
-
-		if (sectionRecord.footerView) {
-			[self addSubview:sectionRecord.footerView];
-			sectionRecord.footerHeight = delegateProvidesSectionFooterHeight? [self.delegate tableView:self heightForFooterInSection:section] : _sectionFooterHeight;
-		} else {
-			sectionRecord.footerHeight = 0;
-		}
-
-		NSMutableArray *rowHeights = [[NSMutableArray alloc] initWithCapacity:numberOfRowsInSection];
-		CGFloat totalRowsHeight = 0;
-		
-		for (NSInteger row=0; row<numberOfRowsInSection; row++) {
-			const CGFloat rowHeight = delegateProvidesRowHeight? [self.delegate tableView:self heightForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section]] : defaultRowHeight;
-			[rowHeights addObject:[NSNumber numberWithFloat:rowHeight]];
-			totalRowsHeight += rowHeight;
-		}
-		
-		sectionRecord.rowsHeight = totalRowsHeight;
-		sectionRecord.rowHeights = rowHeights;
-		
-		[_sections addObject:sectionRecord];
-		[sectionRecord release];
-		[rowHeights release];
-	}
-	
-	_needsReload = NO;
-	[self _updateContentSize];
-	[self setNeedsLayout];
-}
-
-- (void)layoutSubviews
-{
-	[super layoutSubviews];
-
-	if (_needsReload) {
-		[self reloadData];
-	}
-	
-	// DO FANCY-PANTS STUFF HERE!
 	const CGSize boundsSize = self.bounds.size;
 	const CGFloat contentOffset = self.contentOffset.y;
 	const CGRect visibleBounds = CGRectMake(0,contentOffset,boundsSize.width,boundsSize.height);
 	CGFloat tableHeight = 0;
-		
+	
 	if (_tableHeaderView) {
 		CGRect tableHeaderFrame = _tableHeaderView.frame;
 		tableHeaderFrame.origin = CGPointZero;
@@ -360,7 +275,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	NSMutableDictionary *availableCells = [_cachedCells mutableCopy];
 	const NSInteger numberOfSections = [_sections count];
 	[_cachedCells removeAllObjects];
-
+	
 	for (NSInteger section=0; section<numberOfSections; section++) {
 		NSAutoreleasePool *sectionPool = [NSAutoreleasePool new];
 		CGRect sectionRect = [self rectForSection:section];
@@ -370,7 +285,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 			const CGRect footerRect = [self rectForFooterInSection:section];
 			UITableViewSection *sectionRecord = [_sections objectAtIndex:section];
 			const NSInteger numberOfRows = sectionRecord.numberOfRows;
-
+			
 			if (sectionRecord.headerView) {
 				if (CGRectIntersectsRect(headerRect,visibleBounds)) {
 					sectionRecord.headerView.frame = headerRect;
@@ -388,7 +303,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 					sectionRecord.footerView.hidden = YES;
 				}
 			}
-
+			
 			for (NSInteger row=0; row<numberOfRows; row++) {
 				NSAutoreleasePool *rowPool = [NSAutoreleasePool new];
 				NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
@@ -419,7 +334,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 			[cell removeFromSuperview];
 		}
 	}
-
+	
 	// non-reusable cells should end up dealloced after at this point, but reusable ones live on in _reusableCells.
 	[availableCells release];
 	
@@ -429,6 +344,99 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		tableFooterFrame.size.width = boundsSize.width;
 		_tableFooterView.frame = tableFooterFrame;
 		_tableFooterView.hidden = !CGRectIntersectsRect(tableFooterFrame, visibleBounds);
+	}
+}
+
+- (void)reloadData
+{
+	const BOOL delegateProvidesRowHeight = [self.delegate respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)];
+	const BOOL delegateProvidesSectionHeaderHeight = [self.delegate respondsToSelector:@selector(tableView:heightForHeaderInSection:)];
+	const BOOL delegateProvidesSectionFooterHeight = [self.delegate respondsToSelector:@selector(tableView:heightForFooterInSection:)];
+	const BOOL delegateProvidesSectionHeaderView = [self.delegate respondsToSelector:@selector(tableView:viewForHeaderInSection:)];
+	const BOOL delegateProvidesSectionFooterView = [self.delegate respondsToSelector:@selector(tableView:viewForFooterInSection:)];
+	const BOOL datasourceProvidesSectionHeaderTitle = [self.dataSource respondsToSelector:@selector(tableView:titleForHeaderInSection:)];
+	const BOOL datasourceProvidesSectionFooterTitle = [self.dataSource respondsToSelector:@selector(tableView:titleForFooterInSection:)];
+	const CGFloat defaultRowHeight = _rowHeight ?: _UITableViewDefaultRowHeight;
+	
+	// clear prior selection
+	[_selectedRow release];
+	_selectedRow = nil;
+	
+	// empty out previously cached stuff
+	[_sections removeAllObjects];
+	[_cachedCells removeAllObjects];
+	
+	// compute the heights/offsets of everything
+	const NSInteger numberOfSections = [self numberOfSections];
+	for (NSInteger section=0; section<numberOfSections; section++) {
+		const NSInteger numberOfRowsInSection = [self numberOfRowsInSection:section];
+		
+		UITableViewSection *sectionRecord = [UITableViewSection new];
+		sectionRecord.numberOfRows = numberOfRowsInSection;
+		sectionRecord.headerView = delegateProvidesSectionHeaderView? [self.delegate tableView:self viewForHeaderInSection:section] : nil;
+		sectionRecord.footerView = delegateProvidesSectionFooterView? [self.delegate tableView:self viewForFooterInSection:section] : nil;
+		sectionRecord.headerTitle = datasourceProvidesSectionHeaderTitle? [self.dataSource tableView:self titleForHeaderInSection:section] : nil;
+		sectionRecord.footerTitle = datasourceProvidesSectionFooterTitle? [self.dataSource tableView:self titleForFooterInSection:section] : nil;
+		
+		// make a default section header view if there's a title for it and no overriding view
+		if (!sectionRecord.headerView && sectionRecord.headerTitle) {
+			sectionRecord.headerView = [UITableViewSectionLabel sectionLabelWithTitle:sectionRecord.headerTitle];
+		}
+		
+		// make a default section footer view if there's a title for it and no overriding view
+		if (!sectionRecord.footerView && sectionRecord.footerTitle) {
+			sectionRecord.footerView = [UITableViewSectionLabel sectionLabelWithTitle:sectionRecord.footerTitle];
+		}
+		
+		// if there's a view, then we need to set the height, otherwise it's going to be zero
+		if (sectionRecord.headerView) {
+			[self addSubview:sectionRecord.headerView];
+			sectionRecord.headerHeight = delegateProvidesSectionHeaderHeight? [self.delegate tableView:self heightForHeaderInSection:section] : _sectionHeaderHeight;
+		} else {
+			sectionRecord.headerHeight = 0;
+		}
+		
+		if (sectionRecord.footerView) {
+			[self addSubview:sectionRecord.footerView];
+			sectionRecord.footerHeight = delegateProvidesSectionFooterHeight? [self.delegate tableView:self heightForFooterInSection:section] : _sectionFooterHeight;
+		} else {
+			sectionRecord.footerHeight = 0;
+		}
+		
+		NSMutableArray *rowHeights = [[NSMutableArray alloc] initWithCapacity:numberOfRowsInSection];
+		CGFloat totalRowsHeight = 0;
+		
+		for (NSInteger row=0; row<numberOfRowsInSection; row++) {
+			const CGFloat rowHeight = delegateProvidesRowHeight? [self.delegate tableView:self heightForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section]] : defaultRowHeight;
+			[rowHeights addObject:[NSNumber numberWithFloat:rowHeight]];
+			totalRowsHeight += rowHeight;
+		}
+		
+		sectionRecord.rowsHeight = totalRowsHeight;
+		sectionRecord.rowHeights = rowHeights;
+		
+		[_sections addObject:sectionRecord];
+		[sectionRecord release];
+		[rowHeights release];
+	}
+	
+	_needsReload = NO;
+	[self _updateContentSize];
+	[self _layoutCells];
+}
+
+- (void)setFrame:(CGRect)frame
+{
+	[super setFrame:frame];
+	[self _layoutCells];
+}
+
+- (void)layoutSubviews
+{
+	[super layoutSubviews];
+
+	if (_needsReload) {
+		[self reloadData];
 	}
 }
 

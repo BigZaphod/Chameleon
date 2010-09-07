@@ -3,8 +3,6 @@
 
 @protocol UIViewLayoutManagerProtocol <NSObject>
 - (void)layoutSubviews;
-@optional
-- (void)_didLayoutSubviews;
 @end
 
 @interface UIViewLayoutManager : NSObject
