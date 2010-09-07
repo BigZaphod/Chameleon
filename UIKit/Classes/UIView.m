@@ -399,7 +399,7 @@ static BOOL _animationsEnabled = YES;
 
 	// Font smoothing looks really bad (or just plain doesn't work, I don't know which) if the background color is transparent
 	// or has any amount of transparency in it. This solves that problem.
-	const BOOL shouldSmoothFonts = (_backgroundColor && (CGColorGetAlpha(_backgroundColor.CGColor) == 1));
+	const BOOL shouldSmoothFonts = (_backgroundColor && (CGColorGetAlpha(_backgroundColor.CGColor) == 1)) || self.opaque;
 	CGContextSetShouldSmoothFonts(ctx, shouldSmoothFonts);
 	
 	[[UIColor blackColor] set];
