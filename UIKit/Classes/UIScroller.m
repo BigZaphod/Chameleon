@@ -75,8 +75,9 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 	}
 }
 
-- (void)layoutSubviews
+- (void)setFrame:(CGRect)frame
 {
+	[super setFrame:frame];
 	_track.frame = self.bounds;
 
 	if (self.knobContentScale < 1.f) {

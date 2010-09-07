@@ -156,10 +156,10 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 	}
 }
 
-- (void)_didLayoutSubviews
+- (void)_updateScrollers
 {
 	[self _constrainContentOffset:NO];
-
+	
 	const BOOL showingGrabber = [self _shouldShowGrabber];
 	
 	const CGRect bounds = self.bounds;
@@ -169,16 +169,50 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 	_grabber.hidden = !showingGrabber;
 	_verticalScroller.hidden = !self._canScrollVertical;
 	_horizontalScroller.hidden = !self._canScrollHorizontal;
+}
 
-	[self bringSubviewToFront:_horizontalScroller];
-	[self bringSubviewToFront:_verticalScroller];
-	[self bringSubviewToFront:_grabber];
+- (void)setFrame:(CGRect)frame
+{
+	[super setFrame:frame];
+	[self _updateScrollers];
+}
+
+- (void)didMoveToSuperview
+{
+	[super didMoveToSuperview];
+	[self _updateScrollers];
+}
+
+- (void)_bringScrollersToFront
+{
+	[super bringSubviewToFront:_horizontalScroller];
+	[super bringSubviewToFront:_verticalScroller];
+	[super bringSubviewToFront:_grabber];
+}
+
+- (void)addSubview:(UIView *)subview
+{
+	[super addSubview:subview];
+	[self _bringScrollersToFront];
+}
+
+- (void)bringSubviewToFront:(UIView *)subview
+{
+	[super bringSubviewToFront:subview];
+	[self _bringScrollersToFront];
+}
+
+- (void)insertSubview:(UIView *)subview atIndex:(NSInteger)index
+{
+	[super insertSubview:subview atIndex:index];
+	[self _bringScrollersToFront];
 }
 
 - (void)setContentOffset:(CGPoint)theOffset animated:(BOOL)animated
 {
 	_contentOffset = theOffset;
 	[self _constrainContentOffset:animated];
+	[self _updateScrollers];
 	if ([_delegate respondsToSelector:@selector(scrollViewDidScroll:)]) {
 		[_delegate scrollViewDidScroll:self];
 	}
@@ -193,7 +227,7 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 {
 	if (!CGSizeEqualToSize(newSize, _contentSize)) {
 		_contentSize = newSize;
-		[self setNeedsLayout];
+		[self _updateScrollers];
 	}
 }
 
