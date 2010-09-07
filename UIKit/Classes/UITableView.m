@@ -431,6 +431,12 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	[self _layoutCells];
 }
 
+- (void)setBounds:(CGRect)bounds
+{
+	[super setBounds:bounds];
+	[self _layoutCells];
+}
+
 - (void)layoutSubviews
 {
 	[super layoutSubviews];
