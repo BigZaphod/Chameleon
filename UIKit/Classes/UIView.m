@@ -110,32 +110,37 @@ static BOOL _animationsEnabled = YES;
 {
 	if (subview && subview.superview != self) {
 		const BOOL changingWindows = (subview.window != self.window);
-		
-		if (![subview->_viewController parentViewController]) [subview->_viewController viewWillAppear:NO];
+
 		if (changingWindows) [subview willMoveToWindow:self.window];
 		[subview willMoveToSuperview:self];
-		
-		[subview retain];
-	
-		if (subview.superview) {
-			[subview.layer removeFromSuperlayer];
-			[subview.superview->_subviews removeObject:subview];
+
+		{
+			[subview retain];
+
+			if (subview.superview) {
+				[subview.layer removeFromSuperlayer];
+				[subview.superview->_subviews removeObject:subview];
+			}
+			
+			[subview willChangeValueForKey:@"superview"];
+			[_subviews addObject:subview];
+			subview->_superview = self;
+			[_layer addSublayer:subview.layer];
+			[subview didChangeValueForKey:@"superview"];
+
+			[subview release];
 		}
-		
-		[subview willChangeValueForKey:@"superview"];
-		[_subviews addObject:subview];
-		subview->_superview = self;
-		[_layer addSublayer:subview.layer];
-		[subview didChangeValueForKey:@"superview"];
-	
-		[subview release];
-		
-		if (![subview->_viewController parentViewController]) [subview->_viewController viewDidAppear:NO];
+
 		if (changingWindows) [subview didMoveToWindow];
 		[subview didMoveToSuperview];
 		[[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:subview];
-		
+
 		[self didAddSubview:subview];
+
+		if (![subview->_viewController parentViewController]) {
+			[subview->_viewController viewWillAppear:NO];
+			[subview->_viewController viewDidAppear:NO];
+		}
 	}
 }
 
