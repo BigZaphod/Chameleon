@@ -415,8 +415,9 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	for (UITableViewCell *cell in [availableCells allValues]) {
 		if (cell.reuseIdentifier) {
 			[_reusableCells addObject:cell];
+		} else {
+			[cell removeFromSuperview];
 		}
-		[cell removeFromSuperview];
 	}
 
 	// non-reusable cells should end up dealloced after at this point, but reusable ones live on in _reusableCells.
