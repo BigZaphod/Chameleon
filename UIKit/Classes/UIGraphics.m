@@ -70,7 +70,7 @@ void UIRectFillUsingBlendMode(CGRect rect, CGBlendMode blendMode)
 	CGContextRef c = UIGraphicsGetCurrentContext();
 	CGContextSaveGState(c);
 	CGContextSetBlendMode(c, blendMode);
-	UIRectFill(rect);
+	CGContextFillRect(c, rect);
 	CGContextRestoreGState(c);
 }
 
