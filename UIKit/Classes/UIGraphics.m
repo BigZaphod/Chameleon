@@ -62,7 +62,7 @@ void UIGraphicsEndImageContext()
 
 void UIRectFill(CGRect rect)
 {
-	CGContextFillRect(UIGraphicsGetCurrentContext(), rect);
+	UIRectFillUsingBlendMode(rect, kCGBlendModeCopy);
 }
 
 void UIRectFillUsingBlendMode(CGRect rect, CGBlendMode blendMode)
