@@ -14,6 +14,11 @@
 	UINavigationBar *_navigationBar;
 	NSMutableArray *_viewControllers;
 	id _delegate;
+	
+	struct {
+		unsigned int didShowViewController : 1;
+		unsigned int willShowViewController : 1;
+	} _delegateHas;
 }
 
 - (id)initWithRootViewController:(UIViewController *)rootViewController;

@@ -27,6 +27,11 @@ typedef NSUInteger UIPopoverArrowDirection;
 	BOOL _popoverVisible;
 	id _popoverWindowController;
 	id _UIKitView;
+	
+	struct {
+		unsigned int popoverControllerDidDismissPopover : 1;
+		unsigned int popoverControllerShouldDismissPopover : 1;
+	} _delegateHas;
 }
 
 - (id)initWithContentViewController:(UIViewController *)viewController;

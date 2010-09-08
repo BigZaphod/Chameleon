@@ -61,7 +61,27 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 - (void)setDataSource:(id<UITableViewDataSource>)newSource
 {
 	_dataSource = newSource;
+
+	_dataSourceHas.numberOfSectionsInTableView = [_dataSource respondsToSelector:@selector(numberOfSectionsInTableView:)];
+	_dataSourceHas.titleForHeaderInSection = [_dataSource respondsToSelector:@selector(tableView:titleForHeaderInSection:)];
+	_dataSourceHas.titleForFooterInSection = [_dataSource respondsToSelector:@selector(tableView:titleForFooterInSection:)];
+	
 	[self _setNeedsReload];
+}
+
+- (void)setDelegate:(id<UITableViewDelegate>)newDelegate
+{
+	[super setDelegate:newDelegate];
+
+	_delegateHas.heightForRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)];
+	_delegateHas.heightForHeaderInSection = [_delegate respondsToSelector:@selector(tableView:heightForHeaderInSection:)];
+	_delegateHas.heightForFooterInSection = [_delegate respondsToSelector:@selector(tableView:heightForFooterInSection:)];
+	_delegateHas.viewForHeaderInSection = [_delegate respondsToSelector:@selector(tableView:viewForHeaderInSection:)];
+	_delegateHas.viewForFooterInSection = [_delegate respondsToSelector:@selector(tableView:viewForFooterInSection:)];
+	_delegateHas.willSelectRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)];
+	_delegateHas.didSelectRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)];
+	_delegateHas.willDeselectRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:willDeselectRowAtIndexPath:)];
+	_delegateHas.didDeselectRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:didDeselectRowAtIndexPath:)];
 }
 
 - (void)setRowHeight:(CGFloat)newHeight
@@ -243,7 +263,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (NSInteger)numberOfSections
 {
-	if ([self.dataSource respondsToSelector:@selector(numberOfSectionsInTableView:)]) {
+	if (_dataSourceHas.numberOfSectionsInTableView) {
 		return [self.dataSource numberOfSectionsInTableView:self];
 	} else {
 		return 1;
@@ -360,13 +380,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void)reloadData
 {
-	const BOOL delegateProvidesRowHeight = [self.delegate respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)];
-	const BOOL delegateProvidesSectionHeaderHeight = [self.delegate respondsToSelector:@selector(tableView:heightForHeaderInSection:)];
-	const BOOL delegateProvidesSectionFooterHeight = [self.delegate respondsToSelector:@selector(tableView:heightForFooterInSection:)];
-	const BOOL delegateProvidesSectionHeaderView = [self.delegate respondsToSelector:@selector(tableView:viewForHeaderInSection:)];
-	const BOOL delegateProvidesSectionFooterView = [self.delegate respondsToSelector:@selector(tableView:viewForFooterInSection:)];
-	const BOOL datasourceProvidesSectionHeaderTitle = [self.dataSource respondsToSelector:@selector(tableView:titleForHeaderInSection:)];
-	const BOOL datasourceProvidesSectionFooterTitle = [self.dataSource respondsToSelector:@selector(tableView:titleForFooterInSection:)];
 	const CGFloat defaultRowHeight = _rowHeight ?: _UITableViewDefaultRowHeight;
 	
 	// clear prior selection
@@ -384,10 +397,10 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		
 		UITableViewSection *sectionRecord = [UITableViewSection new];
 		sectionRecord.numberOfRows = numberOfRowsInSection;
-		sectionRecord.headerView = delegateProvidesSectionHeaderView? [self.delegate tableView:self viewForHeaderInSection:section] : nil;
-		sectionRecord.footerView = delegateProvidesSectionFooterView? [self.delegate tableView:self viewForFooterInSection:section] : nil;
-		sectionRecord.headerTitle = datasourceProvidesSectionHeaderTitle? [self.dataSource tableView:self titleForHeaderInSection:section] : nil;
-		sectionRecord.footerTitle = datasourceProvidesSectionFooterTitle? [self.dataSource tableView:self titleForFooterInSection:section] : nil;
+		sectionRecord.headerView = _delegateHas.viewForHeaderInSection? [self.delegate tableView:self viewForHeaderInSection:section] : nil;
+		sectionRecord.footerView = _delegateHas.viewForFooterInSection? [self.delegate tableView:self viewForFooterInSection:section] : nil;
+		sectionRecord.headerTitle = _dataSourceHas.titleForHeaderInSection? [self.dataSource tableView:self titleForHeaderInSection:section] : nil;
+		sectionRecord.footerTitle = _dataSourceHas.titleForFooterInSection? [self.dataSource tableView:self titleForFooterInSection:section] : nil;
 		
 		// make a default section header view if there's a title for it and no overriding view
 		if (!sectionRecord.headerView && sectionRecord.headerTitle) {
@@ -402,14 +415,14 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		// if there's a view, then we need to set the height, otherwise it's going to be zero
 		if (sectionRecord.headerView) {
 			[self addSubview:sectionRecord.headerView];
-			sectionRecord.headerHeight = delegateProvidesSectionHeaderHeight? [self.delegate tableView:self heightForHeaderInSection:section] : _sectionHeaderHeight;
+			sectionRecord.headerHeight = _delegateHas.heightForHeaderInSection? [self.delegate tableView:self heightForHeaderInSection:section] : _sectionHeaderHeight;
 		} else {
 			sectionRecord.headerHeight = 0;
 		}
 		
 		if (sectionRecord.footerView) {
 			[self addSubview:sectionRecord.footerView];
-			sectionRecord.footerHeight = delegateProvidesSectionFooterHeight? [self.delegate tableView:self heightForFooterInSection:section] : _sectionFooterHeight;
+			sectionRecord.footerHeight = _delegateHas.heightForFooterInSection? [self.delegate tableView:self heightForFooterInSection:section] : _sectionFooterHeight;
 		} else {
 			sectionRecord.footerHeight = 0;
 		}
@@ -418,7 +431,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		CGFloat totalRowsHeight = 0;
 		
 		for (NSInteger row=0; row<numberOfRowsInSection; row++) {
-			const CGFloat rowHeight = delegateProvidesRowHeight? [self.delegate tableView:self heightForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section]] : defaultRowHeight;
+			const CGFloat rowHeight = _delegateHas.heightForRowAtIndexPath? [self.delegate tableView:self heightForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section]] : defaultRowHeight;
 			[rowHeights addObject:[NSNumber numberWithFloat:rowHeight]];
 			totalRowsHeight += rowHeight;
 		}
@@ -543,26 +556,26 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		if (selectedRow) {
 			NSIndexPath *rowToDeselect = selectedRow;
 			
-			if ([_delegate respondsToSelector:@selector(tableView:willDeselectRowAtIndexPath:)]) {
+			if (_delegateHas.willDeselectRowAtIndexPath) {
 				rowToDeselect = [_delegate tableView:self willDeselectRowAtIndexPath:rowToDeselect];
 			}
 			
 			[self deselectRowAtIndexPath:rowToDeselect animated:NO];
 			
-			if ([_delegate respondsToSelector:@selector(tableView:didDeselectRowAtIndexPath:)]) {
+			if (_delegateHas.didDeselectRowAtIndexPath) {
 				[_delegate tableView:self didDeselectRowAtIndexPath:rowToDeselect];
 			}
 		}
 
 		NSIndexPath *rowToSelect = touchedRow;
 		
-		if ([_delegate respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)]) {
+		if (_delegateHas.willSelectRowAtIndexPath) {
 			rowToSelect = [_delegate tableView:self willSelectRowAtIndexPath:rowToSelect];
 		}
 
 		[self selectRowAtIndexPath:rowToSelect animated:NO scrollPosition:UITableViewScrollPositionNone];
 		
-		if ([_delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
+		if (_delegateHas.didSelectRowAtIndexPath) {
 			[_delegate tableView:self didSelectRowAtIndexPath:rowToSelect];
 		}
 	}

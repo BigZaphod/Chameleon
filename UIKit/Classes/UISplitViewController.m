@@ -163,6 +163,14 @@ static const CGFloat SplitterPadding = 3;
 	[super dealloc];
 }
 
+- (void)setDelegate:(id <UISplitViewControllerDelegate>)newDelegate
+{
+	_delegate = newDelegate;
+	_delegateHas.willPresentViewController = [_delegate respondsToSelector:@selector(splitViewController:popoverController:willPresentViewController:)];
+	_delegateHas.willHideViewController = [_delegate respondsToSelector:@selector(splitViewController:willHideViewController:withBarButtonItem:forPopoverController:)];
+	_delegateHas.willShowViewController = [_delegate respondsToSelector:@selector(splitViewController:willShowViewController:invalidatingBarButtonItem:)];
+}
+
 - (void)loadView
 {
 	self.view = [[[_UISplitViewControllerView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame] autorelease];

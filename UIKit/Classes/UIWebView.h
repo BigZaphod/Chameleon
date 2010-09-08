@@ -27,6 +27,10 @@ typedef NSUInteger UIWebViewNavigationType;
 	BOOL _canGoForward;
 	NSURLRequest *_request;
 	UIDataDetectorTypes _dataDetectorTypes;
+	
+	struct {
+		unsigned int shouldStartLoadWithRequest : 1;
+	} _delegateHas;
 }
 
 - (void)loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL;

@@ -50,6 +50,17 @@
 	[super dealloc];
 }
 
+- (void)setDelegate:(id<UIAlertViewDelegate>)newDelegate
+{
+	_delegate = newDelegate;
+	_delegateHas.clickedButtonAtIndex = [_delegate respondsToSelector:@selector(alertView:clickedButtonAtIndex:)];
+	_delegateHas.alertViewCancel = [_delegate respondsToSelector:@selector(alertViewCancel:)];
+	_delegateHas.willPresentAlertView = [_delegate respondsToSelector:@selector(willPresentAlertView:)];
+	_delegateHas.didPresentAlertView = [_delegate respondsToSelector:@selector(didPresentAlertView:)];
+	_delegateHas.willDismissWithButtonIndex = [_delegate respondsToSelector:@selector(alertView:willDismissWithButtonIndex:)];
+	_delegateHas.didDismissWithButtonIndex = [_delegate respondsToSelector:@selector(alertView:didDismissWithButtonIndex:)];
+}
+
 - (NSInteger)addButtonWithTitle:(NSString *)title
 {
 	[self.buttonTitles addObject:title];
@@ -69,11 +80,11 @@
 
 - (void)show
 {
-	if (self.delegate && [self.delegate respondsToSelector:@selector(willPresentAlertView:)]) {
-		[self.delegate willPresentAlertView:self];
+	if (_delegateHas.willPresentAlertView) {
+		[_delegate willPresentAlertView:self];
 	}
-	if (self.delegate && [self.delegate respondsToSelector:@selector(didPresentAlertView:)]) {
-		[self.delegate didPresentAlertView:self];
+	if (_delegateHas.didPresentAlertView) {
+		[_delegate didPresentAlertView:self];
 	}
 
 	NSString *defaultButton = nil;
@@ -124,15 +135,15 @@
 			break;
 	}
 
-	if (self.delegate && [self.delegate respondsToSelector:@selector(alertView:clickedButtonAtIndex:)]) {
-		[self.delegate alertView:self clickedButtonAtIndex:buttonIndex];
+	if (_delegateHas.clickedButtonAtIndex) {
+		[_delegate alertView:self clickedButtonAtIndex:buttonIndex];
 	}
 
-	if (self.delegate && [self.delegate respondsToSelector:@selector(alertView:willDismissWithButtonIndex:)]) {
-		[self.delegate alertView:self willDismissWithButtonIndex:buttonIndex];
+	if (_delegateHas.willDismissWithButtonIndex) {
+		[_delegate alertView:self willDismissWithButtonIndex:buttonIndex];
 	}
-	if (self.delegate && [self.delegate respondsToSelector:@selector(alertView:didDismissWithButtonIndex:)]) {
-		[self.delegate alertView:self didDismissWithButtonIndex:buttonIndex];
+	if (_delegateHas.didDismissWithButtonIndex) {
+		[_delegate alertView:self didDismissWithButtonIndex:buttonIndex];
 	}
 }
 

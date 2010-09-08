@@ -45,6 +45,13 @@
 	[super dealloc];
 }
 
+- (void)setDelegate:(id<UIPopoverControllerDelegate>)newDelegate
+{
+	_delegate = newDelegate;
+	_delegateHas.popoverControllerDidDismissPopover = [_delegate respondsToSelector:@selector(popoverControllerDidDismissPopover:)];
+	_delegateHas.popoverControllerShouldDismissPopover = [_delegate respondsToSelector:@selector(popoverControllerShouldDismissPopover:)];
+}
+
 - (void)setContentViewController:(UIViewController *)viewController
 {
 	if (viewController != _contentViewController) {

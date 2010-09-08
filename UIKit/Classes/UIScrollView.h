@@ -36,6 +36,10 @@ typedef enum {
 	UIScrollViewIndicatorStyle _indicatorStyle;
 	BOOL _delaysContentTouches;
 	BOOL _pagingEnabled;
+	
+	struct {
+		unsigned int scrollViewDidScroll : 1;
+	} _delegateCan;	
 }
 
 - (void)setContentOffset:(CGPoint)theOffset animated:(BOOL)animated;

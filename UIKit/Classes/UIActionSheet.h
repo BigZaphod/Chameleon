@@ -21,6 +21,15 @@
 	NSString *_title;
 	NSMutableArray *_buttons;
 	UIPopoverController *_popoverController;
+	
+	struct {
+		unsigned int clickedButtonAtIndex : 1;
+		unsigned int willPresentActionSheet : 1;
+		unsigned int didPresentActionSheet : 1;
+		unsigned int willDismissWithButtonIndex : 1;
+		unsigned int didDismissWithButtonIndex : 1;
+		unsigned int actionSheetCancel : 1;
+	} _delegateHas;
 }
 
 - (id)initWithTitle:(NSString *)title delegate:(id<UIActionSheetDelegate>)delegate cancelButtonTitle:(NSString *)cancelButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ...;

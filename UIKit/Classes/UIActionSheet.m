@@ -58,6 +58,17 @@
 	[super dealloc];
 }
 
+- (void)setDelegate:(id<UIActionSheetDelegate>)newDelegate
+{
+	_delegate = newDelegate;
+	_delegateHas.clickedButtonAtIndex = [_delegate respondsToSelector:@selector(actionSheet:clickedButtonAtIndex:)];
+	_delegateHas.willPresentActionSheet = [_delegate respondsToSelector:@selector(willPresentActionSheet:)];
+	_delegateHas.didPresentActionSheet = [_delegate respondsToSelector:@selector(didPresentActionSheet:)];
+	_delegateHas.willDismissWithButtonIndex = [_delegate respondsToSelector:@selector(actionSheet:willDismissWithButtonIndex:)];
+	_delegateHas.didDismissWithButtonIndex = [_delegate respondsToSelector:@selector(actionSheet:didDismissWithButtonIndex:)];
+	_delegateHas.actionSheetCancel = [_delegate respondsToSelector:@selector(actionSheetCancel:)];
+}
+
 - (CGSize)_viewSize
 {
 	return CGSizeMake(320, [_buttons count]*40);
@@ -139,13 +150,13 @@
 		_popoverController = [[UIPopoverController alloc] initWithContentViewController:controller];
 		_popoverController.delegate = self;
 		
-		if ([_delegate respondsToSelector:@selector(willPresentActionSheet:)]) {
+		if (_delegateHas.willPresentActionSheet) {
 			[_delegate willPresentActionSheet:self];
 		}
 
 		[_popoverController presentPopoverFromRect:rect inView:view permittedArrowDirections:UIPopoverArrowDirectionAny animated:animated];
 
-		if ([_delegate respondsToSelector:@selector(didPresentActionSheet:)]) {
+		if (_delegateHas.didPresentActionSheet) {
 			[_delegate didPresentActionSheet:self];
 		}
 	}
@@ -162,21 +173,21 @@
 
 - (void)_clickedButtonAtIndex:(NSInteger)index
 {
-	if ([_delegate respondsToSelector:@selector(actionSheet:clickedButtonAtIndex:)] ){
+	if (_delegateHas.clickedButtonAtIndex){
 		[_delegate actionSheet:self clickedButtonAtIndex:index];
 	}
 	
-	if (index == _cancelButtonIndex && [_delegate respondsToSelector:@selector(actionSheetCancel:)]) {
+	if (index == _cancelButtonIndex && _delegateHas.actionSheetCancel) {
 		[_delegate actionSheetCancel:self];
 	}
 	
-	if ([_delegate respondsToSelector:@selector(actionSheet:willDismissWithButtonIndex:)]) {
+	if (_delegateHas.willDismissWithButtonIndex) {
 		[_delegate actionSheet:self willDismissWithButtonIndex:index];
 	}
 	
 	[self dismissWithClickedButtonIndex:index animated:YES];
 	
-	if ([_delegate respondsToSelector:@selector(actionSheet:didDismissWithButtonIndex:)]) {
+	if (_delegateHas.didDismissWithButtonIndex) {
 		[_delegate actionSheet:self didDismissWithButtonIndex:index];
 	}
 }

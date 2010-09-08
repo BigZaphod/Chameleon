@@ -54,6 +54,12 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 	[super dealloc];
 }
 
+- (void)setDelegate:(id)newDelegate
+{
+	_delegate = newDelegate;
+	_delegateCan.scrollViewDidScroll = [_delegate respondsToSelector:@selector(scrollViewDidScroll:)];
+}
+
 - (void)setShowsHorizontalScrollIndicator:(BOOL)show
 {
 	_showsHorizontalScrollIndicator = show;
@@ -213,7 +219,7 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 	_contentOffset = theOffset;
 	[self _constrainContentOffset:animated];
 	[self _updateScrollers];
-	if ([_delegate respondsToSelector:@selector(scrollViewDidScroll:)]) {
+	if (_delegateCan.scrollViewDidScroll) {
 		[_delegate scrollViewDidScroll:self];
 	}
 }

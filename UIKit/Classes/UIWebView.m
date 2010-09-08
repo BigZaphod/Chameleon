@@ -4,6 +4,12 @@
 @implementation UIWebView
 @synthesize loading=_loading, canGoBack=_canGoBack, canGoForward=_canGoForward, request=_request, delegate=_delegate, dataDetectorTypes=_dataDetectorTypes;
 
+- (void)setDelegate:(id<UIWebViewDelegate>)newDelegate
+{
+	_delegate = newDelegate;
+	_delegateHas.shouldStartLoadWithRequest = [_delegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)];
+}
+
 - (void)loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL
 {
 }

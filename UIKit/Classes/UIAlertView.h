@@ -10,6 +10,15 @@
 	id<UIAlertViewDelegate> _delegate;
 	NSInteger _cancelButtonIndex;
 	NSMutableArray *_buttonTitles;
+	
+	struct {
+		unsigned int clickedButtonAtIndex : 1;
+		unsigned int alertViewCancel : 1;
+		unsigned int willPresentAlertView : 1;
+		unsigned int didPresentAlertView : 1;
+		unsigned int willDismissWithButtonIndex : 1;
+		unsigned int didDismissWithButtonIndex : 1;
+	} _delegateHas;
 }
 
 - (id)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ...;

@@ -7,6 +7,12 @@
 @private
 	id <UISplitViewControllerDelegate> _delegate;
 	NSArray *_viewControllers;
+	
+	struct {
+		unsigned int willPresentViewController : 1;
+		unsigned int willHideViewController : 1;
+		unsigned int willShowViewController : 1;
+	} _delegateHas;
 }
 
 @property (nonatomic, assign) id <UISplitViewControllerDelegate> delegate;
@@ -15,7 +21,8 @@
 @end
 
 @class UIPopoverController;
-@protocol UISplitViewControllerDelegate
+
+@protocol UISplitViewControllerDelegate <NSObject>
 @optional
 - (void)splitViewController:(UISplitViewController*)svc popoverController:(UIPopoverController*)pc willPresentViewController:(UIViewController *)aViewController;
 - (void)splitViewController:(UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController:(UIPopoverController*)pc;

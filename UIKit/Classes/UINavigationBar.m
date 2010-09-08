@@ -91,6 +91,15 @@ static const CGFloat kMaxButtonHeight = 28;
 	[super dealloc];
 }
 
+- (void)setDelegate:(id)newDelegate
+{
+	_delegate = newDelegate;
+	_delegateHas.shouldPushItem = [_delegate respondsToSelector:@selector(navigationBar:shouldPushItem:)];
+	_delegateHas.didPushItem = [_delegate respondsToSelector:@selector(navigationBar:didPushItem:)];
+	_delegateHas.shouldPopItem = [_delegate respondsToSelector:@selector(navigationBar:shouldPopItem:)];
+	_delegateHas.didPopItem = [_delegate respondsToSelector:@selector(navigationBar:didPopItem:)];
+}
+
 - (UINavigationItem *)topItem
 {
 	return [_navStack lastObject];
@@ -191,7 +200,7 @@ static const CGFloat kMaxButtonHeight = 28;
 {
 	BOOL shouldPush = YES;
 
-	if ([_delegate respondsToSelector:@selector(navigationBar:shouldPushItem:)]) {
+	if (_delegateHas.shouldPushItem) {
 		shouldPush = [_delegate navigationBar:self shouldPushItem:item];
 	}
 
@@ -199,7 +208,7 @@ static const CGFloat kMaxButtonHeight = 28;
 		[_navStack addObject:item];
 		[self _updateViews:animated];
 		
-		if ([_delegate respondsToSelector:@selector(navigationBar:didPushItem:)]) {
+		if (_delegateHas.didPushItem) {
 			[_delegate navigationBar:self didPushItem:item];
 		}
 	}
@@ -212,7 +221,7 @@ static const CGFloat kMaxButtonHeight = 28;
 	if (previousItem) {
 		BOOL shouldPop = YES;
 
-		if ([_delegate respondsToSelector:@selector(navigationBar:shouldPopItem:)]) {
+		if (_delegateHas.shouldPopItem) {
 			shouldPop = [_delegate navigationBar:self shouldPopItem:previousItem];
 		}
 		
@@ -221,7 +230,7 @@ static const CGFloat kMaxButtonHeight = 28;
 			[_navStack removeObject:previousItem];
 			[self _updateViews:animated];
 			
-			if ([_delegate respondsToSelector:@selector(navigationBar:didPopItem:)]) {
+			if (_delegateHas.didPopItem) {
 				[_delegate navigationBar:self didPopItem:previousItem];
 			}
 			

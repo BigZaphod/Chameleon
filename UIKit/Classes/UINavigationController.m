@@ -36,6 +36,13 @@ static const CGFloat NavigationBarHeight = 32;
 	[super dealloc];
 }
 
+- (void)setDelegate:(id<UINavigationControllerDelegate>)newDelegate
+{
+	_delegate = newDelegate;
+	_delegateHas.didShowViewController = [_delegate respondsToSelector:@selector(navigationController:didShowViewController:animated:)];
+	_delegateHas.willShowViewController = [_delegate respondsToSelector:@selector(navigationController:willShowViewController:animated:)];
+}
+
 - (CGRect)_controllerFrame
 {
 	CGRect controllerFrame = self.view.bounds;
@@ -117,11 +124,20 @@ static const CGFloat NavigationBarHeight = 32;
 
 		if ([self isViewLoaded]) {
 			UIViewController *newTopController = self.topViewController;
+
 			[newTopController viewWillAppear:animated];
+			if (_delegateHas.willShowViewController) {
+				[_delegate navigationController:self willShowViewController:newTopController animated:animated];
+			}
+			
 			newTopController.view.frame = [self _controllerFrame];
 			[self.view addSubview:newTopController.view];
 			[self.view bringSubviewToFront:_navigationBar];
+
 			[newTopController viewDidAppear:animated];
+			if (_delegateHas.didShowViewController) {
+				[_delegate navigationController:self didShowViewController:newTopController animated:animated];
+			}
 		}
 
 		[_navigationBar setItems:items animated:animated];
@@ -149,35 +165,49 @@ static const CGFloat NavigationBarHeight = 32;
 		viewController.view.frame = [self _controllerFrame];
 
 		[self.view addSubview:viewController.view];
-		[viewController viewWillAppear:animated];
 
+		[viewController viewWillAppear:animated];
+		if (_delegateHas.willShowViewController) {
+			[_delegate navigationController:self willShowViewController:viewController animated:animated];
+		}
+		
 		[self.topViewController.view removeFromSuperview];
 
 		[viewController viewDidAppear:animated];
+		if (_delegateHas.didShowViewController) {
+			[_delegate navigationController:self didShowViewController:viewController animated:animated];
+		}
 	}
 
 	[_viewControllers addObject:viewController];
 	[_navigationBar pushNavigationItem:viewController.navigationItem animated:animated];
 }
 
-- (UIViewController *)_popViewControllerWithoutPoppingNavigationBarAnimated:(BOOL)animate
+- (UIViewController *)_popViewControllerWithoutPoppingNavigationBarAnimated:(BOOL)animated
 {
 	if ([_viewControllers count] > 1) {
 		UIViewController *oldViewController = [self.topViewController retain];
-		
+
 		[_viewControllers removeLastObject];
 		[oldViewController _setParentViewController:nil];
 
 		if ([self isViewLoaded]) {
 			UIViewController *nextViewController = self.topViewController;
-			
+
 			nextViewController.view.frame = [self _controllerFrame];
 			[self.view addSubview:nextViewController.view];
-			[nextViewController viewWillAppear:animate];
-			
+
+			[nextViewController viewWillAppear:animated];
+			if (_delegateHas.willShowViewController) {
+				[_delegate navigationController:self willShowViewController:nextViewController animated:animated];
+			}
+
 			[oldViewController.view removeFromSuperview];
 
-			[nextViewController viewDidAppear:animate];
+			[nextViewController viewDidAppear:animated];
+			if (_delegateHas.didShowViewController) {
+				[_delegate navigationController:self didShowViewController:nextViewController animated:animated];
+			}
 		}
 		
 		return [oldViewController autorelease];
