@@ -382,17 +382,27 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void)reloadData
 {
-	const CGFloat defaultRowHeight = _rowHeight ?: _UITableViewDefaultRowHeight;
-	
+	// for cached cells, spin through them and add any reusable ones back into the reusable set for later so we don't waste time making them again
+	// but take any non-reusable ones off the view so they get removed as they should.
+	// SPECIAL NOTE: not removing reusable cells from the view here - that will happen in _layoutCells if they happen to not get used again.
+	for (UITableViewCell *cell in [_cachedCells allValues]) {
+		if (cell.reuseIdentifier) {
+			[_reusableCells addObject:cell];
+		} else {
+			[cell removeFromSuperview];
+		}
+	}
+
+	// clear the caches since everything is going to change
+	[_cachedCells removeAllObjects];
+	[_sections removeAllObjects];
+
 	// clear prior selection
 	[_selectedRow release];
 	_selectedRow = nil;
 	
-	// empty out previously cached stuff
-	[_sections removeAllObjects];
-	[_cachedCells removeAllObjects];
-	
 	// compute the heights/offsets of everything
+	const CGFloat defaultRowHeight = _rowHeight ?: _UITableViewDefaultRowHeight;
 	const NSInteger numberOfSections = [self numberOfSections];
 	for (NSInteger section=0; section<numberOfSections; section++) {
 		const NSInteger numberOfRowsInSection = [self numberOfRowsInSection:section];
