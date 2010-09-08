@@ -330,7 +330,18 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	for (UITableViewCell *cell in [availableCells allValues]) {
 		if (cell.reuseIdentifier) {
 			[_reusableCells addObject:cell];
+			
+			// only remove a reusable cell if it's within the visible bounds, otherwise don't worry about it and leave it in the tableview.
+			// this is done becaue when resizing a table view by shrinking it's height in an animation, it looks better. The reason is that
+			// when an animation happens, it sets the frame to the new (shorter) size and thus recalcuates which cells should be visible.
+			// If it removed all non-visible cells, then the cells on the bottom of the table view would disappear immediately but before
+			// the frame of the table view has actually animated down to the new, shorter size. So the animation is jumpy/ugly because
+			// the cells suddenly disappear instead of seemingly animating down and out of view like they should.
+			if (CGRectIntersectsRect(cell.frame,visibleBounds)) {
+				[cell removeFromSuperview];
+			}
 		} else {
+			// always remove non-cached cells - otherwise we lose track of them.
 			[cell removeFromSuperview];
 		}
 	}
