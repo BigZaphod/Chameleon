@@ -26,13 +26,13 @@ extern NSString *const UITextViewTextDidEndEditingNotification;
 	UIDataDetectorTypes _dataDetectorTypes;
 	
 	struct {
-		unsigned int shouldBeginEditing : 1;
-		unsigned int didBeginEditing : 1;
-		unsigned int shouldEndEditing : 1;
-		unsigned int didEndEditing : 1;
-		unsigned int shouldChangeText : 1;
-		unsigned int didChange : 1;
-		unsigned int didChangeSelection : 1;
+		BOOL shouldBeginEditing : 1;
+		BOOL didBeginEditing : 1;
+		BOOL shouldEndEditing : 1;
+		BOOL didEndEditing : 1;
+		BOOL shouldChangeText : 1;
+		BOOL didChange : 1;
+		BOOL didChangeSelection : 1;
 	} _delegateHas;
 }
 

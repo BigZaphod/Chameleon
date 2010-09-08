@@ -21,10 +21,10 @@
 	UIView *_rightView;
 	
 	struct {
-		unsigned int shouldPushItem : 1;
-		unsigned int didPushItem : 1;
-		unsigned int shouldPopItem : 1;
-		unsigned int didPopItem : 1;
+		BOOL shouldPushItem : 1;
+		BOOL didPushItem : 1;
+		BOOL shouldPopItem : 1;
+		BOOL didPopItem : 1;
 	} _delegateHas;
 }
 

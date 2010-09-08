@@ -29,8 +29,8 @@ typedef NSUInteger UIPopoverArrowDirection;
 	id _UIKitView;
 	
 	struct {
-		unsigned int popoverControllerDidDismissPopover : 1;
-		unsigned int popoverControllerShouldDismissPopover : 1;
+		BOOL popoverControllerDidDismissPopover : 1;
+		BOOL popoverControllerShouldDismissPopover : 1;
 	} _delegateHas;
 }
 

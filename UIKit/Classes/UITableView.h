@@ -71,21 +71,21 @@ typedef enum {
 	CGFloat _sectionFooterHeight;
 	
 	struct {
-		unsigned int heightForRowAtIndexPath : 1;
-		unsigned int heightForHeaderInSection : 1;
-		unsigned int heightForFooterInSection : 1;
-		unsigned int viewForHeaderInSection : 1;
-		unsigned int viewForFooterInSection : 1;
-		unsigned int willSelectRowAtIndexPath : 1;
-		unsigned int didSelectRowAtIndexPath : 1;
-		unsigned int willDeselectRowAtIndexPath : 1;
-		unsigned int didDeselectRowAtIndexPath : 1;
+		BOOL heightForRowAtIndexPath : 1;
+		BOOL heightForHeaderInSection : 1;
+		BOOL heightForFooterInSection : 1;
+		BOOL viewForHeaderInSection : 1;
+		BOOL viewForFooterInSection : 1;
+		BOOL willSelectRowAtIndexPath : 1;
+		BOOL didSelectRowAtIndexPath : 1;
+		BOOL willDeselectRowAtIndexPath : 1;
+		BOOL didDeselectRowAtIndexPath : 1;
 	} _delegateHas;
 	
 	struct {
-		unsigned int numberOfSectionsInTableView : 1;
-		unsigned int titleForHeaderInSection : 1;
-		unsigned int titleForFooterInSection : 1;
+		BOOL numberOfSectionsInTableView : 1;
+		BOOL titleForHeaderInSection : 1;
+		BOOL titleForFooterInSection : 1;
 	} _dataSourceHas;
 }
 

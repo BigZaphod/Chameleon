@@ -38,7 +38,7 @@ typedef enum {
 	BOOL _pagingEnabled;
 	
 	struct {
-		unsigned int scrollViewDidScroll : 1;
+		BOOL scrollViewDidScroll : 1;
 	} _delegateCan;	
 }
 

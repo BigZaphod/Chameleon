@@ -23,12 +23,12 @@
 	UIPopoverController *_popoverController;
 	
 	struct {
-		unsigned int clickedButtonAtIndex : 1;
-		unsigned int willPresentActionSheet : 1;
-		unsigned int didPresentActionSheet : 1;
-		unsigned int willDismissWithButtonIndex : 1;
-		unsigned int didDismissWithButtonIndex : 1;
-		unsigned int actionSheetCancel : 1;
+		BOOL clickedButtonAtIndex : 1;
+		BOOL willPresentActionSheet : 1;
+		BOOL didPresentActionSheet : 1;
+		BOOL willDismissWithButtonIndex : 1;
+		BOOL didDismissWithButtonIndex : 1;
+		BOOL actionSheetCancel : 1;
 	} _delegateHas;
 }
 

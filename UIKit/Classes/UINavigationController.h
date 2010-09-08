@@ -16,8 +16,8 @@
 	id _delegate;
 	
 	struct {
-		unsigned int didShowViewController : 1;
-		unsigned int willShowViewController : 1;
+		BOOL didShowViewController : 1;
+		BOOL willShowViewController : 1;
 	} _delegateHas;
 }
 

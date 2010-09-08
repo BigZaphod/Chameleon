@@ -52,13 +52,13 @@ typedef enum {
 	UITextBorderStyle _borderStyle;
 	
 	struct {
-		unsigned int shouldBeginEditing : 1;
-		unsigned int didBeginEditing : 1;
-		unsigned int shouldEndEditing : 1;
-		unsigned int didEndEditing : 1;
-		unsigned int shouldChangeCharacters : 1;
-		unsigned int shouldClear : 1;
-		unsigned int shouldReturn : 1;
+		BOOL shouldBeginEditing : 1;
+		BOOL didBeginEditing : 1;
+		BOOL shouldEndEditing : 1;
+		BOOL didEndEditing : 1;
+		BOOL shouldChangeCharacters : 1;
+		BOOL shouldClear : 1;
+		BOOL shouldReturn : 1;
 	} _delegateHas;	
 }
 

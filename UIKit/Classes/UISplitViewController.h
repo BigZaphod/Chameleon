@@ -9,9 +9,9 @@
 	NSArray *_viewControllers;
 	
 	struct {
-		unsigned int willPresentViewController : 1;
-		unsigned int willHideViewController : 1;
-		unsigned int willShowViewController : 1;
+		BOOL willPresentViewController : 1;
+		BOOL willHideViewController : 1;
+		BOOL willShowViewController : 1;
 	} _delegateHas;
 }
 

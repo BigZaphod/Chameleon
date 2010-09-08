@@ -29,7 +29,7 @@ typedef NSUInteger UIWebViewNavigationType;
 	UIDataDetectorTypes _dataDetectorTypes;
 	
 	struct {
-		unsigned int shouldStartLoadWithRequest : 1;
+		BOOL shouldStartLoadWithRequest : 1;
 	} _delegateHas;
 }
 
