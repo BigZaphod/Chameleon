@@ -5,6 +5,7 @@
 #import <AppKit/NSTextContainer.h>
 #import <AppKit/NSMenuItem.h>
 #import <AppKit/NSMenu.h>
+#import <AppKit/NSGraphicsContext.h>
 
 static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and the text could become blurry.
 
@@ -147,6 +148,14 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 	}
 	[self setSelectedRange:NSMakeRange(0,0)];
 	return [super resignFirstResponder];
+}
+
+
+- (void)drawRect:(NSRect)rect
+{
+	CGContextRef c = [[NSGraphicsContext currentContext] graphicsPort];
+	CGContextSetShouldSmoothFonts(c, NO);
+	[super drawRect:rect];
 }
 
 @end
