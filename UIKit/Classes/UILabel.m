@@ -142,7 +142,7 @@
 	drawRect.size = [_text sizeWithFont:_font constrainedToSize:maxSize lineBreakMode:_lineBreakMode];
 
 	// now vertically center it
-	drawRect.origin.y = roundf(((bounds.size.height - drawRect.size.height) / 2.f) + ((hasShadow? _shadowOffset.height : 0)/2.f));
+	drawRect.origin.y = roundf((bounds.size.height - drawRect.size.height) / 2.f);
 	
 	// now position it correctly for the width
 	// this might be cheating somehow and not how the real thing does it...
