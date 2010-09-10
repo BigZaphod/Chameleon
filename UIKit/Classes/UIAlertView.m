@@ -114,10 +114,10 @@
 
 	if (self.title) [alert setMessageText:self.title];
 	if (self.message) [alert setInformativeText:self.message];
+	if (defaultButton) [alert addButtonWithTitle:defaultButton];
 	if (alternateButton) [alert addButtonWithTitle:alternateButton];
 	if (otherButton) [alert addButtonWithTitle:otherButton];
-	if (defaultButton) [alert addButtonWithTitle:defaultButton];
-	
+
 	NSInteger result = [alert runModal];
 
 	NSInteger buttonIndex = -1;
