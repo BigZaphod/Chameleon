@@ -153,8 +153,12 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 
 - (void)drawRect:(NSRect)rect
 {
+	// This disables font smoothing. This is necessary because in this implementation, the NSTextView is always drawn with a transparent background
+	// and layered on top of other views. It therefore cannot properly do subpixel rendering and the smoothing ends up looking like crap. Turning
+	// the smoothing off is not as nice as properly smoothed text, of course, but at least its readable. :)
 	CGContextRef c = [[NSGraphicsContext currentContext] graphicsPort];
 	CGContextSetShouldSmoothFonts(c, NO);
+	
 	[super drawRect:rect];
 }
 
