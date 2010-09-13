@@ -33,6 +33,7 @@
 	UIWindow *window = [self _responderWindow];
 	UIResponder *firstResponder = [window _firstResponder];
 	if (window && [self canBecomeFirstResponder] && (!firstResponder || ([firstResponder canResignFirstResponder] && [firstResponder resignFirstResponder]))) {
+		[window makeKeyWindow];		// not sure about this :/
 		[window _setFirstResponder:self];
 		return YES;
 	} else {
