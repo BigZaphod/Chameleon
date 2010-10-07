@@ -8,6 +8,7 @@
 
 + (UIPasteboard *)generalPasteboard;
 
+@property (nonatomic,copy) NSString *string;
 @property (nonatomic, copy) UIImage *image;
 @property (nonatomic, copy) NSArray *items;
 

@@ -8,6 +8,15 @@
 	return nil;
 }
 
+- (void)setString:(NSString *)theString
+{
+}
+
+- (NSString *)string
+{
+	return nil;
+}
+
 - (void)setImage:(UIImage *)theImage
 {
 }
