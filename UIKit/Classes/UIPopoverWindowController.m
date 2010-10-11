@@ -8,7 +8,8 @@
 
 #import "UIPopoverWindowController.h"
 #import "UIPopoverWindow.h"
-#import "UIPopoverController.h"
+#import "UIPopoverController+UIPrivate.h"
+
 
 @implementation UIPopoverWindowController
 
@@ -48,19 +49,13 @@ NOTE: These methods are only called when loading from a NIB file.
 - (void)windowWillClose:(NSNotification *)notification
 {
 	if ([notification object] == [self window]) {
-		if ([popoverController.delegate respondsToSelector:@selector(popoverControllerDidDismissPopover:)]) {
-			[popoverController.delegate popoverControllerDidDismissPopover:popoverController];
-		}
+		[popoverController _popoverWindowControllerDidClosePopoverWindow:self];
 	}
 }
 
 - (BOOL)windowShouldClose:(id)sender
 {
-	BOOL shouldClose = YES;
-	
-	if ([popoverController.delegate respondsToSelector:@selector(popoverControllerShouldDismissPopover:)]) {
-		shouldClose = [popoverController.delegate popoverControllerShouldDismissPopover:popoverController];
-	}
+	const BOOL shouldClose = [popoverController _popoverWindowControllerShouldClosePopoverWindow:self];
 
 	if (shouldClose) {
 		// grab any pending editing changes in the text fields
@@ -85,13 +80,16 @@ NOTE: These methods are only called when loading from a NIB file.
 //	[self.window orderOut:self];
 }
 
+/*
 - (void)animationDidEnd:(NSAnimation *)animation
 {
 	[self.window performClose:self];
 }
+ */
 
 - (void)windowDidResignMain:(NSNotification *)notification
 {
+	/*
 	if ([NSApp isActive]) {
 #if 0
 		// fade window out
@@ -109,6 +107,7 @@ NOTE: These methods are only called when loading from a NIB file.
 		[self.window performClose:self];
 #endif
 	}
+	 */
 }
 
 @end

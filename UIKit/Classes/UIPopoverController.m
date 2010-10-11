@@ -39,6 +39,7 @@
 
 - (void)dealloc
 {
+	_delegate = nil;
 	[_UIKitView release];
 	[_popoverWindowController release];
 	[_contentViewController release];
@@ -79,6 +80,7 @@
 
 	_contentViewController.view.frame = [_UIKitView UIWindow].bounds;
 	
+	_manuallyDismissed = NO;
 	[_popoverWindowController showWindow:self];
 }
 
@@ -88,12 +90,29 @@
 
 - (void)dismissPopoverAnimated:(BOOL)animated
 {
+	_manuallyDismissed = YES;
 	[_popoverWindowController close];
 }
 
 - (void)_setWindowTitle:(NSString *)title
 {
 	[[_popoverWindowController window] setTitle:title];
+}
+
+- (void)_popoverWindowControllerDidClosePopoverWindow:(id)controller
+{
+	if (!_manuallyDismissed && _delegateHas.popoverControllerDidDismissPopover) {
+		[_delegate popoverControllerDidDismissPopover:self];
+	}
+}
+
+- (BOOL)_popoverWindowControllerShouldClosePopoverWindow:(id)controller
+{
+	if (_delegateHas.popoverControllerShouldDismissPopover) {
+		return [_delegate popoverControllerShouldDismissPopover:self];
+	} else {
+		return YES;
+	}
 }
 
 @end

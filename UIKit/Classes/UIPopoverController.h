@@ -27,6 +27,7 @@ typedef NSUInteger UIPopoverArrowDirection;
 	BOOL _popoverVisible;
 	id _popoverWindowController;
 	id _UIKitView;
+	BOOL _manuallyDismissed;
 	
 	struct {
 		BOOL popoverControllerDidDismissPopover : 1;
