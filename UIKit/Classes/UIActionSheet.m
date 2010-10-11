@@ -194,9 +194,11 @@
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
 {
-	[_popoverController release];
-	_popoverController = nil;
-	[self _clickedButtonAtIndex:_cancelButtonIndex];
+	if (_popoverController == popoverController) {
+		[_popoverController release];
+		_popoverController = nil;
+		[self _clickedButtonAtIndex:_cancelButtonIndex];
+	}
 }
 
 - (void)_buttonTapped:(id)sender
