@@ -135,15 +135,19 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (CGRect)rectForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	UITableViewSection *sectionRecord = [_sections objectAtIndex:indexPath.section];
-	CGFloat offset = [self _offsetForSection:indexPath.section];
-	offset += sectionRecord.headerHeight;
-	
-	for (NSInteger row=0; row<indexPath.row; row++) {
-		offset += [[sectionRecord.rowHeights objectAtIndex:row] floatValue];
+	if (indexPath.section < 0 || indexPath.section >= [_sections count]) {
+		return CGRectZero;
+	} else {
+		UITableViewSection *sectionRecord = [_sections objectAtIndex:indexPath.section];	
+		CGFloat offset = [self _offsetForSection:indexPath.section];
+		offset += sectionRecord.headerHeight;
+		
+		for (NSInteger row=0; row<indexPath.row; row++) {
+			offset += [[sectionRecord.rowHeights objectAtIndex:row] floatValue];
+		}
+		
+		return [self _CGRectFromVerticalOffset:offset height:[[sectionRecord.rowHeights objectAtIndex:indexPath.row] floatValue]];
 	}
-	
-	return [self _CGRectFromVerticalOffset:offset height:[[sectionRecord.rowHeights objectAtIndex:indexPath.row] floatValue]];
 }
 
 - (UITableViewCell *)cellForRowAtIndexPath:(NSIndexPath *)indexPath
