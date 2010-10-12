@@ -1,7 +1,7 @@
 //  Created by Sean Heber on 10/12/10.
 #import "UIScreen.h"
 
-@interface UIScreen (UIAppKitIntegration)
+@interface UIScreen (AppKitIntegration)
 // promotes this screen to the main screen
 // this only changes what [UIScreen mainScreen] returns in the future, it doesn't move anything between views, etc.
 - (void)becomeMainScreen;

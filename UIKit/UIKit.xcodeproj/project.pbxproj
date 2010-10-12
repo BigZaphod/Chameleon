@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		140AA8C01264E4710057D87F /* UIAppKitIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = 140AA8BE1264E4710057D87F /* UIAppKitIntegration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		140AA8C01264E4710057D87F /* AppKitIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = 140AA8BE1264E4710057D87F /* AppKitIntegration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		140AA9151264E9770057D87F /* UIResponderAppKitIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = 140AA9141264E9770057D87F /* UIResponderAppKitIntegration.h */; };
 		140AA9281264EA210057D87F /* UIColorAppKitIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = 140AA9251264EA210057D87F /* UIColorAppKitIntegration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		140AA9291264EA210057D87F /* UIFontAppKitIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = 140AA9261264EA210057D87F /* UIFontAppKitIntegration.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -199,7 +199,7 @@
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		140AA8BE1264E4710057D87F /* UIAppKitIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIAppKitIntegration.h; path = Classes/UIAppKitIntegration.h; sourceTree = "<group>"; };
+		140AA8BE1264E4710057D87F /* AppKitIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppKitIntegration.h; path = Classes/AppKitIntegration.h; sourceTree = "<group>"; };
 		140AA9141264E9770057D87F /* UIResponderAppKitIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIResponderAppKitIntegration.h; path = Classes/UIResponderAppKitIntegration.h; sourceTree = "<group>"; };
 		140AA9251264EA210057D87F /* UIColorAppKitIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIColorAppKitIntegration.h; path = Classes/UIColorAppKitIntegration.h; sourceTree = "<group>"; };
 		140AA9261264EA210057D87F /* UIFontAppKitIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIFontAppKitIntegration.h; path = Classes/UIFontAppKitIntegration.h; sourceTree = "<group>"; };
@@ -477,7 +477,7 @@
 				14CC835611EFA8AF005988CC /* UIActivityIndicatorView.m */,
 				14CC835711EFA8AF005988CC /* UIAlertView.h */,
 				14CC835811EFA8AF005988CC /* UIAlertView.m */,
-				140AA8BE1264E4710057D87F /* UIAppKitIntegration.h */,
+				140AA8BE1264E4710057D87F /* AppKitIntegration.h */,
 				14CC835911EFA8AF005988CC /* UIApplication.h */,
 				14CC835A11EFA8AF005988CC /* UIApplication.m */,
 				14869DB0121303C60019B134 /* UIApplicationDelegate.h */,
@@ -757,7 +757,7 @@
 				145335851226F3490005644F /* UICustomNSClipView.h in Headers */,
 				14690C9F122D79C2005A12A2 /* UIMenuController.h in Headers */,
 				14690CB5122D7B56005A12A2 /* UIMenuItem.h in Headers */,
-				140AA8C01264E4710057D87F /* UIAppKitIntegration.h in Headers */,
+				140AA8C01264E4710057D87F /* AppKitIntegration.h in Headers */,
 				140AA9281264EA210057D87F /* UIColorAppKitIntegration.h in Headers */,
 				140AA9291264EA210057D87F /* UIFontAppKitIntegration.h in Headers */,
 				140AA92A1264EA210057D87F /* UIImageAppKitIntegration.h in Headers */,

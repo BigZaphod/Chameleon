@@ -3,7 +3,7 @@
 
 @class NSFont;
 
-@interface UIFont (UIAppKitIntegration)
+@interface UIFont (AppKitIntegration)
 + (UIFont *)fontWithNSFont:(NSFont *)aFont;
 - (NSFont *)NSFont;
 @end

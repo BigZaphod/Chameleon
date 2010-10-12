@@ -1,7 +1,7 @@
 //  Created by Sean Heber on 10/12/10.
 #import "UIResponderAppKitIntegration.h"
 
-@implementation UIResponder (UIAppKitIntegration)
+@implementation UIResponder (AppKitIntegration)
 
 - (void)scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event
 {

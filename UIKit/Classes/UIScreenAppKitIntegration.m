@@ -5,7 +5,7 @@
 
 extern NSMutableArray *_allScreens;
 
-@implementation UIScreen (UIAppKitIntegration)
+@implementation UIScreen (AppKitIntegration)
 - (CGPoint)convertPoint:(CGPoint)toConvert toScreen:(UIScreen *)toScreen
 {
 	if (toScreen == self) {

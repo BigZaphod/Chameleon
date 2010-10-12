@@ -1,7 +1,7 @@
 //  Created by Sean Heber on 10/12/10.
 #import "UIResponder.h"
 
-@interface UIResponder (UIAppKitIntegration)
+@interface UIResponder (AppKitIntegration)
 // This message is sent up the responder chain so that views behind other views can make use of the scroll wheel (such as UIScrollView).
 - (void)scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event;
 

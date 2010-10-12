@@ -3,7 +3,7 @@
 
 @class NSImage;
 
-@interface UIImage (UIAppKitIntegration)
+@interface UIImage (AppKitIntegration)
 - (id)initWithNSImage:(NSImage *)theImage;
 - (NSImage *)NSImage;
 @end
