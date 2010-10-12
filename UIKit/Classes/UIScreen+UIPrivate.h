@@ -1,6 +1,8 @@
 //  Created by Sean Heber on 8/11/10.
 #import "UIScreen.h"
 
+@class UIView, UIEvent;
+
 @interface UIScreen (UIPrivate)
 - (void)_setNSView:(NSView *)theView;
 - (NSView *)_NSView;

@@ -5,6 +5,7 @@
 #import "UIViewController.h"
 #import "UIWindow.h"
 #import "UIScreen+UIPrivate.h"
+#import "UIScreenAppKitIntegration.h"
 #import "UIKitView.h"
 #import "UITouch.h"
 

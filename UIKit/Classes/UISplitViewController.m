@@ -5,6 +5,7 @@
 #import "UITouch.h"
 #import "UIColor.h"
 #import "UIScreen.h"
+#import "UIResponderAppKitIntegration.h"
 #import <AppKit/NSCursor.h>
 
 static const CGFloat SplitterPadding = 3;

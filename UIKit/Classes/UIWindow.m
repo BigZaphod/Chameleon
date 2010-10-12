@@ -2,10 +2,12 @@
 #import "UIWindow+UIPrivate.h"
 #import "UIView+UIPrivate.h"
 #import "UIScreen+UIPrivate.h"
+#import "UIScreenAppKitIntegration.h"
 #import "UIApplication+UIPrivate.h"
 #import "UIEvent+UIPrivate.h"
 #import "UITouch.h"
 #import "UIScreenMode.h"
+#import "UIResponderAppKitIntegration.h"
 #import <Cocoa/Cocoa.h>
 
 const UIWindowLevel UIWindowLevelNormal = 0;
