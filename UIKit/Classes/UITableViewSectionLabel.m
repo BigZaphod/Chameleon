@@ -1,7 +1,7 @@
 //  Created by Sean Heber on 8/19/10.
 #import "UITableViewSectionLabel.h"
 #import "UIGraphics.h"
-#import "UIAppKitIntegration.h"
+#import "AppKitIntegration.h"
 #import <AppKit/NSGradient.h>
 
 @implementation UITableViewSectionLabel

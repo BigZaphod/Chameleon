@@ -1,7 +1,7 @@
 //  Created by Sean Heber on 5/28/10.
 #import "UINinePartImage.h"
 #import "UIImageTools.h"
-#import "UIAppKitIntegration.h"
+#import "AppKitIntegration.h"
 #import <AppKit/AppKit.h>
 
 @implementation UINinePartImage

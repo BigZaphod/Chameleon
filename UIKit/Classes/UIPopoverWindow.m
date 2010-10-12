@@ -10,7 +10,7 @@
 
 #import "UIPopoverWindowFrameView.h"
 #import "UIImage+UIPrivate.h"
-#import "UIAppKitIntegration.h"
+#import "AppKitIntegration.h"
 
 extern const CGFloat popoverWindowFrameTitleHeight;
 extern const CGFloat popoverWindowFrameBorderWidth;

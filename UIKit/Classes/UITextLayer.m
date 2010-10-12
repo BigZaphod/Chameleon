@@ -5,7 +5,7 @@
 #import "UICustomNSClipView.h"
 #import "UIWindow.h"
 #import "UIScreen+UIPrivate.h"
-#import "UIAppKitIntegration.h"
+#import "AppKitIntegration.h"
 #import "UIView+UIPrivate.h"
 #import <AppKit/NSLayoutManager.h>
 #import <AppKit/NSWindow.h>
