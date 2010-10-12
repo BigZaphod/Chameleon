@@ -8,7 +8,6 @@
 	CGColorRef _color;
 }
 
-+ (UIColor *)colorWithNSColor:(NSColor *)c;
 - (id)initWithNSColor:(NSColor *)c;
 
 + (UIColor *)colorWithWhite:(CGFloat)white alpha:(CGFloat)alpha;

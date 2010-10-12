@@ -5,8 +5,7 @@
 #import "UICustomNSClipView.h"
 #import "UIWindow.h"
 #import "UIScreen+UIPrivate.h"
-#import "UIColor+UIPrivate.h"
-#import "UIFont+UIPrivate.h"
+#import "UIAppKitIntegration.h"
 #import "UIView+UIPrivate.h"
 #import <AppKit/NSLayoutManager.h>
 #import <AppKit/NSWindow.h>
@@ -173,7 +172,7 @@
 	if (newFont != font) {
 		[font release];
 		font = [newFont retain];
-		[textView setFont:[font _NSFont]];
+		[textView setFont:[font NSFont]];
 	}
 }
 
@@ -182,7 +181,7 @@
 	if (newColor != textColor) {
 		[textColor release];
 		textColor = [newColor retain];
-		[textView setTextColor:[textColor _NSColor]];
+		[textView setTextColor:[textColor NSColor]];
 	}
 }
 

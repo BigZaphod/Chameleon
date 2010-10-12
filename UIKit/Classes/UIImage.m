@@ -16,19 +16,19 @@ NSMutableDictionary *imageCache = nil;
 	}
 }
 
-- (id)_initWithNSImage:(NSImage *)theImage
+- (id)initWithNSImage:(NSImage *)theImage
 {
 	return [self initWithCGImage:[theImage CGImageForProposedRect:NULL context:NULL hints:nil]];
 }
 
 - (id)initWithData:(NSData *)data
 {
-	return [self _initWithNSImage:[[[NSImage alloc] initWithData:data] autorelease]];
+	return [self initWithNSImage:[[[NSImage alloc] initWithData:data] autorelease]];
 }
 
 - (id)initWithContentsOfFile:(NSString *)path
 {
-	return [self _initWithNSImage:[[[NSImage alloc] initWithContentsOfFile:path] autorelease]];
+	return [self initWithNSImage:[[[NSImage alloc] initWithContentsOfFile:path] autorelease]];
 }
 
 - (id)initWithCGImage:(CGImageRef)imageRef
@@ -54,7 +54,7 @@ NSMutableDictionary *imageCache = nil;
 	if ([name length] > 0) {
 		UIImage *cachedImage = [imageCache objectForKey:name];
 		if (!cachedImage) {
-			if ((cachedImage = [[[self alloc] _initWithNSImage:[NSImage imageNamed:name]] autorelease])) {
+			if ((cachedImage = [[[self alloc] initWithNSImage:[NSImage imageNamed:name]] autorelease])) {
 				[imageCache setObject:cachedImage forKey:name];
 			}
 		}
@@ -153,7 +153,7 @@ NSMutableDictionary *imageCache = nil;
 	return UIImageOrientationUp;
 }
 
-- (NSImage *)_NSImage
+- (NSImage *)NSImage
 {
 	return [[[NSImage alloc] initWithCGImage:_image size:NSSizeFromCGSize(self.size)] autorelease];
 }

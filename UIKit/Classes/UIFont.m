@@ -1,5 +1,5 @@
 //  Created by Sean Heber on 6/17/10.
-#import "UIFont+UIPrivate.h"
+#import "UIFont.h"
 #import <Cocoa/Cocoa.h>
 
 @implementation UIFont
@@ -17,7 +17,7 @@
 	return [theFont autorelease];
 }
 
-+ (UIFont *)_fontWithNSFont:(NSFont *)aFont
++ (UIFont *)fontWithNSFont:(NSFont *)aFont
 {
 	if (aFont) {
 		CTFontRef newFont = CTFontCreateWithName((CFStringRef)[aFont fontName], [aFont pointSize], NULL);
@@ -32,17 +32,17 @@
 
 + (UIFont *)fontWithName:(NSString *)fontName size:(CGFloat)fontSize
 {
-	return [self _fontWithNSFont:[NSFont fontWithName:fontName size:fontSize]];
+	return [self fontWithNSFont:[NSFont fontWithName:fontName size:fontSize]];
 }
 
 + (UIFont *)systemFontOfSize:(CGFloat)fontSize
 {
-	return [self _fontWithNSFont:[NSFont systemFontOfSize:fontSize]];
+	return [self fontWithNSFont:[NSFont systemFontOfSize:fontSize]];
 }
 
 + (UIFont *)boldSystemFontOfSize:(CGFloat)fontSize
 {
-	return [self _fontWithNSFont:[NSFont boldSystemFontOfSize:fontSize]];
+	return [self fontWithNSFont:[NSFont boldSystemFontOfSize:fontSize]];
 }
 
 - (NSString *)fontName
@@ -107,7 +107,7 @@
 	}
 }
 
-- (NSFont *)_NSFont
+- (NSFont *)NSFont
 {
 	return [NSFont fontWithName:self.fontName size:self.pointSize];
 }

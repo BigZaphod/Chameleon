@@ -1,8 +1,7 @@
 //  Created by Sean Heber on 8/19/10.
 #import "UITableViewSectionLabel.h"
-#import "UIColor+UIPrivate.h"
-#import "UIFont.h"
 #import "UIGraphics.h"
+#import "UIAppKitIntegration.h"
 #import <AppKit/NSGradient.h>
 
 @implementation UITableViewSectionLabel
@@ -27,7 +26,7 @@
 	UIColor *startColor = [UIColor colorWithRed:145/255.f green:158/255.f blue:171/255.f alpha:1];
 	UIColor *endColor = [UIColor colorWithRed:185/255.f green:193/255.f blue:201/255.f alpha:1];
 	
-	NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:[startColor _NSColor] endingColor:[endColor _NSColor]];
+	NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:[startColor NSColor] endingColor:[endColor NSColor]];
 	[gradient drawFromPoint:NSMakePoint(0,1) toPoint:NSMakePoint(0,size.height-1) options:0];
 	[gradient release];
 	

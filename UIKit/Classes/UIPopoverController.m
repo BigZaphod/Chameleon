@@ -6,9 +6,10 @@
 #import "UIWindow.h"
 #import "UIScreen+UIPrivate.h"
 #import "UIKitView.h"
+#import "UITouch.h"
 
 @implementation UIPopoverController
-@synthesize delegate=_delegate, contentViewController=_contentViewController, popoverVisible=_popoverVisible;
+@synthesize delegate=_delegate, contentViewController=_contentViewController, popoverVisible=_popoverVisible, passthroughViews=_passthroughViews;
 
 - (id)init
 {
@@ -41,6 +42,7 @@
 {
 	_delegate = nil;
 	[_UIKitView release];
+	[_passthroughViews release];
 	[_popoverWindowController release];
 	[_contentViewController release];
 	[super dealloc];
@@ -113,6 +115,23 @@
 	} else {
 		return YES;
 	}
+}
+
+- (BOOL)_applicationShouldSendEvent:(UIEvent *)event
+{
+	UITouch *touch = [[event allTouches] anyObject];
+	UIView *touchedView = touch.view;
+	NSArray *allowedViews = [[NSArray arrayWithObject:_contentViewController.view] arrayByAddingObjectsFromArray:_passthroughViews];
+	
+	for (UIView *view in allowedViews) {
+		if ([touchedView isDescendantOfView:view]) {
+			return YES;
+		}
+	}
+	
+	_manuallyDismissed = NO;
+	[_popoverWindowController close];
+	return NO;
 }
 
 @end

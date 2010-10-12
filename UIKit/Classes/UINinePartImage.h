@@ -1,5 +1,5 @@
 //  Created by Sean Heber on 5/28/10.
-#import "UIImage+UIPrivate.h"
+#import "UIImage.h"
 
 @interface UINinePartImage : UIImage {
 @private

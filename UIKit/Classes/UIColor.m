@@ -1,5 +1,5 @@
 //  Created by Sean Heber on 5/27/10.
-#import "UIColor+UIPrivate.h"
+#import "UIColor.h"
 #import "UIImage.h"
 #import "UIGraphics.h"
 #import <AppKit/AppKit.h>
@@ -63,7 +63,7 @@ CGColorRef CreatePatternColor(CGImageRef image)
 	[super dealloc];
 }
 
-+ (UIColor *)colorWithNSColor:(NSColor *)c
++ (UIColor *)_colorWithNSColor:(NSColor *)c
 {
 	return [[[self alloc] initWithNSColor:c] autorelease];
 }
@@ -93,21 +93,21 @@ CGColorRef CreatePatternColor(CGImageRef image)
 	return [[[self alloc] initWithPatternImage:patternImage] autorelease];
 }
 
-+ (UIColor *)blackColor			{ return [self colorWithNSColor:[NSColor blackColor]]; }
-+ (UIColor *)darkGrayColor		{ return [self colorWithNSColor:[NSColor darkGrayColor]]; }
-+ (UIColor *)lightGrayColor		{ return [self colorWithNSColor:[NSColor lightGrayColor]]; }
-+ (UIColor *)whiteColor			{ return [self colorWithNSColor:[NSColor whiteColor]]; }
-+ (UIColor *)grayColor			{ return [self colorWithNSColor:[NSColor grayColor]]; }
-+ (UIColor *)redColor			{ return [self colorWithNSColor:[NSColor redColor]]; }
-+ (UIColor *)greenColor			{ return [self colorWithNSColor:[NSColor greenColor]]; }
-+ (UIColor *)blueColor			{ return [self colorWithNSColor:[NSColor blueColor]]; }
-+ (UIColor *)cyanColor			{ return [self colorWithNSColor:[NSColor cyanColor]]; }
-+ (UIColor *)yellowColor		{ return [self colorWithNSColor:[NSColor yellowColor]]; }
-+ (UIColor *)magentaColor		{ return [self colorWithNSColor:[NSColor magentaColor]]; }
-+ (UIColor *)orangeColor		{ return [self colorWithNSColor:[NSColor orangeColor]]; }
-+ (UIColor *)purpleColor		{ return [self colorWithNSColor:[NSColor purpleColor]]; }
-+ (UIColor *)brownColor			{ return [self colorWithNSColor:[NSColor brownColor]]; }
-+ (UIColor *)clearColor			{ return [self colorWithNSColor:[NSColor clearColor]]; }
++ (UIColor *)blackColor			{ return [self _colorWithNSColor:[NSColor blackColor]]; }
++ (UIColor *)darkGrayColor		{ return [self _colorWithNSColor:[NSColor darkGrayColor]]; }
++ (UIColor *)lightGrayColor		{ return [self _colorWithNSColor:[NSColor lightGrayColor]]; }
++ (UIColor *)whiteColor			{ return [self _colorWithNSColor:[NSColor whiteColor]]; }
++ (UIColor *)grayColor			{ return [self _colorWithNSColor:[NSColor grayColor]]; }
++ (UIColor *)redColor			{ return [self _colorWithNSColor:[NSColor redColor]]; }
++ (UIColor *)greenColor			{ return [self _colorWithNSColor:[NSColor greenColor]]; }
++ (UIColor *)blueColor			{ return [self _colorWithNSColor:[NSColor blueColor]]; }
++ (UIColor *)cyanColor			{ return [self _colorWithNSColor:[NSColor cyanColor]]; }
++ (UIColor *)yellowColor		{ return [self _colorWithNSColor:[NSColor yellowColor]]; }
++ (UIColor *)magentaColor		{ return [self _colorWithNSColor:[NSColor magentaColor]]; }
++ (UIColor *)orangeColor		{ return [self _colorWithNSColor:[NSColor orangeColor]]; }
++ (UIColor *)purpleColor		{ return [self _colorWithNSColor:[NSColor purpleColor]]; }
++ (UIColor *)brownColor			{ return [self _colorWithNSColor:[NSColor brownColor]]; }
++ (UIColor *)clearColor			{ return [self _colorWithNSColor:[NSColor clearColor]]; }
 
 - (id)initWithWhite:(CGFloat)white alpha:(CGFloat)alpha
 {
@@ -167,7 +167,7 @@ CGColorRef CreatePatternColor(CGImageRef image)
 	return resultingUIColor;
 }
 
-- (NSColor *)_NSColor
+- (NSColor *)NSColor
 {
 	NSColorSpace *colorSpace = [[NSColorSpace alloc] initWithCGColorSpace:CGColorGetColorSpace(_color)];
 	const NSInteger numberOfComponents = CGColorGetNumberOfComponents(_color);

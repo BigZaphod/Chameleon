@@ -1,13 +1,14 @@
 //  Created by Sean Heber on 5/28/10.
 #import "UINinePartImage.h"
 #import "UIImageTools.h"
+#import "UIAppKitIntegration.h"
 #import <AppKit/AppKit.h>
 
 @implementation UINinePartImage
 
 - (id)initWithNSImage:(id)theImage leftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight
 {
-	if ((self=[super _initWithNSImage:theImage])) {
+	if ((self=[super initWithNSImage:theImage])) {
 		const CGSize size = self.size;
 		const CGFloat stretchyWidth = (leftCapWidth < size.width)? 1 : 0;
 		const CGFloat stretchyHeight = (topCapHeight < size.height)? 1 : 0;

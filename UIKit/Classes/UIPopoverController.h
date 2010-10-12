@@ -27,6 +27,7 @@ typedef NSUInteger UIPopoverArrowDirection;
 	BOOL _popoverVisible;
 	id _popoverWindowController;
 	id _UIKitView;
+	NSArray *_passthroughViews;
 	BOOL _manuallyDismissed;
 	
 	struct {
@@ -44,5 +45,6 @@ typedef NSUInteger UIPopoverArrowDirection;
 @property (nonatomic, assign) id <UIPopoverControllerDelegate> delegate;
 @property (nonatomic, retain) UIViewController *contentViewController;
 @property (nonatomic, readonly, getter=isPopoverVisible) BOOL popoverVisible;
+@property (nonatomic, copy) NSArray *passthroughViews;
 
 @end

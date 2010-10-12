@@ -1,13 +1,14 @@
 //  Created by Sean Heber on 5/28/10.
 #import "UIThreePartImage.h"
 #import "UIImageTools.h"
+#import "UIAppKitIntegration.h"
 #import <AppKit/AppKit.h>
 
 @implementation UIThreePartImage
 
 - (id)initWithNSImage:(id)theImage capSize:(NSInteger)capSize vertical:(BOOL)isVertical
 {
-	if ((self=[super _initWithNSImage:theImage])) {
+	if ((self=[super initWithNSImage:theImage])) {
 		const CGSize size = self.size;
 
 		_vertical = isVertical;
