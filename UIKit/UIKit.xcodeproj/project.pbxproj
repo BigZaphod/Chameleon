@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		140AA8C01264E4710057D87F /* AppKitIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = 140AA8BE1264E4710057D87F /* AppKitIntegration.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		140AA9151264E9770057D87F /* UIResponderAppKitIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = 140AA9141264E9770057D87F /* UIResponderAppKitIntegration.h */; };
+		140AA9151264E9770057D87F /* UIResponderAppKitIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = 140AA9141264E9770057D87F /* UIResponderAppKitIntegration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		140AA9281264EA210057D87F /* UIColorAppKitIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = 140AA9251264EA210057D87F /* UIColorAppKitIntegration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		140AA9291264EA210057D87F /* UIFontAppKitIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = 140AA9261264EA210057D87F /* UIFontAppKitIntegration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		140AA92A1264EA210057D87F /* UIImageAppKitIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = 140AA9271264EA210057D87F /* UIImageAppKitIntegration.h */; settings = {ATTRIBUTES = (Public, ); }; };
