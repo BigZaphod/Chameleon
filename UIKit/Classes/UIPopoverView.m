@@ -1,0 +1,259 @@
+//  Created by Sean Heber on 10/12/10.
+#import "UIPopoverView.h"
+#import "UIImageView.h"
+#import "UIImage+UIPrivate.h"
+#import <QuartzCore/QuartzCore.h>
+
+typedef struct {
+	CGPoint from;
+	CGPoint to;
+} LineSegment;
+
+static LineSegment LineSegmentMake(CGPoint from, CGPoint to)
+{
+	LineSegment segment;
+	segment.from = from;
+	segment.to = to;
+	return segment;
+}
+
+static BOOL LineSegmentsIntersect(LineSegment line1, LineSegment line2, CGPoint *intersection)
+{
+	/*
+	 E = B-A = ( Bx-Ax, By-Ay )
+	 F = D-C = ( Dx-Cx, Dy-Cy ) 
+	 P = ( -Ey, Ex )
+	 h = ( (A-C) * P ) / ( F * P )
+	 
+	 I = C + F*h
+	 */
+	
+	const CGPoint A = line1.from;
+	const CGPoint B = line1.to;
+	const CGPoint C = line2.from;
+	const CGPoint D = line2.to;
+	
+	const CGPoint E = CGPointMake(B.x-A.x, B.y-A.y);
+	const CGPoint F = CGPointMake(D.x-C.x, D.y-C.y);
+	const CGPoint P = CGPointMake(-E.y, E.x);
+	
+	const CGPoint AC = CGPointMake(A.x-C.x, A.y-C.y);
+	const CGFloat h2 = F.x * P.x + F.y * P.y;
+	
+	// if h2 is 0, the lines are parallel
+	if (h2 != 0) {
+		const CGFloat h1 = AC.x * P.x + AC.y * P.y;
+		const CGFloat h = h1 / h2;
+		
+		// if h is exactly 0 or 1, the lines touched on the end - we won't consider that an intersection
+		if (h > 0 && h < 1) {
+			if (intersection) {
+				const CGPoint I = CGPointMake(C.x+F.x*h, C.y+F.y*h);
+				intersection->x = I.x;
+				intersection->y = I.y;
+			}
+			return YES;
+		}
+	}
+	
+	return NO;
+	
+}
+
+static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
+{
+	CGFloat a = B.x - A.x;
+	CGFloat b = B.y - A.y;
+	return sqrtf((a*a) + (b*b));
+}
+
+@implementation UIPopoverView
+@synthesize contentView=_contentView;
+
++ (UIEdgeInsets)insetForArrows
+{
+	return UIEdgeInsetsMake(17,12,8,12);
+}
+
++ (CGRect)backgroundRectForBounds:(CGRect)bounds
+{
+	return UIEdgeInsetsInsetRect(bounds, [self insetForArrows]);
+}
+
++ (CGRect)contentRectForBounds:(CGRect)bounds withNavigationBar:(BOOL)hasNavBar
+{
+	const CGFloat navBarOffset = hasNavBar? 32 : 0;
+	return UIEdgeInsetsInsetRect(CGRectMake(14,9+navBarOffset,bounds.size.width-28,bounds.size.height-28-navBarOffset), [self insetForArrows]);
+}
+
++ (CGSize)frameSizeForContentSize:(CGSize)contentSize withNavigationBar:(BOOL)hasNavBar
+{
+	UIEdgeInsets insets = [self insetForArrows];
+	CGSize frameSize;
+	
+	frameSize.width = contentSize.width + 28 + insets.left + insets.right;
+	frameSize.height = contentSize.height + 28 + (hasNavBar? 32 : 0) + insets.top + insets.bottom;
+	
+	return frameSize;
+}
+
+
+- (id)initWithContentView:(UIView *)aView size:(CGSize)aSize
+{	
+	if ((self=[super initWithFrame:CGRectMake(0,0,320,480)])) {
+		_contentView = [aView retain];
+		
+		UIImage *backgroundImage = [[UIImage _frameworkImageNamed:@"<UIPopoverView> background.png"] stretchableImageWithLeftCapWidth:23 topCapHeight:23];
+		_backgroundView = [[UIImageView alloc] initWithImage:backgroundImage];
+		
+		_arrowView = [[UIImageView alloc] initWithFrame:CGRectZero];
+		
+		_contentContainerView = [[UIView alloc] init];
+		_contentContainerView.layer.cornerRadius = 3;
+		_contentContainerView.clipsToBounds = YES;
+
+		[self addSubview:_backgroundView];
+		[self addSubview:_arrowView];
+		[self addSubview:_contentContainerView];
+		[_contentContainerView addSubview:_contentView];
+		
+		self.contentSize = aSize;
+	}
+	return self;
+}
+
+- (void)dealloc
+{
+	[_backgroundView release];
+	[_arrowView release];
+	[_contentContainerView release];
+	[_contentView release];
+	[super dealloc];
+}
+
+- (void)layoutSubviews
+{
+	[super layoutSubviews];
+
+	const CGRect bounds = self.bounds;	
+	_backgroundView.frame = [isa backgroundRectForBounds:bounds];
+	_contentContainerView.frame = [isa contentRectForBounds:bounds withNavigationBar:NO];
+	_contentView.frame = _contentContainerView.bounds;
+}
+
+- (void)pointTo:(CGPoint)point inView:(UIView *)view
+{
+	const CGRect myBounds = self.bounds;
+
+	// arrowPoint and myCenter should both be in self's coordinate space
+	const CGPoint arrowPoint = [self convertPoint:point fromView:view];
+	const CGPoint myCenter = CGPointMake(CGRectGetMidX(myBounds), CGRectGetMidY(myBounds));
+
+	// inset the bounds so that the bounding lines are at the center points of the arrow images
+	const CGRect bounds = CGRectInset(myBounds, 11, 11);
+
+	const CGPoint topRight = CGPointMake(bounds.origin.x+bounds.size.width, bounds.origin.y);
+	const CGPoint bottomLeft = CGPointMake(bounds.origin.x, bounds.origin.y+bounds.size.height);
+	const CGPoint bottomRight = CGPointMake(bounds.origin.x+bounds.size.width, bounds.origin.y+bounds.size.height);
+	
+	const LineSegment arrowLine = LineSegmentMake(arrowPoint, myCenter);
+	const LineSegment rightSide = LineSegmentMake(topRight, bottomRight);
+	const LineSegment topSide = LineSegmentMake(bounds.origin, topRight);
+	const LineSegment bottomSide = LineSegmentMake(bottomLeft, bottomRight);
+	const LineSegment leftSide = LineSegmentMake(bounds.origin, bottomLeft);
+	
+	CGPoint intersection = CGPointZero;
+	CGPoint bestIntersection = CGPointZero;
+	CGFloat bestDistance = CGFLOAT_MAX;
+	CGRectEdge closestEdge = CGRectMinXEdge;
+	
+	if (LineSegmentsIntersect(arrowLine, rightSide, &intersection)) {
+		const CGFloat distance = DistanceBetweenTwoPoints(intersection, arrowPoint);
+		if (distance < bestDistance) {
+			bestDistance = distance;
+			closestEdge = CGRectMaxXEdge;
+			bestIntersection = intersection;
+		}
+	}
+	
+	if (LineSegmentsIntersect(arrowLine, topSide, &intersection)) {
+		const CGFloat distance = DistanceBetweenTwoPoints(intersection, arrowPoint);
+		if (distance < bestDistance) {
+			bestDistance = distance;
+			closestEdge = CGRectMinYEdge;
+			bestIntersection = intersection;
+		}
+	}
+	
+	if (LineSegmentsIntersect(arrowLine, bottomSide, &intersection)) {
+		const CGFloat distance = DistanceBetweenTwoPoints(intersection, arrowPoint);
+		if (distance < bestDistance) {
+			bestDistance = distance;
+			closestEdge = CGRectMaxYEdge;
+			bestIntersection = intersection;
+		}
+	}
+	
+	if (LineSegmentsIntersect(arrowLine, leftSide, &intersection)) {
+		const CGFloat distance = DistanceBetweenTwoPoints(intersection, arrowPoint);
+		if (distance < bestDistance) {
+			bestDistance = distance;
+			closestEdge = CGRectMinXEdge;
+			bestIntersection = intersection;
+		}
+	}
+	
+	BOOL clampVertical = NO;
+	
+	if (closestEdge == CGRectMaxXEdge) {
+		// right side
+		_arrowView.image = [UIImage _frameworkImageNamed:@"<UIPopoverView> arrow-right.png"];
+		clampVertical = YES;
+	} else if (closestEdge == CGRectMaxYEdge) {
+		// bottom side
+		_arrowView.image = [UIImage _frameworkImageNamed:@"<UIPopoverView> arrow-bottom.png"];
+		clampVertical = NO;
+	} else if (closestEdge == CGRectMinYEdge) {
+		// top side
+		_arrowView.image = [UIImage _frameworkImageNamed:@"<UIPopoverView> arrow-top.png"];
+		clampVertical = NO;
+	} else {
+		// left side
+		_arrowView.image = [UIImage _frameworkImageNamed:@"<UIPopoverView> arrow-left.png"];
+		clampVertical = YES;
+	}
+
+	// this will clamp where the arrow is positioned so that it doesn't slide off the edges of
+	// the popover and look dumb and disconnected.
+	const CGRect innerBounds = CGRectInset(myBounds, 42, 42);
+	if (clampVertical) {
+		if (bestIntersection.y < innerBounds.origin.y) {
+			bestIntersection.y = innerBounds.origin.y;
+		} else if (bestIntersection.y > innerBounds.origin.y+innerBounds.size.height) {
+			bestIntersection.y = innerBounds.origin.y+innerBounds.size.height;
+		}
+	} else {
+		if (bestIntersection.x < innerBounds.origin.x) {
+			bestIntersection.x = innerBounds.origin.x;
+		} else if (bestIntersection.x > innerBounds.origin.x+innerBounds.size.width) {
+			bestIntersection.x = innerBounds.origin.x+innerBounds.size.width;
+		}
+	}
+	
+	[_arrowView sizeToFit];
+	_arrowView.center = bestIntersection;
+}
+
+- (CGSize)contentSize
+{
+	return _contentContainerView.bounds.size;
+}
+
+- (void)setContentSize:(CGSize)newSize
+{
+	CGRect frame = self.frame;
+	frame.size = [isa frameSizeForContentSize:newSize withNavigationBar:NO];
+	self.frame = frame;
+}
+
+@end

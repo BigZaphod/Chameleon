@@ -168,6 +168,13 @@
 		14CC843811EFA8BA005988CC /* <UIScrollView> grabber-dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 14CC843011EFA8BA005988CC /* <UIScrollView> grabber-dark.png */; };
 		14CC844111EFA901005988CC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14CC844011EFA901005988CC /* QuartzCore.framework */; };
 		14CC844511EFA91A005988CC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14CC844411EFA91A005988CC /* SystemConfiguration.framework */; };
+		14F56F3D12664D350045EC82 /* <UIPopoverView> arrow-bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F56F3812664D350045EC82 /* <UIPopoverView> arrow-bottom.png */; };
+		14F56F3E12664D350045EC82 /* <UIPopoverView> arrow-left.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F56F3912664D350045EC82 /* <UIPopoverView> arrow-left.png */; };
+		14F56F3F12664D350045EC82 /* <UIPopoverView> arrow-right.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F56F3A12664D350045EC82 /* <UIPopoverView> arrow-right.png */; };
+		14F56F4012664D350045EC82 /* <UIPopoverView> arrow-top.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F56F3B12664D350045EC82 /* <UIPopoverView> arrow-top.png */; };
+		14F56F4112664D350045EC82 /* <UIPopoverView> background.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F56F3C12664D350045EC82 /* <UIPopoverView> background.png */; };
+		14F56F4412664D430045EC82 /* UIPopoverView.h in Headers */ = {isa = PBXBuildFile; fileRef = 14F56F4212664D430045EC82 /* UIPopoverView.h */; };
+		14F56F4512664D430045EC82 /* UIPopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14F56F4312664D430045EC82 /* UIPopoverView.m */; };
 		14FA8C5D121DA4A000C4264B /* UIImageTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 14FA8C45121DA4A000C4264B /* UIImageTools.h */; };
 		14FA8C5E121DA4A000C4264B /* UIImageTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 14FA8C46121DA4A000C4264B /* UIImageTools.m */; };
 		14FA8C5F121DA4A000C4264B /* UINinePartImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 14FA8C47121DA4A000C4264B /* UINinePartImage.h */; };
@@ -360,6 +367,13 @@
 		14CC843011EFA8BA005988CC /* <UIScrollView> grabber-dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIScrollView> grabber-dark.png"; path = "Resources/<UIScrollView> grabber-dark.png"; sourceTree = "<group>"; };
 		14CC844011EFA901005988CC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		14CC844411EFA91A005988CC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		14F56F3812664D350045EC82 /* <UIPopoverView> arrow-bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIPopoverView> arrow-bottom.png"; path = "Resources/<UIPopoverView> arrow-bottom.png"; sourceTree = "<group>"; };
+		14F56F3912664D350045EC82 /* <UIPopoverView> arrow-left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIPopoverView> arrow-left.png"; path = "Resources/<UIPopoverView> arrow-left.png"; sourceTree = "<group>"; };
+		14F56F3A12664D350045EC82 /* <UIPopoverView> arrow-right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIPopoverView> arrow-right.png"; path = "Resources/<UIPopoverView> arrow-right.png"; sourceTree = "<group>"; };
+		14F56F3B12664D350045EC82 /* <UIPopoverView> arrow-top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIPopoverView> arrow-top.png"; path = "Resources/<UIPopoverView> arrow-top.png"; sourceTree = "<group>"; };
+		14F56F3C12664D350045EC82 /* <UIPopoverView> background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIPopoverView> background.png"; path = "Resources/<UIPopoverView> background.png"; sourceTree = "<group>"; };
+		14F56F4212664D430045EC82 /* UIPopoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPopoverView.h; sourceTree = "<group>"; };
+		14F56F4312664D430045EC82 /* UIPopoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPopoverView.m; sourceTree = "<group>"; };
 		14FA8C45121DA4A000C4264B /* UIImageTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageTools.h; sourceTree = "<group>"; };
 		14FA8C46121DA4A000C4264B /* UIImageTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageTools.m; sourceTree = "<group>"; };
 		14FA8C47121DA4A000C4264B /* UINinePartImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINinePartImage.h; sourceTree = "<group>"; };
@@ -440,6 +454,11 @@
 		089C1665FE841158C02AAC07 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				14F56F3812664D350045EC82 /* <UIPopoverView> arrow-bottom.png */,
+				14F56F3912664D350045EC82 /* <UIPopoverView> arrow-left.png */,
+				14F56F3A12664D350045EC82 /* <UIPopoverView> arrow-right.png */,
+				14F56F3B12664D350045EC82 /* <UIPopoverView> arrow-top.png */,
+				14F56F3C12664D350045EC82 /* <UIPopoverView> background.png */,
 				146910AE122F003F005A12A2 /* <UIPopoverWindow> close.tif */,
 				1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */,
 				1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */,
@@ -602,6 +621,8 @@
 				14FA8C46121DA4A000C4264B /* UIImageTools.m */,
 				14FA8C47121DA4A000C4264B /* UINinePartImage.h */,
 				14FA8C48121DA4A000C4264B /* UINinePartImage.m */,
+				14F56F4212664D430045EC82 /* UIPopoverView.h */,
+				14F56F4312664D430045EC82 /* UIPopoverView.m */,
 				14FA8C49121DA4A000C4264B /* UIPopoverWindow.h */,
 				14FA8C4A121DA4A000C4264B /* UIPopoverWindow.m */,
 				14FA8C4B121DA4A000C4264B /* UIPopoverWindowController.h */,
@@ -762,6 +783,7 @@
 				140AA9291264EA210057D87F /* UIFontAppKitIntegration.h in Headers */,
 				140AA92A1264EA210057D87F /* UIImageAppKitIntegration.h in Headers */,
 				140AA9301264EB040057D87F /* UIScreenAppKitIntegration.h in Headers */,
+				14F56F4412664D430045EC82 /* UIPopoverView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -830,6 +852,11 @@
 				1464960D11FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png in Resources */,
 				1464960E11FF7AE500ECEC7A /* <UINavigationBar> button.png in Resources */,
 				146910AF122F003F005A12A2 /* <UIPopoverWindow> close.tif in Resources */,
+				14F56F3D12664D350045EC82 /* <UIPopoverView> arrow-bottom.png in Resources */,
+				14F56F3E12664D350045EC82 /* <UIPopoverView> arrow-left.png in Resources */,
+				14F56F3F12664D350045EC82 /* <UIPopoverView> arrow-right.png in Resources */,
+				14F56F4012664D350045EC82 /* <UIPopoverView> arrow-top.png in Resources */,
+				14F56F4112664D350045EC82 /* <UIPopoverView> background.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -914,6 +941,7 @@
 				14690CB6122D7B56005A12A2 /* UIMenuItem.m in Sources */,
 				140AA93A1264EBB10057D87F /* UIScreenAppKitIntegration.m in Sources */,
 				140AA94E1264EC770057D87F /* UIResponderAppKitIntegration.m in Sources */,
+				14F56F4512664D430045EC82 /* UIPopoverView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
