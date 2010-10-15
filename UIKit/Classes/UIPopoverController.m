@@ -164,9 +164,16 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 		// now build the actual popover view which represents the popover's chrome, and since it's a UIView, we need to build a UIKitView 
 		// as well to put it in our NSWindow...
 		_popoverView = [[UIPopoverView alloc] initWithContentView:_contentViewController.view size:_contentViewController.contentSizeForViewInPopover];
+
 		UIKitView *hostingView = [(UIKitView *)[UIKitView alloc] initWithFrame:NSRectFromCGRect([_popoverView bounds])];
 		[[hostingView UIScreen] _setPopoverController:self];
 		[[hostingView UIWindow] addSubview:_popoverView];
+
+		// this prevents a visible flash from sometimes occuring due to the fact that the window is created and added as a child before it has the
+		// proper origin set. this means it it ends up flashing at the bottom left corner of the screen sometimes before it
+		// gets down farther in this method where the actual origin is calculated and set. since the window is transparent, simply setting the UIView
+		// hidden gets around the problem since you then can't see any of the actual content that's in the window :)
+		_popoverView.hidden = YES;
 
 		// now finally make the actual popover window itself and attach it to the overlay window
 		_popoverWindow = [[UIPopoverNSWindow alloc] initWithContentRect:[hostingView bounds] styleMask:NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES];
@@ -186,6 +193,7 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 	NSPoint pointTo = NSMakePoint(0,0);
 
 	[_popoverWindow setFrameOrigin:PopoverWindowOrigin(_overlayWindow, NSRectFromCGRect(desktopScreenRect), NSSizeFromCGSize(_popoverView.frame.size), arrowDirections, &pointTo, &_popoverArrowDirection)];
+	_popoverView.hidden = NO;
 	[_popoverWindow makeKeyWindow];
 
 	// the window has to be visible before these coordinate conversions will work correctly (otherwise the UIScreen isn't attached to anything
