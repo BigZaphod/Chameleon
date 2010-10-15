@@ -43,7 +43,6 @@ typedef enum {
 	UIEvent *_currentEvent;
 	__weak UIWindow *_keyWindow;
 	NSMutableSet *_visibleWindows;
-	NSMutableSet *_visiblePopovers;
 	id<UIApplicationDelegate> _delegate;
 	BOOL _idleTimerDisabled;
 }

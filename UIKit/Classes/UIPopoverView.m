@@ -143,11 +143,31 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 
 - (void)pointTo:(CGPoint)point inView:(UIView *)view
 {
+	// This math here is excessive. I went through a lot of effort because of an earlier idea I had about how to
+	// get this stuff to point correctly. I'm reasonably sure that wasn't really necessary, but I'm going to leave it
+	// here for now. It's neat stuff.. :) It takes an origin point within the popover view and then creates a line
+	// between it and the destination point. It then finds where that line intersects with the sides of the popover
+	// frame and uses that intersection point as the place to put the arrow image. There is also logic here to clamp
+	// the position of the arrow images so that they don't extend beyond the popover's chrome. Cool, but excessive. :)
 	const CGRect myBounds = self.bounds;
 
 	// arrowPoint and myCenter should both be in self's coordinate space
 	const CGPoint arrowPoint = [self convertPoint:point fromView:view];
-	const CGPoint myCenter = CGPointMake(CGRectGetMidX(myBounds), CGRectGetMidY(myBounds));
+	CGPoint myCenter = CGPointMake(CGRectGetMidX(myBounds), CGRectGetMidY(myBounds));
+	
+
+	// check to see if the arrowPoint has any components that fall on lines which intersect the popover view itself.
+	// if it does, then adjust myCenter accordingly - this makes the algorithm prefer a straight line whenever possible
+	// which should ultimately look better - note that this was added well after all this complex math and is the
+	// single simple thing which helps render most of the complex math moot. Sometimes the easy thing to do is not
+	// the obvious thing if you're in the wrong frame of mind at the time. :/
+	if (arrowPoint.x > CGRectGetMinX(myBounds) && arrowPoint.x < CGRectGetMaxX(myBounds)) {
+		myCenter.x = arrowPoint.x;
+	}
+	if (arrowPoint.y > CGRectGetMinY(myBounds) && arrowPoint.y < CGRectGetMaxY(myBounds)) {
+		myCenter.y = arrowPoint.y;
+	}
+	
 
 	// inset the bounds so that the bounding lines are at the center points of the arrow images
 	const CGRect bounds = CGRectInset(myBounds, 11, 11);
@@ -197,7 +217,7 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 	if (LineSegmentsIntersect(arrowLine, leftSide, &intersection)) {
 		const CGFloat distance = DistanceBetweenTwoPoints(intersection, arrowPoint);
 		if (distance < bestDistance) {
-			bestDistance = distance;
+			//bestDistance = distance;  -- commented out to avoid a harmless analyzer warning
 			closestEdge = CGRectMinXEdge;
 			bestIntersection = intersection;
 		}
@@ -244,6 +264,31 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 	_arrowView.center = bestIntersection;
 }
 
+- (void)setContentView:(UIView *)aView animated:(BOOL)animated
+{
+	if (aView != _contentView) {
+		[_contentView removeFromSuperview];
+		[_contentView release];
+		_contentView = [aView retain];
+		[self addSubview:_contentView];
+	}
+}
+
+- (void)setContentView:(UIView *)aView
+{
+	[self setContentView:aView animated:NO];
+}
+
+- (void)setContentSize:(CGSize)aSize animated:(BOOL)animated
+{
+	CGRect frame = self.frame;
+	frame.size = [isa frameSizeForContentSize:aSize withNavigationBar:NO];
+
+	if (animated) [UIView beginAnimations:@"setContentSize" context:NULL];
+	self.frame = frame;
+	if (animated) [UIView commitAnimations];
+}
+
 - (CGSize)contentSize
 {
 	return _contentContainerView.bounds.size;
@@ -251,9 +296,7 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 
 - (void)setContentSize:(CGSize)newSize
 {
-	CGRect frame = self.frame;
-	frame.size = [isa frameSizeForContentSize:newSize withNavigationBar:NO];
-	self.frame = frame;
+	[self setContentSize:newSize animated:NO];
 }
 
 @end

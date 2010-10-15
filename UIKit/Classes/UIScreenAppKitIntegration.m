@@ -46,14 +46,14 @@ extern NSMutableArray *_allScreens;
 {
 	CGPoint origin = [self convertPoint:CGPointMake(CGRectGetMinX(toConvert),CGRectGetMinY(toConvert)) toScreen:toScreen];
 	CGPoint bottom = [self convertPoint:CGPointMake(CGRectGetMaxX(toConvert),CGRectGetMaxY(toConvert)) toScreen:toScreen];
-	return CGRectMake(origin.x, origin.y, bottom.x-origin.x, bottom.y-origin.y);
+	return CGRectStandardize(CGRectMake(origin.x, origin.y, bottom.x-origin.x, bottom.y-origin.y));
 }
 
 - (CGRect)convertRect:(CGRect)toConvert fromScreen:(UIScreen *)fromScreen
 {
 	CGPoint origin = [self convertPoint:CGPointMake(CGRectGetMinX(toConvert),CGRectGetMinY(toConvert)) fromScreen:fromScreen];
 	CGPoint bottom = [self convertPoint:CGPointMake(CGRectGetMaxX(toConvert),CGRectGetMaxY(toConvert)) fromScreen:fromScreen];
-	return CGRectMake(origin.x, origin.y, bottom.x-origin.x, bottom.y-origin.y);
+	return CGRectStandardize(CGRectMake(origin.x, origin.y, bottom.x-origin.x, bottom.y-origin.y));
 }
 
 - (void)becomeMainScreen

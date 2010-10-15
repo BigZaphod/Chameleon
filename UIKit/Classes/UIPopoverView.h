@@ -13,8 +13,10 @@
 - (id)initWithContentView:(UIView *)aView size:(CGSize)aSize;
 
 - (void)pointTo:(CGPoint)point inView:(UIView *)view;
+- (void)setContentView:(UIView *)aView animated:(BOOL)animated;
+- (void)setContentSize:(CGSize)aSize animated:(BOOL)animated;
 
-@property (nonatomic, readonly) UIView *contentView;
+@property (nonatomic, retain) UIView *contentView;
 @property (nonatomic, assign) CGSize contentSize;
 
 @end

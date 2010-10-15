@@ -47,7 +47,7 @@ static UIApplication *_theApplication = nil;
 	if ((self=[super init])) {
 		_currentEvent = [UIEvent new];
 		_visibleWindows = [[NSMutableSet alloc] init];
-		_visiblePopovers = [[NSMutableSet alloc] init];
+		//_visiblePopovers = [[NSMutableSet alloc] init];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
 	}
 	return self;
@@ -58,7 +58,7 @@ static UIApplication *_theApplication = nil;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[_currentEvent release];
 	[_visibleWindows release];
-	[_visiblePopovers release];
+	//[_visiblePopovers release];
 	[super dealloc];
 }
 
@@ -121,6 +121,7 @@ static UIApplication *_theApplication = nil;
 	return [[_visibleWindows valueForKey:@"nonretainedObjectValue"] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sort]];
 }
 
+/*
 - (void)_popoverControllerWillBecomeVisible:(UIPopoverController *)controller
 {
 	[_visiblePopovers addObject:[NSValue valueWithNonretainedObject:controller]];
@@ -130,6 +131,7 @@ static UIApplication *_theApplication = nil;
 {
 	[_visiblePopovers removeObject:[NSValue valueWithNonretainedObject:controller]];
 }
+ */
 
 - (BOOL)sendAction:(SEL)action to:(id)target from:(id)sender forEvent:(UIEvent *)event
 {
@@ -175,19 +177,8 @@ static UIApplication *_theApplication = nil;
 
 - (void)sendEvent:(UIEvent *)event
 {
-	BOOL shouldSendEvent = YES;
-	
-	for (NSValue *popoverValue in _visiblePopovers) {
-		UIPopoverController *popover = [popoverValue nonretainedObjectValue];
-		if (![popover _applicationShouldSendEvent:event]) {
-			shouldSendEvent = NO;
-		}
-	}
-
-	if (shouldSendEvent) {
-		for (UITouch *touch in [event allTouches]) {
-			[touch.window sendEvent:event];
-		}
+	for (UITouch *touch in [event allTouches]) {
+		[touch.window sendEvent:event];
 	}
 }
 

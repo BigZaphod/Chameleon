@@ -13,7 +13,6 @@
 - (void)configureLayers
 {
 	[self setWantsLayer:YES];
-	[self layer].backgroundColor = [UIColor whiteColor].CGColor;
 
 	[[self layer] insertSublayer:[_screen _layer] atIndex:0];
 	[_screen _layer].frame = [self layer].bounds;
@@ -51,11 +50,6 @@
 - (void)awakeFromNib
 {
 	[self configureLayers];
-}
- 
-- (BOOL)isOpaque
-{
-	return YES;
 }
 
 - (BOOL)isFlipped

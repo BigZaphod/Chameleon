@@ -12,7 +12,7 @@ enum {
 };
 typedef NSUInteger UIPopoverArrowDirection;
 
-@class UIView, UIViewController, UIPopoverController, UIBarButtonItem;
+@class UIView, UIViewController, UIPopoverController, UIBarButtonItem, UIPopoverView;
 
 @protocol UIPopoverControllerDelegate <NSObject>
 @optional
@@ -22,21 +22,24 @@ typedef NSUInteger UIPopoverArrowDirection;
 
 @interface UIPopoverController : NSObject {
 @private
-	id _delegate;
 	UIViewController *_contentViewController;
-	BOOL _popoverVisible;
-	id _popoverWindowController;
-	id _UIKitView;
 	NSArray *_passthroughViews;
-	BOOL _manuallyDismissed;
+	UIPopoverArrowDirection _popoverArrowDirection;
+
+	UIPopoverView *_popoverView;
+	id _popoverWindow;
+	id _overlayWindow;
 	
+	id _delegate;
 	struct {
 		BOOL popoverControllerDidDismissPopover : 1;
 		BOOL popoverControllerShouldDismissPopover : 1;
-	} _delegateHas;
+	} _delegateHas;	
 }
 
 - (id)initWithContentViewController:(UIViewController *)viewController;
+
+- (void)setContentViewController:(UIViewController *)controller animated:(BOOL)animated;
 
 - (void)presentPopoverFromRect:(CGRect)rect inView:(UIView *)view permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated;
 - (void)presentPopoverFromBarButtonItem:(UIBarButtonItem *)item permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated;
@@ -46,5 +49,6 @@ typedef NSUInteger UIPopoverArrowDirection;
 @property (nonatomic, retain) UIViewController *contentViewController;
 @property (nonatomic, readonly, getter=isPopoverVisible) BOOL popoverVisible;
 @property (nonatomic, copy) NSArray *passthroughViews;
+@property (nonatomic, readonly) UIPopoverArrowDirection popoverArrowDirection;
 
 @end
