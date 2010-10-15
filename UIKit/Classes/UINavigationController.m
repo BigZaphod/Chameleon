@@ -261,4 +261,14 @@ static const CGFloat NavigationBarHeight = 32;
 	return nil;
 }
 
+- (void)setContentSizeForViewInPopover:(CGSize)newSize
+{
+	self.topViewController.contentSizeForViewInPopover = newSize;
+}
+
+- (CGSize)contentSizeForViewInPopover
+{
+	return self.topViewController.contentSizeForViewInPopover;
+}
+
 @end

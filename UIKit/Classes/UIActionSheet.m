@@ -6,6 +6,9 @@
 #import "UIViewController.h"
 #import "UIPopoverController.h"
 
+static const CGFloat UIActionSheetButtonHeight = 40;
+static const CGFloat UIActionSheetButtonSpacer = 2;
+
 @interface UIActionSheet () <UIPopoverControllerDelegate>
 @end
 
@@ -71,7 +74,9 @@
 
 - (CGSize)_viewSize
 {
-	return CGSizeMake(320, [_buttons count]*40);
+	const CGFloat emptySpace = ([_buttons count] - 1) * UIActionSheetButtonSpacer;
+	const CGFloat buttonSpace = [_buttons count] * UIActionSheetButtonHeight;
+	return CGSizeMake(320, ([_buttons count] > 0)? emptySpace+buttonSpace : 0);
 }
 
 - (void)layoutSubviews
@@ -79,13 +84,14 @@
 	[super layoutSubviews];
 
 	const CGFloat width = self.bounds.size.width;
-	const CGFloat buttonHeight = 40;
-	const CGFloat buttonSpacer = 2;
 	CGFloat y = 0;
 	
 	for (UIButton *button in _buttons) {
-		button.frame = CGRectMake(0,y,width,buttonHeight);
-		y+= buttonHeight + buttonSpacer;
+		button.frame = CGRectMake(0,y,width,UIActionSheetButtonHeight);
+
+		if (button != [_buttons lastObject]) {
+			y+= UIActionSheetButtonHeight + UIActionSheetButtonSpacer;
+		}
 	}
 }
 

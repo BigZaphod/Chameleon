@@ -42,7 +42,11 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 	origin.x = fromRect.origin.x + (fromRect.size.width/2.f) - (popoverSize.width/2.f);
 	origin.y = fromRect.origin.y + (fromRect.size.height/2.f) - (popoverSize.height/2.f);
 	
-	if (allowRightQuad && SizeIsLessThanOrEqualSize(popoverSize,rightQuad.size)) {
+	if (allowBottomQuad && SizeIsLessThanOrEqualSize(popoverSize,bottomQuad.size)) {
+		pointTo->y = fromRect.origin.y;
+		origin.y = fromRect.origin.y - popoverSize.height;
+		*arrowDirection = UIPopoverArrowDirectionUp;
+	} else if (allowRightQuad && SizeIsLessThanOrEqualSize(popoverSize,rightQuad.size)) {
 		pointTo->x = fromRect.origin.x + fromRect.size.width;
 		origin.x = pointTo->x;
 		*arrowDirection = UIPopoverArrowDirectionLeft;
@@ -50,10 +54,6 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 		pointTo->x = fromRect.origin.x;
 		origin.x = fromRect.origin.x - popoverSize.width;
 		*arrowDirection = UIPopoverArrowDirectionRight;
-	} else if (allowBottomQuad && SizeIsLessThanOrEqualSize(popoverSize,bottomQuad.size)) {
-		pointTo->y = fromRect.origin.y;
-		origin.y = fromRect.origin.y - popoverSize.height;
-		*arrowDirection = UIPopoverArrowDirectionUp;
 	} else if (allowTopQuad && SizeIsLessThanOrEqualSize(popoverSize,topQuad.size)) {
 		pointTo->y = fromRect.origin.y + fromRect.size.height;
 		origin.y = pointTo->y;
@@ -186,16 +186,17 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 	NSPoint pointTo = NSMakePoint(0,0);
 
 	[_popoverWindow setFrameOrigin:PopoverWindowOrigin(_overlayWindow, NSRectFromCGRect(desktopScreenRect), NSSizeFromCGSize(_popoverView.frame.size), arrowDirections, &pointTo, &_popoverArrowDirection)];
-	
 	[_popoverWindow makeKeyWindow];
 
 	// the window has to be visible before these coordinate conversions will work correctly (otherwise the UIScreen isn't attached to anything
 	// and blah blah blah...)
 	// finally, set the arrow position so it points to the right place and looks all purty.
-	CGPoint screenPointTo = [view.window.screen convertPoint:NSPointToCGPoint(pointTo) fromScreen:nil];
-	CGPoint windowPointTo = [view.window convertPoint:screenPointTo fromWindow:nil];
-	CGPoint viewPointTo = [view convertPoint:windowPointTo fromView:nil];
-	[_popoverView pointTo:viewPointTo inView:view];
+	if (_popoverArrowDirection != UIPopoverArrowDirectionUnknown) {
+		CGPoint screenPointTo = [view.window.screen convertPoint:NSPointToCGPoint(pointTo) fromScreen:nil];
+		CGPoint windowPointTo = [view.window convertPoint:screenPointTo fromWindow:nil];
+		CGPoint viewPointTo = [view convertPoint:windowPointTo fromView:nil];
+		[_popoverView pointTo:viewPointTo inView:view];
+	}
 }
 
 - (void)presentPopoverFromBarButtonItem:(UIBarButtonItem *)item permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated
