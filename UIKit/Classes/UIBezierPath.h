@@ -8,7 +8,11 @@
 	NSBezierPath *_path;
 }
 
++ (UIBezierPath *)bezierPath;
++ (UIBezierPath *)bezierPathWithRect:(CGRect)rect;
 + (UIBezierPath *)bezierPathWithRoundedRect:(CGRect)rect cornerRadius:(CGFloat)cornerRadius;
+
+- (void)appendPath:(UIBezierPath *)bezierPath;
 
 - (void)addClip;
 - (void)fill;
