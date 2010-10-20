@@ -111,7 +111,7 @@ static const CGFloat UIActionSheetButtonSpacer = 2;
 {
 	if (index != _destructiveButtonIndex) {
 		if (index >= 0) {
-			NSAssert(index<[_buttons count],nil,nil);
+			assert(index<[_buttons count]);
 		} else {
 			index = -1;
 		}
@@ -124,7 +124,7 @@ static const CGFloat UIActionSheetButtonSpacer = 2;
 {
 	if (index != _cancelButtonIndex) {
 		if (index >= 0) {
-			NSAssert(index<[_buttons count],nil,nil);
+			assert(index<[_buttons count]);
 		} else {
 			index = -1;
 		}

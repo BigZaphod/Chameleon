@@ -50,7 +50,7 @@
 
 - (void)setFont:(UIFont *)newFont
 {
-	NSAssert((newFont != nil), nil);
+	assert(newFont != nil);
 
 	if (newFont != _font) {
 		[_font release];

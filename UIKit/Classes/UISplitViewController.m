@@ -180,7 +180,7 @@ static const CGFloat SplitterPadding = 3;
 
 - (void)setViewControllers:(NSArray *)newControllers
 {
-	NSAssert(([newControllers count]==2), nil);
+	assert([newControllers count]==2);
 	
 	if (![newControllers isEqualToArray:_viewControllers]) {
 		for (UIViewController *c in _viewControllers) {

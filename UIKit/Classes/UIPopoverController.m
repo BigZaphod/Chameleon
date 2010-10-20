@@ -141,10 +141,10 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 
 - (void)presentPopoverFromRect:(CGRect)rect inView:(UIView *)view permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated
 {
-	NSAssert((view != nil), nil);
-	NSAssert((arrowDirections != UIPopoverArrowDirectionUnknown), nil);
-	NSAssert((!CGRectIsNull(rect)), nil);
-	NSAssert(!(CGRectEqualToRect(rect,CGRectZero)), nil);
+	assert(view != nil);
+	assert(arrowDirections != UIPopoverArrowDirectionUnknown);
+	assert(!CGRectIsNull(rect));
+	assert(!CGRectEqualToRect(rect,CGRectZero));
 	
 	NSWindow *viewNSWindow = [[view.window.screen _NSView] window];
 

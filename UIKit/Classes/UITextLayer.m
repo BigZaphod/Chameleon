@@ -168,7 +168,7 @@
 
 - (void)setFont:(UIFont *)newFont
 {
-	NSAssert((newFont != nil), nil);
+	assert(newFont != nil);
 	if (newFont != font) {
 		[font release];
 		font = [newFont retain];

@@ -100,7 +100,7 @@ static const CGFloat NavigationBarHeight = 32;
 
 - (void)setViewControllers:(NSArray *)newViewControllers animated:(BOOL)animated
 {
-	NSAssert(([newViewControllers count] >= 1), nil);
+	assert([newViewControllers count] >= 1);
 	if (newViewControllers != _viewControllers) {
 		UIViewController *previousTopController = self.topViewController;
 
@@ -156,8 +156,8 @@ static const CGFloat NavigationBarHeight = 32;
 
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-	NSAssert(![viewController isKindOfClass:[UITabBarController class]], nil);
-	NSAssert(![_viewControllers containsObject:viewController], nil);
+	assert(![viewController isKindOfClass:[UITabBarController class]]);
+	assert(![_viewControllers containsObject:viewController]);
 	
 	[viewController _setParentViewController:self];
 
