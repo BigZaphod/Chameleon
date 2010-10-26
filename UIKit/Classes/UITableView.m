@@ -504,7 +504,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void)deselectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated
 {
-	if ([indexPath isEqual:_selectedRow]) {
+	if (indexPath && [indexPath isEqual:_selectedRow]) {
 		[self cellForRowAtIndexPath:_selectedRow].selected = NO;
 		[_selectedRow release];
 		_selectedRow = nil;
@@ -514,6 +514,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 - (void)selectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition
 {
 	if (![_selectedRow isEqual:indexPath]) {
+		[self deselectRowAtIndexPath:_selectedRow animated:animated];
 		[_selectedRow release];
 		_selectedRow = [indexPath retain];
 		[self cellForRowAtIndexPath:_selectedRow].selected = YES;
