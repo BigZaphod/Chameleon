@@ -2,7 +2,8 @@
 #import "UIMenuController.h"
 #import "UIApplication.h"
 #import "UIWindow+UIPrivate.h"
-#import "UIScreen+UIPrivate.h"
+#import "UIScreenAppKitIntegration.h"
+#import "UIKitView.h"
 #import "UIMenuItem.h"
 #import <AppKit/NSMenu.h>
 #import <AppKit/NSMenuItem.h>
@@ -157,7 +158,7 @@
 - (void)_presentMenu
 {
 	if (_menu && _window) {
-		NSView *theNSView = [_window.screen _NSView];
+		NSView *theNSView = [_window.screen UIKitView];
 		if (theNSView) {
 			[_menu popUpMenuPositioningItem:nil atLocation:NSPointFromCGPoint(_menuFrame.origin) inView:theNSView];
 		}

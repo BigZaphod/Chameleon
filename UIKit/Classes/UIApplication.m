@@ -1,6 +1,8 @@
 //  Created by Sean Heber on 5/28/10.
 #import "UIApplication+UIPrivate.h"
 #import "UIScreen+UIPrivate.h"
+#import "UIScreenAppKitIntegration.h"
+#import "UIKitView.h"
 #import "UIEvent+UIPrivate.h"
 #import "UITouch+UIPrivate.h"
 #import "UIWindow.h"
@@ -211,10 +213,10 @@ static UIApplication *_theApplication = nil;
 	
 	[_currentEvent _setNSEvent:theNSEvent];
 
-	CGPoint clickPoint = NSPointToCGPoint([[theScreen _NSView] convertPoint:[theNSEvent locationInWindow] fromView:nil]);
+	CGPoint clickPoint = NSPointToCGPoint([[theScreen UIKitView] convertPoint:[theNSEvent locationInWindow] fromView:nil]);
 
 	// the y coord from the NSView might be inverted
-	if (![[theScreen _NSView] isFlipped]) {
+	if (![[theScreen UIKitView] isFlipped]) {
 		clickPoint.y = theScreen.bounds.size.height - clickPoint.y - 1;
 	}
 	

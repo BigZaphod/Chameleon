@@ -1,5 +1,6 @@
 //  Created by Sean Heber on 5/27/10.
 #import "UIScreen.h"
+#import "UIScreenAppKitIntegration.h"
 #import "UIImage+UIPrivate.h"
 #import "UIImageView.h"
 #import "UIApplication.h"
@@ -9,6 +10,7 @@
 #import "UIColor.h"
 #import "UIScreenMode+UIPrivate.h"
 #import "UIWindow.h"
+#import "UIKitView.h"
 
 NSString *const UIScreenDidConnectNotification = @"UIScreenDidConnectNotification";
 NSString *const UIScreenDidDisconnectNotification = @"UIScreenDidDisconnectNotification";
@@ -85,16 +87,16 @@ NSMutableArray *_allScreens = nil;
 
 - (BOOL)_hasResizeIndicator
 {
-	NSWindow *realWindow = [_NSView window];
+	NSWindow *realWindow = [_UIKitView window];
 
 	if (realWindow && ([realWindow styleMask] & NSResizableWindowMask) && [realWindow showsResizeIndicator] ) {
 		NSView *contentView = [realWindow contentView];
 		
-		const CGRect myBounds = NSRectToCGRect([_NSView bounds]);
+		const CGRect myBounds = NSRectToCGRect([_UIKitView bounds]);
 		const CGPoint myLowerRight = CGPointMake(CGRectGetMaxX(myBounds),CGRectGetMaxY(myBounds));
 		const CGRect contentViewBounds = NSRectToCGRect([contentView frame]);
 		const CGPoint contentViewLowerRight = CGPointMake(CGRectGetMaxX(contentViewBounds),0);
-		const CGPoint convertedPoint = NSPointToCGPoint([_NSView convertPoint:NSPointFromCGPoint(myLowerRight) toView:contentView]);
+		const CGPoint convertedPoint = NSPointToCGPoint([_UIKitView convertPoint:NSPointFromCGPoint(myLowerRight) toView:contentView]);
 
 		if (CGPointEqualToPoint(convertedPoint,contentViewLowerRight) && [realWindow showsResizeIndicator]) {
 			return YES;
@@ -135,25 +137,20 @@ NSMutableArray *_allScreens = nil;
 	return _layer.bounds;
 }
 
-- (NSView *)_NSView
-{
-	return _NSView;
-}
-
 - (CALayer *)_layer
 {
 	return _layer;
 }
 
-- (void)_setNSView:(id)theView
+- (void)_setUIKitView:(id)theView
 {
-	if (_NSView != theView) {
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewFrameDidChangeNotification object:_NSView];
-		if ((_NSView = theView)) {
+	if (_UIKitView != theView) {
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewFrameDidChangeNotification object:_UIKitView];
+		if ((_UIKitView = theView)) {
 			[_allScreens addObject:[NSValue valueWithNonretainedObject:self]];
-			self.currentMode = [UIScreenMode screenModeWithNSView:_NSView];
+			self.currentMode = [UIScreenMode screenModeWithNSView:_UIKitView];
 			[[NSNotificationCenter defaultCenter] postNotificationName:UIScreenDidConnectNotification object:self];
-			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_NSViewFrameDidChange:) name:NSViewFrameDidChangeNotification object:_NSView];
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_UIKitViewFrameDidChange:) name:NSViewFrameDidChangeNotification object:_UIKitView];
 		} else {
 			[_allScreens removeObject:[NSValue valueWithNonretainedObject:self]];
 			[[NSNotificationCenter defaultCenter] postNotificationName:UIScreenDidDisconnectNotification object:self];
@@ -161,10 +158,10 @@ NSMutableArray *_allScreens = nil;
 	}
 }
 
-- (void)_NSViewFrameDidChange:(NSNotification *)note
+- (void)_UIKitViewFrameDidChange:(NSNotification *)note
 {
 	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:self.currentMode forKey:@"_previousMode"];
-	self.currentMode = [UIScreenMode screenModeWithNSView:_NSView];
+	self.currentMode = [UIScreenMode screenModeWithNSView:_UIKitView];
 	[[NSNotificationCenter defaultCenter] postNotificationName:UIScreenModeDidChangeNotification object:self userInfo:userInfo];
 }
 

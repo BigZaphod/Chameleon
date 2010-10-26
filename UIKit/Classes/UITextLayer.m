@@ -5,8 +5,10 @@
 #import "UICustomNSClipView.h"
 #import "UIWindow.h"
 #import "UIScreen+UIPrivate.h"
+#import "UIScreenAppKitIntegration.h"
 #import "AppKitIntegration.h"
 #import "UIView+UIPrivate.h"
+#import "UIKitView.h"
 #import <AppKit/NSLayoutManager.h>
 #import <AppKit/NSWindow.h>
 
@@ -70,7 +72,7 @@
 		[clipView scrollToPoint:NSZeroPoint];
 	}
 
-	[[containerView.window.screen _NSView] addSubview:clipView];
+	[[containerView.window.screen UIKitView] addSubview:clipView];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateScrollViewContentOffset) name:NSViewBoundsDidChangeNotification object:clipView];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hierarchyDidChangeNotification:) name:UIViewFrameDidChangeNotification object:nil];
@@ -235,7 +237,7 @@
 	UIScreen *screen = containerView.window.screen;
 	
 	if (screen) {
-		if (![[screen _NSView] isFlipped]) {
+		if (![[screen UIKitView] isFlipped]) {
 			point.y = screen.bounds.size.height - point.y - 1;
 		}
 		return (containerView == [containerView.window.screen _hitTest:NSPointToCGPoint(point) event:nil]);

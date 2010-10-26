@@ -59,7 +59,7 @@
 
 - (void)viewDidMoveToSuperview
 {	
-	[_screen _setNSView:self.superview? self : nil];
+	[_screen _setUIKitView:self.superview? self : nil];
 }
 
 - (void)updateTrackingAreas

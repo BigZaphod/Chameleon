@@ -146,7 +146,7 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 	assert(!CGRectIsNull(rect));
 	assert(!CGRectEqualToRect(rect,CGRectZero));
 	
-	NSWindow *viewNSWindow = [[view.window.screen _NSView] window];
+	NSWindow *viewNSWindow = [[view.window.screen UIKitView] window];
 
 	// only create new stuff if the popover isn't already visible
 	if (![self isPopoverVisible]) {

@@ -1,7 +1,7 @@
 //  Created by Sean Heber on 6/25/10.
 #import "UIView.h"
 
-@class UIActionSheet, UIPopoverController;
+@class UIActionSheet;
 
 @protocol UIActionSheetDelegate <NSObject>
 @optional
@@ -19,8 +19,8 @@
 	NSInteger _destructiveButtonIndex;
 	NSInteger _cancelButtonIndex;
 	NSString *_title;
-	NSMutableArray *_buttons;
-	UIPopoverController *_popoverController;
+	NSMutableArray *_menuTitles;
+	id _menu;
 	
 	struct {
 		BOOL clickedButtonAtIndex : 1;

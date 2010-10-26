@@ -2,6 +2,9 @@
 #import "UIScreen.h"
 
 @interface UIScreen (AppKitIntegration)
+// the real NSView that the screen lives on (or nil if there isn't one)
+- (UIKitView *)UIKitView;
+
 // promotes this screen to the main screen
 // this only changes what [UIScreen mainScreen] returns in the future, it doesn't move anything between views, etc.
 - (void)becomeMainScreen;

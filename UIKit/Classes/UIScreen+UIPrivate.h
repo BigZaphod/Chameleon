@@ -4,8 +4,7 @@
 @class UIView, UIEvent;
 
 @interface UIScreen (UIPrivate)
-- (void)_setNSView:(NSView *)theView;
-- (NSView *)_NSView;
+- (void)_setUIKitView:(UIKitView *)theView;
 - (CALayer *)_layer;
 - (BOOL)_hasResizeIndicator;
 - (void)_setPopoverController:(UIPopoverController *)controller;
