@@ -14,7 +14,7 @@ static UIImage *ButtonHighlightedImage = nil;
 static UIImage *BackButtonImage = nil;
 static UIImage *BackButtonHighlightedImage = nil;
 
-static const UIEdgeInsets kButtonEdgeInsets = {5,5,5,5};
+static const UIEdgeInsets kButtonEdgeInsets = {0,0,0,0};
 static const CGFloat kMinButtonWidth = 30;
 static const CGFloat kMaxButtonWidth = 200;
 static const CGFloat kMaxButtonHeight = 24;
