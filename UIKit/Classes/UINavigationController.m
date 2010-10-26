@@ -162,8 +162,14 @@ static const CGFloat NavigationBarHeight = 28;
 	[viewController _setParentViewController:self];
 
 	if ([self isViewLoaded]) {
-		viewController.view.frame = [self _controllerFrame];
+		UIViewController *oldViewController = self.topViewController;
 
+		const CGRect controllerFrame = [self _controllerFrame];
+		const CGRect nextFrameStart = CGRectOffset(controllerFrame, controllerFrame.size.width, 0);
+		const CGRect nextFrameEnd = controllerFrame;
+		const CGRect oldFrameStart = controllerFrame;
+		const CGRect oldFrameEnd = CGRectOffset(controllerFrame, -controllerFrame.size.width, 0);
+		
 		[self.view addSubview:viewController.view];
 
 		[viewController viewWillAppear:animated];
@@ -171,7 +177,22 @@ static const CGFloat NavigationBarHeight = 28;
 			[_delegate navigationController:self willShowViewController:viewController animated:animated];
 		}
 		
-		[self.topViewController.view removeFromSuperview];
+		if (animated) {
+			viewController.view.frame = nextFrameStart;
+			oldViewController.view.frame = oldFrameStart;
+			
+			[oldViewController retain];
+			
+			[UIView beginAnimations:@"PushViewController" context:(void *)oldViewController];
+			[UIView setAnimationDelegate:self];
+			[UIView setAnimationDidStopSelector:@selector(_pushAnimationDidStop:finished:removeOldViewController:)];
+			viewController.view.frame = nextFrameEnd;
+			oldViewController.view.frame = oldFrameEnd;
+			[UIView commitAnimations];
+		} else {
+			viewController.view.frame = nextFrameEnd;
+			[oldViewController.view removeFromSuperview];
+		}
 
 		[viewController viewDidAppear:animated];
 		if (_delegateHas.didShowViewController) {
@@ -181,6 +202,12 @@ static const CGFloat NavigationBarHeight = 28;
 
 	[_viewControllers addObject:viewController];
 	[_navigationBar pushNavigationItem:viewController.navigationItem animated:animated];
+}
+
+- (void)_pushAnimationDidStop:(NSString *)name finished:(NSNumber *)finished removeOldViewController:(UIViewController *)controller
+{
+	[controller.view removeFromSuperview];
+	[controller release];
 }
 
 - (UIViewController *)_popViewControllerWithoutPoppingNavigationBarAnimated:(BOOL)animated
@@ -194,7 +221,14 @@ static const CGFloat NavigationBarHeight = 28;
 		if ([self isViewLoaded]) {
 			UIViewController *nextViewController = self.topViewController;
 
-			nextViewController.view.frame = [self _controllerFrame];
+			const CGRect controllerFrame = [self _controllerFrame];
+			const CGRect nextFrameStart = CGRectOffset(controllerFrame, -controllerFrame.size.width, 0);
+			const CGRect nextFrameEnd = controllerFrame;
+			const CGRect oldFrameStart = controllerFrame;
+			const CGRect oldFrameEnd = CGRectOffset(controllerFrame, controllerFrame.size.width, 0);
+
+			//nextViewController.view.frame = nextFrameEnd;
+
 			[self.view addSubview:nextViewController.view];
 
 			[nextViewController viewWillAppear:animated];
@@ -202,7 +236,22 @@ static const CGFloat NavigationBarHeight = 28;
 				[_delegate navigationController:self willShowViewController:nextViewController animated:animated];
 			}
 
-			[oldViewController.view removeFromSuperview];
+			if (animated) {
+				nextViewController.view.frame = nextFrameStart;
+				oldViewController.view.frame = oldFrameStart;
+				
+				[oldViewController retain];
+
+				[UIView beginAnimations:@"PopViewController" context:(void *)oldViewController];
+				[UIView setAnimationDelegate:self];
+				[UIView setAnimationDidStopSelector:@selector(_popAnimationDidStop:finished:removeOldViewController:)];
+				nextViewController.view.frame = nextFrameEnd;
+				oldViewController.view.frame = oldFrameEnd;
+				[UIView commitAnimations];
+			} else {
+				nextViewController.view.frame = nextFrameEnd;
+				[oldViewController.view removeFromSuperview];
+			}
 
 			[nextViewController viewDidAppear:animated];
 			if (_delegateHas.didShowViewController) {
@@ -214,6 +263,12 @@ static const CGFloat NavigationBarHeight = 28;
 	} else {
 		return nil;
 	}
+}
+
+- (void)_popAnimationDidStop:(NSString *)name finished:(NSNumber *)finished removeOldViewController:(UIViewController *)controller
+{
+	[controller.view removeFromSuperview];
+	[controller release];
 }
 
 - (UIViewController *)popViewControllerAnimated:(BOOL)animate
