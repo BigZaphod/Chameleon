@@ -116,11 +116,16 @@
 		[_menu setAllowsContextMenuPlugIns:NO];
 		
 		for (NSInteger index=0; index<[_menuTitles count]; index++) {
-			NSMenuItem *theItem = [[NSMenuItem alloc] initWithTitle:[_menuTitles objectAtIndex:index] action:@selector(_didSelectMenuItem:) keyEquivalent:@""];
-			[theItem setTag:index];
-			[theItem setTarget:self];
-			[_menu addItem:theItem];
-			[theItem release];
+			// don't even bother putting a cancel menu item on there. I think on OSX it's always going to be pointless
+			// as clicking outside of the menu is always the same thing as tapping the cancel button and that's just
+			// how it's got to work, I think.
+			if (index != _cancelButtonIndex) {
+				NSMenuItem *theItem = [[NSMenuItem alloc] initWithTitle:[_menuTitles objectAtIndex:index] action:@selector(_didSelectMenuItem:) keyEquivalent:@""];
+				[theItem setTag:index];
+				[theItem setTarget:self];
+				[_menu addItem:theItem];
+				[theItem release];
+			}
 		}
 
 		// convert the point from view's coordinate space to the underlying NSView's coordinate space
