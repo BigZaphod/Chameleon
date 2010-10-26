@@ -79,7 +79,7 @@ static const CGFloat kMaxButtonHeight = 28;
 {
 	if ((self=[super initWithFrame:frame])) {
 		_navStack = [NSMutableArray new];
-		self.tintColor = [UIColor colorWithWhite:0.133f alpha:1];
+		self.tintColor = [UIColor colorWithRed:21/255.f green:21/255.f blue:25/255.f alpha:1];
 	}
 	return self;
 }
