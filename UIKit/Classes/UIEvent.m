@@ -43,16 +43,6 @@
 	}
 }
 
-- (UIEvent *)_cloneAndClearTouch
-{
-	UIEvent *event = [[UIEvent alloc] init];
-	[event _setTouch:_touch];
-	[event _setNSEvent:_event];
-	[event _setPreviousMouseMovementView:_previousMouseMovementView];
-	[self _setTouch:nil];
-	return [event autorelease];
-}
-
 - (void)dealloc
 {
 	[_event release];

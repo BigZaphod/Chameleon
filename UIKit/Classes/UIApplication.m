@@ -229,7 +229,8 @@ static UIApplication *_theApplication = nil;
 		case NSLeftMouseUp:
 			if ([_currentEvent _touch]) {
 				[[_currentEvent _touch] _updateWithNSEvent:theNSEvent screenLocation:clickPoint];
-				[self sendEvent:[_currentEvent _cloneAndClearTouch]];
+				[self sendEvent:_currentEvent];
+				[_currentEvent _setTouch:nil];
 			}
 			break;
 
@@ -237,14 +238,16 @@ static UIApplication *_theApplication = nil;
 		case NSMouseMoved:
 			if (![_currentEvent _touch]) {
 				[self _beginNewTouchForEvent:_currentEvent atScreen:theScreen location:clickPoint];
-				[self sendEvent:[_currentEvent _cloneAndClearTouch]];
+				[self sendEvent:_currentEvent];
+				[_currentEvent _setTouch:nil];
 			}
 			break;
 
 		case NSRightMouseDown:
 			if (![_currentEvent _touch]) {
 				[self _beginNewTouchForEvent:_currentEvent atScreen:theScreen location:clickPoint];
-				[self sendEvent:[_currentEvent _cloneAndClearTouch]];
+				[self sendEvent:_currentEvent];
+				[_currentEvent _setTouch:nil];
 			}
 			break;
 			
@@ -261,9 +264,11 @@ static UIApplication *_theApplication = nil;
 // it's pretty annoying, but I think it's necessary.
 - (void)_cancelTouches
 {
-	if ([_currentEvent _touch]) {
-		[[_currentEvent _touch] _cancel];
-		[self sendEvent:[_currentEvent _cloneAndClearTouch]];
+	UITouch *touch = [_currentEvent _touch];
+	if (touch && (touch.phase != UITouchPhaseEnded || touch.phase != UITouchPhaseCancelled)) {
+		[touch _cancel];
+		[self sendEvent:_currentEvent];
+		[_currentEvent _setTouch:nil];
 	}
 }
 

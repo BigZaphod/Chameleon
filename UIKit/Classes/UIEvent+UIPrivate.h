@@ -10,5 +10,4 @@
 - (UITouch *)_touch;
 - (UIView *)_previousMouseMovementView;
 - (void)_setPreviousMouseMovementView:(UIView *)view;
-- (UIEvent *)_cloneAndClearTouch;
 @end
