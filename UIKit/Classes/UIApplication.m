@@ -257,6 +257,8 @@ static UIApplication *_theApplication = nil;
 	}
 }
 
+// this is used to fake an interruption/cancel of touches. this is important when something modally pops up or whatever.
+// it's pretty annoying, but I think it's necessary.
 - (void)_cancelTouches
 {
 	if ([_currentEvent _touch]) {

@@ -1,6 +1,6 @@
 //  Created by Sean Heber on 8/31/10.
 #import "UIMenuController.h"
-#import "UIApplication.h"
+#import "UIApplication+UIPrivate.h"
 #import "UIWindow+UIPrivate.h"
 #import "UIScreenAppKitIntegration.h"
 #import "UIKitView.h"
@@ -160,6 +160,7 @@
 	if (_menu && _window) {
 		NSView *theNSView = [_window.screen UIKitView];
 		if (theNSView) {
+			[[UIApplication sharedApplication] _cancelTouches];
 			[_menu popUpMenuPositioningItem:nil atLocation:NSPointFromCGPoint(_menuFrame.origin) inView:theNSView];
 		}
 	}

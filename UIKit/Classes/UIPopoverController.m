@@ -196,6 +196,13 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 	CGRect desktopScreenRect = [view.window.screen convertRect:screenRect toScreen:nil];
 	NSPoint pointTo = NSMakePoint(0,0);
 
+	// cancel current touches (if any) to prevent the main window from losing track of events (such as if the user was holding down the mouse
+	// button and a timer triggered the appearance of this popover. the window would possibly then not receive the mouseUp depending on how
+	// all this works out... I first ran into this problem with NSMenus. A NSWindow is a bit different, but I think this makes sense here
+	// too so premptively doing it to avoid potential problems.)
+	[[UIApplication sharedApplication] _cancelTouches];
+	
+	// finally, let's show it!
 	[_popoverWindow setFrameOrigin:PopoverWindowOrigin(_overlayWindow, NSRectFromCGRect(desktopScreenRect), NSSizeFromCGSize(_popoverView.frame.size), arrowDirections, &pointTo, &_popoverArrowDirection)];
 	_popoverView.hidden = NO;
 	[_popoverWindow makeKeyWindow];
