@@ -14,9 +14,10 @@ static UIImage *ButtonHighlightedImage = nil;
 static UIImage *BackButtonImage = nil;
 static UIImage *BackButtonHighlightedImage = nil;
 
+static const UIEdgeInsets kButtonEdgeInsets = {5,5,5,5};
 static const CGFloat kMinButtonWidth = 30;
 static const CGFloat kMaxButtonWidth = 200;
-static const CGFloat kMaxButtonHeight = 28;
+static const CGFloat kMaxButtonHeight = 24;
 
 @implementation UINavigationBar
 @synthesize tintColor=_tintColor, delegate=_delegate, items=_navStack;
@@ -49,7 +50,7 @@ static const CGFloat kMaxButtonHeight = 28;
 	[backButton setBackgroundImage:BackButtonHighlightedImage forState:UIControlStateHighlighted];
 	[backButton setTitle:item.title forState:UIControlStateNormal];
 	backButton.titleLabel.font = [UIFont systemFontOfSize:11];
-	backButton.titleEdgeInsets = UIEdgeInsetsMake(8,15,4,4);
+	backButton.titleEdgeInsets = UIEdgeInsetsMake(0,15,0,7);
 	[backButton addTarget:nil action:@selector(_backButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
 	[self _setBarButtonSize:backButton];
 	return backButton;
@@ -60,6 +61,7 @@ static const CGFloat kMaxButtonHeight = 28;
 	if (!item) return nil;
 
 	if (item.customView) {
+		[self _setBarButtonSize:item.customView];
 		return item.customView;
 	} else {
 		UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -68,7 +70,7 @@ static const CGFloat kMaxButtonHeight = 28;
 		[button setTitle:item.title forState:UIControlStateNormal];
 		[button setImage:item.image forState:UIControlStateNormal];
 		button.titleLabel.font = [UIFont systemFontOfSize:11];
-		button.titleEdgeInsets = UIEdgeInsetsMake(8,4,4,4);
+		button.titleEdgeInsets = UIEdgeInsetsMake(0,7,0,7);
 		[button addTarget:item.target action:item.action forControlEvents:UIControlEventTouchUpInside];
 		[self _setBarButtonSize:button];
 		return button;
@@ -125,8 +127,6 @@ static const CGFloat kMaxButtonHeight = 28;
 	UINavigationItem *backItem = self.backItem;
 	
 	if (topItem) {
-		const CGFloat leftPadding = 4;
-		const CGFloat rightPadding = 4;
 		CGRect leftFrame = CGRectZero;
 		CGRect rightFrame = CGRectZero;
 		
@@ -138,7 +138,7 @@ static const CGFloat kMaxButtonHeight = 28;
 
 		if (_leftView) {
 			leftFrame = _leftView.frame;
-			leftFrame.origin = CGPointMake(leftPadding,0);
+			leftFrame.origin = CGPointMake(kButtonEdgeInsets.left, kButtonEdgeInsets.top);
 			_leftView.frame = leftFrame;
 			[self addSubview:_leftView];
 		}
@@ -148,7 +148,8 @@ static const CGFloat kMaxButtonHeight = 28;
 		if (_rightView) {
 			_rightView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 			rightFrame = _rightView.frame;
-			rightFrame.origin = CGPointMake(self.bounds.size.width-rightFrame.size.width-rightPadding,0);
+			rightFrame.origin.x = self.bounds.size.width-rightFrame.size.width - kButtonEdgeInsets.right;
+			rightFrame.origin.y = kButtonEdgeInsets.top;
 			_rightView.frame = rightFrame;
 			[self addSubview:_rightView];
 		}
@@ -161,12 +162,13 @@ static const CGFloat kMaxButtonHeight = 28;
 			titleLabel.textAlignment = UITextAlignmentCenter;
 			titleLabel.backgroundColor = [UIColor clearColor];
 			titleLabel.textColor = [UIColor whiteColor];
-			titleLabel.font = [UIFont boldSystemFontOfSize:17];
+			titleLabel.font = [UIFont systemFontOfSize:14];
 			_centerView = titleLabel;
 		}
 
+		const CGFloat centerPadding = MAX(leftFrame.size.width, rightFrame.size.width);
 		_centerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		_centerView.frame = CGRectMake(leftFrame.size.width+leftPadding,0,self.bounds.size.width-leftFrame.size.width-rightFrame.size.width-leftPadding-rightPadding,kMaxButtonHeight);
+		_centerView.frame = CGRectMake(kButtonEdgeInsets.left+centerPadding,kButtonEdgeInsets.top,self.bounds.size.width-kButtonEdgeInsets.right-kButtonEdgeInsets.left-centerPadding-centerPadding,kMaxButtonHeight);
 		[self addSubview:_centerView];
 	} else {
 		_leftView = _centerView = _rightView = nil;
@@ -252,7 +254,7 @@ static const CGFloat kMaxButtonHeight = 28;
 	[_tintColor setFill];
 	UIRectFill(bounds);
 
-	[[UIColor colorWithWhite:0.29f alpha:1] setFill];
+	[[UIColor blackColor] setFill];
 	UIRectFill(CGRectMake(0,bounds.size.height-1,bounds.size.width,1));
 }
 
