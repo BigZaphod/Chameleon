@@ -229,8 +229,7 @@ static UIApplication *_theApplication = nil;
 		case NSLeftMouseUp:
 			if ([_currentEvent _touch]) {
 				[[_currentEvent _touch] _updateWithNSEvent:theNSEvent screenLocation:clickPoint];
-				[self sendEvent:_currentEvent];
-				[_currentEvent _setTouch:nil];
+				[self sendEvent:[_currentEvent _cloneAndClearTouch]];
 			}
 			break;
 
@@ -238,16 +237,14 @@ static UIApplication *_theApplication = nil;
 		case NSMouseMoved:
 			if (![_currentEvent _touch]) {
 				[self _beginNewTouchForEvent:_currentEvent atScreen:theScreen location:clickPoint];
-				[self sendEvent:_currentEvent];
-				[_currentEvent _setTouch:nil];
+				[self sendEvent:[_currentEvent _cloneAndClearTouch]];
 			}
 			break;
 
 		case NSRightMouseDown:
 			if (![_currentEvent _touch]) {
 				[self _beginNewTouchForEvent:_currentEvent atScreen:theScreen location:clickPoint];
-				[self sendEvent:_currentEvent];
-				[_currentEvent _setTouch:nil];
+				[self sendEvent:[_currentEvent _cloneAndClearTouch]];
 			}
 			break;
 			
@@ -257,6 +254,14 @@ static UIApplication *_theApplication = nil;
 				[self sendEvent:_currentEvent];
 			}
 			break;
+	}
+}
+
+- (void)_cancelTouches
+{
+	if ([_currentEvent _touch]) {
+		[[_currentEvent _touch] _cancel];
+		[self sendEvent:[_currentEvent _cloneAndClearTouch]];
 	}
 }
 

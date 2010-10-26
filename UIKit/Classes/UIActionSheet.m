@@ -3,6 +3,7 @@
 #import "UIWindow.h"
 #import "UIScreenAppKitIntegration.h"
 #import "UIKitView.h"
+#import "UIApplication+UIPrivate.h"
 #import <AppKit/NSMenu.h>
 #import <AppKit/NSMenuItem.h>
 #import <AppKit/NSEvent.h>
@@ -184,6 +185,14 @@
 	if (_delegateHas.didPresentActionSheet) {
 		[_delegate didPresentActionSheet:self];
 	}
+	
+	// this is certainly less than ideal, however because of the modal nature of NSMenu's, if there's a touch active (like, being held down)
+	// when a menu is triggered, the modal NSMenu seems to take over the event stream and so a mouseUp is never delivered to the UIKitView
+	// which means it never gets to the app and it leaves the touch system in an inconsistent state. This will attempt to cause a touch
+	// cancelation just before it actually shows the menu so hopefully things that respond correctly to canceled touches should then handle
+	// things correctly. I'm not really sure. It's possible that instead of faking a cancel event it should just fake a mouseUp event.
+	// That is presently unclear.
+	[[UIApplication sharedApplication] _cancelTouches];
 	
 	// this goes modal... meh.
 	BOOL itemSelected = [_menu popUpMenuPositioningItem:nil atLocation:NSPointFromCGPoint([aPoint CGPointValue]) inView:[self.window.screen UIKitView]];

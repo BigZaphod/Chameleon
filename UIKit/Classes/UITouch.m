@@ -50,6 +50,11 @@
 	}
 }
 
+- (void)_cancel
+{
+	_phase = UITouchPhaseCancelled;
+}
+
 - (void)_setView:(UIView *)theView
 {
 	if (_view != theView) {

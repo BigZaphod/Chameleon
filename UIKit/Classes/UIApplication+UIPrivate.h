@@ -8,6 +8,5 @@
 - (void)_windowDidBecomeVisible:(UIWindow *)theWindow;
 - (void)_windowDidBecomeHidden:(UIWindow *)theWindow;
 - (void)_screen:(UIScreen *)theScreen didReceiveNSEvent:(NSEvent *)theEvent;
-//- (void)_popoverControllerWillBecomeVisible:(UIPopoverController *)controller;
-//- (void)_popoverControllerWillBecomeHidden:(UIPopoverController *)controller;
+- (void)_cancelTouches;
 @end

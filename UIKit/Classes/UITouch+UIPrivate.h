@@ -6,4 +6,5 @@
 @interface UITouch (UIPrivate)
 - (void)_updateWithNSEvent:(NSEvent *)theEvent screenLocation:(CGPoint)baseLocation;
 - (void)_setView:(UIView *)theView;
+- (void)_cancel;
 @end
