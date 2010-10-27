@@ -16,6 +16,7 @@
 	NSMutableArray *_navStack;
 	UIColor *_tintColor;
 	id _delegate;
+	
 	UIView *_leftView;
 	UIView *_centerView;
 	UIView *_rightView;

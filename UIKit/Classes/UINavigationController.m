@@ -4,6 +4,7 @@
 #import "UITabBarController.h"
 #import "UINavigationBar.h"
 
+static const NSTimeInterval kAnimationDuration = 0.4;
 static const CGFloat NavigationBarHeight = 28;
 //static const CGFloat ToolbarHeight = 32;
 
@@ -184,6 +185,7 @@ static const CGFloat NavigationBarHeight = 28;
 			[oldViewController retain];
 			
 			[UIView beginAnimations:@"PushViewController" context:(void *)oldViewController];
+			[UIView setAnimationDuration:kAnimationDuration];
 			[UIView setAnimationDelegate:self];
 			[UIView setAnimationDidStopSelector:@selector(_pushAnimationDidStop:finished:removeOldViewController:)];
 			viewController.view.frame = nextFrameEnd;
@@ -243,6 +245,7 @@ static const CGFloat NavigationBarHeight = 28;
 				[oldViewController retain];
 
 				[UIView beginAnimations:@"PopViewController" context:(void *)oldViewController];
+				[UIView setAnimationDuration:kAnimationDuration];
 				[UIView setAnimationDelegate:self];
 				[UIView setAnimationDidStopSelector:@selector(_popAnimationDidStop:finished:removeOldViewController:)];
 				nextViewController.view.frame = nextFrameEnd;

@@ -19,6 +19,13 @@ static const CGFloat kMinButtonWidth = 30;
 static const CGFloat kMaxButtonWidth = 200;
 static const CGFloat kMaxButtonHeight = 24;
 
+static const NSTimeInterval kAnimationDuration = 0.4;
+
+typedef enum {
+	_UINavigationBarTransitionPush,
+	_UINavigationBarTransitionPop
+} _UINavigationBarTransition;
+
 @implementation UINavigationBar
 @synthesize tintColor=_tintColor, delegate=_delegate, items=_navStack;
 
@@ -117,16 +124,54 @@ static const CGFloat kMaxButtonHeight = 24;
 	[self popNavigationItemAnimated:YES];
 }
 
-- (void)_updateViews:(BOOL)animated
+- (void)_removeAnimatedViews:(NSArray *)views
 {
-	[_leftView removeFromSuperview];
-	[_centerView removeFromSuperview];
-	[_rightView removeFromSuperview];
+	[views makeObjectsPerformSelector:@selector(removeFromSuperview)];
+	[views release];
+}
+
+- (void)_setViewsWithTransition:(_UINavigationBarTransition)transition animated:(BOOL)animated
+{
+	{
+		NSMutableArray *previousViews = [[NSMutableArray alloc] init];
+		if (_leftView) [previousViews addObject:_leftView];
+		if (_centerView) [previousViews addObject:_centerView];
+		if (_rightView) [previousViews addObject:_rightView];
+
+		if (animated) {
+			CGFloat moveCenterBy = self.bounds.size.width - _centerView.frame.origin.x;
+			CGFloat moveLeftBy = self.bounds.size.width/2.f;
+
+			if (transition == _UINavigationBarTransitionPush) {
+				moveCenterBy *= -1.f;
+				moveLeftBy *= -1.f;
+			}
+			
+			[UIView beginAnimations:@"move out" context:NULL];
+			[UIView setAnimationDuration:kAnimationDuration];
+			_leftView.frame = CGRectOffset(_leftView.frame, moveLeftBy, 0);
+			_centerView.frame = CGRectOffset(_centerView.frame, moveCenterBy, 0);
+			[UIView commitAnimations];
+
+			[UIView beginAnimations:@"fade out" context:NULL];
+			[UIView setAnimationDuration:kAnimationDuration * .8];
+			[UIView setAnimationDelay:kAnimationDuration * .2];
+			_leftView.alpha = 0;
+			_rightView.alpha = 0;
+			_centerView.alpha = 0;
+			[UIView commitAnimations];
+			
+			[self performSelector:@selector(_removeAnimatedViews:) withObject:previousViews afterDelay:kAnimationDuration];
+		} else {
+			[self _removeAnimatedViews:previousViews];
+		}
+	}
 	
 	UINavigationItem *topItem = self.topItem;
-	UINavigationItem *backItem = self.backItem;
 	
 	if (topItem) {
+		UINavigationItem *backItem = self.backItem;
+
 		CGRect leftFrame = CGRectZero;
 		CGRect rightFrame = CGRectZero;
 		
@@ -170,6 +215,39 @@ static const CGFloat kMaxButtonHeight = 24;
 		_centerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		_centerView.frame = CGRectMake(kButtonEdgeInsets.left+centerPadding,kButtonEdgeInsets.top,self.bounds.size.width-kButtonEdgeInsets.right-kButtonEdgeInsets.left-centerPadding-centerPadding,kMaxButtonHeight);
 		[self addSubview:_centerView];
+
+		if (animated) {
+			CGFloat moveCenterBy = self.bounds.size.width - _centerView.frame.origin.x;
+			CGFloat moveLeftBy = self.bounds.size.width/2.f;
+
+			if (transition == _UINavigationBarTransitionPush) {
+				moveLeftBy *= -1.f;
+				moveCenterBy *= -1.f;
+			}
+
+			CGRect destinationLeftFrame = _leftView.frame;
+			CGRect destinationCenterFrame = _centerView.frame;
+			
+			_leftView.frame = CGRectOffset(_leftView.frame, -moveLeftBy, 0);
+			_centerView.frame = CGRectOffset(_centerView.frame, -moveCenterBy, 0);
+			_leftView.alpha = 0;
+			_rightView.alpha = 0;
+			_centerView.alpha = 0;
+			
+			[UIView beginAnimations:@"move in" context:NULL];
+			[UIView setAnimationDuration:kAnimationDuration];
+			_leftView.frame = destinationLeftFrame;
+			_centerView.frame = destinationCenterFrame;
+			[UIView commitAnimations];
+			
+			[UIView beginAnimations:@"fade in" context:NULL];
+			[UIView setAnimationDuration:kAnimationDuration * .8];
+			[UIView setAnimationDelay:kAnimationDuration * .2];
+			_leftView.alpha = 1;
+			_rightView.alpha = 1;
+			_centerView.alpha = 1;
+			[UIView commitAnimations];
+		}		
 	} else {
 		_leftView = _centerView = _rightView = nil;
 	}
@@ -189,7 +267,7 @@ static const CGFloat kMaxButtonHeight = 24;
 	if (![_navStack isEqualToArray:items]) {
 		[_navStack removeAllObjects];
 		[_navStack addObjectsFromArray:items];
-		[self _updateViews:animated];
+		[self _setViewsWithTransition:_UINavigationBarTransitionPush animated:animated];
 	}
 }
 
@@ -208,7 +286,7 @@ static const CGFloat kMaxButtonHeight = 24;
 
 	if (shouldPush) {
 		[_navStack addObject:item];
-		[self _updateViews:animated];
+		[self _setViewsWithTransition:_UINavigationBarTransitionPush animated:animated];
 		
 		if (_delegateHas.didPushItem) {
 			[_delegate navigationBar:self didPushItem:item];
@@ -230,7 +308,7 @@ static const CGFloat kMaxButtonHeight = 24;
 		if (shouldPop) {
 			[previousItem retain];
 			[_navStack removeObject:previousItem];
-			[self _updateViews:animated];
+			[self _setViewsWithTransition:_UINavigationBarTransitionPop animated:animated];
 			
 			if (_delegateHas.didPopItem) {
 				[_delegate navigationBar:self didPopItem:previousItem];
