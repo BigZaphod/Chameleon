@@ -154,24 +154,22 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 	// arrowPoint and myCenter should both be in self's coordinate space
 	const CGPoint arrowPoint = [self convertPoint:point fromView:view];
 	CGPoint myCenter = CGPointMake(CGRectGetMidX(myBounds), CGRectGetMidY(myBounds));
-	
+
+	// inset the bounds so that the bounding lines are at the center points of the arrow images
+	const CGRect bounds = CGRectInset(myBounds, 11, 11);
 
 	// check to see if the arrowPoint has any components that fall on lines which intersect the popover view itself.
 	// if it does, then adjust myCenter accordingly - this makes the algorithm prefer a straight line whenever possible
 	// which should ultimately look better - note that this was added well after all this complex math and is the
 	// single simple thing which helps render most of the complex math moot. Sometimes the easy thing to do is not
 	// the obvious thing if you're in the wrong frame of mind at the time. :/
-	if (arrowPoint.x > CGRectGetMinX(myBounds) && arrowPoint.x < CGRectGetMaxX(myBounds)) {
+	if (arrowPoint.x > CGRectGetMinX(bounds) && arrowPoint.x < CGRectGetMaxX(bounds)) {
 		myCenter.x = arrowPoint.x;
 	}
-	if (arrowPoint.y > CGRectGetMinY(myBounds) && arrowPoint.y < CGRectGetMaxY(myBounds)) {
+	if (arrowPoint.y > CGRectGetMinY(bounds) && arrowPoint.y < CGRectGetMaxY(bounds)) {
 		myCenter.y = arrowPoint.y;
 	}
 	
-
-	// inset the bounds so that the bounding lines are at the center points of the arrow images
-	const CGRect bounds = CGRectInset(myBounds, 11, 11);
-
 	const CGPoint topRight = CGPointMake(bounds.origin.x+bounds.size.width, bounds.origin.y);
 	const CGPoint bottomLeft = CGPointMake(bounds.origin.x, bounds.origin.y+bounds.size.height);
 	const CGPoint bottomRight = CGPointMake(bounds.origin.x+bounds.size.width, bounds.origin.y+bounds.size.height);
