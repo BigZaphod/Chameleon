@@ -4,7 +4,7 @@
 #import "UITabBarController.h"
 #import "UINavigationBar.h"
 
-static const NSTimeInterval kAnimationDuration = 0.4;
+static const NSTimeInterval kAnimationDuration = 0.33;
 static const CGFloat NavigationBarHeight = 28;
 //static const CGFloat ToolbarHeight = 32;
 

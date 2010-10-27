@@ -19,7 +19,7 @@ static const CGFloat kMinButtonWidth = 30;
 static const CGFloat kMaxButtonWidth = 200;
 static const CGFloat kMaxButtonHeight = 24;
 
-static const NSTimeInterval kAnimationDuration = 0.4;
+static const NSTimeInterval kAnimationDuration = 0.33;
 
 typedef enum {
 	_UINavigationBarTransitionPush,
