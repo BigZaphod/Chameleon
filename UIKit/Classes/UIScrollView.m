@@ -280,4 +280,36 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 {
 	return NO;
 }
+
+- (void)scrollRectToVisible:(CGRect)rect animated:(BOOL)animated
+{
+	const CGRect contentRect = CGRectMake(0,0,_contentSize.width, _contentSize.height);
+	const CGRect visibleRect = self.bounds;
+	CGRect goalRect = CGRectIntersection(rect, contentRect);
+
+	if (!CGRectIsNull(goalRect) && !CGRectContainsRect(visibleRect, goalRect)) {
+		
+		// clamp the goal rect to the largest possible size for it given the visible space available
+		// this causes it to prefer the top-left of the rect if the rect is too big
+		goalRect.size.width = MIN(goalRect.size.width, visibleRect.size.width);
+		goalRect.size.height = MIN(goalRect.size.height, visibleRect.size.height);
+		
+		CGPoint offset = self.contentOffset;
+		
+		if (CGRectGetMaxY(goalRect) > CGRectGetMaxY(visibleRect)) {
+			offset.y += CGRectGetMaxY(goalRect) - CGRectGetMaxY(visibleRect);
+		} else if (CGRectGetMinY(goalRect) < CGRectGetMinY(visibleRect)) {
+			offset.y += CGRectGetMinY(goalRect) - CGRectGetMinY(visibleRect);
+		}
+		
+		if (CGRectGetMaxX(goalRect) > CGRectGetMaxX(visibleRect)) {
+			offset.x += CGRectGetMaxX(goalRect) - CGRectGetMaxX(visibleRect);
+		} else if (CGRectGetMinX(goalRect) < CGRectGetMinX(visibleRect)) {
+			offset.x += CGRectGetMinX(goalRect) - CGRectGetMinX(visibleRect);
+		}
+		
+		[self setContentOffset:offset animated:animated];
+	}
+}
+
 @end

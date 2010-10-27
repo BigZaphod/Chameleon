@@ -42,6 +42,8 @@ typedef enum {
 	} _delegateCan;	
 }
 
+- (void)scrollRectToVisible:(CGRect)rect animated:(BOOL)animated;
+
 - (void)setContentOffset:(CGPoint)theOffset animated:(BOOL)animated;
 - (void)flashScrollIndicators;		// does nothing
 
