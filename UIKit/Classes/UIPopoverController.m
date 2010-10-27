@@ -216,6 +216,18 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 		CGPoint viewPointTo = [view convertPoint:windowPointTo fromView:nil];
 		[_popoverView pointTo:viewPointTo inView:view];
 	}
+	
+	if (animated) {
+		_popoverView.transform = CGAffineTransformMakeScale(0.9f,0.9f);
+		_popoverView.alpha = 0.5f;
+		
+		[UIView beginAnimations:@"Ploop" context:NULL];
+		[UIView setAnimationDuration:0.05];
+		[UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+		_popoverView.transform = CGAffineTransformIdentity;
+		_popoverView.alpha = 1.f;
+		[UIView commitAnimations];
+	}
 }
 
 - (void)presentPopoverFromBarButtonItem:(UIBarButtonItem *)item permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated
@@ -227,23 +239,36 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 	return (_popoverView || _popoverWindow || _overlayWindow);
 }
 
+- (void)_destroyPopover
+{
+	[[_overlayWindow parentWindow] makeKeyAndOrderFront:self];
+	
+	[_overlayWindow removeChildWindow:_popoverWindow];
+	[[_overlayWindow parentWindow] removeChildWindow:_overlayWindow];
+	
+	[_popoverView release];
+	[_popoverWindow release];
+	[_overlayWindow release];
+	
+	_popoverView = nil;
+	_popoverWindow = nil;
+	_overlayWindow = nil;
+	
+	_popoverArrowDirection = UIPopoverArrowDirectionUnknown;
+}
+
 - (void)dismissPopoverAnimated:(BOOL)animated
 {
 	if ([self isPopoverVisible]) {
-		[[_overlayWindow parentWindow] makeKeyAndOrderFront:self];
-
-		[_overlayWindow removeChildWindow:_popoverWindow];
-		[[_overlayWindow parentWindow] removeChildWindow:_overlayWindow];
-
-		[_popoverView release];
-		[_popoverWindow release];
-		[_overlayWindow release];
-		
-		_popoverView = nil;
-		_popoverWindow = nil;
-		_overlayWindow = nil;
-		
-		_popoverArrowDirection = UIPopoverArrowDirectionUnknown;
+		if (animated) {
+			[UIView beginAnimations:@"dismissPopoverAnimated" context:NULL];
+			[UIView setAnimationDelegate:self];
+			[UIView setAnimationDidStopSelector:@selector(_destroyPopover)];
+			_popoverView.alpha = 0;
+			[UIView commitAnimations];
+		} else {
+			[self _destroyPopover];
+		}
 	}
 }
 
