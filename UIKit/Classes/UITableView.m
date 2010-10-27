@@ -523,10 +523,12 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void)scrollToNearestSelectedRowAtScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated
 {
+	[self scrollRectToVisible:[self rectForRowAtIndexPath:[self indexPathForSelectedRow]] animated:animated];
 }
 
 - (void)scrollToRowAtIndexPath:(NSIndexPath *)indexPath atScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated
 {
+	[self scrollRectToVisible:[self rectForRowAtIndexPath:indexPath] animated:animated];
 }
 
 - (UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier
