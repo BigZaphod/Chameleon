@@ -218,13 +218,16 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 	}
 	
 	if (animated) {
-		_popoverView.transform = CGAffineTransformMakeScale(0.9f,0.9f);
-		_popoverView.alpha = 0.5f;
+		_popoverView.transform = CGAffineTransformMakeScale(0.98f,0.98f);
+		_popoverView.alpha = 0.4f;
 		
 		[UIView beginAnimations:@"Ploop" context:NULL];
-		[UIView setAnimationDuration:0.05];
-		[UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+		[UIView setAnimationDuration:0.08];
 		_popoverView.transform = CGAffineTransformIdentity;
+		[UIView commitAnimations];
+
+		[UIView beginAnimations:@"Fade" context:NULL];
+		[UIView setAnimationDuration:0.1];
 		_popoverView.alpha = 1.f;
 		[UIView commitAnimations];
 	}
