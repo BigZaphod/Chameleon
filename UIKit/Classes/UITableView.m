@@ -11,6 +11,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 @interface UITableView ()
 - (void)_setNeedsReload;
+- (void)_setNeedsCellLayout;
 @end
 
 @implementation UITableView
@@ -93,6 +94,12 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 - (void)_setNeedsReload
 {
 	_needsReload = YES;
+	[self setNeedsLayout];
+}
+
+- (void)_setNeedsCellLayout
+{
+	_needsCellLayout = YES;
 	[self setNeedsLayout];
 }
 
@@ -249,7 +256,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		[_tableHeaderView removeFromSuperview];
 		[_tableHeaderView release];
 		_tableHeaderView = [newHeader retain];
-		[self _updateContentSize];
+		[self _setNeedsCellLayout];
 		[self addSubview:_tableHeaderView];
 	}
 }
@@ -260,7 +267,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		[_tableFooterView removeFromSuperview];
 		[_tableFooterView release];
 		_tableFooterView = [newFooter retain];
-		[self _updateContentSize];
+		[self _setNeedsCellLayout];
 		[self addSubview:_tableFooterView];
 	}
 }
@@ -281,6 +288,8 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void)_layoutCells
 {
+	[self _updateContentSize];
+
 	const CGSize boundsSize = self.bounds.size;
 	const CGFloat contentOffset = self.contentOffset.y;
 	const CGRect visibleBounds = CGRectMake(0,contentOffset,boundsSize.width,boundsSize.height);
@@ -382,6 +391,8 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		_tableFooterView.frame = tableFooterFrame;
 		_tableFooterView.hidden = !CGRectIntersectsRect(tableFooterFrame, visibleBounds);
 	}
+	
+	_needsCellLayout = NO;
 }
 
 - (void)reloadData
@@ -461,20 +472,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	}
 	
 	_needsReload = NO;
-	[self _updateContentSize];
-	[self _layoutCells];
-}
-
-- (void)setFrame:(CGRect)frame
-{
-	[super setFrame:frame];
-	[self _layoutCells];
-}
-
-- (void)setBounds:(CGRect)bounds
-{
-	[super setBounds:bounds];
-	[self _layoutCells];
+	[self _setNeedsCellLayout];
 }
 
 - (void)layoutSubviews
@@ -484,6 +482,22 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	if (_needsReload) {
 		[self reloadData];
 	}
+	
+	if (_needsCellLayout) {
+		[self _layoutCells];
+	}
+}
+
+- (void)setFrame:(CGRect)frame
+{
+	[super setFrame:frame];
+	[self _setNeedsCellLayout];
+}
+
+- (void)setBounds:(CGRect)bounds
+{
+	[super setBounds:bounds];
+	[self _setNeedsCellLayout];
 }
 
 - (NSIndexPath *)indexPathForSelectedRow

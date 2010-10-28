@@ -56,6 +56,7 @@ typedef enum {
 	UITableViewStyle _style;
 	id<UITableViewDataSource> _dataSource;
 	BOOL _needsReload;
+	BOOL _needsCellLayout;
 	CGFloat _rowHeight;
 	UIColor *_separatorColor;
 	UITableViewCellSeparatorStyle _separatorStyle;
