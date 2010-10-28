@@ -16,7 +16,6 @@ static const CGFloat NavigationBarHeight = 28;
 	if ((self=[super initWithNibName:nibName bundle:bundle])) {
 		_viewControllers = [[NSMutableArray alloc] initWithCapacity:1];
 		_navigationBar = [UINavigationBar new];
-		_navigationBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		_navigationBar.delegate = self;
 	}
 	return self;
@@ -69,9 +68,11 @@ static const CGFloat NavigationBarHeight = 28;
 
 	UIViewController *topViewController = self.topViewController;
 	topViewController.view.frame = [self _controllerFrame];
+	topViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[self.view addSubview:topViewController.view];
 
 	_navigationBar.frame = CGRectMake(0,0,320,NavigationBarHeight);
+	_navigationBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	[self.view addSubview:_navigationBar];
 }
 
@@ -132,8 +133,8 @@ static const CGFloat NavigationBarHeight = 28;
 			}
 			
 			newTopController.view.frame = [self _controllerFrame];
-			[self.view addSubview:newTopController.view];
-			[self.view bringSubviewToFront:_navigationBar];
+			newTopController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+			[self.view insertSubview:newTopController.view atIndex:0];
 
 			[newTopController viewDidAppear:animated];
 			if (_delegateHas.didShowViewController) {
@@ -171,7 +172,8 @@ static const CGFloat NavigationBarHeight = 28;
 		const CGRect oldFrameStart = controllerFrame;
 		const CGRect oldFrameEnd = CGRectOffset(controllerFrame, -controllerFrame.size.width, 0);
 		
-		[self.view addSubview:viewController.view];
+		viewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		[self.view insertSubview:viewController.view atIndex:0];
 
 		[viewController viewWillAppear:animated];
 		if (_delegateHas.willShowViewController) {
@@ -231,7 +233,8 @@ static const CGFloat NavigationBarHeight = 28;
 
 			//nextViewController.view.frame = nextFrameEnd;
 
-			[self.view addSubview:nextViewController.view];
+			nextViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+			[self.view insertSubview:nextViewController.view atIndex:0];
 
 			[nextViewController viewWillAppear:animated];
 			if (_delegateHas.willShowViewController) {
