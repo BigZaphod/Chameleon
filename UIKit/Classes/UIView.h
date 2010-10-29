@@ -60,7 +60,7 @@ typedef enum {
 	BOOL _implementsDrawRect;
 	BOOL _multipleTouchEnabled;
 	BOOL _exclusiveTouch;
-	UIViewController *_viewController;
+	__weak UIViewController *_viewController;
 	UIViewAutoresizing _autoresizingMask;
 }
 

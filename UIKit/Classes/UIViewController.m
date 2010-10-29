@@ -29,6 +29,7 @@
 
 - (void)dealloc
 {
+	[_view _setViewController:nil];
 	[_modalViewController release];
 	[_navigationItem release];
 	[_title release];
