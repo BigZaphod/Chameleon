@@ -67,7 +67,7 @@
 	[super updateTrackingAreas];
 	[self removeTrackingArea:_trackingArea];
 	[_trackingArea release];
-	_trackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds options:NSTrackingCursorUpdate|NSTrackingMouseMoved|NSTrackingInVisibleRect|NSTrackingActiveInActiveApp owner:self userInfo:nil];
+	_trackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds options:NSTrackingCursorUpdate|NSTrackingMouseMoved|NSTrackingInVisibleRect|NSTrackingActiveInKeyWindow owner:self userInfo:nil];
 	[self addTrackingArea:_trackingArea];
 }
 
