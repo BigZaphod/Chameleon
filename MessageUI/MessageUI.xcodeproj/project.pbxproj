@@ -11,9 +11,7 @@
 		143B57941230357C00F43562 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14FB133A1230307C00B615ED /* UIKit.framework */; };
 		14C25EF31211ED0400622309 /* MessageUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 14C25EF21211ED0400622309 /* MessageUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14EFB1BB1211DB5300D19B0C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14EFB1BA1211DB5300D19B0C /* Cocoa.framework */; };
-		14FB132612302F8700B615ED /* MessageUI_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 14FB132512302F8700B615ED /* MessageUI_Prefix.pch */; };
 		14FB132D12302FD900B615ED /* MFMailComposeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14FB132B12302FD900B615ED /* MFMailComposeViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		14FB132E12302FD900B615ED /* MFMailComposeViewController.m in Resources */ = {isa = PBXBuildFile; fileRef = 14FB132C12302FD900B615ED /* MFMailComposeViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -140,7 +138,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				14C25EF31211ED0400622309 /* MessageUI.h in Headers */,
-				14FB132612302F8700B615ED /* MessageUI_Prefix.pch in Headers */,
 				14FB132D12302FD900B615ED /* MFMailComposeViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -175,6 +172,7 @@
 			isa = PBXProject;
 			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "MessageUI" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -213,7 +211,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14FB132E12302FD900B615ED /* MFMailComposeViewController.m in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
