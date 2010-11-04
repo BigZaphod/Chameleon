@@ -236,6 +236,12 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 	return UIEdgeInsetsInsetRect(bounds,_contentEdgeInsets);
 }
 
+- (CGSize)_backgroundSizeForState:(UIControlState)state
+{
+	UIImage *backgroundImage = [self backgroundImageForState:state];
+	return backgroundImage? backgroundImage.size : CGSizeZero;
+}
+
 - (CGSize)_titleSizeForState:(UIControlState)state
 {
 	NSString *title = [self titleForState:state];
@@ -246,13 +252,6 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 {
 	UIImage *image = [self imageForState:state];
 	return image ? image.size : CGSizeZero;
-}
-
-- (CGSize)_contentSizeForState:(UIControlState)state
-{
-	const CGSize imageSize = [self _imageSizeForState:state];
-	const CGSize titleSize = [self _titleSizeForState:state];
-	return CGSizeMake(titleSize.width+imageSize.width, MAX(titleSize.height,imageSize.height));
 }
 
 - (CGRect)_componentRectForSize:(CGSize)size inContentRect:(CGRect)contentRect withState:(UIControlState)state
@@ -322,12 +321,11 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 {
 	[super layoutSubviews];
 	
-	CGRect bounds = self.bounds;
-	CGRect backgroundRect = [self backgroundRectForBounds:bounds];
-	CGRect contentRect = [self contentRectForBounds:bounds];
-	CGRect titleRect = [self titleRectForContentRect:contentRect];
-	_backgroundImageView.frame = backgroundRect;
-	_titleLabel.frame = titleRect;
+	const CGRect bounds = self.bounds;
+	const CGRect contentRect = [self contentRectForBounds:bounds];
+
+	_backgroundImageView.frame = [self backgroundRectForBounds:bounds];
+	_titleLabel.frame = [self titleRectForContentRect:contentRect];
 	_imageView.frame = [self imageRectForContentRect:contentRect];
 }
 
@@ -341,16 +339,13 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 {
 	const UIControlState state = self.state;
 	
-	CGSize fitSize = [self _contentSizeForState:state];
-	
-	UIImage *backgroundImage = [self backgroundImageForState:state];
-	if (backgroundImage) {
-		fitSize.width = MAX(fitSize.width, backgroundImage.size.width);
-		fitSize.height = MAX(fitSize.height, backgroundImage.size.height);
-	}
-	
-	fitSize.width += _contentEdgeInsets.left + _contentEdgeInsets.right;
-	fitSize.height += _contentEdgeInsets.top + _contentEdgeInsets.bottom;
+	const CGSize backgroundSize = [self _backgroundSizeForState:state];
+	const CGSize imageSize = [self _imageSizeForState:state];
+	const CGSize titleSize = [self _titleSizeForState:state];
+
+	CGSize fitSize;
+	fitSize.width = _contentEdgeInsets.left + _contentEdgeInsets.right + MAX((titleSize.width+imageSize.width), backgroundSize.width);
+	fitSize.height = _contentEdgeInsets.top + _contentEdgeInsets.bottom + MAX(MAX(titleSize.height,imageSize.height),backgroundSize.height);
 	
 	return fitSize;
 }
