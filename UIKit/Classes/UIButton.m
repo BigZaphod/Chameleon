@@ -46,7 +46,7 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 		_adjustsImageWhenHighlighted = YES;
 		_adjustsImageWhenDisabled = YES;
 		_showsTouchWhenHighlighted = NO;
-
+		
 		self.opaque = NO;
 		_titleLabel.backgroundColor = [UIColor clearColor];
 		_titleLabel.textAlignment = UITextAlignmentLeft;
@@ -57,7 +57,7 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 	}
 	return self;
 }
-					 
+
 - (void)dealloc
 {
 	[_content release];
@@ -136,7 +136,7 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 	} else {
 		[_imageView _setDrawMode:_UIImageViewDrawModeNormal];
 	}
-
+	
 	if (!backgroundImage) {
 		backgroundImage = [self backgroundImageForState:state];
 		if (_adjustsImageWhenDisabled && state & UIControlStateDisabled) {
@@ -255,20 +255,25 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 	return CGSizeMake(titleSize.width+imageSize.width, MAX(titleSize.height,imageSize.height));
 }
 
-- (CGRect)_alignComponentRect:(CGRect)rect forContentRect:(CGRect)contentRect state:(UIControlState)state
+- (CGRect)_componentRectForSize:(CGSize)size inContentRect:(CGRect)contentRect withState:(UIControlState)state
 {
-	const CGSize contentSize = [self _contentSizeForState:state];
+	CGRect rect;
+
+	rect.origin = contentRect.origin;
+	rect.size = size;
 	
-	rect.origin.x += contentRect.origin.x;
-	rect.origin.y += contentRect.origin.y;
+	// clamp the right edge of the rect to the contentRect - this is what the real UIButton appears to do.
+	if (CGRectGetMaxX(rect) > CGRectGetMaxX(contentRect)) {
+		rect.size.width -= CGRectGetMaxX(rect) - CGRectGetMaxX(contentRect);
+	}
 	
 	switch (self.contentHorizontalAlignment) {
 		case UIControlContentHorizontalAlignmentCenter:
-			rect.origin.x += roundf((contentRect.size.width/2.f) - (contentSize.width/2.f));
+			rect.origin.x += roundf((contentRect.size.width/2.f) - (rect.size.width/2.f));
 			break;
 			
 		case UIControlContentHorizontalAlignmentRight:
-			rect.origin.x += contentRect.size.width - contentSize.width;
+			rect.origin.x += contentRect.size.width - rect.size.width;
 			break;
 			
 		case UIControlContentHorizontalAlignmentFill:
@@ -284,15 +289,10 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 		case UIControlContentVerticalAlignmentBottom:
 			rect.origin.y += contentRect.size.height - rect.size.height;
 			break;
-
+			
 		case UIControlContentVerticalAlignmentFill:
 			rect.size.height = contentRect.size.height;
 			break;
-	}
-
-	// clamp the right edge of the rect to the contentRect - this is what the real UIButton appears to do.
-	if (CGRectGetMaxX(rect) > CGRectGetMaxX(contentRect)) {
-		rect.size.width -= CGRectGetMaxX(rect) - CGRectGetMaxX(contentRect);
 	}
 	
 	return rect;
@@ -301,28 +301,27 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 - (CGRect)titleRectForContentRect:(CGRect)contentRect
 {
 	const UIControlState state = self.state;
-
-	CGRect titleRect = CGRectZero;
-	titleRect.origin.x += [self _imageSizeForState:state].width;
-	titleRect.size = [self _titleSizeForState:state];
-
-	return [self _alignComponentRect:titleRect forContentRect:UIEdgeInsetsInsetRect(contentRect,_titleEdgeInsets) state:state];
+	
+	UIEdgeInsets inset = _titleEdgeInsets;
+	inset.left += [self _imageSizeForState:state].width;
+	
+	return [self _componentRectForSize:[self _titleSizeForState:state] inContentRect:UIEdgeInsetsInsetRect(contentRect,inset) withState:state];
 }
 
 - (CGRect)imageRectForContentRect:(CGRect)contentRect
 {
 	const UIControlState state = self.state;
-
-	CGRect imageRect = CGRectZero;
-	imageRect.size = [self _imageSizeForState:state];
 	
-	return [self _alignComponentRect:imageRect forContentRect:UIEdgeInsetsInsetRect(contentRect,_imageEdgeInsets) state:state];
+	UIEdgeInsets inset = _imageEdgeInsets;
+	inset.right += [self _titleSizeForState:state].width;
+	
+	return [self _componentRectForSize:[self _imageSizeForState:state] inContentRect:UIEdgeInsetsInsetRect(contentRect,inset) withState:state];
 }
 
 - (void)layoutSubviews
 {
 	[super layoutSubviews];
-
+	
 	CGRect bounds = self.bounds;
 	CGRect backgroundRect = [self backgroundRectForBounds:bounds];
 	CGRect contentRect = [self contentRectForBounds:bounds];
@@ -349,10 +348,10 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 		fitSize.width = MAX(fitSize.width, backgroundImage.size.width);
 		fitSize.height = MAX(fitSize.height, backgroundImage.size.height);
 	}
-
+	
 	fitSize.width += _contentEdgeInsets.left + _contentEdgeInsets.right;
 	fitSize.height += _contentEdgeInsets.top + _contentEdgeInsets.bottom;
-
+	
 	return fitSize;
 }
 
