@@ -35,7 +35,7 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 	const CGRect bounds = self.bounds;
 	const CGFloat dimension = MAX(bounds.size.width, bounds.size.height);
 	const CGFloat knobScale = MIN(1, (dimension / _contentSize));
-	return MAX((dimension * knobScale), 20);
+	return MAX((dimension * knobScale), 50);
 }
 
 - (CGRect)knobRect
@@ -144,7 +144,7 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 		[[[UIColor whiteColor] colorWithAlphaComponent:0.5] setFill];
 	} else {
 		[[[UIColor blackColor] colorWithAlphaComponent:0.5] setFill];
-		[[[UIColor whiteColor] colorWithAlphaComponent:0.25] setStroke];
+		[[[UIColor whiteColor] colorWithAlphaComponent:0.2] setStroke];
 		[path stroke];
 	}
 	
