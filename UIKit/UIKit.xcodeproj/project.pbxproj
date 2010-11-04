@@ -162,14 +162,9 @@
 		14CC842611EFA8AF005988CC /* UIWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC83B011EFA8AF005988CC /* UIWebView.m */; };
 		14CC842711EFA8AF005988CC /* UIWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CC83B111EFA8AF005988CC /* UIWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14CC842811EFA8AF005988CC /* UIWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC83B211EFA8AF005988CC /* UIWindow.m */; };
-		14CC843111EFA8BA005988CC /* <UIScroller> horizontal-knob-dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 14CC842911EFA8BA005988CC /* <UIScroller> horizontal-knob-dark.png */; };
-		14CC843211EFA8BA005988CC /* <UIScroller> horizontal-track-dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 14CC842A11EFA8BA005988CC /* <UIScroller> horizontal-track-dark.png */; };
-		14CC843311EFA8BA005988CC /* <UIScroller> vertical-knob-dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 14CC842B11EFA8BA005988CC /* <UIScroller> vertical-knob-dark.png */; };
-		14CC843411EFA8BA005988CC /* <UIScroller> vertical-track-dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 14CC842C11EFA8BA005988CC /* <UIScroller> vertical-track-dark.png */; };
 		14CC843511EFA8BA005988CC /* <UIRoundedRectButton> highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 14CC842D11EFA8BA005988CC /* <UIRoundedRectButton> highlighted.png */; };
 		14CC843611EFA8BA005988CC /* <UIRoundedRectButton> normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 14CC842E11EFA8BA005988CC /* <UIRoundedRectButton> normal.png */; };
 		14CC843711EFA8BA005988CC /* <UIScreen> grabber.png in Resources */ = {isa = PBXBuildFile; fileRef = 14CC842F11EFA8BA005988CC /* <UIScreen> grabber.png */; };
-		14CC843811EFA8BA005988CC /* <UIScrollView> grabber-dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 14CC843011EFA8BA005988CC /* <UIScrollView> grabber-dark.png */; };
 		14CC844111EFA901005988CC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14CC844011EFA901005988CC /* QuartzCore.framework */; };
 		14CC844511EFA91A005988CC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14CC844411EFA91A005988CC /* SystemConfiguration.framework */; };
 		14F56F3D12664D350045EC82 /* <UIPopoverView> arrow-bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F56F3812664D350045EC82 /* <UIPopoverView> arrow-bottom.png */; };
@@ -359,14 +354,9 @@
 		14CC83B011EFA8AF005988CC /* UIWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIWebView.m; path = Classes/UIWebView.m; sourceTree = "<group>"; };
 		14CC83B111EFA8AF005988CC /* UIWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIWindow.h; path = Classes/UIWindow.h; sourceTree = "<group>"; };
 		14CC83B211EFA8AF005988CC /* UIWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIWindow.m; path = Classes/UIWindow.m; sourceTree = "<group>"; };
-		14CC842911EFA8BA005988CC /* <UIScroller> horizontal-knob-dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIScroller> horizontal-knob-dark.png"; path = "Resources/<UIScroller> horizontal-knob-dark.png"; sourceTree = "<group>"; };
-		14CC842A11EFA8BA005988CC /* <UIScroller> horizontal-track-dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIScroller> horizontal-track-dark.png"; path = "Resources/<UIScroller> horizontal-track-dark.png"; sourceTree = "<group>"; };
-		14CC842B11EFA8BA005988CC /* <UIScroller> vertical-knob-dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIScroller> vertical-knob-dark.png"; path = "Resources/<UIScroller> vertical-knob-dark.png"; sourceTree = "<group>"; };
-		14CC842C11EFA8BA005988CC /* <UIScroller> vertical-track-dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIScroller> vertical-track-dark.png"; path = "Resources/<UIScroller> vertical-track-dark.png"; sourceTree = "<group>"; };
 		14CC842D11EFA8BA005988CC /* <UIRoundedRectButton> highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIRoundedRectButton> highlighted.png"; path = "Resources/<UIRoundedRectButton> highlighted.png"; sourceTree = "<group>"; };
 		14CC842E11EFA8BA005988CC /* <UIRoundedRectButton> normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIRoundedRectButton> normal.png"; path = "Resources/<UIRoundedRectButton> normal.png"; sourceTree = "<group>"; };
 		14CC842F11EFA8BA005988CC /* <UIScreen> grabber.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIScreen> grabber.png"; path = "Resources/<UIScreen> grabber.png"; sourceTree = "<group>"; };
-		14CC843011EFA8BA005988CC /* <UIScrollView> grabber-dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIScrollView> grabber-dark.png"; path = "Resources/<UIScrollView> grabber-dark.png"; sourceTree = "<group>"; };
 		14CC844011EFA901005988CC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		14CC844411EFA91A005988CC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		14F56F3812664D350045EC82 /* <UIPopoverView> arrow-bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIPopoverView> arrow-bottom.png"; path = "Resources/<UIPopoverView> arrow-bottom.png"; sourceTree = "<group>"; };
@@ -463,11 +453,6 @@
 				14CC842D11EFA8BA005988CC /* <UIRoundedRectButton> highlighted.png */,
 				14CC842E11EFA8BA005988CC /* <UIRoundedRectButton> normal.png */,
 				14CC842F11EFA8BA005988CC /* <UIScreen> grabber.png */,
-				14CC842911EFA8BA005988CC /* <UIScroller> horizontal-knob-dark.png */,
-				14CC842A11EFA8BA005988CC /* <UIScroller> horizontal-track-dark.png */,
-				14CC842B11EFA8BA005988CC /* <UIScroller> vertical-knob-dark.png */,
-				14CC842C11EFA8BA005988CC /* <UIScroller> vertical-track-dark.png */,
-				14CC843011EFA8BA005988CC /* <UIScrollView> grabber-dark.png */,
 				8DC2EF5A0486A6940098B216 /* Info.plist */,
 			);
 			name = Resources;
@@ -832,14 +817,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14CC843111EFA8BA005988CC /* <UIScroller> horizontal-knob-dark.png in Resources */,
-				14CC843211EFA8BA005988CC /* <UIScroller> horizontal-track-dark.png in Resources */,
-				14CC843311EFA8BA005988CC /* <UIScroller> vertical-knob-dark.png in Resources */,
-				14CC843411EFA8BA005988CC /* <UIScroller> vertical-track-dark.png in Resources */,
 				14CC843511EFA8BA005988CC /* <UIRoundedRectButton> highlighted.png in Resources */,
 				14CC843611EFA8BA005988CC /* <UIRoundedRectButton> normal.png in Resources */,
 				14CC843711EFA8BA005988CC /* <UIScreen> grabber.png in Resources */,
-				14CC843811EFA8BA005988CC /* <UIScrollView> grabber-dark.png in Resources */,
 				1464960B11FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png in Resources */,
 				1464960C11FF7AE500ECEC7A /* <UINavigationBar> back.png in Resources */,
 				1464960D11FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png in Resources */,
