@@ -289,6 +289,11 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 			rect.size.height = contentRect.size.height;
 			break;
 	}
+
+	// clamp the right edge of the rect to the contentRect - this is what the real UIButton appears to do.
+	if (CGRectGetMaxX(rect) > CGRectGetMaxX(contentRect)) {
+		rect.size.width -= CGRectGetMaxX(rect) - CGRectGetMaxX(contentRect);
+	}
 	
 	return rect;
 }
