@@ -29,9 +29,9 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 {
 	if ((self=[super initWithFrame:frame])) {
 		_style = theStyle;
-		_cachedCells = [NSMutableDictionary new];
-		_sections = [NSMutableArray new];
-		_reusableCells = [NSMutableSet new];
+		_cachedCells = [[NSMutableDictionary alloc] init];
+		_sections = [[NSMutableArray alloc] init];
+		_reusableCells = [[NSMutableSet alloc] init];
 
 		self.separatorColor = [UIColor colorWithRed:.88f green:.88f blue:.88f alpha:1];
 		self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
@@ -170,7 +170,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	// For now I'm assuming the cells stretch all the way across the view. It's not clear to me if the real
 	// implementation gets anal about this or not (haven't tested it).
 
-	NSMutableArray *results = [NSMutableArray new];
+	NSMutableArray *results = [[NSMutableArray alloc] init];
 	const NSInteger numberOfSections = [_sections count];
 	CGFloat offset = _tableHeaderView? _tableHeaderView.frame.size.height : 0;
 	
@@ -225,7 +225,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (NSArray *)visibleCells
 {
-	NSMutableArray *cells = [[NSMutableArray new] autorelease];
+	NSMutableArray *cells = [[[NSMutableArray alloc] init] autorelease];
 	for (NSIndexPath *index in [self indexPathsForVisibleRows]) {
 		UITableViewCell *cell = [self cellForRowAtIndexPath:index];
 		if (cell) {
@@ -310,7 +310,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	[_cachedCells removeAllObjects];
 	
 	for (NSInteger section=0; section<numberOfSections; section++) {
-		NSAutoreleasePool *sectionPool = [NSAutoreleasePool new];
+		NSAutoreleasePool *sectionPool = [[NSAutoreleasePool alloc] init];
 		CGRect sectionRect = [self rectForSection:section];
 		tableHeight += sectionRect.size.height;
 		if (CGRectIntersectsRect(sectionRect, visibleBounds)) {
@@ -338,7 +338,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 			}
 			
 			for (NSInteger row=0; row<numberOfRows; row++) {
-				NSAutoreleasePool *rowPool = [NSAutoreleasePool new];
+				NSAutoreleasePool *rowPool = [[NSAutoreleasePool alloc] init];
 				NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
 				CGRect rowRect = [self rectForRowAtIndexPath:indexPath];
 				if (CGRectIntersectsRect(rowRect,visibleBounds) && rowRect.size.height > 0) {
@@ -422,7 +422,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	for (NSInteger section=0; section<numberOfSections; section++) {
 		const NSInteger numberOfRowsInSection = [self numberOfRowsInSection:section];
 		
-		UITableViewSection *sectionRecord = [UITableViewSection new];
+		UITableViewSection *sectionRecord = [[UITableViewSection alloc] init];
 		sectionRecord.numberOfRows = numberOfRowsInSection;
 		sectionRecord.headerView = _delegateHas.viewForHeaderInSection? [self.delegate tableView:self viewForHeaderInSection:section] : nil;
 		sectionRecord.footerView = _delegateHas.viewForFooterInSection? [self.delegate tableView:self viewForFooterInSection:section] : nil;

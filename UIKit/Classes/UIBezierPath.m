@@ -6,7 +6,7 @@
 
 + (UIBezierPath *)_bezierPathWithNSBezierPath:(NSBezierPath *)thePath
 {
-	UIBezierPath *p = [UIBezierPath new];
+	UIBezierPath *p = [[UIBezierPath alloc] init];
 	p->_path = [thePath retain];
 	return [p autorelease];
 }

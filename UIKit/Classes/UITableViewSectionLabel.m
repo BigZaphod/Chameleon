@@ -7,7 +7,7 @@
 @implementation UITableViewSectionLabel
 + (UITableViewSectionLabel *)sectionLabelWithTitle:(NSString *)title
 {
-	UITableViewSectionLabel *label = [self new];
+	UITableViewSectionLabel *label = [[self alloc] init];
 	label.text = [NSString stringWithFormat:@"  %@", title];
 	label.font = [UIFont boldSystemFontOfSize:17];
 	label.textColor = [UIColor whiteColor];

@@ -15,7 +15,7 @@ static const CGFloat NavigationBarHeight = 28;
 {
 	if ((self=[super initWithNibName:nibName bundle:bundle])) {
 		_viewControllers = [[NSMutableArray alloc] initWithCapacity:1];
-		_navigationBar = [UINavigationBar new];
+		_navigationBar = [[UINavigationBar alloc] init];
 		_navigationBar.delegate = self;
 	}
 	return self;
@@ -288,7 +288,7 @@ static const CGFloat NavigationBarHeight = 28;
 
 - (NSArray *)popToViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-	NSMutableArray *popped = [NSMutableArray new];
+	NSMutableArray *popped = [[NSMutableArray alloc] init];
 
 	while (self.topViewController != viewController) {
 		UIViewController *poppedController = [self popViewControllerAnimated:animated];

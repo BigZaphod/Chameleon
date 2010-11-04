@@ -8,7 +8,7 @@ static UIDevice *theDevice;
 + (void)initialize
 {
 	if (self == [UIDevice class]) {
-		theDevice = [UIDevice new];
+		theDevice = [[UIDevice alloc] init];
 	}
 }
 

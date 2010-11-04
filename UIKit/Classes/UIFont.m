@@ -12,7 +12,7 @@
 
 + (UIFont *)_fontWithCTFont:(CTFontRef)aFont
 {
-	UIFont *theFont = [UIFont new];
+	UIFont *theFont = [[UIFont alloc] init];
 	theFont->_font = CFRetain(aFont);
 	return [theFont autorelease];
 }

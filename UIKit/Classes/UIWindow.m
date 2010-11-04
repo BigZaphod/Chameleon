@@ -30,7 +30,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 - (id)initWithFrame:(CGRect)theFrame
 {
 	if ((self=[super initWithFrame:theFrame])) {
-		_undoManager = [NSUndoManager new];
+		_undoManager = [[NSUndoManager alloc] init];
 		[self _makeHidden];	// do this first because before the screen is set, it will prevent any visibility notifications from being sent.
 		self.screen = [UIScreen mainScreen];
 		self.opaque = NO;

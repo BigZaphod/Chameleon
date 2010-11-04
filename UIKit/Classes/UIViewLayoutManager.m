@@ -9,7 +9,7 @@ static UIViewLayoutManager *theLayoutManager = nil;
 + (void)initialize
 {
 	if (self == [UIViewLayoutManager class]) {
-		theLayoutManager = [self new];
+		theLayoutManager = [[self alloc] init];
 	}
 }
 

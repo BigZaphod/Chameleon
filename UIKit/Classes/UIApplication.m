@@ -35,7 +35,7 @@ static UIApplication *_theApplication = nil;
 + (void)initialize
 {
 	if (self == [UIApplication class]) {
-		_theApplication = [UIApplication new];
+		_theApplication = [[UIApplication alloc] init];
 	}
 }
 
@@ -47,7 +47,7 @@ static UIApplication *_theApplication = nil;
 - (id)init
 {
 	if ((self=[super init])) {
-		_currentEvent = [UIEvent new];
+		_currentEvent = [[UIEvent alloc] init];
 		_visibleWindows = [[NSMutableSet alloc] init];
 		//_visiblePopovers = [[NSMutableSet alloc] init];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
@@ -191,7 +191,7 @@ static UIApplication *_theApplication = nil;
 
 - (void)_beginNewTouchForEvent:(UIEvent *)theEvent atScreen:(UIScreen *)theScreen location:(CGPoint)point
 {
-	UITouch *newTouch = [UITouch new];
+	UITouch *newTouch = [[UITouch alloc] init];
 	
 	[newTouch _updateWithNSEvent:[theEvent _NSEvent] screenLocation:point];
 	[theEvent _setTouch:newTouch];

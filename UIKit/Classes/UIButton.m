@@ -27,11 +27,11 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 		case UIButtonTypeInfoLight:
 		case UIButtonTypeInfoDark:
 		case UIButtonTypeContactAdd:
-			return [[UIRoundedRectButton new] autorelease];
+			return [[[UIRoundedRectButton alloc] init] autorelease];
 			
 		case UIButtonTypeCustom:
 		default:
-			return [[self new] autorelease];
+			return [[[self alloc] init] autorelease];
 	}
 }
 
@@ -39,10 +39,10 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 {
 	if ((self=[super initWithFrame:frame])) {
 		_buttonType = UIButtonTypeCustom;
-		_content = [NSMutableDictionary new];
-		_titleLabel = [UILabel new];
-		_imageView = [UIImageView new];
-		_backgroundImageView = [UIImageView new];
+		_content = [[NSMutableDictionary alloc] init];
+		_titleLabel = [[UILabel alloc] init];
+		_imageView = [[UIImageView alloc] init];
+		_backgroundImageView = [[UIImageView alloc] init];
 		_adjustsImageWhenHighlighted = YES;
 		_adjustsImageWhenDisabled = YES;
 		_showsTouchWhenHighlighted = NO;
@@ -159,7 +159,7 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 	NSMutableDictionary *typeContent = [_content objectForKey:type];
 	
 	if (!typeContent) {
-		typeContent = [[NSMutableDictionary new] autorelease];
+		typeContent = [[[NSMutableDictionary alloc] init] autorelease];
 		[_content setObject:typeContent forKey:type];
 	}
 	

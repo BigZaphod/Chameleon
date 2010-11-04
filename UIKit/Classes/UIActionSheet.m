@@ -14,7 +14,7 @@
 - (id)initWithFrame:(CGRect)frame
 {
 	if ((self=[super initWithFrame:frame])) {
-		_menuTitles = [NSMutableArray new];
+		_menuTitles = [[NSMutableArray alloc] init];
 		_destructiveButtonIndex = -1;
 		_cancelButtonIndex = -1;
 	}

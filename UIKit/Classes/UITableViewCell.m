@@ -18,17 +18,17 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	if ((self=[super initWithFrame:frame])) {
 		_style = UITableViewCellStyleDefault;
 
-		_seperatorView = [UITableViewCellSeparator new];
+		_seperatorView = [[UITableViewCellSeparator alloc] init];
 		[self addSubview:_seperatorView];
 		
-		_contentView = [UIView new];
+		_contentView = [[UIView alloc] init];
 		[self addSubview:_contentView];
 		
-		_imageView = [UIImageView new];
+		_imageView = [[UIImageView alloc] init];
 		_imageView.contentMode = UIViewContentModeCenter;
 		[_contentView addSubview:_imageView];
 
-		_textLabel = [UILabel new];
+		_textLabel = [[UILabel alloc] init];
 		_textLabel.backgroundColor = [UIColor clearColor];
 		_textLabel.textColor = [UIColor blackColor];
 		_textLabel.highlightedTextColor = [UIColor whiteColor];

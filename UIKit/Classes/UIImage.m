@@ -12,7 +12,7 @@ NSMutableDictionary *imageCache = nil;
 + (void)initialize
 {
 	if (self == [UIImage class]) {
-		imageCache = [NSMutableDictionary new];
+		imageCache = [[NSMutableDictionary alloc] init];
 	}
 }
 

@@ -25,7 +25,7 @@
 - (id)initWithFrame:(CGRect)frame
 {
 	if ((self=[super initWithFrame:frame])) {
-		_registeredActions = [NSMutableArray new];
+		_registeredActions = [[NSMutableArray alloc] init];
 		self.enabled = YES;
 		self.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
 		self.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
@@ -41,7 +41,7 @@
 
 - (void)addTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents
 {
-	_UIControlAction *controlAction = [_UIControlAction new];
+	_UIControlAction *controlAction = [[_UIControlAction alloc] init];
 	controlAction.target = target;
 	controlAction.action = action;
 	controlAction.controlEvents = controlEvents;
@@ -51,7 +51,7 @@
 
 - (void)removeTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents
 {
-	NSMutableArray *discard = [NSMutableArray new];
+	NSMutableArray *discard = [[NSMutableArray alloc] init];
 	
 	for (_UIControlAction *controlAction in _registeredActions) {
 		if (controlAction.target == target && (action == NULL || controlAction.controlEvents == controlEvents)) {
@@ -65,7 +65,7 @@
 
 - (NSArray *)actionsForTarget:(id)target forControlEvent:(UIControlEvents)controlEvent
 {
-	NSMutableArray *actions = [NSMutableArray new];
+	NSMutableArray *actions = [[NSMutableArray alloc] init];
 	
 	for (_UIControlAction *controlAction in _registeredActions) {
 		if ((target == nil || controlAction.target == target) && (controlAction.controlEvents & controlEvent) ) {

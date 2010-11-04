@@ -24,7 +24,7 @@ NSMutableArray *_allScreens = nil;
 + (void)initialize
 {
 	if (self == [UIScreen class]) {
-		_allScreens = [NSMutableArray new];
+		_allScreens = [[NSMutableArray alloc] init];
 	}
 }
 

@@ -22,7 +22,7 @@
 - (id)initWithFrame:(NSRect)frame
 {
     if ((self = [super initWithFrame:frame])) {
-		_screen = [UIScreen new];
+		_screen = [[UIScreen alloc] init];
 		[self configureLayers];
     }
     return self;

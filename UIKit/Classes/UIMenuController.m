@@ -18,7 +18,7 @@
 + (UIMenuController *)sharedMenuController
 {
 	static UIMenuController *controller = nil;
-	return controller ?: (controller = [UIMenuController new]);
+	return controller ?: (controller = [[UIMenuController alloc] init]);
 }
 
 + (NSArray *)_defaultMenuItems
@@ -43,7 +43,7 @@
 - (id)init
 {
 	if ((self=[super init])) {
-		_enabledMenuItems = [NSMutableArray new];
+		_enabledMenuItems = [[NSMutableArray alloc] init];
 	}
 	return self;
 }

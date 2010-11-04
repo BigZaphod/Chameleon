@@ -23,7 +23,7 @@ static BOOL _animationsEnabled = YES;
 + (void)initialize
 {
 	if (self == [UIView class]) {
-		_animationGroups = [NSMutableArray new];
+		_animationGroups = [[NSMutableArray alloc] init];
 	}
 }
 
@@ -47,7 +47,7 @@ static BOOL _animationsEnabled = YES;
 	if ((self=[super init])) {
 		_implementsDrawRect = [[self class] _instanceImplementsDrawRect];
 
-		_subviews = [NSMutableSet new];
+		_subviews = [[NSMutableSet alloc] init];
 		_layer = [[[[self class] layerClass] alloc] init];
 		_layer.delegate = self;
 		_layer.layoutManager = [UIViewLayoutManager layoutManager];
@@ -441,6 +441,9 @@ static BOOL _animationsEnabled = YES;
 		if (_autoresizingMask & UIViewAutoresizingFlexibleTopMargin)	heightChanges++;
 		if (_autoresizingMask & UIViewAutoresizingFlexibleHeight)		heightChanges++;
 		if (_autoresizingMask & UIViewAutoresizingFlexibleBottomMargin)	heightChanges++;
+		
+		if (_autoresizingMask & UIViewAutoresizingFlexibleLeftMargin && _autoresizingMask & UIViewAutoresizingFlexibleRightMargin)	widthChanges -= 0.5f;
+		if (_autoresizingMask & UIViewAutoresizingFlexibleTopMargin && _autoresizingMask & UIViewAutoresizingFlexibleBottomMargin)	heightChanges -= 0.5f;
 		
 		CGFloat widthDelta = (newSize.width-oldSize.width) / widthChanges;
 		CGFloat heightDelta = (newSize.height-oldSize.height) / heightChanges;

@@ -53,7 +53,7 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 
 - (void)updateStyles
 {
-	NSMutableParagraphStyle *style = [NSMutableParagraphStyle new];
+	NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
 	[style setParagraphStyle:[NSParagraphStyle defaultParagraphStyle]];
 	
 	if (secureTextEntry) {
@@ -66,7 +66,7 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 		[self setAutomaticTextReplacementEnabled:NO];
 		[self setSmartInsertDeleteEnabled:NO];
 		[self setUsesFindPanel:NO];
-		[[self layoutManager] setGlyphGenerator:[[UIBulletGlyphGenerator new] autorelease]];
+		[[self layoutManager] setGlyphGenerator:[[[UIBulletGlyphGenerator alloc] init] autorelease]];
 		[style setLineBreakMode:NSLineBreakByCharWrapping];
 	} else {
 		[self setSmartInsertDeleteEnabled:YES];
