@@ -301,7 +301,7 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 	titleRect.origin.x += [self _imageSizeForState:state].width;
 	titleRect.size = [self _titleSizeForState:state];
 
-	return [self _alignComponentRect:titleRect forContentRect:contentRect state:state];
+	return [self _alignComponentRect:titleRect forContentRect:UIEdgeInsetsInsetRect(contentRect,_titleEdgeInsets) state:state];
 }
 
 - (CGRect)imageRectForContentRect:(CGRect)contentRect
@@ -311,7 +311,7 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 	CGRect imageRect = CGRectZero;
 	imageRect.size = [self _imageSizeForState:state];
 	
-	return [self _alignComponentRect:imageRect forContentRect:contentRect state:state];
+	return [self _alignComponentRect:imageRect forContentRect:UIEdgeInsetsInsetRect(contentRect,_imageEdgeInsets) state:state];
 }
 
 - (void)layoutSubviews
@@ -339,11 +339,14 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 	
 	CGSize fitSize = [self _contentSizeForState:state];
 	
-	fitSize.width = MAX(fitSize.width, [self backgroundImageForState:state].size.width);
-	fitSize.height = MAX(fitSize.height, [self backgroundImageForState:state].size.height);
+	UIImage *backgroundImage = [self backgroundImageForState:state];
+	if (backgroundImage) {
+		fitSize.width = MAX(fitSize.width, backgroundImage.size.width);
+		fitSize.height = MAX(fitSize.height, backgroundImage.size.height);
+	}
 
-	fitSize.width += _titleEdgeInsets.left + _titleEdgeInsets.right + _contentEdgeInsets.left + _contentEdgeInsets.right;
-	fitSize.height += _titleEdgeInsets.top + _titleEdgeInsets.bottom + _contentEdgeInsets.top + _contentEdgeInsets.bottom;
+	fitSize.width += _contentEdgeInsets.left + _contentEdgeInsets.right;
+	fitSize.height += _contentEdgeInsets.top + _contentEdgeInsets.bottom;
 
 	return fitSize;
 }
