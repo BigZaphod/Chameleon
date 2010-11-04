@@ -49,7 +49,6 @@
 		14A726D71213303400648C9B /* UIImage+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B41213303400648C9B /* UIImage+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726D81213303400648C9B /* UIImageView+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B51213303400648C9B /* UIImageView+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726DA1213303400648C9B /* UIScreen+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B71213303400648C9B /* UIScreen+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		14A726DB1213303400648C9B /* UIScrollView+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B81213303400648C9B /* UIScrollView+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726DC1213303400648C9B /* UITableViewCell+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B91213303400648C9B /* UITableViewCell+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726DD1213303400648C9B /* UITouch+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BA1213303400648C9B /* UITouch+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726DE1213303400648C9B /* UIView+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BB1213303400648C9B /* UIView+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -241,7 +240,6 @@
 		14A726B41213303400648C9B /* UIImage+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+UIPrivate.h"; sourceTree = "<group>"; };
 		14A726B51213303400648C9B /* UIImageView+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+UIPrivate.h"; sourceTree = "<group>"; };
 		14A726B71213303400648C9B /* UIScreen+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScreen+UIPrivate.h"; sourceTree = "<group>"; };
-		14A726B81213303400648C9B /* UIScrollView+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+UIPrivate.h"; sourceTree = "<group>"; };
 		14A726B91213303400648C9B /* UITableViewCell+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+UIPrivate.h"; sourceTree = "<group>"; };
 		14A726BA1213303400648C9B /* UITouch+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITouch+UIPrivate.h"; sourceTree = "<group>"; };
 		14A726BB1213303400648C9B /* UIView+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+UIPrivate.h"; sourceTree = "<group>"; };
@@ -640,7 +638,6 @@
 				1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */,
 				14A726B71213303400648C9B /* UIScreen+UIPrivate.h */,
 				1443DF23121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h */,
-				14A726B81213303400648C9B /* UIScrollView+UIPrivate.h */,
 				14A726B91213303400648C9B /* UITableViewCell+UIPrivate.h */,
 				14A726BA1213303400648C9B /* UITouch+UIPrivate.h */,
 				14A726BB1213303400648C9B /* UIView+UIPrivate.h */,
@@ -728,7 +725,6 @@
 				14A726D71213303400648C9B /* UIImage+UIPrivate.h in Headers */,
 				14A726D81213303400648C9B /* UIImageView+UIPrivate.h in Headers */,
 				14A726DA1213303400648C9B /* UIScreen+UIPrivate.h in Headers */,
-				14A726DB1213303400648C9B /* UIScrollView+UIPrivate.h in Headers */,
 				14A726DC1213303400648C9B /* UITableViewCell+UIPrivate.h in Headers */,
 				14A726DD1213303400648C9B /* UITouch+UIPrivate.h in Headers */,
 				14A726DE1213303400648C9B /* UIView+UIPrivate.h in Headers */,
