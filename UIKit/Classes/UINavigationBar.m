@@ -57,7 +57,7 @@ typedef enum {
 	[backButton setBackgroundImage:BackButtonHighlightedImage forState:UIControlStateHighlighted];
 	[backButton setTitle:item.title forState:UIControlStateNormal];
 	backButton.titleLabel.font = [UIFont systemFontOfSize:11];
-	backButton.titleEdgeInsets = UIEdgeInsetsMake(0,15,0,7);
+	backButton.contentEdgeInsets = UIEdgeInsetsMake(0,15,0,7);
 	[backButton addTarget:nil action:@selector(_backButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
 	[self _setBarButtonSize:backButton];
 	return backButton;
@@ -77,7 +77,7 @@ typedef enum {
 		[button setTitle:item.title forState:UIControlStateNormal];
 		[button setImage:item.image forState:UIControlStateNormal];
 		button.titleLabel.font = [UIFont systemFontOfSize:11];
-		button.titleEdgeInsets = UIEdgeInsetsMake(0,7,0,7);
+		button.contentEdgeInsets = UIEdgeInsetsMake(0,7,0,7);
 		[button addTarget:item.target action:item.action forControlEvents:UIControlEventTouchUpInside];
 		[self _setBarButtonSize:button];
 		return button;
@@ -87,7 +87,7 @@ typedef enum {
 - (id)initWithFrame:(CGRect)frame
 {
 	if ((self=[super initWithFrame:frame])) {
-		_navStack = [NSMutableArray new];
+		_navStack = [[NSMutableArray alloc] init];
 		self.tintColor = [UIColor colorWithRed:21/255.f green:21/255.f blue:25/255.f alpha:1];
 	}
 	return self;
@@ -202,7 +202,7 @@ typedef enum {
 		_centerView = topItem.titleView;
 
 		if (!_centerView) {
-			UILabel *titleLabel = [[UILabel new] autorelease];
+			UILabel *titleLabel = [[[UILabel alloc] init] autorelease];
 			titleLabel.text = topItem.title;
 			titleLabel.textAlignment = UITextAlignmentCenter;
 			titleLabel.backgroundColor = [UIColor clearColor];
