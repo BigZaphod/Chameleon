@@ -260,6 +260,7 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 	
 	[_arrowView sizeToFit];
 	_arrowView.center = bestIntersection;
+	_arrowView.frame = CGRectIntegral(_arrowView.frame);
 }
 
 - (void)setContentView:(UIView *)aView animated:(BOOL)animated

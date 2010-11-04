@@ -85,6 +85,9 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 		windowRect.origin.y = NSMinY(screenRect);
 	}
 	
+	windowRect.origin.x = roundf(windowRect.origin.x);
+	windowRect.origin.y = roundf(windowRect.origin.y);
+	
 	return windowRect.origin;
 }
 
