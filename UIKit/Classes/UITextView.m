@@ -3,7 +3,7 @@
 #import "UIColor.h"
 #import "UIFont.h"
 #import "UITextLayer.h"
-#import "UIScrollView+UIPrivate.h"
+#import "UIScrollView.h"
 
 NSString *const UITextViewTextDidBeginEditingNotification = @"UITextViewTextDidBeginEditingNotification";
 NSString *const UITextViewTextDidChangeNotification = @"UITextViewTextDidChangeNotification";
@@ -48,12 +48,7 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 - (void)layoutSubviews
 {
 	[super layoutSubviews];
-
-	CGRect textRect = self.bounds;	
-	if ([self _canScrollVertical]) {
-		textRect.size.width -= _UIScrollViewScrollerSize;
-	}
-	_textLayer.frame = textRect;
+	_textLayer.frame = self.bounds;
 }
 
 - (void)setContentOffset:(CGPoint)theOffset animated:(BOOL)animated

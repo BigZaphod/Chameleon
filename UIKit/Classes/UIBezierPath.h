@@ -16,5 +16,6 @@
 
 - (void)addClip;
 - (void)fill;
+- (void)stroke;
 
 @end

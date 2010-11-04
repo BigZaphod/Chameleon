@@ -1,6 +1,5 @@
 //  Created by Sean Heber on 6/4/10.
 #import "UITableView.h"
-#import "UIScrollView+UIPrivate.h"
 #import "UITableViewCell+UIPrivate.h"
 #import "UIColor.h"
 #import "UITouch.h"
@@ -105,9 +104,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (CGRect)_CGRectFromVerticalOffset:(CGFloat)offset height:(CGFloat)height
 {
-	const CGFloat scrollerAdjustment = [self _canScrollVertical]? (_UIScrollViewScrollerSize-self.scrollIndicatorInsets.right) : 0;
-	const CGFloat width = self.bounds.size.width - scrollerAdjustment;
-	return CGRectMake(0,offset,width,height);
+	return CGRectMake(0,offset,self.bounds.size.width,height);
 }
 
 - (CGFloat)_offsetForSection:(NSInteger)section

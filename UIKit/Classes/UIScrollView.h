@@ -24,8 +24,6 @@ typedef enum {
 	UIEdgeInsets _scrollIndicatorInsets;
 	UIScroller *_verticalScroller;
 	UIScroller *_horizontalScroller;
-	UIScroller *_draggingScroller;
-	UIImageView *_grabber;
 	BOOL _scrollEnabled;
 	BOOL _showsVerticalScrollIndicator;
 	BOOL _showsHorizontalScrollIndicator;

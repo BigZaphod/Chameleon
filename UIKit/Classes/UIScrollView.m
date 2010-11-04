@@ -1,5 +1,5 @@
 //  Created by Sean Heber on 5/28/10.
-#import "UIScrollView+UIPrivate.h"
+#import "UIScrollView.h"
 #import "UIView+UIPrivate.h"
 #import "UIScroller.h"
 #import "UIScreen+UIPrivate.h"
@@ -12,7 +12,7 @@
 @interface UIScrollView () <_UIScrollerDelegate>
 @end
 
-const CGFloat _UIScrollViewScrollerSize = 15;
+const CGFloat _UIScrollViewScrollerSize = 10;
 
 @implementation UIScrollView
 @synthesize contentOffset=_contentOffset, contentInset=_contentInset, scrollIndicatorInsets=_scrollIndicatorInsets, scrollEnabled=_scrollEnabled;
@@ -23,16 +23,13 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 - (id)initWithFrame:(CGRect)frame
 {
 	if ((self=[super initWithFrame:frame])) {
-		_verticalScroller = [[UIScroller alloc] initWithOrientation:_UIScrollerOrientationVertical];
+		_verticalScroller = [[UIScroller alloc] init];
 		_verticalScroller.delegate = self;
 		[self addSubview:_verticalScroller];
 
-		_horizontalScroller = [[UIScroller alloc] initWithOrientation:_UIScrollerOrientationHorizontal];
+		_horizontalScroller = [[UIScroller alloc] init];
 		_horizontalScroller.delegate = self;
 		[self addSubview:_horizontalScroller];
-		
-		_grabber = [[UIImageView alloc] initWithImage:[UIImage _frameworkImageNamed:@"<UIScrollView> grabber-dark.png"]];
-		[self addSubview:_grabber];
 		
 		self.clipsToBounds = YES;
 		self.scrollEnabled = YES;
@@ -50,7 +47,6 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 {
 	[_verticalScroller release];
 	[_horizontalScroller release];
-	[_grabber release];
 	[super dealloc];
 }
 
@@ -58,6 +54,13 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 {
 	_delegate = newDelegate;
 	_delegateCan.scrollViewDidScroll = [_delegate respondsToSelector:@selector(scrollViewDidScroll:)];
+}
+
+- (void)setIndicatorStyle:(UIScrollViewIndicatorStyle)style
+{
+	_indicatorStyle = style;
+	_horizontalScroller.indicatorStyle = style;
+	_verticalScroller.indicatorStyle = style;
 }
 
 - (void)setShowsHorizontalScrollIndicator:(BOOL)show
@@ -132,47 +135,22 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 		_contentOffset.y = 0;
 	}
 
-	_verticalScroller.contentSize = _contentSize.height - (self._canScrollHorizontal? _UIScrollViewScrollerSize : 0);
+	_verticalScroller.contentSize = _contentSize.height;
 	_verticalScroller.contentOffset = _contentOffset.y;
-	_horizontalScroller.contentSize = _contentSize.width - (self._canScrollVertical? _UIScrollViewScrollerSize : 0);
+	_horizontalScroller.contentSize = _contentSize.width;
 	_horizontalScroller.contentOffset = _contentOffset.x;
 
 	[self _setContentPositionAnimated:animated];
-}
-
-- (BOOL)_shouldShowGrabber
-{
-	const BOOL showingHorizontal = self._canScrollHorizontal;
-	const BOOL showingVertical = self._canScrollVertical;
-	const BOOL showingBothScrollers = showingVertical && showingHorizontal;
-	if (showingBothScrollers) {
-		return YES;
-	} else if (showingVertical || showingHorizontal) {
-		UIWindow *window = self.window;
-		UIScreen *screen = window.screen;
-		const CGRect screenBounds = screen.bounds;
-		const CGPoint bottomRightScreenPoint = CGPointMake(screenBounds.origin.x+screenBounds.size.width, screenBounds.origin.y+screenBounds.size.height);
-		const CGRect selfBounds = self.bounds;
-		const CGPoint bottomRightViewPoint = CGPointMake(selfBounds.origin.x+selfBounds.size.width, selfBounds.origin.y+selfBounds.size.height);
-		const CGPoint viewBottomRightScreenPoint = [window convertPoint:[self convertPoint:bottomRightViewPoint toView:window] toWindow:nil];
-		const BOOL viewAtBottomRightOfScreen = CGPointEqualToPoint(viewBottomRightScreenPoint, bottomRightScreenPoint);
-		return (viewAtBottomRightOfScreen && [screen _hasResizeIndicator]);
-	} else {
-		return NO;
-	}
 }
 
 - (void)_updateScrollers
 {
 	[self _constrainContentOffset:NO];
 	
-	const BOOL showingGrabber = [self _shouldShowGrabber];
-	
 	const CGRect bounds = self.bounds;
-	_verticalScroller.frame = CGRectMake(bounds.origin.x+bounds.size.width-_UIScrollViewScrollerSize-_scrollIndicatorInsets.right,bounds.origin.y+_scrollIndicatorInsets.top,_UIScrollViewScrollerSize,bounds.size.height-(showingGrabber? _UIScrollViewScrollerSize : 0)-_scrollIndicatorInsets.top-_scrollIndicatorInsets.bottom);
-	_horizontalScroller.frame = CGRectMake(bounds.origin.x+_scrollIndicatorInsets.left,bounds.origin.y+bounds.size.height-_UIScrollViewScrollerSize-_scrollIndicatorInsets.bottom,bounds.size.width-(showingGrabber? _UIScrollViewScrollerSize : 0)-_scrollIndicatorInsets.left-_scrollIndicatorInsets.right,_UIScrollViewScrollerSize);
-	_grabber.frame = CGRectMake(bounds.origin.x+bounds.size.width-_UIScrollViewScrollerSize-_scrollIndicatorInsets.right,bounds.origin.y+bounds.size.height-_UIScrollViewScrollerSize-_scrollIndicatorInsets.bottom,_UIScrollViewScrollerSize,_UIScrollViewScrollerSize);
-	_grabber.hidden = !showingGrabber;
+	_verticalScroller.frame = CGRectMake(bounds.origin.x+bounds.size.width-_UIScrollViewScrollerSize-_scrollIndicatorInsets.right,bounds.origin.y+_scrollIndicatorInsets.top,_UIScrollViewScrollerSize,bounds.size.height-_scrollIndicatorInsets.top-_scrollIndicatorInsets.bottom);
+	_horizontalScroller.frame = CGRectMake(bounds.origin.x+_scrollIndicatorInsets.left,bounds.origin.y+bounds.size.height-_UIScrollViewScrollerSize-_scrollIndicatorInsets.bottom,bounds.size.width-_scrollIndicatorInsets.left-_scrollIndicatorInsets.right,_UIScrollViewScrollerSize);
+
 	_verticalScroller.hidden = !self._canScrollVertical;
 	_horizontalScroller.hidden = !self._canScrollHorizontal;
 }
@@ -193,7 +171,6 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 {
 	[super bringSubviewToFront:_horizontalScroller];
 	[super bringSubviewToFront:_verticalScroller];
-	[super bringSubviewToFront:_grabber];
 }
 
 - (void)addSubview:(UIView *)subview
@@ -239,7 +216,7 @@ const CGFloat _UIScrollViewScrollerSize = 15;
 
 - (BOOL)isDragging
 {
-	return (_draggingScroller != nil);
+	return (_horizontalScroller.dragging || _verticalScroller.dragging);
 }
 
 - (void)scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event

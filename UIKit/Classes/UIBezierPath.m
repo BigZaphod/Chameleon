@@ -49,4 +49,9 @@
 	[_path fill];
 }
 
+- (void)stroke
+{
+	[_path stroke];
+}
+
 @end

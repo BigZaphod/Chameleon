@@ -1,136 +1,87 @@
 //  Created by Sean Heber on 5/28/10.
 #import "UIScroller.h"
-#import "UIImageView.h"
-#import "UIImage+UIPrivate.h"
 #import "UITouch.h"
+#import "UIBezierPath.h"
+#import "UIColor.h"
 
 static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 
 @implementation UIScroller
-@synthesize delegate=_delegate, contentOffset=_contentOffset, contentSize=_contentSize;
+@synthesize delegate=_delegate, contentOffset=_contentOffset, contentSize=_contentSize, dragging=_draggingKnob, indicatorStyle=_indicatorStyle;
 
-- (id)initWithOrientation:(_UIScrollerOrientation)theOrientation
+- (id)initWithFrame:(CGRect)frame
 {
-	if ((self=[super init])) {
-		_orientation = theOrientation;
-		
-		UIImage *knobImage, *trackImage;
-		
-		if (_orientation == _UIScrollerOrientationVertical) {
-			trackImage = [[UIImage _frameworkImageNamed:@"<UIScroller> vertical-track-dark.png"] stretchableImageWithLeftCapWidth:7 topCapHeight:15];
-			knobImage = [[UIImage _frameworkImageNamed:@"<UIScroller> vertical-knob-dark.png"] stretchableImageWithLeftCapWidth:7 topCapHeight:10];
-		} else {
-			trackImage = [[UIImage _frameworkImageNamed:@"<UIScroller> horizontal-track-dark.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:7];
-			knobImage = [[UIImage _frameworkImageNamed:@"<UIScroller> horizontal-knob-dark.png"] stretchableImageWithLeftCapWidth:10 topCapHeight:7];
-		}
-
-		[self addSubview:(_track = [[UIImageView alloc] initWithImage:trackImage])];
-		[self addSubview:(_knob = [[UIImageView alloc] initWithImage:knobImage])];
+	if ((self=[super initWithFrame:frame])) {
+		self.opaque = NO;
+		self.indicatorStyle = UIScrollViewIndicatorStyleDefault;
 	}
 	return self;
 }
 
-- (void)dealloc
+- (void)setFrame:(CGRect)frame
 {
-	[_track release];
-	[_knob release];
-	[super dealloc];
+	_isVertical = (frame.size.height > frame.size.width);
+	[super setFrame:frame];
 }
 
-- (UIEdgeInsets)knobTrackInset
+- (void)setIndicatorStyle:(UIScrollViewIndicatorStyle)style
 {
-	if (_orientation == _UIScrollerOrientationVertical) {
-		return UIEdgeInsetsMake(7,0,4,0);
-	} else {
-		return UIEdgeInsetsMake(0,7,0,4);
-	}
-}
-
-- (CGFloat)knobContentSize
-{
-	return MAX(_contentSize, ((_orientation == _UIScrollerOrientationVertical)? self.bounds.size.height : self.bounds.size.width));
-}
-
-- (CGFloat)knobContentScale
-{
-	return ((_orientation == _UIScrollerOrientationVertical)? self.bounds.size.height : self.bounds.size.width) / self.knobContentSize;
-}
-
-- (CGFloat)maxKnobSize
-{
-	const UIEdgeInsets knobTrackInset = [self knobTrackInset];
-	if (_orientation == _UIScrollerOrientationVertical) {
-		return (self.bounds.size.height-knobTrackInset.top-knobTrackInset.bottom);
-	} else {
-		return (self.bounds.size.width-knobTrackInset.left-knobTrackInset.right);
-	}
+	_indicatorStyle = style;
+	[self setNeedsDisplay];
 }
 
 - (CGFloat)knobSize
 {
-	if (_orientation == _UIScrollerOrientationVertical) {
-		return MAX(_knob.image.size.height,roundf(self.maxKnobSize*self.knobContentScale));
-	} else {
-		return MAX(_knob.image.size.width,roundf(self.maxKnobSize*self.knobContentScale));
-	}
+	const CGRect bounds = self.bounds;
+	const CGFloat dimension = MAX(bounds.size.width, bounds.size.height);
+	const CGFloat knobScale = MIN(1, (dimension / _contentSize));
+	return MAX((dimension * knobScale), 20);
 }
 
-- (void)setFrame:(CGRect)frame
+- (CGRect)knobRect
 {
-	[super setFrame:frame];
-	_track.frame = self.bounds;
-
-	if (self.knobContentScale < 1.f) {
-		_knob.hidden = NO;
-		const UIEdgeInsets knobTrackInset = [self knobTrackInset];
-		const CGFloat modifiedContentSize = self.knobContentSize;
-		CGFloat knobSize = self.knobSize;
-		CGFloat modifiedContentOffset = MIN(MAX(0,_contentOffset),modifiedContentSize);	
-		
-		if (_orientation == _UIScrollerOrientationVertical) {
-			CGFloat knobY = knobTrackInset.top + roundf(modifiedContentOffset*self.knobContentScale);
-			_knob.frame = CGRectMake(0, MIN(knobY,self.bounds.size.height-knobTrackInset.bottom-knobSize), self.bounds.size.width, knobSize);
-		} else {
-			CGFloat knobX = knobTrackInset.left + roundf(modifiedContentOffset*self.knobContentScale);
-			_knob.frame = CGRectMake(MIN(knobX,self.bounds.size.width-knobTrackInset.right-knobSize), 0, knobSize, self.bounds.size.height);
-		}
+	const CGRect bounds = self.bounds;
+	const CGFloat dimension = MAX(bounds.size.width, bounds.size.height);
+	const CGFloat maxContentSize = MAX(1,(_contentSize-dimension));
+	const CGFloat knobSize = [self knobSize];
+	const CGFloat positionScale = MIN(1, (MIN(_contentOffset,maxContentSize) / maxContentSize));
+	const CGFloat knobPosition = (dimension - knobSize) * positionScale;
+	
+	if (_isVertical) {
+		return CGRectMake(bounds.origin.x, knobPosition, bounds.size.width, knobSize);
 	} else {
-		_knob.hidden = YES;
+		return CGRectMake(knobPosition, bounds.origin.y, knobSize, bounds.size.height);
 	}
 }
 
 - (void)setContentOffset:(CGFloat)newOffset
 {
-	CGFloat minOffset;
-	if (_orientation == _UIScrollerOrientationVertical) {
-		minOffset = MAX(0,(_contentSize - self.bounds.size.height));
-	} else {
-		minOffset = MAX(0,(_contentSize - self.bounds.size.width));
-	}
-	_contentOffset = MAX(0,MIN(newOffset, minOffset));
-	[self setNeedsLayout];
+	_contentOffset = MIN(MAX(0,newOffset),_contentSize);
+	[self setNeedsDisplay];
 }
 
 - (void)setContentSize:(CGFloat)newContentSize
 {
 	_contentSize = newContentSize;
-	[self setNeedsLayout];
+	[self setNeedsDisplay];
 }
 
-- (void)setContentOffsetWithPoint:(CGPoint)point
+- (void)setContentOffsetWithLastTouch
 {
-	CGFloat percentage;
-	if (_orientation == _UIScrollerOrientationVertical) {
-		percentage = MIN(1,MAX(0,((point.y-_dragOffset)/self.bounds.size.height)));
-	} else {
-		percentage = MIN(1,MAX(0,((point.x-_dragOffset)/self.bounds.size.width)));
-	}
-	[self setContentOffset:percentage * _contentSize];
+	const CGRect bounds = self.bounds;
+	const CGFloat dimension = _isVertical? bounds.size.height : bounds.size.width;
+	const CGFloat maxContentOffset = _contentSize - dimension;
+	const CGFloat knobSize = [self knobSize];
+	const CGFloat point = _isVertical? _lastTouchLocation.y : _lastTouchLocation.x;
+	const CGFloat knobPosition = MIN(MAX(0, point-_dragOffset), (dimension-knobSize));
+	const CGFloat contentOffset = (knobPosition / (dimension-knobSize)) * maxContentOffset;
+
+	[self setContentOffset:contentOffset];
 }
 
 - (void)pageUp
 {
-	if (_orientation == _UIScrollerOrientationVertical) {
+	if (_isVertical) {
 		[self setContentOffset:_contentOffset-self.bounds.size.height];
 	} else {
 		[self setContentOffset:_contentOffset-self.bounds.size.width];
@@ -139,7 +90,7 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 
 - (void)pageDown
 {
-	if (_orientation == _UIScrollerOrientationVertical) {
+	if (_isVertical) {
 		[self setContentOffset:_contentOffset+self.bounds.size.height];
 	} else {
 		[self setContentOffset:_contentOffset+self.bounds.size.width];
@@ -148,13 +99,15 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 
 - (void)autoPageContent
 {
-	if (!CGRectContainsPoint(_knob.frame,_lastTouchLocation) && CGRectContainsPoint(self.bounds,_lastTouchLocation)) {
+	const CGRect knobRect = [self knobRect];
+
+	if (!CGRectContainsPoint(knobRect, _lastTouchLocation) && CGRectContainsPoint(self.bounds, _lastTouchLocation)) {
 		BOOL shouldPageUp;
 
-		if (_orientation == _UIScrollerOrientationVertical) {
-			shouldPageUp = (_lastTouchLocation.y < _knob.frame.origin.y);
+		if (_isVertical) {
+			shouldPageUp = (_lastTouchLocation.y < knobRect.origin.y);
 		} else {
-			shouldPageUp = (_lastTouchLocation.x < _knob.frame.origin.x);
+			shouldPageUp = (_lastTouchLocation.x < knobRect.origin.x);
 		}
 		
 		if (shouldPageUp) {
@@ -173,30 +126,50 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 	_holdTimer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(autoPageContent) userInfo:nil repeats:YES];
 }
 
+- (void)drawRect:(CGRect)rect
+{
+	CGRect knobRect = [self knobRect];
+
+	if (_isVertical) {
+		knobRect = CGRectInset(knobRect, 1, 8);
+	} else {
+		knobRect = CGRectInset(knobRect, 8, 1);
+	}
+
+	UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:knobRect cornerRadius:4];
+
+	if (_indicatorStyle == UIScrollViewIndicatorStyleBlack) {
+		[[[UIColor blackColor] colorWithAlphaComponent:0.5] setFill];
+	} else if (_indicatorStyle == UIScrollViewIndicatorStyleWhite) {
+		[[[UIColor whiteColor] colorWithAlphaComponent:0.5] setFill];
+	} else {
+		[[[UIColor blackColor] colorWithAlphaComponent:0.5] setFill];
+		[[[UIColor whiteColor] colorWithAlphaComponent:0.25] setStroke];
+		[path stroke];
+	}
+	
+	[path fill];
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	CGPoint point = [[touches anyObject] locationInView:self];
-	UIEdgeInsets knobTrackInset = self.knobTrackInset;
+	_lastTouchLocation = [[touches anyObject] locationInView:self];
+	const CGRect knobRect = [self knobRect];
 
-	if (CGRectContainsPoint(_knob.frame,point)) {
-		if (_orientation == _UIScrollerOrientationVertical) {
-			_dragOffset = point.y - _knob.frame.origin.y + knobTrackInset.top;
+	if (CGRectContainsPoint(knobRect,_lastTouchLocation)) {
+		if (_isVertical) {
+			_dragOffset = _lastTouchLocation.y - knobRect.origin.y;
 		} else {
-			_dragOffset = point.x - _knob.frame.origin.x + knobTrackInset.left;
+			_dragOffset = _lastTouchLocation.x - knobRect.origin.x;
 		}
 		_draggingKnob = YES;
 	} else {
 		if (_UIScrollerJumpToSpotThatIsClicked) {
-			if (_orientation == _UIScrollerOrientationVertical) {
-				_dragOffset = (self.knobSize/2.f) + knobTrackInset.top;
-			} else {
-				_dragOffset = (self.knobSize/2.f) + knobTrackInset.left;
-			}
+			_dragOffset = [self knobSize] / 2.f;
 			_draggingKnob = YES;
-			[self setContentOffsetWithPoint:point];
+			[self setContentOffsetWithLastTouch];
 			[_delegate _UIScroller:self contentOffsetDidChange:_contentOffset];
 		} else {
-			_lastTouchLocation = point;
 			[self autoPageContent];
 			_holdTimer = [NSTimer scheduledTimerWithTimeInterval:0.33 target:self selector:@selector(startHoldPaging) userInfo:nil repeats:NO];
 		}
@@ -205,11 +178,11 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
+	_lastTouchLocation = [[touches anyObject] locationInView:self];
+
 	if (_draggingKnob) {
-		[self setContentOffsetWithPoint:[[touches anyObject] locationInView:self]];
+		[self setContentOffsetWithLastTouch];
 		[_delegate _UIScroller:self contentOffsetDidChange:_contentOffset];
-	} else {
-		_lastTouchLocation = [[touches anyObject] locationInView:self];
 	}
 }
 
@@ -222,18 +195,5 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 		_holdTimer = nil;
 	}
 }
-
-/*
-- (void)scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event
-{
-	if (orientation == _UIScrollerOrientationVertical) {
-		[self setContentOffset:contentOffset-delta.y];
-	} else {
-		[self setContentOffset:contentOffset-delta.x];
-	}
-
-	[delegate _UIScroller:self contentOffsetDidChange:contentOffset];
-}
-*/
 
 @end
