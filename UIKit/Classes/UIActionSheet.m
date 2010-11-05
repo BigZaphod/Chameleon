@@ -76,6 +76,12 @@
 	return [_menuTitles count]-1;
 }
 
+- (NSInteger)addSeparator
+{
+	[_menuTitles addObject:[NSNull null]];
+	return [_menuTitles count]-1;
+}
+
 - (void)setDestructiveButtonIndex:(NSInteger)index
 {
 	if (index != _destructiveButtonIndex) {
@@ -121,11 +127,16 @@
 			// as clicking outside of the menu is always the same thing as tapping the cancel button and that's just
 			// how it's got to work, I think.
 			if (index != _cancelButtonIndex) {
-				NSMenuItem *theItem = [[NSMenuItem alloc] initWithTitle:[_menuTitles objectAtIndex:index] action:@selector(_didSelectMenuItem:) keyEquivalent:@""];
-				[theItem setTag:index];
-				[theItem setTarget:self];
-				[_menu addItem:theItem];
-				[theItem release];
+				if ([[_menuTitles objectAtIndex:index] isKindOfClass:[NSNull class]]) {
+					[_menu addItem:[NSMenuItem separatorItem]];
+				}
+				else {
+					NSMenuItem *theItem = [[NSMenuItem alloc] initWithTitle:[_menuTitles objectAtIndex:index] action:@selector(_didSelectMenuItem:) keyEquivalent:@""];
+					[theItem setTag:index];
+					[theItem setTarget:self];
+					[_menu addItem:theItem];
+					[theItem release];
+				}
 			}
 		}
 
