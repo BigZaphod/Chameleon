@@ -34,6 +34,7 @@ typedef enum {
 	UIScrollViewIndicatorStyle _indicatorStyle;
 	BOOL _delaysContentTouches;
 	BOOL _pagingEnabled;
+	NSTimer *_scrollerFadeTimer;
 	
 	struct {
 		BOOL scrollViewDidScroll : 1;

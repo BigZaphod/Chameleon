@@ -25,10 +25,12 @@ const CGFloat _UIScrollViewScrollerSize = 10;
 	if ((self=[super initWithFrame:frame])) {
 		_verticalScroller = [[UIScroller alloc] init];
 		_verticalScroller.delegate = self;
+		_verticalScroller.alpha = 0;
 		[self addSubview:_verticalScroller];
 
 		_horizontalScroller = [[UIScroller alloc] init];
 		_horizontalScroller.delegate = self;
+		_horizontalScroller.alpha = 0;
 		[self addSubview:_horizontalScroller];
 		
 		self.clipsToBounds = YES;
@@ -245,8 +247,27 @@ const CGFloat _UIScrollViewScrollerSize = 10;
 	}
 }
 
+- (void)_scrollerFadeTimerFired:(NSTimer *)timer
+{
+	if (timer == _scrollerFadeTimer) {
+		_scrollerFadeTimer = nil;
+
+		[UIView beginAnimations:@"_fadeScrollIndicators" context:NULL];
+		[UIView setAnimationDuration:0.33];
+		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+		_horizontalScroller.alpha = 0;
+		_verticalScroller.alpha = 0;
+		[UIView commitAnimations];
+	}
+}
+
 - (void)flashScrollIndicators
 {
+	_horizontalScroller.alpha = 1;
+	_verticalScroller.alpha = 1;
+	
+	[_scrollerFadeTimer invalidate];
+	_scrollerFadeTimer = [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(_scrollerFadeTimerFired:) userInfo:nil repeats:NO];
 }
 
 - (void)setZoomScale:(float)scale animated:(BOOL)animated
