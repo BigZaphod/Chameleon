@@ -13,9 +13,16 @@ typedef enum {
 @private
 	UIBarStyle _barStyle;
 	UIColor *_tintColor;
+	NSMutableArray *_items;
+	NSMutableArray *_itemViews;
+	BOOL _translucent;
 }
+
+- (void)setItems:(NSArray *)items animated:(BOOL)animated;
 
 @property (nonatomic) UIBarStyle barStyle;
 @property (nonatomic, retain) UIColor *tintColor;
+@property (nonatomic, copy) NSArray *items;
+@property (nonatomic,assign,getter=isTranslucent) BOOL translucent;
 
 @end

@@ -7,6 +7,7 @@
 #import "UIBarButtonItem.h"
 #import "UINavigationController.h"
 #import "UISplitViewController.h"
+#import "UIToolbar.h"
 
 @implementation UIViewController
 @synthesize view=_view, wantsFullScreenLayout=_wantsFullScreenLayout, title=_title, contentSizeForViewInPopover=_contentSizeForViewInPopover;
@@ -125,6 +126,7 @@
 	if (_toolbarItems != theToolbarItems) {
 		[_toolbarItems release];
 		_toolbarItems = [theToolbarItems retain];
+		[self.navigationController.toolbar setItems:_toolbarItems animated:animated];
 	}
 }
 

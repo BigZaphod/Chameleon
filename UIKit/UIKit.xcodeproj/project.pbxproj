@@ -19,6 +19,8 @@
 		141927A311F8A88E00051ABD /* UISplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 141927A111F8A88E00051ABD /* UISplitViewController.m */; };
 		1436CF96121476A1001DFEFB /* UISwitch.h in Headers */ = {isa = PBXBuildFile; fileRef = 1436CF94121476A1001DFEFB /* UISwitch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1436CF97121476A1001DFEFB /* UISwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 1436CF95121476A1001DFEFB /* UISwitch.m */; };
+		144156DB1284A22200532FE2 /* UIToolbarButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 144156D91284A22200532FE2 /* UIToolbarButton.h */; };
+		144156DC1284A22200532FE2 /* UIToolbarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 144156DA1284A22200532FE2 /* UIToolbarButton.m */; };
 		1443DF24121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1443DF23121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h */; };
 		145335651226F03E0005644F /* UITextLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 145335631226F03E0005644F /* UITextLayer.h */; };
 		145335661226F03E0005644F /* UITextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 145335641226F03E0005644F /* UITextLayer.m */; };
@@ -211,6 +213,8 @@
 		141927A111F8A88E00051ABD /* UISplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UISplitViewController.m; path = Classes/UISplitViewController.m; sourceTree = "<group>"; };
 		1436CF94121476A1001DFEFB /* UISwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UISwitch.h; path = Classes/UISwitch.h; sourceTree = "<group>"; };
 		1436CF95121476A1001DFEFB /* UISwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UISwitch.m; path = Classes/UISwitch.m; sourceTree = "<group>"; };
+		144156D91284A22200532FE2 /* UIToolbarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIToolbarButton.h; sourceTree = "<group>"; };
+		144156DA1284A22200532FE2 /* UIToolbarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIToolbarButton.m; sourceTree = "<group>"; };
 		1443DF23121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScreenMode+UIPrivate.h"; sourceTree = "<group>"; };
 		145335631226F03E0005644F /* UITextLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITextLayer.h; sourceTree = "<group>"; };
 		145335641226F03E0005644F /* UITextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITextLayer.m; sourceTree = "<group>"; };
@@ -621,6 +625,8 @@
 				145335641226F03E0005644F /* UITextLayer.m */,
 				14FA8C57121DA4A000C4264B /* UIThreePartImage.h */,
 				14FA8C58121DA4A000C4264B /* UIThreePartImage.m */,
+				144156D91284A22200532FE2 /* UIToolbarButton.h */,
+				144156DA1284A22200532FE2 /* UIToolbarButton.m */,
 				14FA8C59121DA4A000C4264B /* UIViewAnimationGroup.h */,
 				14FA8C5A121DA4A000C4264B /* UIViewAnimationGroup.m */,
 				14FA8C5B121DA4A000C4264B /* UIViewLayoutManager.h */,
@@ -762,6 +768,7 @@
 				14CB384512689907003334AD /* UIPopoverNSWindow.h in Headers */,
 				14CB384912689949003334AD /* UIPopoverOverlayNSView.h in Headers */,
 				44339D0512848AA700A858ED /* UIActionSheetAppKitIntegration.h in Headers */,
+				144156DB1284A22200532FE2 /* UIToolbarButton.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -914,6 +921,7 @@
 				14F56F4512664D430045EC82 /* UIPopoverView.m in Sources */,
 				14CB384612689907003334AD /* UIPopoverNSWindow.m in Sources */,
 				14CB384A12689949003334AD /* UIPopoverOverlayNSView.m in Sources */,
+				144156DC1284A22200532FE2 /* UIToolbarButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

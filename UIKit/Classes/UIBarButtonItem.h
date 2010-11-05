@@ -36,11 +36,14 @@ typedef enum {
 @class UIView, UIImage;
 
 @interface UIBarButtonItem : UIBarItem {
-@private
+@package
 	CGFloat _width;
 	UIView *_customView;
 	id _target;
 	SEL _action;
+	BOOL _isSystemItem;
+	UIBarButtonSystemItem _systemItem;
+	UIBarButtonItemStyle _style;
 }
 
 - (id)initWithBarButtonSystemItem:(UIBarButtonSystemItem)systemItem target:(id)target action:(SEL)action;
@@ -48,6 +51,7 @@ typedef enum {
 - (id)initWithTitle:(NSString *)title style:(UIBarButtonItemStyle)style target:(id)target action:(SEL)action;
 - (id)initWithImage:(UIImage *)image style:(UIBarButtonItemStyle)style target:(id)target action:(SEL)action;
 
+@property (nonatomic) UIBarButtonItemStyle style;
 @property (nonatomic) CGFloat width;
 @property (nonatomic, retain) UIView *customView;
 @property (nonatomic, assign) id target;
