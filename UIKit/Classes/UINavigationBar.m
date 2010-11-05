@@ -140,7 +140,7 @@ typedef enum {
 
 		if (animated) {
 			CGFloat moveCenterBy = self.bounds.size.width - _centerView.frame.origin.x;
-			CGFloat moveLeftBy = self.bounds.size.width/2.f;
+			CGFloat moveLeftBy = self.bounds.size.width * 0.33f;
 
 			if (transition == _UINavigationBarTransitionPush) {
 				moveCenterBy *= -1.f;
@@ -218,7 +218,7 @@ typedef enum {
 
 		if (animated) {
 			CGFloat moveCenterBy = self.bounds.size.width - _centerView.frame.origin.x;
-			CGFloat moveLeftBy = self.bounds.size.width/2.f;
+			CGFloat moveLeftBy = self.bounds.size.width * 0.33f;
 
 			if (transition == _UINavigationBarTransitionPush) {
 				moveLeftBy *= -1.f;
