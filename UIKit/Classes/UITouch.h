@@ -7,6 +7,9 @@ typedef enum {
 	UITouchPhaseStationary,
 	UITouchPhaseEnded,
 	UITouchPhaseCancelled,
+	UITouchPhaseHovered,
+	UITouchPhaseScrolled,
+	UITouchPhaseRightClicked
 } UITouchPhase;
 
 @class UIView, UIWindow;
@@ -16,10 +19,13 @@ typedef enum {
 	NSTimeInterval _timestamp;
 	NSUInteger _tapCount;
 	UITouchPhase _phase;
+	CGPoint _delta;
 	CGPoint _location;
 	CGPoint _previousLocation;
 	UIView *_view;
-	UIWindow *_window;
+	UIWindow *_window;	
+	UIView *_previousView;
+	UIWindow *_previousWindow;
 }
 
 - (CGPoint)locationInView:(UIView *)inView;

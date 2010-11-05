@@ -6,75 +6,84 @@
 @implementation UITouch
 @synthesize timestamp=_timestamp, tapCount=_tapCount, phase=_phase, view=_view, window=_window;
 
-- (void)_updateWithNSEvent:(NSEvent *)theEvent screenLocation:(CGPoint)screenLocation
+- (id)init
 {
-	NSUInteger newTapCount = 0;
-	UITouchPhase newPhase = UITouchPhaseStationary;
-	BOOL locationChanged = NO;
+	if ((self=[super init])) {
+		_phase = UITouchPhaseCancelled;
+	}
+	return self;
+}
 
+- (void)dealloc
+{
+	[_window release];
+	[_view release];
+	[_previousWindow release];
+	[_previousView release];
+	[super dealloc];
+}
+
+- (void)_setPhase:(UITouchPhase)phase screenLocation:(CGPoint)screenLocation tapCount:(NSUInteger)tapCount delta:(CGPoint)delta timestamp:(NSTimeInterval)timestamp
+{
+	BOOL locationChanged = NO;
+	
 	if (!CGPointEqualToPoint(screenLocation, _location)) {
 		_previousLocation = _location;
 		_location = screenLocation;
 		locationChanged = YES;
 	}
-	
-	switch ([theEvent type]) {
-		case NSLeftMouseDown:
-		case NSRightMouseDown:
-			newPhase = UITouchPhaseBegan;
-			_previousLocation = screenLocation;
-			locationChanged = YES;
-			newTapCount = [theEvent clickCount];
-			break;
 
-		case NSLeftMouseDragged:
-		case NSRightMouseDragged:
-			newPhase = UITouchPhaseMoved;
-			break;
-			
-		case NSLeftMouseUp:
-		case NSRightMouseUp:
-			newPhase = UITouchPhaseEnded;
-			newTapCount = [theEvent clickCount];
-			break;
-			
-		default:
-			newPhase = UITouchPhaseStationary;
-			break;
-	}
-	
-	if (newPhase != _phase || locationChanged || newTapCount != _tapCount) {
-		_timestamp = [theEvent timestamp];
-		_phase = newPhase;
-		_tapCount = newTapCount;
+	if (phase != _phase || locationChanged || tapCount != _tapCount || !CGPointEqualToPoint(_delta,delta)) {
+		_timestamp = timestamp;
+		_phase = phase;
+		_tapCount = tapCount;
+		_delta = delta;
 	}
 }
 
-- (void)_cancel
+- (void)_setView:(UIView *)view
+{
+	if (_view != view) {
+		[_previousView release];
+		[_previousWindow release];
+		
+		_previousWindow = _window;
+		_previousView = _view;
+		
+		_view = [view retain];
+		_window = [view.window retain];
+	}
+}
+
+- (void)_setTouchPhaseCancelled
 {
 	_phase = UITouchPhaseCancelled;
 }
 
-- (void)_setView:(UIView *)theView
+- (CGPoint)_delta
 {
-	if (_view != theView) {
-		[_view release];
-		[_window release];
-		
-		_view = [theView retain];
-		_window = [theView.window retain];
-	}
+	return _delta;
+}
+
+- (UIView *)_previousView
+{
+	return _previousView;
+}
+
+- (UIWindow *)window
+{
+	return _window ?: _previousWindow;
 }
 
 - (CGPoint)_convertLocationPoint:(CGPoint)thePoint toView:(UIView *)inView
 {
 	// The stored location should always be in the coordinate space of the UIScreen that contains the touch's window.
 	// So first convert from the screen to the window:
-	CGPoint point = [self.window convertPoint:thePoint fromWindow:nil];
+	CGPoint point = [_window convertPoint:thePoint fromWindow:nil];
 	
 	// Then convert to the desired location (if any).
 	if (inView) {
-		point = [inView convertPoint:point fromView:self.window];
+		point = [inView convertPoint:point fromView:_window];
 	}
 	
 	return point;
@@ -88,13 +97,6 @@
 - (CGPoint)previousLocationInView:(UIView *)inView
 {
 	return [self _convertLocationPoint:_previousLocation toView:inView];
-}
-
-- (void)dealloc
-{
-	[_window release];
-	[_view release];
-	[super dealloc];
 }
 
 @end

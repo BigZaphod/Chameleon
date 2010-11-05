@@ -3,7 +3,7 @@
 #import "UIScreen+UIPrivate.h"
 #import "UIScreenAppKitIntegration.h"
 #import "UIKitView.h"
-#import "UIEvent+UIPrivate.h"
+#import "UIEvent.h"
 #import "UITouch+UIPrivate.h"
 #import "UIWindow.h"
 #import "UIPopoverController+UIPrivate.h"
@@ -29,6 +29,21 @@ NSString *const UITrackingRunLoopMode = @"UITrackingRunLoopMode";
 
 static UIApplication *_theApplication = nil;
 
+static CGPoint ScreenLocationFromNSEvent(UIScreen *theScreen, NSEvent *theNSEvent)
+{
+	CGPoint screenLocation = NSPointToCGPoint([[theScreen UIKitView] convertPoint:[theNSEvent locationInWindow] fromView:nil]);
+	if (![[theScreen UIKitView] isFlipped]) {
+		// the y coord from the NSView might be inverted
+		screenLocation.y = theScreen.bounds.size.height - screenLocation.y - 1;
+	}
+	return screenLocation;
+}
+
+static BOOL TouchIsActive(UITouch *touch)
+{
+	return (touch.phase == UITouchPhaseBegan || touch.phase == UITouchPhaseMoved || touch.phase == UITouchPhaseStationary);
+}
+
 @implementation UIApplication
 @synthesize keyWindow=_keyWindow, delegate=_delegate, idleTimerDisabled=_idleTimerDisabled;
 
@@ -49,7 +64,6 @@ static UIApplication *_theApplication = nil;
 	if ((self=[super init])) {
 		_currentEvent = [[UIEvent alloc] init];
 		_visibleWindows = [[NSMutableSet alloc] init];
-		//_visiblePopovers = [[NSMutableSet alloc] init];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
 	}
 	return self;
@@ -60,7 +74,6 @@ static UIApplication *_theApplication = nil;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[_currentEvent release];
 	[_visibleWindows release];
-	//[_visiblePopovers release];
 	[super dealloc];
 }
 
@@ -123,18 +136,6 @@ static UIApplication *_theApplication = nil;
 	return [[_visibleWindows valueForKey:@"nonretainedObjectValue"] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sort]];
 }
 
-/*
-- (void)_popoverControllerWillBecomeVisible:(UIPopoverController *)controller
-{
-	[_visiblePopovers addObject:[NSValue valueWithNonretainedObject:controller]];
-}
-
-- (void)_popoverControllerWillBecomeHidden:(UIPopoverController *)controller
-{
-	[_visiblePopovers removeObject:[NSValue valueWithNonretainedObject:controller]];
-}
- */
-
 - (BOOL)sendAction:(SEL)action to:(id)target from:(id)sender forEvent:(UIEvent *)event
 {
 	if (!target) {
@@ -189,74 +190,61 @@ static UIApplication *_theApplication = nil;
 	return [[NSWorkspace sharedWorkspace] openURL:url];
 }
 
-- (void)_beginNewTouchForEvent:(UIEvent *)theEvent atScreen:(UIScreen *)theScreen location:(CGPoint)point
-{
-	UITouch *newTouch = [[UITouch alloc] init];
-	
-	[newTouch _updateWithNSEvent:[theEvent _NSEvent] screenLocation:point];
-	[theEvent _setTouch:newTouch];
-
-	UIView *touchedView = [theScreen _hitTest:point event:theEvent];
-	if (touchedView) {
-		[newTouch _setView:touchedView];
-	}
-
-	[newTouch release];
-}
-
 - (void)_screen:(UIScreen *)theScreen didReceiveNSEvent:(NSEvent *)theNSEvent
 {
-	// All "touch" events are left mouse clicks (right now). A single touch "gesture" starts with the clicking of the left
-	// mouse button, so the first thing to do is make sure that the click happened on a visible UIWindow. If it did, then
-	// we have to capture which specific window and view it happened on. If ultimately there's no userInteractionEnabled=YES
-	// views beneath the click, then we will simply ignore it.
-	
-	[_currentEvent _setNSEvent:theNSEvent];
+	UITouch *touch = [[_currentEvent allTouches] anyObject];
+	BOOL isSupportedEvent = YES;
 
-	CGPoint clickPoint = NSPointToCGPoint([[theScreen UIKitView] convertPoint:[theNSEvent locationInWindow] fromView:nil]);
+	const CGPoint screenLocation = ScreenLocationFromNSEvent(theScreen, theNSEvent);
+	const NSTimeInterval timestamp = [theNSEvent timestamp];
+	const CGPoint delta = CGPointMake([theNSEvent deltaX], [theNSEvent deltaY]);
 
-	// the y coord from the NSView might be inverted
-	if (![[theScreen UIKitView] isFlipped]) {
-		clickPoint.y = theScreen.bounds.size.height - clickPoint.y - 1;
+	if (TouchIsActive(touch)) {
+		switch ([theNSEvent type]) {
+			case NSLeftMouseUp:
+				[touch _setPhase:UITouchPhaseEnded screenLocation:screenLocation tapCount:touch.tapCount delta:delta timestamp:timestamp];
+				break;
+				
+			case NSLeftMouseDragged:
+				[touch _setPhase:UITouchPhaseMoved screenLocation:screenLocation tapCount:touch.tapCount delta:delta timestamp:timestamp];
+				break;
+				
+			default:
+				[touch _setPhase:UITouchPhaseStationary screenLocation:screenLocation tapCount:touch.tapCount delta:delta timestamp:timestamp];
+				break;
+		}
+	} else {
+		switch ([theNSEvent type]) {
+			case NSLeftMouseDown:
+				[touch _setView:[theScreen _hitTest:screenLocation event:_currentEvent]];
+				[touch _setPhase:UITouchPhaseBegan screenLocation:screenLocation tapCount:[theNSEvent clickCount] delta:delta timestamp:timestamp];
+				break;
+				
+			case NSScrollWheel:
+				[touch _setView:[theScreen _hitTest:screenLocation event:_currentEvent]];
+				[touch _setPhase:UITouchPhaseScrolled screenLocation:screenLocation tapCount:0 delta:delta timestamp:timestamp];
+				break;
+				
+			case NSMouseMoved:
+			case NSMouseEntered:
+			case NSMouseExited:
+				[touch _setView:[theScreen _hitTest:screenLocation event:_currentEvent]];
+				[touch _setPhase:UITouchPhaseHovered screenLocation:screenLocation tapCount:0 delta:delta timestamp:timestamp];
+				break;
+				
+			case NSRightMouseDown:
+				[touch _setView:[theScreen _hitTest:screenLocation event:_currentEvent]];
+				[touch _setPhase:UITouchPhaseRightClicked screenLocation:screenLocation tapCount:1 delta:delta timestamp:timestamp];
+				break;
+				
+			default:
+				isSupportedEvent = NO;
+				break;
+		}
 	}
 	
-	switch ([theNSEvent type]) {
-		case NSLeftMouseDown:
-			[self _beginNewTouchForEvent:_currentEvent atScreen:theScreen location:clickPoint];
-			[self sendEvent:_currentEvent];
-			break;
-
-		case NSLeftMouseUp:
-			if ([_currentEvent _touch]) {
-				[[_currentEvent _touch] _updateWithNSEvent:theNSEvent screenLocation:clickPoint];
-				[self sendEvent:_currentEvent];
-				[_currentEvent _setTouch:nil];
-			}
-			break;
-
-		case NSScrollWheel:
-		case NSMouseMoved:
-			if (![_currentEvent _touch]) {
-				[self _beginNewTouchForEvent:_currentEvent atScreen:theScreen location:clickPoint];
-				[self sendEvent:_currentEvent];
-				[_currentEvent _setTouch:nil];
-			}
-			break;
-
-		case NSRightMouseDown:
-			if (![_currentEvent _touch]) {
-				[self _beginNewTouchForEvent:_currentEvent atScreen:theScreen location:clickPoint];
-				[self sendEvent:_currentEvent];
-				[_currentEvent _setTouch:nil];
-			}
-			break;
-			
-		default:
-			if ([_currentEvent _touch]) {
-				[[_currentEvent _touch] _updateWithNSEvent:theNSEvent screenLocation:clickPoint];
-				[self sendEvent:_currentEvent];
-			}
-			break;
+	if (isSupportedEvent) {
+		[self sendEvent:_currentEvent];
 	}
 }
 
@@ -264,11 +252,10 @@ static UIApplication *_theApplication = nil;
 // it's pretty annoying, but I think it's necessary.
 - (void)_cancelTouches
 {
-	UITouch *touch = [_currentEvent _touch];
-	if (touch && (touch.phase != UITouchPhaseEnded || touch.phase != UITouchPhaseCancelled)) {
-		[touch _cancel];
+	UITouch *touch = [[_currentEvent allTouches] anyObject];
+	if (TouchIsActive(touch)) {
+		[touch _setTouchPhaseCancelled];
 		[self sendEvent:_currentEvent];
-		[_currentEvent _setTouch:nil];
 	}
 }
 
