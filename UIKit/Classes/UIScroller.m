@@ -145,6 +145,7 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 	} else {
 		[[[UIColor blackColor] colorWithAlphaComponent:0.5] setFill];
 		[[[UIColor whiteColor] colorWithAlphaComponent:0.2] setStroke];
+		[path setLineWidth:1.5];
 		[path stroke];
 	}
 	

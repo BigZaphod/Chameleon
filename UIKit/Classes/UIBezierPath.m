@@ -54,4 +54,14 @@
 	[_path stroke];
 }
 
+- (void)setLineWidth:(CGFloat)width
+{
+	[_path setLineWidth:width];
+}
+
+- (CGFloat)lineWidth
+{
+	return [_path lineWidth];
+}
+
 @end

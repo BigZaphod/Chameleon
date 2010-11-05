@@ -18,4 +18,6 @@
 - (void)fill;
 - (void)stroke;
 
+@property (nonatomic) CGFloat lineWidth;
+
 @end
