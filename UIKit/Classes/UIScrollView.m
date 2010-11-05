@@ -25,12 +25,10 @@ const CGFloat _UIScrollViewScrollerSize = 10;
 	if ((self=[super initWithFrame:frame])) {
 		_verticalScroller = [[UIScroller alloc] init];
 		_verticalScroller.delegate = self;
-		_verticalScroller.alpha = 0;
 		[self addSubview:_verticalScroller];
 
 		_horizontalScroller = [[UIScroller alloc] init];
 		_horizontalScroller.delegate = self;
-		_horizontalScroller.alpha = 0;
 		[self addSubview:_horizontalScroller];
 		
 		self.clipsToBounds = YES;
@@ -221,6 +219,27 @@ const CGFloat _UIScrollViewScrollerSize = 10;
 	return (_horizontalScroller.dragging || _verticalScroller.dragging);
 }
 
+- (void)flashScrollIndicators
+{
+	[_horizontalScroller flash];
+	[_verticalScroller flash];
+}
+
+- (void)_quickFlashScrollIndicators
+{
+	[_horizontalScroller quickFlash];
+	[_verticalScroller quickFlash];
+}
+
+- (void)mouseMoved:(CGPoint)delta withEvent:(UIEvent *)event
+{
+	UITouch *touch = [[event allTouches] anyObject];
+	const CGPoint point = [touch locationInView:self];
+	
+	_horizontalScroller.alwaysVisible = CGRectContainsPoint(CGRectInset(_horizontalScroller.frame, -_UIScrollViewScrollerSize, -_UIScrollViewScrollerSize), point);
+	_verticalScroller.alwaysVisible = CGRectContainsPoint(CGRectInset(_verticalScroller.frame, -_UIScrollViewScrollerSize, -_UIScrollViewScrollerSize), point);
+}
+
 - (void)scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event
 {
 	if (self.scrollEnabled) {
@@ -228,11 +247,12 @@ const CGFloat _UIScrollViewScrollerSize = 10;
 		// Dunno if this is something standard that OSX is doing or if OSX actually scales it somehow based on content size.
 		delta.x *= 10.f;
 		delta.y *= 10.f;
-
+		
 		CGPoint offset = self.contentOffset;
 		offset.x -= delta.x;
 		offset.y -= delta.y;
 		[self setContentOffset:offset animated:NO];	// setting YES here is a lot nicer/smoother, but the scrollbars get all messed up. Need to figure that out.
+		[self _quickFlashScrollIndicators];
 	}
 }
 
@@ -247,27 +267,14 @@ const CGFloat _UIScrollViewScrollerSize = 10;
 	}
 }
 
-- (void)_scrollerFadeTimerFired:(NSTimer *)timer
+- (void)_UIScrollerDidEndDragging:(UIScroller *)scroller withEvent:(UIEvent *)event
 {
-	if (timer == _scrollerFadeTimer) {
-		_scrollerFadeTimer = nil;
-
-		[UIView beginAnimations:@"_fadeScrollIndicators" context:NULL];
-		[UIView setAnimationDuration:0.33];
-		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-		_horizontalScroller.alpha = 0;
-		_verticalScroller.alpha = 0;
-		[UIView commitAnimations];
-	}
-}
-
-- (void)flashScrollIndicators
-{
-	_horizontalScroller.alpha = 1;
-	_verticalScroller.alpha = 1;
+	UITouch *touch = [[event allTouches] anyObject];
+	const CGPoint point = [touch locationInView:self];
 	
-	[_scrollerFadeTimer invalidate];
-	_scrollerFadeTimer = [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(_scrollerFadeTimerFired:) userInfo:nil repeats:NO];
+	if (!CGRectContainsPoint(scroller.frame,point)) {
+		scroller.alwaysVisible = NO;
+	}
 }
 
 - (void)setZoomScale:(float)scale animated:(BOOL)animated

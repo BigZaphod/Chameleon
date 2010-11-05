@@ -7,7 +7,8 @@
 static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 
 @implementation UIScroller
-@synthesize delegate=_delegate, contentOffset=_contentOffset, contentSize=_contentSize, dragging=_draggingKnob, indicatorStyle=_indicatorStyle;
+@synthesize delegate=_delegate, contentOffset=_contentOffset, contentSize=_contentSize, dragging=_draggingKnob;
+@synthesize indicatorStyle=_indicatorStyle, alwaysVisible=_alwaysVisible;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -22,6 +23,59 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 {
 	_isVertical = (frame.size.height > frame.size.width);
 	[super setFrame:frame];
+}
+
+- (void)_fadeOutTimerFired:(NSTimer *)timer
+{
+	if (timer == _fadeTimer) {
+		_fadeTimer = nil;
+			
+		[UIView beginAnimations:@"_fadeTimerFired" context:NULL];
+		[UIView setAnimationDuration:0.33];
+		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+		self.alpha = 0;
+		[UIView commitAnimations];
+	}
+}
+
+- (void)_fadeOutAfterDelay:(NSTimeInterval)time
+{
+	[_fadeTimer invalidate];
+	_fadeTimer = [NSTimer scheduledTimerWithTimeInterval:time target:self selector:@selector(_fadeOutTimerFired:) userInfo:nil repeats:NO];
+}
+
+- (void)flash
+{
+	if (!_alwaysVisible) {
+		[UIView beginAnimations:@"flash" context:NULL];
+		[UIView setAnimationDuration:0.33];
+		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+		self.alpha = 1;
+		[UIView commitAnimations];
+		
+		[self _fadeOutAfterDelay:1.5];
+	}
+}
+
+- (void)quickFlash
+{
+	if (!_alwaysVisible) {
+		self.alpha = 1;
+		[self _fadeOutAfterDelay:0.5];
+	}
+}
+
+- (void)setAlwaysVisible:(BOOL)v
+{
+	_alwaysVisible = v;
+
+	if (_alwaysVisible) {
+		[_fadeTimer invalidate];
+		_fadeTimer = nil;
+		self.alpha = 1;
+	} else if (self.alpha > 0) {
+		[self _fadeOutAfterDelay:0.5];
+	}
 }
 
 - (void)setIndicatorStyle:(UIScrollViewIndicatorStyle)style
@@ -191,6 +245,7 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 {
 	if (_draggingKnob) {
 		_draggingKnob = NO;
+		[_delegate _UIScrollerDidEndDragging:self withEvent:event];
 	} else {
 		[_holdTimer invalidate];
 		_holdTimer = nil;
