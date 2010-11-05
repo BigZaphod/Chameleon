@@ -13,14 +13,9 @@
 	[[self nextResponder] rightClick:touch withEvent:event];
 }
 
-- (void)mouseEntered:(UIView *)view withEvent:(UIEvent *)event
+- (void)mouseExitedView:(UIView *)exited enteredView:(UIView *)entered withEvent:(UIEvent *)event
 {
-	[[self nextResponder] mouseEntered:view withEvent:event];
-}
-
-- (void)mouseExited:(UIView *)view withEvent:(UIEvent *)event
-{
-	[[self nextResponder] mouseExited:view withEvent:event];
+	[[self nextResponder] mouseExitedView:exited enteredView:entered withEvent:event];
 }
 
 - (void)mouseMoved:(CGPoint)delta withEvent:(UIEvent *)event

@@ -7,6 +7,7 @@
 #import "UITouch.h"
 #import "UIImageView.h"
 #import "UIImage+UIPrivate.h"
+#import "UIResponderAppKitIntegration.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface UIScrollView () <_UIScrollerDelegate>
@@ -238,6 +239,18 @@ const CGFloat _UIScrollViewScrollerSize = 10;
 	
 	_horizontalScroller.alwaysVisible = CGRectContainsPoint(CGRectInset(_horizontalScroller.frame, -_UIScrollViewScrollerSize, -_UIScrollViewScrollerSize), point);
 	_verticalScroller.alwaysVisible = CGRectContainsPoint(CGRectInset(_verticalScroller.frame, -_UIScrollViewScrollerSize, -_UIScrollViewScrollerSize), point);
+	
+	[super mouseMoved:delta withEvent:event];
+}
+
+- (void)mouseExitedView:(UIView *)exited enteredView:(UIView *)entered withEvent:(UIEvent *)event
+{
+	if ([exited isDescendantOfView:self] && ![entered isDescendantOfView:self]) {
+		_horizontalScroller.alwaysVisible = NO;
+		_verticalScroller.alwaysVisible = NO;
+	}
+	
+	[super mouseExitedView:exited enteredView:entered withEvent:event];
 }
 
 - (void)scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event

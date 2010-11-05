@@ -67,7 +67,7 @@
 	[super updateTrackingAreas];
 	[self removeTrackingArea:_trackingArea];
 	[_trackingArea release];
-	_trackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds options:NSTrackingCursorUpdate|NSTrackingMouseMoved|NSTrackingInVisibleRect|NSTrackingActiveInKeyWindow owner:self userInfo:nil];
+	_trackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds options:NSTrackingCursorUpdate|NSTrackingMouseMoved|NSTrackingInVisibleRect|NSTrackingActiveInKeyWindow|NSTrackingMouseEnteredAndExited owner:self userInfo:nil];
 	[self addTrackingArea:_trackingArea];
 }
 
@@ -107,6 +107,16 @@
 }
 
 - (void)scrollWheel:(NSEvent *)theEvent
+{
+	[[UIApplication sharedApplication] _screen:_screen didReceiveNSEvent:theEvent];
+}
+
+- (void)mouseEntered:(NSEvent *)theEvent
+{
+	[[UIApplication sharedApplication] _screen:_screen didReceiveNSEvent:theEvent];
+}
+
+- (void)mouseExited:(NSEvent *)theEvent
 {
 	[[UIApplication sharedApplication] _screen:_screen didReceiveNSEvent:theEvent];
 }

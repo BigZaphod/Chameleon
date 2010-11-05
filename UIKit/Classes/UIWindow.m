@@ -272,8 +272,8 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 		UIView *previousView = [event _previousMouseMovementView];
 		UIView *currentView = touch.view;
 		if (currentView != previousView) {
-			[previousView mouseExited:previousView withEvent:event];
-			[currentView mouseEntered:currentView withEvent:event];
+			[previousView mouseExitedView:previousView enteredView:currentView withEvent:event];
+			[currentView mouseExitedView:previousView enteredView:currentView withEvent:event];
 			[event _setPreviousMouseMovementView:currentView];
 		}
 		[currentView mouseMoved:delta withEvent:event];
