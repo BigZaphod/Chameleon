@@ -25,34 +25,40 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 	[super setFrame:frame];
 }
 
-- (void)_fadeOutTimerFired:(NSTimer *)timer
+- (void)_fadeOut
 {
-	if (timer == _fadeTimer) {
-		_fadeTimer = nil;
-			
-		[UIView beginAnimations:@"_fadeTimerFired" context:NULL];
-		[UIView setAnimationDuration:0.33];
-		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-		self.alpha = 0;
-		[UIView commitAnimations];
-	}
+	[_fadeTimer invalidate];
+	_fadeTimer = nil;
+		
+	[UIView beginAnimations:@"fadeOut" context:NULL];
+	[UIView setAnimationDuration:0.33];
+	[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+	self.alpha = 0;
+	[UIView commitAnimations];
 }
 
 - (void)_fadeOutAfterDelay:(NSTimeInterval)time
 {
 	[_fadeTimer invalidate];
-	_fadeTimer = [NSTimer scheduledTimerWithTimeInterval:time target:self selector:@selector(_fadeOutTimerFired:) userInfo:nil repeats:NO];
+	_fadeTimer = [NSTimer scheduledTimerWithTimeInterval:time target:self selector:@selector(_fadeOut) userInfo:nil repeats:NO];
+}
+
+- (void)_fadeIn
+{
+	[_fadeTimer invalidate];
+	_fadeTimer = nil;
+
+	[UIView beginAnimations:@"fadeIn" context:NULL];
+	[UIView setAnimationDuration:0.33];
+	[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+	self.alpha = 1;
+	[UIView commitAnimations];
 }
 
 - (void)flash
 {
 	if (!_alwaysVisible) {
-		[UIView beginAnimations:@"flash" context:NULL];
-		[UIView setAnimationDuration:0.33];
-		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-		self.alpha = 1;
-		[UIView commitAnimations];
-		
+		[self _fadeIn];
 		[self _fadeOutAfterDelay:1.5];
 	}
 }
@@ -70,11 +76,9 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 	_alwaysVisible = v;
 
 	if (_alwaysVisible) {
-		[_fadeTimer invalidate];
-		_fadeTimer = nil;
-		self.alpha = 1;
+		[self _fadeIn];
 	} else if (self.alpha > 0) {
-		[self _fadeOutAfterDelay:0.5];
+		[self _fadeOut];
 	}
 }
 
