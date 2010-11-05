@@ -77,13 +77,15 @@
 
 - (CGPoint)_convertLocationPoint:(CGPoint)thePoint toView:(UIView *)inView
 {
+	UIWindow *window = self.window;
+	
 	// The stored location should always be in the coordinate space of the UIScreen that contains the touch's window.
 	// So first convert from the screen to the window:
-	CGPoint point = [_window convertPoint:thePoint fromWindow:nil];
+	CGPoint point = [window convertPoint:thePoint fromWindow:nil];
 	
 	// Then convert to the desired location (if any).
 	if (inView) {
-		point = [inView convertPoint:point fromView:_window];
+		point = [inView convertPoint:point fromView:window];
 	}
 	
 	return point;
