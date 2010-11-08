@@ -13,8 +13,7 @@ typedef enum {
 @private
 	UIBarStyle _barStyle;
 	UIColor *_tintColor;
-	NSMutableArray *_items;
-	NSMutableArray *_itemViews;
+	NSMutableArray *_toolbarItems;
 	BOOL _translucent;
 }
 

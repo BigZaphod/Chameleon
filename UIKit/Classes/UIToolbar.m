@@ -5,8 +5,70 @@
 #import "UIColor.h"
 #import "UIGraphics.h"
 
+
+
+
+
+@interface UIToolbarItem : NSObject {
+	UIBarButtonItem *item;
+	UIView *view;
+}
+
+- (id)initWithBarButtonItem:(UIBarButtonItem *)anItem;
+
+@property (nonatomic, readonly) UIView *view;
+@property (nonatomic, readonly) UIBarButtonItem *item;
+@property (nonatomic, readonly) CGFloat width;
+
+@end
+
+@implementation UIToolbarItem
+@synthesize item, view;
+
+- (id)initWithBarButtonItem:(UIBarButtonItem *)anItem
+{
+	if ((self=[super init])) {
+		item = [anItem retain];
+		
+		if (!item->_isSystemItem && item.customView) {
+			view = [item.customView retain];
+		} else if (!item->_isSystemItem || (item->_systemItem != UIBarButtonSystemItemFixedSpace && item->_systemItem != UIBarButtonSystemItemFlexibleSpace)) {
+			view = [[UIToolbarButton alloc] initWithBarButtonItem:item];
+			[view sizeToFit];
+		}
+	}
+	return self;
+}
+
+- (void)dealloc
+{
+	[item release];
+	[view release];
+	[super dealloc];
+}
+
+- (CGFloat)width
+{
+	if (view) {
+		return view.frame.size.width;
+	} else if (item->_isSystemItem && item->_systemItem == UIBarButtonSystemItemFixedSpace) {
+		return item.width;
+	} else {
+		return -1;
+	}
+}
+
+@end
+
+
+
+
+
+
+
+
 @implementation UIToolbar
-@synthesize barStyle=_barStyle, tintColor=_tintColor, items=_items, translucent=_translucent;
+@synthesize barStyle=_barStyle, tintColor=_tintColor, translucent=_translucent;
 
 - (id)init
 {
@@ -16,8 +78,7 @@
 - (id)initWithFrame:(CGRect)frame
 {
 	if ((self=[super initWithFrame:frame])) {
-		_items = [[NSMutableArray alloc] init];
-		_itemViews = [[NSMutableArray alloc] init];
+		_toolbarItems = [[NSMutableArray alloc] init];
 		self.barStyle = UIBarStyleDefault;
 		self.translucent = NO;
 		self.tintColor = nil;
@@ -28,8 +89,7 @@
 - (void)dealloc
 {
 	[_tintColor release];
-	[_items release];
-	[_itemViews release];
+	[_toolbarItems release];
 	[super dealloc];
 }
 
@@ -43,6 +103,7 @@
 	}
 }
 
+/*
 - (void)_updateItemViews
 {
 	[_itemViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -86,32 +147,87 @@
 		}
 	}
 }
+*/
+
+- (void)layoutSubviews
+{
+	[super layoutSubviews];
+	
+	CGFloat itemWidth = 0;
+	NSUInteger numberOfFlexibleItems = 0;
+	
+	for (UIToolbarItem *toolbarItem in _toolbarItems) {
+		const CGFloat width = toolbarItem.width;
+		if (width >= 0) {
+			itemWidth += width;
+		} else {
+			numberOfFlexibleItems++;
+		}
+	}
+	
+	const CGFloat flexibleSpaceWidth = (numberOfFlexibleItems > 0)? ((self.bounds.size.width - itemWidth) / numberOfFlexibleItems) : 0;
+
+	CGFloat x = 0;
+	
+	for (UIToolbarItem *toolbarItem in _toolbarItems) {
+		UIView *view = toolbarItem.view;
+		const CGFloat width = toolbarItem.width;
+		
+		if (view) {
+			CGRect frame = view.frame;
+			frame.origin.x = x;
+			frame.size.width = width;
+			view.frame = frame;
+		}
+
+		if (width < 0) {
+			x += flexibleSpaceWidth;
+		} else {
+			x += width;
+		}
+	}
+	
+}
 
 - (void)setItems:(NSArray *)newItems animated:(BOOL)animated
 {
-	if (![_items isEqualToArray:newItems]) {
-
+	if (![self.items isEqualToArray:newItems]) {
 		// if animated, fade old item views out, otherwise just remove them
-		if (animated) {
-			for (UIView *v in _itemViews) {
-				[UIView beginAnimations:@"fadeOut" context:NULL];
-				[UIView setAnimationDidStopSelector:@selector(removeFromSuperview)];
-				[UIView setAnimationDelegate:v];
-				v.alpha = 0;
-				[UIView commitAnimations];
+		for (UIToolbarItem *toolbarItem in _toolbarItems) {
+			UIView *view = toolbarItem.view;
+			if (view) {
+				if (animated) {
+					[UIView beginAnimations:@"fadeOut" context:NULL];
+					[UIView setAnimationDidStopSelector:@selector(removeFromSuperview)];
+					[UIView setAnimationDelegate:view];
+					view.alpha = 0;
+					[UIView commitAnimations];
+				} else {
+					[view removeFromSuperview];
+				}
 			}
-			[_itemViews removeAllObjects];
 		}
-
-		[_items setArray:newItems];
-		[self _updateItemViews];
-
+		
+		[_toolbarItems removeAllObjects];
+		
+		for (UIBarButtonItem *item in newItems) {
+			UIToolbarItem *toolbarItem = [[UIToolbarItem alloc] initWithBarButtonItem:item];
+			[_toolbarItems addObject:toolbarItem];
+			[self addSubview:toolbarItem.view];
+			[toolbarItem release];
+		}
+				
 		// if animated, fade them in
 		if (animated) {
-			for (UIView *v in _itemViews) v.alpha = 0;
-			[UIView beginAnimations:@"fadeIn" context:NULL];
-			for (UIView *v in _itemViews) v.alpha = 1;
-			[UIView commitAnimations];
+			for (UIToolbarItem *toolbarItem in _toolbarItems) {
+				UIView *view = toolbarItem.view;
+				if (view) {
+					view.alpha = 0;
+					[UIView beginAnimations:@"fadeIn" context:NULL];
+					view.alpha = 1;
+					[UIView commitAnimations];
+				}
+			}
 		}
 	}
 }
@@ -123,16 +239,12 @@
 
 - (NSArray *)items
 {
-	return [[_items copy] autorelease];
+	return [_toolbarItems valueForKey:@"item"];
 }
 
 - (void)drawRect:(CGRect)rect
 {
 	const CGRect bounds = self.bounds;
-	
-	// I kind of suspect that the "right" thing to do is to draw the background and then paint over it with the tintColor doing some kind of blending
-	// so that it actually doesn "tint" the image instead of define it. That'd probably work better with the bottom line coloring and stuff, too, but
-	// for now hardcoding stuff works well enough.
 	
 	UIColor *color = _tintColor ?: [UIColor colorWithRed:21/255.f green:21/255.f blue:25/255.f alpha:1];
 

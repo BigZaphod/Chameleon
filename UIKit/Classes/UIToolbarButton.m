@@ -2,25 +2,34 @@
 #import "UIToolbarButton.h"
 #import "UIBarButtonItem.h"
 #import "UIColor.h"
+#import "UIImage+UIPrivate.h"
 
 @implementation UIToolbarButton
 
 - (id)initWithBarButtonItem:(UIBarButtonItem *)item
 {
 	if ((self=[super initWithFrame:CGRectMake(0,0,item.width,24)])) {
-		self.backgroundColor = [UIColor redColor];
+		//self.backgroundColor = [UIColor redColor];
+		UIImage *image = nil;
+		NSString *title = nil;
 		
 		if (item->_isSystemItem) {
-
-		} else {
-			if (item.image) {
-				[self setImage:item.image forState:UIControlStateNormal];
-			} else {
-				[self setTitle:item.title forState:UIControlStateNormal];
+			switch (item->_systemItem) {
+				case UIBarButtonSystemItemAdd:
+					image = [UIImage _frameworkImageNamed:@"<UIBarButtonSystemItem> add.png"];
+					break;
+					
+				case UIBarButtonSystemItemReply:
+					image = [UIImage _frameworkImageNamed:@"<UIBarButtonSystemItem> reply.png"];
+					break;
 			}
+		} else {
+			image = item.image;
+			title = item.title;
 		}
 		
-		[self sizeToFit];
+		[self setImage:image forState:UIControlStateNormal];
+		[self setTitle:title forState:UIControlStateNormal];
 	}
 	return self;
 }
