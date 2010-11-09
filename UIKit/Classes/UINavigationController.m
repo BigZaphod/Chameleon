@@ -51,11 +51,6 @@ static const CGFloat BarHeight = 28;
 	CGRect toolbarRect = self.view.bounds;
 	toolbarRect.origin.y = toolbarRect.origin.y + toolbarRect.size.height - BarHeight;
 	toolbarRect.size.height = BarHeight;
-	
-	if (self.toolbarHidden) {
-		toolbarRect.origin.y += BarHeight;
-	}
-	
 	return toolbarRect;
 }
 
@@ -91,6 +86,7 @@ static const CGFloat BarHeight = 28;
 	
 	_toolbar.frame = [self _toolbarFrame];
 	_toolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+	_toolbar.hidden = self.toolbarHidden;
 	[self.view addSubview:_toolbar];
 }
 
@@ -122,19 +118,7 @@ static const CGFloat BarHeight = 28;
 {
 	UIViewController *topController = self.topViewController;
 	[_toolbar setItems:topController.toolbarItems animated:animated];
-	
-	if ([self isViewLoaded]) {
-		if (animated) {
-			[UIView beginAnimations:@"toggleToolbar" context:NULL];
-		}
-		
-		_toolbar.frame = [self _toolbarFrame];
-		topController.view.frame = [self _controllerFrame];
-		
-		if (animated) {
-			[UIView commitAnimations];
-		}
-	}
+	_toolbar.hidden = self.toolbarHidden;
 }
 
 - (void)setViewControllers:(NSArray *)newViewControllers animated:(BOOL)animated
