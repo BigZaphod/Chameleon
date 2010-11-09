@@ -29,6 +29,7 @@ typedef enum {
 	NSArray *_toolbarItems;
 	UIModalPresentationStyle _modalPresentationStyle;
 	BOOL _editing;
+	BOOL _hidesBottomBarWhenPushed;
 	UIViewController *_parentViewController;
 	UIViewController *_modalViewController;
 	UIModalTransitionStyle _modalTransitionStyle;
@@ -68,6 +69,7 @@ typedef enum {
 @property (nonatomic, readonly, retain) UINavigationItem *navigationItem;
 @property (nonatomic, retain) NSArray *toolbarItems;
 @property (nonatomic, getter=isEditing) BOOL editing;
+@property (nonatomic) BOOL hidesBottomBarWhenPushed;
 
 @property (nonatomic, readwrite) CGSize contentSizeForViewInPopover;
 @property (nonatomic,readwrite,getter=isModalInPopover) BOOL modalInPopover;

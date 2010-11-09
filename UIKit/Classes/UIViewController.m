@@ -13,7 +13,7 @@
 @synthesize view=_view, wantsFullScreenLayout=_wantsFullScreenLayout, title=_title, contentSizeForViewInPopover=_contentSizeForViewInPopover;
 @synthesize modalInPopover=_modalInPopover, toolbarItems=_toolbarItems, modalPresentationStyle=_modalPresentationStyle, editing=_editing;
 @synthesize modalViewController=_modalViewController, parentViewController=_parentViewController;
-@synthesize modalTransitionStyle=_modalTransitionStyle;
+@synthesize modalTransitionStyle=_modalTransitionStyle, hidesBottomBarWhenPushed=_hidesBottomBarWhenPushed;
 
 - (id)init
 {
@@ -24,6 +24,7 @@
 {
 	if ((self=[super init])) {
 		_contentSizeForViewInPopover = CGSizeMake(320,1100);
+		_hidesBottomBarWhenPushed = NO;
 	}
 	return self;
 }

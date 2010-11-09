@@ -12,8 +12,10 @@
 @interface UINavigationController : UIViewController {
 @private
 	UINavigationBar *_navigationBar;
+	UIToolbar *_toolbar;
 	NSMutableArray *_viewControllers;
 	id _delegate;
+	BOOL _toolbarHidden;
 	
 	struct {
 		BOOL didShowViewController : 1;
@@ -37,5 +39,6 @@
 @property (nonatomic, readonly) UIToolbar *toolbar;
 @property (nonatomic, assign) id<UINavigationControllerDelegate> delegate;
 @property (nonatomic, readonly, retain) UIViewController *topViewController;
+@property (nonatomic,getter=isToolbarHidden) BOOL toolbarHidden;
 
 @end
