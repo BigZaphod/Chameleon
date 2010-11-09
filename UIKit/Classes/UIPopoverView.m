@@ -103,7 +103,7 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 	if ((self=[super initWithFrame:CGRectMake(0,0,320,480)])) {
 		_contentView = [aView retain];
 		
-		UIImage *backgroundImage = [[UIImage _frameworkImageNamed:@"<UIPopoverView> background.png"] stretchableImageWithLeftCapWidth:23 topCapHeight:23];
+		UIImage *backgroundImage = [UIImage _popoverBackgroundImage];
 		_backgroundView = [[UIImageView alloc] initWithImage:backgroundImage];
 		
 		_arrowView = [[UIImageView alloc] initWithFrame:CGRectZero];
@@ -225,19 +225,19 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 	
 	if (closestEdge == CGRectMaxXEdge) {
 		// right side
-		_arrowView.image = [UIImage _frameworkImageNamed:@"<UIPopoverView> arrow-right.png"];
+		_arrowView.image = [UIImage _rightPopoverArrowImage];
 		clampVertical = YES;
 	} else if (closestEdge == CGRectMaxYEdge) {
 		// bottom side
-		_arrowView.image = [UIImage _frameworkImageNamed:@"<UIPopoverView> arrow-bottom.png"];
+		_arrowView.image = [UIImage _bottomPopoverArrowImage];
 		clampVertical = NO;
 	} else if (closestEdge == CGRectMinYEdge) {
 		// top side
-		_arrowView.image = [UIImage _frameworkImageNamed:@"<UIPopoverView> arrow-top.png"];
+		_arrowView.image = [UIImage _topPopoverArrowImage];
 		clampVertical = NO;
 	} else {
 		// left side
-		_arrowView.image = [UIImage _frameworkImageNamed:@"<UIPopoverView> arrow-left.png"];
+		_arrowView.image = [UIImage _leftPopoverArrowImage];
 		clampVertical = YES;
 	}
 

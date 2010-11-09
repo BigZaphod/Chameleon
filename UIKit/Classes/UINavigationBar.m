@@ -9,11 +9,6 @@
 #import "UIBarButtonItem.h"
 #import "UIButton.h"
 
-static UIImage *ButtonImage = nil;
-static UIImage *ButtonHighlightedImage = nil;
-static UIImage *BackButtonImage = nil;
-static UIImage *BackButtonHighlightedImage = nil;
-
 static const UIEdgeInsets kButtonEdgeInsets = {0,0,0,0};
 static const CGFloat kMinButtonWidth = 30;
 static const CGFloat kMaxButtonWidth = 200;
@@ -29,16 +24,6 @@ typedef enum {
 @implementation UINavigationBar
 @synthesize tintColor=_tintColor, delegate=_delegate, items=_navStack;
 
-+ (void)initialize
-{
-	if (self == [UINavigationBar class]) {
-		ButtonImage = [[[UIImage _frameworkImageNamed:@"<UINavigationBar> button.png"] stretchableImageWithLeftCapWidth:6 topCapHeight:0] retain];
-		ButtonHighlightedImage = [[[UIImage _frameworkImageNamed:@"<UINavigationBar> button-highlighted.png"] stretchableImageWithLeftCapWidth:6 topCapHeight:0] retain];
-		BackButtonImage = [[[UIImage _frameworkImageNamed:@"<UINavigationBar> back.png"] stretchableImageWithLeftCapWidth:18 topCapHeight:0] retain];
-		BackButtonHighlightedImage = [[[UIImage _frameworkImageNamed:@"<UINavigationBar> back-highlighted.png"] stretchableImageWithLeftCapWidth:18 topCapHeight:0] retain];
-	}
-}
-
 + (void)_setBarButtonSize:(UIView *)view
 {
 	CGRect frame = view.frame;
@@ -53,8 +38,8 @@ typedef enum {
 	if (!item) return nil;
 	
 	UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	[backButton setBackgroundImage:BackButtonImage forState:UIControlStateNormal];
-	[backButton setBackgroundImage:BackButtonHighlightedImage forState:UIControlStateHighlighted];
+	[backButton setBackgroundImage:[UIImage _backButtonImage] forState:UIControlStateNormal];
+	[backButton setBackgroundImage:[UIImage _highlightedBackButtonImage] forState:UIControlStateHighlighted];
 	[backButton setTitle:item.title forState:UIControlStateNormal];
 	backButton.titleLabel.font = [UIFont systemFontOfSize:11];
 	backButton.contentEdgeInsets = UIEdgeInsetsMake(0,15,0,7);
@@ -72,8 +57,8 @@ typedef enum {
 		return item.customView;
 	} else {
 		UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-		[button setBackgroundImage:ButtonImage forState:UIControlStateNormal];
-		[button setBackgroundImage:ButtonHighlightedImage forState:UIControlStateHighlighted];
+		[button setBackgroundImage:[UIImage _toolbarButtonImage] forState:UIControlStateNormal];
+		[button setBackgroundImage:[UIImage _highlightedToolbarButtonImage] forState:UIControlStateHighlighted];
 		[button setTitle:item.title forState:UIControlStateNormal];
 		[button setImage:item.image forState:UIControlStateNormal];
 		button.titleLabel.font = [UIFont systemFontOfSize:11];

@@ -59,7 +59,7 @@ NSMutableArray *_allScreens = nil;
 		_layer.geometryFlipped = YES;
 		//_layer.sublayerTransform = CATransform3DMakeScale(1,-1,1);
 		
-		_grabber = [[UIImageView alloc] initWithImage:[UIImage _frameworkImageNamed:@"<UIScreen> grabber.png"]];
+		_grabber = [[UIImageView alloc] initWithImage:[UIImage _windowResizeGrabberImage]];
 		_grabber.layer.zPosition = 10000;
 		[_layer addSublayer:_grabber.layer];
     }

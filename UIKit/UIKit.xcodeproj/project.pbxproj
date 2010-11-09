@@ -32,8 +32,6 @@
 		145335861226F3490005644F /* UICustomNSClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 145335841226F3490005644F /* UICustomNSClipView.m */; };
 		1464960B11FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */; };
 		1464960C11FF7AE500ECEC7A /* <UINavigationBar> back.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */; };
-		1464960D11FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */; };
-		1464960E11FF7AE500ECEC7A /* <UINavigationBar> button.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */; };
 		14690C9F122D79C2005A12A2 /* UIMenuController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14690C9D122D79C2005A12A2 /* UIMenuController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14690CA0122D79C2005A12A2 /* UIMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14690C9E122D79C2005A12A2 /* UIMenuController.m */; };
 		14690CB5122D7B56005A12A2 /* UIMenuItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 14690CB3122D7B56005A12A2 /* UIMenuItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -166,6 +164,9 @@
 		14CC843711EFA8BA005988CC /* <UIScreen> grabber.png in Resources */ = {isa = PBXBuildFile; fileRef = 14CC842F11EFA8BA005988CC /* <UIScreen> grabber.png */; };
 		14CC844111EFA901005988CC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14CC844011EFA901005988CC /* QuartzCore.framework */; };
 		14CC844511EFA91A005988CC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14CC844411EFA91A005988CC /* SystemConfiguration.framework */; };
+		14DD1C281289B3C900DCF231 /* UIImage+UIPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = 14DD1C271289B3C900DCF231 /* UIImage+UIPrivate.m */; };
+		14DD1C361289B4D500DCF231 /* <UIToolbar> button-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 14DD1C341289B4D500DCF231 /* <UIToolbar> button-highlighted.png */; };
+		14DD1C371289B4D500DCF231 /* <UIToolbar> button.png in Resources */ = {isa = PBXBuildFile; fileRef = 14DD1C351289B4D500DCF231 /* <UIToolbar> button.png */; };
 		14F0BC0D1288A67F00BA54F9 /* <UIBarButtonSystemItem> add.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F0BC0B1288A67F00BA54F9 /* <UIBarButtonSystemItem> add.png */; };
 		14F0BC0E1288A67F00BA54F9 /* <UIBarButtonSystemItem> reply.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F0BC0C1288A67F00BA54F9 /* <UIBarButtonSystemItem> reply.png */; };
 		14F56F3D12664D350045EC82 /* <UIPopoverView> arrow-bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F56F3812664D350045EC82 /* <UIPopoverView> arrow-bottom.png */; };
@@ -226,8 +227,6 @@
 		145335841226F3490005644F /* UICustomNSClipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICustomNSClipView.m; sourceTree = "<group>"; };
 		1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> back-highlighted.png"; path = "Resources/<UINavigationBar> back-highlighted.png"; sourceTree = "<group>"; };
 		1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> back.png"; path = "Resources/<UINavigationBar> back.png"; sourceTree = "<group>"; };
-		1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> button-highlighted.png"; path = "Resources/<UINavigationBar> button-highlighted.png"; sourceTree = "<group>"; };
-		1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> button.png"; path = "Resources/<UINavigationBar> button.png"; sourceTree = "<group>"; };
 		14690C9D122D79C2005A12A2 /* UIMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIMenuController.h; path = Classes/UIMenuController.h; sourceTree = "<group>"; };
 		14690C9E122D79C2005A12A2 /* UIMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIMenuController.m; path = Classes/UIMenuController.m; sourceTree = "<group>"; };
 		14690CB3122D7B56005A12A2 /* UIMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIMenuItem.h; path = Classes/UIMenuItem.h; sourceTree = "<group>"; };
@@ -320,8 +319,8 @@
 		14CC838D11EFA8AF005988CC /* UIPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIPopoverController.m; path = Classes/UIPopoverController.m; sourceTree = "<group>"; };
 		14CC838E11EFA8AF005988CC /* UIResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIResponder.h; path = Classes/UIResponder.h; sourceTree = "<group>"; };
 		14CC838F11EFA8AF005988CC /* UIResponder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIResponder.m; path = Classes/UIResponder.m; sourceTree = "<group>"; };
-		14CC839011EFA8AF005988CC /* UIRoundedRectButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIRoundedRectButton.h; path = Classes/UIRoundedRectButton.h; sourceTree = "<group>"; };
-		14CC839111EFA8AF005988CC /* UIRoundedRectButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIRoundedRectButton.m; path = Classes/UIRoundedRectButton.m; sourceTree = "<group>"; };
+		14CC839011EFA8AF005988CC /* UIRoundedRectButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIRoundedRectButton.h; sourceTree = "<group>"; };
+		14CC839111EFA8AF005988CC /* UIRoundedRectButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIRoundedRectButton.m; sourceTree = "<group>"; };
 		14CC839211EFA8AF005988CC /* UIScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIScreen.h; path = Classes/UIScreen.h; sourceTree = "<group>"; };
 		14CC839311EFA8AF005988CC /* UIScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIScreen.m; path = Classes/UIScreen.m; sourceTree = "<group>"; };
 		14CC839411EFA8AF005988CC /* UIScreenMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIScreenMode.h; path = Classes/UIScreenMode.h; sourceTree = "<group>"; };
@@ -360,6 +359,9 @@
 		14CC842F11EFA8BA005988CC /* <UIScreen> grabber.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIScreen> grabber.png"; path = "Resources/<UIScreen> grabber.png"; sourceTree = "<group>"; };
 		14CC844011EFA901005988CC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		14CC844411EFA91A005988CC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		14DD1C271289B3C900DCF231 /* UIImage+UIPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+UIPrivate.m"; sourceTree = "<group>"; };
+		14DD1C341289B4D500DCF231 /* <UIToolbar> button-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIToolbar> button-highlighted.png"; path = "Resources/<UIToolbar> button-highlighted.png"; sourceTree = "<group>"; };
+		14DD1C351289B4D500DCF231 /* <UIToolbar> button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIToolbar> button.png"; path = "Resources/<UIToolbar> button.png"; sourceTree = "<group>"; };
 		14F0BC0B1288A67F00BA54F9 /* <UIBarButtonSystemItem> add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> add.png"; path = "Resources/<UIBarButtonSystemItem> add.png"; sourceTree = "<group>"; };
 		14F0BC0C1288A67F00BA54F9 /* <UIBarButtonSystemItem> reply.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> reply.png"; path = "Resources/<UIBarButtonSystemItem> reply.png"; sourceTree = "<group>"; };
 		14F56F3812664D350045EC82 /* <UIPopoverView> arrow-bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIPopoverView> arrow-bottom.png"; path = "Resources/<UIPopoverView> arrow-bottom.png"; sourceTree = "<group>"; };
@@ -453,11 +455,11 @@
 				14F56F3C12664D350045EC82 /* <UIPopoverView> background.png */,
 				1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */,
 				1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */,
-				1464960A11FF7AE500ECEC7A /* <UINavigationBar> button.png */,
-				1464960911FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png */,
 				14CC842D11EFA8BA005988CC /* <UIRoundedRectButton> highlighted.png */,
 				14CC842E11EFA8BA005988CC /* <UIRoundedRectButton> normal.png */,
 				14CC842F11EFA8BA005988CC /* <UIScreen> grabber.png */,
+				14DD1C341289B4D500DCF231 /* <UIToolbar> button-highlighted.png */,
+				14DD1C351289B4D500DCF231 /* <UIToolbar> button.png */,
 				8DC2EF5A0486A6940098B216 /* Info.plist */,
 			);
 			name = Resources;
@@ -548,8 +550,6 @@
 				14CC838F11EFA8AF005988CC /* UIResponder.m */,
 				140AA9141264E9770057D87F /* UIResponderAppKitIntegration.h */,
 				140AA94D1264EC770057D87F /* UIResponderAppKitIntegration.m */,
-				14CC839011EFA8AF005988CC /* UIRoundedRectButton.h */,
-				14CC839111EFA8AF005988CC /* UIRoundedRectButton.m */,
 				14CC839211EFA8AF005988CC /* UIScreen.h */,
 				14CC839311EFA8AF005988CC /* UIScreen.m */,
 				140AA92F1264EB040057D87F /* UIScreenAppKitIntegration.h */,
@@ -614,6 +614,8 @@
 				14CB384812689949003334AD /* UIPopoverOverlayNSView.m */,
 				14F56F4212664D430045EC82 /* UIPopoverView.h */,
 				14F56F4312664D430045EC82 /* UIPopoverView.m */,
+				14CC839011EFA8AF005988CC /* UIRoundedRectButton.h */,
+				14CC839111EFA8AF005988CC /* UIRoundedRectButton.m */,
 				14FA8C4F121DA4A000C4264B /* UIScroller.h */,
 				14FA8C50121DA4A000C4264B /* UIScroller.m */,
 				14FA8C51121DA4A000C4264B /* UITableViewCellSeparator.h */,
@@ -643,6 +645,7 @@
 				14A726AF1213303400648C9B /* UIApplication+UIPrivate.h */,
 				14A726B11213303400648C9B /* UIControl+UIPrivate.h */,
 				14A726B41213303400648C9B /* UIImage+UIPrivate.h */,
+				14DD1C271289B3C900DCF231 /* UIImage+UIPrivate.m */,
 				14A726B51213303400648C9B /* UIImageView+UIPrivate.h */,
 				1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */,
 				14A726B71213303400648C9B /* UIScreen+UIPrivate.h */,
@@ -828,8 +831,6 @@
 				14CC843711EFA8BA005988CC /* <UIScreen> grabber.png in Resources */,
 				1464960B11FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png in Resources */,
 				1464960C11FF7AE500ECEC7A /* <UINavigationBar> back.png in Resources */,
-				1464960D11FF7AE500ECEC7A /* <UINavigationBar> button-highlighted.png in Resources */,
-				1464960E11FF7AE500ECEC7A /* <UINavigationBar> button.png in Resources */,
 				14F56F3D12664D350045EC82 /* <UIPopoverView> arrow-bottom.png in Resources */,
 				14F56F3E12664D350045EC82 /* <UIPopoverView> arrow-left.png in Resources */,
 				14F56F3F12664D350045EC82 /* <UIPopoverView> arrow-right.png in Resources */,
@@ -837,6 +838,8 @@
 				14F56F4112664D350045EC82 /* <UIPopoverView> background.png in Resources */,
 				14F0BC0D1288A67F00BA54F9 /* <UIBarButtonSystemItem> add.png in Resources */,
 				14F0BC0E1288A67F00BA54F9 /* <UIBarButtonSystemItem> reply.png in Resources */,
+				14DD1C361289B4D500DCF231 /* <UIToolbar> button-highlighted.png in Resources */,
+				14DD1C371289B4D500DCF231 /* <UIToolbar> button.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -922,6 +925,7 @@
 				14CB384612689907003334AD /* UIPopoverNSWindow.m in Sources */,
 				14CB384A12689949003334AD /* UIPopoverOverlayNSView.m in Sources */,
 				144156DC1284A22200532FE2 /* UIToolbarButton.m in Sources */,
+				14DD1C281289B3C900DCF231 /* UIImage+UIPrivate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

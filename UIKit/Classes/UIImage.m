@@ -5,16 +5,7 @@
 #import "UIGraphics.h"
 #import <AppKit/NSImage.h>
 
-NSMutableDictionary *imageCache = nil;
-
 @implementation UIImage
-
-+ (void)initialize
-{
-	if (self == [UIImage class]) {
-		imageCache = [[NSMutableDictionary alloc] init];
-	}
-}
 
 - (id)initWithNSImage:(NSImage *)theImage
 {
@@ -52,10 +43,10 @@ NSMutableDictionary *imageCache = nil;
 + (UIImage *)imageNamed:(NSString *)name
 {
 	if ([name length] > 0) {
-		UIImage *cachedImage = [imageCache objectForKey:name];
+		UIImage *cachedImage = [self _cachedImageForName:name];
 		if (!cachedImage) {
 			if ((cachedImage = [[[self alloc] initWithNSImage:[NSImage imageNamed:name]] autorelease])) {
-				[imageCache setObject:cachedImage forKey:name];
+				[self _cacheImage:cachedImage forName:name];
 			}
 		}
 		return cachedImage;
@@ -77,13 +68,6 @@ NSMutableDictionary *imageCache = nil;
 + (UIImage *)imageWithCGImage:(CGImageRef)imageRef
 {
 	return [[[self alloc] initWithCGImage:imageRef] autorelease];
-}
-
-+ (UIImage *)_frameworkImageNamed:(NSString *)name
-{
-	NSBundle *frameworkBundle = [NSBundle bundleWithIdentifier:@"com.iconfactory.UIKit"];
-	NSString *frameworkFile = [[frameworkBundle resourcePath] stringByAppendingPathComponent:name];
-	return [self imageWithContentsOfFile:frameworkFile];
 }
 
 - (UIImage *)stretchableImageWithLeftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight

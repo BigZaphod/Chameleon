@@ -3,18 +3,7 @@
 #import "UIImage+UIPrivate.h"
 #import "UIColor.h"
 
-static UIImage *highlightedImage = nil;
-static UIImage *normalImage = nil;
-
 @implementation UIRoundedRectButton
-
-+ (void)initialize
-{
-	if (self == [UIRoundedRectButton class]) {
-		normalImage = [[[UIImage _frameworkImageNamed:@"<UIRoundedRectButton> normal.png"] stretchableImageWithLeftCapWidth:12 topCapHeight:9] retain];
-		highlightedImage = [[[UIImage _frameworkImageNamed:@"<UIRoundedRectButton> highlighted.png"] stretchableImageWithLeftCapWidth:12 topCapHeight:9] retain];
-	}
-}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -33,7 +22,7 @@ static UIImage *normalImage = nil;
 // you to define background images on the button itself which then render on top of the rounded rect. So.... whatever :)
 - (void)drawRect:(CGRect)rect
 {
-	[(self.highlighted? highlightedImage : normalImage) drawInRect:self.bounds];
+	[(self.highlighted? [UIImage _highlightedRoundedRectButtonImage] : [UIImage _roundedRectButtonImage]) drawInRect:self.bounds];
 }
 
 @end

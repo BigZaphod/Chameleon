@@ -16,11 +16,11 @@
 		if (item->_isSystemItem) {
 			switch (item->_systemItem) {
 				case UIBarButtonSystemItemAdd:
-					image = [UIImage _frameworkImageNamed:@"<UIBarButtonSystemItem> add.png"];
+					image = [UIImage _buttonBarSystemItemAdd];
 					break;
 					
 				case UIBarButtonSystemItemReply:
-					image = [UIImage _frameworkImageNamed:@"<UIBarButtonSystemItem> reply.png"];
+					image = [UIImage _buttonBarSystemItemReply];
 					break;
 			}
 		} else {

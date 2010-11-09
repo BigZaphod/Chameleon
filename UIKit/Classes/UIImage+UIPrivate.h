@@ -2,5 +2,22 @@
 #import "UIImage.h"
 
 @interface UIImage (UIPrivate)
-+ (UIImage *)_frameworkImageNamed:(NSString *)name;
++ (void)_cacheImage:(UIImage *)image forName:(NSString *)name;
++ (UIImage *)_cachedImageForName:(NSString *)name;
++ (UIImage *)_backButtonImage;
++ (UIImage *)_highlightedBackButtonImage;
++ (UIImage *)_toolbarButtonImage;
++ (UIImage *)_highlightedToolbarButtonImage;
++ (UIImage *)_leftPopoverArrowImage;
++ (UIImage *)_rightPopoverArrowImage;
++ (UIImage *)_topPopoverArrowImage;
++ (UIImage *)_bottomPopoverArrowImage;
++ (UIImage *)_popoverBackgroundImage;
++ (UIImage *)_roundedRectButtonImage;
++ (UIImage *)_highlightedRoundedRectButtonImage;
++ (UIImage *)_windowResizeGrabberImage;
++ (UIImage *)_buttonBarSystemItemAdd;
++ (UIImage *)_buttonBarSystemItemReply;
+
+- (UIImage *)_toolbarImage;		// returns a new image which is modified as required for toolbar buttons (turned into a solid color)
 @end
