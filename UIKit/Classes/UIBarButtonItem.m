@@ -48,6 +48,7 @@
 {
 	if ((self=[self init])) {
 		self.image = image;
+		self.style = style;
 		self.target = target;
 		self.action = action;
 	}

@@ -1,5 +1,7 @@
 //  Created by Sean Heber on 11/9/10.
 #import "UIImage+UIPrivate.h"
+#import "UIColor.h"
+#import "UIGraphics.h"
 #import <Foundation/Foundation.h>
 
 NSMutableDictionary *imageCache = nil;
@@ -109,7 +111,29 @@ NSMutableDictionary *imageCache = nil;
 
 - (UIImage *)_toolbarImage
 {
-	return self;
+	// NOTE.. I don't know where to put this, really, but it seems like the real UIKit reduces image size by 75% if they are too
+	// big for a toolbar. That seems funky, but I guess here is as good a place as any to do that? I don't really know...
+
+	CGSize imageSize = self.size;
+	CGSize size = CGSizeZero;
+	
+	if (imageSize.width > 24 || imageSize.height > 24) {
+		size.height = imageSize.height * 0.75f;
+		size.width = imageSize.width / imageSize.height * size.height;
+	} else {
+		size = imageSize;
+	}
+	
+	CGRect rect = CGRectMake(0,0,size.width,size.height);
+	
+	UIGraphicsBeginImageContext(size);
+	[[UIColor colorWithRed:101/255.f green:104/255.f blue:121/255.f alpha:1] setFill];
+	UIRectFill(rect);
+	[self drawInRect:rect blendMode:kCGBlendModeDestinationIn alpha:1];
+	UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+	UIGraphicsEndImageContext();
+	
+	return image;
 }
 
 @end

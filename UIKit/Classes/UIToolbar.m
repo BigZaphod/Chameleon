@@ -34,7 +34,6 @@
 			view = [item.customView retain];
 		} else if (!item->_isSystemItem || (item->_systemItem != UIBarButtonSystemItemFixedSpace && item->_systemItem != UIBarButtonSystemItemFlexibleSpace)) {
 			view = [[UIToolbarButton alloc] initWithBarButtonItem:item];
-			[view sizeToFit];
 		}
 	}
 	return self;
@@ -165,7 +164,9 @@
 		}
 	}
 	
-	const CGFloat flexibleSpaceWidth = (numberOfFlexibleItems > 0)? ((self.bounds.size.width - itemWidth) / numberOfFlexibleItems) : 0;
+	const CGSize size = self.bounds.size;
+	const CGFloat flexibleSpaceWidth = (numberOfFlexibleItems > 0)? ((size.width - itemWidth) / numberOfFlexibleItems) : 0;
+	const CGFloat centerY = size.height / 2.f;
 
 	CGFloat x = 0;
 	
@@ -176,7 +177,7 @@
 		if (view) {
 			CGRect frame = view.frame;
 			frame.origin.x = x;
-			frame.size.width = width;
+			frame.origin.y = floorf(centerY - (frame.size.height / 2.f));
 			view.frame = frame;
 		}
 
@@ -186,7 +187,6 @@
 			x += width;
 		}
 	}
-	
 }
 
 - (void)setItems:(NSArray *)newItems animated:(BOOL)animated

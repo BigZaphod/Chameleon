@@ -48,6 +48,7 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 		_showsTouchWhenHighlighted = NO;
 		
 		self.opaque = NO;
+		_titleLabel.lineBreakMode = UILineBreakModeMiddleTruncation;
 		_titleLabel.backgroundColor = [UIColor clearColor];
 		_titleLabel.textAlignment = UITextAlignmentLeft;
 		_titleLabel.shadowOffset = CGSizeZero;
@@ -339,14 +340,13 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 {
 	const UIControlState state = self.state;
 	
-	const CGSize backgroundSize = [self _backgroundSizeForState:state];
 	const CGSize imageSize = [self _imageSizeForState:state];
 	const CGSize titleSize = [self _titleSizeForState:state];
-
-	CGSize fitSize;
-	fitSize.width = _contentEdgeInsets.left + _contentEdgeInsets.right + MAX((titleSize.width+imageSize.width), backgroundSize.width);
-	fitSize.height = _contentEdgeInsets.top + _contentEdgeInsets.bottom + MAX(MAX(titleSize.height,imageSize.height),backgroundSize.height);
 	
+	CGSize fitSize;
+	fitSize.width = _contentEdgeInsets.left + _contentEdgeInsets.right + titleSize.width + imageSize.width;
+	fitSize.height = _contentEdgeInsets.top + _contentEdgeInsets.bottom + MAX(titleSize.height,imageSize.height);
+
 	return fitSize;
 }
 
