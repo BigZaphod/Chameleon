@@ -6,7 +6,8 @@
 #import "UIToolbar.h"
 
 static const NSTimeInterval kAnimationDuration = 0.33;
-static const CGFloat BarHeight = 28;
+static const CGFloat NavBarHeight = 28;
+static const CGFloat ToolbarHeight = 28;
 
 @implementation UINavigationController
 @synthesize viewControllers=_viewControllers, delegate=_delegate, navigationBar=_navigationBar, toolbar=_toolbar, toolbarHidden=_toolbarHidden;
@@ -46,11 +47,18 @@ static const CGFloat BarHeight = 28;
 	_delegateHas.willShowViewController = [_delegate respondsToSelector:@selector(navigationController:willShowViewController:animated:)];
 }
 
+- (CGRect)_navigationBarFrame
+{
+	CGRect navBarFrame = self.view.bounds;
+	navBarFrame.size.height = NavBarHeight;
+	return navBarFrame;
+}
+
 - (CGRect)_toolbarFrame
 {
 	CGRect toolbarRect = self.view.bounds;
-	toolbarRect.origin.y = toolbarRect.origin.y + toolbarRect.size.height - BarHeight;
-	toolbarRect.size.height = BarHeight;
+	toolbarRect.origin.y = toolbarRect.origin.y + toolbarRect.size.height - ToolbarHeight;
+	toolbarRect.size.height = ToolbarHeight;
 	return toolbarRect;
 }
 
@@ -59,12 +67,12 @@ static const CGFloat BarHeight = 28;
 	CGRect controllerFrame = self.view.bounds;
 
 	// adjust for the nav bar
-	controllerFrame.origin.y += BarHeight;
-	controllerFrame.size.height -= BarHeight;
+	controllerFrame.origin.y += NavBarHeight;
+	controllerFrame.size.height -= NavBarHeight;
 	
 	// adjust for toolbar (if there is one)
 	if (!self.toolbarHidden) {
-		controllerFrame.size.height -= BarHeight;
+		controllerFrame.size.height -= ToolbarHeight;
 	}
 	
 	return controllerFrame;
@@ -80,7 +88,7 @@ static const CGFloat BarHeight = 28;
 	topViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[self.view addSubview:topViewController.view];
 
-	_navigationBar.frame = CGRectMake(0,0,320,BarHeight);
+	_navigationBar.frame = [self _navigationBarFrame];
 	_navigationBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	[self.view addSubview:_navigationBar];
 	
@@ -119,6 +127,7 @@ static const CGFloat BarHeight = 28;
 	UIViewController *topController = self.topViewController;
 	[_toolbar setItems:topController.toolbarItems animated:animated];
 	_toolbar.hidden = self.toolbarHidden;
+	topController.view.frame = [self _controllerFrame];
 }
 
 - (void)setViewControllers:(NSArray *)newViewControllers animated:(BOOL)animated
@@ -337,10 +346,8 @@ static const CGFloat BarHeight = 28;
 
 - (void)setToolbarHidden:(BOOL)hidden animated:(BOOL)animated
 {
-	if (_toolbarHidden != hidden) {
-		_toolbarHidden = hidden;
-		[self _updateToolbar:animated];
-	}
+	_toolbarHidden = hidden;
+	[self _updateToolbar:animated];
 }
 
 - (void)setToolbarHidden:(BOOL)hidden

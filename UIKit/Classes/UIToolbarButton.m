@@ -11,7 +11,7 @@
 // If you specify both an image and a title, these buttons stack them vertically which is unlike default UIButton behavior
 // This is all a pain in the ass and wrong, but good enough for now, I guess
 
-static CGFloat UIToolbarButtonEdgePadding = 7;
+static UIEdgeInsets UIToolbarButtonInset = {0,4,0,4};
 
 @implementation UIToolbarButton
 
@@ -69,18 +69,19 @@ static CGFloat UIToolbarButtonEdgePadding = 7;
 
 - (CGRect)backgroundRectForBounds:(CGRect)bounds
 {
-	return CGRectInset(bounds, UIToolbarButtonEdgePadding, 0);
+	return UIEdgeInsetsInsetRect(bounds, UIToolbarButtonInset);
 }
 
 - (CGRect)contentRectForBounds:(CGRect)bounds
 {
-	return CGRectInset(bounds, UIToolbarButtonEdgePadding, 0);
+	return UIEdgeInsetsInsetRect(bounds, UIToolbarButtonInset);
 }
 
 - (CGSize)sizeThatFits:(CGSize)fitSize
 {
 	fitSize = [super sizeThatFits:fitSize];
-	fitSize.width += UIToolbarButtonEdgePadding + UIToolbarButtonEdgePadding;
+	fitSize.width += UIToolbarButtonInset.left + UIToolbarButtonInset.right;
+	fitSize.height += UIToolbarButtonInset.top + UIToolbarButtonInset.bottom;
 	return fitSize;
 }
 
