@@ -109,6 +109,12 @@ static BOOL _animationsEnabled = YES;
 - (void)addSubview:(UIView *)subview
 {
 	if (subview && subview.superview != self) {
+		const BOOL notifyController = (![subview->_viewController parentViewController] && self.window);
+		
+		if (notifyController) {
+			[subview->_viewController viewWillAppear:NO];
+		}
+		
 		const BOOL changingWindows = (subview.window != self.window);
 
 		if (changingWindows) [subview willMoveToWindow:self.window];
@@ -136,9 +142,8 @@ static BOOL _animationsEnabled = YES;
 		[[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:subview];
 
 		[self didAddSubview:subview];
-
-		if (![subview->_viewController parentViewController]) {
-			[subview->_viewController viewWillAppear:NO];
+		
+		if (notifyController) {
 			[subview->_viewController viewDidAppear:NO];
 		}
 	}
@@ -177,13 +182,17 @@ static BOOL _animationsEnabled = YES;
 	[self didChangeValueForKey:@"superview"];
 }
 
-- (void)removeFromSuperview
+- (void)_removeFromSuperview:(BOOL)notifyViewController
 {
 	if (_superview) {
 		[self retain];
-		[self willChangeValueForKey:@"superview"];
 		
-		if (_viewController) [_viewController viewWillDisappear:NO];
+		if (notifyViewController) {
+			[_viewController viewWillDisappear:NO];
+		}
+		
+		[self willChangeValueForKey:@"superview"];
+
 		[_superview willRemoveSubview:self];
 		[self willMoveToWindow:nil];
 		[self willMoveToSuperview:nil];
@@ -191,15 +200,25 @@ static BOOL _animationsEnabled = YES;
 		[_layer removeFromSuperlayer];
 		[_superview->_subviews removeObject:self];
 		_superview = nil;
-		
-		if (_viewController) [_viewController viewDidDisappear:NO];
+
 		[self didMoveToWindow];
 		[self didMoveToSuperview];
 		[[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:self];
 		
 		[self didChangeValueForKey:@"superview"];
+
+		if (notifyViewController) {
+			[_viewController viewDidDisappear:NO];
+		}
+		
 		[self release];
 	}
+}
+
+- (void)removeFromSuperview
+{
+	const BOOL notifyViewController = (![_viewController parentViewController] && self.window);
+	[self _removeFromSuperview:notifyViewController];
 }
 
 - (void)didAddSubview:(UIView *)subview
