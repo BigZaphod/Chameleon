@@ -106,18 +106,57 @@ static BOOL _animationsEnabled = YES;
 	return subviews;
 }
 
+
+- (void)_willMoveFromWindow:(UIWindow *)fromWindow toWindow:(UIWindow *)toWindow
+{
+	if (fromWindow != toWindow) {
+		[self willMoveToWindow:toWindow];
+
+		for (UIView *subview in self.subviews) {
+			[subview _willMoveFromWindow:fromWindow toWindow:toWindow];
+		}
+	}
+}
+
+- (void)_didMoveFromWindow:(UIWindow *)fromWindow toWindow:(UIWindow *)toWindow
+{
+	if (fromWindow != toWindow) {
+		[self didMoveToWindow];
+
+		for (UIView *subview in self.subviews) {
+			[subview _didMoveFromWindow:fromWindow toWindow:toWindow];
+		}
+	}
+}
+
+- (BOOL)_subviewControllersNeedAppearAndDisappear
+{
+	UIView *view = self;
+
+	while (view) {
+		if (view->_viewController != nil) {
+			return NO;
+		} else {
+			view = [view superview];
+		}
+	}
+
+	return YES;
+}
+
 - (void)addSubview:(UIView *)subview
 {
 	if (subview && subview.superview != self) {
-		const BOOL notifyController = (![subview->_viewController parentViewController] && self.window);
+		UIWindow *oldWindow = subview.window;
+		UIWindow *newWindow = self.window;
 		
-		if (notifyController) {
+		subview->_needsDidAppearOrDisappear = [self _subviewControllersNeedAppearAndDisappear];
+
+		if (subview->_viewController && subview->_needsDidAppearOrDisappear) {
 			[subview->_viewController viewWillAppear:NO];
 		}
 		
-		const BOOL changingWindows = (subview.window != self.window);
-
-		if (changingWindows) [subview willMoveToWindow:self.window];
+		[subview _willMoveFromWindow:oldWindow toWindow:newWindow];
 		[subview willMoveToSuperview:self];
 
 		{
@@ -137,13 +176,13 @@ static BOOL _animationsEnabled = YES;
 			[subview release];
 		}
 
-		if (changingWindows) [subview didMoveToWindow];
+		[subview _didMoveFromWindow:oldWindow toWindow:newWindow];
 		[subview didMoveToSuperview];
 		[[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:subview];
 
 		[self didAddSubview:subview];
 		
-		if (notifyController) {
+		if (subview->_viewController && subview->_needsDidAppearOrDisappear) {
 			[subview->_viewController viewDidAppear:NO];
 		}
 	}
@@ -187,27 +226,27 @@ static BOOL _animationsEnabled = YES;
 	if (_superview) {
 		[self retain];
 		
-		if (notifyViewController) {
+		UIWindow *oldWindow = self.window;
+		
+		if (_needsDidAppearOrDisappear && _viewController) {
 			[_viewController viewWillDisappear:NO];
 		}
-		
-		[self willChangeValueForKey:@"superview"];
 
 		[_superview willRemoveSubview:self];
-		[self willMoveToWindow:nil];
+		[self _willMoveFromWindow:oldWindow toWindow:nil];
 		[self willMoveToSuperview:nil];
 
+		[self willChangeValueForKey:@"superview"];
 		[_layer removeFromSuperlayer];
 		[_superview->_subviews removeObject:self];
 		_superview = nil;
-
-		[self didMoveToWindow];
-		[self didMoveToSuperview];
-		[[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:self];
-		
 		[self didChangeValueForKey:@"superview"];
 
-		if (notifyViewController) {
+		[self _didMoveFromWindow:oldWindow toWindow:nil];
+		[self didMoveToSuperview];
+		[[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:self];
+
+		if (_needsDidAppearOrDisappear && _viewController) {
 			[_viewController viewDidDisappear:NO];
 		}
 		

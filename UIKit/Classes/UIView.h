@@ -62,6 +62,7 @@ typedef enum {
 	BOOL _exclusiveTouch;
 	__weak UIViewController *_viewController;
 	UIViewAutoresizing _autoresizingMask;
+	BOOL _needsDidAppearOrDisappear;
 }
 
 + (Class)layerClass;
