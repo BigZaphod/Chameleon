@@ -521,6 +521,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		[_selectedRow release];
 		_selectedRow = [indexPath retain];
 		[self cellForRowAtIndexPath:_selectedRow].selected = YES;
+		[self scrollToRowAtIndexPath:_selectedRow atScrollPosition:scrollPosition animated:animated];
 	}
 }
 
