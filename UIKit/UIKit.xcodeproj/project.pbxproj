@@ -30,6 +30,8 @@
 		145335721226F2720005644F /* UICustomNSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 145335701226F2720005644F /* UICustomNSTextView.m */; };
 		145335851226F3490005644F /* UICustomNSClipView.h in Headers */ = {isa = PBXBuildFile; fileRef = 145335831226F3490005644F /* UICustomNSClipView.h */; };
 		145335861226F3490005644F /* UICustomNSClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 145335841226F3490005644F /* UICustomNSClipView.m */; };
+		1457DD3F128DDE610057A7F9 /* UITransitionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1457DD3D128DDE610057A7F9 /* UITransitionView.h */; };
+		1457DD40128DDE610057A7F9 /* UITransitionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1457DD3E128DDE610057A7F9 /* UITransitionView.m */; };
 		1464960B11FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */; };
 		1464960C11FF7AE500ECEC7A /* <UINavigationBar> back.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */; };
 		14690C9F122D79C2005A12A2 /* UIMenuController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14690C9D122D79C2005A12A2 /* UIMenuController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -225,6 +227,8 @@
 		145335701226F2720005644F /* UICustomNSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICustomNSTextView.m; sourceTree = "<group>"; };
 		145335831226F3490005644F /* UICustomNSClipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICustomNSClipView.h; sourceTree = "<group>"; };
 		145335841226F3490005644F /* UICustomNSClipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICustomNSClipView.m; sourceTree = "<group>"; };
+		1457DD3D128DDE610057A7F9 /* UITransitionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITransitionView.h; sourceTree = "<group>"; };
+		1457DD3E128DDE610057A7F9 /* UITransitionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITransitionView.m; sourceTree = "<group>"; };
 		1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> back-highlighted.png"; path = "Resources/<UINavigationBar> back-highlighted.png"; sourceTree = "<group>"; };
 		1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> back.png"; path = "Resources/<UINavigationBar> back.png"; sourceTree = "<group>"; };
 		14690C9D122D79C2005A12A2 /* UIMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIMenuController.h; path = Classes/UIMenuController.h; sourceTree = "<group>"; };
@@ -630,6 +634,8 @@
 				14FA8C58121DA4A000C4264B /* UIThreePartImage.m */,
 				144156D91284A22200532FE2 /* UIToolbarButton.h */,
 				144156DA1284A22200532FE2 /* UIToolbarButton.m */,
+				1457DD3D128DDE610057A7F9 /* UITransitionView.h */,
+				1457DD3E128DDE610057A7F9 /* UITransitionView.m */,
 				14FA8C59121DA4A000C4264B /* UIViewAnimationGroup.h */,
 				14FA8C5A121DA4A000C4264B /* UIViewAnimationGroup.m */,
 				14FA8C5B121DA4A000C4264B /* UIViewLayoutManager.h */,
@@ -771,6 +777,7 @@
 				14CB384912689949003334AD /* UIPopoverOverlayNSView.h in Headers */,
 				44339D0512848AA700A858ED /* UIActionSheetAppKitIntegration.h in Headers */,
 				144156DB1284A22200532FE2 /* UIToolbarButton.h in Headers */,
+				1457DD3F128DDE610057A7F9 /* UITransitionView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -926,6 +933,7 @@
 				14CB384A12689949003334AD /* UIPopoverOverlayNSView.m in Sources */,
 				144156DC1284A22200532FE2 /* UIToolbarButton.m in Sources */,
 				14DD1C281289B3C900DCF231 /* UIImage+UIPrivate.m in Sources */,
+				1457DD40128DDE610057A7F9 /* UITransitionView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
