@@ -521,8 +521,11 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		[_selectedRow release];
 		_selectedRow = [indexPath retain];
 		[self cellForRowAtIndexPath:_selectedRow].selected = YES;
-		[self scrollToRowAtIndexPath:_selectedRow atScrollPosition:scrollPosition animated:animated];
 	}
+	
+	// I did not verify if the real UIKit will still scroll the selection into view even if the selection itself doesn't change.
+	// However, this behavior was useful on Ostrich and seems harmless enough.
+	[self scrollToRowAtIndexPath:_selectedRow atScrollPosition:scrollPosition animated:animated];
 }
 
 - (void)scrollToNearestSelectedRowAtScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated
