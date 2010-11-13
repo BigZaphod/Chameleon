@@ -491,14 +491,14 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (NSIndexPath *)indexPathForSelectedRow
 {
-	return _selectedRow;
+	return [[_selectedRow retain] autorelease];
 }
 
 - (NSIndexPath *)indexPathForCell:(UITableViewCell *)cell
 {
 	for (NSIndexPath *index in [_cachedCells allKeys]) {
 		if ([_cachedCells objectForKey:index] == cell) {
-			return index;
+			return [[index retain] autorelease];
 		}
 	}
 	
