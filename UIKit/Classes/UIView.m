@@ -455,10 +455,23 @@ static BOOL _animationsEnabled = YES;
 		CGContextFillRect(ctx,bounds);
 	}
 
-	// Font smoothing looks really bad (or just plain doesn't work, I don't know which) if the background color is transparent
-	// or has any amount of transparency in it. This solves that problem.
+	/*
+	 NOTE: This kind of logic would seem to be ideal and result in the best font rendering when possible. The downside here is that
+	 the rendering is then inconsistent throughout the app depending on how certain views are constructed or configured.
+	 I'm not sure what to do about this. It appears to be impossible to subpixel render text drawn into a transparent layer because
+	 of course there are no pixels behind the text to use when doing the subpixel blending. If it is turned on in that case, it looks
+	 bad depending on what is ultimately composited behind it. Turning it off everywhere makes everything "equally bad," in a sense,
+	 but at least stuff doesn't jump out as obviously different. However this doesn't look very nice on OSX. iOS appears to not use
+	 any subpixel smoothing anywhere but doesn't seem to look bad when using it. There are many possibilities for why. Some I can
+	 think of are they are setting some kind of graphics context mode I just haven't found yet, the rendering engines are
+	 fundamentally different, the fonts themselves are actually different, voodoo magic, or the loch ness monster.
+	 
 	const BOOL shouldSmoothFonts = (_backgroundColor && (CGColorGetAlpha(_backgroundColor.CGColor) == 1)) || self.opaque;
 	CGContextSetShouldSmoothFonts(ctx, shouldSmoothFonts);
+	 */
+
+	CGContextSetShouldSmoothFonts(ctx, NO);		// make text suck universally for now :)
+
 	
 	[[UIColor blackColor] set];
 	[self drawRect:bounds];
