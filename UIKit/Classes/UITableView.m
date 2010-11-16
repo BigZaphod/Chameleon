@@ -139,19 +139,22 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (CGRect)rectForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if (indexPath.section < 0 || indexPath.section >= [_sections count]) {
-		return CGRectZero;
-	} else {
-		UITableViewSection *sectionRecord = [_sections objectAtIndex:indexPath.section];	
-		CGFloat offset = [self _offsetForSection:indexPath.section];
-		offset += sectionRecord.headerHeight;
+	if (indexPath && indexPath.section >= 0 && indexPath.section < [_sections count] && indexPath.row >= 0) {
+		UITableViewSection *sectionRecord = [_sections objectAtIndex:indexPath.section];
 		
-		for (NSInteger row=0; row<indexPath.row; row++) {
-			offset += [[sectionRecord.rowHeights objectAtIndex:row] floatValue];
+		if (indexPath.row < sectionRecord.numberOfRows) {
+			CGFloat offset = [self _offsetForSection:indexPath.section];
+			offset += sectionRecord.headerHeight;
+			
+			for (NSInteger row=0; row<indexPath.row; row++) {
+				offset += [[sectionRecord.rowHeights objectAtIndex:row] floatValue];
+			}
+			
+			return [self _CGRectFromVerticalOffset:offset height:[[sectionRecord.rowHeights objectAtIndex:indexPath.row] floatValue]];
 		}
-		
-		return [self _CGRectFromVerticalOffset:offset height:[[sectionRecord.rowHeights objectAtIndex:indexPath.row] floatValue]];
 	}
+	
+	return CGRectZero;
 }
 
 - (UITableViewCell *)cellForRowAtIndexPath:(NSIndexPath *)indexPath
