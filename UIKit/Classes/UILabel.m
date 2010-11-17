@@ -173,7 +173,7 @@
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
-	size = CGSizeMake(CGFLOAT_MAX, _numberOfLines <= 0? CGFLOAT_MAX : (_font.leading*_numberOfLines));
+	size = CGSizeMake(((_numberOfLines > 0)? CGFLOAT_MAX : size.width), ((_numberOfLines <= 0)? CGFLOAT_MAX : (_font.leading*_numberOfLines)));
 	return [_text sizeWithFont:_font constrainedToSize:size lineBreakMode:_lineBreakMode];
 }
 
