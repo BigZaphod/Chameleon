@@ -153,6 +153,8 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 	
 	_imageView.image = image;
 	_backgroundImageView.image = backgroundImage;
+	
+	[self setNeedsLayout];
 }
 
 - (void)_setContent:(id)value forState:(UIControlState)state type:(NSString *)type
