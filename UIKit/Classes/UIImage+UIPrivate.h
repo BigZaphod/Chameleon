@@ -2,6 +2,9 @@
 #import "UIImage.h"
 
 @interface UIImage (UIPrivate)
++ (NSString *)_macPathForFile:(NSString *)path;		// inserts "@mac" into the filename of the file in the given path and returns the result
++ (NSString *)_pathForFile:(NSString *)path;		// uses above, checks for existence, if found, returns it otherwise returns the path string un-altered (doesn't verify that the file at the original path exists, though)
+
 + (void)_cacheImage:(UIImage *)image forName:(NSString *)name;
 + (UIImage *)_cachedImageForName:(NSString *)name;
 + (UIImage *)_backButtonImage;

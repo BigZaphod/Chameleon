@@ -19,7 +19,7 @@
 
 - (id)initWithContentsOfFile:(NSString *)path
 {
-	return [self initWithNSImage:[[[NSImage alloc] initWithContentsOfFile:path] autorelease]];
+	return [self initWithNSImage:[[[NSImage alloc] initWithContentsOfFile:[isa _pathForFile:path]] autorelease]];
 }
 
 - (id)initWithCGImage:(CGImageRef)imageRef
@@ -43,12 +43,30 @@
 + (UIImage *)imageNamed:(NSString *)name
 {
 	if ([name length] > 0) {
-		UIImage *cachedImage = [self _cachedImageForName:name];
+		
+		NSString *macName = [self _macPathForFile:name];
+		
+		// first check for @mac version of the name
+		UIImage *cachedImage = [self _cachedImageForName:macName];
 		if (!cachedImage) {
-			if ((cachedImage = [[[self alloc] initWithNSImage:[NSImage imageNamed:name]] autorelease])) {
+			// otherwise try again with the original given name
+			cachedImage = [self _cachedImageForName:name];
+		}
+
+		if (!cachedImage) {
+			// okay, we couldn't find a cached version so now lets first try to make an original with the @mac name.
+			// if that fails, try to make it with the original name.
+			NSImage *image = [NSImage imageNamed:macName];
+			if (!image) {
+				image = [NSImage imageNamed:name];
+			}
+			
+			if (image) {
+				cachedImage = [[[self alloc] initWithNSImage:image] autorelease];
 				[self _cacheImage:cachedImage forName:name];
 			}
 		}
+		
 		return cachedImage;
 	} else {
 		return nil;

@@ -13,6 +13,27 @@ NSMutableDictionary *imageCache = nil;
 	imageCache = [[NSMutableDictionary alloc] init];
 }
 
++ (NSString *)_macPathForFile:(NSString *)path
+{
+	NSString *home = [path stringByDeletingLastPathComponent];
+	NSString *filename = [path lastPathComponent];
+	NSString *extension = [filename pathExtension];
+	NSString *bareFilename = [filename stringByDeletingPathExtension];
+
+	return [home stringByAppendingPathComponent:[[bareFilename stringByAppendingString:@"@mac"] stringByAppendingPathExtension:extension]];
+}
+
++ (NSString *)_pathForFile:(NSString *)path
+{
+	NSString *macPath = [self _macPathForFile:path];
+	
+	if ([[NSFileManager defaultManager] fileExistsAtPath:macPath]) {
+		return macPath;
+	} else {
+		return path;
+	}
+}
+
 + (void)_cacheImage:(UIImage *)image forName:(NSString *)name
 {
 	if (image && name) {
