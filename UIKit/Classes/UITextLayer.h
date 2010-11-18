@@ -1,5 +1,6 @@
 //  Created by Sean Heber on 8/26/10.
 #import <QuartzCore/CALayer.h>
+#import <Foundation/Foundation.h>
 
 @class UICustomNSClipView, UICustomNSTextView, UIColor, UIFont, UIScrollView, UIWindow, UIView;
 
