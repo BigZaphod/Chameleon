@@ -17,6 +17,7 @@
 		140AA94E1264EC770057D87F /* UIResponderAppKitIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = 140AA94D1264EC770057D87F /* UIResponderAppKitIntegration.m */; };
 		141927A211F8A88E00051ABD /* UISplitViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 141927A011F8A88E00051ABD /* UISplitViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		141927A311F8A88E00051ABD /* UISplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 141927A111F8A88E00051ABD /* UISplitViewController.m */; };
+		142CA6411295B03100834E69 /* MockUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 142CA6401295B03100834E69 /* MockUITableViewCell.m */; };
 		1436CF96121476A1001DFEFB /* UISwitch.h in Headers */ = {isa = PBXBuildFile; fileRef = 1436CF94121476A1001DFEFB /* UISwitch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1436CF97121476A1001DFEFB /* UISwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 1436CF95121476A1001DFEFB /* UISwitch.m */; };
 		143E35FA1295A71A0073FB22 /* NSIndexPath+UITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CC834E11EFA8AF005988CC /* NSIndexPath+UITableView.m */; };
@@ -322,6 +323,8 @@
 		141927A011F8A88E00051ABD /* UISplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UISplitViewController.h; path = Classes/UISplitViewController.h; sourceTree = "<group>"; };
 		141927A111F8A88E00051ABD /* UISplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UISplitViewController.m; path = Classes/UISplitViewController.m; sourceTree = "<group>"; };
 		142CA6341295AD1400834E69 /* TestIncludes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestIncludes.h; sourceTree = "<group>"; };
+		142CA63F1295B03100834E69 /* MockUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockUITableViewCell.h; sourceTree = "<group>"; };
+		142CA6401295B03100834E69 /* MockUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MockUITableViewCell.m; sourceTree = "<group>"; };
 		1436CF94121476A1001DFEFB /* UISwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UISwitch.h; path = Classes/UISwitch.h; sourceTree = "<group>"; };
 		1436CF95121476A1001DFEFB /* UISwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UISwitch.m; path = Classes/UISwitch.m; sourceTree = "<group>"; };
 		143E34BB1295A4880073FB22 /* UIKitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UIKitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -746,6 +749,8 @@
 				143E36CD1295A9530073FB22 /* MockUITableViewDataSource.m */,
 				143E36CE1295A9530073FB22 /* MockUITableViewDelegate.h */,
 				143E36CF1295A9530073FB22 /* MockUITableViewDelegate.m */,
+				142CA63F1295B03100834E69 /* MockUITableViewCell.h */,
+				142CA6401295B03100834E69 /* MockUITableViewCell.m */,
 			);
 			name = Mocks;
 			sourceTree = "<group>";
@@ -1145,6 +1150,7 @@
 				143E36D21295A9530073FB22 /* MockUITableViewDataSource.m in Sources */,
 				143E36D31295A9530073FB22 /* MockUITableViewDelegate.m in Sources */,
 				143E36D41295A9530073FB22 /* UITableViewTest.m in Sources */,
+				142CA6411295B03100834E69 /* MockUITableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
