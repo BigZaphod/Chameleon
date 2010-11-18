@@ -63,6 +63,7 @@ typedef enum {
 	UIView *_tableHeaderView;
 	UIView *_tableFooterView;
 	BOOL _allowsSelection;
+	BOOL _allowsSelectionDuringEditing;
 	BOOL _editing;
 	NSIndexPath *_selectedRow;
 	NSMutableDictionary *_cachedCells;
@@ -129,6 +130,7 @@ typedef enum {
 @property (nonatomic, retain) UIView *tableHeaderView;
 @property (nonatomic, retain) UIView *tableFooterView;
 @property (nonatomic) BOOL allowsSelection;
+@property (nonatomic) BOOL allowsSelectionDuringEditing;	// not implemented
 @property (nonatomic, getter=isEditing) BOOL editing;
 @property (nonatomic) CGFloat sectionHeaderHeight;
 @property (nonatomic) CGFloat sectionFooterHeight;

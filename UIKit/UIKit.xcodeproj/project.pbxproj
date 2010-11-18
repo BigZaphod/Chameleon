@@ -322,7 +322,6 @@
 		140AA94D1264EC770057D87F /* UIResponderAppKitIntegration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIResponderAppKitIntegration.m; path = Classes/UIResponderAppKitIntegration.m; sourceTree = "<group>"; };
 		141927A011F8A88E00051ABD /* UISplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UISplitViewController.h; path = Classes/UISplitViewController.h; sourceTree = "<group>"; };
 		141927A111F8A88E00051ABD /* UISplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UISplitViewController.m; path = Classes/UISplitViewController.m; sourceTree = "<group>"; };
-		142CA6341295AD1400834E69 /* TestIncludes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestIncludes.h; sourceTree = "<group>"; };
 		142CA63F1295B03100834E69 /* MockUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockUITableViewCell.h; sourceTree = "<group>"; };
 		142CA6401295B03100834E69 /* MockUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MockUITableViewCell.m; sourceTree = "<group>"; };
 		1436CF94121476A1001DFEFB /* UISwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UISwitch.h; path = Classes/UISwitch.h; sourceTree = "<group>"; };
@@ -734,7 +733,6 @@
 		143E34CF1295A49C0073FB22 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				142CA6341295AD1400834E69 /* TestIncludes.h */,
 				143E36D51295A9550073FB22 /* Mocks */,
 				143E36D01295A9530073FB22 /* UITableViewTest.h */,
 				143E36D11295A9530073FB22 /* UITableViewTest.m */,

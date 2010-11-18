@@ -17,6 +17,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 @synthesize style=_style, dataSource=_dataSource, rowHeight=_rowHeight, separatorStyle=_separatorStyle, separatorColor=_separatorColor;
 @synthesize tableHeaderView=_tableHeaderView, tableFooterView=_tableFooterView, allowsSelection=_allowsSelection, editing=_editing;
 @synthesize sectionFooterHeight=_sectionFooterHeight, sectionHeaderHeight=_sectionHeaderHeight;
+@synthesize allowsSelectionDuringEditing=_allowsSelectionDuringEditing;
 @dynamic delegate;
 
 - (id)initWithFrame:(CGRect)frame
@@ -36,6 +37,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 		self.showsHorizontalScrollIndicator = NO;
 		self.allowsSelection = YES;
+		self.allowsSelectionDuringEditing = NO;
 		self.sectionHeaderHeight = self.sectionFooterHeight = 22;
 
 		if (_style == UITableViewStylePlain) {
