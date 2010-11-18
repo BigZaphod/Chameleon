@@ -200,6 +200,10 @@
 					SenTestingKit,
 					"-framework",
 					UIKit,
+					"-framework",
+					QuartzCore,
+					"-framework",
+					CoreGraphics,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = AppleUIKitTests;
@@ -229,6 +233,10 @@
 					SenTestingKit,
 					"-framework",
 					UIKit,
+					"-framework",
+					QuartzCore,
+					"-framework",
+					CoreGraphics,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = AppleUIKitTests;
