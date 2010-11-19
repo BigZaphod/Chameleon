@@ -584,24 +584,26 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void)_scrollRectToVisible:(CGRect)aRect atScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated
 {
-	// adjust the rect based on the scroll position mode
-	switch (scrollPosition) {
-		case UITableViewScrollPositionTop:
-			aRect.size.height = self.bounds.size.height;
-			break;
+	if (!CGRectIsNull(aRect) && aRect.size.height > 0) {
+		// adjust the rect based on the scroll position mode
+		switch (scrollPosition) {
+			case UITableViewScrollPositionTop:
+				aRect.size.height = self.bounds.size.height;
+				break;
 
-		case UITableViewScrollPositionMiddle:
-			aRect.origin.y -= (self.bounds.size.height / 2.f) - aRect.size.height;
-			aRect.size.height = self.bounds.size.height;
-			break;
+			case UITableViewScrollPositionMiddle:
+				aRect.origin.y -= (self.bounds.size.height / 2.f) - aRect.size.height;
+				aRect.size.height = self.bounds.size.height;
+				break;
 
-		case UITableViewScrollPositionBottom:
-			aRect.origin.y -= self.bounds.size.height - aRect.size.height;
-			aRect.size.height = self.bounds.size.height;
-			break;
+			case UITableViewScrollPositionBottom:
+				aRect.origin.y -= self.bounds.size.height - aRect.size.height;
+				aRect.size.height = self.bounds.size.height;
+				break;
+		}
+		
+		[self scrollRectToVisible:aRect animated:animated];
 	}
-	
-	[self scrollRectToVisible:aRect animated:animated];
 }
 
 - (void)scrollToNearestSelectedRowAtScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated
