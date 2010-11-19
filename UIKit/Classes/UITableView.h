@@ -56,7 +56,6 @@ typedef enum {
 	UITableViewStyle _style;
 	id<UITableViewDataSource> _dataSource;
 	BOOL _needsReload;
-	BOOL _needsCellLayout;
 	CGFloat _rowHeight;
 	UIColor *_separatorColor;
 	UITableViewCellSeparatorStyle _separatorStyle;
@@ -115,7 +114,6 @@ typedef enum {
 - (void)deselectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated;
 - (void)selectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition;
 
-// the scrollPosition parameter is currently ignored
 - (void)scrollToNearestSelectedRowAtScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated;
 - (void)scrollToRowAtIndexPath:(NSIndexPath *)indexPath atScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated;
 

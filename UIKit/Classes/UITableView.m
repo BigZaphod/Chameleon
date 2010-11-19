@@ -10,7 +10,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 @interface UITableView ()
 - (void)_setNeedsReload;
-- (void)_setNeedsCellLayout;
 @end
 
 @implementation UITableView
@@ -92,153 +91,97 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	[self setNeedsLayout];
 }
 
-- (void)_setNeedsReload
-{
-	_needsReload = YES;
-	[self setNeedsLayout];
-}
 
-- (void)_setNeedsCellLayout
-{
-	_needsCellLayout = YES;
-	[self setNeedsLayout];
-}
 
-- (CGRect)_CGRectFromVerticalOffset:(CGFloat)offset height:(CGFloat)height
-{
-	return CGRectMake(0,offset,self.bounds.size.width,height);
-}
 
-- (CGFloat)_offsetForSection:(NSInteger)section
+- (void)_updateSectionsCache
 {
-	CGFloat offset = _tableHeaderView? _tableHeaderView.frame.size.height : 0;
+	// use dataSource to rebuild the cache.
+	// if no dataSource, this can't really proceed beyond clearing the old
+	// cache. setting the dataSource and/or delegate likely needs to clear
+	// this cache but not actually update the info immediately (do it lazily).
 	
-	for (NSInteger s=0; s<section; s++) {
-		offset += [[_sections objectAtIndex:s] sectionHeight];
-	}
+	[_sections removeAllObjects];
 	
-	return offset;
-}
-
-- (CGRect)rectForSection:(NSInteger)section
-{
-	return [self _CGRectFromVerticalOffset:[self _offsetForSection:section] height:[[_sections objectAtIndex:section] sectionHeight]];
-}
-
-- (CGRect)rectForHeaderInSection:(NSInteger)section
-{
-	return [self _CGRectFromVerticalOffset:[self _offsetForSection:section] height:[[_sections objectAtIndex:section] headerHeight]];
-}
-
-- (CGRect)rectForFooterInSection:(NSInteger)section
-{
-	UITableViewSection *sectionRecord = [_sections objectAtIndex:section];
-	CGFloat offset = [self _offsetForSection:section];
-	offset += sectionRecord.headerHeight;
-	offset += sectionRecord.rowsHeight;
-	return [self _CGRectFromVerticalOffset:offset height:sectionRecord.footerHeight];
-}
-
-- (CGRect)rectForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	if (indexPath && indexPath.section >= 0 && indexPath.section < [_sections count] && indexPath.row >= 0) {
-		UITableViewSection *sectionRecord = [_sections objectAtIndex:indexPath.section];
-		
-		if (indexPath.row < sectionRecord.numberOfRows) {
-			CGFloat offset = [self _offsetForSection:indexPath.section];
-			offset += sectionRecord.headerHeight;
+	if (_dataSource) {
+		// compute the heights/offsets of everything
+		const CGFloat defaultRowHeight = _rowHeight ?: _UITableViewDefaultRowHeight;
+		const NSInteger numberOfSections = [self numberOfSections];
+		for (NSInteger section=0; section<numberOfSections; section++) {
+			const NSInteger numberOfRowsInSection = [self numberOfRowsInSection:section];
 			
-			for (NSInteger row=0; row<indexPath.row; row++) {
-				offset += [[sectionRecord.rowHeights objectAtIndex:row] floatValue];
+			UITableViewSection *sectionRecord = [[UITableViewSection alloc] init];
+			sectionRecord.numberOfRows = numberOfRowsInSection;
+			sectionRecord.headerView = _delegateHas.viewForHeaderInSection? [self.delegate tableView:self viewForHeaderInSection:section] : nil;
+			sectionRecord.footerView = _delegateHas.viewForFooterInSection? [self.delegate tableView:self viewForFooterInSection:section] : nil;
+			sectionRecord.headerTitle = _dataSourceHas.titleForHeaderInSection? [self.dataSource tableView:self titleForHeaderInSection:section] : nil;
+			sectionRecord.footerTitle = _dataSourceHas.titleForFooterInSection? [self.dataSource tableView:self titleForFooterInSection:section] : nil;
+			
+			// make a default section header view if there's a title for it and no overriding view
+			if (!sectionRecord.headerView && sectionRecord.headerTitle) {
+				sectionRecord.headerView = [UITableViewSectionLabel sectionLabelWithTitle:sectionRecord.headerTitle];
 			}
 			
-			return [self _CGRectFromVerticalOffset:offset height:[[sectionRecord.rowHeights objectAtIndex:indexPath.row] floatValue]];
-		}
-	}
-	
-	return CGRectZero;
-}
-
-- (UITableViewCell *)cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	// this is allowed to return nil if the cell isn't visible and is not restricted to only returning visible cells
-	// so this simple call should be good enough.
-	return [_cachedCells objectForKey:indexPath];
-}
-
-- (NSArray *)indexPathsForRowsInRect:(CGRect)rect
-{
-	// This needs to return the index paths even if the cells don't exist in any caches or are not on screen
-	// For now I'm assuming the cells stretch all the way across the view. It's not clear to me if the real
-	// implementation gets anal about this or not (haven't tested it).
-
-	NSMutableArray *results = [[NSMutableArray alloc] init];
-	const NSInteger numberOfSections = [_sections count];
-	CGFloat offset = _tableHeaderView? _tableHeaderView.frame.size.height : 0;
-	
-	for (NSInteger section=0; section<numberOfSections; section++) {
-		UITableViewSection *sectionRecord = [_sections objectAtIndex:section];
-		const NSInteger numberOfRows = sectionRecord.numberOfRows;
-		
-		offset += sectionRecord.headerHeight;
-
-		if (offset + sectionRecord.rowsHeight >= rect.origin.y) {
-			for (NSInteger row=0; row<numberOfRows; row++) {
-				const CGFloat height = [[sectionRecord.rowHeights objectAtIndex:row] floatValue];
-				CGRect simpleRowRect = CGRectMake(rect.origin.x, offset, rect.size.width, height);
-				
-				if (CGRectIntersectsRect(rect,simpleRowRect)) {
-					[results addObject:[NSIndexPath indexPathForRow:row inSection:section]];
-				} else if (simpleRowRect.origin.y > rect.origin.y+rect.size.height) {
-					break;	// don't need to find anything else.. we are past the end
-				}
-				
-				offset += height;
+			// make a default section footer view if there's a title for it and no overriding view
+			if (!sectionRecord.footerView && sectionRecord.footerTitle) {
+				sectionRecord.footerView = [UITableViewSectionLabel sectionLabelWithTitle:sectionRecord.footerTitle];
 			}
-		} else {
-			offset += sectionRecord.rowsHeight;
+			
+			// if there's a view, then we need to set the height, otherwise it's going to be zero
+			if (sectionRecord.headerView) {
+				[self addSubview:sectionRecord.headerView];
+				sectionRecord.headerHeight = _delegateHas.heightForHeaderInSection? [self.delegate tableView:self heightForHeaderInSection:section] : _sectionHeaderHeight;
+			} else {
+				sectionRecord.headerHeight = 0;
+			}
+			
+			if (sectionRecord.footerView) {
+				[self addSubview:sectionRecord.footerView];
+				sectionRecord.footerHeight = _delegateHas.heightForFooterInSection? [self.delegate tableView:self heightForFooterInSection:section] : _sectionFooterHeight;
+			} else {
+				sectionRecord.footerHeight = 0;
+			}
+			
+			NSMutableArray *rowHeights = [[NSMutableArray alloc] initWithCapacity:numberOfRowsInSection];
+			CGFloat totalRowsHeight = 0;
+			
+			for (NSInteger row=0; row<numberOfRowsInSection; row++) {
+				const CGFloat rowHeight = _delegateHas.heightForRowAtIndexPath? [self.delegate tableView:self heightForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section]] : defaultRowHeight;
+				[rowHeights addObject:[NSNumber numberWithFloat:rowHeight]];
+				totalRowsHeight += rowHeight;
+			}
+			
+			sectionRecord.rowsHeight = totalRowsHeight;
+			sectionRecord.rowHeights = rowHeights;
+			
+			[_sections addObject:sectionRecord];
+			[sectionRecord release];
+			[rowHeights release];
 		}
-		
-		offset += sectionRecord.footerHeight;
 	}
+}
+
+- (void)_updateSectionsCacheIfNeeded
+{
+	// if there's a cache already in place, this doesn't do anything,
+	// otherwise calls _updateSectionsCache.
+	// this is called from _setContentSize and probably other places that
+	// require access to anything that might be in the section caches (any sizing
+	// information, etc)
 	
-	return [results autorelease];
-}
-
-- (NSIndexPath *)indexPathForRowAtPoint:(CGPoint)point
-{
-	NSArray *paths = [self indexPathsForRowsInRect:CGRectMake(point.x,point.y,1,1)];
-	return ([paths count] > 0)? [paths objectAtIndex:0] : nil;
-}
-
-- (NSArray *)indexPathsForVisibleRows
-{
-	NSMutableArray *indexes = [NSMutableArray arrayWithCapacity:[_cachedCells count]];
-	const CGRect bounds = self.bounds;
-
-	for (NSIndexPath *indexPath in [_cachedCells allKeys]) {
-		if (CGRectIntersectsRect(bounds,[self rectForRowAtIndexPath:indexPath])) {
-			[indexes addObject:indexPath];
-		}
+	if ([_sections count] == 0) {
+		[self _updateSectionsCache];
 	}
+}
+
+- (void)_setContentSize
+{
+	// first calls _updateSectionsCacheIfNeeded, then sets the scroll view's size
+	// taking into account the size of the header, footer, and all rows.
+	// should be called by reloadData, setFrame, header/footer setters.
 	
-	return indexes;
-}
-
-- (NSArray *)visibleCells
-{
-	NSMutableArray *cells = [[[NSMutableArray alloc] init] autorelease];
-	for (NSIndexPath *index in [self indexPathsForVisibleRows]) {
-		UITableViewCell *cell = [self cellForRowAtIndexPath:index];
-		if (cell) {
-			[cells addObject:cell];
-		}
-	}
-	return cells;
-}
-
-- (void)_updateContentSize
-{
+	[self _updateSectionsCacheIfNeeded];
+	
 	CGFloat height = _tableHeaderView? _tableHeaderView.frame.size.height : 0;
 	
 	for (UITableViewSection *section in _sections) {
@@ -249,49 +192,16 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		height += _tableFooterView.frame.size.height;
 	}
 	
-	self.contentSize = CGSizeMake(0,height);
+	self.contentSize = CGSizeMake(0,height);	
 }
 
-- (void)setTableHeaderView:(UIView *)newHeader
+- (void)_layoutTableViewIfNeeded
 {
-	if (newHeader != _tableHeaderView) {
-		[_tableHeaderView removeFromSuperview];
-		[_tableHeaderView release];
-		_tableHeaderView = [newHeader retain];
-		[self _setNeedsCellLayout];
-		[self addSubview:_tableHeaderView];
-	}
-}
-
-- (void)setTableFooterView:(UIView *)newFooter
-{
-	if (newFooter != _tableFooterView) {
-		[_tableFooterView removeFromSuperview];
-		[_tableFooterView release];
-		_tableFooterView = [newFooter retain];
-		[self _setNeedsCellLayout];
-		[self addSubview:_tableFooterView];
-	}
-}
-
-- (NSInteger)numberOfSections
-{
-	if (_dataSourceHas.numberOfSectionsInTableView) {
-		return [self.dataSource numberOfSectionsInTableView:self];
-	} else {
-		return 1;
-	}
-}
-
-- (NSInteger)numberOfRowsInSection:(NSInteger)section
-{
-	return [self.dataSource tableView:self numberOfRowsInSection:section];
-}
-
-- (void)_layoutCells
-{
-	[self _updateContentSize];
-
+	// only works if a sectionsCache exists, if not this does nothing.
+	// lays out headers and rows that are visible at the time. this should also do cell
+	// dequeuing and keep a list of all existing cells that are visible and those
+	// that exist but are not visible and are reusable
+	
 	const CGSize boundsSize = self.bounds.size;
 	const CGFloat contentOffset = self.contentOffset.y;
 	const CGRect visibleBounds = CGRectMake(0,contentOffset,boundsSize.width,boundsSize.height);
@@ -393,8 +303,187 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		_tableFooterView.frame = tableFooterFrame;
 		_tableFooterView.hidden = !CGRectIntersectsRect(tableFooterFrame, visibleBounds);
 	}
+}
+
+
+
+
+- (CGRect)_CGRectFromVerticalOffset:(CGFloat)offset height:(CGFloat)height
+{
+	return CGRectMake(0,offset,self.bounds.size.width,height);
+}
+
+- (CGFloat)_offsetForSection:(NSInteger)index
+{
+	CGFloat offset = _tableHeaderView? _tableHeaderView.frame.size.height : 0;
 	
-	_needsCellLayout = NO;
+	for (NSInteger s=0; s<index; s++) {
+		offset += [[_sections objectAtIndex:s] sectionHeight];
+	}
+	
+	return offset;
+}
+
+- (CGRect)rectForSection:(NSInteger)section
+{
+	[self _updateSectionsCacheIfNeeded];
+	return [self _CGRectFromVerticalOffset:[self _offsetForSection:section] height:[[_sections objectAtIndex:section] sectionHeight]];
+}
+
+- (CGRect)rectForHeaderInSection:(NSInteger)section
+{
+	[self _updateSectionsCacheIfNeeded];
+	return [self _CGRectFromVerticalOffset:[self _offsetForSection:section] height:[[_sections objectAtIndex:section] headerHeight]];
+}
+
+- (CGRect)rectForFooterInSection:(NSInteger)section
+{
+	[self _updateSectionsCacheIfNeeded];
+	UITableViewSection *sectionRecord = [_sections objectAtIndex:section];
+	CGFloat offset = [self _offsetForSection:section];
+	offset += sectionRecord.headerHeight;
+	offset += sectionRecord.rowsHeight;
+	return [self _CGRectFromVerticalOffset:offset height:sectionRecord.footerHeight];
+}
+
+- (CGRect)rectForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	[self _updateSectionsCacheIfNeeded];
+
+	if (indexPath && indexPath.row >= 0 && indexPath.section < [_sections count]) {
+		UITableViewSection *sectionRecord = [_sections objectAtIndex:indexPath.section];
+		
+		if (indexPath.row < sectionRecord.numberOfRows) {
+			CGFloat offset = [self _offsetForSection:indexPath.section];
+			offset += sectionRecord.headerHeight;
+			
+			for (NSInteger row=0; row<indexPath.row; row++) {
+				offset += [[sectionRecord.rowHeights objectAtIndex:row] floatValue];
+			}
+			
+			return [self _CGRectFromVerticalOffset:offset height:[[sectionRecord.rowHeights objectAtIndex:indexPath.row] floatValue]];
+		}
+	}
+	
+	return CGRectZero;
+}
+
+- (UITableViewCell *)cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	// this is allowed to return nil if the cell isn't visible and is not restricted to only returning visible cells
+	// so this simple call should be good enough.
+	return [_cachedCells objectForKey:indexPath];
+}
+
+- (NSArray *)indexPathsForRowsInRect:(CGRect)rect
+{
+	// This needs to return the index paths even if the cells don't exist in any caches or are not on screen
+	// For now I'm assuming the cells stretch all the way across the view. It's not clear to me if the real
+	// implementation gets anal about this or not (haven't tested it).
+
+	[self _updateSectionsCacheIfNeeded];
+
+	NSMutableArray *results = [[NSMutableArray alloc] init];
+	const NSInteger numberOfSections = [_sections count];
+	CGFloat offset = _tableHeaderView? _tableHeaderView.frame.size.height : 0;
+	
+	for (NSInteger section=0; section<numberOfSections; section++) {
+		UITableViewSection *sectionRecord = [_sections objectAtIndex:section];
+		const NSInteger numberOfRows = sectionRecord.numberOfRows;
+		
+		offset += sectionRecord.headerHeight;
+
+		if (offset + sectionRecord.rowsHeight >= rect.origin.y) {
+			for (NSInteger row=0; row<numberOfRows; row++) {
+				const CGFloat height = [[sectionRecord.rowHeights objectAtIndex:row] floatValue];
+				CGRect simpleRowRect = CGRectMake(rect.origin.x, offset, rect.size.width, height);
+				
+				if (CGRectIntersectsRect(rect,simpleRowRect)) {
+					[results addObject:[NSIndexPath indexPathForRow:row inSection:section]];
+				} else if (simpleRowRect.origin.y > rect.origin.y+rect.size.height) {
+					break;	// don't need to find anything else.. we are past the end
+				}
+				
+				offset += height;
+			}
+		} else {
+			offset += sectionRecord.rowsHeight;
+		}
+		
+		offset += sectionRecord.footerHeight;
+	}
+	
+	return [results autorelease];
+}
+
+- (NSIndexPath *)indexPathForRowAtPoint:(CGPoint)point
+{
+	NSArray *paths = [self indexPathsForRowsInRect:CGRectMake(point.x,point.y,1,1)];
+	return ([paths count] > 0)? [paths objectAtIndex:0] : nil;
+}
+
+- (NSArray *)indexPathsForVisibleRows
+{
+	[self _layoutTableViewIfNeeded];
+
+	NSMutableArray *indexes = [NSMutableArray arrayWithCapacity:[_cachedCells count]];
+	const CGRect bounds = self.bounds;
+
+	for (NSIndexPath *indexPath in [_cachedCells allKeys]) {
+		if (CGRectIntersectsRect(bounds,[self rectForRowAtIndexPath:indexPath])) {
+			[indexes addObject:indexPath];
+		}
+	}
+	
+	return indexes;
+}
+
+- (NSArray *)visibleCells
+{
+	NSMutableArray *cells = [[[NSMutableArray alloc] init] autorelease];
+	for (NSIndexPath *index in [self indexPathsForVisibleRows]) {
+		UITableViewCell *cell = [self cellForRowAtIndexPath:index];
+		if (cell) {
+			[cells addObject:cell];
+		}
+	}
+	return cells;
+}
+
+- (void)setTableHeaderView:(UIView *)newHeader
+{
+	if (newHeader != _tableHeaderView) {
+		[_tableHeaderView removeFromSuperview];
+		[_tableHeaderView release];
+		_tableHeaderView = [newHeader retain];
+		[self _setContentSize];
+		[self addSubview:_tableHeaderView];
+	}
+}
+
+- (void)setTableFooterView:(UIView *)newFooter
+{
+	if (newFooter != _tableFooterView) {
+		[_tableFooterView removeFromSuperview];
+		[_tableFooterView release];
+		_tableFooterView = [newFooter retain];
+		[self _setContentSize];
+		[self addSubview:_tableFooterView];
+	}
+}
+
+- (NSInteger)numberOfSections
+{
+	if (_dataSourceHas.numberOfSectionsInTableView) {
+		return [self.dataSource numberOfSectionsInTableView:self];
+	} else {
+		return 1;
+	}
+}
+
+- (NSInteger)numberOfRowsInSection:(NSInteger)section
+{
+	return [self.dataSource tableView:self numberOfRowsInSection:section];
 }
 
 - (void)reloadData
@@ -404,94 +493,49 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	[_reusableCells makeObjectsPerformSelector:@selector(removeFromSuperview)];
 	[_reusableCells removeAllObjects];
 	[_cachedCells removeAllObjects];
-	[_sections removeAllObjects];
 
 	// clear prior selection
 	[_selectedRow release];
 	_selectedRow = nil;
 	
-	// compute the heights/offsets of everything
-	const CGFloat defaultRowHeight = _rowHeight ?: _UITableViewDefaultRowHeight;
-	const NSInteger numberOfSections = [self numberOfSections];
-	for (NSInteger section=0; section<numberOfSections; section++) {
-		const NSInteger numberOfRowsInSection = [self numberOfRowsInSection:section];
-		
-		UITableViewSection *sectionRecord = [[UITableViewSection alloc] init];
-		sectionRecord.numberOfRows = numberOfRowsInSection;
-		sectionRecord.headerView = _delegateHas.viewForHeaderInSection? [self.delegate tableView:self viewForHeaderInSection:section] : nil;
-		sectionRecord.footerView = _delegateHas.viewForFooterInSection? [self.delegate tableView:self viewForFooterInSection:section] : nil;
-		sectionRecord.headerTitle = _dataSourceHas.titleForHeaderInSection? [self.dataSource tableView:self titleForHeaderInSection:section] : nil;
-		sectionRecord.footerTitle = _dataSourceHas.titleForFooterInSection? [self.dataSource tableView:self titleForFooterInSection:section] : nil;
-		
-		// make a default section header view if there's a title for it and no overriding view
-		if (!sectionRecord.headerView && sectionRecord.headerTitle) {
-			sectionRecord.headerView = [UITableViewSectionLabel sectionLabelWithTitle:sectionRecord.headerTitle];
-		}
-		
-		// make a default section footer view if there's a title for it and no overriding view
-		if (!sectionRecord.footerView && sectionRecord.footerTitle) {
-			sectionRecord.footerView = [UITableViewSectionLabel sectionLabelWithTitle:sectionRecord.footerTitle];
-		}
-		
-		// if there's a view, then we need to set the height, otherwise it's going to be zero
-		if (sectionRecord.headerView) {
-			[self addSubview:sectionRecord.headerView];
-			sectionRecord.headerHeight = _delegateHas.heightForHeaderInSection? [self.delegate tableView:self heightForHeaderInSection:section] : _sectionHeaderHeight;
-		} else {
-			sectionRecord.headerHeight = 0;
-		}
-		
-		if (sectionRecord.footerView) {
-			[self addSubview:sectionRecord.footerView];
-			sectionRecord.footerHeight = _delegateHas.heightForFooterInSection? [self.delegate tableView:self heightForFooterInSection:section] : _sectionFooterHeight;
-		} else {
-			sectionRecord.footerHeight = 0;
-		}
-		
-		NSMutableArray *rowHeights = [[NSMutableArray alloc] initWithCapacity:numberOfRowsInSection];
-		CGFloat totalRowsHeight = 0;
-		
-		for (NSInteger row=0; row<numberOfRowsInSection; row++) {
-			const CGFloat rowHeight = _delegateHas.heightForRowAtIndexPath? [self.delegate tableView:self heightForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section]] : defaultRowHeight;
-			[rowHeights addObject:[NSNumber numberWithFloat:rowHeight]];
-			totalRowsHeight += rowHeight;
-		}
-		
-		sectionRecord.rowsHeight = totalRowsHeight;
-		sectionRecord.rowHeights = rowHeights;
-		
-		[_sections addObject:sectionRecord];
-		[sectionRecord release];
-		[rowHeights release];
-	}
+	[self _updateSectionsCache];
+	[self _setContentSize];
 	
 	_needsReload = NO;
-	[self _setNeedsCellLayout];
+}
+
+- (void)_reloadDataIfNeeded
+{
+	if (_needsReload) {
+		[self reloadData];
+	}
+}
+
+- (void)_setNeedsReload
+{
+	_needsReload = YES;
+	[self setNeedsLayout];
 }
 
 - (void)layoutSubviews
 {
+	[self _reloadDataIfNeeded];
+	[self _layoutTableViewIfNeeded];
 	[super layoutSubviews];
-
-	if (_needsReload) {
-		[self reloadData];
-	}
-	
-	if (_needsCellLayout) {
-		[self _layoutCells];
-	}
 }
 
 - (void)setFrame:(CGRect)frame
 {
-	[super setFrame:frame];
-	[self _setNeedsCellLayout];
-}
+	CGRect oldFrame = self.frame;
 
-- (void)setBounds:(CGRect)bounds
-{
-	[super setBounds:bounds];
-	[self _setNeedsCellLayout];
+	[super setFrame:frame];
+	
+	if (!CGRectEqualToRect(oldFrame,frame)) {
+		if (oldFrame.size.width != frame.size.width) {
+			[self _updateSectionsCache];
+		}
+		[self _setContentSize];
+	}
 }
 
 - (NSIndexPath *)indexPathForSelectedRow
@@ -521,6 +565,11 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void)selectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition
 {
+	// unlike the other methods that I've tested, the real UIKit appears to call reload on select if the table hasn't been reloaded yet
+	// other methods all appear to rebuild their internal cache "on-demand" which is what I've done here so that my table has a very
+	// similar delegate and dataSource access pattern to the real thing.
+	[self _reloadDataIfNeeded];
+	
 	if (![_selectedRow isEqual:indexPath]) {
 		[self deselectRowAtIndexPath:_selectedRow animated:animated];
 		[_selectedRow release];
@@ -533,14 +582,36 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	[self scrollToRowAtIndexPath:_selectedRow atScrollPosition:scrollPosition animated:animated];
 }
 
+- (void)_scrollRectToVisible:(CGRect)aRect atScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated
+{
+	// adjust the rect based on the scroll position mode
+	switch (scrollPosition) {
+		case UITableViewScrollPositionTop:
+			aRect.size.height = self.bounds.size.height;
+			break;
+
+		case UITableViewScrollPositionMiddle:
+			aRect.origin.y -= (self.bounds.size.height / 2.f) - aRect.size.height;
+			aRect.size.height = self.bounds.size.height;
+			break;
+
+		case UITableViewScrollPositionBottom:
+			aRect.origin.y -= self.bounds.size.height - aRect.size.height;
+			aRect.size.height = self.bounds.size.height;
+			break;
+	}
+	
+	[self scrollRectToVisible:aRect animated:animated];
+}
+
 - (void)scrollToNearestSelectedRowAtScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated
 {
-	[self scrollRectToVisible:[self rectForRowAtIndexPath:[self indexPathForSelectedRow]] animated:animated];
+	[self _scrollRectToVisible:[self rectForRowAtIndexPath:[self indexPathForSelectedRow]] atScrollPosition:scrollPosition animated:animated];
 }
 
 - (void)scrollToRowAtIndexPath:(NSIndexPath *)indexPath atScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated
 {
-	[self scrollRectToVisible:[self rectForRowAtIndexPath:indexPath] animated:animated];
+	[self _scrollRectToVisible:[self rectForRowAtIndexPath:indexPath] atScrollPosition:scrollPosition animated:animated];
 }
 
 - (UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier
