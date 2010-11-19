@@ -429,12 +429,16 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	NSMutableArray *indexes = [NSMutableArray arrayWithCapacity:[_cachedCells count]];
 	const CGRect bounds = self.bounds;
 
-	for (NSIndexPath *indexPath in [_cachedCells allKeys]) {
+	// Special note - it's unclear if UIKit returns these in sorted order. Because we're assuming that visibleCells returns them in order (top-bottom)
+	// and visibleCells uses this method, I'm going to make the executive decision here and assume that UIKit probably does return them sorted - since
+	// there's nothing warning that they aren't. :)
+	
+	for (NSIndexPath *indexPath in [[_cachedCells allKeys] sortedArrayUsingSelector:@selector(compare:)]) {
 		if (CGRectIntersectsRect(bounds,[self rectForRowAtIndexPath:indexPath])) {
 			[indexes addObject:indexPath];
 		}
 	}
-	
+
 	return indexes;
 }
 
