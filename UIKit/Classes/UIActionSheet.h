@@ -18,6 +18,7 @@
 	id<UIActionSheetDelegate> _delegate;
 	NSInteger _destructiveButtonIndex;
 	NSInteger _cancelButtonIndex;
+	NSInteger _firstOtherButtonIndex;
 	NSString *_title;
 	NSMutableArray *_menuTitles;
 	id _menu;
@@ -44,5 +45,6 @@
 @property (nonatomic, readonly, getter=isVisible) BOOL visible;
 @property (nonatomic) NSInteger destructiveButtonIndex;
 @property (nonatomic) NSInteger cancelButtonIndex;
+@property (nonatomic, readonly) NSInteger firstOtherButtonIndex;
 
 @end

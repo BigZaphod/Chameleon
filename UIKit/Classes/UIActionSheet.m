@@ -10,6 +10,7 @@
 
 @implementation UIActionSheet
 @synthesize delegate=_delegate, destructiveButtonIndex=_destructiveButtonIndex, cancelButtonIndex=_cancelButtonIndex, title=_title;
+@synthesize firstOtherButtonIndex=_firstOtherButtonIndex;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -17,6 +18,7 @@
 		_menuTitles = [[NSMutableArray alloc] init];
 		_destructiveButtonIndex = -1;
 		_cancelButtonIndex = -1;
+		_firstOtherButtonIndex = -1;
 	}
 	return self;
 }
@@ -33,7 +35,9 @@
 		if (destructiveButtonTitle) {
 			self.destructiveButtonIndex = [self addButtonWithTitle:destructiveButtonTitle];
 		}
-		
+
+		_firstOtherButtonIndex = -1;	// sort of a hack to reset this because the addButtonWithTitle's above can change it's value :)
+
 		if (otherButtonTitles) {
 			[self addButtonWithTitle:otherButtonTitles];
 
@@ -73,7 +77,13 @@
 - (NSInteger)addButtonWithTitle:(NSString *)title
 {
 	[_menuTitles addObject:title];
-	return [_menuTitles count]-1;
+	NSInteger index = [_menuTitles count]-1;
+
+	if (_firstOtherButtonIndex == -1 ) {
+		_firstOtherButtonIndex = index;
+	}
+	
+	return index;
 }
 
 - (NSInteger)addSeparator
