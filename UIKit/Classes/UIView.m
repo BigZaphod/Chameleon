@@ -286,6 +286,10 @@ static BOOL _animationsEnabled = YES;
 
 - (CGPoint)convertPoint:(CGPoint)toConvert fromView:(UIView *)fromView
 {
+	// NOTE: this is a lot more complex than it needs to be - I just noticed the docs say this method requires fromView and self to
+	// belong to the same UIWindow! arg! leaving this for now because, well, it's neat.. but also I'm too tired to really ponder
+	// all the implications of a change to something so "low level".
+	
 	if (fromView) {
 		// If the screens are the same, then we know they share a common parent CALayer, so we can convert directly with the layer's
 		// conversion method. If not, though, we need to do something a bit more complicated.
@@ -306,6 +310,10 @@ static BOOL _animationsEnabled = YES;
 
 - (CGPoint)convertPoint:(CGPoint)toConvert toView:(UIView *)toView
 {
+	// NOTE: this is a lot more complex than it needs to be - I just noticed the docs say this method requires toView and self to
+	// belong to the same UIWindow! arg! leaving this for now because, well, it's neat.. but also I'm too tired to really ponder
+	// all the implications of a change to something so "low level".
+	
 	// See note in convertPoint:fromView: for some explaination about why this is done... :/
 	if (toView && (self.window.screen == toView.window.screen)) {
 		return [self.layer convertPoint:toConvert toLayer:toView.layer];
