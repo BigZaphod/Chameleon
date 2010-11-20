@@ -91,15 +91,12 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	[self setNeedsLayout];
 }
 
-
-
-
 - (void)_updateSectionsCache
 {
-	// use dataSource to rebuild the cache.
-	// if no dataSource, this can't really proceed beyond clearing the old
-	// cache. setting the dataSource and/or delegate likely needs to clear
-	// this cache but not actually update the info immediately (do it lazily).
+	// uses the dataSource to rebuild the cache.
+	// if there's no dataSource, this can't do anything else.
+	// note that I'm presently caching and hanging on to views and titles for section headers which is something
+	// the real UIKit appears to fetch more on-demand than this. so far this has not been a problem.
 	
 	[_sections removeAllObjects];
 	
@@ -165,9 +162,8 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 {
 	// if there's a cache already in place, this doesn't do anything,
 	// otherwise calls _updateSectionsCache.
-	// this is called from _setContentSize and probably other places that
-	// require access to anything that might be in the section caches (any sizing
-	// information, etc)
+	// this is called from _setContentSize and other places that require access
+	// to the section caches (mostly for size-related information)
 	
 	if ([_sections count] == 0) {
 		[self _updateSectionsCache];
@@ -197,10 +193,10 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void)_layoutTableView
 {
-	// only works if a sectionsCache exists, if not this does nothing.
 	// lays out headers and rows that are visible at the time. this should also do cell
 	// dequeuing and keep a list of all existing cells that are visible and those
 	// that exist but are not visible and are reusable
+	// if there's no section cache, no rows will be laid out but the header/footer will (if any).
 	
 	const CGSize boundsSize = self.bounds.size;
 	const CGFloat contentOffset = self.contentOffset.y;
@@ -289,7 +285,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	// If it removed all non-visible cells, then the cells on the bottom of the table view would disappear immediately but before
 	// the frame of the table view has actually animated down to the new, shorter size. So the animation is jumpy/ugly because
 	// the cells suddenly disappear instead of seemingly animating down and out of view like they should. This tries to leave them
-	// on screen as often as possible, but only if they don't get in the way.
+	// on screen as long as possible, but only if they don't get in the way.
 	for (UITableViewCell *cell in _reusableCells) {
 		if (CGRectIntersectsRect(cell.frame,visibleBounds)) {
 			[cell removeFromSuperview];
@@ -304,9 +300,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		_tableFooterView.hidden = !CGRectIntersectsRect(tableFooterFrame, visibleBounds);
 	}
 }
-
-
-
 
 - (CGRect)_CGRectFromVerticalOffset:(CGFloat)offset height:(CGFloat)height
 {
@@ -502,6 +495,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	[_selectedRow release];
 	_selectedRow = nil;
 	
+	// trigger the section cache to be repopulated
 	[self _updateSectionsCache];
 	[self _setContentSize];
 	
@@ -544,8 +538,8 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		
 		// this is not something the real UIKit does, but since this is a desktop environment, resizing a window with a table with a selection
 		// in it could be a common occurance and it's pretty confusing to have the selection disappear on you as things wrap and change size.
-		// this prevents that from happen in general. that may not ultimately be desirable as it is a sort of "magical" thing to be hiding
-		// inside the framework like this.
+		// this can prevent that from happening. this may not ultimately be desirable here as it is a very "magical" thing to be hiding inside
+		// the framework like this.
 		if (selectedRowWasVisible) {
 			[self scrollToNearestSelectedRowAtScrollPosition:UITableViewScrollPositionNone animated:NO];
 		}
@@ -579,9 +573,9 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void)selectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition
 {
-	// unlike the other methods that I've tested, the real UIKit appears to call reload on select if the table hasn't been reloaded yet
-	// other methods all appear to rebuild their internal cache "on-demand" which is what I've done here so that my table has a very
-	// similar delegate and dataSource access pattern to the real thing.
+	// unlike the other methods that I've tested, the real UIKit appears to call reload during selection if the table hasn't been reloaded
+	// yet. other methods all appear to rebuild the section cache "on-demand" but don't do a "proper" reload. for the sake of attempting
+	// to maintain a similar delegate and dataSource access pattern to the real thing, I'll do it this way here. :)
 	[self _reloadDataIfNeeded];
 	
 	if (![_selectedRow isEqual:indexPath]) {
@@ -592,14 +586,14 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	}
 	
 	// I did not verify if the real UIKit will still scroll the selection into view even if the selection itself doesn't change.
-	// However, this behavior was useful on Ostrich and seems harmless enough.
+	// this behavior was useful for Ostrich and seems harmless enough, so leaving it like this for now.
 	[self scrollToRowAtIndexPath:_selectedRow atScrollPosition:scrollPosition animated:animated];
 }
 
 - (void)_scrollRectToVisible:(CGRect)aRect atScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated
 {
 	if (!CGRectIsNull(aRect) && aRect.size.height > 0) {
-		// adjust the rect based on the scroll position mode
+		// adjust the rect based on the desired scroll position setting
 		switch (scrollPosition) {
 			case UITableViewScrollPositionTop:
 				aRect.size.height = self.bounds.size.height;
