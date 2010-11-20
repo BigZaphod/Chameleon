@@ -14,6 +14,7 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 {
 	if ((self=[super initWithFrame:frame])) {
 		self.opaque = NO;
+		self.alpha = 0;
 		self.indicatorStyle = UIScrollViewIndicatorStyleDefault;
 	}
 	return self;

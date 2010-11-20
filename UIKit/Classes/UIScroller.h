@@ -24,6 +24,9 @@
 	BOOL _alwaysVisible;
 }
 
+// NOTE: UIScroller set's its own alpha to 0 when it is created, so it is NOT visible by default!
+// the flash/quickFlash methods alter its own alpha in order to fade in/out, etc.
+
 - (void)flash;
 - (void)quickFlash;
 
