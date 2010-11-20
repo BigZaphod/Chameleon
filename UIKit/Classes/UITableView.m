@@ -195,7 +195,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	self.contentSize = CGSizeMake(0,height);	
 }
 
-- (void)_layoutTableViewIfNeeded
+- (void)_layoutTableView
 {
 	// only works if a sectionsCache exists, if not this does nothing.
 	// lays out headers and rows that are visible at the time. this should also do cell
@@ -424,7 +424,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (NSArray *)indexPathsForVisibleRows
 {
-	[self _layoutTableViewIfNeeded];
+	[self _layoutTableView];
 
 	NSMutableArray *indexes = [NSMutableArray arrayWithCapacity:[_cachedCells count]];
 	const CGRect bounds = self.bounds;
@@ -524,21 +524,31 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 - (void)layoutSubviews
 {
 	[self _reloadDataIfNeeded];
-	[self _layoutTableViewIfNeeded];
+	[self _layoutTableView];
 	[super layoutSubviews];
 }
 
 - (void)setFrame:(CGRect)frame
 {
-	CGRect oldFrame = self.frame;
-
-	[super setFrame:frame];
-	
+	const CGRect oldFrame = self.frame;
 	if (!CGRectEqualToRect(oldFrame,frame)) {
+		const BOOL selectedRowWasVisible = _selectedRow ? CGRectIntersectsRect(self.bounds,[self rectForRowAtIndexPath:_selectedRow]) : NO;
+
+		[super setFrame:frame];
+
 		if (oldFrame.size.width != frame.size.width) {
 			[self _updateSectionsCache];
 		}
+
 		[self _setContentSize];
+		
+		// this is not something the real UIKit does, but since this is a desktop environment, resizing a window with a table with a selection
+		// in it could be a common occurance and it's pretty confusing to have the selection disappear on you as things wrap and change size.
+		// this prevents that from happen in general. that may not ultimately be desirable as it is a sort of "magical" thing to be hiding
+		// inside the framework like this.
+		if (selectedRowWasVisible) {
+			[self scrollToNearestSelectedRowAtScrollPosition:UITableViewScrollPositionNone animated:NO];
+		}
 	}
 }
 
