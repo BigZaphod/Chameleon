@@ -24,8 +24,6 @@ typedef enum {
 	CGPoint _previousLocation;
 	UIView *_view;
 	UIWindow *_window;	
-	UIView *_previousView;
-	UIWindow *_previousWindow;
 }
 
 - (CGPoint)locationInView:(UIView *)inView;

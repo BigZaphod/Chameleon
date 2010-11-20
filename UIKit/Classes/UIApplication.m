@@ -7,6 +7,7 @@
 #import "UITouch+UIPrivate.h"
 #import "UIWindow.h"
 #import "UIPopoverController+UIPrivate.h"
+#import "UIResponderAppKitIntegration.h"
 #import <Cocoa/Cocoa.h>
 
 NSString *const UIApplicationWillChangeStatusBarOrientationNotification = @"UIApplicationWillChangeStatusBarOrientationNotification";
@@ -216,30 +217,39 @@ static BOOL TouchIsActive(UITouch *touch)
 	} else {
 		switch ([theNSEvent type]) {
 			case NSLeftMouseDown:
-				[touch _setView:[theScreen _hitTest:screenLocation event:_currentEvent]];
 				[touch _setPhase:UITouchPhaseBegan screenLocation:screenLocation tapCount:[theNSEvent clickCount] delta:delta timestamp:timestamp];
 				break;
 				
 			case NSScrollWheel:
-				[touch _setView:[theScreen _hitTest:screenLocation event:_currentEvent]];
 				[touch _setPhase:UITouchPhaseScrolled screenLocation:screenLocation tapCount:0 delta:delta timestamp:timestamp];
 				break;
 				
 			case NSMouseMoved:
 			case NSMouseEntered:
 			case NSMouseExited:
-				[touch _setView:[theScreen _hitTest:screenLocation event:_currentEvent]];
 				[touch _setPhase:UITouchPhaseHovered screenLocation:screenLocation tapCount:0 delta:delta timestamp:timestamp];
 				break;
 				
 			case NSRightMouseDown:
-				[touch _setView:[theScreen _hitTest:screenLocation event:_currentEvent]];
 				[touch _setPhase:UITouchPhaseRightClicked screenLocation:screenLocation tapCount:1 delta:delta timestamp:timestamp];
 				break;
 				
 			default:
 				isSupportedEvent = NO;
 				break;
+		}
+		
+		// handle mouse enter/exit view changes as well as setting the new view for the touch
+		if (isSupportedEvent) {
+			UIView *previousView = [touch.view retain];
+			[touch _setView:[theScreen _hitTest:screenLocation event:_currentEvent]];
+
+			if (touch.view != previousView) {
+				[previousView mouseExitedView:previousView enteredView:touch.view withEvent:_currentEvent];
+				[touch.view mouseExitedView:previousView enteredView:touch.view withEvent:_currentEvent];
+			}
+			
+			[previousView release];
 		}
 	}
 	
@@ -253,10 +263,27 @@ static BOOL TouchIsActive(UITouch *touch)
 - (void)_cancelTouches
 {
 	UITouch *touch = [[_currentEvent allTouches] anyObject];
+
 	if (TouchIsActive(touch)) {
 		[touch _setTouchPhaseCancelled];
 		[self sendEvent:_currentEvent];
 	}
+
+	// the fake mouse exit for the view is delayed to prevent stuff from disappearing when a right-click menu is presented from a touch event.
+	// since right-click menus block the runloop when they are presented, and touches should always be cancelled just before such menus appear,
+	// this delay can have the effect of keeping something like, say, a gear icon visible while the menu is being presented.
+	// in other situations, I think this delay should be pretty much harmless.
+	// note that this fake mouse exit when touches are cancelled could be skipped entirely, but that has the effect of causing lingering things
+	// in views when a popover appears because the mouse exit event would not be sent until the mouse moved again and this has an odd effect, too
+	// so I think this is a nice approach that solves that problem while remaining semi-elegant.
+	[self performSelector:@selector(_delayedCancelledMouseExit:) withObject:touch.view afterDelay:0];
+
+	[touch _setView:nil];
+}
+
+- (void)_delayedCancelledMouseExit:(UIView *)leftView
+{
+	[leftView mouseExitedView:leftView enteredView:nil withEvent:_currentEvent];
 }
 
 - (void)_applicationWillTerminate:(NSNotification *)note

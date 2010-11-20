@@ -18,8 +18,6 @@
 {
 	[_window release];
 	[_view release];
-	[_previousWindow release];
-	[_previousView release];
 	[super dealloc];
 }
 
@@ -44,12 +42,8 @@
 - (void)_setView:(UIView *)view
 {
 	if (_view != view) {
-		[_previousView release];
-		[_previousWindow release];
-		
-		_previousWindow = _window;
-		_previousView = _view;
-		
+		[_view release];
+		[_window release];
 		_view = [view retain];
 		_window = [view.window retain];
 	}
@@ -65,14 +59,9 @@
 	return _delta;
 }
 
-- (UIView *)_previousView
-{
-	return _previousView;
-}
-
 - (UIWindow *)window
 {
-	return _window ?: _previousWindow;
+	return _window;
 }
 
 - (CGPoint)_convertLocationPoint:(CGPoint)thePoint toView:(UIView *)inView

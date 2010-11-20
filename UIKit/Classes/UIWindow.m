@@ -271,10 +271,6 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 					break;
 					
 				case UITouchPhaseHovered:
-					if (touch.view != [touch _previousView]) {
-						[[touch _previousView] mouseExitedView:[touch _previousView] enteredView:touch.view withEvent:event];
-						[touch.view mouseExitedView:[touch _previousView] enteredView:touch.view withEvent:event];
-					}
 					if ([touch.view hitTest:[touch locationInView:touch.view] withEvent:event]) {
 						[touch.view mouseMoved:[touch _delta] withEvent:event];
 					}
