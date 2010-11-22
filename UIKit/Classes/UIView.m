@@ -6,6 +6,7 @@
 #import "UIViewLayoutManager.h"
 #import "UIViewAnimationGroup.h"
 #import "UIViewController.h"
+#import "UIApplication+UIPrivate.h"
 #import <QuartzCore/CALayer.h>
 
 NSString *const UIViewFrameDidChangeNotification = @"UIViewFrameDidChangeNotification";
@@ -221,43 +222,39 @@ static BOOL _animationsEnabled = YES;
 	[self didChangeValueForKey:@"superview"];
 }
 
-- (void)_removeFromSuperview:(BOOL)notifyViewController
+- (void)removeFromSuperview
 {
 	if (_superview) {
 		[self retain];
+		
+		[[UIApplication sharedApplication] _cancelTouchesInView:self];
 		
 		UIWindow *oldWindow = self.window;
 		
 		if (_needsDidAppearOrDisappear && _viewController) {
 			[_viewController viewWillDisappear:NO];
 		}
-
+		
 		[_superview willRemoveSubview:self];
 		[self _willMoveFromWindow:oldWindow toWindow:nil];
 		[self willMoveToSuperview:nil];
-
+		
 		[self willChangeValueForKey:@"superview"];
 		[_layer removeFromSuperlayer];
 		[_superview->_subviews removeObject:self];
 		_superview = nil;
 		[self didChangeValueForKey:@"superview"];
-
+		
 		[self _didMoveFromWindow:oldWindow toWindow:nil];
 		[self didMoveToSuperview];
 		[[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:self];
-
+		
 		if (_needsDidAppearOrDisappear && _viewController) {
 			[_viewController viewDidDisappear:NO];
 		}
 		
 		[self release];
 	}
-}
-
-- (void)removeFromSuperview
-{
-	const BOOL notifyViewController = (![_viewController parentViewController] && self.window);
-	[self _removeFromSuperview:notifyViewController];
 }
 
 - (void)didAddSubview:(UIView *)subview

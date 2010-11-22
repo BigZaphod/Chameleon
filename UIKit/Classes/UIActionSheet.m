@@ -213,7 +213,7 @@
 	// cancelation just before it actually shows the menu so hopefully things that respond correctly to canceled touches should then handle
 	// things correctly. I'm not really sure. It's possible that instead of faking a cancel event it should just fake a mouseUp event.
 	// That is presently unclear.
-	[[UIApplication sharedApplication] _cancelTouches];
+	[[UIApplication sharedApplication] _cancelTouchesInView:nil];
 	
 	// this goes modal... meh.
 	BOOL itemSelected = [_menu popUpMenuPositioningItem:nil atLocation:NSPointFromCGPoint([aPoint CGPointValue]) inView:[self.window.screen UIKitView]];

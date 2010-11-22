@@ -260,25 +260,47 @@ static BOOL TouchIsActive(UITouch *touch)
 
 // this is used to fake an interruption/cancel of touches. this is important when something modally pops up or whatever.
 // it's pretty annoying, but I think it's necessary.
-- (void)_cancelTouches
+// if aView is nil, it'll cancel all current touches (there's only ever one on OSX) and also do a deferred mouse exit and send a touch cancel event.
+// if aView is NOT nil, then the deferred mouse exit never happens, the cancel event itself is not sent, either - the
+// assumption being that the view is probably being destroyed or removed from its superview or something else rather big.
+// I don't like this magic-ness, but it seemed the easiest solution to the problem of a UIView getting removed from its
+// superview while a touch is active in it or any of it's child views. The real UIKit will apparently cancel/abort/stop any
+// touch events that originated in the subviews or the view itself that got removed. It never calls touchesCancelled, either.
+// additionally, it doesn't appear to wait for a new touch move event or anything to trigger this behavior. In testing, it
+// seemed the cancel effect was immediate when the view was removed from its superview. If I added the same view back onto
+// the window later using a timer, the touch event didn't resume working again, either. Removing it completely cancels it.
+- (void)_cancelTouchesInView:(UIView *)aView
 {
 	UITouch *touch = [[_currentEvent allTouches] anyObject];
+	const BOOL shouldCancelTouch = (!aView || [touch.view isDescendantOfView:aView]);
+	
+	if (shouldCancelTouch) {
+		const BOOL shouldSendEvents = !aView;
 
-	if (TouchIsActive(touch)) {
-		[touch _setTouchPhaseCancelled];
-		[self sendEvent:_currentEvent];
+		// only attempt to actually cancel the touch if there's one active
+		if (TouchIsActive(touch)) {
+			[touch _setTouchPhaseCancelled];
+			
+			if (shouldSendEvents) {
+				[self sendEvent:_currentEvent];
+			}
+		}
+
+		// note that even if there wasn't an active touch, this will still be sent - this is because sometimes the touch ended handlers are what pops
+		// up the new popover or menu, so we still need to do the mouse exit thing for certain hover elements to disappear correctly
+		if (shouldSendEvents) {
+			// the fake mouse exit for the view is delayed to prevent stuff from disappearing when a right-click menu is presented from a touch event.
+			// since right-click menus block the runloop when they are presented, and touches should always be cancelled just before such menus appear,
+			// this delay can have the effect of keeping something like, say, a gear icon visible while the menu is being presented.
+			// in other situations, I think this delay should be pretty much harmless.
+			// note that this fake mouse exit when touches are cancelled could be skipped entirely, but that has the effect of causing lingering things
+			// in views when a popover appears because the mouse exit event would not be sent until the mouse moved again and this has an odd effect, too
+			// so I think this is a nice approach that solves that problem while remaining semi-elegant.
+			[self performSelector:@selector(_delayedCancelledMouseExit:) withObject:touch.view afterDelay:0];
+		}
+
+		[touch _setView:nil];
 	}
-
-	// the fake mouse exit for the view is delayed to prevent stuff from disappearing when a right-click menu is presented from a touch event.
-	// since right-click menus block the runloop when they are presented, and touches should always be cancelled just before such menus appear,
-	// this delay can have the effect of keeping something like, say, a gear icon visible while the menu is being presented.
-	// in other situations, I think this delay should be pretty much harmless.
-	// note that this fake mouse exit when touches are cancelled could be skipped entirely, but that has the effect of causing lingering things
-	// in views when a popover appears because the mouse exit event would not be sent until the mouse moved again and this has an odd effect, too
-	// so I think this is a nice approach that solves that problem while remaining semi-elegant.
-	[self performSelector:@selector(_delayedCancelledMouseExit:) withObject:touch.view afterDelay:0];
-
-	[touch _setView:nil];
 }
 
 - (void)_delayedCancelledMouseExit:(UIView *)leftView

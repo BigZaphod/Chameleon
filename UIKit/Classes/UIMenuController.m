@@ -160,7 +160,7 @@
 	if (_menu && _window) {
 		NSView *theNSView = [_window.screen UIKitView];
 		if (theNSView) {
-			[[UIApplication sharedApplication] _cancelTouches];
+			[[UIApplication sharedApplication] _cancelTouchesInView:nil];
 			[_menu popUpMenuPositioningItem:nil atLocation:NSPointFromCGPoint(_menuFrame.origin) inView:theNSView];
 		}
 	}
