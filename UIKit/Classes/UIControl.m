@@ -182,6 +182,8 @@
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
+	self.highlighted = NO;
+
 	if (_tracking) {
 		[self cancelTrackingWithEvent:event];
 		[self _sendActionsForControlEvents:UIControlEventTouchCancel withEvent:event];
