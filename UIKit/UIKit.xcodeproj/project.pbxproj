@@ -17,6 +17,8 @@
 		140AA94E1264EC770057D87F /* UIResponderAppKitIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = 140AA94D1264EC770057D87F /* UIResponderAppKitIntegration.m */; };
 		141927A211F8A88E00051ABD /* UISplitViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 141927A011F8A88E00051ABD /* UISplitViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		141927A311F8A88E00051ABD /* UISplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 141927A111F8A88E00051ABD /* UISplitViewController.m */; };
+		1426FFDD129ADEA300BD31E5 /* UIControlAction.h in Headers */ = {isa = PBXBuildFile; fileRef = 1426FFDB129ADEA300BD31E5 /* UIControlAction.h */; };
+		1426FFDE129ADEA300BD31E5 /* UIControlAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 1426FFDC129ADEA300BD31E5 /* UIControlAction.m */; };
 		1436CF96121476A1001DFEFB /* UISwitch.h in Headers */ = {isa = PBXBuildFile; fileRef = 1436CF94121476A1001DFEFB /* UISwitch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1436CF97121476A1001DFEFB /* UISwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 1436CF95121476A1001DFEFB /* UISwitch.m */; };
 		143E36AD1295A8690073FB22 /* UIActionSheetAppKitIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = 143E36AC1295A8690073FB22 /* UIActionSheetAppKitIntegration.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -214,6 +216,8 @@
 		140AA94D1264EC770057D87F /* UIResponderAppKitIntegration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIResponderAppKitIntegration.m; path = Classes/UIResponderAppKitIntegration.m; sourceTree = "<group>"; };
 		141927A011F8A88E00051ABD /* UISplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UISplitViewController.h; path = Classes/UISplitViewController.h; sourceTree = "<group>"; };
 		141927A111F8A88E00051ABD /* UISplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UISplitViewController.m; path = Classes/UISplitViewController.m; sourceTree = "<group>"; };
+		1426FFDB129ADEA300BD31E5 /* UIControlAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIControlAction.h; sourceTree = "<group>"; };
+		1426FFDC129ADEA300BD31E5 /* UIControlAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIControlAction.m; sourceTree = "<group>"; };
 		1436CF94121476A1001DFEFB /* UISwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UISwitch.h; path = Classes/UISwitch.h; sourceTree = "<group>"; };
 		1436CF95121476A1001DFEFB /* UISwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UISwitch.m; path = Classes/UISwitch.m; sourceTree = "<group>"; };
 		143E36AA1295A84A0073FB22 /* Tests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
@@ -606,6 +610,8 @@
 			children = (
 				145335671226F1F90005644F /* UIBulletGlyphGenerator.h */,
 				145335681226F1F90005644F /* UIBulletGlyphGenerator.m */,
+				1426FFDB129ADEA300BD31E5 /* UIControlAction.h */,
+				1426FFDC129ADEA300BD31E5 /* UIControlAction.m */,
 				145335831226F3490005644F /* UICustomNSClipView.h */,
 				145335841226F3490005644F /* UICustomNSClipView.m */,
 				1453356F1226F2720005644F /* UICustomNSTextView.h */,
@@ -780,6 +786,7 @@
 				144156DB1284A22200532FE2 /* UIToolbarButton.h in Headers */,
 				1457DD3F128DDE610057A7F9 /* UITransitionView.h in Headers */,
 				143E36AD1295A8690073FB22 /* UIActionSheetAppKitIntegration.h in Headers */,
+				1426FFDD129ADEA300BD31E5 /* UIControlAction.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -936,6 +943,7 @@
 				144156DC1284A22200532FE2 /* UIToolbarButton.m in Sources */,
 				14DD1C281289B3C900DCF231 /* UIImage+UIPrivate.m in Sources */,
 				1457DD40128DDE610057A7F9 /* UITransitionView.m in Sources */,
+				1426FFDE129ADEA300BD31E5 /* UIControlAction.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

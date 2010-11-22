@@ -3,20 +3,7 @@
 #import "UIEvent.h"
 #import "UITouch.h"
 #import "UIApplication.h"
-
-@interface _UIControlAction : NSObject {
-	id target;
-	SEL action;
-	UIControlEvents controlEvents;
-}
-@property (nonatomic, assign) id target;
-@property (nonatomic, assign) SEL action;
-@property (nonatomic, assign) UIControlEvents controlEvents;
-@end
-
-@implementation _UIControlAction
-@synthesize target, action, controlEvents;
-@end
+#import "UIControlAction.h"
 
 @implementation UIControl
 @synthesize tracking=_tracking, touchInside=_touchInside, selected=_selected, enabled=_enabled, highlighted=_highlighted;
@@ -41,7 +28,7 @@
 
 - (void)addTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents
 {
-	_UIControlAction *controlAction = [[_UIControlAction alloc] init];
+	UIControlAction *controlAction = [[UIControlAction alloc] init];
 	controlAction.target = target;
 	controlAction.action = action;
 	controlAction.controlEvents = controlEvents;
@@ -53,7 +40,7 @@
 {
 	NSMutableArray *discard = [[NSMutableArray alloc] init];
 	
-	for (_UIControlAction *controlAction in _registeredActions) {
+	for (UIControlAction *controlAction in _registeredActions) {
 		if (controlAction.target == target && (action == NULL || controlAction.controlEvents == controlEvents)) {
 			[discard addObject:controlAction];
 		}
@@ -67,7 +54,7 @@
 {
 	NSMutableArray *actions = [[NSMutableArray alloc] init];
 	
-	for (_UIControlAction *controlAction in _registeredActions) {
+	for (UIControlAction *controlAction in _registeredActions) {
 		if ((target == nil || controlAction.target == target) && (controlAction.controlEvents & controlEvent) ) {
 			[actions addObject:NSStringFromSelector(controlAction.action)];
 		}
@@ -90,7 +77,7 @@
 {
 	UIControlEvents allEvents = 0;
 	
-	for (_UIControlAction *controlAction in _registeredActions) {
+	for (UIControlAction *controlAction in _registeredActions) {
 		allEvents |= controlAction.controlEvents;
 	}
 	
@@ -99,7 +86,7 @@
 
 - (void)_sendActionsForControlEvents:(UIControlEvents)controlEvents withEvent:(UIEvent *)event
 {
-	for (_UIControlAction *controlAction in _registeredActions) {
+	for (UIControlAction *controlAction in _registeredActions) {
 		if (controlAction.controlEvents & controlEvents) {
 			[self sendAction:controlAction.action to:controlAction.target forEvent:event];
 		}
