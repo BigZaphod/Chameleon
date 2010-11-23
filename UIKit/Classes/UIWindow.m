@@ -252,7 +252,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 	if (event.type == UIEventTypeTouches) {
 		NSSet *touches = [event touchesForWindow:self];
 
-		for (UITouch *touch in [event touchesForWindow:self]) {
+		for (UITouch *touch in touches) {
 			switch (touch.phase) {
 				case UITouchPhaseBegan:
 					[touch.view touchesBegan:touches withEvent:event];
