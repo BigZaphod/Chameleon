@@ -65,15 +65,24 @@
 		return _view;
 	} else {
 		[self loadView];
-		[_view _setViewController:self];
 		[self viewDidLoad];
 		return _view;
 	}
 }
 
+- (void)setView:(UIView *)aView
+{
+	if (aView != _view) {
+		[_view _setViewController:nil];
+		[_view release];
+		_view = [aView retain];
+		[_view _setViewController:self];
+	}
+}
+
 - (void)loadView
 {
-	_view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
+	self.view = [[[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame] autorelease];
 }
 
 - (void)viewDidLoad
