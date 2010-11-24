@@ -69,6 +69,7 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 		[[self layoutManager] setGlyphGenerator:[[[UIBulletGlyphGenerator alloc] init] autorelease]];
 		[style setLineBreakMode:NSLineBreakByCharWrapping];
 	} else {
+		[self setContinuousSpellCheckingEnabled:YES];
 		[self setSmartInsertDeleteEnabled:YES];
 		[self setUsesFindPanel:YES];
 		[[self layoutManager] setGlyphGenerator:[NSGlyphGenerator sharedGlyphGenerator]];
@@ -149,7 +150,6 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 	[self setSelectedRange:NSMakeRange(0,0)];
 	return [super resignFirstResponder];
 }
-
 
 - (void)drawRect:(NSRect)rect
 {
