@@ -259,14 +259,14 @@ static BOOL TouchIsActive(UITouch *touch)
 }
 
 // this is used to cause an interruption/cancel of the current touch.
-// (1) if aView is nil, it sends a mouse exit event to the last touched view, and sends a touch cancelled event if there's an "active" touch.
-// (2) if aView is NOT nil, no events are sent, but if the last touched view is a decendant of aView, the last touch is marked cancelled and the last touched view set to nil.
+// (1) if aView is nil, it sends a mouse exit event to the last touched view, and sends a touch cancelled event if there was an "active" touch.
+// (2) if aView is NOT nil, no event is sent, but if the last touched view is a decendant of aView, the touch is marked cancelled.
 // Use (1) is for when a modal UI element appears (such as a native popup menu), or when a UIPopoverController appears. It seems to make the most sense
 // to call _cancelTouchesInView: *after* the modal menu has been dismissed, as this causes UI elements to remain in their "pushed" state while the menu
 // is being displayed. If that behavior isn't desired, the simple solution is to present the menu from touchesEnded: instead of touchesBegan:.
 // Use (2) is specifically for when a UIView is removed from its superview. This case aborts touch handling if the view being removed is a part of
 // the currently active touch. The real UIKit also aborts an active touch in this situation and no cancel events are ever sent as far as I can tell - it
-// just seems to abort the whole thing immediately. If the removed view has nothing to do with the current touch event, nothing happens here.
+// just seems to abort the whole thing immediately. If the removed view has nothing to do with the current touch event, nothing happens.
 - (void)_cancelTouchesInView:(UIView *)aView
 {
 	UITouch *touch = [[_currentEvent allTouches] anyObject];
@@ -278,15 +278,9 @@ static BOOL TouchIsActive(UITouch *touch)
 
 		[touch _setTouchPhaseCancelled];
 		
-		if (!aView) {
-			[touchedView mouseExitedView:touchedView enteredView:nil withEvent:_currentEvent];
-
-			if (wasActiveTouch) {
-				[self sendEvent:_currentEvent];
-			}
+		if (!aView && wasActiveTouch) {
+			[self sendEvent:_currentEvent];
 		}
-		
-		[touch _setView:nil];
 	}
 }
 
