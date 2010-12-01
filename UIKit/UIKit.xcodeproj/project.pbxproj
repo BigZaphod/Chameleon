@@ -41,6 +41,11 @@
 		14690CA0122D79C2005A12A2 /* UIMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14690C9E122D79C2005A12A2 /* UIMenuController.m */; };
 		14690CB5122D7B56005A12A2 /* UIMenuItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 14690CB3122D7B56005A12A2 /* UIMenuItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14690CB6122D7B56005A12A2 /* UIMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 14690CB4122D7B56005A12A2 /* UIMenuItem.m */; };
+		14805D1A12A6A5F80080C4BA /* UIViewAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 14805D1812A6A5F80080C4BA /* UIViewAdapter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		14805D1B12A6A5F80080C4BA /* UIViewAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 14805D1912A6A5F80080C4BA /* UIViewAdapter.m */; };
+		14805D4112A6B0E80080C4BA /* UINSClipView.h in Headers */ = {isa = PBXBuildFile; fileRef = 14805D3F12A6B0E80080C4BA /* UINSClipView.h */; };
+		14805D4212A6B0E80080C4BA /* UINSClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14805D4012A6B0E80080C4BA /* UINSClipView.m */; };
+		14805F5A12A6E2AE0080C4BA /* UIScrollView+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14805F5812A6E2AE0080C4BA /* UIScrollView+UIPrivate.h */; };
 		14869DB1121303C60019B134 /* UIApplicationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14869DB0121303C60019B134 /* UIApplicationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1490AFE01219C31C00774286 /* UIPopoverController+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */; };
 		1490B0411219CA2F00774286 /* UIAccelerometer.h in Headers */ = {isa = PBXBuildFile; fileRef = 1490B03F1219CA2F00774286 /* UIAccelerometer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -241,6 +246,11 @@
 		14690C9E122D79C2005A12A2 /* UIMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIMenuController.m; path = Classes/UIMenuController.m; sourceTree = "<group>"; };
 		14690CB3122D7B56005A12A2 /* UIMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIMenuItem.h; path = Classes/UIMenuItem.h; sourceTree = "<group>"; };
 		14690CB4122D7B56005A12A2 /* UIMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIMenuItem.m; path = Classes/UIMenuItem.m; sourceTree = "<group>"; };
+		14805D1812A6A5F80080C4BA /* UIViewAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIViewAdapter.h; path = Classes/UIViewAdapter.h; sourceTree = "<group>"; };
+		14805D1912A6A5F80080C4BA /* UIViewAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIViewAdapter.m; path = Classes/UIViewAdapter.m; sourceTree = "<group>"; };
+		14805D3F12A6B0E80080C4BA /* UINSClipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINSClipView.h; sourceTree = "<group>"; };
+		14805D4012A6B0E80080C4BA /* UINSClipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINSClipView.m; sourceTree = "<group>"; };
+		14805F5812A6E2AE0080C4BA /* UIScrollView+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+UIPrivate.h"; sourceTree = "<group>"; };
 		14869DB0121303C60019B134 /* UIApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIApplicationDelegate.h; path = Classes/UIApplicationDelegate.h; sourceTree = "<group>"; };
 		1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIPopoverController+UIPrivate.h"; sourceTree = "<group>"; };
 		1490B03F1219CA2F00774286 /* UIAccelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIAccelerometer.h; path = Classes/UIAccelerometer.h; sourceTree = "<group>"; };
@@ -595,6 +605,8 @@
 				14CC83AA11EFA8AF005988CC /* UITouch.m */,
 				14CC83AB11EFA8AF005988CC /* UIView.h */,
 				14CC83AC11EFA8AF005988CC /* UIView.m */,
+				14805D1812A6A5F80080C4BA /* UIViewAdapter.h */,
+				14805D1912A6A5F80080C4BA /* UIViewAdapter.m */,
 				14CC83AD11EFA8AF005988CC /* UIViewController.h */,
 				14CC83AE11EFA8AF005988CC /* UIViewController.m */,
 				14CC83AF11EFA8AF005988CC /* UIWebView.h */,
@@ -620,6 +632,8 @@
 				14FA8C46121DA4A000C4264B /* UIImageTools.m */,
 				14FA8C47121DA4A000C4264B /* UINinePartImage.h */,
 				14FA8C48121DA4A000C4264B /* UINinePartImage.m */,
+				14805D3F12A6B0E80080C4BA /* UINSClipView.h */,
+				14805D4012A6B0E80080C4BA /* UINSClipView.m */,
 				14CB384312689907003334AD /* UIPopoverNSWindow.h */,
 				14CB384412689907003334AD /* UIPopoverNSWindow.m */,
 				14CB384712689949003334AD /* UIPopoverOverlayNSView.h */,
@@ -664,6 +678,7 @@
 				1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */,
 				14A726B71213303400648C9B /* UIScreen+UIPrivate.h */,
 				1443DF23121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h */,
+				14805F5812A6E2AE0080C4BA /* UIScrollView+UIPrivate.h */,
 				14A726B91213303400648C9B /* UITableViewCell+UIPrivate.h */,
 				14A726BA1213303400648C9B /* UITouch+UIPrivate.h */,
 				14A726BB1213303400648C9B /* UIView+UIPrivate.h */,
@@ -787,6 +802,9 @@
 				1457DD3F128DDE610057A7F9 /* UITransitionView.h in Headers */,
 				143E36AD1295A8690073FB22 /* UIActionSheetAppKitIntegration.h in Headers */,
 				1426FFDD129ADEA300BD31E5 /* UIControlAction.h in Headers */,
+				14805D1A12A6A5F80080C4BA /* UIViewAdapter.h in Headers */,
+				14805D4112A6B0E80080C4BA /* UINSClipView.h in Headers */,
+				14805F5A12A6E2AE0080C4BA /* UIScrollView+UIPrivate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -944,6 +962,8 @@
 				14DD1C281289B3C900DCF231 /* UIImage+UIPrivate.m in Sources */,
 				1457DD40128DDE610057A7F9 /* UITransitionView.m in Sources */,
 				1426FFDE129ADEA300BD31E5 /* UIControlAction.m in Sources */,
+				14805D1B12A6A5F80080C4BA /* UIViewAdapter.m in Sources */,
+				14805D4212A6B0E80080C4BA /* UINSClipView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

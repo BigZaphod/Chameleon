@@ -12,6 +12,7 @@
 NSString *const UIViewFrameDidChangeNotification = @"UIViewFrameDidChangeNotification";
 NSString *const UIViewBoundsDidChangeNotification = @"UIViewBoundsDidChangeNotification";
 NSString *const UIViewDidMoveToSuperviewNotification = @"UIViewDidMoveToSuperviewNotification";
+NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotification";
 
 static NSMutableArray *_animationGroups;
 static BOOL _animationsEnabled = YES;
@@ -179,6 +180,7 @@ static BOOL _animationsEnabled = YES;
 
 		[subview _didMoveFromWindow:oldWindow toWindow:newWindow];
 		[subview didMoveToSuperview];
+		
 		[[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:subview];
 
 		[self didAddSubview:subview];
@@ -681,6 +683,7 @@ static BOOL _animationsEnabled = YES;
 {
 	if (h != _layer.hidden) {
 		_layer.hidden = h;
+		[[NSNotificationCenter defaultCenter] postNotificationName:UIViewHiddenDidChangeNotification object:self];
 	}
 }
 

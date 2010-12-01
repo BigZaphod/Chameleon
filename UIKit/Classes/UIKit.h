@@ -58,3 +58,4 @@
 #import "UIAccelerometer.h"
 #import "UIMenuController.h"
 #import "UIMenuItem.h"
+#import "UIViewAdapter.h"

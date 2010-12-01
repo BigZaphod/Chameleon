@@ -4,6 +4,7 @@
 extern NSString *const UIViewFrameDidChangeNotification;
 extern NSString *const UIViewBoundsDidChangeNotification;
 extern NSString *const UIViewDidMoveToSuperviewNotification;
+extern NSString *const UIViewHiddenDidChangeNotification;
 
 @interface UIView (UIPrivate)
 - (void)_removeFromSuperview:(BOOL)notifyViewController;
