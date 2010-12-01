@@ -12,6 +12,8 @@ typedef enum {
 @protocol UIScrollViewDelegate <NSObject>
 @optional
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView;
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView;
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
 @end
 
 @interface UIScrollView : UIView {
@@ -37,6 +39,8 @@ typedef enum {
 	
 	struct {
 		BOOL scrollViewDidScroll : 1;
+		BOOL scrollViewWillBeginDragging : 1;
+		BOOL scrollViewDidEndDragging : 1;
 	} _delegateCan;	
 }
 

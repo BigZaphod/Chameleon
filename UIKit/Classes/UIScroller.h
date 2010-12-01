@@ -6,6 +6,7 @@
 
 @protocol _UIScrollerDelegate
 - (void)_UIScroller:(UIScroller *)scroller contentOffsetDidChange:(CGFloat)newOffset;
+- (void)_UIScrollerWillBeginDragging:(UIScroller *)scroller withEvent:(UIEvent *)event;
 - (void)_UIScrollerDidEndDragging:(UIScroller *)scroller withEvent:(UIEvent *)event;
 @end
 

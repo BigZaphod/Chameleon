@@ -222,6 +222,7 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 		} else {
 			_dragOffset = _lastTouchLocation.x - knobRect.origin.x;
 		}
+		[_delegate _UIScrollerWillBeginDragging:self withEvent:event];
 		_draggingKnob = YES;
 	} else {
 		if (_UIScrollerJumpToSpotThatIsClicked) {

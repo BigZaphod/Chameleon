@@ -55,6 +55,8 @@ const CGFloat _UIScrollViewScrollerSize = 10;
 {
 	_delegate = newDelegate;
 	_delegateCan.scrollViewDidScroll = [_delegate respondsToSelector:@selector(scrollViewDidScroll:)];
+	_delegateCan.scrollViewWillBeginDragging = [_delegate respondsToSelector:@selector(scrollViewWillBeginDragging:)];
+	_delegateCan.scrollViewDidEndDragging = [_delegate respondsToSelector:@selector(scrollViewDidEndDragging:willDecelerate:)];
 }
 
 - (void)setIndicatorStyle:(UIScrollViewIndicatorStyle)style
@@ -194,11 +196,13 @@ const CGFloat _UIScrollViewScrollerSize = 10;
 
 - (void)setContentOffset:(CGPoint)theOffset animated:(BOOL)animated
 {
-	_contentOffset = theOffset;
-	[self _constrainContentOffset:animated];
-	[self _updateScrollers];
-	if (_delegateCan.scrollViewDidScroll) {
-		[_delegate scrollViewDidScroll:self];
+	if (! CGPointEqualToPoint(_contentOffset, theOffset)) {
+		_contentOffset = theOffset;
+		[self _constrainContentOffset:animated];
+		[self _updateScrollers];
+		if (_delegateCan.scrollViewDidScroll) {
+			[_delegate scrollViewDidScroll:self];
+		}
 	}
 }
 
@@ -280,6 +284,13 @@ const CGFloat _UIScrollViewScrollerSize = 10;
 	}
 }
 
+- (void)_UIScrollerWillBeginDragging:(UIScroller *)scroller withEvent:(UIEvent *)event
+{
+	if (_delegateCan.scrollViewWillBeginDragging) {
+		[_delegate scrollViewWillBeginDragging:self];
+	}
+}
+
 - (void)_UIScrollerDidEndDragging:(UIScroller *)scroller withEvent:(UIEvent *)event
 {
 	UITouch *touch = [[event allTouches] anyObject];
@@ -287,6 +298,10 @@ const CGFloat _UIScrollViewScrollerSize = 10;
 	
 	if (!CGRectContainsPoint(scroller.frame,point)) {
 		scroller.alwaysVisible = NO;
+	}
+
+	if (_delegateCan.scrollViewDidEndDragging) {
+		[_delegate scrollViewDidEndDragging:self willDecelerate:NO];
 	}
 }
 
