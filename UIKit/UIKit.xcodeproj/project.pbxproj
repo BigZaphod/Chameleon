@@ -46,6 +46,8 @@
 		14805D4112A6B0E80080C4BA /* UINSClipView.h in Headers */ = {isa = PBXBuildFile; fileRef = 14805D3F12A6B0E80080C4BA /* UINSClipView.h */; };
 		14805D4212A6B0E80080C4BA /* UINSClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14805D4012A6B0E80080C4BA /* UINSClipView.m */; };
 		14805F5A12A6E2AE0080C4BA /* UIScrollView+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14805F5812A6E2AE0080C4BA /* UIScrollView+UIPrivate.h */; };
+		1480633612A851230080C4BA /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1480633512A851230080C4BA /* QTKit.framework */; };
+		1480633812A851230080C4BA /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1480633712A851230080C4BA /* WebKit.framework */; };
 		14869DB1121303C60019B134 /* UIApplicationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14869DB0121303C60019B134 /* UIApplicationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1490AFE01219C31C00774286 /* UIPopoverController+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */; };
 		1490B0411219CA2F00774286 /* UIAccelerometer.h in Headers */ = {isa = PBXBuildFile; fileRef = 1490B03F1219CA2F00774286 /* UIAccelerometer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -251,6 +253,8 @@
 		14805D3F12A6B0E80080C4BA /* UINSClipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINSClipView.h; sourceTree = "<group>"; };
 		14805D4012A6B0E80080C4BA /* UINSClipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINSClipView.m; sourceTree = "<group>"; };
 		14805F5812A6E2AE0080C4BA /* UIScrollView+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+UIPrivate.h"; sourceTree = "<group>"; };
+		1480633512A851230080C4BA /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
+		1480633712A851230080C4BA /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		14869DB0121303C60019B134 /* UIApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIApplicationDelegate.h; path = Classes/UIApplicationDelegate.h; sourceTree = "<group>"; };
 		1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIPopoverController+UIPrivate.h"; sourceTree = "<group>"; };
 		1490B03F1219CA2F00774286 /* UIAccelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIAccelerometer.h; path = Classes/UIAccelerometer.h; sourceTree = "<group>"; };
@@ -422,6 +426,8 @@
 				8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */,
 				14CC844111EFA901005988CC /* QuartzCore.framework in Frameworks */,
 				14CC844511EFA91A005988CC /* SystemConfiguration.framework in Frameworks */,
+				1480633612A851230080C4BA /* QTKit.framework in Frameworks */,
+				1480633812A851230080C4BA /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -458,6 +464,8 @@
 				14CC844411EFA91A005988CC /* SystemConfiguration.framework */,
 				0867D6A5FE840307C02AAC07 /* AppKit.framework */,
 				0867D69BFE84028FC02AAC07 /* Foundation.framework */,
+				1480633512A851230080C4BA /* QTKit.framework */,
+				1480633712A851230080C4BA /* WebKit.framework */,
 			);
 			name = "External Frameworks and Libraries";
 			sourceTree = "<group>";

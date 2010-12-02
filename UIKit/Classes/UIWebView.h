@@ -12,24 +12,25 @@ enum {
 };
 typedef NSUInteger UIWebViewNavigationType;
 
-@class UIWebView;
+@class UIWebView, UIViewAdapter, WebView;
 
 @protocol UIWebViewDelegate <NSObject>
 @optional
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
+- (void)webView:(UIWebView *)aWebView didFailLoadWithError:(NSError *)error;
 @end
 
 @interface UIWebView : UIView {
 @private
 	id _delegate;
-	BOOL _loading;
-	BOOL _canGoBack;
-	BOOL _canGoForward;
 	NSURLRequest *_request;
 	UIDataDetectorTypes _dataDetectorTypes;
+	WebView *_webView;
+	UIViewAdapter *_webViewAdapter;
 	
 	struct {
 		BOOL shouldStartLoadWithRequest : 1;
+		BOOL didFailLoadWithError : 1;
 	} _delegateHas;
 }
 
