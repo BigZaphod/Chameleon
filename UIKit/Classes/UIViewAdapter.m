@@ -211,8 +211,9 @@
 
 - (BOOL)becomeFirstResponder
 {
+	[self _updateNSViews];
+
 	if ([super becomeFirstResponder]) {
-		[self _updateNSViews];
 		[[_view window] makeFirstResponder:_view];
 		return YES;
 	} else {
@@ -222,6 +223,8 @@
 
 - (BOOL)resignFirstResponder
 {
+	[self _updateNSViews];
+
 	const BOOL didResign = [super resignFirstResponder];
 	
 	if (didResign && [[_view window] firstResponder] == _view) {
