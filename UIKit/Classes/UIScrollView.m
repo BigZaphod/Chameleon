@@ -219,11 +219,6 @@ const CGFloat _UIScrollViewScrollerSize = 10;
 	}
 }
 
-- (BOOL)isDragging
-{
-	return (_horizontalScroller.dragging || _verticalScroller.dragging);
-}
-
 - (void)flashScrollIndicators
 {
 	[_horizontalScroller flash];
@@ -234,6 +229,32 @@ const CGFloat _UIScrollViewScrollerSize = 10;
 {
 	[_horizontalScroller quickFlash];
 	[_verticalScroller quickFlash];
+}
+
+- (void)_delegateDraggingDidBegin
+{
+	if (!_dragDelegateTimer) {
+		if (_delegateCan.scrollViewWillBeginDragging) {
+			[_delegate scrollViewWillBeginDragging:self];
+		}
+	}
+	
+	[_dragDelegateTimer invalidate];
+	_dragDelegateTimer = [NSTimer scheduledTimerWithTimeInterval:0.33 target:self selector:@selector(_delegateDraggingDidEnd) userInfo:nil repeats:NO];
+}
+
+- (BOOL)isDragging
+{
+	return (_dragDelegateTimer != nil);
+}
+
+- (void)_delegateDraggingDidEnd
+{
+	_dragDelegateTimer = nil;
+
+	if (_delegateCan.scrollViewDidEndDragging) {
+		[_delegate scrollViewDidEndDragging:self willDecelerate:NO];
+	}
 }
 
 - (void)mouseMoved:(CGPoint)delta withEvent:(UIEvent *)event
@@ -260,6 +281,8 @@ const CGFloat _UIScrollViewScrollerSize = 10;
 - (void)scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event
 {
 	if (self.scrollEnabled) {
+		[self _delegateDraggingDidBegin];
+		
 		// Increasing the delta because it just seems to feel better to me right now.
 		// Dunno if this is something standard that OSX is doing or if OSX actually scales it somehow based on content size.
 		delta.x *= 10.f;
@@ -276,18 +299,13 @@ const CGFloat _UIScrollViewScrollerSize = 10;
 - (void)_UIScroller:(UIScroller *)scroller contentOffsetDidChange:(CGFloat)newOffset
 {
 	if (self.scrollEnabled) {
+		[self _delegateDraggingDidBegin];
+
 		if (scroller == _verticalScroller) {
 			[self setContentOffset:CGPointMake(self.contentOffset.x,newOffset) animated:NO];
 		} else if (scroller == _horizontalScroller) {
 			[self setContentOffset:CGPointMake(newOffset,self.contentOffset.y) animated:NO];
 		}
-	}
-}
-
-- (void)_UIScrollerWillBeginDragging:(UIScroller *)scroller withEvent:(UIEvent *)event
-{
-	if (_delegateCan.scrollViewWillBeginDragging) {
-		[_delegate scrollViewWillBeginDragging:self];
 	}
 }
 
@@ -298,10 +316,6 @@ const CGFloat _UIScrollViewScrollerSize = 10;
 	
 	if (!CGRectContainsPoint(scroller.frame,point)) {
 		scroller.alwaysVisible = NO;
-	}
-
-	if (_delegateCan.scrollViewDidEndDragging) {
-		[_delegate scrollViewDidEndDragging:self willDecelerate:NO];
 	}
 }
 

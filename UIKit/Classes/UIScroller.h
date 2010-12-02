@@ -6,7 +6,6 @@
 
 @protocol _UIScrollerDelegate
 - (void)_UIScroller:(UIScroller *)scroller contentOffsetDidChange:(CGFloat)newOffset;
-- (void)_UIScrollerWillBeginDragging:(UIScroller *)scroller withEvent:(UIEvent *)event;
 - (void)_UIScrollerDidEndDragging:(UIScroller *)scroller withEvent:(UIEvent *)event;
 @end
 
@@ -35,7 +34,6 @@
 @property (nonatomic, assign) id<_UIScrollerDelegate> delegate;
 @property (nonatomic, assign) CGFloat contentSize;		// used to calulate how big the slider knob should be (uses its own frame height/width and compares against this value)
 @property (nonatomic, assign) CGFloat contentOffset;	// set this after contentSize is set or else it'll normalize in unexpected ways
-@property (nonatomic, readonly, getter=isDragging) BOOL dragging;
 @property (nonatomic) UIScrollViewIndicatorStyle indicatorStyle;
 
 @end
