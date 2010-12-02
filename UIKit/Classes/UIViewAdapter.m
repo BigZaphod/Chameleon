@@ -23,6 +23,7 @@
 {
 	if ((self=[super initWithFrame:frame])) {
 		_clipView = [[UINSClipView alloc] initWithFrame:NSMakeRect(0,0,frame.size.width,frame.size.height) parentView:self];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_hierarchyMayHaveChangedNotification:) name:UIViewHiddenDidChangeNotification object:nil];
 	}
 	return self;
 }
@@ -40,6 +41,7 @@
 
 - (void)dealloc
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewHiddenDidChangeNotification object:nil];
 	[_view release];
 	[_clipView release];
 	[super dealloc];
@@ -50,6 +52,8 @@
 
 - (void)_addNSView
 {
+	NSLog( @"_addNSView" );
+	
 	[_clipView scrollToPoint:NSPointFromCGPoint(self.contentOffset)];
 	
 	[[self.window.screen UIKitView] addSubview:_clipView];
@@ -59,16 +63,16 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_updateScrollViewAndFlashScrollbars) name:NSViewBoundsDidChangeNotification object:_clipView];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_hierarchyMayHaveChangedNotification:) name:UIViewFrameDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_hierarchyMayHaveChangedNotification:) name:UIViewBoundsDidChangeNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_hierarchyMayHaveChangedNotification:) name:UIViewHiddenDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_hierarchyMayHaveChangedNotification:) name:UIViewDidMoveToSuperviewNotification object:nil];
 }
 
 - (void)_removeNSView
 {
+	NSLog( @"_removeNSView" );
+
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewBoundsDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewFrameDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewBoundsDidChangeNotification object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewHiddenDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewDidMoveToSuperviewNotification object:nil];
 	
 	[_clipView removeFromSuperview];
@@ -130,6 +134,8 @@
 
 - (void)_updateNSViews
 {
+	NSLog( @"_updateNSViews" );
+	
 	if ([self _NSViewShouldBeVisible]) {
 		if ([_clipView superview] != [self.window.screen UIKitView]) {
 			[self _addNSView];
