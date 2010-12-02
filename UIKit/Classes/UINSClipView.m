@@ -39,7 +39,7 @@
 		offset.y -= [event deltaY];
 		
 		[parentView _quickFlashScrollIndicators];
-		[parentView setContentOffset:offset animated:NO];
+		[parentView setContentOffset:NSPointToCGPoint(offset) animated:NO];
 	}
 }
 
