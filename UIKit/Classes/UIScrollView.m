@@ -13,8 +13,6 @@
 @interface UIScrollView () <_UIScrollerDelegate>
 @end
 
-const CGFloat _UIScrollViewScrollerSize = 10;
-
 @implementation UIScrollView
 @synthesize contentOffset=_contentOffset, contentInset=_contentInset, scrollIndicatorInsets=_scrollIndicatorInsets, scrollEnabled=_scrollEnabled;
 @synthesize showsHorizontalScrollIndicator=_showsHorizontalScrollIndicator, showsVerticalScrollIndicator=_showsVerticalScrollIndicator, contentSize=_contentSize;
@@ -146,13 +144,26 @@ const CGFloat _UIScrollViewScrollerSize = 10;
 	[self _setContentPositionAnimated:animated];
 }
 
+- (CGFloat)_scrollerSize
+{
+	const CGSize viewSize = self.bounds.size;
+	const CGFloat minViewSize = 50;
+	
+	if (viewSize.width <= minViewSize || viewSize.height <= minViewSize) {
+		return 6;
+	} else {
+		return 10;
+	}
+}
+
 - (void)_updateScrollers
 {
 	[self _constrainContentOffset:NO];
 	
+	const CGFloat scrollerSize = [self _scrollerSize];
 	const CGRect bounds = self.bounds;
-	_verticalScroller.frame = CGRectMake(bounds.origin.x+bounds.size.width-_UIScrollViewScrollerSize-_scrollIndicatorInsets.right,bounds.origin.y+_scrollIndicatorInsets.top,_UIScrollViewScrollerSize,bounds.size.height-_scrollIndicatorInsets.top-_scrollIndicatorInsets.bottom);
-	_horizontalScroller.frame = CGRectMake(bounds.origin.x+_scrollIndicatorInsets.left,bounds.origin.y+bounds.size.height-_UIScrollViewScrollerSize-_scrollIndicatorInsets.bottom,bounds.size.width-_scrollIndicatorInsets.left-_scrollIndicatorInsets.right,_UIScrollViewScrollerSize);
+	_verticalScroller.frame = CGRectMake(bounds.origin.x+bounds.size.width-scrollerSize-_scrollIndicatorInsets.right,bounds.origin.y+_scrollIndicatorInsets.top,scrollerSize,bounds.size.height-_scrollIndicatorInsets.top-_scrollIndicatorInsets.bottom);
+	_horizontalScroller.frame = CGRectMake(bounds.origin.x+_scrollIndicatorInsets.left,bounds.origin.y+bounds.size.height-scrollerSize-_scrollIndicatorInsets.bottom,bounds.size.width-_scrollIndicatorInsets.left-_scrollIndicatorInsets.right,scrollerSize);
 
 	_verticalScroller.hidden = !self._canScrollVertical;
 	_horizontalScroller.hidden = !self._canScrollHorizontal;
@@ -261,9 +272,10 @@ const CGFloat _UIScrollViewScrollerSize = 10;
 {
 	UITouch *touch = [[event allTouches] anyObject];
 	const CGPoint point = [touch locationInView:self];
+	const CGFloat scrollerSize = [self _scrollerSize];
 	
-	_horizontalScroller.alwaysVisible = CGRectContainsPoint(CGRectInset(_horizontalScroller.frame, -_UIScrollViewScrollerSize, -_UIScrollViewScrollerSize), point);
-	_verticalScroller.alwaysVisible = CGRectContainsPoint(CGRectInset(_verticalScroller.frame, -_UIScrollViewScrollerSize, -_UIScrollViewScrollerSize), point);
+	_horizontalScroller.alwaysVisible = CGRectContainsPoint(CGRectInset(_horizontalScroller.frame, -scrollerSize, -scrollerSize), point);
+	_verticalScroller.alwaysVisible = CGRectContainsPoint(CGRectInset(_verticalScroller.frame, -scrollerSize, -scrollerSize), point);
 	
 	[super mouseMoved:delta withEvent:event];
 }
