@@ -66,6 +66,7 @@ static BOOL TouchIsActive(UITouch *touch)
 		_currentEvent = [[UIEvent alloc] init];
 		_visibleWindows = [[NSMutableSet alloc] init];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillResignActive:) name:NSApplicationWillResignActiveNotification object:nil];
 	}
 	return self;
 }
@@ -291,6 +292,15 @@ static BOOL TouchIsActive(UITouch *touch)
 	}
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationWillTerminateNotification object:self];
+}
+
+- (void)_applicationWillResignActive:(NSNotification *)note
+{
+	if ([_delegate respondsToSelector:@selector(applicationWillResignActive:)]) {
+		[_delegate applicationWillResignActive:self];
+	}
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationWillResignActiveNotification object:self];
 }
 
 @end
