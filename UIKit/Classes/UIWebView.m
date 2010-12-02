@@ -109,13 +109,13 @@
 
 - (void)webView:(WebView *)webView decidePolicyForNavigationAction:(NSDictionary *)actionInformation request:(NSURLRequest *)request frame:(WebFrame *)frame decisionListener:(id < WebPolicyDecisionListener >)listener
 {
-	BOOL shouldStartLoad = YES;
+	BOOL shouldStartLoad = NO;
 	
-	if (_delegateHas.didFailLoadWithError) {
+	if (_delegateHas.shouldStartLoadWithRequest) {
 		id navTypeObject = [actionInformation objectForKey:WebActionNavigationTypeKey];
 		NSInteger navTypeCode = [navTypeObject intValue];
 		UIWebViewNavigationType navType = UIWebViewNavigationTypeOther;
-		
+
 		switch (navTypeCode) {
 			case WebNavigationTypeLinkClicked:		navType = UIWebViewNavigationTypeLinkClicked;		break;
 			case WebNavigationTypeFormSubmitted:	navType = UIWebViewNavigationTypeFormSubmitted;		break;
