@@ -305,6 +305,8 @@
 		offset.y -= delta.y;
 		[self setContentOffset:offset animated:NO];	// setting YES here is a lot nicer/smoother, but the scrollbars get all messed up. Need to figure that out.
 		[self _quickFlashScrollIndicators];
+	} else {
+		[super scrollWheelMoved:delta withEvent:event];
 	}
 }
 

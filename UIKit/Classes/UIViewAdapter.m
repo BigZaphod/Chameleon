@@ -52,8 +52,6 @@
 
 - (void)_addNSView
 {
-	NSLog( @"_addNSView" );
-	
 	[_clipView scrollToPoint:NSPointFromCGPoint(self.contentOffset)];
 	
 	[[self.window.screen UIKitView] addSubview:_clipView];
@@ -68,8 +66,6 @@
 
 - (void)_removeNSView
 {
-	NSLog( @"_removeNSView" );
-
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewBoundsDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewFrameDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewBoundsDidChangeNotification object:nil];
@@ -134,8 +130,6 @@
 
 - (void)_updateNSViews
 {
-	NSLog( @"_updateNSViews" );
-	
 	if ([self _NSViewShouldBeVisible]) {
 		if ([_clipView superview] != [self.window.screen UIKitView]) {
 			[self _addNSView];

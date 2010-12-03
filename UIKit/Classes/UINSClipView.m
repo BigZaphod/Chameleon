@@ -40,6 +40,8 @@
 		
 		[parentView _quickFlashScrollIndicators];
 		[parentView setContentOffset:NSPointToCGPoint(offset) animated:NO];
+	} else {
+		[super scrollWheel:event];
 	}
 }
 
