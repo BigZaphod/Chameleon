@@ -13,6 +13,7 @@
 		[_webView setAutoresizingMask:(NSViewWidthSizable|NSViewHeightSizable)];
 		[_webView setPolicyDelegate:self];
 		[_webView setFrameLoadDelegate:self];
+		[_webView setDrawsBackground:NO];
 
 		_webViewAdapter = [[UIViewAdapter alloc] initWithFrame:self.bounds];
 		_webViewAdapter.NSView = _webView;
