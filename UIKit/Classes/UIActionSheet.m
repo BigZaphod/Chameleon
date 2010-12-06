@@ -76,7 +76,7 @@
 
 - (NSInteger)addButtonWithTitle:(NSString *)title
 {
-	[_menuTitles addObject:title];
+	[_menuTitles addObject:title ?: @""];
 	NSInteger index = [_menuTitles count]-1;
 
 	if (_firstOtherButtonIndex == -1 ) {
