@@ -31,7 +31,8 @@
 {
 	if ([self superview]) {
 		[CATransaction begin];
-		[CATransaction setAnimationDuration:0];
+		[CATransaction setValue:(id)kCFBooleanTrue
+						 forKey:kCATransactionDisableActions];
 		
 		CALayer *layer = [self layer];
 
