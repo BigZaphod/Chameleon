@@ -64,4 +64,21 @@
 	return [_path lineWidth];
 }
 
+- (void)applyTransform:(CGAffineTransform)transform
+{
+	NSAffineTransformStruct t;
+	
+	t.m11 = transform.a;
+	t.m12 = transform.b;
+	t.m21 = transform.c;
+	t.m22 = transform.d;
+	t.tX = transform.tx;
+	t.tY = transform.ty;
+	
+	NSAffineTransform *affineTransform = [NSAffineTransform transform];
+	[affineTransform setTransformStruct:t];
+	
+	[_path transformUsingAffineTransform:affineTransform];
+}
+
 @end

@@ -18,6 +18,8 @@
 - (void)fill;
 - (void)stroke;
 
+- (void)applyTransform:(CGAffineTransform)transform;
+
 @property (nonatomic) CGFloat lineWidth;
 
 @end
