@@ -160,13 +160,23 @@
 	return [[[NSImage alloc] initWithCGImage:_image size:NSSizeFromCGSize(self.size)] autorelease];
 }
 
+- (NSBitmapImageRep *)_NSBitmapImageRep
+{
+	return [[[NSBitmapImageRep alloc] initWithCGImage:_image] autorelease];
+}
+
 @end
 
 void UIImageWriteToSavedPhotosAlbum(UIImage *image, id completionTarget, SEL completionSelector, void *contextInfo)
 {
 }
 
-NSData * UIImageJPEGRepresentation(UIImage *image, CGFloat compressionQuality)
+NSData *UIImageJPEGRepresentation(UIImage *image, CGFloat compressionQuality)
 {
-	return nil;
+	return [[image _NSBitmapImageRep] representationUsingType:NSJPEGFileType properties:[NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:compressionQuality] forKey:NSImageCompressionFactor]];
+}
+
+NSData *UIImagePNGRepresentation(UIImage *image)
+{
+	return [[image _NSBitmapImageRep] representationUsingType:NSPNGFileType properties:nil];
 }

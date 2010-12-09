@@ -43,4 +43,5 @@ typedef enum {
 @end
 
 void UIImageWriteToSavedPhotosAlbum(UIImage *image, id completionTarget, SEL completionSelector, void *contextInfo);
-NSData * UIImageJPEGRepresentation(UIImage *image, CGFloat compressionQuality);
+NSData *UIImageJPEGRepresentation(UIImage *image, CGFloat compressionQuality);
+NSData *UIImagePNGRepresentation(UIImage *image);
