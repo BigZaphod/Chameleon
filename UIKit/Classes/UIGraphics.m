@@ -39,9 +39,11 @@ CGContextRef UIGraphicsGetCurrentContext()
 
 void UIGraphicsBeginImageContext(CGSize size)
 {
+	const size_t width = size.width;
+	const size_t height = size.height;
 	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-	CGContextRef ctx = CGBitmapContextCreate(NULL, size.width, size.height, 8, 4*size.width, colorSpace, kCGImageAlphaPremultipliedLast);
-	CGContextConcatCTM(ctx, CGAffineTransformMake(1, 0, 0, -1, 0, size.height));
+	CGContextRef ctx = CGBitmapContextCreate(NULL, width, height, 8, 4*width, colorSpace, kCGImageAlphaPremultipliedLast);
+	CGContextConcatCTM(ctx, CGAffineTransformMake(1, 0, 0, -1, 0, height));
 	CGColorSpaceRelease(colorSpace);
 	UIGraphicsPushContext(ctx);
 	CGContextRelease(ctx);
