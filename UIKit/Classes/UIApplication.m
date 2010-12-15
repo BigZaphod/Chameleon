@@ -18,6 +18,7 @@ NSString *const UIApplicationWillResignActiveNotification = @"UIApplicationWillR
 NSString *const UIApplicationDidEnterBackgroundNotification = @"UIApplicationDidEnterBackgroundNotification";
 NSString *const UIApplicationDidBecomeActiveNotification = @"UIApplicationDidBecomeActiveNotification";
 NSString *const UIApplicationDidFinishLaunchingNotification = @"UIApplicationDidFinishLaunchingNotification";
+NSString *const UIApplicationNetworkActivityIndicatorChangedNotification = @"UIApplicationNetworkActivityIndicatorChangedNotification";
 
 NSString *const UIApplicationLaunchOptionsURLKey = @"UIApplicationLaunchOptionsURLKey";
 NSString *const UIApplicationLaunchOptionsSourceApplicationKey = @"UIApplicationLaunchOptionsSourceApplicationKey";
@@ -91,12 +92,15 @@ static BOOL TouchIsActive(UITouch *touch)
 
 - (BOOL)isNetworkActivityIndicatorVisible
 {
-	return NO;  // lies!
+	return _networkActivityIndicatorVisible;
 }
 
 - (void)setNetworkActivityIndicatorVisible:(BOOL)b
 {
-	// nothing!
+	if (b != [self isNetworkActivityIndicatorVisible]) {
+		_networkActivityIndicatorVisible = b;
+		[[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationNetworkActivityIndicatorChangedNotification object:self];
+	}
 }
 
 - (void)beginIgnoringInteractionEvents

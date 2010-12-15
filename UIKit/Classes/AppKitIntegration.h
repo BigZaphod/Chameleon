@@ -5,3 +5,4 @@
 #import "UIResponderAppKitIntegration.h"
 #import "UIScreenAppKitIntegration.h"
 #import "UIActionSheetAppKitIntegration.h"
+#import "UIApplicationAppKitIntegration.h"

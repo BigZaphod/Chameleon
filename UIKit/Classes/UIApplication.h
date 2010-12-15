@@ -2,6 +2,7 @@
 #import "UIResponder.h"
 #import "UIDevice.h"
 #import "UIApplicationDelegate.h"
+#import "UIApplicationAppKitIntegration.h"
 
 extern NSString *const UIApplicationWillChangeStatusBarOrientationNotification;
 extern NSString *const UIApplicationDidChangeStatusBarOrientationNotification;
@@ -45,6 +46,7 @@ typedef enum {
 	NSMutableSet *_visibleWindows;
 	id<UIApplicationDelegate> _delegate;
 	BOOL _idleTimerDisabled;
+	BOOL _networkActivityIndicatorVisible;
 }
 
 + (UIApplication *)sharedApplication;
