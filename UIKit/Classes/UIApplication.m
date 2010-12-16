@@ -47,7 +47,7 @@ static BOOL TouchIsActive(UITouch *touch)
 }
 
 @implementation UIApplication
-@synthesize keyWindow=_keyWindow, delegate=_delegate, idleTimerDisabled=_idleTimerDisabled;
+@synthesize keyWindow=_keyWindow, delegate=_delegate, idleTimerDisabled=_idleTimerDisabled, applicationSupportsShakeToEdit=_applicationSupportsShakeToEdit;
 
 + (void)initialize
 {
@@ -66,6 +66,7 @@ static BOOL TouchIsActive(UITouch *touch)
 	if ((self=[super init])) {
 		_currentEvent = [[UIEvent alloc] init];
 		_visibleWindows = [[NSMutableSet alloc] init];
+		_applicationSupportsShakeToEdit = YES;		// yeah... not *really* true, but UIKit defaults to YES :)
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillResignActive:) name:NSApplicationWillResignActiveNotification object:nil];
 	}

@@ -71,6 +71,7 @@ typedef enum {
 - (void)addSubview:(UIView *)subview;
 - (void)insertSubview:(UIView *)subview atIndex:(NSInteger)index;
 - (void)insertSubview:(UIView *)subview belowSubview:(UIView *)below;
+- (void)insertSubview:(UIView *)subview aboveSubview:(UIView *)above;
 - (void)removeFromSuperview;
 - (void)bringSubviewToFront:(UIView *)subview;
 - (void)sendSubviewToBack:(UIView *)subview;

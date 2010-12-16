@@ -203,6 +203,12 @@ static BOOL _animationsEnabled = YES;
 	[_layer insertSublayer:subview.layer below:below.layer];
 }
 
+- (void)insertSubview:(UIView *)subview aboveSubview:(UIView *)above
+{
+	[self addSubview:subview];
+	[_layer insertSublayer:subview.layer above:above.layer];
+}
+
 - (void)bringSubviewToFront:(UIView *)subview
 {
 	if (subview.superview == self) {

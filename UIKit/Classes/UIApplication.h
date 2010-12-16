@@ -47,6 +47,7 @@ typedef enum {
 	id<UIApplicationDelegate> _delegate;
 	BOOL _idleTimerDisabled;
 	BOOL _networkActivityIndicatorVisible;
+	BOOL _applicationSupportsShakeToEdit;
 }
 
 + (UIApplication *)sharedApplication;
@@ -66,5 +67,6 @@ typedef enum {
 @property (nonatomic, readonly) NSTimeInterval statusBarOrientationAnimationDuration;
 @property (nonatomic, assign) id<UIApplicationDelegate> delegate;
 @property (nonatomic, getter=isIdleTimerDisabled) BOOL idleTimerDisabled;	// has no actual affect
+@property (nonatomic) BOOL applicationSupportsShakeToEdit;					// no effect
 
 @end

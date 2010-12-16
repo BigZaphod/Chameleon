@@ -19,8 +19,10 @@
 		141927A311F8A88E00051ABD /* UISplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 141927A111F8A88E00051ABD /* UISplitViewController.m */; };
 		1426FFDD129ADEA300BD31E5 /* UIControlAction.h in Headers */ = {isa = PBXBuildFile; fileRef = 1426FFDB129ADEA300BD31E5 /* UIControlAction.h */; };
 		1426FFDE129ADEA300BD31E5 /* UIControlAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 1426FFDC129ADEA300BD31E5 /* UIControlAction.m */; };
-		142E96A312BAC99800850A95 /* UIPageControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 142E96A112BAC99800850A95 /* UIPageControl.h */; };
+		142E96A312BAC99800850A95 /* UIPageControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 142E96A112BAC99800850A95 /* UIPageControl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		142E96A412BAC99800850A95 /* UIPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 142E96A212BAC99800850A95 /* UIPageControl.m */; };
+		142E970E12BACF6A00850A95 /* UIProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = 142E970C12BACF6A00850A95 /* UIProgressView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		142E970F12BACF6A00850A95 /* UIProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 142E970D12BACF6A00850A95 /* UIProgressView.m */; };
 		1436CF96121476A1001DFEFB /* UISwitch.h in Headers */ = {isa = PBXBuildFile; fileRef = 1436CF94121476A1001DFEFB /* UISwitch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1436CF97121476A1001DFEFB /* UISwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 1436CF95121476A1001DFEFB /* UISwitch.m */; };
 		143E36AD1295A8690073FB22 /* UIActionSheetAppKitIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = 143E36AC1295A8690073FB22 /* UIActionSheetAppKitIntegration.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -230,6 +232,8 @@
 		1426FFDC129ADEA300BD31E5 /* UIControlAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIControlAction.m; sourceTree = "<group>"; };
 		142E96A112BAC99800850A95 /* UIPageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIPageControl.h; path = Classes/UIPageControl.h; sourceTree = "<group>"; };
 		142E96A212BAC99800850A95 /* UIPageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIPageControl.m; path = Classes/UIPageControl.m; sourceTree = "<group>"; };
+		142E970C12BACF6A00850A95 /* UIProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIProgressView.h; path = Classes/UIProgressView.h; sourceTree = "<group>"; };
+		142E970D12BACF6A00850A95 /* UIProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIProgressView.m; path = Classes/UIProgressView.m; sourceTree = "<group>"; };
 		1436CF94121476A1001DFEFB /* UISwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UISwitch.h; path = Classes/UISwitch.h; sourceTree = "<group>"; };
 		1436CF95121476A1001DFEFB /* UISwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UISwitch.m; path = Classes/UISwitch.m; sourceTree = "<group>"; };
 		143E36AA1295A84A0073FB22 /* Tests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
@@ -583,6 +587,8 @@
 				14CC838B11EFA8AF005988CC /* UIPasteboard.m */,
 				14CC838C11EFA8AF005988CC /* UIPopoverController.h */,
 				14CC838D11EFA8AF005988CC /* UIPopoverController.m */,
+				142E970C12BACF6A00850A95 /* UIProgressView.h */,
+				142E970D12BACF6A00850A95 /* UIProgressView.m */,
 				14CC838E11EFA8AF005988CC /* UIResponder.h */,
 				14CC838F11EFA8AF005988CC /* UIResponder.m */,
 				140AA9141264E9770057D87F /* UIResponderAppKitIntegration.h */,
@@ -824,6 +830,7 @@
 				14805F5A12A6E2AE0080C4BA /* UIScrollView+UIPrivate.h in Headers */,
 				447D834D12B855910032A95E /* UIApplicationAppKitIntegration.h in Headers */,
 				142E96A312BAC99800850A95 /* UIPageControl.h in Headers */,
+				142E970E12BACF6A00850A95 /* UIProgressView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -984,6 +991,7 @@
 				14805D1B12A6A5F80080C4BA /* UIViewAdapter.m in Sources */,
 				14805D4212A6B0E80080C4BA /* UINSClipView.m in Sources */,
 				142E96A412BAC99800850A95 /* UIPageControl.m in Sources */,
+				142E970F12BACF6A00850A95 /* UIProgressView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

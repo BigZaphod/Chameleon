@@ -60,3 +60,4 @@
 #import "UIMenuItem.h"
 #import "UIViewAdapter.h"
 #import "UIPageControl.h"
+#import "UIProgressView.h"
