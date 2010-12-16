@@ -192,7 +192,7 @@ typedef enum {
 			titleLabel.textAlignment = UITextAlignmentCenter;
 			titleLabel.backgroundColor = [UIColor clearColor];
 			titleLabel.textColor = [UIColor whiteColor];
-			titleLabel.font = [UIFont systemFontOfSize:14];
+			titleLabel.font = [UIFont boldSystemFontOfSize:14];
 			_centerView = titleLabel;
 		}
 
