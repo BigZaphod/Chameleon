@@ -40,10 +40,9 @@
 	[super dealloc];
 }
 
-+ (UIImage *)imageNamed:(NSString *)name
++ (UIImage *)_loadImageNamed:(NSString *)name
 {
 	if ([name length] > 0) {
-		
 		NSString *macName = [self _macPathForFile:name];
 		
 		// first check for @mac version of the name
@@ -52,7 +51,7 @@
 			// otherwise try again with the original given name
 			cachedImage = [self _cachedImageForName:name];
 		}
-
+		
 		if (!cachedImage) {
 			// okay, we couldn't find a cached version so now lets first try to make an original with the @mac name.
 			// if that fails, try to make it with the original name.
@@ -71,6 +70,21 @@
 	} else {
 		return nil;
 	}
+}
+
++ (UIImage *)imageNamed:(NSString *)name
+{
+	// first try it with the given name
+	UIImage *image = [self _loadImageNamed:name];
+	
+	// if nothing is found, try again after replacing any underscores in the name with dashes.
+	// I don't know why, but UIKit does something similar. it probably has a good reason and it might not be this simplistic, but
+	// for now this little hack makes Ramp Champ work. :)
+	if (!image) {
+		image = [self _loadImageNamed:[name stringByReplacingOccurrencesOfString:@"_" withString:@"-"]];
+	}
+	
+	return image;
 }
 
 + (UIImage *)imageWithData:(NSData *)data
