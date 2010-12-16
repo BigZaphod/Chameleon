@@ -35,6 +35,7 @@ typedef enum {
 	BOOL _scrollsToTop;
 	UIScrollViewIndicatorStyle _indicatorStyle;
 	BOOL _delaysContentTouches;
+	BOOL _canCancelContentTouches;
 	BOOL _pagingEnabled;
 	NSTimer *_dragDelegateTimer;
 	
@@ -61,6 +62,7 @@ typedef enum {
 @property (nonatomic, assign) id<UIScrollViewDelegate> delegate;
 @property (nonatomic) BOOL scrollsToTop;
 @property (nonatomic) BOOL delaysContentTouches;	// no effect
+@property (nonatomic) BOOL canCancelContentTouches; // no effect
 @property (nonatomic, readonly, getter=isDragging) BOOL dragging;
 @property (nonatomic, readonly, getter=isDecelerating) BOOL decelerating;	// always returns NO
 @property (nonatomic, assign) BOOL pagingEnabled;	// not implemented

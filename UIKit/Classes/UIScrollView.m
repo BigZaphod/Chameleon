@@ -18,6 +18,7 @@
 @synthesize showsHorizontalScrollIndicator=_showsHorizontalScrollIndicator, showsVerticalScrollIndicator=_showsVerticalScrollIndicator, contentSize=_contentSize;
 @synthesize maximumZoomScale=_maximumZoomScale, minimumZoomScale=_minimumZoomScale, zoomScale=_zoomScale, scrollsToTop=_scrollsToTop;
 @synthesize indicatorStyle=_indicatorStyle, delaysContentTouches=_delaysContentTouches, delegate=_delegate, pagingEnabled=_pagingEnabled;
+@synthesize canCancelContentTouches=_canCancelContentTouches;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -37,6 +38,7 @@
 		self.showsHorizontalScrollIndicator = YES;
 		self.scrollsToTop = YES;
 		self.delaysContentTouches = YES;
+		self.canCancelContentTouches = YES;
 		self.pagingEnabled = NO;
 	}
 	return self;
