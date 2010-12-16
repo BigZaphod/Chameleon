@@ -254,6 +254,24 @@
 	_dragDelegateTimer = [NSTimer scheduledTimerWithTimeInterval:0.33 target:self selector:@selector(_delegateDraggingDidEnd) userInfo:nil repeats:NO];
 }
 
+- (void)removeFromSuperview
+{
+	// there's a rare case where the deferment of the draggingDidEnd message can cause a crash indirectly because it ends up that the scroll view's delegate
+	// was destroyed and the only thing keeping the scrollview itself alive is the NSTimer holding on to it for this. That means that when the timer fires,
+	// it tries to send a message to the now-deceased delegate object and BOOM goes the app. This seems like a hacky work around to this. Technically,
+	// anything that wants to be a delegate of the scroll view should be making sure it's living at least as long as the scroll view itself, or set the
+	// scroll view's delegate to nil before it pops off and dies. So in some respects, this isn't *exactly* a bug in UIKit but it is happening often enough
+	// and the fact that this is a deferred thing which is not how the real UIKit works makes me think we have to try to work around it here in this case. :/
+	// The reasoning for invalidating the timer here is similar to the reasoning in UIView's removeFromSuperview which cancels any active touches on the view
+	// just before it's removed. This sort of falls into the same category in that this is kind of like a fake touch. If it weren't implemented via a timer
+	// then the touching canceling that happens in UIView's removeFromSuperview would ultimately have the same effect here - it'd never get a touchesEnded:
+	// message and thus I'd assume there'd be no sending of draggingDidEnd, either.
+	[_dragDelegateTimer invalidate];
+	_dragDelegateTimer = nil;
+
+	[super removeFromSuperview];
+}
+
 - (BOOL)isDragging
 {
 	return (_dragDelegateTimer != nil);
