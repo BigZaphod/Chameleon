@@ -809,8 +809,10 @@ static BOOL _animationsEnabled = YES;
 
 + (void)commitAnimations
 {
-	[[_animationGroups lastObject] commit];
-	[_animationGroups removeLastObject];
+	if ([_animationGroups count] > 0) {
+		[[_animationGroups lastObject] commit];
+		[_animationGroups removeLastObject];
+	}
 }
 
 + (void)setAnimationBeginsFromCurrentState:(BOOL)beginFromCurrentState
