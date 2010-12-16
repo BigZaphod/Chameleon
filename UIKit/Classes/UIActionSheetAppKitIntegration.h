@@ -2,5 +2,5 @@
 #import "UIActionSheet.h"
 
 @interface UIActionSheet (AppKitIntegration)
-- (NSInteger)addSeparator;
+- (void)addSeparator;
 @end

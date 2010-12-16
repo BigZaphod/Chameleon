@@ -21,6 +21,7 @@
 	NSInteger _firstOtherButtonIndex;
 	NSString *_title;
 	NSMutableArray *_menuTitles;
+	NSMutableSet *_separatorIndexes;
 	id _menu;
 	
 	struct {

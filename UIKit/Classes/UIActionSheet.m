@@ -16,6 +16,7 @@
 {
 	if ((self=[super initWithFrame:frame])) {
 		_menuTitles = [[NSMutableArray alloc] init];
+		_separatorIndexes = [[NSMutableArray alloc] init];
 		_destructiveButtonIndex = -1;
 		_cancelButtonIndex = -1;
 		_firstOtherButtonIndex = -1;
@@ -60,6 +61,7 @@
 	[_title release];
 	[_menu release];
 	[_menuTitles release];
+	[_separatorIndexes release];
 	[super dealloc];
 }
 
@@ -86,10 +88,9 @@
 	return index;
 }
 
-- (NSInteger)addSeparator
+- (void)addSeparator
 {
-	[_menuTitles addObject:[NSNull null]];
-	return [_menuTitles count]-1;
+	[_separatorIndexes addObject:[NSNumber numberWithInt:[_menuTitles count]]];
 }
 
 - (void)setDestructiveButtonIndex:(NSInteger)index
@@ -133,20 +134,19 @@
 		[_menu setAllowsContextMenuPlugIns:NO];
 		
 		for (NSInteger index=0; index<[_menuTitles count]; index++) {
+			if ([_separatorIndexes containsObject:[NSNumber numberWithInt:index]]) {
+				[_menu addItem:[NSMenuItem separatorItem]];
+			}
+			
 			// don't even bother putting a cancel menu item on there. I think on OSX it's always going to be pointless
 			// as clicking outside of the menu is always the same thing as tapping the cancel button and that's just
 			// how it's got to work, I think.
-			if (index != _cancelButtonIndex) {
-				if ([[_menuTitles objectAtIndex:index] isKindOfClass:[NSNull class]]) {
-					[_menu addItem:[NSMenuItem separatorItem]];
-				}
-				else {
-					NSMenuItem *theItem = [[NSMenuItem alloc] initWithTitle:[_menuTitles objectAtIndex:index] action:@selector(_didSelectMenuItem:) keyEquivalent:@""];
-					[theItem setTag:index];
-					[theItem setTarget:self];
-					[_menu addItem:theItem];
-					[theItem release];
-				}
+			if (index != _cancelButtonIndex) {				
+				NSMenuItem *theItem = [[NSMenuItem alloc] initWithTitle:[_menuTitles objectAtIndex:index] action:@selector(_didSelectMenuItem:) keyEquivalent:@""];
+				[theItem setTag:index];
+				[theItem setTarget:self];
+				[_menu addItem:theItem];
+				[theItem release];
 			}
 		}
 
