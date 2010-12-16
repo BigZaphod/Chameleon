@@ -59,3 +59,4 @@
 #import "UIMenuController.h"
 #import "UIMenuItem.h"
 #import "UIViewAdapter.h"
+#import "UIPageControl.h"
