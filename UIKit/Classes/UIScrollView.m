@@ -102,7 +102,7 @@
 		[UIView beginAnimations:@"setContent" context:NULL];
 		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 		[UIView setAnimationBeginsFromCurrentState:YES];
-		[UIView setAnimationDuration:0.1];
+		[UIView setAnimationDuration:0.33];
 	}
 
 	CGRect bounds = self.bounds;
