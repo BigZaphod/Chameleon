@@ -7,6 +7,7 @@ void UIGraphicsPushContext(CGContextRef ctx);
 void UIGraphicsPopContext();
 CGContextRef UIGraphicsGetCurrentContext();
 
+void UIGraphicsBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloat scale);
 void UIGraphicsBeginImageContext(CGSize size);
 UIImage *UIGraphicsGetImageFromCurrentImageContext();
 void UIGraphicsEndImageContext();

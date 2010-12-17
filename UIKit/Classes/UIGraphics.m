@@ -1,6 +1,7 @@
 //  Created by Sean Heber on 6/3/10.
 #import "UIGraphics.h"
 #import "UIImage.h"
+#import "UIScreen.h"
 #import <AppKit/AppKit.h>
 
 typedef struct UISavedGraphicsContext_ {
@@ -37,16 +38,27 @@ CGContextRef UIGraphicsGetCurrentContext()
 	return [[NSGraphicsContext currentContext] graphicsPort];
 }
 
-void UIGraphicsBeginImageContext(CGSize size)
+void UIGraphicsBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloat scale)
 {
-	const size_t width = size.width;
-	const size_t height = size.height;
+	if (scale == 0.f) {
+		scale = [UIScreen mainScreen].scale;
+	}
+	
+	const size_t width = size.width * scale;
+	const size_t height = size.height * scale;
+
 	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-	CGContextRef ctx = CGBitmapContextCreate(NULL, width, height, 8, 4*width, colorSpace, kCGImageAlphaPremultipliedLast);
+	CGContextRef ctx = CGBitmapContextCreate(NULL, width, height, 8, 4*width, colorSpace, (opaque? kCGImageAlphaNoneSkipFirst : kCGImageAlphaPremultipliedFirst));
 	CGContextConcatCTM(ctx, CGAffineTransformMake(1, 0, 0, -1, 0, height));
+	CGContextScaleCTM(ctx, 1.f/scale, 1.f/scale);
 	CGColorSpaceRelease(colorSpace);
 	UIGraphicsPushContext(ctx);
 	CGContextRelease(ctx);
+}
+
+void UIGraphicsBeginImageContext(CGSize size)
+{
+	UIGraphicsBeginImageContextWithOptions(size, NO, 1.f);
 }
 
 UIImage *UIGraphicsGetImageFromCurrentImageContext()
