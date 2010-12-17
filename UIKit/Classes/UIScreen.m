@@ -75,6 +75,11 @@ NSMutableArray *_allScreens = nil;
 	[super dealloc];
 }
 
+- (CGFloat)scale
+{
+	return 1;
+}
+
 - (void)_setPopoverController:(UIPopoverController *)controller
 {
 	_popoverController = controller;

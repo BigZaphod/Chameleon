@@ -6,6 +6,7 @@
 @interface UINavigationItem : NSObject {
 @private
 	NSString *_title;
+	NSString *_prompt;
 	UIBarButtonItem *_backBarButtonItem;
 	UIBarButtonItem *_leftBarButtonItem;
 	UIBarButtonItem *_rightBarButtonItem;
@@ -19,6 +20,7 @@
 - (void)setHidesBackButton:(BOOL)hidesBackButton animated:(BOOL)animated;
 
 @property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *prompt;
 @property (nonatomic, retain) UIBarButtonItem *backBarButtonItem;
 @property (nonatomic, retain) UIBarButtonItem *leftBarButtonItem;
 @property (nonatomic, retain) UIBarButtonItem *rightBarButtonItem;

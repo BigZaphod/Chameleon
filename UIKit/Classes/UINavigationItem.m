@@ -4,7 +4,7 @@
 
 @implementation UINavigationItem
 @synthesize title=_title, rightBarButtonItem=_rightBarButtonItem, titleView=_titleView, hidesBackButton=_hidesBackButton;
-@synthesize leftBarButtonItem=_leftBarButtonItem, backBarButtonItem=_backBarButtonItem;
+@synthesize leftBarButtonItem=_leftBarButtonItem, backBarButtonItem=_backBarButtonItem, prompt=_prompt;
 
 - (id)initWithTitle:(NSString *)theTitle
 {
@@ -21,6 +21,7 @@
 	[_rightBarButtonItem release];
 	[_title release];
 	[_titleView release];
+	[_prompt release];
 	[super dealloc];
 }
 
