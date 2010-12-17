@@ -2,12 +2,21 @@
 #import "UIFont.h"
 #import <Cocoa/Cocoa.h>
 
+static NSString *UIFontSystemFontName = nil;
+static NSString *UIFontBoldSystemFontName = nil;
+
 @implementation UIFont
 
-- (void)dealloc
++ (void)setSystemFontName:(NSString *)aName
 {
-	CFRelease(_font);
-	[super dealloc];
+	[UIFontSystemFontName release];
+	UIFontSystemFontName = [aName copy];
+}
+
++ (void)setBoldSystemFontName:(NSString *)aName
+{
+	[UIFontBoldSystemFontName release];
+	UIFontBoldSystemFontName = [aName copy];
 }
 
 + (UIFont *)_fontWithCTFont:(CTFontRef)aFont
@@ -37,12 +46,20 @@
 
 + (UIFont *)systemFontOfSize:(CGFloat)fontSize
 {
-	return [self fontWithNSFont:[NSFont systemFontOfSize:fontSize]];
+	NSFont *systemFont = UIFontSystemFontName? [NSFont fontWithName:UIFontSystemFontName size:fontSize] : [NSFont systemFontOfSize:fontSize];
+	return [self fontWithNSFont:systemFont];
 }
 
 + (UIFont *)boldSystemFontOfSize:(CGFloat)fontSize
 {
-	return [self fontWithNSFont:[NSFont boldSystemFontOfSize:fontSize]];
+	NSFont *systemFont = UIFontBoldSystemFontName? [NSFont fontWithName:UIFontBoldSystemFontName size:fontSize] : [NSFont boldSystemFontOfSize:fontSize];
+	return [self fontWithNSFont:systemFont];
+}
+
+- (void)dealloc
+{
+	CFRelease(_font);
+	[super dealloc];
 }
 
 - (NSString *)fontName
