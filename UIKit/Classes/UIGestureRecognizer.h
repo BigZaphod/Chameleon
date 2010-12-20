@@ -35,5 +35,6 @@ typedef enum {
 @property (nonatomic) BOOL delaysTouchesEnded;
 @property (nonatomic) BOOL cancelsTouchesInView;
 @property (nonatomic, readonly) UIGestureRecognizerState state;
+@property (nonatomic, readonly) UIView *view;
 
 @end

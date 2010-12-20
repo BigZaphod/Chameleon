@@ -35,4 +35,9 @@
 	return CGPointZero;
 }
 
+- (UIView *)view
+{
+	return nil;
+}
+
 @end
