@@ -15,7 +15,18 @@ NSImage *_NSImageCreateSubimage(NSImage *theImage, CGRect rect)
 
 NSCompositingOperation _NSCompositingOperationFromCGBlendMode(CGBlendMode blendMode) {
 	switch (blendMode) {
-		case kCGBlendModeNormal:
+		case kCGBlendModeClear:				return NSCompositeClear;
+		case kCGBlendModeCopy:				return NSCompositeCopy;
+		case kCGBlendModeSourceIn:			return NSCompositeSourceIn;
+		case kCGBlendModeSourceOut:			return NSCompositeSourceOut;
+		case kCGBlendModeSourceAtop:		return NSCompositeSourceAtop;
+		case kCGBlendModeDestinationOver:	return NSCompositeDestinationOver;
+		case kCGBlendModeDestinationIn:		return NSCompositeDestinationIn;
+		case kCGBlendModeDestinationOut:	return NSCompositeDestinationOut;
+		case kCGBlendModeDestinationAtop:	return NSCompositeDestinationAtop;
+		case kCGBlendModeXOR:				return NSCompositeXOR;
+		case kCGBlendModePlusDarker:		return NSCompositePlusDarker;
+		case kCGBlendModePlusLighter:		return NSCompositePlusLighter;
 		case kCGBlendModeMultiply:			
 		case kCGBlendModeScreen:
 		case kCGBlendModeOverlay:
@@ -31,19 +42,8 @@ NSCompositingOperation _NSCompositingOperationFromCGBlendMode(CGBlendMode blendM
 		case kCGBlendModeSaturation:
 		case kCGBlendModeColor:
 		case kCGBlendModeLuminosity:
-		case kCGBlendModeClear:
-		case kCGBlendModeCopy:
-		case kCGBlendModeSourceIn:
-		case kCGBlendModeSourceOut:
-		case kCGBlendModeSourceAtop:
-		case kCGBlendModeDestinationOver:
-		case kCGBlendModeDestinationIn:
-		case kCGBlendModeDestinationOut:
-		case kCGBlendModeDestinationAtop:
-		case kCGBlendModeXOR:
-		case kCGBlendModePlusDarker:
-		case kCGBlendModePlusLighter:
+		case kCGBlendModeNormal:
 		default:
-			return NSCompositeCopy;
+			return NSCompositeSourceOver;
 	}
 }
