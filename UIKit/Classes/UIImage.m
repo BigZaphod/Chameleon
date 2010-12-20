@@ -118,7 +118,7 @@
 
 - (void)drawAtPoint:(CGPoint)point blendMode:(CGBlendMode)blendMode alpha:(CGFloat)alpha
 {
-	CGSize size = self.size;
+	const CGSize size = self.size;
 	[self drawInRect:CGRectMake(point.x,point.y,size.width,size.height) blendMode:blendMode alpha:alpha];
 }
 
@@ -126,22 +126,26 @@
 {
 	CGContextRef ctx = UIGraphicsGetCurrentContext();
 	CGContextSaveGState(ctx);
-	CGContextTranslateCTM(ctx, rect.origin.x, rect.origin.y+rect.size.height);
-	CGContextScaleCTM(ctx, 1.0, -1.0);
 	CGContextSetBlendMode(ctx, blendMode);
 	CGContextSetAlpha(ctx, alpha);
-	CGContextDrawImage(ctx, CGRectMake(0,0,rect.size.width,rect.size.height), _image);
+	[self drawInRect:rect];
 	CGContextRestoreGState(ctx);
 }
 
 - (void)drawAtPoint:(CGPoint)point
 {
-	[self drawAtPoint:point blendMode:kCGBlendModeNormal alpha:1];
+	const CGSize size = self.size;
+	[self drawInRect:CGRectMake(point.x,point.y,size.width,size.height)];
 }
 
 - (void)drawInRect:(CGRect)rect
 {
-	[self drawInRect:rect blendMode:kCGBlendModeNormal alpha:1];
+	CGContextRef ctx = UIGraphicsGetCurrentContext();
+	CGContextSaveGState(ctx);
+	CGContextTranslateCTM(ctx, rect.origin.x, rect.origin.y+rect.size.height);
+	CGContextScaleCTM(ctx, 1.0, -1.0);
+	CGContextDrawImage(ctx, CGRectMake(0,0,rect.size.width,rect.size.height), _image);
+	CGContextRestoreGState(ctx);
 }
 
 - (CGSize)size

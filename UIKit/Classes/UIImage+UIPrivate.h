@@ -1,6 +1,8 @@
 //  Created by Sean Heber on 8/11/10.
 #import "UIImage.h"
 
+@class NSImage;
+
 @interface UIImage (UIPrivate)
 + (NSString *)_macPathForFile:(NSString *)path;		// inserts "@mac" into the filename of the file in the given path and returns the result
 + (NSString *)_pathForFile:(NSString *)path;		// uses above, checks for existence, if found, returns it otherwise returns the path string un-altered (doesn't verify that the file at the original path exists, though)
@@ -24,3 +26,6 @@
 
 - (UIImage *)_toolbarImage;		// returns a new image which is modified as required for toolbar buttons (turned into a solid color)
 @end
+
+// this is used by stretchable images to break the NSImage into multiple parts
+NSImage *_NSImageCreateSubimage(NSImage *theImage, CGRect rect);

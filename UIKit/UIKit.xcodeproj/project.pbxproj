@@ -192,8 +192,6 @@
 		14F56F4112664D350045EC82 /* <UIPopoverView> background.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F56F3C12664D350045EC82 /* <UIPopoverView> background.png */; };
 		14F56F4412664D430045EC82 /* UIPopoverView.h in Headers */ = {isa = PBXBuildFile; fileRef = 14F56F4212664D430045EC82 /* UIPopoverView.h */; };
 		14F56F4512664D430045EC82 /* UIPopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14F56F4312664D430045EC82 /* UIPopoverView.m */; };
-		14FA8C5D121DA4A000C4264B /* UIImageTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 14FA8C45121DA4A000C4264B /* UIImageTools.h */; };
-		14FA8C5E121DA4A000C4264B /* UIImageTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 14FA8C46121DA4A000C4264B /* UIImageTools.m */; };
 		14FA8C5F121DA4A000C4264B /* UINinePartImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 14FA8C47121DA4A000C4264B /* UINinePartImage.h */; };
 		14FA8C60121DA4A000C4264B /* UINinePartImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 14FA8C48121DA4A000C4264B /* UINinePartImage.m */; };
 		14FA8C67121DA4A000C4264B /* UIScroller.h in Headers */ = {isa = PBXBuildFile; fileRef = 14FA8C4F121DA4A000C4264B /* UIScroller.h */; };
@@ -404,8 +402,6 @@
 		14F56F3C12664D350045EC82 /* <UIPopoverView> background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIPopoverView> background.png"; path = "Resources/<UIPopoverView> background.png"; sourceTree = "<group>"; };
 		14F56F4212664D430045EC82 /* UIPopoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPopoverView.h; sourceTree = "<group>"; };
 		14F56F4312664D430045EC82 /* UIPopoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPopoverView.m; sourceTree = "<group>"; };
-		14FA8C45121DA4A000C4264B /* UIImageTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageTools.h; sourceTree = "<group>"; };
-		14FA8C46121DA4A000C4264B /* UIImageTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageTools.m; sourceTree = "<group>"; };
 		14FA8C47121DA4A000C4264B /* UINinePartImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINinePartImage.h; sourceTree = "<group>"; };
 		14FA8C48121DA4A000C4264B /* UINinePartImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINinePartImage.m; sourceTree = "<group>"; };
 		14FA8C4F121DA4A000C4264B /* UIScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScroller.h; sourceTree = "<group>"; };
@@ -651,8 +647,6 @@
 				145335841226F3490005644F /* UICustomNSClipView.m */,
 				1453356F1226F2720005644F /* UICustomNSTextView.h */,
 				145335701226F2720005644F /* UICustomNSTextView.m */,
-				14FA8C45121DA4A000C4264B /* UIImageTools.h */,
-				14FA8C46121DA4A000C4264B /* UIImageTools.m */,
 				14FA8C47121DA4A000C4264B /* UINinePartImage.h */,
 				14FA8C48121DA4A000C4264B /* UINinePartImage.m */,
 				14805D3F12A6B0E80080C4BA /* UINSClipView.h */,
@@ -797,7 +791,6 @@
 				1490AFE01219C31C00774286 /* UIPopoverController+UIPrivate.h in Headers */,
 				1490B0411219CA2F00774286 /* UIAccelerometer.h in Headers */,
 				1490B04B1219CAE800774286 /* UIAcceleration.h in Headers */,
-				14FA8C5D121DA4A000C4264B /* UIImageTools.h in Headers */,
 				14FA8C5F121DA4A000C4264B /* UINinePartImage.h in Headers */,
 				14FA8C67121DA4A000C4264B /* UIScroller.h in Headers */,
 				14FA8C69121DA4A000C4264B /* UITableViewCellSeparator.h in Headers */,
@@ -964,7 +957,6 @@
 				1436CF97121476A1001DFEFB /* UISwitch.m in Sources */,
 				1490B0421219CA2F00774286 /* UIAccelerometer.m in Sources */,
 				1490B04C1219CAE800774286 /* UIAcceleration.m in Sources */,
-				14FA8C5E121DA4A000C4264B /* UIImageTools.m in Sources */,
 				14FA8C60121DA4A000C4264B /* UINinePartImage.m in Sources */,
 				14FA8C68121DA4A000C4264B /* UIScroller.m in Sources */,
 				14FA8C6A121DA4A000C4264B /* UITableViewCellSeparator.m in Sources */,

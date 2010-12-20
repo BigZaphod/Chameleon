@@ -1,7 +1,7 @@
 //  Created by Sean Heber on 5/28/10.
 #import "UINinePartImage.h"
-#import "UIImageTools.h"
 #import "AppKitIntegration.h"
+#import "UIGraphics.h"
 #import <AppKit/AppKit.h>
 
 @implementation UINinePartImage
@@ -53,9 +53,19 @@
 	return [_topLeftCorner size].height;
 }
 
-- (void)drawInRect:(CGRect)rect blendMode:(CGBlendMode)blendMode alpha:(CGFloat)alpha
+- (void)drawInRect:(CGRect)rect
 {
-	NSDrawNinePartImage(NSRectFromCGRect(rect), _topLeftCorner, _topEdgeFill, _topRightCorner, _leftEdgeFill, _centerFill, _rightEdgeFill, _bottomLeftCorner, _bottomEdgeFill, _bottomRightCorner, _NSCompositingOperationFromCGBlendMode(blendMode), alpha, YES);
+	// There aren't enough NSCompositingOperations to map all possible CGBlendModes, so rather than have gaps in the support,
+	// I am drawing the multipart image into a new image context which is then drawn in the usual way which results in the draw
+	// obeying the currently active CGBlendMode and doing the expected thing. This is no doubt more expensive than it could be,
+	// but I suspect it's pretty irrelevant in the grand scheme of things.
+	UIGraphicsBeginImageContext(rect.size);
+	NSDrawNinePartImage(NSMakeRect(0,0,rect.size.width,rect.size.height), _topLeftCorner, _topEdgeFill, _topRightCorner, _leftEdgeFill, _centerFill, _rightEdgeFill, _bottomLeftCorner, _bottomEdgeFill, _bottomRightCorner, NSCompositeCopy, 1, YES);
+	UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+	UIGraphicsEndImageContext();
+	
+	[img drawInRect:rect];
+	
 }
 
 @end
