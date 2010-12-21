@@ -82,7 +82,13 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
 
 - (CGSize)sizeThatFits:(CGSize)aSize
 {
-	return UIActivityIndicatorViewStyleSize(_activityIndicatorViewStyle);
+	UIActivityIndicatorViewStyle style;
+	
+	@synchronized (self) {
+		style = _activityIndicatorViewStyle;
+	}
+	
+	return UIActivityIndicatorViewStyleSize(style);
 }
 
 - (void)setActivityIndicatorViewStyle:(UIActivityIndicatorViewStyle)style
@@ -102,9 +108,11 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
 - (UIActivityIndicatorViewStyle)activityIndicatorViewStyle
 {
 	UIActivityIndicatorViewStyle style;
+
 	@synchronized (self) {
 		style = _activityIndicatorViewStyle;
 	}
+
 	return style;
 }
 
@@ -124,9 +132,11 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
 - (BOOL)hidesWhenStopped
 {
 	BOOL hides;
+
 	@synchronized (self) {
 		hides = _hidesWhenStopped;
 	}
+
 	return hides;
 }
 
@@ -172,15 +182,23 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
 - (BOOL)isAnimating
 {
 	BOOL animating;
+
 	@synchronized (self) {
 		animating = _animating;
 	}
+
 	return animating;
 }
 
 - (void)drawRect:(CGRect)rect
 {
-	[UIActivityIndicatorViewFrameImage(_activityIndicatorViewStyle, 0, 1) drawInRect:self.bounds];
+	UIActivityIndicatorViewStyle style;
+
+	@synchronized (self) {
+		style = _activityIndicatorViewStyle;
+	}
+	
+	[UIActivityIndicatorViewFrameImage(style, 0, 1) drawInRect:self.bounds];
 }
 
 @end
