@@ -55,7 +55,6 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
 }
 
 @implementation UIActivityIndicatorView
-@synthesize hidesWhenStopped=_hidesWhenStopped, activityIndicatorViewStyle=_activityIndicatorViewStyle;
 
 - (id)initWithActivityIndicatorStyle:(UIActivityIndicatorViewStyle)style
 {
@@ -88,65 +87,95 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
 
 - (void)setActivityIndicatorViewStyle:(UIActivityIndicatorViewStyle)style
 {
-	if (_activityIndicatorViewStyle != style) {
-		_activityIndicatorViewStyle = style;
-		[self setNeedsDisplay];
-		
-		if (_animating) {
-			[self startAnimating];	// this will reset the images in the animation if it was already animating
+	@synchronized (self) {
+		if (_activityIndicatorViewStyle != style) {
+			_activityIndicatorViewStyle = style;
+			[self setNeedsDisplay];
+			
+			if (_animating) {
+				[self startAnimating];	// this will reset the images in the animation if it was already animating
+			}
 		}
 	}
 }
 
+- (UIActivityIndicatorViewStyle)activityIndicatorViewStyle
+{
+	UIActivityIndicatorViewStyle style;
+	@synchronized (self) {
+		style = _activityIndicatorViewStyle;
+	}
+	return style;
+}
+
 - (void)setHidesWhenStopped:(BOOL)hides
 {
-	_hidesWhenStopped = hides;
+	@synchronized (self) {
+		_hidesWhenStopped = hides;
 
-	if (_hidesWhenStopped) {
-		self.hidden = !_animating;
-	} else {
-		self.hidden = NO;
+		if (_hidesWhenStopped) {
+			self.hidden = !_animating;
+		} else {
+			self.hidden = NO;
+		}
 	}
+}
+
+- (BOOL)hidesWhenStopped
+{
+	BOOL hides;
+	@synchronized (self) {
+		hides = _hidesWhenStopped;
+	}
+	return hides;
 }
 
 - (void)startAnimating
 {
-	_animating = YES;
-	self.hidden = NO;
-	
-	const NSInteger numberOfFrames = 12;
-	const CFTimeInterval animationDuration = 0.8;
-	
-	NSMutableArray *images = [[NSMutableArray alloc] initWithCapacity:numberOfFrames];
-	
-	for (NSInteger frameNumber=0; frameNumber<numberOfFrames; frameNumber++) {
-		[images addObject:(id)UIActivityIndicatorViewFrameImage(_activityIndicatorViewStyle, frameNumber, numberOfFrames).CGImage];
+	@synchronized (self) {
+		_animating = YES;
+		self.hidden = NO;
+		
+		const NSInteger numberOfFrames = 12;
+		const CFTimeInterval animationDuration = 0.8;
+		
+		NSMutableArray *images = [[NSMutableArray alloc] initWithCapacity:numberOfFrames];
+		
+		for (NSInteger frameNumber=0; frameNumber<numberOfFrames; frameNumber++) {
+			[images addObject:(id)UIActivityIndicatorViewFrameImage(_activityIndicatorViewStyle, frameNumber, numberOfFrames).CGImage];
+		}
+		
+		CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"contents"];
+		animation.calculationMode = kCAAnimationDiscrete;
+		animation.duration = animationDuration;
+		animation.repeatCount = HUGE_VALF;
+		animation.values = images;
+		
+		[self.layer addAnimation:animation forKey:@"contents"];
+		
+		[images release];
 	}
-	
-	CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"contents"];
-	animation.calculationMode = kCAAnimationDiscrete;
-	animation.duration = animationDuration;
-	animation.repeatCount = HUGE_VALF;
-	animation.values = images;
-	
-	[self.layer addAnimation:animation forKey:@"contents"];
-	
-	[images release];	
 }
 
 - (void)stopAnimating
 {
-	_animating = NO;
-	[self.layer removeAnimationForKey:@"contents"];
-	
-	if (self.hidesWhenStopped) {
-		self.hidden = YES;
+	@synchronized (self) {
+		_animating = NO;
+		[self.layer removeAnimationForKey:@"contents"];
+		
+		if (self.hidesWhenStopped) {
+			self.hidden = YES;
+		}
 	}
 }
 
 - (BOOL)isAnimating
 {
-	return _animating;
+	BOOL animating;
+	@synchronized (self) {
+		animating = _animating;
+	}
+	return animating;
 }
 
 - (void)drawRect:(CGRect)rect

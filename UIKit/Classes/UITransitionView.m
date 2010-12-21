@@ -35,8 +35,8 @@
 		case UITransitionFromTop:		return CGRectOffset(self.bounds,0,-self.bounds.size.height);
 		case UITransitionPushUp:
 		case UITransitionFromBottom:	return CGRectOffset(self.bounds,0,self.bounds.size.height);
+		default:						return self.bounds;
 	}
-	return self.bounds;
 }
 
 - (CGRect)_rectForOutgoingView
@@ -46,8 +46,8 @@
 		case UITransitionPushRight:		return CGRectOffset(self.bounds,self.bounds.size.width,0);
 		case UITransitionPushDown:		return CGRectOffset(self.bounds,0,self.bounds.size.height);
 		case UITransitionPushUp:		return CGRectOffset(self.bounds,0,-self.bounds.size.height);
+		default:						return self.bounds;
 	}
-	return self.bounds;
 }
 
 - (void)_finishTransition:(NSDictionary *)info

@@ -281,6 +281,10 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 		case UIControlContentHorizontalAlignmentFill:
 			rect.size.width = contentRect.size.width;
 			break;
+			
+		case UIControlContentHorizontalAlignmentLeft:
+			// don't do anything - it's already left aligned
+			break;
 	}
 	
 	switch (self.contentVerticalAlignment) {
@@ -294,6 +298,10 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 			
 		case UIControlContentVerticalAlignmentFill:
 			rect.size.height = contentRect.size.height;
+			break;
+			
+		case UIControlContentVerticalAlignmentTop:
+			// don't do anything - it's already top aligned
 			break;
 	}
 	

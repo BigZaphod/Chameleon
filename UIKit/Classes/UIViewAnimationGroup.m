@@ -187,6 +187,7 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 		trans.type = kCATransitionMoveIn;
 		
 		switch (_transitionType) {
+			case UIViewAnimationTransitionNone:				trans.subtype = nil;						break;
 			case UIViewAnimationTransitionCurlUp:			trans.subtype = kCATransitionFromTop;		break;
 			case UIViewAnimationTransitionCurlDown:			trans.subtype = kCATransitionFromBottom;	break;
 			case UIViewAnimationTransitionFlipFromLeft:		trans.subtype = kCATransitionFromLeft;		break;

@@ -283,6 +283,9 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 				case UITouchPhaseRightClicked:
 					[touch.view rightClick:touch withEvent:event];
 					break;
+					
+				case UITouchPhaseStationary:
+					break;
 			}
 
 			NSCursor *newCursor = [touch.view mouseCursorForEvent:event] ?: [NSCursor arrowCursor];

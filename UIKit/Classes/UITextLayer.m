@@ -19,7 +19,7 @@
 @implementation UITextLayer
 @synthesize textColor, font, editable, secureTextEntry;
 
-- (id)initWithContainer:(id<UITextLayerContainerViewProtocol, UITextLayerTextDelegate>)aView isField:(BOOL)isField
+- (id)initWithContainer:(UIView <UITextLayerContainerViewProtocol, UITextLayerTextDelegate> *)aView isField:(BOOL)isField
 {
 	if ((self=[super init])) {
 		self.geometryFlipped = YES;
@@ -72,7 +72,7 @@
 		[clipView scrollToPoint:NSZeroPoint];
 	}
 
-	[[containerView.window.screen UIKitView] addSubview:clipView];
+	[[[containerView window].screen UIKitView] addSubview:clipView];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateScrollViewContentOffset) name:NSViewBoundsDidChangeNotification object:clipView];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hierarchyDidChangeNotification:) name:UIViewFrameDidChangeNotification object:nil];
@@ -101,7 +101,7 @@
 
 - (BOOL)shouldBeVisible
 {
-	return (containerView.window && (self.superlayer == containerView.layer) && !self.hidden && ![containerView isHidden]);
+	return ([containerView window] && (self.superlayer == [containerView layer]) && !self.hidden && ![containerView isHidden]);
 }
 
 - (void)updateNSViews
@@ -111,7 +111,7 @@
 			[self addNSView];
 		}
 		
-		UIWindow *window = containerView.window;
+		UIWindow *window = [containerView window];
 		const CGRect windowRect = [window convertRect:self.frame fromView:containerView];
 		const CGRect screenRect = [window convertRect:windowRect toWindow:nil];
 		NSRect desiredFrame = NSRectFromCGRect(screenRect);
@@ -234,13 +234,13 @@
 // be less than ideal. This makes it ideal. Awesome.
 - (BOOL)hitTestForClipViewPoint:(NSPoint)point
 {
-	UIScreen *screen = containerView.window.screen;
+	UIScreen *screen = [containerView window].screen;
 	
 	if (screen) {
 		if (![[screen UIKitView] isFlipped]) {
 			point.y = screen.bounds.size.height - point.y - 1;
 		}
-		return (containerView == [containerView.window.screen _hitTest:NSPointToCGPoint(point) event:nil]);
+		return (containerView == [[containerView window].screen _hitTest:NSPointToCGPoint(point) event:nil]);
 	}
 
 	return NO;

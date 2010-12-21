@@ -35,7 +35,7 @@
 @end
 
 @interface UITextLayer : CALayer {
-	id<UITextLayerContainerViewProtocol, UITextLayerTextDelegate> containerView;
+	id containerView;
 	BOOL containerCanScroll;
 	UICustomNSTextView *textView;
 	UICustomNSClipView *clipView;
@@ -51,7 +51,7 @@
 	} textDelegateHas;
 }
 
-- (id)initWithContainer:(id<UITextLayerContainerViewProtocol,UITextLayerTextDelegate>)aView isField:(BOOL)isField;
+- (id)initWithContainer:(UIView <UITextLayerContainerViewProtocol,UITextLayerTextDelegate> *)aView isField:(BOOL)isField;
 - (void)setContentOffset:(CGPoint)contentOffset;
 - (void)scrollRangeToVisible:(NSRange)range;
 - (BOOL)becomeFirstResponder;

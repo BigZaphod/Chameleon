@@ -32,6 +32,9 @@ static UIEdgeInsets UIToolbarButtonInset = {0,4,0,4};
 				case UIBarButtonSystemItemReply:
 					image = [UIImage _buttonBarSystemItemReply];
 					break;
+					
+				default:
+					break;
 			}
 		} else {
 			image = [item.image _toolbarImage];
