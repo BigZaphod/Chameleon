@@ -13,6 +13,7 @@
 		[_webView setAutoresizingMask:(NSViewWidthSizable|NSViewHeightSizable)];
 		[_webView setPolicyDelegate:self];
 		[_webView setFrameLoadDelegate:self];
+		[_webView setUIDelegate:self];
 		[_webView setDrawsBackground:NO];
 
 		_webViewAdapter = [[UIViewAdapter alloc] initWithFrame:self.bounds];
@@ -144,6 +145,19 @@
 	if (_delegateHas.didFailLoadWithError) {
 		[_delegate webView:self didFailLoadWithError:error];
 	}
+}
+
+#pragma mark -
+#pragma mark WebView UI Delegate
+
+- (void)webView:(WebView *)sender makeFirstResponder:(NSResponder *)responder
+{
+	[[_webViewAdapter.NSView window] makeFirstResponder:nil];
+}
+
+- (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems
+{
+	return [NSArray array];
 }
 
 @end
