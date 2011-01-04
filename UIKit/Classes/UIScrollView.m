@@ -18,11 +18,24 @@
 @synthesize showsHorizontalScrollIndicator=_showsHorizontalScrollIndicator, showsVerticalScrollIndicator=_showsVerticalScrollIndicator, contentSize=_contentSize;
 @synthesize maximumZoomScale=_maximumZoomScale, minimumZoomScale=_minimumZoomScale, zoomScale=_zoomScale, scrollsToTop=_scrollsToTop;
 @synthesize indicatorStyle=_indicatorStyle, delaysContentTouches=_delaysContentTouches, delegate=_delegate, pagingEnabled=_pagingEnabled;
-@synthesize canCancelContentTouches=_canCancelContentTouches;
+@synthesize canCancelContentTouches=_canCancelContentTouches, bouncesZoom=_bouncesZoom, zooming=_zooming;
 
 - (id)initWithFrame:(CGRect)frame
 {
 	if ((self=[super initWithFrame:frame])) {
+		_scrollEnabled = YES;
+		_indicatorStyle = UIScrollViewIndicatorStyleDefault;
+		_showsVerticalScrollIndicator = YES;
+		_showsHorizontalScrollIndicator = YES;
+		_scrollsToTop = YES;
+		_delaysContentTouches = YES;
+		_canCancelContentTouches = YES;
+		_pagingEnabled = NO;
+		_bouncesZoom = NO;
+		_zoomScale = 1;
+		_maximumZoomScale = 1;
+		_minimumZoomScale = 1;
+		
 		_verticalScroller = [[UIScroller alloc] init];
 		_verticalScroller.delegate = self;
 		[self addSubview:_verticalScroller];
@@ -32,14 +45,6 @@
 		[self addSubview:_horizontalScroller];
 		
 		self.clipsToBounds = YES;
-		self.scrollEnabled = YES;
-		self.indicatorStyle = UIScrollViewIndicatorStyleDefault;
-		self.showsVerticalScrollIndicator = YES;
-		self.showsHorizontalScrollIndicator = YES;
-		self.scrollsToTop = YES;
-		self.delaysContentTouches = YES;
-		self.canCancelContentTouches = YES;
-		self.pagingEnabled = NO;
 	}
 	return self;
 }
@@ -57,6 +62,20 @@
 	_delegateCan.scrollViewDidScroll = [_delegate respondsToSelector:@selector(scrollViewDidScroll:)];
 	_delegateCan.scrollViewWillBeginDragging = [_delegate respondsToSelector:@selector(scrollViewWillBeginDragging:)];
 	_delegateCan.scrollViewDidEndDragging = [_delegate respondsToSelector:@selector(scrollViewDidEndDragging:willDecelerate:)];
+	_delegateCan.viewForZoomingInScrollView = [_delegate respondsToSelector:@selector(viewForZoomingInScrollView:)];
+	_delegateCan.scrollViewWillBeginZooming = [_delegate respondsToSelector:@selector(scrollViewWillBeginZooming:withView:)];
+	_delegateCan.scrollViewDidEndZooming = [_delegate respondsToSelector:@selector(scrollViewDidEndZooming:withView:atScale:)];
+	_delegateCan.scrollViewDidZoom = [_delegate respondsToSelector:@selector(scrollViewDidZoom:)];
+}
+
+- (UIView *)_viewForZooming
+{
+	return (_delegateCan.viewForZoomingInScrollView)? [_delegate viewForZoomingInScrollView:self] : nil;
+}
+
+- (BOOL)_isZoomEnabled
+{
+	return (_delegateCan.scrollViewDidEndZooming && [self _viewForZooming]);
 }
 
 - (void)setIndicatorStyle:(UIScrollViewIndicatorStyle)style
@@ -353,10 +372,6 @@
 	}
 }
 
-- (void)setZoomScale:(float)scale animated:(BOOL)animated
-{
-}
-
 - (BOOL)isDecelerating
 {
 	return NO;
@@ -391,6 +406,28 @@
 		
 		[self setContentOffset:offset animated:animated];
 	}
+}
+
+- (BOOL)isZoomBouncing
+{
+	return NO;
+}
+
+- (void)setZoomScale:(float)scale animated:(BOOL)animated
+{
+	if ([self _isZoomEnabled]) {
+		_zoomScale = scale;
+		// do other stuff... :P
+	}
+}
+
+- (void)setZoomScale:(float)scale
+{
+	[self setZoomScale:scale animated:NO];
+}
+
+- (void)zoomToRect:(CGRect)rect animated:(BOOL)animated
+{
 }
 
 @end
