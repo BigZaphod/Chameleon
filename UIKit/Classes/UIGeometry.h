@@ -29,6 +29,8 @@ NSString *NSStringFromCGPoint(CGPoint p);
 NSString *NSStringFromCGRect(CGRect r);
 NSString *NSStringFromCGSize(CGSize s);
 
+NSString *NSStringFromCGAffineTransform(CGAffineTransform transform);
+
 @interface NSValue (NSValueUIGeometryExtensions)
 + (NSValue *)valueWithCGPoint:(CGPoint)point;
 + (NSValue *)valueWithCGRect:(CGRect)rect;
