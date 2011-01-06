@@ -173,9 +173,9 @@ const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 	}
 }
 
-- (void)_updateScrollers
+- (void)_updateScrollers:(BOOL)animated
 {
-	[self _constrainContentOffset:NO];
+	[self _constrainContentOffset:animated];
 	
 	const CGFloat scrollerSize = [self _scrollerSize];
 	const CGRect bounds = self.bounds;
@@ -189,13 +189,13 @@ const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 - (void)setFrame:(CGRect)frame
 {
 	[super setFrame:frame];
-	[self _updateScrollers];
+	[self _updateScrollers:NO];
 }
 
 - (void)didMoveToSuperview
 {
 	[super didMoveToSuperview];
-	[self _updateScrollers];
+	[self _updateScrollers:NO];
 }
 
 - (void)_bringScrollersToFront
@@ -226,8 +226,7 @@ const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 {
 	if (! CGPointEqualToPoint(_contentOffset, theOffset)) {
 		_contentOffset = theOffset;
-		[self _constrainContentOffset:animated];
-		[self _updateScrollers];
+		[self _updateScrollers:animated];
 		if (_delegateCan.scrollViewDidScroll) {
 			[_delegate scrollViewDidScroll:self];
 		}
@@ -239,12 +238,17 @@ const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 	[self setContentOffset:theOffset animated:NO];
 }
 
-- (void)setContentSize:(CGSize)newSize
+- (void)_setContentSize:(CGSize)newSize animated:(BOOL)animated
 {
 	if (!CGSizeEqualToSize(newSize, _contentSize)) {
 		_contentSize = newSize;
-		[self _updateScrollers];
+		[self _updateScrollers:animated];
 	}
+}
+
+- (void)setContentSize:(CGSize)newSize
+{
+	[self _setContentSize:newSize animated:NO];
 }
 
 - (void)flashScrollIndicators
@@ -436,7 +440,7 @@ const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 		const CGSize size = zoomingView.frame.size;
 		zoomingView.layer.position = CGPointMake(size.width/2.f, size.height/2.f);
 
-		self.contentSize = size;
+		[self _setContentSize:size animated:animated];
 		
 		if (animated) {
 			[UIView commitAnimations];
