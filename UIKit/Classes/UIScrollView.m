@@ -10,6 +10,8 @@
 #import "UIResponderAppKitIntegration.h"
 #import <QuartzCore/QuartzCore.h>
 
+const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
+
 @interface UIScrollView () <_UIScrollerDelegate>
 @end
 
@@ -68,14 +70,14 @@
 	_delegateCan.scrollViewDidZoom = [_delegate respondsToSelector:@selector(scrollViewDidZoom:)];
 }
 
-- (UIView *)_viewForZooming
+- (UIView *)_zoomingView
 {
 	return (_delegateCan.viewForZoomingInScrollView)? [_delegate viewForZoomingInScrollView:self] : nil;
 }
 
 - (BOOL)_isZoomEnabled
 {
-	return (_delegateCan.scrollViewDidEndZooming && [self _viewForZooming]);
+	return (_delegateCan.scrollViewDidEndZooming && [self _zoomingView]);
 }
 
 - (void)setIndicatorStyle:(UIScrollViewIndicatorStyle)style
@@ -121,7 +123,7 @@
 		[UIView beginAnimations:@"setContent" context:NULL];
 		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 		[UIView setAnimationBeginsFromCurrentState:YES];
-		[UIView setAnimationDuration:0.33];
+		[UIView setAnimationDuration:UIScrollViewAnimationDuration];
 	}
 
 	CGRect bounds = self.bounds;
@@ -416,8 +418,27 @@
 - (void)setZoomScale:(float)scale animated:(BOOL)animated
 {
 	if ([self _isZoomEnabled]) {
-		_zoomScale = scale;
-		// do other stuff... :P
+		_zoomScale = MIN(MAX(scale, _minimumZoomScale), _maximumZoomScale);
+		
+		if (animated) {
+			[UIView beginAnimations:@"setZoomScale" context:NULL];
+			[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+			[UIView setAnimationBeginsFromCurrentState:YES];
+			[UIView setAnimationDuration:UIScrollViewAnimationDuration];
+		}
+		
+		UIView *zoomingView = [self _zoomingView];
+
+		zoomingView.transform = CGAffineTransformMakeScale(_zoomScale, _zoomScale);
+		
+		const CGSize size = zoomingView.frame.size;
+		zoomingView.layer.position = CGPointMake(size.width/2.f, size.height/2.f);
+
+		self.contentSize = size;
+		
+		if (animated) {
+			[UIView commitAnimations];
+		}
 	}
 }
 
