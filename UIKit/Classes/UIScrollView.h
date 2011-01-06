@@ -36,7 +36,6 @@ typedef enum {
 	BOOL _showsHorizontalScrollIndicator;
 	float _maximumZoomScale;
 	float _minimumZoomScale;
-	float _zoomScale;
 	BOOL _scrollsToTop;
 	UIScrollViewIndicatorStyle _indicatorStyle;
 	BOOL _delaysContentTouches;

@@ -18,7 +18,7 @@ const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 @implementation UIScrollView
 @synthesize contentOffset=_contentOffset, contentInset=_contentInset, scrollIndicatorInsets=_scrollIndicatorInsets, scrollEnabled=_scrollEnabled;
 @synthesize showsHorizontalScrollIndicator=_showsHorizontalScrollIndicator, showsVerticalScrollIndicator=_showsVerticalScrollIndicator, contentSize=_contentSize;
-@synthesize maximumZoomScale=_maximumZoomScale, minimumZoomScale=_minimumZoomScale, zoomScale=_zoomScale, scrollsToTop=_scrollsToTop;
+@synthesize maximumZoomScale=_maximumZoomScale, minimumZoomScale=_minimumZoomScale, scrollsToTop=_scrollsToTop;
 @synthesize indicatorStyle=_indicatorStyle, delaysContentTouches=_delaysContentTouches, delegate=_delegate, pagingEnabled=_pagingEnabled;
 @synthesize canCancelContentTouches=_canCancelContentTouches, bouncesZoom=_bouncesZoom, zooming=_zooming;
 
@@ -34,7 +34,6 @@ const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 		_canCancelContentTouches = YES;
 		_pagingEnabled = NO;
 		_bouncesZoom = NO;
-		_zoomScale = 1;
 		_maximumZoomScale = 1;
 		_minimumZoomScale = 1;
 		
@@ -73,11 +72,6 @@ const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 - (UIView *)_zoomingView
 {
 	return (_delegateCan.viewForZoomingInScrollView)? [_delegate viewForZoomingInScrollView:self] : nil;
-}
-
-- (BOOL)_isZoomEnabled
-{
-	return (_delegateCan.scrollViewDidEndZooming && [self _zoomingView]);
 }
 
 - (void)setIndicatorStyle:(UIScrollViewIndicatorStyle)style
@@ -415,21 +409,29 @@ const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 	return NO;
 }
 
+- (float)zoomScale
+{
+	UIView *zoomingView = [self _zoomingView];
+	
+	// it seems weird to return the "a" component of the transform for this, but after some messing around with the real UIKit, I'm
+	// reasonably certain that's how it is doing it.
+	return zoomingView? zoomingView.transform.a : 1.f;
+}
+
 - (void)setZoomScale:(float)scale animated:(BOOL)animated
 {
-	if ([self _isZoomEnabled]) {
-		_zoomScale = MIN(MAX(scale, _minimumZoomScale), _maximumZoomScale);
-		
+	UIView *zoomingView = [self _zoomingView];
+	scale = MIN(MAX(scale, _minimumZoomScale), _maximumZoomScale);
+
+	if (zoomingView && self.zoomScale != scale) {
 		if (animated) {
 			[UIView beginAnimations:@"setZoomScale" context:NULL];
 			[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 			[UIView setAnimationBeginsFromCurrentState:YES];
 			[UIView setAnimationDuration:UIScrollViewAnimationDuration];
 		}
-		
-		UIView *zoomingView = [self _zoomingView];
 
-		zoomingView.transform = CGAffineTransformMakeScale(_zoomScale, _zoomScale);
+		zoomingView.transform = CGAffineTransformMakeScale(scale, scale);
 		
 		const CGSize size = zoomingView.frame.size;
 		zoomingView.layer.position = CGPointMake(size.width/2.f, size.height/2.f);
