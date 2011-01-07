@@ -216,17 +216,12 @@ static CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 	[self setContentOffset:theOffset animated:NO];
 }
 
-- (void)_setContentSize:(CGSize)newSize animated:(BOOL)animated
+- (void)setContentSize:(CGSize)newSize
 {
 	if (!CGSizeEqualToSize(newSize, _contentSize)) {
 		_contentSize = newSize;
 		[self _constrainContent];
 	}
-}
-
-- (void)setContentSize:(CGSize)newSize
-{
-	[self _setContentSize:newSize animated:NO];
 }
 
 - (void)flashScrollIndicators
@@ -419,7 +414,7 @@ static CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 		const CGSize size = zoomingView.frame.size;
 		zoomingView.layer.position = CGPointMake(size.width/2.f, size.height/2.f);
 
-		[self _setContentSize:size animated:animated];
+		self.contentSize = size;
 		
 		if (animated) {
 			[UIView commitAnimations];
