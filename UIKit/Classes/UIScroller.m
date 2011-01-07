@@ -4,7 +4,10 @@
 #import "UIBezierPath.h"
 #import "UIColor.h"
 
-static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
+
+static const BOOL _UIScrollerGutterEnabled = NO;
+static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;	// _UIScrollerGutterEnabled must be YES for this to have any meaning
+
 
 @implementation UIScroller
 @synthesize delegate=_delegate, contentOffset=_contentOffset, contentSize=_contentSize;
@@ -223,7 +226,7 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 			_dragOffset = _lastTouchLocation.x - knobRect.origin.x;
 		}
 		_draggingKnob = YES;
-	} else {
+	} else if (_UIScrollerGutterEnabled) {
 		if (_UIScrollerJumpToSpotThatIsClicked) {
 			_dragOffset = [self knobSize] / 2.f;
 			_draggingKnob = YES;
@@ -255,6 +258,19 @@ static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;
 		[_holdTimer invalidate];
 		_holdTimer = nil;
 	}
+}
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+{
+	UIView *hit = [super hitTest:point withEvent:event];
+	
+	// if the gutter is disabled, then we pretend the view is invisible to events if the user clicks in the gutter
+	// otherwise the scroller would capture those clicks and things wouldn't work as expected.
+	if (hit == self && !_UIScrollerGutterEnabled && !CGRectContainsPoint([self knobRect],point)) {
+		hit = nil;
+	}
+	
+	return hit;
 }
 
 @end
