@@ -111,54 +111,10 @@ const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 
 - (void)_setContentPositionAnimated:(BOOL)animated
 {
-	const BOOL wasAnimating = [UIView areAnimationsEnabled];
-	[UIView setAnimationsEnabled:animated];
-	if (animated) {
-		[UIView beginAnimations:@"setContent" context:NULL];
-		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-		[UIView setAnimationBeginsFromCurrentState:YES];
-		[UIView setAnimationDuration:UIScrollViewAnimationDuration];
-	}
-
-	CGRect bounds = self.bounds;
-	bounds.origin = CGPointMake(_contentOffset.x+_contentInset.left, _contentOffset.y+_contentInset.top);
-	self.bounds = bounds;
-	
-	if (animated) {
-		[UIView commitAnimations];
-	}
-	[UIView setAnimationsEnabled:wasAnimating];
 }
 
 - (void)_constrainContentOffset:(BOOL)animated
 {
-	const CGRect bounds = UIEdgeInsetsInsetRect(self.bounds, _contentInset);
-
-	if ((_contentSize.width-_contentOffset.x) < bounds.size.width) {
-		_contentOffset.x = (_contentSize.width - bounds.size.width);
-	}
-
-	if ((_contentSize.height-_contentOffset.y) < bounds.size.height) {
-		_contentOffset.y = (_contentSize.height - bounds.size.height);
-	}
-
-	_contentOffset.x = MAX(roundf(_contentOffset.x),0);
-	_contentOffset.y = MAX(roundf(_contentOffset.y),0);
-
-	if (_contentSize.width <= bounds.size.width) {
-		_contentOffset.x = 0;
-	}
-
-	if (_contentSize.height <= bounds.size.height) {
-		_contentOffset.y = 0;
-	}
-
-	_verticalScroller.contentSize = _contentSize.height;
-	_verticalScroller.contentOffset = _contentOffset.y;
-	_horizontalScroller.contentSize = _contentSize.width;
-	_horizontalScroller.contentOffset = _contentOffset.x;
-
-	[self _setContentPositionAnimated:animated];
 }
 
 - (CGFloat)_scrollerSize
@@ -173,29 +129,67 @@ const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 	}
 }
 
-- (void)_updateScrollers:(BOOL)animated
+- (void)_updateContentOffset:(BOOL)animated
 {
-	[self _constrainContentOffset:animated];
+	if (animated) {
+		[UIView beginAnimations:@"updateContentOffset" context:NULL];
+		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+		[UIView setAnimationBeginsFromCurrentState:YES];
+		[UIView setAnimationDuration:UIScrollViewAnimationDuration];
+	}
 	
+	const CGRect scrollerBounds = UIEdgeInsetsInsetRect(self.bounds, _contentInset);
+	
+	if ((_contentSize.width-_contentOffset.x) < scrollerBounds.size.width) {
+		_contentOffset.x = (_contentSize.width - scrollerBounds.size.width);
+	}
+	
+	if ((_contentSize.height-_contentOffset.y) < scrollerBounds.size.height) {
+		_contentOffset.y = (_contentSize.height - scrollerBounds.size.height);
+	}
+	
+	_contentOffset.x = MAX(roundf(_contentOffset.x),0);
+	_contentOffset.y = MAX(roundf(_contentOffset.y),0);
+	
+	if (_contentSize.width <= scrollerBounds.size.width) {
+		_contentOffset.x = 0;
+	}
+	
+	if (_contentSize.height <= scrollerBounds.size.height) {
+		_contentOffset.y = 0;
+	}
+	
+	_verticalScroller.contentSize = _contentSize.height;
+	_verticalScroller.contentOffset = _contentOffset.y;
+	_horizontalScroller.contentSize = _contentSize.width;
+	_horizontalScroller.contentOffset = _contentOffset.x;
+
+	CGRect bounds = self.bounds;
+	bounds.origin = CGPointMake(_contentOffset.x+_contentInset.left, _contentOffset.y+_contentInset.top);
+	self.bounds = bounds;
+
 	const CGFloat scrollerSize = [self _scrollerSize];
-	const CGRect bounds = self.bounds;
 	_verticalScroller.frame = CGRectMake(bounds.origin.x+bounds.size.width-scrollerSize-_scrollIndicatorInsets.right,bounds.origin.y+_scrollIndicatorInsets.top,scrollerSize,bounds.size.height-_scrollIndicatorInsets.top-_scrollIndicatorInsets.bottom);
 	_horizontalScroller.frame = CGRectMake(bounds.origin.x+_scrollIndicatorInsets.left,bounds.origin.y+bounds.size.height-scrollerSize-_scrollIndicatorInsets.bottom,bounds.size.width-_scrollIndicatorInsets.left-_scrollIndicatorInsets.right,scrollerSize);
 
 	_verticalScroller.hidden = !self._canScrollVertical;
 	_horizontalScroller.hidden = !self._canScrollHorizontal;
+
+	if (animated) {
+		[UIView commitAnimations];
+	}
 }
 
 - (void)setFrame:(CGRect)frame
 {
 	[super setFrame:frame];
-	[self _updateScrollers:NO];
+	[self _updateContentOffset:NO];
 }
 
 - (void)didMoveToSuperview
 {
 	[super didMoveToSuperview];
-	[self _updateScrollers:NO];
+	[self _updateContentOffset:NO];
 }
 
 - (void)_bringScrollersToFront
@@ -226,7 +220,7 @@ const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 {
 	if (! CGPointEqualToPoint(_contentOffset, theOffset)) {
 		_contentOffset = theOffset;
-		[self _updateScrollers:animated];
+		[self _updateContentOffset:animated];
 		if (_delegateCan.scrollViewDidScroll) {
 			[_delegate scrollViewDidScroll:self];
 		}
@@ -242,7 +236,7 @@ const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 {
 	if (!CGSizeEqualToSize(newSize, _contentSize)) {
 		_contentSize = newSize;
-		[self _updateScrollers:animated];
+		[self _updateContentOffset:animated];
 	}
 }
 
@@ -338,11 +332,15 @@ const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 		// Dunno if this is something standard that OSX is doing or if OSX actually scales it somehow based on content size.
 		delta.x *= 10.f;
 		delta.y *= 10.f;
+
+		if (delta.x != 0 || delta.y != 0) {
+			CGPoint offset = self.contentOffset;
+			offset.x -= delta.x;
+			offset.y -= delta.y;
+
+			[self setContentOffset:offset animated:YES];
+		}
 		
-		CGPoint offset = self.contentOffset;
-		offset.x -= delta.x;
-		offset.y -= delta.y;
-		[self setContentOffset:offset animated:NO];	// setting YES here is a lot nicer/smoother, but the scrollbars get all messed up. Need to figure that out.
 		[self _quickFlashScrollIndicators];
 	} else {
 		[super scrollWheelMoved:delta withEvent:event];
