@@ -333,14 +333,11 @@ const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 		delta.x *= 10.f;
 		delta.y *= 10.f;
 
-		if (delta.x != 0 || delta.y != 0) {
-			CGPoint offset = self.contentOffset;
-			offset.x -= delta.x;
-			offset.y -= delta.y;
+		CGPoint offset = self.contentOffset;
+		offset.x -= delta.x;
+		offset.y -= delta.y;
 
-			[self setContentOffset:offset animated:YES];
-		}
-		
+		[self setContentOffset:offset animated:NO];		
 		[self _quickFlashScrollIndicators];
 	} else {
 		[super scrollWheelMoved:delta withEvent:event];
