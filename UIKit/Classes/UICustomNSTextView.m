@@ -76,9 +76,11 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 		[self setAutomaticTextReplacementEnabled:NO];
 		[self setSmartInsertDeleteEnabled:NO];
 		[self setUsesFindPanel:NO];
+		[self setAllowsUndo:NO];
 		[[self layoutManager] setGlyphGenerator:[[[UIBulletGlyphGenerator alloc] init] autorelease]];
 		[style setLineBreakMode:NSLineBreakByCharWrapping];
 	} else {
+		[self setAllowsUndo:YES];
 		[self setContinuousSpellCheckingEnabled:YES];
 		[self setSmartInsertDeleteEnabled:YES];
 		[self setUsesFindPanel:YES];
