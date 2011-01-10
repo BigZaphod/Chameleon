@@ -4,18 +4,14 @@
 
 @implementation UIResponder
 
-- (UIWindow *)_responderWindow
-{
-	if ([isa instancesRespondToSelector:@selector(window)]) {
-		return [self performSelector:@selector(window)];
-	} else {
-		return [[self nextResponder] _responderWindow];
-	}
-}
-
 - (UIResponder *)nextResponder
 {
 	return nil;
+}
+
+- (UIWindow *)_responderWindow
+{
+	return [self isKindOfClass:[UIView class]]? [(UIView *)self window] : nil;
 }
 
 - (BOOL)isFirstResponder
@@ -30,13 +26,28 @@
 
 - (BOOL)becomeFirstResponder
 {
-	UIWindow *window = [self _responderWindow];
-	UIResponder *firstResponder = [window _firstResponder];
-	if (window && [self canBecomeFirstResponder] && (!firstResponder || ([firstResponder canResignFirstResponder] && [firstResponder resignFirstResponder]))) {
-		[window makeKeyWindow];		// not sure about this :/
-		[window _setFirstResponder:self];
+	if ([self isFirstResponder]) {
 		return YES;
 	} else {
+		UIWindow *window = [self _responderWindow];
+		UIResponder *firstResponder = [window _firstResponder];
+		
+		if (window && [self canBecomeFirstResponder]) {
+			BOOL didResign = NO;
+			
+			if (firstResponder && [firstResponder canResignFirstResponder]) {
+				didResign = [firstResponder resignFirstResponder];
+			} else {
+				didResign = YES;
+			}
+			
+			if (didResign) {
+				[window makeKeyWindow];		// not sure about this :/
+				[window _setFirstResponder:self];
+				return YES;
+			}
+		}
+
 		return NO;
 	}
 }
@@ -48,7 +59,10 @@
 
 - (BOOL)resignFirstResponder
 {
-	[[self _responderWindow] _setFirstResponder:nil];
+	if ([self isFirstResponder]) {
+		[[self _responderWindow] _setFirstResponder:nil];
+	}
+	
 	return YES;
 }
 
