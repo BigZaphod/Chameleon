@@ -24,3 +24,13 @@
 @property (readonly) NSUndoManager *undoManager;
 
 @end
+
+
+@interface NSObject (UIResponderStandardEditActions)
+- (void)copy:(id)sender;
+- (void)cut:(id)sender;
+- (void)delete:(id)sender;
+- (void)paste:(id)sender;
+- (void)select:(id)sender;
+- (void)selectAll:(id)sender;
+@end
