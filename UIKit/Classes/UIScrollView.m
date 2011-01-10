@@ -132,8 +132,8 @@ static CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 		_contentOffset.y = (_contentSize.height - scrollerBounds.size.height);
 	}
 	
-	_contentOffset.x = MAX(_contentOffset.x,0);
-	_contentOffset.y = MAX(_contentOffset.y,0);
+	_contentOffset.x = MAX(roundf(_contentOffset.x),0);
+	_contentOffset.y = MAX(roundf(_contentOffset.y),0);
 	
 	if (_contentSize.width <= scrollerBounds.size.width) {
 		_contentOffset.x = 0;
@@ -152,7 +152,7 @@ static CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 	_horizontalScroller.hidden = !self._canScrollHorizontal;
 	
 	CGRect bounds = self.bounds;
-	bounds.origin = CGPointMake(roundf(_contentOffset.x+_contentInset.left), roundf(_contentOffset.y+_contentInset.top));
+	bounds.origin = CGPointMake(_contentOffset.x+_contentInset.left, _contentOffset.y+_contentInset.top);
 	self.bounds = bounds;
 	
 	[self setNeedsLayout];
@@ -210,7 +210,7 @@ static CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 
 - (void)_scrollContentOffsetBy:(CGPoint)delta withAnimationDuration:(NSTimeInterval)animationDuration
 {
-	const NSInteger framesPerSecond = 40;
+	const NSInteger framesPerSecond = 60;
 	const NSInteger numberOfFrames = animationDuration * framesPerSecond;
 	const NSTimeInterval timePerFrame = animationDuration/(NSTimeInterval)numberOfFrames;
 	const CGPoint frameDelta = CGPointMake(delta.x/(float)numberOfFrames, delta.y/(float)numberOfFrames);
