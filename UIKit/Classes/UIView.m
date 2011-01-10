@@ -112,6 +112,14 @@ static BOOL _animationsEnabled = YES;
 - (void)_willMoveFromWindow:(UIWindow *)fromWindow toWindow:(UIWindow *)toWindow
 {
 	if (fromWindow != toWindow) {
+		
+		// need to manage the responder chain. apparently UIKit (at least by version 4.2) seems to make sure that if a view was first responder
+		// and it or it's parent views are disconnected from their window, the first responder gets reset to nil. Honestly, I don't think this
+		// was always true - but it's certainly a much better and less-crashy design. Hopefully this check here replicates the behavior properly.
+		if ([self isFirstResponder]) {
+			[self resignFirstResponder];
+		}
+		
 		[self willMoveToWindow:toWindow];
 
 		for (UIView *subview in self.subviews) {
@@ -153,11 +161,11 @@ static BOOL _animationsEnabled = YES;
 		UIWindow *newWindow = self.window;
 		
 		subview->_needsDidAppearOrDisappear = [self _subviewControllersNeedAppearAndDisappear];
-
+		
 		if (subview->_viewController && subview->_needsDidAppearOrDisappear) {
 			[subview->_viewController viewWillAppear:NO];
 		}
-		
+
 		[subview _willMoveFromWindow:oldWindow toWindow:newWindow];
 		[subview willMoveToSuperview:self];
 
