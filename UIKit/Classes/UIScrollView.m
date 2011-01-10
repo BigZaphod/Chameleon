@@ -47,7 +47,7 @@ static CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 		_bouncesZoom = NO;
 		_maximumZoomScale = 1;
 		_minimumZoomScale = 1;
-		
+
 		_verticalScroller = [[UIScroller alloc] init];
 		_verticalScroller.delegate = self;
 		[self addSubview:_verticalScroller];
@@ -132,8 +132,8 @@ static CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 		_contentOffset.y = (_contentSize.height - scrollerBounds.size.height);
 	}
 	
-	_contentOffset.x = MAX(roundf(_contentOffset.x),0);
-	_contentOffset.y = MAX(roundf(_contentOffset.y),0);
+	_contentOffset.x = MAX(_contentOffset.x,0);
+	_contentOffset.y = MAX(_contentOffset.y,0);
 	
 	if (_contentSize.width <= scrollerBounds.size.width) {
 		_contentOffset.x = 0;
@@ -152,7 +152,7 @@ static CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 	_horizontalScroller.hidden = !self._canScrollHorizontal;
 	
 	CGRect bounds = self.bounds;
-	bounds.origin = CGPointMake(_contentOffset.x+_contentInset.left, _contentOffset.y+_contentInset.top);
+	bounds.origin = CGPointMake(roundf(_contentOffset.x+_contentInset.left), roundf(_contentOffset.y+_contentInset.top));
 	self.bounds = bounds;
 	
 	[self setNeedsLayout];
@@ -199,21 +199,46 @@ static CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 	[self _bringScrollersToFront];
 }
 
+- (void)_scrollContentOffsetBy:(NSValue *)d
+{
+	const CGPoint delta = [d CGPointValue];
+	CGPoint offset = self.contentOffset;
+	offset.x -= delta.x;
+	offset.y -= delta.y;
+	self.contentOffset = offset;
+}
+
+- (void)_scrollContentOffsetBy:(CGPoint)delta withAnimationDuration:(NSTimeInterval)animationDuration
+{
+	const NSInteger framesPerSecond = 40;
+	const NSInteger numberOfFrames = animationDuration * framesPerSecond;
+	const NSTimeInterval timePerFrame = animationDuration/(NSTimeInterval)numberOfFrames;
+	const CGPoint frameDelta = CGPointMake(delta.x/(float)numberOfFrames, delta.y/(float)numberOfFrames);
+	
+	for (NSInteger f=0; f<numberOfFrames; f++) {
+		[self performSelector:@selector(_scrollContentOffsetBy:) withObject:[NSValue valueWithCGPoint:frameDelta] afterDelay:(f * timePerFrame)];
+	}
+}
+
 - (void)setContentOffset:(CGPoint)theOffset animated:(BOOL)animated
 {
-	if (! CGPointEqualToPoint(_contentOffset, theOffset)) {
-		_contentOffset = theOffset;
-		[self _constrainContent];
-
-		if (_delegateCan.scrollViewDidScroll) {
-			[_delegate scrollViewDidScroll:self];
-		}
+	if (animated) {
+		[self _scrollContentOffsetBy:CGPointMake(_contentOffset.x-theOffset.x, _contentOffset.y-theOffset.y) withAnimationDuration:UIScrollViewAnimationDuration];
+	} else {
+		[self setContentOffset:theOffset];
 	}
 }
 
 - (void)setContentOffset:(CGPoint)theOffset
 {
-	[self setContentOffset:theOffset animated:NO];
+	if (! CGPointEqualToPoint(_contentOffset, theOffset)) {
+		_contentOffset = theOffset;
+		[self _constrainContent];
+		
+		if (_delegateCan.scrollViewDidScroll) {
+			[_delegate scrollViewDidScroll:self];
+		}
+	}
 }
 
 - (void)setContentSize:(CGSize)newSize
@@ -306,17 +331,13 @@ static CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 {
 	if (self.scrollEnabled) {
 		[self _delegateDraggingDidBegin];
-		
+
 		// Increasing the delta because it just seems to feel better to me right now.
 		// Dunno if this is something standard that OSX is doing or if OSX actually scales it somehow based on content size.
 		delta.x *= 10.f;
 		delta.y *= 10.f;
-
-		CGPoint offset = self.contentOffset;
-		offset.x -= delta.x;
-		offset.y -= delta.y;
-
-		[self setContentOffset:offset animated:NO];		
+		
+		[self _scrollContentOffsetBy:delta withAnimationDuration:0.1];
 		[self _quickFlashScrollIndicators];
 	} else {
 		[super scrollWheelMoved:delta withEvent:event];
