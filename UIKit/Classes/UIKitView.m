@@ -2,7 +2,7 @@
 #import "UIKitView.h"
 #import "UIApplication+UIPrivate.h"
 #import "UIScreen+UIPrivate.h"
-#import "UIWindow.h"
+#import "UIWindow+UIPrivate.h"
 #import "UIImage.h"
 #import "UIImageView.h"
 #import "UIColor.h"
@@ -61,6 +61,52 @@
 {	
 	[_screen _setUIKitView:self.superview? self : nil];
 }
+
+- (UIResponder *)_firstUIKitResponder
+{
+	UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+	if (keyWindow.screen == _screen) {
+		return [keyWindow _firstResponder];
+	} else {
+		return nil;
+	}
+}
+
+- (BOOL)acceptsFirstResponder
+{
+	return ([self _firstUIKitResponder] != nil);
+}
+
+- (BOOL)firstResponderCanPerformAction:(SEL)action withSender:(id)sender
+{
+	return [[self _firstUIKitResponder] canPerformAction:action withSender:sender];
+}
+
+- (void)sendActionToFirstResponder:(SEL)action from:(id)sender
+{
+	[[self _firstUIKitResponder] performSelector:action withObject:sender];
+}
+
+- (BOOL)respondsToSelector:(SEL)cmd
+{
+	if (cmd == @selector(copy:) ||
+		cmd == @selector(cut:) ||
+		cmd == @selector(delete:) ||
+		cmd == @selector(paste:) ||
+		cmd == @selector(select:) ||
+		cmd == @selector(selectAll:)) {
+		return [self firstResponderCanPerformAction:cmd withSender:nil];
+	} else {
+		return [super respondsToSelector:cmd];
+	}
+}
+
+- (void)copy:(id)sender			{ [self sendActionToFirstResponder:_cmd from:sender]; }
+- (void)cut:(id)sender			{ [self sendActionToFirstResponder:_cmd from:sender]; }
+- (void)delete:(id)sender		{ [self sendActionToFirstResponder:_cmd from:sender]; }
+- (void)paste:(id)sender		{ [self sendActionToFirstResponder:_cmd from:sender]; }
+- (void)select:(id)sender		{ [self sendActionToFirstResponder:_cmd from:sender]; }
+- (void)selectAll:(id)sender	{ [self sendActionToFirstResponder:_cmd from:sender]; }
 
 - (void)updateTrackingAreas
 {
