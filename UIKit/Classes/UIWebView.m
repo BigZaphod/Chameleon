@@ -152,7 +152,7 @@
 
 - (void)webView:(WebView *)sender makeFirstResponder:(NSResponder *)responder
 {
-	[[_webViewAdapter.NSView window] makeFirstResponder:nil];
+	[[_webViewAdapter.NSView window] makeFirstResponder:responder];
 }
 
 - (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems
