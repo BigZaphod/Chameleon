@@ -44,6 +44,9 @@ typedef enum {
 	NSTimer *_dragDelegateTimer;
 	BOOL _bouncesZoom;
 	BOOL _zooming;
+	NSMutableArray *_scrollAnimations;
+	NSTimer *_scrollTimer;
+	NSTimeInterval _scrollAnimationTime;
 	
 	struct {
 		BOOL scrollViewDidScroll : 1;

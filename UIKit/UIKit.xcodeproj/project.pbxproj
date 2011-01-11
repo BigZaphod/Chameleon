@@ -180,6 +180,8 @@
 		14CC843711EFA8BA005988CC /* <UIScreen> grabber.png in Resources */ = {isa = PBXBuildFile; fileRef = 14CC842F11EFA8BA005988CC /* <UIScreen> grabber.png */; };
 		14CC844111EFA901005988CC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14CC844011EFA901005988CC /* QuartzCore.framework */; };
 		14CC844511EFA91A005988CC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14CC844411EFA91A005988CC /* SystemConfiguration.framework */; };
+		14D0C43812DCEF910040035C /* UIScrollViewScrollAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 14D0C43612DCEF910040035C /* UIScrollViewScrollAnimation.h */; };
+		14D0C43912DCEF910040035C /* UIScrollViewScrollAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D0C43712DCEF910040035C /* UIScrollViewScrollAnimation.m */; };
 		14DD1C281289B3C900DCF231 /* UIImage+UIPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = 14DD1C271289B3C900DCF231 /* UIImage+UIPrivate.m */; };
 		14DD1C361289B4D500DCF231 /* <UIToolbar> button-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 14DD1C341289B4D500DCF231 /* <UIToolbar> button-highlighted.png */; };
 		14DD1C371289B4D500DCF231 /* <UIToolbar> button.png in Resources */ = {isa = PBXBuildFile; fileRef = 14DD1C351289B4D500DCF231 /* <UIToolbar> button.png */; };
@@ -390,6 +392,8 @@
 		14CC842F11EFA8BA005988CC /* <UIScreen> grabber.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIScreen> grabber.png"; path = "Resources/<UIScreen> grabber.png"; sourceTree = "<group>"; };
 		14CC844011EFA901005988CC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		14CC844411EFA91A005988CC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		14D0C43612DCEF910040035C /* UIScrollViewScrollAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewScrollAnimation.h; sourceTree = "<group>"; };
+		14D0C43712DCEF910040035C /* UIScrollViewScrollAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScrollViewScrollAnimation.m; sourceTree = "<group>"; };
 		14DD1C271289B3C900DCF231 /* UIImage+UIPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+UIPrivate.m"; sourceTree = "<group>"; };
 		14DD1C341289B4D500DCF231 /* <UIToolbar> button-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIToolbar> button-highlighted.png"; path = "Resources/<UIToolbar> button-highlighted.png"; sourceTree = "<group>"; };
 		14DD1C351289B4D500DCF231 /* <UIToolbar> button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIToolbar> button.png"; path = "Resources/<UIToolbar> button.png"; sourceTree = "<group>"; };
@@ -661,6 +665,8 @@
 				14CC839111EFA8AF005988CC /* UIRoundedRectButton.m */,
 				14FA8C4F121DA4A000C4264B /* UIScroller.h */,
 				14FA8C50121DA4A000C4264B /* UIScroller.m */,
+				14D0C43612DCEF910040035C /* UIScrollViewScrollAnimation.h */,
+				14D0C43712DCEF910040035C /* UIScrollViewScrollAnimation.m */,
 				14FA8C51121DA4A000C4264B /* UITableViewCellSeparator.h */,
 				14FA8C52121DA4A000C4264B /* UITableViewCellSeparator.m */,
 				14FA8C53121DA4A000C4264B /* UITableViewSection.h */,
@@ -824,6 +830,7 @@
 				447D834D12B855910032A95E /* UIApplicationAppKitIntegration.h in Headers */,
 				142E96A312BAC99800850A95 /* UIPageControl.h in Headers */,
 				142E970E12BACF6A00850A95 /* UIProgressView.h in Headers */,
+				14D0C43812DCEF910040035C /* UIScrollViewScrollAnimation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -984,6 +991,7 @@
 				14805D4212A6B0E80080C4BA /* UINSClipView.m in Sources */,
 				142E96A412BAC99800850A95 /* UIPageControl.m in Sources */,
 				142E970F12BACF6A00850A95 /* UIProgressView.m in Sources */,
+				14D0C43912DCEF910040035C /* UIScrollViewScrollAnimation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

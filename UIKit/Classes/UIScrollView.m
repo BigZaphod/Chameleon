@@ -8,20 +8,11 @@
 #import "UIImageView.h"
 #import "UIImage+UIPrivate.h"
 #import "UIResponderAppKitIntegration.h"
+#import "UIScrollViewScrollAnimation.h"
 #import <QuartzCore/QuartzCore.h>
 
 const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
-
-static CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
-{
-	const CGFloat minViewSize = 50;
-	
-	if (boundsSize.width <= minViewSize || boundsSize.height <= minViewSize) {
-		return 6;
-	} else {
-		return 10;
-	}
-}
+const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 
 @interface UIScrollView () <_UIScrollerDelegate>
 @end
@@ -47,6 +38,7 @@ static CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 		_bouncesZoom = NO;
 		_maximumZoomScale = 1;
 		_minimumZoomScale = 1;
+		_scrollAnimations = [[NSMutableArray alloc] init];
 
 		_verticalScroller = [[UIScroller alloc] init];
 		_verticalScroller.delegate = self;
@@ -63,6 +55,7 @@ static CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 
 - (void)dealloc
 {
+	[_scrollAnimations release];
 	[_verticalScroller release];
 	[_horizontalScroller release];
 	[super dealloc];
@@ -132,8 +125,20 @@ static CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 		_contentOffset.y = (_contentSize.height - scrollerBounds.size.height);
 	}
 	
-	_contentOffset.x = MAX(roundf(_contentOffset.x),0);
-	_contentOffset.y = MAX(roundf(_contentOffset.y),0);
+	// Note that rounding of the coordinates only occurs if we're NOT in the middle of a smooth scrolling animation.
+	// This results in far smoother animations because it'll use sub-pixel coordinates as it goes. However normal behavior
+	// is to  snap to whole pixels otherwise the subviews look terrible due to partial pixel alignment problems (blur, etc).
+	// This is sort of a clever hack here, but it works pretty well in the end because the _scrollTimer is invalidated and set to nil
+	// on the final animation frame *before* setContentOffset: is ultimately called. That means that the final frame of scrolling
+	// animation will end up being snapped to the boundary as it should be. Any calls made to setContentOffset: in the midst of an
+	// animation won't have their values rounded, but it shouldn't matter much in the end because when the in-progress animation finishes
+	// the final values will again get rounded out. Hopefully this makes sense.
+	if (!_scrollTimer) {
+		_contentOffset.x = roundf(_contentOffset.x);
+		_contentOffset.y = roundf(_contentOffset.y);
+	}	
+	_contentOffset.x = MAX(_contentOffset.x,0);
+	_contentOffset.y = MAX(_contentOffset.y,0);
 	
 	if (_contentSize.width <= scrollerBounds.size.width) {
 		_contentOffset.x = 0;
@@ -199,39 +204,83 @@ static CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 	[self _bringScrollersToFront];
 }
 
-- (void)_scrollContentOffsetBy:(NSValue *)d
+- (void)_updateScrollAnimation
 {
-	const CGPoint delta = [d CGPointValue];
-	CGPoint offset = self.contentOffset;
-	offset.x -= delta.x;
-	offset.y -= delta.y;
-	self.contentOffset = offset;
+	const NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
+	const NSTimeInterval timePerFrame = 1. / (NSTimeInterval)UIScrollViewScrollAnimationFramesPerSecond;
+
+	CGPoint contentOffset = self.contentOffset;
+	NSArray *animations = [_scrollAnimations copy];
+
+	while (_scrollAnimationTime <= currentTime) {
+		// update the simulation's time by one perfect frame-worth of time
+		_scrollAnimationTime += timePerFrame;
+		
+		// now we process all currently running animations
+		for (UIScrollViewScrollAnimation *animation in animations) {
+			CGPoint velocity = animation.contentOffsetVelocity;
+			
+			// doing some fancy math here to calculate exactly how much the offset should change even if the original animation
+			// was set to end in the middle of a frame. while I can't really percieve this, it was fun to do and it should result
+			// in basically "perfect" animations as far as I know right now. :)
+			// note that this is clamping the upper value of timeScaler to 1.0 so it processes only a single frame at a time at most
+			const float timeScaler = MIN(1,((animation.stopTime - _scrollAnimationTime) / timePerFrame));
+			
+			if (timeScaler > 0) {
+				// apply the animation's velocity to the offset
+				contentOffset.x += velocity.x * timeScaler;
+				contentOffset.y += velocity.y * timeScaler;
+			} else {
+				// if we're beyond the time where this animation should have stopped, it is time to kill it.
+				[_scrollAnimations removeObject:animation];
+			}
+		}
+	}
+
+	[animations release];
+
+	// note that invalidation of the timer must happen before setContentOffset: is called due to a clever hack having to do with rounding
+	// the content offset. Basically, I'm avoiding rounding the offset values (and thus snapping to pixel boundaries and avoiding subpixel blur)
+	// while a scroll animation is occuring because that results in visually smoother animations. this is important especailly near the end of a
+	// momentum scroll because the scroll gets slower and slower so little jitters are easier to see. The trick here is that when the offset values
+	// are later constrained in _constrainContent, they are only rounded if there's no scroll animations in progress. This enhances the percieved
+	// smoothness of the animation by a noticable amount.
+	if ([_scrollAnimations count] == 0) {
+		[_scrollTimer invalidate];
+		_scrollTimer = nil;
+	}
+
+	// yay! we can finally update the offset!
+	self.contentOffset = contentOffset;
 }
 
 - (void)_scrollContentOffsetBy:(CGPoint)delta withAnimationDuration:(NSTimeInterval)animationDuration
 {
-	const NSInteger framesPerSecond = 60;
-	const NSInteger numberOfFrames = animationDuration * framesPerSecond;
-	const NSTimeInterval timePerFrame = animationDuration/(NSTimeInterval)numberOfFrames;
+	const NSTimeInterval startTime = [NSDate timeIntervalSinceReferenceDate];
+	const NSInteger numberOfFrames = animationDuration * UIScrollViewScrollAnimationFramesPerSecond;
 	const CGPoint frameDelta = CGPointMake(delta.x/(float)numberOfFrames, delta.y/(float)numberOfFrames);
 	
-	for (NSInteger f=0; f<numberOfFrames; f++) {
-		[self performSelector:@selector(_scrollContentOffsetBy:) withObject:[NSValue valueWithCGPoint:frameDelta] afterDelay:(f * timePerFrame)];
+	// an animation here is really just a velocity to apply over time. the frames per second is assumed to be constant, etc.
+	// it's not too fancy.
+	UIScrollViewScrollAnimation *animation = [[UIScrollViewScrollAnimation alloc] init];
+	animation.contentOffsetVelocity = frameDelta;
+	animation.stopTime = animationDuration + startTime;
+	[_scrollAnimations addObject:animation];
+	[animation release];
+
+	// if there's no current scrolling animation running, we need to start one here - it will repeat until there are no more 
+	// animations in _scrollAnimations.
+	if (!_scrollTimer) {
+		_scrollAnimationTime = startTime;
+		_scrollTimer = [NSTimer scheduledTimerWithTimeInterval:1/(NSTimeInterval)UIScrollViewScrollAnimationFramesPerSecond target:self selector:@selector(_updateScrollAnimation) userInfo:nil repeats:YES];
 	}
 }
 
 - (void)setContentOffset:(CGPoint)theOffset animated:(BOOL)animated
 {
 	if (animated) {
-		[self _scrollContentOffsetBy:CGPointMake(_contentOffset.x-theOffset.x, _contentOffset.y-theOffset.y) withAnimationDuration:UIScrollViewAnimationDuration];
+		[self _scrollContentOffsetBy:CGPointMake(theOffset.x-_contentOffset.x, theOffset.y-_contentOffset.y) withAnimationDuration:UIScrollViewAnimationDuration];
 	} else {
-		[self setContentOffset:theOffset];
-	}
-}
-
-- (void)setContentOffset:(CGPoint)theOffset
-{
-	if (! CGPointEqualToPoint(_contentOffset, theOffset)) {
 		_contentOffset = theOffset;
 		[self _constrainContent];
 		
@@ -239,6 +288,11 @@ static CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 			[_delegate scrollViewDidScroll:self];
 		}
 	}
+}
+
+- (void)setContentOffset:(CGPoint)theOffset
+{
+	[self setContentOffset:theOffset animated:NO];
 }
 
 - (void)setContentSize:(CGSize)newSize
@@ -334,10 +388,10 @@ static CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 
 		// Increasing the delta because it just seems to feel better to me right now.
 		// Dunno if this is something standard that OSX is doing or if OSX actually scales it somehow based on content size.
-		delta.x *= 10.f;
-		delta.y *= 10.f;
+		delta.x *= -9.f;
+		delta.y *= -9.f;
 		
-		[self _scrollContentOffsetBy:delta withAnimationDuration:0.08];
+		[self _scrollContentOffsetBy:delta withAnimationDuration:0.1];
 		[self _quickFlashScrollIndicators];
 	} else {
 		[super scrollWheelMoved:delta withEvent:event];
