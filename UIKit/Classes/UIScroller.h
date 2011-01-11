@@ -4,6 +4,8 @@
 
 @class UIImageView, UIScroller;
 
+CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize);
+
 @protocol _UIScrollerDelegate
 - (void)_UIScroller:(UIScroller *)scroller contentOffsetDidChange:(CGFloat)newOffset;
 - (void)_UIScrollerDidEndDragging:(UIScroller *)scroller withEvent:(UIEvent *)event;

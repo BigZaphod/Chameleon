@@ -9,6 +9,18 @@ static const BOOL _UIScrollerGutterEnabled = NO;
 static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;	// _UIScrollerGutterEnabled must be YES for this to have any meaning
 
 
+CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
+{
+	const CGFloat minViewSize = 50;
+	
+	if (boundsSize.width <= minViewSize || boundsSize.height <= minViewSize) {
+		return 6;
+	} else {
+		return 10;
+	}
+}
+
+
 @implementation UIScroller
 @synthesize delegate=_delegate, contentOffset=_contentOffset, contentSize=_contentSize;
 @synthesize indicatorStyle=_indicatorStyle, alwaysVisible=_alwaysVisible;
