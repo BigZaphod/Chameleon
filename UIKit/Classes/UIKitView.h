@@ -14,8 +14,8 @@
 // current first responder with the given action and sender and return the result. if the keyWindow is not on this screen, it always returns NO.
 - (BOOL)firstResponderCanPerformAction:(SEL)action withSender:(id)sender;
 
-// if UIApplication's keyWindow is on the screen represented by this UIKitView, this will send the action to the first responder of the keyWindow.
-// otherwise it does nothing.
+// if UIApplication's keyWindow is on the screen represented by this UIKitView, this will send the action down the responder chain starting with
+// the keyWindow's first responder. if the keyWindow is not on this screen, nothing happens.
 - (void)sendActionToFirstResponder:(SEL)action from:(id)sender;
 
 // this is an optional method

@@ -10,6 +10,8 @@
 - (CALayer *)layer;
 - (BOOL)isHidden;
 - (BOOL)isDescendantOfView:(UIView *)view;
+- (BOOL)becomeFirstResponder;
+- (BOOL)resignFirstResponder;
 
 // if any one of these doesn't exist, then scrolling of the NSClipView is disabled
 @optional
@@ -28,6 +30,8 @@
 - (void)_textDidEndEditing;
 - (BOOL)_textShouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
 
+//- (BOOL)_textShouldHandleKeyDown:(NSEvent *)event;
+
 @optional
 - (void)_textDidChange;
 - (void)_textDidChangeSelection;
@@ -43,6 +47,7 @@
 	BOOL editable;
 	UIColor *textColor;
 	UIFont *font;
+	BOOL changingResponderStatus;
 	
 	struct {
 		unsigned int didChange : 1;

@@ -154,13 +154,49 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 	return menu;
 }
 
+
+- (id<UICustomNSTextViewDelegate>)delegate
+{
+	return (id<UICustomNSTextViewDelegate>)[super delegate];
+}
+
+- (void)setDelegate:(id<UICustomNSTextViewDelegate>)d
+{
+	[super setDelegate:d];
+}
+
+
+- (BOOL)becomeFirstResponder
+{
+	return [[self delegate] textViewBecomeFirstResponder:self];
+}
+
+- (BOOL)reallyBecomeFirstResponder
+{
+	return [super becomeFirstResponder];
+}
+
 - (BOOL)resignFirstResponder
+{
+	return [[self delegate] textViewResignFirstResponder:self];
+}
+
+- (BOOL)reallyResignFirstResponder
 {
 	if ([self isFieldEditor]) {
 		[self scrollRangeToVisible:NSMakeRange(0,0)];
 	}
+
 	[self setSelectedRange:NSMakeRange(0,0)];
+
 	return [super resignFirstResponder];
+}
+
+- (void)keyDown:(NSEvent *)event
+{
+	if ([[self delegate] textView:self shouldAcceptKeyDown:event]) {
+		[super keyDown:event];
+	}
 }
 
 #pragma mark -

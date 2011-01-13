@@ -6,13 +6,14 @@
 #import "UIWindow.h"
 #import "UIScreen+UIPrivate.h"
 #import "UIScreenAppKitIntegration.h"
+#import "UIApplication+UIPrivate.h"
 #import "AppKitIntegration.h"
 #import "UIView+UIPrivate.h"
 #import "UIKitView.h"
 #import <AppKit/NSLayoutManager.h>
 #import <AppKit/NSWindow.h>
 
-@interface UITextLayer () <UICustomNSClipViewBehaviorDelegate, NSTextViewDelegate>
+@interface UITextLayer () <UICustomNSClipViewBehaviorDelegate, UICustomNSTextViewDelegate>
 - (void)removeNSView;
 @end
 
@@ -311,26 +312,53 @@
 		}
 		return YES;
 	}
+	
 	return NO;
 }
 
+- (BOOL)textViewBecomeFirstResponder:(UICustomNSTextView *)aTextView
+{
+	if (changingResponderStatus) {
+		return [aTextView reallyBecomeFirstResponder];
+	} else {
+		return [containerView becomeFirstResponder];
+	}
+}
 
+- (BOOL)textViewResignFirstResponder:(UICustomNSTextView *)aTextView
+{
+	if (changingResponderStatus) {
+		return [aTextView reallyResignFirstResponder];
+	} else {
+		return [containerView resignFirstResponder];
+	}
+}
 
 - (BOOL)becomeFirstResponder
 {
 	if ([self shouldBeVisible] && ![clipView superview]) {
-			[self addNSView];
+		[self addNSView];
 	}
-	return [[textView window] makeFirstResponder:textView];
+	
+	changingResponderStatus = YES;
+	const BOOL result = [[textView window] makeFirstResponder:textView];
+	changingResponderStatus = NO;
+
+	return result;
 }
 
 - (BOOL)resignFirstResponder
 {
-	if ([[textView window] firstResponder] != textView) {
-		return NO;
-	} else {
-		return [[textView window] makeFirstResponder:nil];
-	}
+	changingResponderStatus = YES;
+	const BOOL result = [[textView window] makeFirstResponder:nil];
+	changingResponderStatus = NO;
+	return result;
+}
+
+
+- (BOOL)textView:(UICustomNSTextView *)aTextView shouldAcceptKeyDown:(NSEvent *)event
+{
+	return ![[UIApplication sharedApplication] _sendGlobalKeyboardNSEvent:event fromScreen:[[containerView window] screen]];
 }
 
 @end

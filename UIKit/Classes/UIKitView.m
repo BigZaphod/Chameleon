@@ -62,29 +62,19 @@
 	[_screen _setUIKitView:self.superview? self : nil];
 }
 
-- (UIResponder *)_firstUIKitResponder
-{
-	UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
-	if (keyWindow.screen == _screen) {
-		return [keyWindow _firstResponder];
-	} else {
-		return nil;
-	}
-}
-
 - (BOOL)acceptsFirstResponder
 {
-	return ([self _firstUIKitResponder] != nil);
+	return ([[UIApplication sharedApplication] _firstResponderForScreen:_screen] != nil);
 }
 
 - (BOOL)firstResponderCanPerformAction:(SEL)action withSender:(id)sender
 {
-	return [[self _firstUIKitResponder] canPerformAction:action withSender:sender];
+	return [[UIApplication sharedApplication] _firstResponderCanPerformAction:action withSender:sender fromScreen:_screen];
 }
 
 - (void)sendActionToFirstResponder:(SEL)action from:(id)sender
 {
-	[[self _firstUIKitResponder] performSelector:action withObject:sender];
+	[[UIApplication sharedApplication] _sendActionToFirstResponder:action withSender:sender fromScreen:_screen];
 }
 
 - (BOOL)respondsToSelector:(SEL)cmd
@@ -94,19 +84,37 @@
 		cmd == @selector(delete:) ||
 		cmd == @selector(paste:) ||
 		cmd == @selector(select:) ||
-		cmd == @selector(selectAll:)) {
+		cmd == @selector(selectAll:) ||
+		cmd == @selector(commit:) ||
+		cmd == @selector(cancel:)) {
 		return [self firstResponderCanPerformAction:cmd withSender:nil];
 	} else {
 		return [super respondsToSelector:cmd];
 	}
 }
 
-- (void)copy:(id)sender			{ [self sendActionToFirstResponder:_cmd from:sender]; }
-- (void)cut:(id)sender			{ [self sendActionToFirstResponder:_cmd from:sender]; }
-- (void)delete:(id)sender		{ [self sendActionToFirstResponder:_cmd from:sender]; }
-- (void)paste:(id)sender		{ [self sendActionToFirstResponder:_cmd from:sender]; }
-- (void)select:(id)sender		{ [self sendActionToFirstResponder:_cmd from:sender]; }
-- (void)selectAll:(id)sender	{ [self sendActionToFirstResponder:_cmd from:sender]; }
+- (void)copy:(id)sender				{ [self sendActionToFirstResponder:_cmd from:sender]; }
+- (void)cut:(id)sender				{ [self sendActionToFirstResponder:_cmd from:sender]; }
+- (void)delete:(id)sender			{ [self sendActionToFirstResponder:_cmd from:sender]; }
+- (void)paste:(id)sender			{ [self sendActionToFirstResponder:_cmd from:sender]; }
+- (void)select:(id)sender			{ [self sendActionToFirstResponder:_cmd from:sender]; }
+- (void)selectAll:(id)sender		{ [self sendActionToFirstResponder:_cmd from:sender]; }
+
+// these are special additions
+- (void)cancel:(id)sender			{ [self sendActionToFirstResponder:_cmd from:sender]; }
+- (void)commit:(id)sender			{ [self sendActionToFirstResponder:_cmd from:sender]; }
+
+// this is a special case, UIKit doesn't normally send anything like this
+- (void)cancelOperation:(id)sender	{ [self cancel:sender]; }
+
+// capture the key presses here and turn them into key events which are sent down the UIKit responder chain
+// if they come back as unhandled, pass them along the AppKit responder chain.
+- (void)keyDown:(NSEvent *)theEvent
+{
+	if (![[UIApplication sharedApplication] _sendKeyboardNSEvent:theEvent fromScreen:_screen]) {
+		[super keyDown:theEvent];
+	}
+}
 
 - (void)updateTrackingAreas
 {
@@ -119,7 +127,7 @@
 
 - (void)mouseMoved:(NSEvent *)theEvent
 {
-	[[UIApplication sharedApplication] _screen:_screen didReceiveNSEvent:theEvent];
+	[[UIApplication sharedApplication] _sendMouseNSEvent:theEvent fromScreen:_screen];
 }
 
 - (void)mouseDown:(NSEvent *)theEvent
@@ -133,38 +141,38 @@
 		NSEvent *newEvent = [NSEvent mouseEventWithType:NSRightMouseDown location:[theEvent locationInWindow] modifierFlags:0 timestamp:[theEvent timestamp] windowNumber:[theEvent windowNumber] context:[theEvent context] eventNumber:[theEvent eventNumber] clickCount:[theEvent clickCount] pressure:[theEvent pressure]];
 		[self rightMouseDown:newEvent];
 	} else {
-		[[UIApplication sharedApplication] _screen:_screen didReceiveNSEvent:theEvent];
+		[[UIApplication sharedApplication] _sendMouseNSEvent:theEvent fromScreen:_screen];
 	}
 }
 
 - (void)mouseUp:(NSEvent *)theEvent
 {
-	[[UIApplication sharedApplication] _screen:_screen didReceiveNSEvent:theEvent];
+	[[UIApplication sharedApplication] _sendMouseNSEvent:theEvent fromScreen:_screen];
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent
 {
-	[[UIApplication sharedApplication] _screen:_screen didReceiveNSEvent:theEvent];
+	[[UIApplication sharedApplication] _sendMouseNSEvent:theEvent fromScreen:_screen];
 }
 
 - (void)rightMouseDown:(NSEvent *)theEvent
 {
-	[[UIApplication sharedApplication] _screen:_screen didReceiveNSEvent:theEvent];
+	[[UIApplication sharedApplication] _sendMouseNSEvent:theEvent fromScreen:_screen];
 }
 
 - (void)scrollWheel:(NSEvent *)theEvent
 {
-	[[UIApplication sharedApplication] _screen:_screen didReceiveNSEvent:theEvent];
+	[[UIApplication sharedApplication] _sendMouseNSEvent:theEvent fromScreen:_screen];
 }
 
 - (void)mouseEntered:(NSEvent *)theEvent
 {
-	[[UIApplication sharedApplication] _screen:_screen didReceiveNSEvent:theEvent];
+	[[UIApplication sharedApplication] _sendMouseNSEvent:theEvent fromScreen:_screen];
 }
 
 - (void)mouseExited:(NSEvent *)theEvent
 {
-	[[UIApplication sharedApplication] _screen:_screen didReceiveNSEvent:theEvent];
+	[[UIApplication sharedApplication] _sendMouseNSEvent:theEvent fromScreen:_screen];
 }
 
 - (void)_launchApplicationDelegate:(id<UIApplicationDelegate>)appDelegate

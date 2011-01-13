@@ -1,5 +1,6 @@
 //  Created by Sean Heber on 10/12/10.
 #import "UIResponderAppKitIntegration.h"
+#import "UIEvent+UIPrivate.h"
 
 @implementation UIResponder (AppKitIntegration)
 
@@ -26,6 +27,16 @@
 - (id)mouseCursorForEvent:(UIEvent *)event
 {
 	return [[self nextResponder] mouseCursorForEvent:event];
+}
+
+- (void)keyPressed:(UIKey *)key withEvent:(UIEvent *)event
+{
+	UIResponder *responder = [self nextResponder];
+	if (responder) {
+		[responder keyPressed:key withEvent:event];
+	} else {
+		[event _setUnhandledKeyPressEvent];
+	}
 }
 
 @end

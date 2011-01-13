@@ -1,6 +1,8 @@
 //  Created by Sean Heber on 10/12/10.
 #import "UIResponder.h"
 
+@class UIKey;
+
 @interface UIResponder (AppKitIntegration)
 // This message is sent up the responder chain so that views behind other views can make use of the scroll wheel (such as UIScrollView).
 - (void)scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event;
@@ -22,4 +24,24 @@
 
 // Return an NSCursor if you want to modify it or nil to use the default arrow. Follows responder chain.
 - (id)mouseCursorForEvent:(UIEvent *)event;	// return an NSCursor if you want to modify it, return nil to use default
+
+// This is a rough guess as to what might be coming in the future with UIKit. I suspect it'll be similar but perhaps more detailed. UIKey
+// may or may not exist, etc. This will work for now in case it is needed. This is only triggered by keyDown: events and is not extensively
+// implemented or tested at this point. This is sent to the firstResponder in the keyWindow.
+// Note, that the UIEvent here will be an empty non-touch one and has no real purpose in the present implementation :)
+- (void)keyPressed:(UIKey *)key withEvent:(UIEvent *)event;
+
 @end
+
+
+@interface NSObject (UIResponderAppKitIntegrationKeyboardActions)
+// This is triggered from AppKit's cancelOperation: so it should be sent in largely the same circumstances. Generally you can think of it as mapping
+// to the ESC key, but CMD-. (period) also maps to it.
+- (void)cancel:(id)sender;
+
+// This is mapped to CMD-Return and Enter and does not come from AppKit since it has no such convention as far as I've found. However it seemed like
+// a useful thing to define, really, so that's what I'm doing. :)
+- (void)commit:(id)sender;
+@end
+
+

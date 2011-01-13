@@ -61,3 +61,4 @@
 #import "UIViewAdapter.h"
 #import "UIPageControl.h"
 #import "UIProgressView.h"
+#import "UIKey.h"	// non standard

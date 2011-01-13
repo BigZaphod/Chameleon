@@ -136,12 +136,20 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 
 - (BOOL)becomeFirstResponder
 {
-	return [_textLayer becomeFirstResponder];
+	if ([super becomeFirstResponder] ){
+		return [_textLayer becomeFirstResponder];
+	} else {
+		return NO;
+	}
 }
 
 - (BOOL)resignFirstResponder
 {
-	return [_textLayer resignFirstResponder];
+	if ([super resignFirstResponder]) {
+		return [_textLayer resignFirstResponder];
+	} else {
+		return NO;
+	}
 }
 
 

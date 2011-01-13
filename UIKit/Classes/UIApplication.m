@@ -3,11 +3,12 @@
 #import "UIScreen+UIPrivate.h"
 #import "UIScreenAppKitIntegration.h"
 #import "UIKitView.h"
-#import "UIEvent.h"
+#import "UIEvent+UIPrivate.h"
 #import "UITouch+UIPrivate.h"
-#import "UIWindow.h"
+#import "UIWindow+UIPrivate.h"
 #import "UIPopoverController+UIPrivate.h"
 #import "UIResponderAppKitIntegration.h"
+#import "UIKey+UIPrivate.h"
 #import <Cocoa/Cocoa.h>
 
 NSString *const UIApplicationWillChangeStatusBarOrientationNotification = @"UIApplicationWillChangeStatusBarOrientationNotification";
@@ -64,7 +65,8 @@ static BOOL TouchIsActive(UITouch *touch)
 - (id)init
 {
 	if ((self=[super init])) {
-		_currentEvent = [[UIEvent alloc] init];
+		_currentEvent = [[UIEvent alloc] initWithEventType:UIEventTypeTouches];
+		[_currentEvent _setTouch:[[[UITouch alloc] init] autorelease]];
 		_visibleWindows = [[NSMutableSet alloc] init];
 		_applicationSupportsShakeToEdit = YES;		// yeah... not *really* true, but UIKit defaults to YES :)
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
@@ -185,6 +187,36 @@ static BOOL TouchIsActive(UITouch *touch)
 	}
 }
 
+- (UIResponder *)_firstResponderForScreen:(UIScreen *)screen
+{
+	if (_keyWindow.screen == screen) {
+		return [_keyWindow _firstResponder];
+	} else {
+		return nil;
+	}
+}
+
+- (BOOL)_sendActionToFirstResponder:(SEL)action withSender:(id)sender fromScreen:(UIScreen *)theScreen
+{
+	UIResponder *responder = [self _firstResponderForScreen:theScreen];
+
+	while (responder) {
+		if ([responder respondsToSelector:action]) {
+			[responder performSelector:action withObject:sender];
+			return YES;
+		} else {
+			responder = [responder nextResponder];
+		}
+	}
+	
+	return NO;
+}
+
+- (BOOL)_firstResponderCanPerformAction:(SEL)action withSender:(id)sender fromScreen:(UIScreen *)theScreen
+{
+	return [[self _firstResponderForScreen:theScreen] canPerformAction:action withSender:sender];
+}
+
 - (void)sendEvent:(UIEvent *)event
 {
 	for (UITouch *touch in [event allTouches]) {
@@ -197,15 +229,48 @@ static BOOL TouchIsActive(UITouch *touch)
 	return [[NSWorkspace sharedWorkspace] openURL:url];
 }
 
-- (void)_screen:(UIScreen *)theScreen didReceiveNSEvent:(NSEvent *)theNSEvent
+- (BOOL)_sendGlobalKeyboardNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
+{
+	UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
+
+	if (key.type == UIKeyTypeEnter || (key.commandKeyPressed && key.type == UIKeyTypeReturn)) {
+		if ([self _firstResponderCanPerformAction:@selector(commit:) withSender:key fromScreen:theScreen]) {
+			return [self _sendActionToFirstResponder:@selector(commit:) withSender:key fromScreen:theScreen];
+		}
+	}
+		
+	return NO;
+}
+
+- (BOOL)_sendKeyboardNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
+{
+	if (![self _sendGlobalKeyboardNSEvent:theNSEvent fromScreen:theScreen]) {
+		UIResponder *firstResponder = [self _firstResponderForScreen:theScreen];
+		
+		if (firstResponder) {
+			UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
+			UIEvent *event = [[[UIEvent alloc] initWithEventType:UIEventTypeKeyPress] autorelease];
+			[event _setTimestamp:[theNSEvent timestamp]];
+
+			[firstResponder keyPressed:key withEvent:event];
+			return ![event _isUnhandledKeyPressEvent];
+		}
+	}
+
+	return NO;
+}
+
+- (void)_sendMouseNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
 {
 	UITouch *touch = [[_currentEvent allTouches] anyObject];
 	BOOL isSupportedEvent = YES;
-
+	
+	[_currentEvent _setTimestamp:[theNSEvent timestamp]];
+	
 	const CGPoint screenLocation = ScreenLocationFromNSEvent(theScreen, theNSEvent);
 	const NSTimeInterval timestamp = [theNSEvent timestamp];
 	const CGPoint delta = CGPointMake([theNSEvent deltaX], [theNSEvent deltaY]);
-
+	
 	if (TouchIsActive(touch)) {
 		switch ([theNSEvent type]) {
 			case NSLeftMouseUp:
@@ -249,7 +314,7 @@ static BOOL TouchIsActive(UITouch *touch)
 		if (isSupportedEvent) {
 			UIView *previousView = [touch.view retain];
 			[touch _setView:[theScreen _hitTest:screenLocation event:_currentEvent]];
-
+			
 			if (touch.view != previousView) {
 				[previousView mouseExitedView:previousView enteredView:touch.view withEvent:_currentEvent];
 				[touch.view mouseExitedView:previousView enteredView:touch.view withEvent:_currentEvent];

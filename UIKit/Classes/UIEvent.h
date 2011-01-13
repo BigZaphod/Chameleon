@@ -4,6 +4,7 @@
 typedef enum {
 	UIEventTypeTouches,
 	UIEventTypeMotion,
+	UIEventTypeKeyPress			// nonstandard
 } UIEventType;
 
 typedef enum {
@@ -15,7 +16,10 @@ typedef enum {
 
 @interface UIEvent : NSObject {
 @private
+	UIEventType _type;
 	UITouch *_touch;
+	NSTimeInterval _timestamp;
+	BOOL _unhandledKeyPressEvent;
 }
 
 @property (nonatomic, readonly) NSTimeInterval timestamp;
