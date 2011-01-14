@@ -360,4 +360,12 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 	return fitSize;
 }
 
+- (void)rightClick:(UITouch *)touch withEvent:(UIEvent *)event
+{
+	// I'm swallowing right clicks on buttons by default, which is why this is here.
+	// This isn't a strong decision, but there's a few places in Twitterrific where passing a right click through a button doesn't feel right.
+	// It also doesn't feel immediately right to treat a right-click on a button as a normal click event, either, so this seems to be a
+	// decent way to avoid the problem in general and define a kind of "standard" behavior in this case.
+}
+
 @end
