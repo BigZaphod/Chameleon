@@ -82,12 +82,15 @@
 				[_menu addItem:theItem];
 				[theItem release];
 			}
-			
-			// this is offset so that it seems to be aligned on the right of the initial rect given to setTargetRect:inView:
-			// I don't know if this is the best behavior yet or not.
+
 			_menuFrame.size = NSSizeToCGSize([_menu size]);
 			_menuFrame.origin = _menuLocation;
-			_menuFrame.origin.x -= _menuFrame.size.width;
+
+			// this is offset so that it seems to be aligned on the right of the initial rect given to setTargetRect:inView:
+			// I don't know if this is the best behavior yet or not.
+			if (_rightAlignMenu) {
+				_menuFrame.origin.x -= _menuFrame.size.width;
+			}
 			
 			// note that presenting an NSMenu is apparently modal. so, to pretend that it isn't, exactly, I'll delay the presentation
 			// of the menu to the start of a new runloop. At least that way, code that may be expecting to run right after setting the
@@ -120,17 +123,32 @@
 	// keyWindow and go from there.
 	_window = targetView.window ?: [UIApplication sharedApplication].keyWindow;
 
-	// this will ultimately position the menu under the lower right of the given rectangle.
-	// but it is then shifted in setMenuVisible:animated: so that the menu is right-aligned with the given rect.
-	// this is all rather strange, perhaps, but it made sense at the time. we'll see if it does in practice.
-	targetRect.origin.x += targetRect.size.width;
-	targetRect.origin.y += targetRect.size.height;
-	
-	// first convert to screen coord, otherwise assume it already is, I guess, only the catch with targetView being nil
-	// is that the assumed screen might not be the keyWindow's screen, which is what I'm going to be assuming here.
-	// but bah - who cares? :)
-	if (targetView) {
-		targetRect = [_window convertRect:[_window convertRect:targetRect fromView:targetView] toWindow:nil];
+	// if the rect is CGRectNull, this is a fancy trigger in my OSX version to use the mouse position as the location for
+	// the menu instead of the requiring a given rect. this is often a much better feel on OSX than the usual UIKit way is.
+	if (CGRectIsNull(targetRect)) {
+		_rightAlignMenu = NO;
+
+		// get the mouse position and use that as the origin of our target rect
+		NSPoint mouseLocation = [NSEvent mouseLocation];
+		CGPoint screenPoint = [_window.screen convertPoint:NSPointToCGPoint(mouseLocation) fromScreen:nil];
+
+		targetRect.origin = screenPoint;
+		targetRect.size = CGSizeZero;
+	} else {
+		_rightAlignMenu = YES;
+
+		// this will ultimately position the menu under the lower right of the given rectangle.
+		// but it is then shifted in setMenuVisible:animated: so that the menu is right-aligned with the given rect.
+		// this is all rather strange, perhaps, but it made sense at the time. we'll see if it does in practice.
+		targetRect.origin.x += targetRect.size.width;
+		targetRect.origin.y += targetRect.size.height;
+		
+		// first convert to screen coord, otherwise assume it already is, I guess, only the catch with targetView being nil
+		// is that the assumed screen might not be the keyWindow's screen, which is what I'm going to be assuming here.
+		// but bah - who cares? :)
+		if (targetView) {
+			targetRect = [_window convertRect:[_window convertRect:targetRect fromView:targetView] toWindow:nil];
+		}
 	}
 	
 	// only the origin is being set here. the size isn't known until the menu is created, which happens in setMenuVisible:animated:

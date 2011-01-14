@@ -227,19 +227,24 @@
 	// a click somewhere. If it's triggered on a delay, that might be a problem. However for a typical app, I suspect that is generally
 	// not the case. I can't think of a better behavior right now, so I'm going to fetch the current mouse position and translate coords
 	// so that the menu presents from there.
-	
-	// translate them thar points!
-	NSPoint mouseLocation = [NSEvent mouseLocation];
-	CGPoint screenPoint = [view.window.screen convertPoint:NSPointToCGPoint(mouseLocation) fromScreen:nil];
-	CGPoint windowPoint = [view.window convertPoint:screenPoint fromWindow:nil];
-	CGPoint viewPoint = [view convertPoint:windowPoint fromView:nil];
-	
-	[self _showFromPoint:viewPoint rightAligned:NO inView:view];
+	[self showFromRect:CGRectNull inView:view animated:YES];
 }
 
 - (void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated
 {
-	[self _showFromPoint:CGPointMake(rect.origin.x+rect.size.width, rect.origin.y+rect.size.height) rightAligned:YES inView:view];
+	// If the rect is NULL, use that as a flag to indicate that the menu should be presented from wherever the mouse cursor is
+	// instead of a specific place on screen. This is not really normal UIKit behavior, of course, but I think it makes sense
+	// here on the Mac.
+	if (CGRectIsNull(rect)) {
+		// translate them thar points!
+		NSPoint mouseLocation = [NSEvent mouseLocation];
+		CGPoint screenPoint = [view.window.screen convertPoint:NSPointToCGPoint(mouseLocation) fromScreen:nil];
+		CGPoint windowPoint = [view.window convertPoint:screenPoint fromWindow:nil];
+		CGPoint viewPoint = [view convertPoint:windowPoint fromView:nil];
+		[self _showFromPoint:viewPoint rightAligned:NO inView:view];
+	} else {
+		[self _showFromPoint:CGPointMake(rect.origin.x+rect.size.width, rect.origin.y+rect.size.height) rightAligned:YES inView:view];
+	}
 }
 
 - (void)dismissWithClickedButtonIndex:(NSInteger)buttonIndex animated:(BOOL)animated
