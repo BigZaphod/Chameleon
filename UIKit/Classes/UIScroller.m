@@ -7,6 +7,7 @@
 
 static const BOOL _UIScrollerGutterEnabled = NO;
 static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;	// _UIScrollerGutterEnabled must be YES for this to have any meaning
+static const CGFloat _UIScrollerMinimumAlpha = 0.25;
 
 
 CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
@@ -29,7 +30,7 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 {
 	if ((self=[super initWithFrame:frame])) {
 		self.opaque = NO;
-		self.alpha = 0;
+		self.alpha = _UIScrollerMinimumAlpha;
 		self.indicatorStyle = UIScrollViewIndicatorStyleDefault;
 	}
 	return self;
@@ -49,7 +50,7 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 	[UIView beginAnimations:@"fadeOut" context:NULL];
 	[UIView setAnimationDuration:0.33];
 	[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-	self.alpha = 0;
+	self.alpha = _UIScrollerMinimumAlpha;
 	[UIView commitAnimations];
 }
 
@@ -93,7 +94,7 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 
 	if (_alwaysVisible) {
 		[self _fadeIn];
-	} else if (self.alpha > 0) {
+	} else if (self.alpha > _UIScrollerMinimumAlpha) {
 		[self _fadeOut];
 	}
 }
