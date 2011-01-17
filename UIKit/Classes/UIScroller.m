@@ -7,7 +7,7 @@
 
 static const BOOL _UIScrollerGutterEnabled = NO;
 static const BOOL _UIScrollerJumpToSpotThatIsClicked = NO;	// _UIScrollerGutterEnabled must be YES for this to have any meaning
-static const CGFloat _UIScrollerMinimumAlpha = 0.25;
+static const CGFloat _UIScrollerMinimumAlpha = 0;
 
 
 CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
