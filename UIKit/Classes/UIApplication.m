@@ -108,10 +108,17 @@ static BOOL TouchIsActive(UITouch *touch)
 
 - (void)beginIgnoringInteractionEvents
 {
+	_ignoringInteractionEvents++;
 }
 
 - (void)endIgnoringInteractionEvents
 {
+	_ignoringInteractionEvents--;
+}
+
+- (BOOL)isIgnoringInteractionEvents
+{
+	return (_ignoringInteractionEvents > 0);
 }
 
 - (UIInterfaceOrientation)statusBarOrientation
@@ -231,11 +238,13 @@ static BOOL TouchIsActive(UITouch *touch)
 
 - (BOOL)_sendGlobalKeyboardNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
 {
-	UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
+	if (![self isIgnoringInteractionEvents]) {
+		UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
 
-	if (key.type == UIKeyTypeEnter || (key.commandKeyPressed && key.type == UIKeyTypeReturn)) {
-		if ([self _firstResponderCanPerformAction:@selector(commit:) withSender:key fromScreen:theScreen]) {
-			return [self _sendActionToFirstResponder:@selector(commit:) withSender:key fromScreen:theScreen];
+		if (key.type == UIKeyTypeEnter || (key.commandKeyPressed && key.type == UIKeyTypeReturn)) {
+			if ([self _firstResponderCanPerformAction:@selector(commit:) withSender:key fromScreen:theScreen]) {
+				return [self _sendActionToFirstResponder:@selector(commit:) withSender:key fromScreen:theScreen];
+			}
 		}
 	}
 		
@@ -244,16 +253,18 @@ static BOOL TouchIsActive(UITouch *touch)
 
 - (BOOL)_sendKeyboardNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
 {
-	if (![self _sendGlobalKeyboardNSEvent:theNSEvent fromScreen:theScreen]) {
-		UIResponder *firstResponder = [self _firstResponderForScreen:theScreen];
-		
-		if (firstResponder) {
-			UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
-			UIEvent *event = [[[UIEvent alloc] initWithEventType:UIEventTypeKeyPress] autorelease];
-			[event _setTimestamp:[theNSEvent timestamp]];
+	if (![self isIgnoringInteractionEvents]) {
+		if (![self _sendGlobalKeyboardNSEvent:theNSEvent fromScreen:theScreen]) {
+			UIResponder *firstResponder = [self _firstResponderForScreen:theScreen];
+			
+			if (firstResponder) {
+				UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
+				UIEvent *event = [[[UIEvent alloc] initWithEventType:UIEventTypeKeyPress] autorelease];
+				[event _setTimestamp:[theNSEvent timestamp]];
 
-			[firstResponder keyPressed:key withEvent:event];
-			return ![event _isUnhandledKeyPressEvent];
+				[firstResponder keyPressed:key withEvent:event];
+				return ![event _isUnhandledKeyPressEvent];
+			}
 		}
 	}
 
@@ -263,7 +274,7 @@ static BOOL TouchIsActive(UITouch *touch)
 - (void)_sendMouseNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
 {
 	UITouch *touch = [[_currentEvent allTouches] anyObject];
-	BOOL isSupportedEvent = YES;
+	BOOL isSupportedEvent = NO;
 	
 	[_currentEvent _setTimestamp:[theNSEvent timestamp]];
 	
@@ -272,6 +283,8 @@ static BOOL TouchIsActive(UITouch *touch)
 	const CGPoint delta = CGPointMake([theNSEvent deltaX], [theNSEvent deltaY]);
 	
 	if (TouchIsActive(touch)) {
+		isSupportedEvent = YES;
+
 		switch ([theNSEvent type]) {
 			case NSLeftMouseUp:
 				[touch _setPhase:UITouchPhaseEnded screenLocation:screenLocation tapCount:touch.tapCount delta:delta timestamp:timestamp];
@@ -285,28 +298,28 @@ static BOOL TouchIsActive(UITouch *touch)
 				[touch _setPhase:UITouchPhaseStationary screenLocation:screenLocation tapCount:touch.tapCount delta:delta timestamp:timestamp];
 				break;
 		}
-	} else {
+	} else if (![self isIgnoringInteractionEvents]) {
 		switch ([theNSEvent type]) {
 			case NSLeftMouseDown:
+				isSupportedEvent = YES;
 				[touch _setPhase:UITouchPhaseBegan screenLocation:screenLocation tapCount:[theNSEvent clickCount] delta:delta timestamp:timestamp];
 				break;
 				
 			case NSScrollWheel:
+				isSupportedEvent = YES;
 				[touch _setPhase:UITouchPhaseScrolled screenLocation:screenLocation tapCount:0 delta:delta timestamp:timestamp];
 				break;
 				
 			case NSMouseMoved:
 			case NSMouseEntered:
 			case NSMouseExited:
+				isSupportedEvent = YES;
 				[touch _setPhase:UITouchPhaseHovered screenLocation:screenLocation tapCount:0 delta:delta timestamp:timestamp];
 				break;
 				
 			case NSRightMouseDown:
+				isSupportedEvent = YES;
 				[touch _setPhase:UITouchPhaseRightClicked screenLocation:screenLocation tapCount:1 delta:delta timestamp:timestamp];
-				break;
-				
-			default:
-				isSupportedEvent = NO;
 				break;
 		}
 		

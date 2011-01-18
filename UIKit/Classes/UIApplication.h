@@ -48,6 +48,7 @@ typedef enum {
 	BOOL _idleTimerDisabled;
 	BOOL _networkActivityIndicatorVisible;
 	BOOL _applicationSupportsShakeToEdit;
+	NSUInteger _ignoringInteractionEvents;
 }
 
 + (UIApplication *)sharedApplication;
@@ -58,6 +59,7 @@ typedef enum {
 
 - (void)beginIgnoringInteractionEvents;
 - (void)endIgnoringInteractionEvents;
+- (BOOL)isIgnoringInteractionEvents;
 
 @property (nonatomic, readonly) UIWindow *keyWindow;
 @property (nonatomic, readonly) NSArray *windows;
