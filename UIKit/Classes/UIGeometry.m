@@ -20,7 +20,7 @@ NSString *NSStringFromCGSize(CGSize s)
 
 NSString *NSStringFromCGAffineTransform(CGAffineTransform transform)
 {
-	return [NSString stringWithFormat:@"[%f, %f, %f, %f, %f, %f]", transform.a, transform.b, transform.c, transform.d, transform.tx, transform.ty];
+	return [NSString stringWithFormat:@"[%g, %g, %g, %g, %g, %g]", transform.a, transform.b, transform.c, transform.d, transform.tx, transform.ty];
 }
 
 @implementation NSValue (NSValueUIGeometryExtensions)
