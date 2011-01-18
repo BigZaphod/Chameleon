@@ -44,6 +44,30 @@ typedef enum {
 	UIViewAnimationTransitionCurlDown,
 } UIViewAnimationTransition;
 
+enum {
+	UIViewAnimationOptionLayoutSubviews            = 1 <<  0,		// not currently supported
+	UIViewAnimationOptionAllowUserInteraction      = 1 <<  1,
+	UIViewAnimationOptionBeginFromCurrentState     = 1 <<  2,
+	UIViewAnimationOptionRepeat                    = 1 <<  3,
+	UIViewAnimationOptionAutoreverse               = 1 <<  4,
+	UIViewAnimationOptionOverrideInheritedDuration = 1 <<  5,		// not currently supported
+	UIViewAnimationOptionOverrideInheritedCurve    = 1 <<  6,		// not currently supported
+	UIViewAnimationOptionAllowAnimatedContent      = 1 <<  7,		// not currently supported
+	UIViewAnimationOptionShowHideTransitionViews   = 1 <<  8,		// not currently supported
+	
+	UIViewAnimationOptionCurveEaseInOut            = 0 << 16,
+	UIViewAnimationOptionCurveEaseIn               = 1 << 16,
+	UIViewAnimationOptionCurveEaseOut              = 2 << 16,
+	UIViewAnimationOptionCurveLinear               = 3 << 16,
+	
+	UIViewAnimationOptionTransitionNone            = 0 << 20,		// not currently supported
+	UIViewAnimationOptionTransitionFlipFromLeft    = 1 << 20,		// not currently supported
+	UIViewAnimationOptionTransitionFlipFromRight   = 2 << 20,		// not currently supported
+	UIViewAnimationOptionTransitionCurlUp          = 3 << 20,		// not currently supported
+	UIViewAnimationOptionTransitionCurlDown        = 4 << 20,		// not currently supported
+};
+typedef NSUInteger UIViewAnimationOptions;
+
 @class UIColor, CALayer, UIViewController, UIGestureRecognizer;
 
 @interface UIView : UIResponder {
@@ -100,6 +124,14 @@ typedef enum {
 - (void)willMoveToSuperview:(UIView *)newSuperview;
 - (void)willMoveToWindow:(UIWindow *)newWindow;
 - (void)willRemoveSubview:(UIView *)subview;
+
++ (void)animateWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion;
++ (void)animateWithDuration:(NSTimeInterval)duration animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion;
++ (void)animateWithDuration:(NSTimeInterval)duration animations:(void (^)(void))animations;
+
+// the block-based transition methods are not currently implemented
++ (void)transitionWithView:(UIView *)view duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion;
++ (void)transitionFromView:(UIView *)fromView toView:(UIView *)toView duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(void (^)(BOOL finished))completion;
 
 + (void)beginAnimations:(NSString *)animationID context:(void *)context;
 + (void)commitAnimations;

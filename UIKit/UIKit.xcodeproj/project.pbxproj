@@ -70,6 +70,8 @@
 		14A726E01213303400648C9B /* UIWindow+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BD1213303400648C9B /* UIWindow+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14B1140812033FA6009D9376 /* UITabBarController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14B1140612033FA6009D9376 /* UITabBarController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14B1140912033FA6009D9376 /* UITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14B1140712033FA6009D9376 /* UITabBarController.m */; };
+		14BF16DB12E621EB007DAA01 /* UIViewBlockAnimationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14BF16D912E621EB007DAA01 /* UIViewBlockAnimationDelegate.h */; };
+		14BF16DC12E621EB007DAA01 /* UIViewBlockAnimationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BF16DA12E621EB007DAA01 /* UIViewBlockAnimationDelegate.m */; };
 		14CB384512689907003334AD /* UIPopoverNSWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CB384312689907003334AD /* UIPopoverNSWindow.h */; };
 		14CB384612689907003334AD /* UIPopoverNSWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CB384412689907003334AD /* UIPopoverNSWindow.m */; };
 		14CB384912689949003334AD /* UIPopoverOverlayNSView.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CB384712689949003334AD /* UIPopoverOverlayNSView.h */; };
@@ -286,6 +288,8 @@
 		14A726BD1213303400648C9B /* UIWindow+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+UIPrivate.h"; sourceTree = "<group>"; };
 		14B1140612033FA6009D9376 /* UITabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UITabBarController.h; path = Classes/UITabBarController.h; sourceTree = "<group>"; };
 		14B1140712033FA6009D9376 /* UITabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UITabBarController.m; path = Classes/UITabBarController.m; sourceTree = "<group>"; };
+		14BF16D912E621EB007DAA01 /* UIViewBlockAnimationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewBlockAnimationDelegate.h; sourceTree = "<group>"; };
+		14BF16DA12E621EB007DAA01 /* UIViewBlockAnimationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewBlockAnimationDelegate.m; sourceTree = "<group>"; };
 		14CB384312689907003334AD /* UIPopoverNSWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPopoverNSWindow.h; sourceTree = "<group>"; };
 		14CB384412689907003334AD /* UIPopoverNSWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPopoverNSWindow.m; sourceTree = "<group>"; };
 		14CB384712689949003334AD /* UIPopoverOverlayNSView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPopoverOverlayNSView.h; sourceTree = "<group>"; };
@@ -693,6 +697,8 @@
 				1457DD3E128DDE610057A7F9 /* UITransitionView.m */,
 				14FA8C59121DA4A000C4264B /* UIViewAnimationGroup.h */,
 				14FA8C5A121DA4A000C4264B /* UIViewAnimationGroup.m */,
+				14BF16D912E621EB007DAA01 /* UIViewBlockAnimationDelegate.h */,
+				14BF16DA12E621EB007DAA01 /* UIViewBlockAnimationDelegate.m */,
 				14FA8C5B121DA4A000C4264B /* UIViewLayoutManager.h */,
 				14FA8C5C121DA4A000C4264B /* UIViewLayoutManager.m */,
 			);
@@ -846,6 +852,7 @@
 				14EEF72512DF5B7800EB7D95 /* UIKey.h in Headers */,
 				14EEF76712DF67CF00EB7D95 /* UIEvent+UIPrivate.h in Headers */,
 				14EEF7A912DF6D9C00EB7D95 /* UIKey+UIPrivate.h in Headers */,
+				14BF16DB12E621EB007DAA01 /* UIViewBlockAnimationDelegate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1008,6 +1015,7 @@
 				142E970F12BACF6A00850A95 /* UIProgressView.m in Sources */,
 				14D0C43912DCEF910040035C /* UIScrollViewScrollAnimation.m in Sources */,
 				14EEF72612DF5B7800EB7D95 /* UIKey.m in Sources */,
+				14BF16DC12E621EB007DAA01 /* UIViewBlockAnimationDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

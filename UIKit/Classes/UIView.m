@@ -5,6 +5,7 @@
 #import "UIColor.h"
 #import "UIViewLayoutManager.h"
 #import "UIViewAnimationGroup.h"
+#import "UIViewBlockAnimationDelegate.h"
 #import "UIViewController.h"
 #import "UIApplication+UIPrivate.h"
 #import <QuartzCore/CALayer.h>
@@ -813,6 +814,70 @@ static BOOL _animationsEnabled = YES;
 }
 
 - (void)addGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+{
+}
+
++ (void)animateWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
+{
+	const BOOL interactionEventsAllowed = ((options & UIViewAnimationOptionAllowUserInteraction) == UIViewAnimationOptionAllowUserInteraction);
+	const BOOL repeatAnimation = ((options & UIViewAnimationOptionRepeat) == UIViewAnimationOptionRepeat);
+	const BOOL autoreverseRepeat = ((options & UIViewAnimationOptionAutoreverse) == UIViewAnimationOptionAutoreverse);
+	const BOOL beginFromCurrentState = ((options & UIViewAnimationOptionBeginFromCurrentState) == UIViewAnimationOptionBeginFromCurrentState);
+	UIViewAnimationCurve animationCurve;
+	
+	if ((options & UIViewAnimationOptionCurveEaseInOut) == UIViewAnimationOptionCurveEaseInOut) {
+		animationCurve = UIViewAnimationCurveEaseInOut;
+	} else if ((options & UIViewAnimationOptionCurveEaseIn) == UIViewAnimationOptionCurveEaseIn) {
+		animationCurve = UIViewAnimationCurveEaseIn;
+	} else if ((options & UIViewAnimationOptionCurveEaseOut) == UIViewAnimationOptionCurveEaseOut) {
+		animationCurve = UIViewAnimationCurveEaseOut;
+	} else {
+		animationCurve = UIViewAnimationCurveLinear;
+	}
+	
+	if (!interactionEventsAllowed) {
+		[[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+	}
+	
+	UIViewBlockAnimationDelegate *delegate = [[UIViewBlockAnimationDelegate alloc] init];
+	delegate.completion = completion;
+	delegate.interactionEventsAllowed = interactionEventsAllowed;
+	
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationCurve:animationCurve];
+	[UIView setAnimationDelay:delay];
+	[UIView setAnimationDuration:duration];
+	[UIView setAnimationBeginsFromCurrentState:beginFromCurrentState];
+	[UIView setAnimationDelegate:delegate];	// this is retained here
+	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:)];
+	[UIView setAnimationRepeatCount:(repeatAnimation? FLT_MAX : 0)];
+	[UIView setAnimationRepeatAutoreverses:autoreverseRepeat];
+	
+	animations();
+	
+	[UIView commitAnimations];
+	[delegate release];
+}
+
++ (void)animateWithDuration:(NSTimeInterval)duration animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
+{
+	[self animateWithDuration:duration
+						delay:0
+					  options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionNone
+				   animations:animations
+				   completion:completion];
+}
+
++ (void)animateWithDuration:(NSTimeInterval)duration animations:(void (^)(void))animations
+{
+	[self animateWithDuration:duration animations:animations completion:NULL];
+}
+
++ (void)transitionWithView:(UIView *)view duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completio
+{
+}
+
++ (void)transitionFromView:(UIView *)fromView toView:(UIView *)toView duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(void (^)(BOOL finished))completion
 {
 }
 
