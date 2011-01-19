@@ -97,7 +97,14 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	// if there's no dataSource, this can't do anything else.
 	// note that I'm presently caching and hanging on to views and titles for section headers which is something
 	// the real UIKit appears to fetch more on-demand than this. so far this has not been a problem.
+
+	// remove all previous section header/footer views
+	for (UITableViewSection *sectionRecord in _sections) {
+		[sectionRecord.headerView removeFromSuperview];
+		[sectionRecord.footerView removeFromSuperview];
+	}
 	
+	// clear the previous cache
 	[_sections removeAllObjects];
 	
 	if (_dataSource) {
