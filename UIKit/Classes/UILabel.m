@@ -129,37 +129,38 @@
 
 - (void)drawRect:(CGRect)rect
 {
-	const CGRect bounds = self.bounds;
-	const BOOL hasShadow = !CGSizeEqualToSize(_shadowOffset,CGSizeZero) && _shadowColor;
-	
-	CGRect drawRect = CGRectZero;
-	
-	// find out the actual size of the text given the size of our bounds
-	CGSize maxSize = self.bounds.size;
-	if (_numberOfLines > 0) {
-		maxSize.height = _font.leading * _numberOfLines;
-	}
-	drawRect.size = [_text sizeWithFont:_font constrainedToSize:maxSize lineBreakMode:_lineBreakMode];
+	if ([_text length] > 0) {
+		const CGRect bounds = self.bounds;
+		const BOOL hasShadow = _shadowColor && !CGSizeEqualToSize(_shadowOffset,CGSizeZero);
+		CGRect drawRect = CGRectZero;
+		
+		// find out the actual size of the text given the size of our bounds
+		CGSize maxSize = bounds.size;
+		if (_numberOfLines > 0) {
+			maxSize.height = _font.leading * _numberOfLines;
+		}
+		drawRect.size = [_text sizeWithFont:_font constrainedToSize:maxSize lineBreakMode:_lineBreakMode];
 
-	// now vertically center it
-	drawRect.origin.y = roundf((bounds.size.height - drawRect.size.height) / 2.f);
-	
-	// now position it correctly for the width
-	// this might be cheating somehow and not how the real thing does it...
-	// I didn't spend a ton of time investigating the sizes that it sends the drawTextInRect: method
-	drawRect.origin.x = 0;
-	drawRect.size.width = bounds.size.width;
-	
-	// if there's a shadow, let's draw that first
-	if (hasShadow) {
-		[_shadowColor setFill];
-		[self drawTextInRect:CGRectOffset(drawRect,_shadowOffset.width,_shadowOffset.height)];
-	}
+		// now vertically center it
+		drawRect.origin.y = roundf((bounds.size.height - drawRect.size.height) / 2.f);
+		
+		// now position it correctly for the width
+		// this might be cheating somehow and not how the real thing does it...
+		// I didn't spend a ton of time investigating the sizes that it sends the drawTextInRect: method
+		drawRect.origin.x = 0;
+		drawRect.size.width = bounds.size.width;
+		
+		// if there's a shadow, let's draw that first
+		if (hasShadow) {
+			[_shadowColor setFill];
+			[self drawTextInRect:CGRectOffset(drawRect,_shadowOffset.width,_shadowOffset.height)];
+		}
 
-	// finally, draw the real label
-	UIColor *drawColor = (_highlighted && _highlightedTextColor)? _highlightedTextColor : _textColor;
-	[drawColor setFill];
-	[self drawTextInRect:drawRect];
+		// finally, draw the real label
+		UIColor *drawColor = (_highlighted && _highlightedTextColor)? _highlightedTextColor : _textColor;
+		[drawColor setFill];
+		[self drawTextInRect:drawRect];
+	}
 }
 
 - (void)setFrame:(CGRect)newFrame
