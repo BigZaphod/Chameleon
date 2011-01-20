@@ -56,6 +56,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	[_cachedCells release];
 	[_sections release];
 	[_reusableCells release];
+	[_separatorColor release];
 	[super dealloc];
 }
 
