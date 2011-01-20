@@ -73,6 +73,7 @@ static BOOL _animationsEnabled = YES;
 	_layer.layoutManager = nil;
 	_layer.delegate = nil;
 	[_layer release];
+	[_backgroundColor release];
 	[super dealloc];
 }
 

@@ -22,7 +22,7 @@ typedef enum {
 } UIKeyType;
 
 @interface UIKey : NSObject {
-	@public
+@private
 	unsigned short _keyCode;
 	NSString *_characters;
 	NSString *_charactersWithModifiers;

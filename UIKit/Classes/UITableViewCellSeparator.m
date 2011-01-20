@@ -14,6 +14,12 @@
 	return self;
 }
 
+- (void)dealloc
+{
+	[_color release];
+	[super dealloc];
+}
+
 - (void)setSeparatorStyle:(UITableViewCellSeparatorStyle)theStyle color:(UIColor *)theColor
 {
 	if (_style != theStyle) {
