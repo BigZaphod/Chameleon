@@ -104,8 +104,17 @@
 - (void)cancel:(id)sender			{ [self sendActionToFirstResponder:_cmd from:sender]; }
 - (void)commit:(id)sender			{ [self sendActionToFirstResponder:_cmd from:sender]; }
 
-// this is a special case, UIKit doesn't normally send anything like this
-- (void)cancelOperation:(id)sender	{ [self cancel:sender]; }
+// this is a special case, UIKit doesn't normally send anything like this.
+// if a UIKit first responder can't handle it, then we'll pass it through to the next responder
+// because something else might want to deal with it somewhere else.
+- (void)cancelOperation:(id)sender
+{
+	if ([self firstResponderCanPerformAction:@selector(cancel:) withSender:sender]) {
+		[self sendActionToFirstResponder:@selector(cancel:) from:sender];
+	} else {
+		[[self nextResponder] cancelOperation:sender];
+	}
+}
 
 // capture the key presses here and turn them into key events which are sent down the UIKit responder chain
 // if they come back as unhandled, pass them along the AppKit responder chain.

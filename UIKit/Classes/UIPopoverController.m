@@ -191,6 +191,7 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 		[(NSWindow *)_popoverWindow setBackgroundColor:[NSColor clearColor]];
 		[_popoverWindow setContentView:hostingView];
 		[_overlayWindow addChildWindow:_popoverWindow ordered:NSWindowAbove];
+		[_popoverWindow makeFirstResponder:hostingView];
 
 		[hostingView release];
 	}
