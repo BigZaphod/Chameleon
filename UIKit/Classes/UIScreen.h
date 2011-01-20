@@ -12,7 +12,7 @@ extern NSString *const UIScreenModeDidChangeNotification;
 @private
 	UIImageView *_grabber;
 	CALayer *_layer;
-	UIKitView *_UIKitView;
+	__weak UIKitView *_UIKitView;
 	UIScreenMode *_currentMode;
 	__weak UIPopoverController *_popoverController;
 }

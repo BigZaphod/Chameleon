@@ -72,6 +72,7 @@ NSMutableArray *_allScreens = nil;
 	[_allScreens removeObject:[NSValue valueWithNonretainedObject:self]];
 	[_grabber release];
 	[_layer release];
+	[_currentMode release];
 	[super dealloc];
 }
 
