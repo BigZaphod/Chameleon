@@ -506,19 +506,10 @@ static BOOL _animationsEnabled = YES;
 - (id)actionForLayer:(CALayer *)theLayer forKey:(NSString *)event
 {
 	if (_animationsEnabled && [_animationGroups lastObject]) {
-		NSSet *animatableKeys = [NSSet setWithObjects:@"bounds", @"position", @"zPosition", @"anchorPoint", @"transform", @"sublayerTransform",
-								 @"contents", @"contentsRect", @"contentsCenter", @"opacity", @"hidden", @"masksToBounds", @"doubleSided", @"cornerRadius",
-								 @"borderWidth", @"borderColor", @"backgroundColor", @"backgroundFilters", @"shadowOpacity", @"shadowRadius", @"shadowOffset",
-								 @"shadowColor", @"filters", @"compositingFilter", nil];
-		
-		const BOOL isAnimatable = [animatableKeys containsObject:[[event componentsSeparatedByString:@"."] objectAtIndex:0]];
-
-		if (isAnimatable) {
-			return [[_animationGroups lastObject] actionForLayer:theLayer forKey:event] ?: (id)[NSNull null];
-		}
+		return [[_animationGroups lastObject] actionForLayer:theLayer forKey:event] ?: (id)[NSNull null];
+	} else {
+		return [NSNull null];
 	}
-
-	return [NSNull null];
 }
 
 - (void)_superviewSizeDidChangeFrom:(CGSize)oldSize to:(CGSize)newSize
