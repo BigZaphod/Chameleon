@@ -1,84 +1,342 @@
 //  Created by Sean Heber on 6/24/10.
 #import "UIBezierPath.h"
-#import <AppKit/AppKit.h>
+#import "UIGraphics.h"
 
 @implementation UIBezierPath
+@synthesize lineWidth=_lineWidth, lineCapStyle=_lineCapStyle, lineJoinStyle=_lineJoinStyle, miterLimit=_miterLimit;
+@synthesize flatness=_flatness, usesEvenOddFillRule=_usesEvenOddFillRule, CGPath=_path;
 
-+ (UIBezierPath *)_bezierPathWithNSBezierPath:(NSBezierPath *)thePath
+- (id)init
 {
-	UIBezierPath *p = [[UIBezierPath alloc] init];
-	p->_path = [thePath retain];
-	return [p autorelease];
+	if ((self=[super init])) {
+		_lineWidth = 1;
+		_lineCapStyle = kCGLineCapButt;
+		_lineJoinStyle = kCGLineJoinMiter;
+		_miterLimit = 10;
+		_flatness = 0.6;
+		_usesEvenOddFillRule = NO;
+		_lineDashPattern = NULL;
+		_lineDashCount = 0;
+		_lineDashPhase = 0;
+	}
+	return self;
 }
 
 - (void)dealloc
 {
-	[_path release];
+	if (_path) CGPathRelease(_path);
 	[super dealloc];
+}
+
++ (UIBezierPath *)bezierPathWithCGPath:(CGPathRef)CGPath
+{
+	NSAssert(CGPath != NULL, nil);
+	UIBezierPath *bezierPath = [[self alloc] init];
+	bezierPath->_path = CGPath;
+	return [bezierPath autorelease];
 }
 
 + (UIBezierPath *)bezierPath
 {
-	return [self _bezierPathWithNSBezierPath:[NSBezierPath bezierPath]];
+	UIBezierPath *bezierPath = [[self alloc] init];
+	bezierPath->_path = CGPathCreateMutable();
+	return [bezierPath autorelease];
 }
 
 + (UIBezierPath *)bezierPathWithRect:(CGRect)rect
 {
-	return [self _bezierPathWithNSBezierPath:[NSBezierPath bezierPathWithRect:NSRectFromCGRect(rect)]];
+	CGMutablePathRef path = CGPathCreateMutable();
+	CGPathAddRect(path, NULL, rect);
+
+	UIBezierPath *bezierPath = [[self alloc] init];
+	bezierPath->_path = path;
+	return [bezierPath autorelease];
+}
+
++ (UIBezierPath *)bezierPathWithOvalInRect:(CGRect)rect
+{
+	CGMutablePathRef path = CGPathCreateMutable();
+	CGPathAddEllipseInRect(path, NULL, rect);
+
+	UIBezierPath *bezierPath = [[self alloc] init];
+	bezierPath->_path = path;
+	return [bezierPath autorelease];
 }
 
 + (UIBezierPath *)bezierPathWithRoundedRect:(CGRect)rect cornerRadius:(CGFloat)cornerRadius
 {
-	return [self _bezierPathWithNSBezierPath:[NSBezierPath bezierPathWithRoundedRect:NSRectFromCGRect(rect) xRadius:cornerRadius yRadius:cornerRadius]];
+	return [self bezierPathWithRoundedRect:rect byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(cornerRadius,cornerRadius)];
+}
+
++ (UIBezierPath *)bezierPathWithRoundedRect:(CGRect)rect byRoundingCorners:(UIRectCorner)corners cornerRadii:(CGSize)cornerRadii
+{
+	CGMutablePathRef path = CGPathCreateMutable();
+	
+	const CGPoint topLeft = rect.origin;
+	const CGPoint topRight = CGPointMake(CGRectGetMaxX(rect), CGRectGetMinY(rect));
+	const CGPoint bottomRight = CGPointMake(CGRectGetMaxX(rect), CGRectGetMaxY(rect));
+	const CGPoint bottomLeft = CGPointMake(CGRectGetMinX(rect), CGRectGetMaxY(rect));
+	
+	if (corners & UIRectCornerTopLeft) {
+		CGPathMoveToPoint(path, NULL, topLeft.x+cornerRadii.width, topLeft.y);
+	} else {
+		CGPathMoveToPoint(path, NULL, topLeft.x, topLeft.y);
+	}
+	
+	if (corners & UIRectCornerTopRight) {
+		CGPathAddLineToPoint(path, NULL, topRight.x-cornerRadii.width, topRight.y);
+		CGPathAddCurveToPoint(path, NULL, topRight.x, topRight.y, topRight.x, topRight.y+cornerRadii.height, topRight.x, topRight.y+cornerRadii.height);
+	} else {
+		CGPathAddLineToPoint(path, NULL, topRight.x, topRight.y);
+	}
+	
+	if (corners & UIRectCornerBottomRight) {
+		CGPathAddLineToPoint(path, NULL, bottomRight.x, bottomRight.y-cornerRadii.height);
+		CGPathAddCurveToPoint(path, NULL, bottomRight.x, bottomRight.y, bottomRight.x-cornerRadii.width, bottomRight.y, bottomRight.x-cornerRadii.width, bottomRight.y);
+	} else {
+		CGPathAddLineToPoint(path, NULL, bottomRight.x, bottomRight.y);
+	}
+	
+	if (corners & UIRectCornerBottomLeft) {
+		CGPathAddLineToPoint(path, NULL, bottomLeft.x+cornerRadii.width, bottomLeft.y);
+		CGPathAddCurveToPoint(path, NULL, bottomLeft.x, bottomLeft.y, bottomLeft.x, bottomLeft.y-cornerRadii.height, bottomLeft.x, bottomLeft.y-cornerRadii.height);
+	} else {
+		CGPathAddLineToPoint(path, NULL, bottomLeft.x, bottomLeft.y);
+	}
+	
+	if (corners & UIRectCornerTopLeft) {
+		CGPathAddLineToPoint(path, NULL, topLeft.x, topLeft.y+cornerRadii.height);
+		CGPathAddCurveToPoint(path, NULL, topLeft.x, topLeft.y, topLeft.x+cornerRadii.width, topLeft.y, topLeft.x+cornerRadii.width, topLeft.y);
+	} else {
+		CGPathAddLineToPoint(path, NULL, topLeft.x, topLeft.y);
+	}
+	
+	CGPathCloseSubpath(path);
+	
+	UIBezierPath *bezierPath = [[self alloc] init];
+	bezierPath->_path = path;
+	return [bezierPath autorelease];
+}
+
++ (UIBezierPath *)bezierPathWithArcCenter:(CGPoint)center radius:(CGFloat)radius startAngle:(CGFloat)startAngle endAngle:(CGFloat)endAngle clockwise:(BOOL)clockwise
+{
+	CGMutablePathRef path = CGPathCreateMutable();
+	CGPathAddArc(path, NULL, center.x, center.y, radius, startAngle, endAngle, clockwise);
+	
+	UIBezierPath *bezierPath = [[self alloc] init];
+	bezierPath->_path = path;
+	return [bezierPath autorelease];
+}
+
+- (void)moveToPoint:(CGPoint)point
+{
+	CGMutablePathRef mutablePath = CGPathCreateMutableCopy(_path);
+	CGPathMoveToPoint(mutablePath, NULL, point.x, point.y);
+	self.CGPath = mutablePath;
+	CGPathRelease(mutablePath);
+}
+
+- (void)addLineToPoint:(CGPoint)point
+{
+	CGMutablePathRef mutablePath = CGPathCreateMutableCopy(_path);
+	CGPathAddLineToPoint(mutablePath, NULL, point.x, point.y);
+	self.CGPath = mutablePath;
+	CGPathRelease(mutablePath);
+}
+
+- (void)addArcWithCenter:(CGPoint)center radius:(CGFloat)radius startAngle:(CGFloat)startAngle endAngle:(CGFloat)endAngle clockwise:(BOOL)clockwise
+{
+	CGMutablePathRef mutablePath = CGPathCreateMutableCopy(_path);
+	CGPathAddArc(mutablePath, NULL, center.x, center.y, radius, startAngle, endAngle, clockwise);
+	self.CGPath = mutablePath;
+	CGPathRelease(mutablePath);
+}
+
+- (void)addCurveToPoint:(CGPoint)endPoint controlPoint1:(CGPoint)controlPoint1 controlPoint2:(CGPoint)controlPoint2
+{
+	CGMutablePathRef mutablePath = CGPathCreateMutableCopy(_path);
+	CGPathAddCurveToPoint(mutablePath, NULL, endPoint.x, endPoint.y, controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y);
+	self.CGPath = mutablePath;
+	CGPathRelease(mutablePath);
+}
+
+- (void)addQuadCurveToPoint:(CGPoint)endPoint controlPoint:(CGPoint)controlPoint
+{
+	CGMutablePathRef mutablePath = CGPathCreateMutableCopy(_path);
+	CGPathAddQuadCurveToPoint(mutablePath, NULL, endPoint.x, endPoint.y, controlPoint.x, controlPoint.y);
+	self.CGPath = mutablePath;
+	CGPathRelease(mutablePath);
+}
+
+- (void)closePath
+{
+	CGMutablePathRef mutablePath = CGPathCreateMutableCopy(_path);
+	CGPathCloseSubpath(mutablePath);
+	self.CGPath = mutablePath;
+	CGPathRelease(mutablePath);
+}
+
+- (void)removeAllPoints
+{
+	CGMutablePathRef mutablePath = CGPathCreateMutable();
+	self.CGPath = mutablePath;
+	CGPathRelease(mutablePath);
 }
 
 - (void)appendPath:(UIBezierPath *)bezierPath
 {
 	if (bezierPath) {
-		[_path appendBezierPath:bezierPath->_path];
+		CGMutablePathRef mutablePath = CGPathCreateMutableCopy(_path);
+		CGPathAddPath(mutablePath, NULL, bezierPath.CGPath);
+		self.CGPath = mutablePath;
+		CGPathRelease(mutablePath);
 	}
+}
+
+- (void)setCGPath:(CGPathRef)path
+{
+	NSAssert(path != NULL, nil);
+	if (path != _path) {
+		if (_path) CGPathRelease(_path);
+		_path = CGPathCreateCopy(path);
+	}
+}
+
+- (CGPoint)currentPoint
+{
+	return CGPathGetCurrentPoint(_path);
+}
+
+- (void)_setContextPath
+{
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	CGContextBeginPath(context);
+	CGContextAddPath(context, _path);
+	CGContextSetLineWidth(context, _lineWidth);
+	CGContextSetLineCap(context, _lineCapStyle);
+	CGContextSetLineJoin(context, _lineJoinStyle);
+	CGContextSetMiterLimit(context, _miterLimit);
+	CGContextSetFlatness(context, _flatness);
+	CGContextSetLineDash(context, _lineDashPhase, &_lineDashPhase, _lineDashCount);
 }
 
 - (void)addClip
 {
-	[_path addClip];
+	[self _setContextPath];
+	
+	if (_usesEvenOddFillRule) {
+		CGContextEOClip(UIGraphicsGetCurrentContext());
+	} else {
+		CGContextClip(UIGraphicsGetCurrentContext());
+	}	
+}
+
+- (void)setLineDash:(const CGFloat *)pattern count:(NSInteger)count phase:(CGFloat)phase
+{
+	free(_lineDashPattern);
+
+	if (pattern && count > 0) {
+		const size_t size = sizeof(CGFloat)*count;
+		_lineDashPattern = malloc(size);
+		bcopy(pattern, _lineDashPattern, size);
+	} else {
+		_lineDashPattern = NULL;
+	}
+	
+	_lineDashCount = count;
+	_lineDashPhase = phase;
+}
+
+- (void)getLineDash:(CGFloat *)pattern count:(NSInteger *)count phase:(CGFloat *)phase
+{
+	if (pattern && _lineDashCount > 0) {
+		const size_t size = sizeof(CGFloat)*_lineDashCount;
+		bcopy(_lineDashPattern, pattern, size);
+	}
+	
+	if (count) {
+		*count = _lineDashCount;
+	}
+	
+	if (phase) {
+		*phase = _lineDashPhase;
+	}
 }
 
 - (void)fill
 {
-	[_path fill];
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	CGContextSaveGState(context);
+	[self _setContextPath];
+	
+	if (_usesEvenOddFillRule) {
+		CGContextEOFillPath(context);
+	} else {
+		CGContextFillPath(context);
+	}
+
+	CGContextBeginPath(context);
+	CGContextRestoreGState(context);
+}
+
+- (void)fillWithBlendMode:(CGBlendMode)blendMode alpha:(CGFloat)alpha
+{
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	CGContextSaveGState(context);
+
+	CGContextSetAlpha(context, alpha);
+	CGContextSetBlendMode(context, blendMode);
+	[self fill];
+	
+	CGContextRestoreGState(context);
 }
 
 - (void)stroke
 {
-	[_path stroke];
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	CGContextSaveGState(context);
+	[self _setContextPath];
+
+	CGContextStrokePath(context);
+	
+	CGContextBeginPath(context);
+	CGContextRestoreGState(context);
 }
 
-- (void)setLineWidth:(CGFloat)width
+- (void)strokeWithBlendMode:(CGBlendMode)blendMode alpha:(CGFloat)alpha
 {
-	[_path setLineWidth:width];
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	CGContextSaveGState(context);
+	
+	CGContextSetAlpha(context, alpha);
+	CGContextSetBlendMode(context, blendMode);
+	[self stroke];
+	
+	CGContextRestoreGState(context);
 }
 
-- (CGFloat)lineWidth
+- (BOOL)containsPoint:(CGPoint)point
 {
-	return [_path lineWidth];
+	return CGPathContainsPoint(_path, NULL, point, _usesEvenOddFillRule);
+}
+
+- (BOOL)isEmpty
+{
+	return CGPathIsEmpty(_path);
+}
+
+- (CGRect)bounds
+{
+	return CGPathGetBoundingBox(_path);
 }
 
 - (void)applyTransform:(CGAffineTransform)transform
 {
-	NSAffineTransformStruct t;
-	
-	t.m11 = transform.a;
-	t.m12 = transform.b;
-	t.m21 = transform.c;
-	t.m22 = transform.d;
-	t.tX = transform.tx;
-	t.tY = transform.ty;
-	
-	NSAffineTransform *affineTransform = [NSAffineTransform transform];
-	[affineTransform setTransformStruct:t];
-	
-	[_path transformUsingAffineTransform:affineTransform];
+	CGMutablePathRef mutablePath = CGPathCreateMutable();
+	CGPathAddPath(mutablePath, &transform, _path);
+	self.CGPath = mutablePath;
+	CGPathRelease(mutablePath);
 }
+
 
 @end
