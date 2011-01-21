@@ -9,12 +9,22 @@
 
 - (id)initWithNSImage:(NSImage *)theImage
 {
-	return [self initWithCGImage:[theImage CGImageForProposedRect:NULL context:NULL hints:nil]];
+	if (theImage) {
+		return [self initWithCGImage:[theImage CGImageForProposedRect:NULL context:NULL hints:nil]];
+	} else {
+		[self release];
+		return nil;
+	}
 }
 
 - (id)initWithData:(NSData *)data
 {
-	return [self initWithNSImage:[[[NSImage alloc] initWithData:data] autorelease]];
+	if (data) {
+		return [self initWithNSImage:[[[NSImage alloc] initWithData:data] autorelease]];
+	} else {
+		[self release];
+		return nil;
+	}
 }
 
 - (id)initWithContentsOfFile:(NSString *)path
