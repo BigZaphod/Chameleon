@@ -3,7 +3,7 @@
 #import "UIApplication.h"
 
 @implementation UIViewBlockAnimationDelegate
-@synthesize completion=_completion, interactionEventsAllowed=_interactionEventsAllowed;
+@synthesize completion=_completion, ignoreInteractionEvents=_ignoreInteractionEvents;
 
 - (void)dealloc
 {
@@ -17,7 +17,7 @@
 		_completion([finished boolValue]);
 	}
 	
-	if (!_interactionEventsAllowed) {
+	if (_ignoreInteractionEvents) {
 		[[UIApplication sharedApplication] endIgnoringInteractionEvents];
 	}	
 }

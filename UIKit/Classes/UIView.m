@@ -811,7 +811,7 @@ static BOOL _animationsEnabled = YES;
 
 + (void)animateWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
 {
-	const BOOL interactionEventsAllowed = ((options & UIViewAnimationOptionAllowUserInteraction) == UIViewAnimationOptionAllowUserInteraction);
+	const BOOL ignoreInteractionEvents = !((options & UIViewAnimationOptionAllowUserInteraction) == UIViewAnimationOptionAllowUserInteraction);
 	const BOOL repeatAnimation = ((options & UIViewAnimationOptionRepeat) == UIViewAnimationOptionRepeat);
 	const BOOL autoreverseRepeat = ((options & UIViewAnimationOptionAutoreverse) == UIViewAnimationOptionAutoreverse);
 	const BOOL beginFromCurrentState = ((options & UIViewAnimationOptionBeginFromCurrentState) == UIViewAnimationOptionBeginFromCurrentState);
@@ -827,13 +827,13 @@ static BOOL _animationsEnabled = YES;
 		animationCurve = UIViewAnimationCurveLinear;
 	}
 	
-	if (!interactionEventsAllowed) {
+	if (ignoreInteractionEvents) {
 		[[UIApplication sharedApplication] beginIgnoringInteractionEvents];
 	}
 	
 	UIViewBlockAnimationDelegate *delegate = [[UIViewBlockAnimationDelegate alloc] init];
 	delegate.completion = completion;
-	delegate.interactionEventsAllowed = interactionEventsAllowed;
+	delegate.ignoreInteractionEvents = ignoreInteractionEvents;
 	
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationCurve:animationCurve];

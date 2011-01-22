@@ -3,11 +3,11 @@
 
 @interface UIViewBlockAnimationDelegate : NSObject {
 	void (^_completion)(BOOL finished);
-	BOOL _interactionEventsAllowed;
+	BOOL _ignoreInteractionEvents;
 }
 
 @property (nonatomic, copy) void (^completion)(BOOL finished);
-@property (nonatomic, assign) BOOL interactionEventsAllowed;
+@property (nonatomic, assign) BOOL ignoreInteractionEvents;
 
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished;
 
