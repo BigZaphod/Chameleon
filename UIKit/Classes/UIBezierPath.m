@@ -249,7 +249,7 @@
 
 - (void)getLineDash:(CGFloat *)pattern count:(NSInteger *)count phase:(CGFloat *)phase
 {
-	if (pattern && _lineDashCount > 0) {
+	if (pattern && _lineDashPattern && _lineDashCount > 0) {
 		const size_t size = sizeof(CGFloat)*_lineDashCount;
 		bcopy(_lineDashPattern, pattern, size);
 	}
