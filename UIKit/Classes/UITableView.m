@@ -351,7 +351,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 {
 	[self _updateSectionsCacheIfNeeded];
 
-	if (indexPath && indexPath.row >= 0 && indexPath.section < [_sections count]) {
+	if (indexPath && indexPath.section < [_sections count]) {
 		UITableViewSection *sectionRecord = [_sections objectAtIndex:indexPath.section];
 		
 		if (indexPath.row < sectionRecord.numberOfRows) {
