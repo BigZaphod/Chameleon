@@ -88,6 +88,8 @@
 		cmd == @selector(commit:) ||
 		cmd == @selector(cancel:)) {
 		return [self firstResponderCanPerformAction:cmd withSender:nil];
+	} else if (cmd == @selector(cancelOperation:)) {
+		return [self firstResponderCanPerformAction:@selector(cancel:) withSender:nil];
 	} else {
 		return [super respondsToSelector:cmd];
 	}
@@ -109,11 +111,7 @@
 // because something else might want to deal with it somewhere else.
 - (void)cancelOperation:(id)sender
 {
-	if ([self firstResponderCanPerformAction:@selector(cancel:) withSender:sender]) {
-		[self sendActionToFirstResponder:@selector(cancel:) from:sender];
-	} else {
-		[[self nextResponder] cancelOperation:sender];
-	}
+	[self sendActionToFirstResponder:@selector(cancel:) from:sender];
 }
 
 // capture the key presses here and turn them into key events which are sent down the UIKit responder chain
