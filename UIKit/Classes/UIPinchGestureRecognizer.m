@@ -1,5 +1,6 @@
 //  Created by Sean Heber on 1/24/11.
 #import "UIPinchGestureRecognizer.h"
+#import "UIGestureRecognizerSubclass.h"
 
 @implementation UIPinchGestureRecognizer
 @synthesize scale=_scale;

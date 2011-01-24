@@ -1,5 +1,6 @@
 //  Created by Sean Heber on 6/29/10.
 #import "UILongPressGestureRecognizer.h"
+#import "UIGestureRecognizerSubclass.h"
 
 @implementation UILongPressGestureRecognizer
 @synthesize minimumPressDuration=_minimumPressDuration, allowableMovement=_allowableMovement, numberOfTapsRequired=_numberOfTapsRequired;

@@ -1,5 +1,6 @@
 //  Created by Sean Heber on 1/24/11.
 #import "UISwipeGestureRecognizer.h"
+#import "UIGestureRecognizerSubclass.h"
 
 @implementation UISwipeGestureRecognizer
 @synthesize direction=_direction, numberOfTouchesRequired=_numberOfTouchesRequired;

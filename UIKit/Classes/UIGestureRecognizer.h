@@ -11,7 +11,7 @@ typedef enum {
 	UIGestureRecognizerStateRecognized = UIGestureRecognizerStateEnded
 } UIGestureRecognizerState;
 
-@class UIView, UIGestureRecognizer, UITouch;
+@class UIView, UIGestureRecognizer, UITouch, UIEvent;
 
 @protocol UIGestureRecognizerDelegate <NSObject>
 @optional

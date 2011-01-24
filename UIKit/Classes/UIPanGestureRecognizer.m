@@ -1,5 +1,6 @@
 //  Created by Sean Heber on 1/24/11.
 #import "UIPanGestureRecognizer.h"
+#import "UIGestureRecognizerSubclass.h"
 
 @implementation UIPanGestureRecognizer
 @synthesize maximumNumberOfTouches=_maximumNumberOfTouches, minimumNumberOfTouches=_minimumNumberOfTouches;

@@ -1,5 +1,6 @@
 //  Created by Sean Heber on 1/24/11.
 #import "UIRotationGestureRecognizer.h"
+#import "UIGestureRecognizerSubclass.h"
 
 @implementation UIRotationGestureRecognizer
 @synthesize rotation=_rotation;

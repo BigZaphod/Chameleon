@@ -1,13 +1,6 @@
-//
-//  UIGestureRecognizer.m
-//  UIKit for OSX
-//
-//  Created by Sean on 6/29/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
-//
-
+//  Created by Sean Heber on 6/29/10.
 #import "UIGestureRecognizer.h"
-
+#import "UIGestureRecognizerSubclass.h"
 
 @implementation UIGestureRecognizer
 @synthesize delegate=_delegate, delaysTouchesBegan=_delaysTouchesBegan, delaysTouchesEnded=_delaysTouchesEnded, cancelsTouchesInView=_cancelsTouchesInView;
@@ -64,6 +57,47 @@
 - (CGPoint)locationInView:(UIView *)view
 {
 	return CGPointZero;
+}
+
+- (void)setState:(UIGestureRecognizerState)state
+{
+	if (state != _state) {
+		_state = state;
+	}
+}
+
+- (void)reset
+{
+}
+
+- (BOOL)canPreventGestureRecognizer:(UIGestureRecognizer *)preventedGestureRecognizer
+{
+	return YES;
+}
+
+- (BOOL)canBePreventedByGestureRecognizer:(UIGestureRecognizer *)preventingGestureRecognizer
+{
+	return YES;
+}
+
+- (void)ignoreTouch:(UITouch*)touch forEvent:(UIEvent*)event
+{
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
 }
 
 @end
