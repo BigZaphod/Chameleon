@@ -22,6 +22,7 @@ static BOOL _animationsEnabled = YES;
 @synthesize layer=_layer, superview=_superview, clearsContextBeforeDrawing=_clearsContextBeforeDrawing, autoresizesSubviews=_autoresizesSubviews;
 @synthesize tag=_tag, userInteractionEnabled=_userInteractionEnabled, contentMode=_contentMode, backgroundColor=_backgroundColor;
 @synthesize multipleTouchEnabled=_multipleTouchEnabled, exclusiveTouch=_exclusiveTouch, autoresizingMask=_autoresizingMask;
+@synthesize gestureRecognizers=_gestureRecognizers;
 
 + (void)initialize
 {
@@ -49,18 +50,18 @@ static BOOL _animationsEnabled = YES;
 {
 	if ((self=[super init])) {
 		_implementsDrawRect = [[self class] _instanceImplementsDrawRect];
-
+		_clearsContextBeforeDrawing = YES;
+		_autoresizesSubviews = YES;
+		_userInteractionEnabled = YES;
 		_subviews = [[NSMutableSet alloc] init];
+
 		_layer = [[[[self class] layerClass] alloc] init];
 		_layer.delegate = self;
 		_layer.layoutManager = [UIViewLayoutManager layoutManager];
 
 		self.frame = theFrame;
 		self.alpha = 1;
-		self.clearsContextBeforeDrawing = YES;
 		self.opaque = YES;
-		self.autoresizesSubviews = YES;
-		self.userInteractionEnabled = YES;
 		[self setNeedsDisplay];
 	}
 	return self;
@@ -74,6 +75,7 @@ static BOOL _animationsEnabled = YES;
 	_layer.delegate = nil;
 	[_layer release];
 	[_backgroundColor release];
+	[_gestureRecognizers release];
 	[super dealloc];
 }
 
@@ -806,6 +808,10 @@ static BOOL _animationsEnabled = YES;
 }
 
 - (void)addGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+{
+}
+
+- (void)removeGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
 {
 }
 

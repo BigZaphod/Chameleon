@@ -4,7 +4,7 @@
 #import <Cocoa/Cocoa.h>
 
 @implementation UITouch
-@synthesize timestamp=_timestamp, tapCount=_tapCount, phase=_phase, view=_view, window=_window;
+@synthesize timestamp=_timestamp, tapCount=_tapCount, phase=_phase, view=_view, window=_window, gestureRecognizers=_gestureRecognizers;
 
 - (id)init
 {
@@ -18,6 +18,7 @@
 {
 	[_window release];
 	[_view release];
+	[_gestureRecognizers release];
 	[super dealloc];
 }
 

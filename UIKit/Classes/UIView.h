@@ -87,6 +87,7 @@ typedef NSUInteger UIViewAnimationOptions;
 	__weak UIViewController *_viewController;
 	UIViewAutoresizing _autoresizingMask;
 	BOOL _needsDidAppearOrDisappear;
+	NSArray *_gestureRecognizers;
 }
 
 + (Class)layerClass;
@@ -116,7 +117,8 @@ typedef NSUInteger UIViewAnimationOptions;
 - (UIView *)viewWithTag:(NSInteger)tag;
 - (BOOL)isDescendantOfView:(UIView *)view;
 
-- (void)addGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;	// no effect as of now
+- (void)addGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;		// not implemented
+- (void)removeGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;	// not implemented
 
 - (void)didAddSubview:(UIView *)subview;
 - (void)didMoveToSuperview;
@@ -170,5 +172,6 @@ typedef NSUInteger UIViewAnimationOptions;
 @property (nonatomic) UIViewContentMode contentMode;
 @property (nonatomic, getter=isMultipleTouchEnabled) BOOL multipleTouchEnabled;	// state is maintained, but it has no effect
 @property (nonatomic, getter=isExclusiveTouch) BOOL exclusiveTouch; // state is maintained, but it has no effect
+@property (nonatomic,copy) NSArray *gestureRecognizers;
 
 @end

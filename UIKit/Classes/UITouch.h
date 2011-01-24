@@ -23,7 +23,8 @@ typedef enum {
 	CGPoint _location;
 	CGPoint _previousLocation;
 	UIView *_view;
-	UIWindow *_window;	
+	UIWindow *_window;
+	NSArray *_gestureRecognizers;
 }
 
 - (CGPoint)locationInView:(UIView *)inView;
@@ -34,5 +35,6 @@ typedef enum {
 @property (nonatomic, readonly) UITouchPhase phase;
 @property (nonatomic, readonly, retain) UIView *view;
 @property (nonatomic, readonly, retain) UIWindow *window;
+@property (nonatomic,readonly,copy) NSArray *gestureRecognizers;
 
 @end
