@@ -62,3 +62,7 @@
 #import "UIPageControl.h"
 #import "UIProgressView.h"
 #import "UIKey.h"	// non standard
+#import "UIPanGestureRecognizer.h"
+#import "UIPinchGestureRecognizer.h"
+#import "UIRotationGestureRecognizer.h"
+#import "UISwipeGestureRecognizer.h"
