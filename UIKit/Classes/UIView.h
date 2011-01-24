@@ -87,7 +87,7 @@ typedef NSUInteger UIViewAnimationOptions;
 	__weak UIViewController *_viewController;
 	UIViewAutoresizing _autoresizingMask;
 	BOOL _needsDidAppearOrDisappear;
-	NSArray *_gestureRecognizers;
+	NSMutableSet *_gestureRecognizers;
 }
 
 + (Class)layerClass;

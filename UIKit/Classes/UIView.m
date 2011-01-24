@@ -8,6 +8,7 @@
 #import "UIViewBlockAnimationDelegate.h"
 #import "UIViewController.h"
 #import "UIApplication+UIPrivate.h"
+#import "UIGestureRecognizer+UIPrivate.h"
 #import <QuartzCore/CALayer.h>
 
 NSString *const UIViewFrameDidChangeNotification = @"UIViewFrameDidChangeNotification";
@@ -22,7 +23,6 @@ static BOOL _animationsEnabled = YES;
 @synthesize layer=_layer, superview=_superview, clearsContextBeforeDrawing=_clearsContextBeforeDrawing, autoresizesSubviews=_autoresizesSubviews;
 @synthesize tag=_tag, userInteractionEnabled=_userInteractionEnabled, contentMode=_contentMode, backgroundColor=_backgroundColor;
 @synthesize multipleTouchEnabled=_multipleTouchEnabled, exclusiveTouch=_exclusiveTouch, autoresizingMask=_autoresizingMask;
-@synthesize gestureRecognizers=_gestureRecognizers;
 
 + (void)initialize
 {
@@ -54,6 +54,7 @@ static BOOL _animationsEnabled = YES;
 		_autoresizesSubviews = YES;
 		_userInteractionEnabled = YES;
 		_subviews = [[NSMutableSet alloc] init];
+		_gestureRecognizers = [[NSMutableSet alloc] init];
 
 		_layer = [[[[self class] layerClass] alloc] init];
 		_layer.delegate = self;
@@ -809,10 +810,33 @@ static BOOL _animationsEnabled = YES;
 
 - (void)addGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
 {
+	[gestureRecognizer.view removeGestureRecognizer:gestureRecognizer];
+	[_gestureRecognizers addObject:gestureRecognizer];
+	[gestureRecognizer _setView:self];
 }
 
 - (void)removeGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
 {
+	if ([_gestureRecognizers containsObject:gestureRecognizer]) {
+		[gestureRecognizer _setView:nil];
+		[_gestureRecognizers removeObject:gestureRecognizer];
+	}
+}
+
+- (void)setGestureRecognizers:(NSArray *)newRecognizers
+{
+	for (UIGestureRecognizer *gesture in [_gestureRecognizers allObjects]) {
+		[self removeGestureRecognizer:gesture];
+	}
+
+	for (UIGestureRecognizer *gesture in newRecognizers) {
+		[self addGestureRecognizer:gesture];
+	}	
+}
+
+- (NSArray *)gestureRecognizers
+{
+	return [_gestureRecognizers allObjects];
 }
 
 + (void)animateWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
