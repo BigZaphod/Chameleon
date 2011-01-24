@@ -3,6 +3,7 @@
 
 #import <AppKit/NSAlert.h>
 #import <AppKit/NSPanel.h>
+#import <AppKit/NSButton.h>
 
 @interface UIAlertView ()
 @property (nonatomic, retain) NSMutableArray *buttonTitles;
@@ -87,51 +88,47 @@
 		[_delegate didPresentAlertView:self];
 	}
 
-	NSString *defaultButton = nil;
-	NSString *alternateButton = nil;
-	NSString *otherButton = nil;
-	
-	NSMutableArray *otherButtonTitles = nil;
-	if ([self numberOfButtons] > 0) {
-		otherButtonTitles = [self.buttonTitles mutableCopy];
-		
-		if (self.cancelButtonIndex >= 0) {
-			defaultButton = [otherButtonTitles objectAtIndex:self.cancelButtonIndex];
-			[otherButtonTitles removeObjectAtIndex:self.cancelButtonIndex];
-		}
-		
-		if ([otherButtonTitles count] >= 1) {
-			alternateButton = [otherButtonTitles objectAtIndex:0];
-		}
-		if ([otherButtonTitles count] >= 2) {
-			otherButton = [otherButtonTitles objectAtIndex:1];
-		}
-
-		[otherButtonTitles release];
-	}
-
 	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 
-	if (self.title) [alert setMessageText:self.title];
-	if (self.message) [alert setInformativeText:self.message];
-	if (defaultButton) [alert addButtonWithTitle:defaultButton];
-	if (alternateButton) [alert addButtonWithTitle:alternateButton];
-	if (otherButton) [alert addButtonWithTitle:otherButton];
+	if (self.title) {
+		[alert setMessageText:self.title];
+	}
+	
+	if (self.message) {
+		[alert setInformativeText:self.message];
+	}
+	
+	NSMutableArray *buttonOrder = [NSMutableArray arrayWithCapacity:self.numberOfButtons];
+	
+	for (NSInteger buttonIndex=0; buttonIndex<self.numberOfButtons; buttonIndex++) {
+		if (buttonIndex != self.cancelButtonIndex) {
+			[alert addButtonWithTitle:[self.buttonTitles objectAtIndex:buttonIndex]];
+			[buttonOrder addObject:[NSNumber numberWithInt:buttonIndex]];
+		}
+	}
+	
+	if (self.cancelButtonIndex >= 0) {
+		NSButton *btn = [alert addButtonWithTitle:[self.buttonTitles objectAtIndex:self.cancelButtonIndex]];
+		[btn setKeyEquivalent:@"\033"];		// this should make the escape key always trigger the cancel option
+		[buttonOrder addObject:[NSNumber numberWithInt:self.cancelButtonIndex]];
+	}
 
 	NSInteger result = [alert runModal];
 
 	NSInteger buttonIndex = -1;
 
 	switch (result) {
-		default:
 		case NSAlertFirstButtonReturn:
-			buttonIndex = [self.buttonTitles indexOfObject:defaultButton];
+			buttonIndex = [[buttonOrder objectAtIndex:0] intValue];
 			break;
 		case NSAlertSecondButtonReturn:
-			buttonIndex = [self.buttonTitles indexOfObject:alternateButton];
+			buttonIndex = [[buttonOrder objectAtIndex:1] intValue];
 			break;
 		case NSAlertThirdButtonReturn:
-			buttonIndex = [self.buttonTitles indexOfObject:otherButton];
+			buttonIndex = [[buttonOrder objectAtIndex:2] intValue];
+			break;
+		default:
+			buttonIndex = [[buttonOrder objectAtIndex:2+(result-NSAlertThirdButtonReturn)] intValue];
 			break;
 	}
 
