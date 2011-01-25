@@ -28,7 +28,7 @@ typedef enum {
 	BOOL _cancelsTouchesInView;
 	BOOL _enabled;
 	UIGestureRecognizerState _state;
-	__weak UIView *view;
+	__weak UIView *_view;
 	
 	struct {
 		BOOL shouldBegin : 1;
