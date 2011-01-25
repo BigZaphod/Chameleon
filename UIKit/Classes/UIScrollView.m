@@ -277,10 +277,15 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 	}
 }
 
+- (void)_setContentOffset:(CGPoint)theOffset withAnimationDuration:(NSTimeInterval)animationDuration
+{
+	[self _scrollContentOffsetBy:CGPointMake(theOffset.x-_contentOffset.x, theOffset.y-_contentOffset.y) withAnimationDuration:animationDuration];
+}
+
 - (void)setContentOffset:(CGPoint)theOffset animated:(BOOL)animated
 {
 	if (animated) {
-		[self _scrollContentOffsetBy:CGPointMake(theOffset.x-_contentOffset.x, theOffset.y-_contentOffset.y) withAnimationDuration:UIScrollViewAnimationDuration];
+		[self _setContentOffset:theOffset withAnimationDuration:UIScrollViewAnimationDuration];
 	} else {
 		_contentOffset = theOffset;
 		[self _constrainContent];
@@ -357,6 +362,35 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 
 	if (_delegateCan.scrollViewDidEndDragging) {
 		[_delegate scrollViewDidEndDragging:self willDecelerate:NO];
+	}
+	
+	if (_pagingEnabled) {
+		const CGSize pageSize = self.bounds.size;
+		const CGSize numberOfWholePages = CGSizeMake(floorf(_contentSize.width/pageSize.width), floorf(_contentSize.height/pageSize.height));
+		const CGSize currentRawPage = CGSizeMake(_contentOffset.x/pageSize.width, _contentOffset.y/pageSize.height);
+		const CGSize currentPage = CGSizeMake(floorf(currentRawPage.width), floorf(currentRawPage.height));
+		const CGSize currentPagePercentage = CGSizeMake(1-(currentRawPage.width-currentPage.width), 1-(currentRawPage.height-currentPage.height));
+		
+		CGPoint finalContentOffset = CGPointZero;
+		
+		// if currentPagePercentage is less than 50%, then go to the next page (if any), otherwise snap to the current page
+		
+		if (currentPagePercentage.width < 0.5 && (currentPage.width+1) < numberOfWholePages.width) {
+			finalContentOffset.x = pageSize.width * (currentPage.width + 1);
+		} else {
+			finalContentOffset.x = pageSize.width * currentPage.width;
+		}
+
+		if (currentPagePercentage.height < 0.5 && (currentPage.height+1) < numberOfWholePages.height) {
+			finalContentOffset.y = pageSize.height * (currentPage.height + 1);
+		} else {
+			finalContentOffset.y = pageSize.height * currentPage.height;
+		}
+		
+		// quickly animate the snap (if necessary)
+		if (!CGPointEqualToPoint(finalContentOffset, _contentOffset)) {
+			[self _setContentOffset:finalContentOffset withAnimationDuration:UIScrollViewAnimationDuration/3.];
+		}
 	}
 }
 
