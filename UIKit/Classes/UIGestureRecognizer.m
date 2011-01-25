@@ -69,21 +69,22 @@
 
 		typedef struct { UIGestureRecognizerState fromState, toState; } StateTransition;
 
-		#define UIGestureRecognizerStateTransitions 11
+		#define UIGestureRecognizerStateTransitions 12
 		static const StateTransition allowedTransitions[UIGestureRecognizerStateTransitions] = {
 			// discrete gestures
-			{UIGestureRecognizerStatePossible,	UIGestureRecognizerStateRecognized},
-			{UIGestureRecognizerStatePossible,	UIGestureRecognizerStateFailed},
-			{UIGestureRecognizerStateFailed,	UIGestureRecognizerStatePossible},
-			{UIGestureRecognizerStatePossible,	UIGestureRecognizerStateBegan},
+			{UIGestureRecognizerStatePossible,		UIGestureRecognizerStateRecognized},
+			{UIGestureRecognizerStatePossible,		UIGestureRecognizerStateFailed},
+			{UIGestureRecognizerStateFailed,		UIGestureRecognizerStatePossible},
+			{UIGestureRecognizerStatePossible,		UIGestureRecognizerStateBegan},
+			{UIGestureRecognizerStateRecognized,	UIGestureRecognizerStatePossible},
 			// continuous gestures
-			{UIGestureRecognizerStateBegan,		UIGestureRecognizerStateChanged},
-			{UIGestureRecognizerStateBegan,		UIGestureRecognizerStateCancelled},
-			{UIGestureRecognizerStateBegan,		UIGestureRecognizerStateEnded},
-			{UIGestureRecognizerStateChanged,	UIGestureRecognizerStateCancelled},
-			{UIGestureRecognizerStateChanged,	UIGestureRecognizerStateEnded},
-			{UIGestureRecognizerStateCancelled,	UIGestureRecognizerStatePossible},
-			{UIGestureRecognizerStateEnded,		UIGestureRecognizerStatePossible}
+			{UIGestureRecognizerStateBegan,			UIGestureRecognizerStateChanged},
+			{UIGestureRecognizerStateBegan,			UIGestureRecognizerStateCancelled},
+			{UIGestureRecognizerStateBegan,			UIGestureRecognizerStateEnded},
+			{UIGestureRecognizerStateChanged,		UIGestureRecognizerStateCancelled},
+			{UIGestureRecognizerStateChanged,		UIGestureRecognizerStateEnded},
+			{UIGestureRecognizerStateCancelled,		UIGestureRecognizerStatePossible},
+			{UIGestureRecognizerStateEnded,			UIGestureRecognizerStatePossible}
 		};
 		
 		BOOL isValidStateTransition = NO;
