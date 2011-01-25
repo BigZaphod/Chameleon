@@ -215,6 +215,7 @@
 		defaultImageView.contentMode = UIViewContentModeCenter;
 		
 		UIWindow *defaultWindow = [(UIWindow *)[UIWindow alloc] initWithFrame:_screen.bounds];
+		defaultWindow.userInteractionEnabled = NO;
 		defaultWindow.screen = _screen;
 		defaultWindow.backgroundColor = [UIColor blackColor];	// dunno..
 		defaultWindow.opaque = YES;
