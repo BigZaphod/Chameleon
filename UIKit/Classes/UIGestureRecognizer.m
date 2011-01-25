@@ -62,7 +62,43 @@
 - (void)setState:(UIGestureRecognizerState)state
 {
 	if (state != _state) {
+
+		// the docs didn't say explicitly if these state transitions were verified, but I suspect they are. if anything, a check like this
+		// should help debug things. it also helps me better understand the whole thing, so it's not a total waste of time :)
+
+		typedef struct { UIGestureRecognizerState fromState, toState; } StateTransition;
+
+		#define UIGestureRecognizerStateTransitions 11
+		static const StateTransition allowedTransitions[UIGestureRecognizerStateTransitions] = {
+			// discrete gestures
+			{UIGestureRecognizerStatePossible,	UIGestureRecognizerStateRecognized},
+			{UIGestureRecognizerStatePossible,	UIGestureRecognizerStateFailed},
+			{UIGestureRecognizerStateFailed,	UIGestureRecognizerStatePossible},
+			{UIGestureRecognizerStatePossible,	UIGestureRecognizerStateBegan},
+			// continuous gestures
+			{UIGestureRecognizerStateBegan,		UIGestureRecognizerStateChanged},
+			{UIGestureRecognizerStateBegan,		UIGestureRecognizerStateCancelled},
+			{UIGestureRecognizerStateBegan,		UIGestureRecognizerStateEnded},
+			{UIGestureRecognizerStateChanged,	UIGestureRecognizerStateCancelled},
+			{UIGestureRecognizerStateChanged,	UIGestureRecognizerStateEnded},
+			{UIGestureRecognizerStateCancelled,	UIGestureRecognizerStatePossible},
+			{UIGestureRecognizerStateEnded,		UIGestureRecognizerStatePossible}
+		};
+		
+		BOOL isValidStateTransition = NO;
+		
+		for (NSUInteger t=0; t<UIGestureRecognizerStateTransitions; t++) {
+			if (allowedTransitions[t].fromState == _state && allowedTransitions[t].toState == state) {
+				isValidStateTransition = YES;
+				break;
+			}
+		}
+
+		NSAssert(isValidStateTransition, nil);
+
 		_state = state;
+			
+		// probably do stuff here like send messages if we're in the right state now.
 	}
 }
 
