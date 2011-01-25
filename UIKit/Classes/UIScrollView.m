@@ -226,13 +226,12 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 
 		// now we process all currently running animations
 		for (UIScrollViewScrollAnimation *animation in animations) {
-			const CGPoint velocity = animation.contentOffsetVelocity;
-
-			if (_scrollAnimationTime >= animation.stopTime) {
+			if (_scrollAnimationTime > animation.stopTime) {
 				// if we're beyond the time where this animation should have stopped, it is time to kill it.
 				[_scrollAnimations removeObject:animation];
 			} else {
-				// apply the animation's velocity to the offset
+				// otherwise apply the animation's velocity to the offset
+				const CGPoint velocity = animation.contentOffsetVelocity;
 				contentOffset.x += velocity.x;
 				contentOffset.y += velocity.y;
 			}
