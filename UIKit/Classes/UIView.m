@@ -810,9 +810,11 @@ static BOOL _animationsEnabled = YES;
 
 - (void)addGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
 {
-	[gestureRecognizer.view removeGestureRecognizer:gestureRecognizer];
-	[_gestureRecognizers addObject:gestureRecognizer];
-	[gestureRecognizer _setView:self];
+	if (![_gestureRecognizers containsObject:gestureRecognizer]) {
+		[gestureRecognizer.view removeGestureRecognizer:gestureRecognizer];
+		[_gestureRecognizers addObject:gestureRecognizer];
+		[gestureRecognizer _setView:self];
+	}
 }
 
 - (void)removeGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer

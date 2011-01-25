@@ -27,6 +27,7 @@
 
 - (void)_setView:(UIView *)v
 {
+	[self reset];	// not sure about this, but it kinda makes sense
 	_view = v;
 }
 
