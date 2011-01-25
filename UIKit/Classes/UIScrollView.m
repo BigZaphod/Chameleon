@@ -27,17 +27,23 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 - (id)initWithFrame:(CGRect)frame
 {
 	if ((self=[super initWithFrame:frame])) {
+		_contentOffset = CGPointZero;
+		_contentSize = CGSizeZero;
+		_contentInset = UIEdgeInsetsZero;
+		_scrollIndicatorInsets = UIEdgeInsetsZero;
 		_scrollEnabled = YES;
-		_indicatorStyle = UIScrollViewIndicatorStyleDefault;
 		_showsVerticalScrollIndicator = YES;
 		_showsHorizontalScrollIndicator = YES;
+		_maximumZoomScale = 1;
+		_minimumZoomScale = 1;
 		_scrollsToTop = YES;
+		_indicatorStyle = UIScrollViewIndicatorStyleDefault;
 		_delaysContentTouches = YES;
 		_canCancelContentTouches = YES;
 		_pagingEnabled = NO;
 		_bouncesZoom = NO;
-		_maximumZoomScale = 1;
-		_minimumZoomScale = 1;
+		_zooming = NO;
+		_scrollAnimationTime = 0;
 		_scrollAnimations = [[NSMutableArray alloc] init];
 
 		_verticalScroller = [[UIScroller alloc] init];
@@ -210,38 +216,34 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 	const NSTimeInterval timePerFrame = 1. / (NSTimeInterval)UIScrollViewScrollAnimationFramesPerSecond;
 
 	CGPoint contentOffset = self.contentOffset;
-	NSArray *animations = [_scrollAnimations copy];
 
 	while (_scrollAnimationTime <= currentTime) {
 		// update the simulation's time by one perfect frame-worth of time
 		_scrollAnimationTime += timePerFrame;
-		
+
+		// making a copy here so that expired animations can be removed
+		NSArray *animations = [_scrollAnimations copy];
+
 		// now we process all currently running animations
 		for (UIScrollViewScrollAnimation *animation in animations) {
-			CGPoint velocity = animation.contentOffsetVelocity;
-			
-			// doing some fancy math here to calculate exactly how much the offset should change even if the original animation
-			// was set to end in the middle of a frame. while I can't really percieve this, it was fun to do and it should result
-			// in basically "perfect" animations as far as I know right now. :)
-			// note that this is clamping the upper value of timeScaler to 1.0 so it processes only a single frame at a time at most
-			const float timeScaler = MIN(1,((animation.stopTime - _scrollAnimationTime) / timePerFrame));
-			
-			if (timeScaler > 0) {
-				// apply the animation's velocity to the offset
-				contentOffset.x += velocity.x * timeScaler;
-				contentOffset.y += velocity.y * timeScaler;
-			} else {
+			const CGPoint velocity = animation.contentOffsetVelocity;
+
+			if (_scrollAnimationTime >= animation.stopTime) {
 				// if we're beyond the time where this animation should have stopped, it is time to kill it.
 				[_scrollAnimations removeObject:animation];
+			} else {
+				// apply the animation's velocity to the offset
+				contentOffset.x += velocity.x;
+				contentOffset.y += velocity.y;
 			}
 		}
+
+		[animations release];
 	}
 
-	[animations release];
-
 	// note that invalidation of the timer must happen before setContentOffset: is called due to a clever hack having to do with rounding
-	// the content offset. Basically, I'm avoiding rounding the offset values (and thus snapping to pixel boundaries and avoiding subpixel blur)
-	// while a scroll animation is occuring because that results in visually smoother animations. this is important especailly near the end of a
+	// the content offset. Basically, I'm avoiding rounding the offset values (and thus snapping to whole number boundaries to avoid subpixel blur)
+	// while a scroll animation is occuring because that results in visually smoother animations. this is important especially near the end of a
 	// momentum scroll because the scroll gets slower and slower so little jitters are easier to see. The trick here is that when the offset values
 	// are later constrained in _constrainContent, they are only rounded if there's no scroll animations in progress. This enhances the percieved
 	// smoothness of the animation by a noticable amount.
@@ -267,7 +269,7 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 	animation.stopTime = animationDuration + startTime;
 	[_scrollAnimations addObject:animation];
 	[animation release];
-
+	
 	// if there's no current scrolling animation running, we need to start one here - it will repeat until there are no more 
 	// animations in _scrollAnimations.
 	if (!_scrollTimer) {
@@ -283,7 +285,7 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 	} else {
 		_contentOffset = theOffset;
 		[self _constrainContent];
-		
+
 		if (_delegateCan.scrollViewDidScroll) {
 			[_delegate scrollViewDidScroll:self];
 		}
