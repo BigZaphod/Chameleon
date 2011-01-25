@@ -316,9 +316,6 @@ typedef enum {
 	
 	[_tintColor setFill];
 	UIRectFill(bounds);
-
-	[[UIColor blackColor] setFill];
-	UIRectFill(CGRectMake(0,bounds.size.height-1,bounds.size.width,1));
 }
 
 @end
