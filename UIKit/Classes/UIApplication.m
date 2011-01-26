@@ -71,6 +71,7 @@ static BOOL TouchIsActive(UITouch *touch)
 		_applicationSupportsShakeToEdit = YES;		// yeah... not *really* true, but UIKit defaults to YES :)
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillResignActive:) name:NSApplicationWillResignActiveNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationDidBecomeActive:) name:NSApplicationDidBecomeActiveNotification object:nil];
 	}
 	return self;
 }
@@ -384,6 +385,15 @@ static BOOL TouchIsActive(UITouch *touch)
 	}
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationWillResignActiveNotification object:self];
+}
+
+- (void)_applicationDidBecomeActive:(NSNotification *)note
+{
+	if ([_delegate respondsToSelector:@selector(applicationDidBecomeActive:)]) {
+		[_delegate applicationDidBecomeActive:self];
+	}
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidBecomeActiveNotification object:self];
 }
 
 @end
