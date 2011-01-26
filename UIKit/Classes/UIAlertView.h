@@ -25,14 +25,14 @@
 
 - (NSInteger)addButtonWithTitle:(NSString *)title;
 - (NSString *)buttonTitleAtIndex:(NSInteger)buttonIndex;
-@property(nonatomic,readonly) NSInteger numberOfButtons;
-
 - (void)show;
+- (void)dismissWithClickedButtonIndex:(NSInteger)buttonIndex animated:(BOOL)animated;		// not implemented at the moment since I use NSAlert and runModal and this would present problems. :/
 
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *message;
 @property (nonatomic, assign) id<UIAlertViewDelegate> delegate;
 @property (nonatomic) NSInteger cancelButtonIndex;
+@property (nonatomic,readonly) NSInteger numberOfButtons;
 
 @end
 

@@ -1,5 +1,6 @@
 //  Created by Sean Heber on 6/25/10.
 #import "UIAlertView.h"
+#import "UIApplication.h"
 
 #import <AppKit/NSAlert.h>
 #import <AppKit/NSPanel.h>
@@ -44,10 +45,9 @@
 
 - (void)dealloc
 {
-	self.title = nil;
-	self.message = nil;
-	self.buttonTitles = nil;
-
+	[_title release];
+	[_message release];
+	[_buttonTitles release];
 	[super dealloc];
 }
 
@@ -81,15 +81,16 @@
 
 - (void)show
 {
-	if (_delegateHas.willPresentAlertView) {
-		[_delegate willPresentAlertView:self];
-	}
-	if (_delegateHas.didPresentAlertView) {
-		[_delegate didPresentAlertView:self];
-	}
+	// capture the current button configuration and build an NSAlert
+	// we show it after letting the runloop finish because UIKit stuff is often written with the assumption
+	// that showing an alert doesn't block the runloop. Kinda icky, but the same pattern is used for UIActionSheet
+	// and the UIMenuController and I don't know there's a lot that I can do about it.
+	// NSAlert does have a mode that doesn't block the runloop, but it has other drawbacks that I didn't like
+	// so opting to do it this way here. :/
 
 	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-
+	NSMutableArray *buttonOrder = [[[NSMutableArray alloc] initWithCapacity:self.numberOfButtons] autorelease];
+	
 	if (self.title) {
 		[alert setMessageText:self.title];
 	}
@@ -97,8 +98,6 @@
 	if (self.message) {
 		[alert setInformativeText:self.message];
 	}
-	
-	NSMutableArray *buttonOrder = [[NSMutableArray alloc] initWithCapacity:self.numberOfButtons];
 	
 	for (NSInteger buttonIndex=0; buttonIndex<self.numberOfButtons; buttonIndex++) {
 		if (buttonIndex != self.cancelButtonIndex) {
@@ -112,15 +111,28 @@
 		[btn setKeyEquivalent:@"\033"];		// this should make the escape key always trigger the cancel option
 		[buttonOrder addObject:[NSNumber numberWithInt:self.cancelButtonIndex]];
 	}
-
-	[self retain];
-	[alert beginSheetModalForWindow:nil modalDelegate:self didEndSelector:@selector(_alertDidEnd:returnCode:contextInfo:) contextInfo:(void *)buttonOrder];
+	
+	[self performSelector:@selector(_showAlertWithOptions:)
+			   withObject:[NSDictionary dictionaryWithObjectsAndKeys:
+						   alert,		@"alert",
+						   buttonOrder, @"buttonOrder",
+						   nil]
+			   afterDelay:0];
 }
 
-- (void)_alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)result contextInfo:(void *)context
+- (void)_showAlertWithOptions:(NSDictionary *)options
 {
-	NSMutableArray *buttonOrder = (NSMutableArray *)context;
+	NSAlert *alert = [options objectForKey:@"alert"];
+	NSMutableArray *buttonOrder = [options objectForKey:@"buttonOrder"];
 	
+	if (_delegateHas.willPresentAlertView) {
+		[_delegate willPresentAlertView:self];
+	}
+	if (_delegateHas.didPresentAlertView) {
+		[_delegate didPresentAlertView:self];
+	}
+	
+	NSInteger result = [alert runModal];
 	NSInteger buttonIndex = -1;
 	
 	switch (result) {
@@ -141,16 +153,18 @@
 	if (_delegateHas.clickedButtonAtIndex) {
 		[_delegate alertView:self clickedButtonAtIndex:buttonIndex];
 	}
-	
+
 	if (_delegateHas.willDismissWithButtonIndex) {
 		[_delegate alertView:self willDismissWithButtonIndex:buttonIndex];
 	}
+	
 	if (_delegateHas.didDismissWithButtonIndex) {
 		[_delegate alertView:self didDismissWithButtonIndex:buttonIndex];
 	}
-	
-	[buttonOrder release];
-	[self autorelease];
+}
+
+- (void)dismissWithClickedButtonIndex:(NSInteger)buttonIndex animated:(BOOL)animated
+{
 }
 
 @end
