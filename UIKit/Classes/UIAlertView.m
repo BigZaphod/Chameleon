@@ -108,7 +108,12 @@
 	
 	if (self.cancelButtonIndex >= 0) {
 		NSButton *btn = [alert addButtonWithTitle:[self.buttonTitles objectAtIndex:self.cancelButtonIndex]];
-		[btn setKeyEquivalent:@"\033"];		// this should make the escape key always trigger the cancel option
+
+		// only change the key equivelent if there's more than one button, otherwise we lose the "Return" key for triggering the default action
+		if (self.numberOfButtons > 1) {
+			[btn setKeyEquivalent:@"\033"];		// this should make the escape key trigger the cancel option
+		}
+
 		[buttonOrder addObject:[NSNumber numberWithInt:self.cancelButtonIndex]];
 	}
 	
