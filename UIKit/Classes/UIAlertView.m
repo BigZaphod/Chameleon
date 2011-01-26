@@ -98,7 +98,7 @@
 		[alert setInformativeText:self.message];
 	}
 	
-	NSMutableArray *buttonOrder = [NSMutableArray arrayWithCapacity:self.numberOfButtons];
+	NSMutableArray *buttonOrder = [[NSMutableArray alloc] initWithCapacity:self.numberOfButtons];
 	
 	for (NSInteger buttonIndex=0; buttonIndex<self.numberOfButtons; buttonIndex++) {
 		if (buttonIndex != self.cancelButtonIndex) {
@@ -113,10 +113,16 @@
 		[buttonOrder addObject:[NSNumber numberWithInt:self.cancelButtonIndex]];
 	}
 
-	NSInteger result = [alert runModal];
+	[self retain];
+	[alert beginSheetModalForWindow:nil modalDelegate:self didEndSelector:@selector(_alertDidEnd:returnCode:contextInfo:) contextInfo:(void *)buttonOrder];
+}
 
+- (void)_alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)result contextInfo:(void *)context
+{
+	NSMutableArray *buttonOrder = (NSMutableArray *)context;
+	
 	NSInteger buttonIndex = -1;
-
+	
 	switch (result) {
 		case NSAlertFirstButtonReturn:
 			buttonIndex = [[buttonOrder objectAtIndex:0] intValue];
@@ -131,17 +137,20 @@
 			buttonIndex = [[buttonOrder objectAtIndex:2+(result-NSAlertThirdButtonReturn)] intValue];
 			break;
 	}
-
+	
 	if (_delegateHas.clickedButtonAtIndex) {
 		[_delegate alertView:self clickedButtonAtIndex:buttonIndex];
 	}
-
+	
 	if (_delegateHas.willDismissWithButtonIndex) {
 		[_delegate alertView:self willDismissWithButtonIndex:buttonIndex];
 	}
 	if (_delegateHas.didDismissWithButtonIndex) {
 		[_delegate alertView:self didDismissWithButtonIndex:buttonIndex];
 	}
+	
+	[buttonOrder release];
+	[self autorelease];
 }
 
 @end
