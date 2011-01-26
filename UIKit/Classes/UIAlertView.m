@@ -112,6 +112,10 @@
 		[buttonOrder addObject:[NSNumber numberWithInt:self.cancelButtonIndex]];
 	}
 	
+	if (_delegateHas.willPresentAlertView) {
+		[_delegate willPresentAlertView:self];
+	}
+	
 	[self performSelector:@selector(_showAlertWithOptions:)
 			   withObject:[NSDictionary dictionaryWithObjectsAndKeys:
 						   alert,		@"alert",
@@ -125,9 +129,6 @@
 	NSAlert *alert = [options objectForKey:@"alert"];
 	NSMutableArray *buttonOrder = [options objectForKey:@"buttonOrder"];
 	
-	if (_delegateHas.willPresentAlertView) {
-		[_delegate willPresentAlertView:self];
-	}
 	if (_delegateHas.didPresentAlertView) {
 		[_delegate didPresentAlertView:self];
 	}
