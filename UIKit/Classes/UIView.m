@@ -531,8 +531,15 @@ static BOOL _animationsEnabled = YES;
 		if (_autoresizingMask & UIViewAutoresizingFlexibleHeight)		heightChanges++;
 		if (_autoresizingMask & UIViewAutoresizingFlexibleBottomMargin)	heightChanges++;
 		
-		if (_autoresizingMask & UIViewAutoresizingFlexibleLeftMargin && _autoresizingMask & UIViewAutoresizingFlexibleRightMargin)	widthChanges -= 0.5f;
-		if (_autoresizingMask & UIViewAutoresizingFlexibleTopMargin && _autoresizingMask & UIViewAutoresizingFlexibleBottomMargin)	heightChanges -= 0.5f;
+		if (   _autoresizingMask & UIViewAutoresizingFlexibleLeftMargin
+			&& _autoresizingMask & UIViewAutoresizingFlexibleRightMargin
+			&& _autoresizingMask & UIViewAutoresizingFlexibleWidth
+			) widthChanges -= 0.5f;
+		
+		if (   _autoresizingMask & UIViewAutoresizingFlexibleTopMargin
+			&& _autoresizingMask & UIViewAutoresizingFlexibleBottomMargin
+			&& _autoresizingMask & UIViewAutoresizingFlexibleHeight
+			) heightChanges -= 0.5f;
 		
 		CGFloat widthDelta = (newSize.width-oldSize.width) / widthChanges;
 		CGFloat heightDelta = (newSize.height-oldSize.height) / heightChanges;
