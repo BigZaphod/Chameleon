@@ -519,6 +519,7 @@ static BOOL _animationsEnabled = YES;
 {
 	if (_autoresizingMask != UIViewAutoresizingNone) {
 		CGRect frame = self.frame;
+		
 		CGFloat widthChanges = 0;
 		CGFloat heightChanges = 0;
 
@@ -542,7 +543,7 @@ static BOOL _animationsEnabled = YES;
 		if (_autoresizingMask & UIViewAutoresizingFlexibleTopMargin)	frame.origin.y += heightDelta;
 		if (_autoresizingMask & UIViewAutoresizingFlexibleHeight)		frame.size.height += heightDelta;
 		
-		self.frame = CGRectIntegral(frame);
+		self.frame = frame;
 	}
 }
 
