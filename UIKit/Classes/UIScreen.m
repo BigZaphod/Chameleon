@@ -95,7 +95,7 @@ NSMutableArray *_allScreens = nil;
 {
 	NSWindow *realWindow = [_UIKitView window];
 
-	if (realWindow && ([realWindow styleMask] & NSResizableWindowMask) && [realWindow showsResizeIndicator] ) {
+	if (realWindow && ([realWindow styleMask] & NSResizableWindowMask) && [realWindow showsResizeIndicator] && !NSEqualSizes([realWindow minSize], [realWindow maxSize])) {
 		NSView *contentView = [realWindow contentView];
 		
 		const CGRect myBounds = NSRectToCGRect([_UIKitView bounds]);
