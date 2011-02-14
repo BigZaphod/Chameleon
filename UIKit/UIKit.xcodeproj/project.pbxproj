@@ -236,7 +236,6 @@
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		1426FFDB129ADEA300BD31E5 /* UIControlAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIControlAction.h; sourceTree = "<group>"; };
 		1426FFDC129ADEA300BD31E5 /* UIControlAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIControlAction.m; sourceTree = "<group>"; };
-		143E36AA1295A84A0073FB22 /* Tests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		144156D91284A22200532FE2 /* UIToolbarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIToolbarButton.h; sourceTree = "<group>"; };
 		144156DA1284A22200532FE2 /* UIToolbarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIToolbarButton.m; sourceTree = "<group>"; };
 		1443DF23121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScreenMode+UIPrivate.h"; sourceTree = "<group>"; };
@@ -530,7 +529,6 @@
 				14DD1C341289B4D500DCF231 /* <UIToolbar> button-highlighted.png */,
 				14DD1C351289B4D500DCF231 /* <UIToolbar> button.png */,
 				8DC2EF5A0486A6940098B216 /* Info.plist */,
-				143E36AA1295A84A0073FB22 /* Tests-Info.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";

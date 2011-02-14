@@ -69,7 +69,6 @@
 			isa = PBXGroup;
 			children = (
 				14FB13351230307C00B615ED /* UIKit.xcodeproj */,
-				147A838C120C902C00422EDC /* Private Classes */,
 				08FB77AEFE84172EC02AAC07 /* Classes */,
 				089C1665FE841158C02AAC07 /* Resources */,
 				32C88DFF0371C24200C91783 /* Other Sources */,
@@ -105,13 +104,6 @@
 				14FB132C12302FD900B615ED /* MFMailComposeViewController.m */,
 			);
 			name = Classes;
-			sourceTree = "<group>";
-		};
-		147A838C120C902C00422EDC /* Private Classes */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Private Classes";
 			sourceTree = "<group>";
 		};
 		14FB13361230307C00B615ED /* Products */ = {

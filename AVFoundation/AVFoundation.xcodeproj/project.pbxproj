@@ -52,7 +52,6 @@
 		0867D691FE84028FC02AAC07 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
-				147A838C120C902C00422EDC /* Private Classes */,
 				08FB77AEFE84172EC02AAC07 /* Classes */,
 				089C1665FE841158C02AAC07 /* Resources */,
 				32C88DFF0371C24200C91783 /* Other Sources */,
@@ -90,13 +89,6 @@
 				14C25EC11211EBC600622309 /* AVAudioSession.m */,
 			);
 			name = Classes;
-			sourceTree = "<group>";
-		};
-		147A838C120C902C00422EDC /* Private Classes */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Private Classes";
 			sourceTree = "<group>";
 		};
 		32C88DFF0371C24200C91783 /* Other Sources */ = {
@@ -149,6 +141,7 @@
 			isa = PBXProject;
 			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "AVFoundation" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
