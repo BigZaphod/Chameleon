@@ -246,6 +246,7 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = MessageUI;
 				SYMROOT = ../build;
+				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -265,6 +266,7 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = MessageUI;
 				SYMROOT = ../build;
+				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
