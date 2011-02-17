@@ -51,6 +51,8 @@
 		NSPoint offset = [self bounds].origin;
 		offset.x += [event deltaX];
 		offset.y -= [event deltaY];
+		offset.x = floor(offset.x);
+		offset.y = floor(offset.y);
 		[self scrollToPoint:[self constrainScrollPoint:offset]];
 	}
 }
