@@ -518,14 +518,19 @@ static BOOL _animationsEnabled = YES;
 	 but at least stuff doesn't jump out as obviously different. However this doesn't look very nice on OSX. iOS appears to not use
 	 any subpixel smoothing anywhere but doesn't seem to look bad when using it. There are many possibilities for why. Some I can
 	 think of are they are setting some kind of graphics context mode I just haven't found yet, the rendering engines are
-	 fundamentally different, the fonts themselves are actually different, voodoo magic, or the loch ness monster.
-	 
-	const BOOL shouldSmoothFonts = (_backgroundColor && (CGColorGetAlpha(_backgroundColor.CGColor) == 1)) || self.opaque;
-	CGContextSetShouldSmoothFonts(ctx, shouldSmoothFonts);
+	 fundamentally different, the fonts themselves are actually different, the DPI of the devices, voodoo, or the loch ness monster.
 	 */
 
-	CGContextSetShouldSmoothFonts(ctx, NO);		// make text suck universally for now :)
-
+	/*
+	 UPDATE: I've since flattened some of the main views in Twitterrific/Ostrich and so now I'd like to have subpixel turned on for
+	 the Mac, so I'm putting this code back in here. It tries to be smart about when to do it (because if it's on when it shouldn't
+	 be the results look very bad). As the note above said, this can and does result in some inconsistency with the rendering in
+	 the app depending on how things are done. Typical UIKit code is going to be lots of layers and thus text will mostly look bad
+	 with straight ports but at this point I really can't come up with a much better solution so it'll have to do.
+	 */
+	
+	const BOOL shouldSmoothFonts = (_backgroundColor && (CGColorGetAlpha(_backgroundColor.CGColor) == 1)) || self.opaque;
+	CGContextSetShouldSmoothFonts(ctx, shouldSmoothFonts);
 	
 	[[UIColor blackColor] set];
 	[self drawRect:bounds];
