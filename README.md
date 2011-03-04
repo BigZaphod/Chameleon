@@ -10,7 +10,7 @@ As a general rule, if Apple's UIKit behaves in a certain way for some piece of c
 
 ## Usage
 
-Chameleon is actually a collection of several frameworks, the largest of which is UIKit. The others are mostly stubs that made porting simple demos and test apps from iOS very simple with minimal (or, in some cases, zero) code changes and may or may not be necessary for you.
+Chameleon is actually a collection of several frameworks, the largest of which is UIKit. The others are mostly stubs that made porting simple demos and test apps from iOS very simple with minimal (in some cases, zero) code changes and may or may not be necessary for you.
 
 The Xcode projects build embeddable frameworks which can then be bundled within your own app's bundle and distributed in a self-contained way.
 
