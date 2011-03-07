@@ -35,76 +35,78 @@
 static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToSize, UIFont *font, UILineBreakMode lineBreakMode, CGSize *renderSize)
 {
 	CFMutableArrayRef lines = CFArrayCreateMutable(NULL, 0, &kCFTypeArrayCallBacks);
-	
-	CFMutableDictionaryRef attributes = CFDictionaryCreateMutable(NULL, 2, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-	CFDictionarySetValue(attributes, kCTFontAttributeName,font->_font);
-	CFDictionarySetValue(attributes, kCTForegroundColorFromContextAttributeName, kCFBooleanTrue);
-	
-	CFAttributedStringRef attributedString = CFAttributedStringCreate(NULL, (CFStringRef)string, attributes);
-	
-	CTTypesetterRef typesetter = CTTypesetterCreateWithAttributedString(attributedString);
-	
-	const CFIndex stringLength = CFAttributedStringGetLength(attributedString);
-	const CGFloat lineHeight = font.lineHeight;
-	const CGFloat capHeight = font.capHeight;
-	
-	CFIndex start = 0;
-	BOOL isLastLine = NO;
 	CGSize drawSize = CGSizeZero;
-	
-	while (start < stringLength && !isLastLine) {
-		drawSize.height += lineHeight;
-		isLastLine = (drawSize.height+capHeight >= constrainedToSize.height);
+
+	if (font) {
+		CFMutableDictionaryRef attributes = CFDictionaryCreateMutable(NULL, 2, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+		CFDictionarySetValue(attributes, kCTFontAttributeName,font->_font);
+		CFDictionarySetValue(attributes, kCTForegroundColorFromContextAttributeName, kCFBooleanTrue);
 		
-		CFIndex usedCharacters = 0;
-		CTLineRef line = NULL;
+		CFAttributedStringRef attributedString = CFAttributedStringCreate(NULL, (CFStringRef)string, attributes);
 		
-		if (isLastLine && (lineBreakMode != UILineBreakModeWordWrap && lineBreakMode != UILineBreakModeCharacterWrap)) {
-			if (lineBreakMode == UILineBreakModeClip) {
-				usedCharacters = CTTypesetterSuggestClusterBreak(typesetter, start, constrainedToSize.width);
-				line = CTTypesetterCreateLine(typesetter, CFRangeMake(start, usedCharacters));
-			} else {
-				CTLineTruncationType truncType;
-				
-				if (lineBreakMode == UILineBreakModeHeadTruncation) {
-					truncType = kCTLineTruncationStart;
-				} else if (lineBreakMode == UILineBreakModeTailTruncation) {
-					truncType = kCTLineTruncationEnd;
-				} else {
-					truncType = kCTLineTruncationMiddle;
-				}
-				
-				usedCharacters = stringLength - start;
-				CFAttributedStringRef ellipsisString = CFAttributedStringCreate(NULL, CFSTR("…"), attributes);
-				CTLineRef ellipsisLine = CTLineCreateWithAttributedString(ellipsisString);
-				CTLineRef tempLine = CTTypesetterCreateLine(typesetter, CFRangeMake(start, usedCharacters));
-				line = CTLineCreateTruncatedLine(tempLine, constrainedToSize.width, truncType, ellipsisLine);
-				CFRelease(tempLine);
-				CFRelease(ellipsisLine);
-				CFRelease(ellipsisString);
-			}
-		} else {
-			if (lineBreakMode == UILineBreakModeCharacterWrap) {
-				usedCharacters = CTTypesetterSuggestClusterBreak(typesetter, start, constrainedToSize.width);
-			} else {
-				usedCharacters = CTTypesetterSuggestLineBreak(typesetter, start, constrainedToSize.width);
-			}
-			line = CTTypesetterCreateLine(typesetter, CFRangeMake(start, usedCharacters));
-		}
+		CTTypesetterRef typesetter = CTTypesetterCreateWithAttributedString(attributedString);
 		
-		if (line) {
-			drawSize.width = MAX(drawSize.width, ceilf(CTLineGetTypographicBounds(line,NULL,NULL,NULL)));
+		const CFIndex stringLength = CFAttributedStringGetLength(attributedString);
+		const CGFloat lineHeight = font.lineHeight;
+		const CGFloat capHeight = font.capHeight;
+		
+		CFIndex start = 0;
+		BOOL isLastLine = NO;
+		
+		while (start < stringLength && !isLastLine) {
+			drawSize.height += lineHeight;
+			isLastLine = (drawSize.height+capHeight >= constrainedToSize.height);
 			
-			CFArrayAppendValue(lines, line);
-			CFRelease(line);
+			CFIndex usedCharacters = 0;
+			CTLineRef line = NULL;
+			
+			if (isLastLine && (lineBreakMode != UILineBreakModeWordWrap && lineBreakMode != UILineBreakModeCharacterWrap)) {
+				if (lineBreakMode == UILineBreakModeClip) {
+					usedCharacters = CTTypesetterSuggestClusterBreak(typesetter, start, constrainedToSize.width);
+					line = CTTypesetterCreateLine(typesetter, CFRangeMake(start, usedCharacters));
+				} else {
+					CTLineTruncationType truncType;
+					
+					if (lineBreakMode == UILineBreakModeHeadTruncation) {
+						truncType = kCTLineTruncationStart;
+					} else if (lineBreakMode == UILineBreakModeTailTruncation) {
+						truncType = kCTLineTruncationEnd;
+					} else {
+						truncType = kCTLineTruncationMiddle;
+					}
+					
+					usedCharacters = stringLength - start;
+					CFAttributedStringRef ellipsisString = CFAttributedStringCreate(NULL, CFSTR("…"), attributes);
+					CTLineRef ellipsisLine = CTLineCreateWithAttributedString(ellipsisString);
+					CTLineRef tempLine = CTTypesetterCreateLine(typesetter, CFRangeMake(start, usedCharacters));
+					line = CTLineCreateTruncatedLine(tempLine, constrainedToSize.width, truncType, ellipsisLine);
+					CFRelease(tempLine);
+					CFRelease(ellipsisLine);
+					CFRelease(ellipsisString);
+				}
+			} else {
+				if (lineBreakMode == UILineBreakModeCharacterWrap) {
+					usedCharacters = CTTypesetterSuggestClusterBreak(typesetter, start, constrainedToSize.width);
+				} else {
+					usedCharacters = CTTypesetterSuggestLineBreak(typesetter, start, constrainedToSize.width);
+				}
+				line = CTTypesetterCreateLine(typesetter, CFRangeMake(start, usedCharacters));
+			}
+			
+			if (line) {
+				drawSize.width = MAX(drawSize.width, ceilf(CTLineGetTypographicBounds(line,NULL,NULL,NULL)));
+				
+				CFArrayAppendValue(lines, line);
+				CFRelease(line);
+			}
+			
+			start += usedCharacters;
 		}
 		
-		start += usedCharacters;
+		CFRelease(typesetter);
+		CFRelease(attributedString);
+		CFRelease(attributes);
 	}
-	
-	CFRelease(typesetter);
-	CFRelease(attributedString);
-	CFRelease(attributes);
 	
 	if (renderSize) {
 		*renderSize = drawSize;
