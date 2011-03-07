@@ -165,7 +165,7 @@
 		// find out the actual size of the text given the size of our bounds
 		CGSize maxSize = bounds.size;
 		if (_numberOfLines > 0) {
-			maxSize.height = _font.leading * _numberOfLines;
+			maxSize.height = _font.lineHeight * _numberOfLines;
 		}
 		drawRect.size = [_text sizeWithFont:_font constrainedToSize:maxSize lineBreakMode:_lineBreakMode];
 
@@ -202,7 +202,7 @@
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
-	size = CGSizeMake(((_numberOfLines > 0)? CGFLOAT_MAX : size.width), ((_numberOfLines <= 0)? CGFLOAT_MAX : (_font.leading*_numberOfLines)));
+	size = CGSizeMake(((_numberOfLines > 0)? CGFLOAT_MAX : size.width), ((_numberOfLines <= 0)? CGFLOAT_MAX : (_font.lineHeight*_numberOfLines)));
 	return [_text sizeWithFont:_font constrainedToSize:size lineBreakMode:_lineBreakMode];
 }
 

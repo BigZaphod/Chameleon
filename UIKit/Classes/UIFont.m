@@ -120,19 +120,9 @@ static NSString *UIFontBoldSystemFontName = nil;
 	return CTFontGetCapHeight(_font);
 }
 
-- (CGFloat)leading
-{
-	// Updated: iOS 4.0 deprecated -leading and added -lineHeight which seems to be what -leading was doing previously.
-	// They kind of walked themselves into a corner here... maybe in a future OS -leading will become the real leading
-	// value of the font instead.
-	return self.lineHeight;
-}
-
 - (CGFloat)lineHeight
 {
-	// This was added in iOS 4.
-	// After much experimentaiton, this seemed to be what is going on in the real UIKit at the time of this writing.
-	return roundf(self.xHeight + self.ascender + self.descender + CTFontGetLeading(_font) + 1.f);
+	return ceilf(self.ascender - self.descender + CTFontGetLeading(_font));
 }
 
 - (NSString *)familyName

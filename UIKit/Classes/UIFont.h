@@ -44,8 +44,7 @@
 
 @property (nonatomic, readonly) CGFloat ascender;
 @property (nonatomic, readonly) CGFloat descender;
-@property (nonatomic, readonly) CGFloat leading;		// deprecated in 4.0 because it was actually returning the value of lineHeight (which was added in 4.0)
-@property (nonatomic, readonly) CGFloat lineHeight;		// added in 4.0
+@property (nonatomic, readonly) CGFloat lineHeight;
 @property (nonatomic, readonly) CGFloat pointSize;
 @property (nonatomic, readonly) CGFloat xHeight;
 @property (nonatomic, readonly) CGFloat capHeight;
