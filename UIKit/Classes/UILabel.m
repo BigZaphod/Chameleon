@@ -158,8 +158,9 @@
 - (void)drawRect:(CGRect)rect
 {
 	if ([_text length] > 0) {
+		CGContextSaveGState(UIGraphicsGetCurrentContext());
+		
 		const CGRect bounds = self.bounds;
-		const BOOL hasShadow = _shadowColor && !CGSizeEqualToSize(_shadowOffset,CGSizeZero);
 		CGRect drawRect = CGRectZero;
 		
 		// find out the actual size of the text given the size of our bounds
@@ -178,16 +179,18 @@
 		drawRect.origin.x = 0;
 		drawRect.size.width = bounds.size.width;
 		
-		// if there's a shadow, let's draw that first
-		if (hasShadow) {
-			[_shadowColor setFill];
-			[self drawTextInRect:CGRectOffset(drawRect,_shadowOffset.width,_shadowOffset.height)];
-		}
-
+		// if there's a shadow, let's set that up
+		CGSize offset = _shadowOffset;
+		offset.height *= -1;				// Need to verify this on Lion! The shadow direction reversed in iOS 4 (I think) which might
+											// indicate a reversal is coming in 10.7 as well!
+		CGContextSetShadowWithColor(UIGraphicsGetCurrentContext(), offset, 0, _shadowColor.CGColor);
+		
 		// finally, draw the real label
 		UIColor *drawColor = (_highlighted && _highlightedTextColor)? _highlightedTextColor : _textColor;
 		[drawColor setFill];
 		[self drawTextInRect:drawRect];
+		
+		CGContextRestoreGState(UIGraphicsGetCurrentContext());
 	}
 }
 
