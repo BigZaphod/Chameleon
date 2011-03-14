@@ -47,11 +47,16 @@ NSString *const UIWindowDidBecomeVisibleNotification = @"UIWindowDidBecomeVisibl
 NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenNotification";
 NSString *const UIWindowDidBecomeKeyNotification = @"UIWindowDidBecomeKeyNotification";
 NSString *const UIWindowDidResignKeyNotification = @"UIWindowDidResignKeyNotification";
+
 NSString *const UIKeyboardWillShowNotification = @"UIKeyboardWillShowNotification";
 NSString *const UIKeyboardDidShowNotification = @"UIKeyboardDidShowNotification";
 NSString *const UIKeyboardWillHideNotification = @"UIKeyboardWillHideNotification";
 NSString *const UIKeyboardDidHideNotification = @"UIKeyboardDidHideNotification";
-NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
+
+NSString *const UIKeyboardFrameBeginUserInfoKey = @"UIKeyboardFrameBeginUserInfoKey";
+NSString *const UIKeyboardFrameEndUserInfoKey = @"UIKeyboardFrameEndUserInfoKey";
+NSString *const UIKeyboardAnimationDurationUserInfoKey = @"UIKeyboardAnimationDurationUserInfoKey";
+NSString *const UIKeyboardAnimationCurveUserInfoKey = @"UIKeyboardAnimationCurveUserInfoKey";
 
 @implementation UIWindow
 @synthesize screen=_screen;

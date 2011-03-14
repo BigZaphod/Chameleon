@@ -38,11 +38,16 @@ extern NSString *const UIWindowDidBecomeVisibleNotification;
 extern NSString *const UIWindowDidBecomeHiddenNotification;
 extern NSString *const UIWindowDidBecomeKeyNotification;
 extern NSString *const UIWindowDidResignKeyNotification;
+
 extern NSString *const UIKeyboardWillShowNotification;
 extern NSString *const UIKeyboardDidShowNotification;
 extern NSString *const UIKeyboardWillHideNotification;
 extern NSString *const UIKeyboardDidHideNotification;
-extern NSString *const UIKeyboardBoundsUserInfoKey;
+
+extern NSString *const UIKeyboardFrameBeginUserInfoKey;
+extern NSString *const UIKeyboardFrameEndUserInfoKey;
+extern NSString *const UIKeyboardAnimationDurationUserInfoKey;
+extern NSString *const UIKeyboardAnimationCurveUserInfoKey;
 
 @class UIScreen;
 
