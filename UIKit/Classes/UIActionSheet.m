@@ -56,14 +56,6 @@
 {
 	if ((self=[self initWithFrame:CGRectZero])) {
 		self.delegate = delegate;
-		
-		if (cancelButtonTitle) {
-			self.cancelButtonIndex = [self addButtonWithTitle:cancelButtonTitle];
-		}
-		
-		if (destructiveButtonTitle) {
-			self.destructiveButtonIndex = [self addButtonWithTitle:destructiveButtonTitle];
-		}
 
 		_firstOtherButtonIndex = -1;	// sort of a hack to reset this because the addButtonWithTitle's above can change it's value :)
 
@@ -80,7 +72,15 @@
 			
 			va_end(argumentList);
 		}
-	}
+        
+        if (destructiveButtonTitle) {
+			self.destructiveButtonIndex = [self addButtonWithTitle:destructiveButtonTitle];
+		}
+        
+		if (cancelButtonTitle) {
+			self.cancelButtonIndex = [self addButtonWithTitle:cancelButtonTitle];
+		}
+    }
 	return self;
 }
 
