@@ -40,6 +40,8 @@ extern CGFloat _UITableViewDefaultRowHeight;
 @synthesize contentView=_contentView, accessoryType=_accessoryType, textLabel=_textLabel, selectionStyle=_selectionStyle, indentationLevel=_indentationLevel;
 @synthesize imageView=_imageView, editingAccessoryType=_editingAccessoryType, selected=_selected, backgroundView=_backgroundView;
 @synthesize selectedBackgroundView=_selectedBackgroundView, highlighted=_highlighted, reuseIdentifier=_reuseIdentifier;
+@synthesize detailTextLabel = _detailTextLabel;
+@synthesize accessoryView = _accessoryView;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -62,7 +64,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		_textLabel.highlightedTextColor = [UIColor whiteColor];
 		_textLabel.font = [UIFont boldSystemFontOfSize:17];
 		[_contentView addSubview:_textLabel];
-		
+        
 		self.accessoryType = UITableViewCellAccessoryNone;
 		self.editingAccessoryType = UITableViewCellAccessoryNone;
 	}
@@ -74,6 +76,30 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	if ((self=[self initWithFrame:CGRectMake(0,0,320,_UITableViewDefaultRowHeight)])) {
 		_style = style;
 		_reuseIdentifier = [reuseIdentifier copy];
+
+        // TODO -- detail text label is created, but not used.
+        _detailTextLabel = [[UILabel alloc] init];
+        _detailTextLabel.backgroundColor = [UIColor clearColor];
+        switch (_style)
+        {
+            case UITableViewCellStyleDefault:
+                break;
+                
+            case UITableViewCellStyleSubtitle:
+                // TODO
+                _detailTextLabel.textColor = [UIColor grayColor];
+                _detailTextLabel.font = [UIFont systemFontOfSize: 15];
+                break;
+                
+            case UITableViewCellStyleValue1:
+                _detailTextLabel.textColor = [UIColor colorWithRed:0.185 green:0.397 blue:0.791 alpha:1.000];
+                _detailTextLabel.font = [UIFont systemFontOfSize: 17];
+                _detailTextLabel.textAlignment = UITextAlignmentRight;
+                break;
+                
+            case UITableViewCellStyleValue2:
+                break; // TODO
+        }
 	}
 	return self;
 }
@@ -83,6 +109,8 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	[_seperatorView release];
 	[_contentView release];
 	[_textLabel release];
+    [_detailTextLabel release];
+    [_accessoryView release];
 	[_imageView release];
 	[_backgroundView release];
 	[_selectedBackgroundView release];
@@ -92,6 +120,9 @@ extern CGFloat _UITableViewDefaultRowHeight;
 
 - (void)layoutSubviews
 {
+    // TODO -- detailTextLabel
+    // TODO -- accessoryView
+    
 	[super layoutSubviews];
 
 	CGRect bounds = self.bounds;

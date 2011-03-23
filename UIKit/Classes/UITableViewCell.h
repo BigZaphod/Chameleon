@@ -69,9 +69,11 @@ typedef enum {
 	UITableViewCellSeparator *_seperatorView;
 	UIView *_contentView;
 	UILabel *_textLabel;
+    UILabel *_detailTextLabel;
 	UIImageView *_imageView;
 	UIView *_backgroundView;
 	UIView *_selectedBackgroundView;
+    UIView *_accessoryView;
 	UITableViewCellAccessoryType _accessoryType;
 	UITableViewCellAccessoryType _editingAccessoryType;
 	UITableViewCellSelectionStyle _selectionStyle;
@@ -88,11 +90,13 @@ typedef enum {
 
 @property (nonatomic, readonly, retain) UIView *contentView;
 @property (nonatomic, readonly, retain) UILabel *textLabel;
+@property (nonatomic, readonly, retain) UILabel *detailTextLabel;
 @property (nonatomic, readonly, retain) UIImageView *imageView;
 @property (nonatomic, retain) UIView *backgroundView;
 @property (nonatomic, retain) UIView *selectedBackgroundView;
 @property (nonatomic) UITableViewCellSelectionStyle selectionStyle;
 @property (nonatomic) NSInteger indentationLevel;
+@property (nonatomic, retain) UIView *accessoryView;
 @property (nonatomic) UITableViewCellAccessoryType accessoryType;
 @property (nonatomic) UITableViewCellAccessoryType editingAccessoryType;
 @property (nonatomic, getter=isSelected) BOOL selected;

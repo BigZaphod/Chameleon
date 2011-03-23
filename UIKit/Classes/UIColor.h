@@ -59,6 +59,7 @@
 + (UIColor *)purpleColor;
 + (UIColor *)brownColor;
 + (UIColor *)clearColor;
++ (UIColor *)groupTableViewBackgroundColor;
 
 - (id)initWithWhite:(CGFloat)white alpha:(CGFloat)alpha;
 - (id)initWithHue:(CGFloat)hue saturation:(CGFloat)saturation brightness:(CGFloat)brightness alpha:(CGFloat)alpha;
