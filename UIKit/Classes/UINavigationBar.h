@@ -39,6 +39,13 @@
 - (void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item;
 @end
 
+typedef enum {
+  UIBarStyleDefault          = 0,
+  UIBarStyleBlack            = 1,
+  UIBarStyleBlackOpaque      = 1, // deprecated
+  UIBarStyleBlackTranslucent = 2, // deprecated
+} UIBarStyle;
+
 @interface UINavigationBar : UIView {
 @private
 	NSMutableArray *_navStack;
@@ -67,6 +74,7 @@
 - (void)pushNavigationItem:(UINavigationItem *)item animated:(BOOL)animated;
 - (UINavigationItem *)popNavigationItemAnimated:(BOOL)animated;
 
+@property (nonatomic, assign) UIBarStyle barStyle;
 @property (nonatomic, retain) UIColor *tintColor;
 @property (nonatomic, readonly, retain) UINavigationItem *topItem;
 @property (nonatomic, readonly, retain) UINavigationItem *backItem;
