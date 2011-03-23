@@ -114,6 +114,7 @@ typedef enum {
 @property (nonatomic) BOOL delaysContentTouches;	// no effect
 @property (nonatomic) BOOL canCancelContentTouches; // no effect
 @property (nonatomic, readonly, getter=isDragging) BOOL dragging;
+@property (nonatomic, readonly, getter=isTracking) BOOL tracking; // always returns NO
 @property (nonatomic, readonly, getter=isDecelerating) BOOL decelerating;	// always returns NO
 @property (nonatomic, assign) BOOL pagingEnabled;
 
