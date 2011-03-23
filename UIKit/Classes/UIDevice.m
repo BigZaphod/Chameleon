@@ -98,3 +98,6 @@ static UIDevice *theDevice;
 }
 
 @end
+
+// will not be sended on mac
+NSString *const UIDeviceOrientationDidChangeNotification = @"UIDeviceOrientationDidChangeNotification";

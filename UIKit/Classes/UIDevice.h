@@ -64,5 +64,6 @@ typedef enum {
 @property (nonatomic, readonly, retain) NSString *model;
 @property (nonatomic, readonly, retain) NSString *uniqueIdentifier;
 
-
 @end
+
+NSString *const UIDeviceOrientationDidChangeNotification;
