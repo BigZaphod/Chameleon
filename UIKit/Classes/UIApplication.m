@@ -437,3 +437,13 @@ static BOOL TouchIsActive(UITouch *touch)
 }
 
 @end
+
+NSString *const UIApplicationDidReceiveMemoryWarningNotification = @"UIApplicationDidReceiveMemoryWarningNotification";
+
+@implementation UIApplication(UIApplicationDeprecated)
+
+- (void)setStatusBarHidden:(BOOL)hidden animated:(BOOL)animated {
+ // stub
+}
+
+@end
