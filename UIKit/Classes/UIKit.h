@@ -94,3 +94,5 @@
 #import "UIPinchGestureRecognizer.h"
 #import "UIRotationGestureRecognizer.h"
 #import "UISwipeGestureRecognizer.h"
+#import "UIPickerView.h"
+#import "UIDatePicker.h"
