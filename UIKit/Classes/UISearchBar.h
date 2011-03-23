@@ -40,8 +40,35 @@
 
 @interface UISearchBar : UIView {
   UITextField *_searchField;
+  BOOL _showsCancelButton;
+  __weak id<UISearchBarDelegate> _delegate;
+  NSString *_placeholder;
 }
 
 @property (nonatomic, copy) NSString *text;
+@property(nonatomic,assign) id<UISearchBarDelegate> delegate;              // weak reference. default is
+@property(nonatomic)        BOOL                    showsCancelButton;     // default is NO
+@property(nonatomic,copy)   NSString               *placeholder;           // default is nil
+
+@end
+
+
+@protocol UISearchBarDelegate <NSObject>
+
+@optional
+
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar;
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar;
+- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar;
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar;
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText;
+- (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar;
+- (void)searchBarBookmarkButtonClicked:(UISearchBar *)searchBar;
+- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
+- (void)searchBarResultsListButtonClicked:(UISearchBar *)searchBar;
+
+- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope;
 
 @end
