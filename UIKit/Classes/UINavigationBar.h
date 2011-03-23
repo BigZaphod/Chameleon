@@ -40,6 +40,13 @@
 - (void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item;
 @end
 
+typedef enum {
+  UIBarStyleDefault          = 0,
+  UIBarStyleBlack            = 1,
+  UIBarStyleBlackOpaque      = 1, // deprecated
+  UIBarStyleBlackTranslucent = 2, // deprecated
+} UIBarStyle;
+
 @interface UINavigationBar : UIView {
 @private
 	NSMutableArray *_navStack;
