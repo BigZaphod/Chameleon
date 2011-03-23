@@ -80,6 +80,7 @@ typedef enum {
 	BOOL _editing;
 	BOOL _selected;
 	BOOL _highlighted;
+    BOOL _showingDeleteConfirmation;
 	NSString *_reuseIdentifier;
 }
 
@@ -100,7 +101,8 @@ typedef enum {
 @property (nonatomic) UITableViewCellAccessoryType editingAccessoryType;
 @property (nonatomic, getter=isSelected) BOOL selected;
 @property (nonatomic, getter=isHighlighted) BOOL highlighted;
-@property(nonatomic,getter=isEditing) BOOL editing; // not implemented
+@property (nonatomic, getter=isEditing) BOOL editing; // not yet implemented
+@property (nonatomic, readonly) BOOL showingDeleteConfirmation;  // not yet implemented
 @property (nonatomic, readonly, copy) NSString *reuseIdentifier;
 
 @end
