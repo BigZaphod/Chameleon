@@ -236,6 +236,7 @@
 		701B7B6B133A84C900811260 /* UIPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 701B7B69133A84C900811260 /* UIPickerView.m */; };
 		701B7B6F133A884300811260 /* UIDatePicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 701B7B6D133A884200811260 /* UIDatePicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		701B7B70133A884300811260 /* UIDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 701B7B6E133A884200811260 /* UIDatePicker.m */; };
+		703A6F01133AA3120084647F /* UIInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 703A6F00133AA3100084647F /* UIInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -473,6 +474,7 @@
 		701B7B69133A84C900811260 /* UIPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPickerView.m; sourceTree = "<group>"; };
 		701B7B6D133A884200811260 /* UIDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDatePicker.h; sourceTree = "<group>"; };
 		701B7B6E133A884200811260 /* UIDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIDatePicker.m; sourceTree = "<group>"; };
+		703A6F00133AA3100084647F /* UIInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIInterface.h; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* UIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -701,6 +703,7 @@
 				701B7B69133A84C900811260 /* UIPickerView.m */,
 				701B7B6D133A884200811260 /* UIDatePicker.h */,
 				701B7B6E133A884200811260 /* UIDatePicker.m */,
+				703A6F00133AA3100084647F /* UIInterface.h */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -880,6 +883,7 @@
 				38615C6A133A54DF00841EEA /* UINSCellControl.h in Headers */,
 				701B7B6A133A84C900811260 /* UIPickerView.h in Headers */,
 				701B7B6F133A884300811260 /* UIDatePicker.h in Headers */,
+				703A6F01133AA3120084647F /* UIInterface.h in Headers */,
 				148985AF12EE2CFF003D4751 /* UINavigationBar.h in Headers */,
 				148985B112EE2CFF003D4751 /* UINavigationController.h in Headers */,
 				148985B312EE2CFF003D4751 /* UINavigationItem.h in Headers */,

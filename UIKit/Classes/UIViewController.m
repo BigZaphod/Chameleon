@@ -35,6 +35,7 @@
 #import "UINavigationController.h"
 #import "UISplitViewController.h"
 #import "UIToolbar.h"
+#import "UIScreen.h"
 
 @implementation UIViewController
 @synthesize view=_view, wantsFullScreenLayout=_wantsFullScreenLayout, title=_title, contentSizeForViewInPopover=_contentSizeForViewInPopover;
@@ -199,7 +200,10 @@
 		UIView *newView = _modalViewController.view;
 
 		newView.autoresizingMask = selfView.autoresizingMask;
-		newView.frame = _wantsFullScreenLayout? window.screen.bounds : window.screen.applicationFrame;
+        // ??? LLVM thinks window is an NSWindow?
+        // ??? LLVM thinks screen is an NSScreen?
+        UIScreen *screen = window.screen;
+		newView.frame = _wantsFullScreenLayout? screen.bounds : screen.applicationFrame;
 
 		[window addSubview:newView];
 		[_modalViewController viewWillAppear:animated];

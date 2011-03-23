@@ -28,6 +28,7 @@
  */
 
 #import "UIView.h"
+#import "UIInterface.h"
 
 @class UIColor, UINavigationItem, UINavigationBar;
 
@@ -61,6 +62,8 @@
 		unsigned reloadItem : 1;
 		unsigned __RESERVED__ : 31;
 	} _navigationBarFlags;
+    
+    UIBarStyle _barStyle;
 }
 
 - (void)setItems:(NSArray *)items animated:(BOOL)animated;
@@ -72,5 +75,6 @@
 @property (nonatomic, readonly, retain) UINavigationItem *backItem;
 @property (nonatomic, copy) NSArray *items;
 @property (nonatomic, assign) id delegate;
+@property (nonatomic, assign) UIBarStyle barStyle;
 
 @end
