@@ -141,6 +141,9 @@ const NSTimeInterval UIMinimumKeepAliveTimeout;
 @property (nonatomic) NSInteger applicationIconBadgeNumber;                 // no effect, but does set/get the number correctly
 @property (nonatomic, copy) NSArray *scheduledLocalNotifications;           // no effect, returns nil
 
+@property (nonatomic, readonly) UIApplicationState applicationState;
+@property (nonatomic, readonly) NSTimeInterval backgroundTimeRemaining;
+
 @end
 
 
