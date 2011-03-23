@@ -75,5 +75,6 @@
 @property (nonatomic) NSInteger destructiveButtonIndex;
 @property (nonatomic) NSInteger cancelButtonIndex;
 @property (nonatomic, readonly) NSInteger firstOtherButtonIndex;
+@property (nonatomic, readonly) NSInteger numberOfButtons;
 
 @end
