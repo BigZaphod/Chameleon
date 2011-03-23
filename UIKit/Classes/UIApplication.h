@@ -128,6 +128,9 @@ const NSTimeInterval UIMinimumKeepAliveTimeout;
 @property(nonatomic) UIStatusBarStyle statusBarStyle; // does not change on mac os
 - (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle animated:(BOOL)animated;  // does not change on mac os
 
+@property (nonatomic, readonly) UIApplicationState applicationState;
+@property (nonatomic, readonly) NSTimeInterval backgroundTimeRemaining;
+
 @end
 
 NSString *const UIApplicationDidReceiveMemoryWarningNotification;
