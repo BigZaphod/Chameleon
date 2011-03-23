@@ -159,7 +159,9 @@
 		}
 		
 		shouldStartLoad = [_delegate webView:self shouldStartLoadWithRequest:request navigationType:navType];
-	}
+	} else {
+        shouldStartLoad = YES;
+    }
 	
 	if (shouldStartLoad) {
 		[listener use];
