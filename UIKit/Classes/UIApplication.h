@@ -51,6 +51,12 @@ extern NSString *const UIApplicationLaunchOptionsLocationKey;
 extern NSString *const UITrackingRunLoopMode;
 
 typedef enum {
+  UIStatusBarStyleDefault,
+  UIStatusBarStyleBlackTranslucent,
+  UIStatusBarStyleBlackOpaque
+} UIStatusBarStyle;
+
+typedef enum {
 	UIInterfaceOrientationPortrait           = UIDeviceOrientationPortrait,
 	UIInterfaceOrientationPortraitUpsideDown = UIDeviceOrientationPortraitUpsideDown,
 	UIInterfaceOrientationLandscapeLeft      = UIDeviceOrientationLandscapeRight,
