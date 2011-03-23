@@ -55,6 +55,12 @@
 		BOOL shouldPopItem : 1;
 		BOOL didPopItem : 1;
 	} _delegateHas;
+	
+	// ideally this should share the same memory as the above flags structure...
+	struct {
+		unsigned reloadItem : 1;
+		unsigned __RESERVED__ : 31;
+	} _navigationBarFlags;
 }
 
 - (void)setItems:(NSArray *)items animated:(BOOL)animated;

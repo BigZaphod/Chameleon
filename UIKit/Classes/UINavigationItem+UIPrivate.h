@@ -1,3 +1,9 @@
+//
+//  UINavigationItem+UIPrivate.h
+//  UIKit
+//
+//  Created by Jim Dovey on 11-03-22.
+//
 /*
  * Copyright (c) 2011, The Iconfactory. All rights reserved.
  *
@@ -27,33 +33,11 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <Foundation/Foundation.h>
+#import "UINavigationItem.h"
 
-@class UIBarButtonItem, UIView, UINavigationBar;
+@class UINavigationBar;
 
-@interface UINavigationItem : NSObject {
-@private
-	NSString *_title;
-	NSString *_prompt;
-	UIBarButtonItem *_backBarButtonItem;
-	UIBarButtonItem *_leftBarButtonItem;
-	UIBarButtonItem *_rightBarButtonItem;
-	UIView *_titleView;
-	BOOL _hidesBackButton;
-	UINavigationBar *_navigationBar;
-}
-
-- (id)initWithTitle:(NSString *)title;
-- (void)setLeftBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated;
-- (void)setRightBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated;
-- (void)setHidesBackButton:(BOOL)hidesBackButton animated:(BOOL)animated;
-
-@property (nonatomic, copy) NSString *title;
-@property (nonatomic, copy) NSString *prompt;
-@property (nonatomic, retain) UIBarButtonItem *backBarButtonItem;
-@property (nonatomic, retain) UIBarButtonItem *leftBarButtonItem;
-@property (nonatomic, retain) UIBarButtonItem *rightBarButtonItem;
-@property (nonatomic, retain) UIView *titleView;
-@property (nonatomic, assign) BOOL hidesBackButton;
-
+@interface UINavigationItem (UIPrivate)
+- (void)_setNavigationBar:(UINavigationBar *)navigationBar;
+- (UINavigationBar *)_navigationBar;
 @end
