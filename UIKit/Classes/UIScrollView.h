@@ -84,9 +84,11 @@ typedef enum {
 		BOOL scrollViewWillBeginZooming : 1;
 		BOOL scrollViewDidEndZooming : 1;
 		BOOL scrollViewDidZoom : 1;
-        BOOL alwaysBounceHorizontal:1;
-        BOOL alwaysBounceVertical:1;
-	} _delegateCan;	
+	} _delegateCan;
+
+  // should be flag struct
+  BOOL alwaysBounceHorizontal;
+  BOOL alwaysBounceVertical;
 }
 
 - (void)scrollRectToVisible:(CGRect)rect animated:(BOOL)animated;
