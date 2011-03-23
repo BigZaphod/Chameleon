@@ -32,7 +32,6 @@
 #import "UIView.h"
 #import "UITouch.h"
 #import "UIColor.h"
-#import "UIScreen.h"
 #import "UIResponderAppKitIntegration.h"
 #import <AppKit/NSCursor.h>
 
@@ -202,7 +201,7 @@ static const CGFloat SplitterPadding = 3;
 
 - (void)loadView
 {
-	self.view = [[[_UISplitViewControllerView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame] autorelease];
+	self.view = [[[_UISplitViewControllerView alloc] initWithFrame:CGRectMake(0,0,1024,768)] autorelease];
 	self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 

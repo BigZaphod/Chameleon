@@ -1,3 +1,9 @@
+//
+//  UINSCellControl.h
+//  UIKit
+//
+//  Created by Jim Dovey on 11-03-23.
+//
 /*
  * Copyright (c) 2011, The Iconfactory. All rights reserved.
  *
@@ -27,69 +33,24 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UITableViewController.h"
+#import <Foundation/Foundation.h>
+#import "UIControl.h"
 
-@implementation UITableViewController
-@synthesize clearsSelectionOnViewWillAppear=_clearsSelectionOnViewWillAppear;
+@class NSCell, UIImage, UIFont;
 
-- (id)init
-{
-	return [self initWithStyle:UITableViewStylePlain];
+@interface UINSCellControl : UIControl {
+@private
+    NSCell *		_cell;
 }
 
-- (id)initWithStyle:(UITableViewStyle)theStyle
-{
-	if ((self=[super initWithNibName:nil bundle:nil])) {
-		_style = theStyle;
-	}
-	return self;
-}
++ (UINSCellControl *)checkboxWithFrame:(CGRect)frame;
 
-- (void)loadView
-{
-	self.tableView = [[[UITableView alloc] initWithFrame:CGRectMake(0,0,320,480) style:_style] autorelease];
-	self.tableView.delegate = self;
-	self.tableView.dataSource = self;
-}
+- (id)initWithFrame:(CGRect)frame cell:(NSCell *)cell;
 
-- (UITableView *)tableView
-{
-	return (UITableView *)self.view;
-}
+@property (nonatomic, readonly) NSCell * cell;
 
-- (void)setTableView:(UITableView *)theTableView
-{
-	self.view = theTableView;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
-
-	if (!_hasReloaded) {
-		[self.tableView reloadData];
-		_hasReloaded = YES;
-	}
-	
-	if (_clearsSelectionOnViewWillAppear) {
-		[self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:animated];
-	}
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-	[super viewDidAppear:animated];
-	[self.tableView flashScrollIndicators];
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-	return 0;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	return nil;
-}
+@property (nonatomic, copy) NSString * title;
+@property (nonatomic, copy) UIImage * image;
+@property (nonatomic, copy) UIFont * font;
 
 @end
