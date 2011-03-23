@@ -40,7 +40,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 @synthesize contentView=_contentView, accessoryType=_accessoryType, textLabel=_textLabel, selectionStyle=_selectionStyle, indentationLevel=_indentationLevel;
 @synthesize imageView=_imageView, editingAccessoryType=_editingAccessoryType, selected=_selected, backgroundView=_backgroundView;
 @synthesize selectedBackgroundView=_selectedBackgroundView, highlighted=_highlighted, reuseIdentifier=_reuseIdentifier;
-@synthesize editing = _editing;
+@synthesize editing = _editing, detailTextLabel = _detailTextLabel;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -84,6 +84,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	[_seperatorView release];
 	[_contentView release];
 	[_textLabel release];
+    [_detailTextLabel release];
 	[_imageView release];
 	[_backgroundView release];
 	[_selectedBackgroundView release];
