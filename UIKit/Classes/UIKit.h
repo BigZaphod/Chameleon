@@ -107,3 +107,18 @@
 
 // AudioToolbox-Helper
 #define kSystemSoundID_Vibrate kSystemSoundID_UserPreferredAlert
+
+// SystemConfiguration-Helper
+#define kSCNetworkReachabilityFlagsIsWWAN kSCNetworkReachabilityFlagsConnectionOnDemand
+
+// stubs
+#import <Quartz/Quartz.h>
+@interface CALayer (UIKitExtensions)
+- (CGFloat)contentsScale;
+- (void)setContentsScale:(CGFloat)newContentsScale;
+@end
+
+@implementation CALayer (UIKitExtensions)
+- (CGFloat)contentsScale { return 1.0; }
+- (void)setContentsScale:(CGFloat)newContentsScale {}
+@end
