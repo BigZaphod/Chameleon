@@ -249,7 +249,7 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 
 - (BOOL)hasText
 {
-  return [_textLayer.text count] > 0;
+  return [_textLayer.text length] > 0;
 }
 
 
