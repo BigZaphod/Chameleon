@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		388BF77C133977F6006EC779 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 388BF77B133977F6006EC779 /* UIKit.framework */; };
 		388BF77F13397877006EC779 /* ChameleonAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 388BF77E13397877006EC779 /* ChameleonAppDelegate.m */; };
 		388BF782133978CB006EC779 /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 388BF781133978CB006EC779 /* TestViewController.m */; };
 		38E523C61339731100E041B3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38E523C51339731100E041B3 /* Cocoa.framework */; };
@@ -16,6 +15,8 @@
 		38E523D61339731100E041B3 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 38E523D41339731100E041B3 /* Credits.rtf */; };
 		38E523D91339731100E041B3 /* NavBarUpdatesAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E523D81339731100E041B3 /* NavBarUpdatesAppDelegate.m */; };
 		38E523DC1339731100E041B3 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38E523DA1339731100E041B3 /* MainMenu.xib */; };
+		F4556120133A5D3B0021B1A6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3825F4661339775C005A267D /* UIKit.framework */; };
+		F455612E133A5D830021B1A6 /* UIKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 3825F4661339775C005A267D /* UIKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,11 +27,31 @@
 			remoteGlobalIDString = 8DC2EF5B0486A6940098B216;
 			remoteInfo = UIKit;
 		};
+		F455611A133A5CE00021B1A6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3825F4611339775C005A267D /* UIKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216 /* UIKit */;
+			remoteInfo = UIKit;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		F4556131133A5DA10021B1A6 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				F455612E133A5D830021B1A6 /* UIKit.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		3825F4611339775C005A267D /* UIKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = UIKit.xcodeproj; path = ../../UIKit/UIKit.xcodeproj; sourceTree = "<group>"; };
-		388BF77B133977F6006EC779 /* UIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		388BF77D13397877006EC779 /* ChameleonAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChameleonAppDelegate.h; sourceTree = "<group>"; };
 		388BF77E13397877006EC779 /* ChameleonAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChameleonAppDelegate.m; sourceTree = "<group>"; };
 		388BF780133978CB006EC779 /* TestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestViewController.h; sourceTree = "<group>"; };
@@ -55,8 +76,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F4556120133A5D3B0021B1A6 /* UIKit.framework in Frameworks */,
 				38E523C61339731100E041B3 /* Cocoa.framework in Frameworks */,
-				388BF77C133977F6006EC779 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,7 +114,6 @@
 			isa = PBXGroup;
 			children = (
 				38E523C51339731100E041B3 /* Cocoa.framework */,
-				388BF77B133977F6006EC779 /* UIKit.framework */,
 				38E523C71339731100E041B3 /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -146,10 +166,12 @@
 				38E523BD1339731100E041B3 /* Sources */,
 				38E523BE1339731100E041B3 /* Frameworks */,
 				38E523BF1339731100E041B3 /* Resources */,
+				F4556131133A5DA10021B1A6 /* Copy Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				F455611B133A5CE00021B1A6 /* PBXTargetDependency */,
 			);
 			name = NavBarUpdates;
 			productName = NavBarUpdates;
@@ -224,6 +246,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		F455611B133A5CE00021B1A6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = UIKit;
+			targetProxy = F455611A133A5CE00021B1A6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		38E523CE1339731100E041B3 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
@@ -289,6 +319,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../build/Debug\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -305,6 +339,10 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../build/Debug\"",
+				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NavBarUpdates/NavBarUpdates-Prefix.pch";
