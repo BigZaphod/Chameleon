@@ -27,6 +27,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import "UIStringDrawing.h"
 #import "UIScrollView.h"
 #import "UIDataDetectors.h"
 #import "UITextInputTraits.h"
@@ -47,12 +48,6 @@ extern NSString *const UITextViewTextDidEndEditingNotification;
 - (void)textViewDidChange:(UITextView *)textView;
 - (void)textViewDidChangeSelection:(UITextView *)textView;
 @end
-
-typedef enum {
-  UITextAlignmentLeft,
-  UITextAlignmentCenter,
-  UITextAlignmentRight,
-} UITextAlignment;
 
 @interface UITextView : UIScrollView <UITextInputTraits> {
 @private
