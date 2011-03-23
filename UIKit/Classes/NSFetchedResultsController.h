@@ -33,9 +33,11 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+//#ifdef NSCoreDataVersionNumber10_5
 @protocol NSFetchedResultsControllerDelegate;
 
 @class NSFetchRequest;
@@ -110,3 +112,5 @@ typedef NSUInteger NSFetchedResultsChangeType;
 - (NSString *)controller:(NSFetchedResultsController *)controller sectionIndexTitleForSectionName:(NSString *)sectionName;
 
 @end
+
+//#endif

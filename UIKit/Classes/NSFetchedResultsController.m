@@ -34,6 +34,9 @@
  */
 
 #import "NSFetchedResultsController.h"
+
+//#ifdef NSCoreDataVersionNumber10_5
+
 #import "NSIndexPath+UITableView.h"
 
 @implementation NSFetchedResultsController
@@ -101,7 +104,6 @@
   return 0;
 }
 
-
-
-
 @end
+
+//#endif

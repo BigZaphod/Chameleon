@@ -98,3 +98,6 @@
 #import "UIRotationGestureRecognizer.h"
 #import "UISwipeGestureRecognizer.h"
 #import "UINSCellControl.h"		// non standard
+
+// only add if core data is included
+#import "NSFetchedResultsController.h"

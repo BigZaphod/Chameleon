@@ -235,7 +235,7 @@
 		7806ED2A133A1D7500273BC6 /* UITabBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 7806ED28133A1D7500273BC6 /* UITabBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7806ED2B133A1D7500273BC6 /* UITabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7806ED29133A1D7500273BC6 /* UITabBar.m */; };
 		789CF671133A34BC00250AB4 /* UITabBar.m in Headers */ = {isa = PBXBuildFile; fileRef = 7806ED29133A1D7500273BC6 /* UITabBar.m */; settings = {ATTRIBUTES = (Public, ); }; };
-		789CF898133A3CD500250AB4 /* NSFetchedResultsController.h in Headers */ = {isa = PBXBuildFile; fileRef = 789CF896133A3CD500250AB4 /* NSFetchedResultsController.h */; };
+		789CF898133A3CD500250AB4 /* NSFetchedResultsController.h in Headers */ = {isa = PBXBuildFile; fileRef = 789CF896133A3CD500250AB4 /* NSFetchedResultsController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		789CF899133A3CD500250AB4 /* NSFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 789CF897133A3CD500250AB4 /* NSFetchedResultsController.m */; };
 		78CB48AC133A9C51008636DA /* UISearchBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 78CB48AA133A9C51008636DA /* UISearchBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		78CB48AD133A9C51008636DA /* UISearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CB48AB133A9C51008636DA /* UISearchBar.m */; };
@@ -813,6 +813,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				789CF898133A3CD500250AB4 /* NSFetchedResultsController.h in Headers */,
 				14CC840611EFA8AF005988CC /* UIRoundedRectButton.h in Headers */,
 				14A726D21213303400648C9B /* UIApplication+UIPrivate.h in Headers */,
 				14A726D41213303400648C9B /* UIControl+UIPrivate.h in Headers */,
@@ -935,7 +936,6 @@
 				38E523B11339680400E041B3 /* UINavigationItem+UIPrivate.h in Headers */,
 				38E523B513396B5B00E041B3 /* UINavigationBar+UIPrivate.h in Headers */,
 				38615C78133A81B900841EEA /* UIFont+UIPrivate.h in Headers */,
-				789CF898133A3CD500250AB4 /* NSFetchedResultsController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1015,6 +1015,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				789CF899133A3CD500250AB4 /* NSFetchedResultsController.m in Sources */,
 				78CB48AD133A9C51008636DA /* UISearchBar.m in Sources */,
 				14CC840711EFA8AF005988CC /* UIRoundedRectButton.m in Sources */,
 				14FA8C60121DA4A000C4264B /* UINinePartImage.m in Sources */,
@@ -1107,7 +1108,6 @@
 				1489860B12EE2DDC003D4751 /* UIPanGestureRecognizer.m in Sources */,
 				38615C6B133A54DF00841EEA /* UINSCellControl.m in Sources */,
 				7806ED2B133A1D7500273BC6 /* UITabBar.m in Sources */,
-				789CF899133A3CD500250AB4 /* NSFetchedResultsController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
