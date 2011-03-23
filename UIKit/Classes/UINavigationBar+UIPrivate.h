@@ -36,5 +36,5 @@
 #import "UINavigationBar.h"
 
 @interface UINavigationBar (UIPrivate)
-- (void) _updateNavigationItem: (UINavigationItem *) item animated: (BOOL) animated;
+- (void)_updateNavigationItem:(UINavigationItem *)item animated:(BOOL)animated;
 @end

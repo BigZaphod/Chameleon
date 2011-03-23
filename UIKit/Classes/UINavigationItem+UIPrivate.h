@@ -38,6 +38,6 @@
 @class UINavigationBar;
 
 @interface UINavigationItem (UIPrivate)
-- (void) _setNavigationBar: (UINavigationBar *) navigationBar;
-- (UINavigationBar *) _navigationBar;
+- (void)_setNavigationBar:(UINavigationBar *)navigationBar;
+- (UINavigationBar *)_navigationBar;
 @end
