@@ -87,6 +87,7 @@
 #import "UISplitViewController.h"
 #import "UITabBarController.h"
 #import "UISwitch.h"
+#import "UISlider.h"
 #import "UIAcceleration.h"
 #import "UIAccelerometer.h"
 #import "UIMenuController.h"
