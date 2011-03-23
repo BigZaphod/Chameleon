@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		147D65B8133918320065FE3B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 147D65B7133918320065FE3B /* UIKit.framework */; };
-		147D65BB133918520065FE3B /* UIKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 147D65B7133918320065FE3B /* UIKit.framework */; };
 		14EEFA8812DFB42A00EB7D95 /* BigAppleAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 14EEFA8712DFB42A00EB7D95 /* BigAppleAppDelegate.m */; };
 		14EEFB1612DFB54100EB7D95 /* ChameleonAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 14EEFB1512DFB54100EB7D95 /* ChameleonAppDelegate.m */; };
 		14EEFB3D12DFB7C900EB7D95 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 14EEFB3C12DFB7C900EB7D95 /* Default-Landscape.png */; };
 		14EEFB5F12DFB99800EB7D95 /* apple.png in Resources */ = {isa = PBXBuildFile; fileRef = 14EEFB5E12DFB99800EB7D95 /* apple.png */; };
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
+		4CD1A1A41339F9FE0053E6AD /* UIKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 147D65B0133917A30065FE3B /* UIKit.framework */; };
+		4CD1A1A51339FA040053E6AD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 147D65B0133917A30065FE3B /* UIKit.framework */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -27,6 +27,13 @@
 			remoteGlobalIDString = 8DC2EF5B0486A6940098B216;
 			remoteInfo = UIKit;
 		};
+		4CD19E3E1339F3350053E6AD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 147D65A8133917A20065FE3B /* UIKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
+			remoteInfo = UIKit;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,7 +43,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				147D65BB133918520065FE3B /* UIKit.framework in Copy Frameworks */,
+				4CD1A1A41339F9FE0053E6AD /* UIKit.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -48,7 +55,6 @@
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		147D65A8133917A20065FE3B /* UIKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = UIKit.xcodeproj; path = ../../UIKit/UIKit.xcodeproj; sourceTree = "<group>"; };
-		147D65B7133918320065FE3B /* UIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		14EEFA8612DFB42A00EB7D95 /* BigAppleAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigAppleAppDelegate.h; sourceTree = "<group>"; };
 		14EEFA8712DFB42A00EB7D95 /* BigAppleAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BigAppleAppDelegate.m; sourceTree = "<group>"; };
 		14EEFB1412DFB54100EB7D95 /* ChameleonAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChameleonAppDelegate.h; sourceTree = "<group>"; };
@@ -70,7 +76,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
-				147D65B8133918320065FE3B /* UIKit.framework in Frameworks */,
+				4CD1A1A51339FA040053E6AD /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,7 +103,6 @@
 		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				147D65B7133918320065FE3B /* UIKit.framework */,
 				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
 				13E42FB307B3F0F600E4EEF1 /* CoreData.framework */,
 				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
@@ -189,6 +194,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				4CD19E3F1339F3350053E6AD /* PBXTargetDependency */,
 			);
 			name = BigApple;
 			productInstallPath = "$(HOME)/Applications";
@@ -263,6 +269,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		4CD19E3F1339F3350053E6AD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = UIKit;
+			targetProxy = 4CD19E3E1339F3350053E6AD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
@@ -291,6 +305,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../../build/$(CONFIGURATION)\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -312,6 +327,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../../build/$(CONFIGURATION)\"",
 				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
