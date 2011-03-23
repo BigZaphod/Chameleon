@@ -114,5 +114,5 @@ typedef enum {
 NSString *const UIApplicationDidReceiveMemoryWarningNotification;
 
 @interface UIApplication(UIApplicationDeprecated)
-- (void)setStatusBarHidden:(BOOL)hidden animated:(BOOL)animated; // use -setStatusBarHidden:withAnimation:
+- (void)setStatusBarHidden:(BOOL)hidden animated:(BOOL)animated __attribute__((deprecated)); // use -setStatusBarHidden:withAnimation:
 @end
