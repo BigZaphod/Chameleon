@@ -49,6 +49,12 @@ extern NSString *const UIKeyboardFrameEndUserInfoKey;
 extern NSString *const UIKeyboardAnimationDurationUserInfoKey;
 extern NSString *const UIKeyboardAnimationCurveUserInfoKey;
 
+// deprecated
+extern NSString *const UIKeyboardCenterBeginUserInfoKey;
+extern NSString *const UIKeyboardCenterEndUserInfoKey;
+extern NSString *const UIKeyboardBoundsUserInfoKey;
+
+
 @class UIScreen;
 
 @interface UIWindow : UIView {
