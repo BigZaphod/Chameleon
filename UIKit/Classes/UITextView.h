@@ -49,12 +49,6 @@ extern NSString *const UITextViewTextDidEndEditingNotification;
 - (void)textViewDidChangeSelection:(UITextView *)textView;
 @end
 
-typedef enum {
-  UITextAlignmentLeft,
-  UITextAlignmentCenter,
-  UITextAlignmentRight,
-} UITextAlignment;
-
 @interface UITextView : UIScrollView <UITextInputTraits> {
 @private
 	UITextLayer *_textLayer;
