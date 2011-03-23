@@ -64,3 +64,9 @@ extern NSString *const UIMenuControllerMenuFrameDidChangeNotification;
 @property (nonatomic, readonly) CGRect menuFrame;
 
 @end
+
+NSString *const UIMenuControllerWillShowMenuNotification;
+NSString *const UIMenuControllerDidShowMenuNotification;
+NSString *const UIMenuControllerWillHideMenuNotification;
+NSString *const UIMenuControllerDidHideMenuNotification;
+NSString *const UIMenuControllerMenuFrameDidChangeNotification;
