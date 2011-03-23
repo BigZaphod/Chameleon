@@ -29,6 +29,7 @@
 
 #import "UIViewController.h"
 #import "UIView+UIPrivate.h"
+#import "UIScreen.h"
 #import "UIWindow.h"
 #import "UIScreen.h"
 #import "UINavigationItem.h"
