@@ -84,6 +84,8 @@ typedef enum {
 		BOOL scrollViewWillBeginZooming : 1;
 		BOOL scrollViewDidEndZooming : 1;
 		BOOL scrollViewDidZoom : 1;
+        BOOL alwaysBounceHorizontal:1;
+        BOOL alwaysBounceVertical:1;
 	} _delegateCan;	
 }
 
@@ -102,6 +104,8 @@ typedef enum {
 @property (nonatomic) UIScrollViewIndicatorStyle indicatorStyle;
 @property (nonatomic) BOOL showsHorizontalScrollIndicator;
 @property (nonatomic) BOOL showsVerticalScrollIndicator;
+@property (nonatomic) BOOL alwaysBounceVertical;   // stub
+@property (nonatomic) BOOL alwaysBounceHorizontal; // stub
 @property (nonatomic, getter=isScrollEnabled) BOOL scrollEnabled;
 @property (nonatomic, assign) id<UIScrollViewDelegate> delegate;
 @property (nonatomic) BOOL scrollsToTop;			// no effect
