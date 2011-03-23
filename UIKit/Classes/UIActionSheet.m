@@ -32,6 +32,7 @@
 #import "UIScreenAppKitIntegration.h"
 #import "UIKitView.h"
 #import "UIApplication+UIPrivate.h"
+#import "UIBarButtonItem.h"
 #import <AppKit/NSMenu.h>
 #import <AppKit/NSMenuItem.h>
 #import <AppKit/NSEvent.h>
@@ -279,6 +280,19 @@
 		[self _showFromPoint:CGPointMake(rect.origin.x+rect.size.width, rect.origin.y+rect.size.height) rightAligned:YES inView:view];
 	}
 }
+
+- (void)showFromToolbar:(UIToolbar *)view {
+  NSLog(@"not implemented");
+}
+
+- (void)showFromTabBar:(UITabBar *)view {
+  NSLog(@"not implemented");
+}
+
+- (void)showFromBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated {
+  NSLog(@"not implemented");
+}
+
 
 - (void)dismissWithClickedButtonIndex:(NSInteger)buttonIndex animated:(BOOL)animated
 {
