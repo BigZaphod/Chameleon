@@ -34,6 +34,11 @@
 
 NSMutableDictionary *imageCache = nil;
 
+// here to keep the compiler happy
+@interface UIImage ()
+- (id)initWithNSImage:(NSImage *)ns;
+@end
+
 @implementation UIImage (UIPrivate)
 
 + (void)load
@@ -72,6 +77,34 @@ NSMutableDictionary *imageCache = nil;
 + (UIImage *)_cachedImageForName:(NSString *)name
 {
 	return [imageCache objectForKey:name];
+}
+
++ (NSString *)_nameForCachedImage:(UIImage *)image
+{
+	__block NSString * result = nil;
+	[imageCache enumerateKeysAndObjectsUsingBlock: ^(id key, id obj, BOOL *stop) {
+		if ( obj == image ) {
+			result = [key copy];
+			*stop = YES;
+		}
+	}];
+	return [result autorelease];
+}
+
++ (UIImage *)_imageFromNSImage:(NSImage *)ns
+{
+	// if the NSImage isn't named, we can't optimize
+	if ([[ns name] length] == 0)
+		return [[[self alloc] initWithNSImage:ns] autorelease];
+	
+	// if it's named, we can cache a UIImage instance for it
+	UIImage *cached = [self _cachedImageForName:[ns name]];
+	if (cached == nil) {
+		cached = [[[self alloc] initWithNSImage:ns] autorelease];
+		[self _cacheImage:cached forName:[ns name]];
+	}
+	
+	return cached;
 }
 
 + (UIImage *)_frameworkImageWithName:(NSString *)name leftCapWidth:(NSUInteger)leftCapWidth topCapHeight:(NSUInteger)topCapHeight
