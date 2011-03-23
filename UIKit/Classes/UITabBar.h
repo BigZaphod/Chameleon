@@ -1,3 +1,9 @@
+//
+//  UITabBar.h
+//  UIKit
+//
+//  Created by Peter Steinberger on 23.03.11.
+//
 /*
  * Copyright (c) 2011, The Iconfactory. All rights reserved.
  *
@@ -27,37 +33,39 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIImage.h"
+#import "UIView.h"
 
-@class NSImage;
+@class UITabBar, UITabBarItem;
 
-@interface UIImage (UIPrivate)
-+ (NSString *)_macPathForFile:(NSString *)path;		// inserts "@mac" into the filename of the file in the given path and returns the result
-+ (NSString *)_pathForFile:(NSString *)path;		// uses above, checks for existence, if found, returns it otherwise returns the path string un-altered (doesn't verify that the file at the original path exists, though)
+@protocol UITabBarDelegate <NSObject>
+@optional
 
-+ (void)_cacheImage:(UIImage *)image forName:(NSString *)name;
-+ (NSString *)_nameForCachedImage:(UIImage *)image;
-+ (UIImage *)_cachedImageForName:(NSString *)name;
-+ (UIImage *)_backButtonImage;
-+ (UIImage *)_highlightedBackButtonImage;
-+ (UIImage *)_toolbarButtonImage;
-+ (UIImage *)_highlightedToolbarButtonImage;
-+ (UIImage *)_leftPopoverArrowImage;
-+ (UIImage *)_rightPopoverArrowImage;
-+ (UIImage *)_topPopoverArrowImage;
-+ (UIImage *)_bottomPopoverArrowImage;
-+ (UIImage *)_popoverBackgroundImage;
-+ (UIImage *)_roundedRectButtonImage;
-+ (UIImage *)_highlightedRoundedRectButtonImage;
-+ (UIImage *)_windowResizeGrabberImage;
-+ (UIImage *)_buttonBarSystemItemAdd;
-+ (UIImage *)_buttonBarSystemItemReply;
-+ (UIImage *)_tabBarBackgroundImage;
-+ (UIImage *)_tabBarItemImage;
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item;
 
-- (UIImage *)_toolbarImage;		// returns a new image which is modified as required for toolbar buttons (turned into a solid color)
-+ (UIImage *)_imageFromNSImage:(NSImage *)ns;
+// stub
+- (void)tabBar:(UITabBar *)tabBar willBeginCustomizingItems:(NSArray *)items;                     // called before customize sheet is shown. items is current item list
+- (void)tabBar:(UITabBar *)tabBar didBeginCustomizingItems:(NSArray *)items;                      // called after customize sheet is shown. items is current item list
+- (void)tabBar:(UITabBar *)tabBar willEndCustomizingItems:(NSArray *)items changed:(BOOL)changed; // called before customize sheet is hidden. items is new item list
+- (void)tabBar:(UITabBar *)tabBar didEndCustomizingItems:(NSArray *)items changed:(BOOL)changed;  // called after customize sheet is hidden. items is new item list
+
 @end
 
-// this is used by stretchable images to break the NSImage into multiple parts
-NSImage *_NSImageCreateSubimage(NSImage *theImage, CGRect rect);
+
+@interface UITabBar : UIView {
+  id<UITabBarDelegate> _delegate;
+  NSArray *_items;
+  NSInteger _selectedItemIndex;
+}
+
+@property (nonatomic, assign) id<UITabBarDelegate>  delegate;
+@property (nonatomic, copy)   NSArray              *items;
+@property (nonatomic, assign) UITabBarItem         *selectedItem;
+
+- (void)setItems:(NSArray *)items animated:(BOOL)animated;
+
+// stub
+- (void)beginCustomizingItems:(NSArray *)items;
+- (BOOL)endCustomizingAnimated:(BOOL)animated;
+- (BOOL)isCustomizing;
+
+@end

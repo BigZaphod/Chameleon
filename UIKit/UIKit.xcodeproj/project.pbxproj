@@ -232,6 +232,9 @@
 		38615C78133A81B900841EEA /* UIFont+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 38615C77133A81B900841EEA /* UIFont+UIPrivate.h */; };
 		38E523B11339680400E041B3 /* UINavigationItem+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 38E523AF1339680400E041B3 /* UINavigationItem+UIPrivate.h */; };
 		38E523B513396B5B00E041B3 /* UINavigationBar+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 38E523B413396B5B00E041B3 /* UINavigationBar+UIPrivate.h */; };
+		7806ED2A133A1D7500273BC6 /* UITabBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 7806ED28133A1D7500273BC6 /* UITabBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7806ED2B133A1D7500273BC6 /* UITabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7806ED29133A1D7500273BC6 /* UITabBar.m */; };
+		789CF671133A34BC00250AB4 /* UITabBar.m in Headers */ = {isa = PBXBuildFile; fileRef = 7806ED29133A1D7500273BC6 /* UITabBar.m */; settings = {ATTRIBUTES = (Public, ); }; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -465,6 +468,8 @@
 		38615C77133A81B900841EEA /* UIFont+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+UIPrivate.h"; sourceTree = "<group>"; };
 		38E523AF1339680400E041B3 /* UINavigationItem+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationItem+UIPrivate.h"; sourceTree = "<group>"; };
 		38E523B413396B5B00E041B3 /* UINavigationBar+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+UIPrivate.h"; sourceTree = "<group>"; };
+		7806ED28133A1D7500273BC6 /* UITabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITabBar.h; sourceTree = "<group>"; };
+		7806ED29133A1D7500273BC6 /* UITabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITabBar.m; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* UIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -677,6 +682,8 @@
 				1489855B12EE2CFE003D4751 /* UITextView.m */,
 				1489855C12EE2CFE003D4751 /* UIToolbar.h */,
 				1489855D12EE2CFE003D4751 /* UIToolbar.m */,
+				7806ED28133A1D7500273BC6 /* UITabBar.h */,
+				7806ED29133A1D7500273BC6 /* UITabBar.m */,
 				1489855E12EE2CFE003D4751 /* UITouch.h */,
 				1489855F12EE2CFE003D4751 /* UITouch.m */,
 				1489856012EE2CFE003D4751 /* UIView.h */,
@@ -842,6 +849,7 @@
 				1489858012EE2CFF003D4751 /* UIBarButtonItem.h in Headers */,
 				1489858212EE2CFF003D4751 /* UIBarItem.h in Headers */,
 				1489858412EE2CFF003D4751 /* UIBezierPath.h in Headers */,
+				789CF671133A34BC00250AB4 /* UITabBar.m in Headers */,
 				1489858612EE2CFF003D4751 /* UIButton.h in Headers */,
 				1489858812EE2CFF003D4751 /* UIColor.h in Headers */,
 				1489858A12EE2CFF003D4751 /* UIColorAppKitIntegration.h in Headers */,
@@ -854,6 +862,7 @@
 				1489859512EE2CFF003D4751 /* UIGeometry.h in Headers */,
 				1489859712EE2CFF003D4751 /* UIGestureRecognizer.h in Headers */,
 				1489859912EE2CFF003D4751 /* UIGraphics.h in Headers */,
+				7806ED2A133A1D7500273BC6 /* UITabBar.h in Headers */,
 				1489859B12EE2CFF003D4751 /* UIImage.h in Headers */,
 				1489859D12EE2CFF003D4751 /* UIImageAppKitIntegration.h in Headers */,
 				1489859E12EE2CFF003D4751 /* UIImagePickerController.h in Headers */,
@@ -1074,6 +1083,7 @@
 				1489860712EE2DBD003D4751 /* UISwipeGestureRecognizer.m in Sources */,
 				1489860B12EE2DDC003D4751 /* UIPanGestureRecognizer.m in Sources */,
 				38615C6B133A54DF00841EEA /* UINSCellControl.m in Sources */,
+				7806ED2B133A1D7500273BC6 /* UITabBar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
