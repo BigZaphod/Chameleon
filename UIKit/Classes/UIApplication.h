@@ -71,6 +71,25 @@ typedef enum {
 ((orientation) == UIInterfaceOrientationLandscapeLeft || \
 (orientation) == UIInterfaceOrientationLandscapeRight)
 
+// push is not gonna work in mac os, unless you are apple (facetime)
+typedef enum {
+  UIRemoteNotificationTypeNone    = 0,
+  UIRemoteNotificationTypeBadge   = 1 << 0,
+  UIRemoteNotificationTypeSound   = 1 << 1,
+  UIRemoteNotificationTypeAlert   = 1 << 2
+} UIRemoteNotificationType;
+
+// will always be UIApplicationStateActive (for now)
+typedef enum {
+  UIApplicationStateActive,
+  UIApplicationStateInactive,
+  UIApplicationStateBackground
+} UIApplicationState;
+
+typedef NSUInteger UIBackgroundTaskIdentifier;
+const UIBackgroundTaskIdentifier UIBackgroundTaskInvalid;
+const NSTimeInterval UIMinimumKeepAliveTimeout;
+
 @class UIWindow, UIApplication;
 
 @interface UIApplication : UIResponder {
