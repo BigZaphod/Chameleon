@@ -28,12 +28,26 @@
  */
 
 #import "UITabBarController.h"
+#import "UITabBar.h"
 
 @implementation UITabBarController
 
 @synthesize selectedViewController = _selectedViewController;
 @synthesize viewControllers = _viewControllers;
 @synthesize selectedIndex = _selectedIndex;
+@synthesize tabBar = _tabBar;
+
+- (id)init {
+  if ((self = [super init])) {
+    _tabBar = [[UITabBar alloc] initWithFrame:CGRectZero];
+  }
+  return self;
+}
+
+- (void)dealloc {
+  [_tabBar release];
+  [super dealloc];
+}
 
 - (void)setViewControllers:(NSArray *)viewController animated:(BOOL)animated {
   // stub
