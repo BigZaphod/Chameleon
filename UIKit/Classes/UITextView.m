@@ -247,6 +247,10 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 }
  */
 
+- (BOOL)hasText
+{
+  return [_textLayer.text count] > 0;
+}
 
 
 - (void)setDelegate:(id<UITextViewDelegate>)theDelegate

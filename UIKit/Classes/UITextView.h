@@ -77,4 +77,6 @@ extern NSString *const UITextViewTextDidEndEditingNotification;
 @property (nonatomic) UIDataDetectorTypes dataDetectorTypes;
 @property (nonatomic, assign) id<UITextViewDelegate> delegate;
 
+- (BOOL)hasText;
+
 @end
