@@ -232,6 +232,14 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 	_textLayer.editable = editable;
 }
 
+- (UITextAlignment)textAlignment {
+  return UITextAlignmentLeft; // STUB
+}
+
+- (void)setTextAlignment:(UITextAlignment)textAlignment {
+  // STUB
+}
+
 - (NSRange)selectedRange
 {
 	return _textLayer.selectedRange;
