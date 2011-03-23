@@ -163,3 +163,4 @@ typedef enum {
 
 @end
 
+NSString *const UITableViewIndexSearch;
