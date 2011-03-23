@@ -1,3 +1,9 @@
+//
+//  UINSCellControl.h
+//  UIKit
+//
+//  Created by Jim Dovey on 11-03-23.
+//
 /*
  * Copyright (c) 2011, The Iconfactory. All rights reserved.
  *
@@ -27,35 +33,24 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIImage.h"
+#import <Foundation/Foundation.h>
+#import "UIControl.h"
 
-@class NSImage;
+@class NSCell, UIImage, UIFont;
 
-@interface UIImage (UIPrivate)
-+ (NSString *)_macPathForFile:(NSString *)path;		// inserts "@mac" into the filename of the file in the given path and returns the result
-+ (NSString *)_pathForFile:(NSString *)path;		// uses above, checks for existence, if found, returns it otherwise returns the path string un-altered (doesn't verify that the file at the original path exists, though)
+@interface UINSCellControl : UIControl {
+@private
+    NSCell *		_cell;
+}
 
-+ (void)_cacheImage:(UIImage *)image forName:(NSString *)name;
-+ (NSString *)_nameForCachedImage:(UIImage *)image;
-+ (UIImage *)_cachedImageForName:(NSString *)name;
-+ (UIImage *)_backButtonImage;
-+ (UIImage *)_highlightedBackButtonImage;
-+ (UIImage *)_toolbarButtonImage;
-+ (UIImage *)_highlightedToolbarButtonImage;
-+ (UIImage *)_leftPopoverArrowImage;
-+ (UIImage *)_rightPopoverArrowImage;
-+ (UIImage *)_topPopoverArrowImage;
-+ (UIImage *)_bottomPopoverArrowImage;
-+ (UIImage *)_popoverBackgroundImage;
-+ (UIImage *)_roundedRectButtonImage;
-+ (UIImage *)_highlightedRoundedRectButtonImage;
-+ (UIImage *)_windowResizeGrabberImage;
-+ (UIImage *)_buttonBarSystemItemAdd;
-+ (UIImage *)_buttonBarSystemItemReply;
++ (UINSCellControl *)checkboxWithFrame:(CGRect)frame;
 
-- (UIImage *)_toolbarImage;		// returns a new image which is modified as required for toolbar buttons (turned into a solid color)
-+ (UIImage *)_imageFromNSImage:(NSImage *)ns;
+- (id)initWithFrame:(CGRect)frame cell:(NSCell *)cell;
+
+@property (nonatomic, readonly) NSCell * cell;
+
+@property (nonatomic, copy) NSString * title;
+@property (nonatomic, copy) UIImage * image;
+@property (nonatomic, copy) UIFont * font;
+
 @end
-
-// this is used by stretchable images to break the NSImage into multiple parts
-NSImage *_NSImageCreateSubimage(NSImage *theImage, CGRect rect);
