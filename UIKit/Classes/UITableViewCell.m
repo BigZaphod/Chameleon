@@ -86,6 +86,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 {
 	[_seperatorView release];
 	[_contentView release];
+    [_accessoryView release];
 	[_textLabel release];
     [_detailTextLabel release];
 	[_imageView release];
