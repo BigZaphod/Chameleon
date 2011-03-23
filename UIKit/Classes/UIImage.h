@@ -67,6 +67,7 @@ typedef enum {
 @property (nonatomic, readonly) NSInteger topCapHeight;
 @property (nonatomic, readonly) CGImageRef CGImage;
 @property (nonatomic, readonly) UIImageOrientation imageOrientation;	// not implemented
+@property (nonatomic, readonly) CGFloat scale;
 
 @end
 
