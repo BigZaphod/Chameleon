@@ -385,6 +385,11 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 	return (_dragDelegateTimer != nil);
 }
 
+- (BOOL)isTracking
+{
+  return NO;
+}
+
 - (void)_delegateDraggingDidEnd
 {
 	_dragDelegateTimer = nil;
