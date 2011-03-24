@@ -109,3 +109,9 @@ typedef enum {
 - (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle animated:(BOOL)animated;  // does not change on mac os
 
 @end
+
+NSString *const UIApplicationDidReceiveMemoryWarningNotification;
+
+@interface UIApplication(UIApplicationDeprecated)
+- (void)setStatusBarHidden:(BOOL)hidden animated:(BOOL)animated; // use -setStatusBarHidden:withAnimation:
+@end
