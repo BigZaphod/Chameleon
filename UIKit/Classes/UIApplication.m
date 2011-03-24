@@ -159,6 +159,18 @@ static BOOL TouchIsActive(UITouch *touch)
 {
 }
 
+- (UIStatusBarStyle)statusBarStyle {
+  return UIStatusBarStyleDefault;
+}
+
+- (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle {
+  // ignored on mac os
+}
+
+- (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle animated:(BOOL)animated {
+  // ignored on mac os
+}
+
 - (void)_setKeyWindow:(UIWindow *)newKeyWindow
 {
 	_keyWindow = newKeyWindow;

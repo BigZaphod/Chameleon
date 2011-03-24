@@ -105,4 +105,7 @@ typedef enum {
 @property (nonatomic, getter=isIdleTimerDisabled) BOOL idleTimerDisabled;	// has no actual affect
 @property (nonatomic) BOOL applicationSupportsShakeToEdit;					// no effect
 
+@property(nonatomic) UIStatusBarStyle statusBarStyle; // does not change on mac os
+- (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle animated:(BOOL)animated;  // does not change on mac os
+
 @end
