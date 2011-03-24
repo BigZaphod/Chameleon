@@ -64,6 +64,17 @@ UIAccessibilityNotifications UIAccessibilityLayoutChangedNotification = 1001;
 - (void)setAccessibilityLabel:(NSString *)label
 {
 }
+
+- (UIAccessibilityTraits)accessibilityTraits
+{
+	return UIAccessibilityTraitNone; // STUB
+}
+
+- (void)setAccessibilityTraits:(UIAccessibilityTraits)traits
+{
+	// STUB
+}
+
 @end
 
 void UIAccessibilityPostNotification(UIAccessibilityNotifications notification, id argument)
