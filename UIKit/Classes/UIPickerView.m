@@ -55,8 +55,41 @@
     [super dealloc];
 }
 
+- (NSInteger) numberOfComponents
+{
+    return 0;
+}
+
+- (NSInteger) numberOfRowsInComponent:(NSInteger)component
+{
+    return 0;
+}
+
+- (void) reloadAllComponents
+{
+}
+
+- (void) reloadComponent:(NSInteger)component
+{
+}
+
+- (CGSize) rowSizeForComponent:(NSInteger)component
+{
+    return CGSizeZero;
+}
+
+- (NSInteger) selectedRowInComponent:(NSInteger)component
+{
+    return -1;
+}
+
 - (void)selectRow:(NSInteger)row inComponent:(NSInteger)component animated:(BOOL)animated
 {
+}
+
+- (UIView *) viewForRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    return nil;
 }
 
 @end

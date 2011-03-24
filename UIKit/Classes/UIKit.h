@@ -105,6 +105,7 @@
 #import "UIPinchGestureRecognizer.h"
 #import "UIRotationGestureRecognizer.h"
 #import "UISwipeGestureRecognizer.h"
+#import "UIDatePicker.h"
 
 // non-standard imports
 #import "UIKey.h"
