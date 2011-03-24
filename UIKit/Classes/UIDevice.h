@@ -64,6 +64,11 @@ typedef enum {
 @property (nonatomic, readonly, retain) NSString *model;
 @property (nonatomic, readonly, retain) NSString *uniqueIdentifier;
 
+// stub
+@property (nonatomic, readonly, getter=isGeneratingDeviceOrientationNotifications) BOOL generatesDeviceOrientationNotifications;
+- (void)beginGeneratingDeviceOrientationNotifications;
+- (void)endGeneratingDeviceOrientationNotifications;
+
 @end
 
 NSString *const UIDeviceOrientationDidChangeNotification;
