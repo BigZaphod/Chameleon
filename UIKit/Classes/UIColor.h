@@ -59,7 +59,6 @@
 + (UIColor *)purpleColor;
 + (UIColor *)brownColor;
 + (UIColor *)clearColor;
-+ (UIColor *)groupTableViewBackgroundColor;
 
 // system colors
 + (UIColor *)groupTableViewBackgroundColor;
