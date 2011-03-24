@@ -265,6 +265,12 @@ static BOOL TouchIsActive(UITouch *touch)
 	return [[NSWorkspace sharedWorkspace] openURL:url];
 }
 
+- (BOOL)canOpenURL:(NSURL *)url
+{
+	NSURL *appURL = [[NSWorkspace sharedWorkspace] URLForApplicationToOpenURL: url];
+	return (appURL != nil);
+}
+
 - (BOOL)_sendGlobalKeyboardNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
 {
 	if (![self isIgnoringInteractionEvents]) {

@@ -84,6 +84,7 @@ typedef enum {
 - (BOOL)sendAction:(SEL)action to:(id)target from:(id)sender forEvent:(UIEvent *)event;
 - (void)sendEvent:(UIEvent *)event;
 - (BOOL)openURL:(NSURL *)url;
+- (BOOL)canOpenURL:(NSURL *)url;
 
 - (void)beginIgnoringInteractionEvents;
 - (void)endIgnoringInteractionEvents;
