@@ -92,7 +92,7 @@ typedef enum {
 - (void)prepareForReuse;
 
 @property (nonatomic, readonly, retain) UIView *contentView;
-@property (nonatomic, readonly, retain) UIView *accessoryView;
+@property (nonatomic, retain) UIView *accessoryView;
 @property (nonatomic, readonly, retain) UILabel *textLabel;
 @property (nonatomic, readonly, retain) UILabel *detailTextLabel;
 @property (nonatomic, readonly, retain) UIImageView *imageView;
