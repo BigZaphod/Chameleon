@@ -184,7 +184,7 @@
 		14A726E01213303400648C9B /* UIWindow+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BD1213303400648C9B /* UIWindow+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14BF16DB12E621EB007DAA01 /* UIViewBlockAnimationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14BF16D912E621EB007DAA01 /* UIViewBlockAnimationDelegate.h */; };
 		14BF16DC12E621EB007DAA01 /* UIViewBlockAnimationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BF16DA12E621EB007DAA01 /* UIViewBlockAnimationDelegate.m */; };
-		14C6C122133AFC94002F111E /* CALayer+UIKitCompatibility.h in Headers */ = {isa = PBXBuildFile; fileRef = 14C6C120133AFC91002F111E /* CALayer+UIKitCompatibility.h */; };
+		14C6C122133AFC94002F111E /* CALayer+UIKitCompatibility.h in Headers */ = {isa = PBXBuildFile; fileRef = 14C6C120133AFC91002F111E /* CALayer+UIKitCompatibility.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14C6C123133AFC94002F111E /* CALayer+UIKitCompatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C6C121133AFC92002F111E /* CALayer+UIKitCompatibility.m */; };
 		14CB384512689907003334AD /* UIPopoverNSWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CB384312689907003334AD /* UIPopoverNSWindow.h */; };
 		14CB384612689907003334AD /* UIPopoverNSWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CB384412689907003334AD /* UIPopoverNSWindow.m */; };
@@ -234,6 +234,8 @@
 		38615C78133A81B900841EEA /* UIFont+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 38615C77133A81B900841EEA /* UIFont+UIPrivate.h */; };
 		38E523B11339680400E041B3 /* UINavigationItem+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 38E523AF1339680400E041B3 /* UINavigationItem+UIPrivate.h */; };
 		38E523B513396B5B00E041B3 /* UINavigationBar+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 38E523B413396B5B00E041B3 /* UINavigationBar+UIPrivate.h */; };
+		7011107C133BE0F400C86512 /* UIDatePicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 7011107A133BE0F300C86512 /* UIDatePicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7011107D133BE0F400C86512 /* UIDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7011107B133BE0F300C86512 /* UIDatePicker.m */; };
 		7806ED2A133A1D7500273BC6 /* UITabBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 7806ED28133A1D7500273BC6 /* UITabBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7806ED2B133A1D7500273BC6 /* UITabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7806ED29133A1D7500273BC6 /* UITabBar.m */; };
 		789CF671133A34BC00250AB4 /* UITabBar.m in Headers */ = {isa = PBXBuildFile; fileRef = 7806ED29133A1D7500273BC6 /* UITabBar.m */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -486,6 +488,8 @@
 		38615C77133A81B900841EEA /* UIFont+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+UIPrivate.h"; sourceTree = "<group>"; };
 		38E523AF1339680400E041B3 /* UINavigationItem+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationItem+UIPrivate.h"; sourceTree = "<group>"; };
 		38E523B413396B5B00E041B3 /* UINavigationBar+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+UIPrivate.h"; sourceTree = "<group>"; };
+		7011107A133BE0F300C86512 /* UIDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDatePicker.h; sourceTree = "<group>"; };
+		7011107B133BE0F300C86512 /* UIDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIDatePicker.m; sourceTree = "<group>"; };
 		7806ED28133A1D7500273BC6 /* UITabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITabBar.h; sourceTree = "<group>"; };
 		7806ED29133A1D7500273BC6 /* UITabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITabBar.m; sourceTree = "<group>"; };
 		789CF896133A3CD500250AB4 /* NSFetchedResultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSFetchedResultsController.h; sourceTree = "<group>"; };
@@ -583,6 +587,8 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				7011107A133BE0F300C86512 /* UIDatePicker.h */,
+				7011107B133BE0F300C86512 /* UIDatePicker.m */,
 				148984E412EE2CFE003D4751 /* AppKitIntegration.h */,
 				14C6C120133AFC91002F111E /* CALayer+UIKitCompatibility.h */,
 				14C6C121133AFC92002F111E /* CALayer+UIKitCompatibility.m */,
@@ -971,6 +977,7 @@
 				38E523B513396B5B00E041B3 /* UINavigationBar+UIPrivate.h in Headers */,
 				38615C78133A81B900841EEA /* UIFont+UIPrivate.h in Headers */,
 				14C6C122133AFC94002F111E /* CALayer+UIKitCompatibility.h in Headers */,
+				7011107C133BE0F400C86512 /* UIDatePicker.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1148,6 +1155,7 @@
 				78CB48BD133AADD0008636DA /* UIPickerView.m in Sources */,
 				78CB48DA133AB922008636DA /* UISlider.m in Sources */,
 				14C6C123133AFC94002F111E /* CALayer+UIKitCompatibility.m in Sources */,
+				7011107D133BE0F400C86512 /* UIDatePicker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
