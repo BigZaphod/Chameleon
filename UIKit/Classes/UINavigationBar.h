@@ -70,6 +70,7 @@
 - (UINavigationItem *)popNavigationItemAnimated:(BOOL)animated;
 
 @property (nonatomic, getter=isNavigationBarHidden) BOOL navigationBarHidden; // stub
+@property (nonatomic, assign) UIBarStyle barStyle;
 @property (nonatomic, retain) UIColor *tintColor;
 @property (nonatomic, readonly, retain) UINavigationItem *topItem;
 @property (nonatomic, readonly, retain) UINavigationItem *backItem;
