@@ -63,9 +63,11 @@ NSString *NSStringFromCGAffineTransform(CGAffineTransform transform);
 + (NSValue *)valueWithCGPoint:(CGPoint)point;
 + (NSValue *)valueWithCGRect:(CGRect)rect;
 + (NSValue *)valueWithCGSize:(CGSize)size;
++ (NSValue *)valueWithUIEdgeInsets:(UIEdgeInsets)insets;
 - (CGPoint)CGPointValue;
 - (CGRect)CGRectValue;
 - (CGSize)CGSizeValue;
+- (UIEdgeInsets)UIEdgeInsetsValue;
 @end
 
 @interface NSCoder (NSCoderUIGeometryExtensions)
