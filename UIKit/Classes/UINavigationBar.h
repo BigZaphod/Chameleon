@@ -29,7 +29,6 @@
 
 #import "UIToolbar.h"
 #import "UIView.h"
-#import "UIInterface.h"
 
 @class UIColor, UINavigationItem, UINavigationBar;
 
@@ -64,8 +63,6 @@
 		unsigned reloadItem : 1;
 		unsigned __RESERVED__ : 31;
 	} _navigationBarFlags;
-    
-    UIBarStyle _barStyle;
 }
 
 - (void)setItems:(NSArray *)items animated:(BOOL)animated;
@@ -73,11 +70,11 @@
 - (UINavigationItem *)popNavigationItemAnimated:(BOOL)animated;
 
 @property (nonatomic, getter=isNavigationBarHidden) BOOL navigationBarHidden; // stub
+@property (nonatomic, assign) UIBarStyle barStyle;
 @property (nonatomic, retain) UIColor *tintColor;
 @property (nonatomic, readonly, retain) UINavigationItem *topItem;
 @property (nonatomic, readonly, retain) UINavigationItem *backItem;
 @property (nonatomic, copy) NSArray *items;
 @property (nonatomic, assign) id delegate;
-@property (nonatomic, assign) UIBarStyle barStyle;
 
 @end
