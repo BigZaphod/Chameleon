@@ -38,6 +38,7 @@
 #import <UIKit/UIKit.h>
 #import "UIImage+UIPrivate.h"
 #import "UIFont+UIPrivate.h"
+#import "UIControl+UIPrivate.h"
 
 @interface NSCell (DrawInCGContext)
 - (void)drawWithFrame:(NSRect)cellFrame inGraphicsContext:(CGContextRef)context;
@@ -99,7 +100,7 @@
 	[_cell setEnabled:enabled];
 	_enabled = enabled;
 	[self didChangeValueForKey:@"enabled"];
-	[self setNeedsDisplay];
+	[self _stateDidChange];
 }
 
 - (void)setSelected:(BOOL)selected
@@ -116,7 +117,7 @@
 		[_cell setState:NSOffState];
 	
 	[self didChangeValueForKey:@"selected"];
-	[self setNeedsDisplay];
+	[self _stateDidChange];
 }
 
 - (void)setHighlighted:(BOOL)highlighted
@@ -127,9 +128,8 @@
 	[self willChangeValueForKey:@"highlighted"];
 	_highlighted = highlighted;
 	[_cell setHighlighted:_highlighted];
-	[self setNeedsDisplay];
 	[self didChangeValueForKey:@"highlighted"];
-	[self setNeedsDisplay];
+	[self _stateDidChange];
 }
 
 - (void)setBounds:(CGRect)bounds
@@ -206,7 +206,7 @@
 {
 	[_cell setTitle:title];
 	[_cell calcDrawInfo: NSRectFromCGRect(self.bounds)];
-	[self setNeedsDisplay];
+	[self _stateDidChange];
 }
 
 - (UIImage *)image
@@ -231,7 +231,7 @@
 	
 	[_cell setImage:ns];
 	[_cell calcDrawInfo: NSRectFromCGRect(self.bounds)];
-	[self setNeedsDisplay];
+	[self _stateDidChange];
 }
 
 - (UIFont *)font
@@ -243,7 +243,7 @@
 {
 	[_cell setFont:[font NSFont]];
 	[_cell calcDrawInfo: NSRectFromCGRect(self.bounds)];
-	[self setNeedsDisplay];
+	[self _stateDidChange];
 }
 
 @end
