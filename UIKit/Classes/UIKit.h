@@ -75,6 +75,7 @@
 #import "UITextView.h"
 #import "UIDataDetectors.h"
 #import "UITableViewController.h"
+#import "UISearchBar.h"
 #import "UISearchDisplayController.h"
 #import "UIImagePickerController.h"
 #import "UINibLoading.h"
