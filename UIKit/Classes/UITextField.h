@@ -28,6 +28,7 @@
  */
 
 #import "UIControl.h"
+#import "UIStringDrawing.h"
 #import "UITextInputTraits.h"
 
 extern NSString *const UITextFieldTextDidBeginEditingNotification;
@@ -102,6 +103,7 @@ typedef enum {
 - (void)drawTextInRect:(CGRect)rect;
 
 @property (nonatomic, assign) id<UITextFieldDelegate> delegate;
+@property (nonatomic, assign) UITextAlignment textAlignment;
 @property (nonatomic, copy) NSString *placeholder;
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, retain) UIFont *font;

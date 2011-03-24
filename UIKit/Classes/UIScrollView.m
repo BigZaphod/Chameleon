@@ -51,6 +51,7 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 @synthesize maximumZoomScale=_maximumZoomScale, minimumZoomScale=_minimumZoomScale, scrollsToTop=_scrollsToTop;
 @synthesize indicatorStyle=_indicatorStyle, delaysContentTouches=_delaysContentTouches, delegate=_delegate, pagingEnabled=_pagingEnabled;
 @synthesize canCancelContentTouches=_canCancelContentTouches, bouncesZoom=_bouncesZoom, zooming=_zooming;
+@synthesize alwaysBounceVertical=_alwaysBounceVertical, alwaysBounceHorizontal=_alwaysBounceHorizontal, bounces=_bounces;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -71,6 +72,10 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 		_pagingEnabled = NO;
 		_bouncesZoom = NO;
 		_zooming = NO;
+        _alwaysBounceVertical = NO;
+        _alwaysBounceHorizontal = NO;
+        _bounces = YES;
+        
 		_scrollAnimationTime = 0;
 		_scrollAnimations = [[NSMutableArray alloc] init];
 
@@ -382,6 +387,11 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 - (BOOL)isDragging
 {
 	return (_dragDelegateTimer != nil);
+}
+
+- (BOOL)isTracking
+{
+    return NO;
 }
 
 - (void)_delegateDraggingDidEnd

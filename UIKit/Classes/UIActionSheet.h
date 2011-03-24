@@ -28,9 +28,9 @@
  */
 
 #import "UIView.h"
-#import "UIInterface.h"
+#import "UIToolbar.h"
 
-@class UIActionSheet;
+@class UIActionSheet, UITabBar, UIToolbar, UIBarButtonItem;
 
 @protocol UIActionSheetDelegate <NSObject>
 @optional
@@ -43,23 +43,23 @@
 @end
 
 typedef enum {
-    UIActionSheetStyleAutomatic = -1,
-    UIActionSheetStyleDefault = UIBarStyleDefault,
-    UIActionSheetStyleBlackTranslucent = UIBarStyleBlackTranslucent,
-    UIActionSheetStyleBlackOpaque = UIBarStyleBlackOpaque
+  UIActionSheetStyleAutomatic        = -1,
+  UIActionSheetStyleDefault          = UIBarStyleDefault,
+  UIActionSheetStyleBlackTranslucent = UIBarStyleBlackTranslucent,
+  UIActionSheetStyleBlackOpaque      = UIBarStyleBlackOpaque,
 } UIActionSheetStyle;
 
 @interface UIActionSheet : UIView {
 @private
-	id<UIActionSheetDelegate> _delegate;
+	__weak id<UIActionSheetDelegate> _delegate;
 	NSInteger _destructiveButtonIndex;
 	NSInteger _cancelButtonIndex;
 	NSInteger _firstOtherButtonIndex;
 	NSString *_title;
 	NSMutableArray *_menuTitles;
 	NSMutableSet *_separatorIndexes;
-	id _menu;
     UIActionSheetStyle _actionSheetStyle;
+	id _menu;
 	
 	struct {
 		BOOL clickedButtonAtIndex : 1;
@@ -78,12 +78,18 @@ typedef enum {
 - (void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated;		// if rect is CGRectNull, the menu will appear wherever the mouse cursor is
 - (void)dismissWithClickedButtonIndex:(NSInteger)buttonIndex animated:(BOOL)animated;
 
+// these are not yet implemented:
+- (void)showFromToolbar:(UIToolbar *)view;
+- (void)showFromTabBar:(UITabBar *)view;
+- (void)showFromBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated;
+
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, assign) id<UIActionSheetDelegate> delegate;
+@property (nonatomic, assign) UIActionSheetStyle actionSheetStyle;
 @property (nonatomic, readonly, getter=isVisible) BOOL visible;
 @property (nonatomic) NSInteger destructiveButtonIndex;
 @property (nonatomic) NSInteger cancelButtonIndex;
 @property (nonatomic, readonly) NSInteger firstOtherButtonIndex;
-@property (nonatomic, assign) UIActionSheetStyle actionSheetStyle;
+@property (nonatomic, readonly) NSInteger numberOfButtons;
 
 @end

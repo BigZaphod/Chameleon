@@ -202,6 +202,16 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 	_textLayer.textColor = newColor;
 }
 
+- (UITextAlignment)textAlignment
+{
+    return _textLayer.textAlignment;
+}
+
+- (void)setTextAlignment:(UITextAlignment)textAlignment
+{
+    _textLayer.textAlignment = textAlignment;
+}
+
 - (NSString *)text
 {
 	return _textLayer.text;
@@ -239,6 +249,10 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 }
  */
 
+- (BOOL)hasText
+{
+  return [_textLayer.text length] > 0;
+}
 
 
 - (void)setDelegate:(id<UITextViewDelegate>)theDelegate

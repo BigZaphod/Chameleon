@@ -28,16 +28,12 @@
  */
 
 #import "UIImage+UIPrivate.h"
+#import "UIImageAppKitIntegration.h"
 #import "UIColor.h"
 #import "UIGraphics.h"
 #import <AppKit/NSImage.h>
 
 NSMutableDictionary *imageCache = nil;
-
-// here to keep the compiler happy
-@interface UIImage ()
-- (id)initWithNSImage:(NSImage *)ns;
-@end
 
 @implementation UIImage (UIPrivate)
 
@@ -216,6 +212,16 @@ NSMutableDictionary *imageCache = nil;
 	UIGraphicsEndImageContext();
 	
 	return image;
+}
+
++ (UIImage *)_tabBarBackgroundImage
+{
+  return [self _frameworkImageWithName:@"<UITabBar> background.png" leftCapWidth:6 topCapHeight:0];
+}
+
++ (UIImage *)_tabBarItemImage
+{
+  return [self _frameworkImageWithName:@"<UITabBar> item.png" leftCapWidth:8 topCapHeight:0];
 }
 
 @end

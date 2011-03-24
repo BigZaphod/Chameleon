@@ -29,6 +29,12 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString *const UIMenuControllerWillShowMenuNotification;
+extern NSString *const UIMenuControllerDidShowMenuNotification;
+extern NSString *const UIMenuControllerWillHideMenuNotification;
+extern NSString *const UIMenuControllerDidHideMenuNotification;
+extern NSString *const UIMenuControllerMenuFrameDidChangeNotification;
+
 @class UIView, UIWindow;
 
 @interface UIMenuController : NSObject {

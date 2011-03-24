@@ -34,6 +34,9 @@
 #import "UITableViewSection.h"
 #import "UITableViewSectionLabel.h"
 
+// http://stackoverflow.com/questions/235120/whats-the-uitableview-index-magnifying-glass-character
+NSString *const UITableViewIndexSearch = @"{search}";
+
 const CGFloat _UITableViewDefaultRowHeight = 43;
 
 @interface UITableView ()

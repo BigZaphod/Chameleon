@@ -88,6 +88,7 @@ static UIColor *OrangeColor = nil;
 static UIColor *PurpleColor = nil;
 static UIColor *BrownColor = nil;
 static UIColor *ClearColor = nil;
+static UIColor *GroupTableViewBackgroundColor = nil;
 
 @implementation UIColor
 
@@ -153,7 +154,7 @@ static UIColor *ClearColor = nil;
 + (UIColor *)purpleColor		{ return PurpleColor ?: (PurpleColor = [[self alloc] initWithNSColor:[NSColor purpleColor]]); }
 + (UIColor *)brownColor			{ return BrownColor ?: (BrownColor = [[self alloc] initWithNSColor:[NSColor brownColor]]); }
 + (UIColor *)clearColor			{ return ClearColor ?: (ClearColor = [[self alloc] initWithNSColor:[NSColor clearColor]]); }
-+ (UIColor *) groupTableViewBackgroundColor { return [UIColor lightGrayColor]; } // FIXME???
++ (UIColor *)groupTableViewBackgroundColor	{ return GroupTableViewBackgroundColor ?: (GroupTableViewBackgroundColor = [[self alloc] initWithNSColor:[NSColor lightGrayColor]]); } // TODO
 
 - (id)initWithWhite:(CGFloat)white alpha:(CGFloat)alpha
 {

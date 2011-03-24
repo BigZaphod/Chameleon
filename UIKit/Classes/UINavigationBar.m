@@ -53,8 +53,7 @@ typedef enum {
 } _UINavigationBarTransition;
 
 @implementation UINavigationBar
-@synthesize tintColor=_tintColor, delegate=_delegate, items=_navStack;
-@synthesize barStyle = _barStyle;
+@synthesize tintColor=_tintColor, delegate=_delegate, items=_navStack, navigationBarHidden = _navigationBarHidden;
 
 + (void)_setBarButtonSize:(UIView *)view
 {
@@ -296,6 +295,15 @@ typedef enum {
 - (void)setItems:(NSArray *)items
 {
 	[self setItems:items animated:NO];
+}
+
+- (UIBarStyle)barStyle
+{
+    return UIBarStyleDefault;
+}
+
+- (void)setBarStyle:(UIBarStyle)barStyle
+{
 }
 
 - (void)pushNavigationItem:(UINavigationItem *)item animated:(BOOL)animated

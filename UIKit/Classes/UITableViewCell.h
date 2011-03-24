@@ -68,19 +68,22 @@ typedef enum {
 	UITableViewCellStyle _style;
 	UITableViewCellSeparator *_seperatorView;
 	UIView *_contentView;
+    UIView *_accessoryView; // stub
 	UILabel *_textLabel;
-    UILabel *_detailTextLabel;
+    UILabel *_detailTextLabel; // not yet displayed!
 	UIImageView *_imageView;
 	UIView *_backgroundView;
 	UIView *_selectedBackgroundView;
-    UIView *_accessoryView;
 	UITableViewCellAccessoryType _accessoryType;
 	UITableViewCellAccessoryType _editingAccessoryType;
 	UITableViewCellSelectionStyle _selectionStyle;
 	NSInteger _indentationLevel;
+	BOOL _editing;
 	BOOL _selected;
 	BOOL _highlighted;
+    BOOL _showingDeleteConfirmation;
 	NSString *_reuseIdentifier;
+    CGFloat _indentationWidth;
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
@@ -89,6 +92,7 @@ typedef enum {
 - (void)prepareForReuse;
 
 @property (nonatomic, readonly, retain) UIView *contentView;
+@property (nonatomic, retain) UIView *accessoryView;
 @property (nonatomic, readonly, retain) UILabel *textLabel;
 @property (nonatomic, readonly, retain) UILabel *detailTextLabel;
 @property (nonatomic, readonly, retain) UIImageView *imageView;
@@ -96,11 +100,13 @@ typedef enum {
 @property (nonatomic, retain) UIView *selectedBackgroundView;
 @property (nonatomic) UITableViewCellSelectionStyle selectionStyle;
 @property (nonatomic) NSInteger indentationLevel;
-@property (nonatomic, retain) UIView *accessoryView;
 @property (nonatomic) UITableViewCellAccessoryType accessoryType;
 @property (nonatomic) UITableViewCellAccessoryType editingAccessoryType;
 @property (nonatomic, getter=isSelected) BOOL selected;
 @property (nonatomic, getter=isHighlighted) BOOL highlighted;
+@property (nonatomic, getter=isEditing) BOOL editing; // not yet implemented
+@property (nonatomic, readonly) BOOL showingDeleteConfirmation;  // not yet implemented
 @property (nonatomic, readonly, copy) NSString *reuseIdentifier;
+@property (nonatomic, assign) CGFloat indentationWidth; // 10 per default
 
 @end

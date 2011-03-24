@@ -221,6 +221,11 @@
 	return [[[NSBitmapImageRep alloc] initWithCGImage:_image] autorelease];
 }
 
+- (CGFloat)scale
+{
+    return 1.0;
+}
+
 @end
 
 void UIImageWriteToSavedPhotosAlbum(UIImage *image, id completionTarget, SEL completionSelector, void *contextInfo)

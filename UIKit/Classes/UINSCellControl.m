@@ -135,13 +135,13 @@
 - (void)setBounds:(CGRect)bounds
 {
 	[super setBounds:bounds];
-	[_cell calcDrawInfo:bounds];
+	[_cell calcDrawInfo:NSRectFromCGRect(bounds)];
 }
 
 - (void)setFrame:(CGRect)frame
 {
 	[super setFrame:frame];
-	[_cell calcDrawInfo:self.bounds];
+	[_cell calcDrawInfo:NSRectFromCGRect(self.bounds)];
 }
 
 - (CGSize)sizeThatFits:(CGSize)size
@@ -169,7 +169,7 @@
 
 - (void)drawRect:(CGRect)rect
 {
-	[_cell drawWithFrame:self.bounds inGraphicsContext:UIGraphicsGetCurrentContext()];
+	[_cell drawWithFrame:NSRectFromCGRect(self.bounds) inGraphicsContext:UIGraphicsGetCurrentContext()];
 }
 
 - (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
@@ -226,7 +226,7 @@
 		ns = [NSImage imageNamed:name];
 	
 	if (ns == nil) {
-		ns = [[[NSImage alloc] initWithCGImage:image.CGImage size:image.size] autorelease];
+		ns = [[[NSImage alloc] initWithCGImage:image.CGImage size:NSSizeFromCGSize(image.size)] autorelease];
 	}
 	
 	[_cell setImage:ns];

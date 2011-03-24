@@ -27,6 +27,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import "UIToolbar.h"
 #import "UIView.h"
 #import "UIInterface.h"
 
@@ -44,6 +45,7 @@
 @private
 	NSMutableArray *_navStack;
 	UIColor *_tintColor;
+    BOOL _navigationBarHidden;
 	id _delegate;
 	
 	UIView *_leftView;
@@ -70,6 +72,8 @@
 - (void)pushNavigationItem:(UINavigationItem *)item animated:(BOOL)animated;
 - (UINavigationItem *)popNavigationItemAnimated:(BOOL)animated;
 
+@property (nonatomic, getter=isNavigationBarHidden) BOOL navigationBarHidden; // stub
+@property (nonatomic, assign) UIBarStyle barStyle;
 @property (nonatomic, retain) UIColor *tintColor;
 @property (nonatomic, readonly, retain) UINavigationItem *topItem;
 @property (nonatomic, readonly, retain) UINavigationItem *backItem;

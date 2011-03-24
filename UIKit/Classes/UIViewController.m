@@ -29,19 +29,23 @@
 
 #import "UIViewController.h"
 #import "UIView+UIPrivate.h"
+#import "UIScreen.h"
 #import "UIWindow.h"
+#import "UIScreen.h"
 #import "UINavigationItem.h"
 #import "UIBarButtonItem.h"
 #import "UINavigationController.h"
 #import "UISplitViewController.h"
 #import "UIToolbar.h"
 #import "UIScreen.h"
+#import "UITabBarController.h"
 
 @implementation UIViewController
 @synthesize view=_view, wantsFullScreenLayout=_wantsFullScreenLayout, title=_title, contentSizeForViewInPopover=_contentSizeForViewInPopover;
 @synthesize modalInPopover=_modalInPopover, toolbarItems=_toolbarItems, modalPresentationStyle=_modalPresentationStyle, editing=_editing;
 @synthesize modalViewController=_modalViewController, parentViewController=_parentViewController;
 @synthesize modalTransitionStyle=_modalTransitionStyle, hidesBottomBarWhenPushed=_hidesBottomBarWhenPushed;
+@synthesize searchDisplayController=_searchDisplayController, tabBarItem=_tabBarItem, tabBarController=_tabBarController;
 
 - (id)init
 {
@@ -200,10 +204,7 @@
 		UIView *newView = _modalViewController.view;
 
 		newView.autoresizingMask = selfView.autoresizingMask;
-        // ??? LLVM thinks window is an NSWindow?
-        // ??? LLVM thinks screen is an NSScreen?
-        UIScreen *screen = window.screen;
-		newView.frame = _wantsFullScreenLayout? screen.bounds : screen.applicationFrame;
+		newView.frame = _wantsFullScreenLayout? window.screen.bounds : window.screen.applicationFrame;
 
 		[window addSubview:newView];
 		[_modalViewController viewWillAppear:animated];

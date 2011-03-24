@@ -12,6 +12,8 @@
 		14C25EF31211ED0400622309 /* MessageUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 14C25EF21211ED0400622309 /* MessageUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14EFB1BB1211DB5300D19B0C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14EFB1BA1211DB5300D19B0C /* Cocoa.framework */; };
 		14FB132D12302FD900B615ED /* MFMailComposeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14FB132B12302FD900B615ED /* MFMailComposeViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		78CB48DD133ABB2C008636DA /* MFMessageComposeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 78CB48DB133ABB2C008636DA /* MFMessageComposeViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		78CB48DE133ABB2C008636DA /* MFMessageComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CB48DC133ABB2C008636DA /* MFMessageComposeViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +31,13 @@
 			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
 			remoteInfo = UIKit;
 		};
+		780E7544133AC53400D8C77B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 780E7540133AC53400D8C77B /* UIKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DC2EF5B0486A6940098B216;
+			remoteInfo = UIKit;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +49,9 @@
 		14FB132B12302FD900B615ED /* MFMailComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MFMailComposeViewController.h; path = Classes/MFMailComposeViewController.h; sourceTree = "<group>"; };
 		14FB132C12302FD900B615ED /* MFMailComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MFMailComposeViewController.m; path = Classes/MFMailComposeViewController.m; sourceTree = "<group>"; };
 		14FB13351230307C00B615ED /* UIKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = UIKit.xcodeproj; path = ../UIKit/UIKit.xcodeproj; sourceTree = SOURCE_ROOT; };
+		780E7540133AC53400D8C77B /* UIKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = UIKit.xcodeproj; path = ../UIKit/UIKit.xcodeproj; sourceTree = "<group>"; };
+		78CB48DB133ABB2C008636DA /* MFMessageComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MFMessageComposeViewController.h; sourceTree = "<group>"; };
+		78CB48DC133ABB2C008636DA /* MFMessageComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MFMessageComposeViewController.m; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* MessageUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MessageUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -74,6 +86,7 @@
 				32C88DFF0371C24200C91783 /* Other Sources */,
 				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
 				034768DFFF38A50411DB9C8B /* Products */,
+				780E7540133AC53400D8C77B /* UIKit.xcodeproj */,
 			);
 			name = UIKit;
 			sourceTree = "<group>";
@@ -102,6 +115,8 @@
 				14C25EF21211ED0400622309 /* MessageUI.h */,
 				14FB132B12302FD900B615ED /* MFMailComposeViewController.h */,
 				14FB132C12302FD900B615ED /* MFMailComposeViewController.m */,
+				78CB48DB133ABB2C008636DA /* MFMessageComposeViewController.h */,
+				78CB48DC133ABB2C008636DA /* MFMessageComposeViewController.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -122,6 +137,14 @@
 			name = "Other Sources";
 			sourceTree = "<group>";
 		};
+		780E7541133AC53400D8C77B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				780E7545133AC53400D8C77B /* UIKit.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -131,6 +154,7 @@
 			files = (
 				14C25EF31211ED0400622309 /* MessageUI.h in Headers */,
 				14FB132D12302FD900B615ED /* MFMailComposeViewController.h in Headers */,
+				78CB48DD133ABB2C008636DA /* MFMessageComposeViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,6 +201,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 780E7541133AC53400D8C77B /* Products */;
+					ProjectRef = 780E7540133AC53400D8C77B /* UIKit.xcodeproj */;
+				},
+				{
 					ProductGroup = 14FB13361230307C00B615ED /* Products */;
 					ProjectRef = 14FB13351230307C00B615ED /* UIKit.xcodeproj */;
 				},
@@ -194,6 +222,13 @@
 			fileType = wrapper.framework;
 			path = UIKit.framework;
 			remoteRef = 14FB13391230307C00B615ED /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		780E7545133AC53400D8C77B /* UIKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = UIKit.framework;
+			remoteRef = 780E7544133AC53400D8C77B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -214,6 +249,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				143B578F1230357600F43562 /* MFMailComposeViewController.m in Sources */,
+				78CB48DE133ABB2C008636DA /* MFMessageComposeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

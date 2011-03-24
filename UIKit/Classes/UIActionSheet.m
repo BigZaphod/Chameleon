@@ -32,14 +32,14 @@
 #import "UIScreenAppKitIntegration.h"
 #import "UIKitView.h"
 #import "UIApplication+UIPrivate.h"
+#import "UIBarButtonItem.h"
 #import <AppKit/NSMenu.h>
 #import <AppKit/NSMenuItem.h>
 #import <AppKit/NSEvent.h>
 
 @implementation UIActionSheet
 @synthesize delegate=_delegate, destructiveButtonIndex=_destructiveButtonIndex, cancelButtonIndex=_cancelButtonIndex, title=_title;
-@synthesize firstOtherButtonIndex=_firstOtherButtonIndex;
-@synthesize actionSheetStyle = _actionSheetStyle;
+@synthesize firstOtherButtonIndex=_firstOtherButtonIndex, actionSheetStyle = _actionSheetStyle;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -151,6 +151,11 @@
 - (BOOL)isVisible
 {
 	return (_menu != nil);
+}
+
+- (NSInteger)numberOfButtons
+{
+    return [_menuTitles count];
 }
 
 - (void)_showFromPoint:(CGPoint)point rightAligned:(BOOL)rightAligned inView:(UIView *)view
@@ -274,6 +279,18 @@
 	} else {
 		[self _showFromPoint:CGPointMake(rect.origin.x+rect.size.width, rect.origin.y+rect.size.height) rightAligned:YES inView:view];
 	}
+}
+
+- (void)showFromToolbar:(UIToolbar *)view
+{
+}
+
+- (void)showFromTabBar:(UITabBar *)view
+{
+}
+
+- (void)showFromBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated
+{
 }
 
 - (void)dismissWithClickedButtonIndex:(NSInteger)buttonIndex animated:(BOOL)animated

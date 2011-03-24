@@ -56,7 +56,12 @@ NSString *const UIApplicationLaunchOptionsAnnotationKey = @"UIApplicationLaunchO
 NSString *const UIApplicationLaunchOptionsLocalNotificationKey = @"UIApplicationLaunchOptionsLocalNotificationKey";
 NSString *const UIApplicationLaunchOptionsLocationKey = @"UIApplicationLaunchOptionsLocationKey";
 
+NSString *const UIApplicationDidReceiveMemoryWarningNotification = @"UIApplicationDidReceiveMemoryWarningNotification";
+
 NSString *const UITrackingRunLoopMode = @"UITrackingRunLoopMode";
+
+UIBackgroundTaskIdentifier const UIBackgroundTaskInvalid = NSUIntegerMax; // correct?
+NSTimeInterval const UIMinimumKeepAliveTimeout = 0;
 
 static UIApplication *_theApplication = nil;
 
@@ -77,6 +82,7 @@ static BOOL TouchIsActive(UITouch *touch)
 
 @implementation UIApplication
 @synthesize keyWindow=_keyWindow, delegate=_delegate, idleTimerDisabled=_idleTimerDisabled, applicationSupportsShakeToEdit=_applicationSupportsShakeToEdit;
+@synthesize applicationIconBadgeNumber = _applicationIconBadgeNumber;
 
 + (void)initialize
 {
@@ -122,6 +128,21 @@ static BOOL TouchIsActive(UITouch *touch)
 	return YES;
 }
 
+- (CGRect)statusBarFrame
+{
+    return CGRectZero;
+}
+
+- (UIApplicationState)applicationState
+{
+    return UIApplicationStateActive;
+}
+
+- (NSTimeInterval)backgroundTimeRemaining
+{
+    return 0;
+}
+
 - (BOOL)isNetworkActivityIndicatorVisible
 {
 	return _networkActivityIndicatorVisible;
@@ -156,6 +177,40 @@ static BOOL TouchIsActive(UITouch *touch)
 }
 
 - (void)setStatusBarOrientation:(UIInterfaceOrientation)orientation
+{
+}
+
+- (UIStatusBarStyle)statusBarStyle
+{
+    return UIStatusBarStyleDefault;
+}
+
+- (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle
+{
+}
+
+- (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle animated:(BOOL)animated
+{
+}
+
+- (void)presentLocalNotificationNow:(UILocalNotification *)notification
+{
+}
+
+- (void)cancelAllLocalNotifications
+{
+}
+
+- (void)cancelLocalNotification:(UILocalNotification *)notification
+{
+}
+
+- (NSArray *)scheduledLocalNotifications
+{
+    return nil;
+}
+
+- (void)setScheduledLocalNotifications:(NSArray *)scheduledLocalNotifications
 {
 }
 
@@ -235,7 +290,7 @@ static BOOL TouchIsActive(UITouch *touch)
 - (BOOL)_sendActionToFirstResponder:(SEL)action withSender:(id)sender fromScreen:(UIScreen *)theScreen
 {
 	UIResponder *responder = [self _firstResponderForScreen:theScreen];
-
+    
 	while (responder) {
 		if ([responder respondsToSelector:action]) {
 			[responder performSelector:action withObject:sender];
@@ -265,18 +320,28 @@ static BOOL TouchIsActive(UITouch *touch)
 	return [[NSWorkspace sharedWorkspace] openURL:url];
 }
 
+- (BOOL)canOpenURL:(NSURL *)URL
+{
+    NSString *urlString = [URL absoluteString];
+    if ([urlString hasPrefix:@"http://"]) {
+        return YES;
+    }else {
+        return NO;
+    }
+}
+
 - (BOOL)_sendGlobalKeyboardNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
 {
 	if (![self isIgnoringInteractionEvents]) {
 		UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
-
+        
 		if (key.type == UIKeyTypeEnter || (key.commandKeyPressed && key.type == UIKeyTypeReturn)) {
 			if ([self _firstResponderCanPerformAction:@selector(commit:) withSender:key fromScreen:theScreen]) {
 				return [self _sendActionToFirstResponder:@selector(commit:) withSender:key fromScreen:theScreen];
 			}
 		}
 	}
-		
+    
 	return NO;
 }
 
@@ -290,13 +355,13 @@ static BOOL TouchIsActive(UITouch *touch)
 				UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
 				UIEvent *event = [[[UIEvent alloc] initWithEventType:UIEventTypeKeyPress] autorelease];
 				[event _setTimestamp:[theNSEvent timestamp]];
-
+                
 				[firstResponder keyPressed:key withEvent:event];
 				return ![event _isUnhandledKeyPressEvent];
 			}
 		}
 	}
-
+    
 	return NO;
 }
 
@@ -313,7 +378,7 @@ static BOOL TouchIsActive(UITouch *touch)
 	
 	if (TouchIsActive(touch)) {
 		isSupportedEvent = YES;
-
+        
 		switch ([theNSEvent type]) {
 			case NSLeftMouseUp:
 				[touch _setPhase:UITouchPhaseEnded screenLocation:screenLocation tapCount:touch.tapCount delta:delta timestamp:timestamp];
@@ -388,7 +453,7 @@ static BOOL TouchIsActive(UITouch *touch)
 	
 	if (shouldCancelTouch) {
 		const BOOL wasActiveTouch = TouchIsActive(touch);
-
+        
 		[touch _setTouchPhaseCancelled];
 		
 		if (!aView && wasActiveTouch) {
@@ -422,6 +487,15 @@ static BOOL TouchIsActive(UITouch *touch)
 	}
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidBecomeActiveNotification object:self];
+}
+
+@end
+
+
+@implementation UIApplication(UIApplicationDeprecated)
+
+- (void)setStatusBarHidden:(BOOL)hidden animated:(BOOL)animated
+{
 }
 
 @end

@@ -27,8 +27,13 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef IBAction
 #define IBAction void
+#endif
+
+#ifndef IBOutlet
 #define IBOutlet
+#endif
 
 #import "UIApplicationDelegate.h"
 #import "UIScreen.h"
@@ -68,12 +73,17 @@
 #import "UITextInputTraits.h"
 #import "UIWebView.h"
 #import "UIToolbar.h"
+#import "UITabBar.h"
+#import "UITabBarItem.h"
+#import "UISegmentedControl.h"
 #import "UIActivityIndicatorView.h"
 #import "UIPopoverController.h"
 #import "UINavigationBar.h"
 #import "UITextView.h"
 #import "UIDataDetectors.h"
 #import "UITableViewController.h"
+#import "UISearchBar.h"
+#import "UISearchDisplayController.h"
 #import "UIImagePickerController.h"
 #import "UINibLoading.h"
 #import "UIGestureRecognizer.h"
@@ -82,6 +92,7 @@
 #import "UISplitViewController.h"
 #import "UITabBarController.h"
 #import "UISwitch.h"
+#import "UISlider.h"
 #import "UIAcceleration.h"
 #import "UIAccelerometer.h"
 #import "UIMenuController.h"
@@ -89,11 +100,22 @@
 #import "UIViewAdapter.h"
 #import "UIPageControl.h"
 #import "UIProgressView.h"
-#import "UIKey.h"	// non standard
+#import "UIPickerView.h"
 #import "UIPanGestureRecognizer.h"
 #import "UIPinchGestureRecognizer.h"
 #import "UIRotationGestureRecognizer.h"
 #import "UISwipeGestureRecognizer.h"
-#import "UINSCellControl.h"		// non standard
-#import "UIPickerView.h"
-#import "UIDatePicker.h"
+
+// non-standard imports
+#import "UIKey.h"
+#import "UINSCellControl.h"
+#import "CALayer+UIKitCompatibility.h"
+
+// only add if core data is included
+#import "NSFetchedResultsController.h"
+
+// AudioToolbox-Helper
+#define kSystemSoundID_Vibrate kSystemSoundID_UserPreferredAlert
+
+// SystemConfiguration-Helper
+#define kSCNetworkReachabilityFlagsIsWWAN kSCNetworkReachabilityFlagsConnectionOnDemand

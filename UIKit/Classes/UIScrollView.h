@@ -71,6 +71,7 @@ typedef enum {
 	BOOL _pagingEnabled;
 	NSTimer *_dragDelegateTimer;
 	BOOL _bouncesZoom;
+    BOOL _bounces;
 	BOOL _zooming;
 	NSMutableArray *_scrollAnimations;
 	NSTimer *_scrollTimer;
@@ -84,7 +85,11 @@ typedef enum {
 		BOOL scrollViewWillBeginZooming : 1;
 		BOOL scrollViewDidEndZooming : 1;
 		BOOL scrollViewDidZoom : 1;
-	} _delegateCan;	
+	} _delegateCan;
+
+  // should be flag struct
+  BOOL _alwaysBounceHorizontal;
+  BOOL _alwaysBounceVertical;
 }
 
 - (void)scrollRectToVisible:(CGRect)rect animated:(BOOL)animated;
@@ -102,12 +107,15 @@ typedef enum {
 @property (nonatomic) UIScrollViewIndicatorStyle indicatorStyle;
 @property (nonatomic) BOOL showsHorizontalScrollIndicator;
 @property (nonatomic) BOOL showsVerticalScrollIndicator;
+@property (nonatomic) BOOL alwaysBounceVertical;   // stub
+@property (nonatomic) BOOL alwaysBounceHorizontal; // stub
 @property (nonatomic, getter=isScrollEnabled) BOOL scrollEnabled;
 @property (nonatomic, assign) id<UIScrollViewDelegate> delegate;
 @property (nonatomic) BOOL scrollsToTop;			// no effect
 @property (nonatomic) BOOL delaysContentTouches;	// no effect
 @property (nonatomic) BOOL canCancelContentTouches; // no effect
 @property (nonatomic, readonly, getter=isDragging) BOOL dragging;
+@property (nonatomic, readonly, getter=isTracking) BOOL tracking; // always returns NO
 @property (nonatomic, readonly, getter=isDecelerating) BOOL decelerating;	// always returns NO
 @property (nonatomic, assign) BOOL pagingEnabled;
 
@@ -116,6 +124,7 @@ typedef enum {
 @property (nonatomic) float zoomScale;
 @property (nonatomic, readonly, getter=isZooming) BOOL zooming;
 @property (nonatomic, readonly, getter=isZoomBouncing) BOOL zoomBouncing;	// always NO
-@property (nonatomic) BOOL bouncesZoom;										// no effect
+@property (nonatomic, assign) BOOL bouncesZoom;				  			    // no effect
+@property (nonatomic, assign) BOOL bounces;                                 // no effect
 
 @end

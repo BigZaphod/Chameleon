@@ -27,6 +27,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import "UIStringDrawing.h"
 #import "UIScrollView.h"
 #import "UIDataDetectors.h"
 #import "UITextInputTraits.h"
@@ -66,6 +67,8 @@ extern NSString *const UITextViewTextDidEndEditingNotification;
 
 - (void)scrollRangeToVisible:(NSRange)range;
 
+
+@property (nonatomic) UITextAlignment textAlignment; // stub, not yet implemented!
 @property (nonatomic) NSRange selectedRange;
 @property (nonatomic, getter=isEditable) BOOL editable;
 @property (nonatomic, copy) NSString *text;
@@ -73,5 +76,7 @@ extern NSString *const UITextViewTextDidEndEditingNotification;
 @property (nonatomic, retain) UIFont *font;
 @property (nonatomic) UIDataDetectorTypes dataDetectorTypes;
 @property (nonatomic, assign) id<UITextViewDelegate> delegate;
+
+- (BOOL)hasText;
 
 @end

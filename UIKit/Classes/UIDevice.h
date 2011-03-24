@@ -29,6 +29,8 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString *const UIDeviceOrientationDidChangeNotification;
+
 typedef enum {
 	UIDeviceOrientationUnknown,
 	UIDeviceOrientationPortrait,
@@ -50,18 +52,31 @@ typedef enum {
 	[[UIDevice currentDevice] userInterfaceIdiom] : \
 	UIUserInterfaceIdiomPhone)
 
+#define UIDeviceOrientationIsPortrait(orientation)  \
+    ((orientation) == UIDeviceOrientationPortrait || \
+    (orientation) == UIDeviceOrientationPortraitUpsideDown)
+
+#define UIDeviceOrientationIsLandscape(orientation) \
+    ((orientation) == UIDeviceOrientationLandscapeLeft || \
+    (orientation) == UIDeviceOrientationLandscapeRight)
+
 @interface UIDevice : NSObject {
 }
 
 + (UIDevice *)currentDevice;
 
 @property (nonatomic, readonly, retain) NSString *name;
-@property (nonatomic, readonly) UIUserInterfaceIdiom userInterfaceIdiom;					// always returns UIUserInterfaceIdiomPad, but maybe shouldn't?
+@property (nonatomic, readonly) UIUserInterfaceIdiom userInterfaceIdiom;					// always returns UIUserInterfaceIdiomDesktop
 @property (nonatomic, readonly) UIDeviceOrientation orientation;							// always returns UIDeviceOrientationPortrait
 @property (nonatomic, readonly,getter=isMultitaskingSupported) BOOL multitaskingSupported;	// always returns YES
 @property (nonatomic, readonly, retain) NSString *systemName;
 @property (nonatomic, readonly, retain) NSString *systemVersion;
 @property (nonatomic, readonly, retain) NSString *model;
+@property (nonatomic, readonly, retain) NSString *uniqueIdentifier;
+@property (nonatomic, readonly, getter=isGeneratingDeviceOrientationNotifications) BOOL generatesDeviceOrientationNotifications; // aways returns NO
+
+- (void)beginGeneratingDeviceOrientationNotifications;  // no effect
+- (void)endGeneratingDeviceOrientationNotifications;    // no effect
 
 @end
 

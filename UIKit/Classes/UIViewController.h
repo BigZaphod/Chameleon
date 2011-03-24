@@ -29,6 +29,10 @@
 
 #import "UIResponder.h"
 #import "UIApplication.h"
+#import "UISearchDisplayController.h"
+#import "UITabBarItem.h"
+
+@class UITabBarController;
 
 typedef enum {
 	UIModalPresentationFullScreen = 0,
@@ -60,7 +64,11 @@ typedef enum {
 	BOOL _hidesBottomBarWhenPushed;
 	UIViewController *_parentViewController;
 	UIViewController *_modalViewController;
+    UISearchDisplayController *_searchDisplayController;
 	UIModalTransitionStyle _modalTransitionStyle;
+
+    UITabBarItem *_tabBarItem;
+    UITabBarController *_tabBarController;
 }
 
 - (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)nibBundle;	// won't load a nib no matter what you do!
@@ -109,5 +117,10 @@ typedef enum {
 @property (nonatomic, readonly) UIViewController *parentViewController;
 @property (nonatomic, readonly, retain) UINavigationController *navigationController;
 @property (nonatomic, readonly, retain) UISplitViewController *splitViewController;
+@property (nonatomic, readonly, retain) UISearchDisplayController *searchDisplayController; // stub
+
+// stubs
+@property (nonatomic, retain) UITabBarItem *tabBarItem;
+@property (nonatomic, readonly, retain) UITabBarController *tabBarController;
 
 @end
