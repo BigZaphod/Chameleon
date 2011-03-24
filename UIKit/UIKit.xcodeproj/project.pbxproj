@@ -243,8 +243,6 @@
 		78CB48B1133AA536008636DA /* UITabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CB48AF133AA535008636DA /* UITabBarItem.m */; };
 		78CB48B4133AA8AF008636DA /* UISegmentedControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 78CB48B2133AA8AF008636DA /* UISegmentedControl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		78CB48B5133AA8AF008636DA /* UISegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CB48B3133AA8AF008636DA /* UISegmentedControl.m */; };
-		78CB48B8133AAA23008636DA /* SSDrawingMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 78CB48B6133AAA22008636DA /* SSDrawingMacros.h */; };
-		78CB48B9133AAA23008636DA /* SSDrawingMacros.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CB48B7133AAA22008636DA /* SSDrawingMacros.m */; };
 		78CB48BC133AADD0008636DA /* UIPickerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 78CB48BA133AADCF008636DA /* UIPickerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		78CB48BD133AADD0008636DA /* UIPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CB48BB133AADD0008636DA /* UIPickerView.m */; };
 		78CB48D9133AB922008636DA /* UISlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 78CB48D7133AB91E008636DA /* UISlider.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -494,8 +492,6 @@
 		78CB48AF133AA535008636DA /* UITabBarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITabBarItem.m; sourceTree = "<group>"; };
 		78CB48B2133AA8AF008636DA /* UISegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISegmentedControl.h; sourceTree = "<group>"; };
 		78CB48B3133AA8AF008636DA /* UISegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISegmentedControl.m; sourceTree = "<group>"; };
-		78CB48B6133AAA22008636DA /* SSDrawingMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSDrawingMacros.h; path = ../../../../../Documents/Projects/OpenSourceApps/sstoolkit/SSToolkit/SSDrawingMacros.h; sourceTree = "<group>"; };
-		78CB48B7133AAA22008636DA /* SSDrawingMacros.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSDrawingMacros.m; path = ../../../../../Documents/Projects/OpenSourceApps/sstoolkit/SSToolkit/SSDrawingMacros.m; sourceTree = "<group>"; };
 		78CB48BA133AADCF008636DA /* UIPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPickerView.h; sourceTree = "<group>"; };
 		78CB48BB133AADD0008636DA /* UIPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPickerView.m; sourceTree = "<group>"; };
 		78CB48D7133AB91E008636DA /* UISlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISlider.h; sourceTree = "<group>"; };
@@ -738,8 +734,6 @@
 				78CB48AF133AA535008636DA /* UITabBarItem.m */,
 				78CB48B2133AA8AF008636DA /* UISegmentedControl.h */,
 				78CB48B3133AA8AF008636DA /* UISegmentedControl.m */,
-				78CB48B6133AAA22008636DA /* SSDrawingMacros.h */,
-				78CB48B7133AAA22008636DA /* SSDrawingMacros.m */,
 				78CB48BA133AADCF008636DA /* UIPickerView.h */,
 				78CB48BB133AADD0008636DA /* UIPickerView.m */,
 				78CB48D7133AB91E008636DA /* UISlider.h */,
@@ -970,7 +964,6 @@
 				38E523B11339680400E041B3 /* UINavigationItem+UIPrivate.h in Headers */,
 				38E523B513396B5B00E041B3 /* UINavigationBar+UIPrivate.h in Headers */,
 				38615C78133A81B900841EEA /* UIFont+UIPrivate.h in Headers */,
-				78CB48B8133AAA23008636DA /* SSDrawingMacros.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1145,7 +1138,6 @@
 				38615C6B133A54DF00841EEA /* UINSCellControl.m in Sources */,
 				7806ED2B133A1D7500273BC6 /* UITabBar.m in Sources */,
 				78CB48B5133AA8AF008636DA /* UISegmentedControl.m in Sources */,
-				78CB48B9133AAA23008636DA /* SSDrawingMacros.m in Sources */,
 				78CB48BD133AADD0008636DA /* UIPickerView.m in Sources */,
 				78CB48DA133AB922008636DA /* UISlider.m in Sources */,
 			);

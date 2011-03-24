@@ -48,6 +48,8 @@ extern NSString *const UIApplicationLaunchOptionsAnnotationKey;
 extern NSString *const UIApplicationLaunchOptionsLocalNotificationKey;
 extern NSString *const UIApplicationLaunchOptionsLocationKey;
 
+extern NSString *const UIApplicationDidReceiveMemoryWarningNotification;
+
 extern NSString *const UITrackingRunLoopMode;
 
 typedef enum {
@@ -109,11 +111,19 @@ const NSTimeInterval UIMinimumKeepAliveTimeout;
 
 - (BOOL)sendAction:(SEL)action to:(id)target from:(id)sender forEvent:(UIEvent *)event;
 - (void)sendEvent:(UIEvent *)event;
+
 - (BOOL)openURL:(NSURL *)url;
+- (BOOL)canOpenURL:(NSURL *)URL;
+
+- (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle animated:(BOOL)animated;  // no effect
 
 - (void)beginIgnoringInteractionEvents;
 - (void)endIgnoringInteractionEvents;
 - (BOOL)isIgnoringInteractionEvents;
+
+- (void)presentLocalNotificationNow:(UILocalNotification *)notification;
+- (void)cancelLocalNotification:(UILocalNotification *)notification;
+- (void)cancelAllLocalNotifications;
 
 @property (nonatomic, readonly) UIWindow *keyWindow;
 @property (nonatomic, readonly) NSArray *windows;
@@ -125,26 +135,14 @@ const NSTimeInterval UIMinimumKeepAliveTimeout;
 @property (nonatomic, assign) id<UIApplicationDelegate> delegate;
 @property (nonatomic, getter=isIdleTimerDisabled) BOOL idleTimerDisabled;	// has no actual affect
 @property (nonatomic) BOOL applicationSupportsShakeToEdit;					// no effect
-
-@property(nonatomic) UIStatusBarStyle statusBarStyle; // does not change on mac os
-- (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle animated:(BOOL)animated;  // does not change on mac os
-
+@property (nonatomic) UIStatusBarStyle statusBarStyle;                      // always returns UIStatusBarStyleDefault
 @property (nonatomic, readonly) UIApplicationState applicationState;
 @property (nonatomic, readonly) NSTimeInterval backgroundTimeRemaining;
-
-@property(nonatomic) NSInteger applicationIconBadgeNumber; // stub
-
-- (BOOL)canOpenURL:(NSURL *)URL;
-
-// local notifications
-- (void)presentLocalNotificationNow:(UILocalNotification *)notification;
-- (void)cancelLocalNotification:(UILocalNotification *)notification;
-- (void)cancelAllLocalNotifications;
-@property(nonatomic,copy) NSArray *scheduledLocalNotifications;
+@property(nonatomic) NSInteger applicationIconBadgeNumber;                  // stub
+@property (nonatomic,copy) NSArray *scheduledLocalNotifications;
 
 @end
 
-NSString *const UIApplicationDidReceiveMemoryWarningNotification;
 
 @interface UIApplication(UIApplicationDeprecated)
 - (void)setStatusBarHidden:(BOOL)hidden animated:(BOOL)animated __attribute__((deprecated)); // use -setStatusBarHidden:withAnimation:
