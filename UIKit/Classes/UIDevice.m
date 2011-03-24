@@ -97,6 +97,15 @@ static UIDevice *theDevice;
   return [[NSProcessInfo processInfo] globallyUniqueString];
 }
 
+- (BOOL)isGeneratingDeviceOrientationNotifications {
+  return NO;
+}
+
+// stub
+- (void)beginGeneratingDeviceOrientationNotifications {}
+- (void)endGeneratingDeviceOrientationNotifications {}
+
+
 @end
 
 // will not be sended on mac
