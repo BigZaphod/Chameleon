@@ -239,6 +239,14 @@
 		789CF899133A3CD500250AB4 /* NSFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 789CF897133A3CD500250AB4 /* NSFetchedResultsController.m */; };
 		78CB48AC133A9C51008636DA /* UISearchBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 78CB48AA133A9C51008636DA /* UISearchBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		78CB48AD133A9C51008636DA /* UISearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CB48AB133A9C51008636DA /* UISearchBar.m */; };
+		78CB48B0133AA536008636DA /* UITabBarItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 78CB48AE133AA535008636DA /* UITabBarItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		78CB48B1133AA536008636DA /* UITabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CB48AF133AA535008636DA /* UITabBarItem.m */; };
+		78CB48B4133AA8AF008636DA /* UISegmentedControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 78CB48B2133AA8AF008636DA /* UISegmentedControl.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		78CB48B5133AA8AF008636DA /* UISegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CB48B3133AA8AF008636DA /* UISegmentedControl.m */; };
+		78CB48B8133AAA23008636DA /* SSDrawingMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 78CB48B6133AAA22008636DA /* SSDrawingMacros.h */; };
+		78CB48B9133AAA23008636DA /* SSDrawingMacros.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CB48B7133AAA22008636DA /* SSDrawingMacros.m */; };
+		78CB48BC133AADD0008636DA /* UIPickerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 78CB48BA133AADCF008636DA /* UIPickerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		78CB48BD133AADD0008636DA /* UIPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CB48BB133AADD0008636DA /* UIPickerView.m */; };
 		78D533DD133A9434006F17CA /* UISearchDisplayController.h in Headers */ = {isa = PBXBuildFile; fileRef = 78D533DB133A9434006F17CA /* UISearchDisplayController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		78D533DE133A9434006F17CA /* UISearchDisplayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D533DC133A9434006F17CA /* UISearchDisplayController.m */; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
@@ -480,6 +488,14 @@
 		789CF897133A3CD500250AB4 /* NSFetchedResultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSFetchedResultsController.m; sourceTree = "<group>"; };
 		78CB48AA133A9C51008636DA /* UISearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISearchBar.h; sourceTree = "<group>"; };
 		78CB48AB133A9C51008636DA /* UISearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISearchBar.m; sourceTree = "<group>"; };
+		78CB48AE133AA535008636DA /* UITabBarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITabBarItem.h; sourceTree = "<group>"; };
+		78CB48AF133AA535008636DA /* UITabBarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITabBarItem.m; sourceTree = "<group>"; };
+		78CB48B2133AA8AF008636DA /* UISegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISegmentedControl.h; sourceTree = "<group>"; };
+		78CB48B3133AA8AF008636DA /* UISegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISegmentedControl.m; sourceTree = "<group>"; };
+		78CB48B6133AAA22008636DA /* SSDrawingMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSDrawingMacros.h; path = ../../../../../Documents/Projects/OpenSourceApps/sstoolkit/SSToolkit/SSDrawingMacros.h; sourceTree = "<group>"; };
+		78CB48B7133AAA22008636DA /* SSDrawingMacros.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSDrawingMacros.m; path = ../../../../../Documents/Projects/OpenSourceApps/sstoolkit/SSToolkit/SSDrawingMacros.m; sourceTree = "<group>"; };
+		78CB48BA133AADCF008636DA /* UIPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPickerView.h; sourceTree = "<group>"; };
+		78CB48BB133AADD0008636DA /* UIPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPickerView.m; sourceTree = "<group>"; };
 		78D533DB133A9434006F17CA /* UISearchDisplayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISearchDisplayController.h; sourceTree = "<group>"; };
 		78D533DC133A9434006F17CA /* UISearchDisplayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISearchDisplayController.m; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -714,6 +730,14 @@
 				78D533DC133A9434006F17CA /* UISearchDisplayController.m */,
 				78CB48AA133A9C51008636DA /* UISearchBar.h */,
 				78CB48AB133A9C51008636DA /* UISearchBar.m */,
+				78CB48AE133AA535008636DA /* UITabBarItem.h */,
+				78CB48AF133AA535008636DA /* UITabBarItem.m */,
+				78CB48B2133AA8AF008636DA /* UISegmentedControl.h */,
+				78CB48B3133AA8AF008636DA /* UISegmentedControl.m */,
+				78CB48B6133AAA22008636DA /* SSDrawingMacros.h */,
+				78CB48B7133AAA22008636DA /* SSDrawingMacros.m */,
+				78CB48BA133AADCF008636DA /* UIPickerView.h */,
+				78CB48BB133AADD0008636DA /* UIPickerView.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -814,7 +838,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				789CF898133A3CD500250AB4 /* NSFetchedResultsController.h in Headers */,
+				78CB48B4133AA8AF008636DA /* UISegmentedControl.h in Headers */,
 				14CC840611EFA8AF005988CC /* UIRoundedRectButton.h in Headers */,
+				78CB48BC133AADD0008636DA /* UIPickerView.h in Headers */,
 				14A726D21213303400648C9B /* UIApplication+UIPrivate.h in Headers */,
 				14A726D41213303400648C9B /* UIControl+UIPrivate.h in Headers */,
 				14A726D71213303400648C9B /* UIImage+UIPrivate.h in Headers */,
@@ -824,6 +850,7 @@
 				14A726DD1213303400648C9B /* UITouch+UIPrivate.h in Headers */,
 				14A726DE1213303400648C9B /* UIView+UIPrivate.h in Headers */,
 				14A726DF1213303400648C9B /* UIViewController+UIPrivate.h in Headers */,
+				78CB48B0133AA536008636DA /* UITabBarItem.h in Headers */,
 				14A726E01213303400648C9B /* UIWindow+UIPrivate.h in Headers */,
 				1490AFE01219C31C00774286 /* UIPopoverController+UIPrivate.h in Headers */,
 				14FA8C5F121DA4A000C4264B /* UINinePartImage.h in Headers */,
@@ -936,6 +963,7 @@
 				38E523B11339680400E041B3 /* UINavigationItem+UIPrivate.h in Headers */,
 				38E523B513396B5B00E041B3 /* UINavigationBar+UIPrivate.h in Headers */,
 				38615C78133A81B900841EEA /* UIFont+UIPrivate.h in Headers */,
+				78CB48B8133AAA23008636DA /* SSDrawingMacros.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1016,6 +1044,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				789CF899133A3CD500250AB4 /* NSFetchedResultsController.m in Sources */,
+				78CB48B1133AA536008636DA /* UITabBarItem.m in Sources */,
 				78CB48AD133A9C51008636DA /* UISearchBar.m in Sources */,
 				14CC840711EFA8AF005988CC /* UIRoundedRectButton.m in Sources */,
 				14FA8C60121DA4A000C4264B /* UINinePartImage.m in Sources */,
@@ -1108,6 +1137,9 @@
 				1489860B12EE2DDC003D4751 /* UIPanGestureRecognizer.m in Sources */,
 				38615C6B133A54DF00841EEA /* UINSCellControl.m in Sources */,
 				7806ED2B133A1D7500273BC6 /* UITabBar.m in Sources */,
+				78CB48B5133AA8AF008636DA /* UISegmentedControl.m in Sources */,
+				78CB48B9133AAA23008636DA /* SSDrawingMacros.m in Sources */,
+				78CB48BD133AADD0008636DA /* UIPickerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
