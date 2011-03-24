@@ -56,6 +56,8 @@
 - (void)selectRow:(NSInteger)row inComponent:(NSInteger)component animated:(BOOL)animated; // stub
 - (UIView *) viewForRow: (NSInteger) row inComponent: (NSInteger) component; // stub
 
+- (void)selectRow:(NSInteger)row inComponent:(NSInteger)component animated:(BOOL)animated; // stub
+
 @end
 
 
