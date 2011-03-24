@@ -80,6 +80,7 @@ static BOOL TouchIsActive(UITouch *touch)
 
 @implementation UIApplication
 @synthesize keyWindow=_keyWindow, delegate=_delegate, idleTimerDisabled=_idleTimerDisabled, applicationSupportsShakeToEdit=_applicationSupportsShakeToEdit;
+@synthesize applicationIconBadgeNumber = _applicationIconBadgeNumber;
 
 + (void)initialize
 {
