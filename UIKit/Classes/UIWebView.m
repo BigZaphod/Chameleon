@@ -33,6 +33,7 @@
 
 @implementation UIWebView
 @synthesize request=_request, delegate=_delegate, dataDetectorTypes=_dataDetectorTypes;
+@synthesize scalesPageToFit = _scalesPageToFit; // stub
 
 - (id)initWithFrame:(CGRect)frame
 {

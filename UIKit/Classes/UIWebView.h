@@ -55,6 +55,7 @@ typedef NSUInteger UIWebViewNavigationType;
 	UIDataDetectorTypes _dataDetectorTypes;
 	WebView *_webView;
 	UIViewAdapter *_webViewAdapter;
+    BOOL _scalesPageToFit;
 	
 	struct {
 		BOOL shouldStartLoadWithRequest : 1;
@@ -75,6 +76,7 @@ typedef NSUInteger UIWebViewNavigationType;
 @property (nonatomic, readonly, getter=isLoading) BOOL loading;
 @property (nonatomic, readonly, getter=canGoBack) BOOL canGoBack;
 @property (nonatomic, readonly, getter=canGoForward) BOOL canGoForward;
+@property (nonatomic, assign) BOOL scalesPageToFit; // stub
 @property (nonatomic, readonly, retain) NSURLRequest *request;
 @property (nonatomic) UIDataDetectorTypes dataDetectorTypes;
 
