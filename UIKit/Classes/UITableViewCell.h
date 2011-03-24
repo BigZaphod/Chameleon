@@ -73,6 +73,7 @@ typedef enum {
 	UIView *_backgroundView;
 	UIView *_selectedBackgroundView;
 	UITableViewCellAccessoryType _accessoryType;
+	UIView *_accessoryView;
 	UITableViewCellAccessoryType _editingAccessoryType;
 	UITableViewCellSelectionStyle _selectionStyle;
 	NSInteger _indentationLevel;
@@ -95,6 +96,7 @@ typedef enum {
 @property (nonatomic) UITableViewCellSelectionStyle selectionStyle;
 @property (nonatomic) NSInteger indentationLevel;
 @property (nonatomic) UITableViewCellAccessoryType accessoryType;
+@property (nonatomic, retain) UIView *accessoryView;
 @property (nonatomic) UITableViewCellAccessoryType editingAccessoryType;
 @property (nonatomic, getter=isSelected) BOOL selected;
 @property (nonatomic, getter=isHighlighted) BOOL highlighted;

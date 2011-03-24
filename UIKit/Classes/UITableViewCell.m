@@ -37,7 +37,7 @@
 extern CGFloat _UITableViewDefaultRowHeight;
 
 @implementation UITableViewCell
-@synthesize contentView=_contentView, accessoryType=_accessoryType, textLabel=_textLabel, selectionStyle=_selectionStyle, indentationLevel=_indentationLevel;
+@synthesize contentView=_contentView, accessoryType=_accessoryType, accessoryView=_accessoryView, textLabel=_textLabel, selectionStyle=_selectionStyle, indentationLevel=_indentationLevel;
 @synthesize imageView=_imageView, editingAccessoryType=_editingAccessoryType, selected=_selected, backgroundView=_backgroundView;
 @synthesize selectedBackgroundView=_selectedBackgroundView, highlighted=_highlighted, editing=_editing, reuseIdentifier=_reuseIdentifier;
 
@@ -86,6 +86,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	[_imageView release];
 	[_backgroundView release];
 	[_selectedBackgroundView release];
+	[_accessoryView release];
 	[_reuseIdentifier release];
 	[super dealloc];
 }
@@ -98,6 +99,16 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	BOOL showingSeperator = !_seperatorView.hidden;
 	
 	CGRect contentFrame = CGRectMake(0,0,bounds.size.width,bounds.size.height-(showingSeperator? 1 : 0));
+	CGRect accessoryRect = CGRectMake(bounds.size.width, 0, 0, 0);
+	if(_accessoryView) {
+		accessoryRect.size = [_accessoryView sizeThatFits: bounds.size];
+		accessoryRect.origin.x = bounds.size.width - accessoryRect.size.width;
+		accessoryRect.origin.y = round(0.5*(bounds.size.height - accessoryRect.size.height));
+		_accessoryView.frame = accessoryRect;
+		if(_accessoryView.superview != self)
+			[self addSubview: _accessoryView];
+		contentFrame.size.width = accessoryRect.origin.x - 1;
+	}
 	
 	_backgroundView.frame = contentFrame;
 	_selectedBackgroundView.frame = contentFrame;
