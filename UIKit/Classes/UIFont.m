@@ -72,6 +72,59 @@ static NSString *UIFontBoldSystemFontName = nil;
 	return [self fontWithNSFont:[NSFont fontWithName:fontName size:fontSize]];
 }
 
+NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFStringRef nameAttr)
+{
+	NSMutableSet *names = [NSMutableSet set];
+	if (collection) {
+		CFArrayRef descriptors = CTFontCollectionCreateMatchingFontDescriptors(collection);
+		if (descriptors) {
+			NSInteger count = CFArrayGetCount(descriptors);
+			for (NSInteger i = 0; i < count; i++) {
+				CTFontDescriptorRef descriptor = (CTFontDescriptorRef) CFArrayGetValueAtIndex(descriptors, i);
+				CFTypeRef name = CTFontDescriptorCopyAttribute(descriptor, nameAttr);
+				if(name) {
+					if (CFGetTypeID(name) == CFStringGetTypeID()) {
+						[names addObject: (NSString*) name];
+					}
+					CFRelease(name);
+				}
+			}
+			CFRelease(descriptors);
+		}
+	}
+	return [names allObjects];
+}
+
++ (NSArray *)familyNames
+{
+	CTFontCollectionRef collection = CTFontCollectionCreateFromAvailableFonts(NULL);
+	NSArray* names = _getFontCollectionNames(collection, kCTFontFamilyNameAttribute);
+	if (collection) {
+		CFRelease(collection);
+	}
+	return names;
+}
+
++ (NSArray *)fontNamesForFamilyName:(NSString *)familyName
+{
+	NSArray *names = nil;
+	CTFontDescriptorRef descriptor = CTFontDescriptorCreateWithAttributes((CFDictionaryRef)
+		[NSDictionary dictionaryWithObjectsAndKeys: familyName, (NSString*)kCTFontFamilyNameAttribute, nil, nil]);
+	if (descriptor) {
+		CFArrayRef descriptors = CFArrayCreate(NULL, (CFTypeRef*) &descriptor, 1, &kCFTypeArrayCallBacks);
+		if (descriptors) {
+			CTFontCollectionRef collection = CTFontCollectionCreateWithFontDescriptors(descriptors, NULL);
+			names = _getFontCollectionNames(collection, kCTFontNameAttribute);
+			if (collection) {
+				CFRelease(collection);
+			}
+			CFRelease(descriptors);
+		}
+		CFRelease(descriptor);
+	}
+	return names;
+}
+
 + (UIFont *)systemFontOfSize:(CGFloat)fontSize
 {
 	NSFont *systemFont = UIFontSystemFontName? [NSFont fontWithName:UIFontSystemFontName size:fontSize] : [NSFont systemFontOfSize:fontSize];

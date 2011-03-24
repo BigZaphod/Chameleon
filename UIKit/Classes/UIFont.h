@@ -35,6 +35,9 @@
 }
 
 + (UIFont *)fontWithName:(NSString *)fontName size:(CGFloat)fontSize;
++ (NSArray *)familyNames;
++ (NSArray *)fontNamesForFamilyName:(NSString *)familyName;
+
 + (UIFont *)systemFontOfSize:(CGFloat)fontSize;
 + (UIFont *)boldSystemFontOfSize:(CGFloat)fontSize;
 
