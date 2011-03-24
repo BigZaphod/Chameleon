@@ -152,6 +152,11 @@
 	return (_menu != nil);
 }
 
+- (NSInteger)numberOfButtons
+{
+    return [_menuTitles count];
+}
+
 - (void)_showFromPoint:(CGPoint)point rightAligned:(BOOL)rightAligned inView:(UIView *)view
 {
 	[view addSubview:self];
