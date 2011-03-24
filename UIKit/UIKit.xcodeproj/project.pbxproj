@@ -232,6 +232,8 @@
 		38615C78133A81B900841EEA /* UIFont+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 38615C77133A81B900841EEA /* UIFont+UIPrivate.h */; };
 		38E523B11339680400E041B3 /* UINavigationItem+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 38E523AF1339680400E041B3 /* UINavigationItem+UIPrivate.h */; };
 		38E523B513396B5B00E041B3 /* UINavigationBar+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 38E523B413396B5B00E041B3 /* UINavigationBar+UIPrivate.h */; };
+		537472D5133ADD4B00EBD5EA /* UIInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 537472D3133ADD4B00EBD5EA /* UIInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		537472D6133ADD4B00EBD5EA /* UIInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 537472D4133ADD4B00EBD5EA /* UIInterface.m */; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -465,6 +467,8 @@
 		38615C77133A81B900841EEA /* UIFont+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+UIPrivate.h"; sourceTree = "<group>"; };
 		38E523AF1339680400E041B3 /* UINavigationItem+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationItem+UIPrivate.h"; sourceTree = "<group>"; };
 		38E523B413396B5B00E041B3 /* UINavigationBar+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+UIPrivate.h"; sourceTree = "<group>"; };
+		537472D3133ADD4B00EBD5EA /* UIInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIInterface.h; sourceTree = "<group>"; };
+		537472D4133ADD4B00EBD5EA /* UIInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIInterface.m; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* UIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -603,6 +607,8 @@
 				1489851912EE2CFE003D4751 /* UIImagePickerController.m */,
 				1489851A12EE2CFE003D4751 /* UIImageView.h */,
 				1489851B12EE2CFE003D4751 /* UIImageView.m */,
+				537472D3133ADD4B00EBD5EA /* UIInterface.h */,
+				537472D4133ADD4B00EBD5EA /* UIInterface.m */,
 				1489851C12EE2CFE003D4751 /* UIKey.h */,
 				1489851D12EE2CFE003D4751 /* UIKey.m */,
 				1489851E12EE2CFE003D4751 /* UIKit.h */,
@@ -622,10 +628,10 @@
 				1489852C12EE2CFE003D4751 /* UINavigationController.m */,
 				1489852D12EE2CFE003D4751 /* UINavigationItem.h */,
 				1489852E12EE2CFE003D4751 /* UINavigationItem.m */,
-				38615C68133A54DF00841EEA /* UINSCellControl.h */,
-				38615C69133A54DF00841EEA /* UINSCellControl.m */,
 				1489852F12EE2CFE003D4751 /* UINibLoading.h */,
 				1489853012EE2CFE003D4751 /* UINibLoading.m */,
+				38615C68133A54DF00841EEA /* UINSCellControl.h */,
+				38615C69133A54DF00841EEA /* UINSCellControl.m */,
 				1489853112EE2CFE003D4751 /* UIPageControl.h */,
 				1489853212EE2CFE003D4751 /* UIPageControl.m */,
 				1489860812EE2DDC003D4751 /* UIPanGestureRecognizer.h */,
@@ -906,6 +912,7 @@
 				38E523B11339680400E041B3 /* UINavigationItem+UIPrivate.h in Headers */,
 				38E523B513396B5B00E041B3 /* UINavigationBar+UIPrivate.h in Headers */,
 				38615C78133A81B900841EEA /* UIFont+UIPrivate.h in Headers */,
+				537472D5133ADD4B00EBD5EA /* UIInterface.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1074,6 +1081,7 @@
 				1489860712EE2DBD003D4751 /* UISwipeGestureRecognizer.m in Sources */,
 				1489860B12EE2DDC003D4751 /* UIPanGestureRecognizer.m in Sources */,
 				38615C6B133A54DF00841EEA /* UINSCellControl.m in Sources */,
+				537472D6133ADD4B00EBD5EA /* UIInterface.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
