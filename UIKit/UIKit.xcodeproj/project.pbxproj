@@ -247,6 +247,8 @@
 		78CB48B9133AAA23008636DA /* SSDrawingMacros.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CB48B7133AAA22008636DA /* SSDrawingMacros.m */; };
 		78CB48BC133AADD0008636DA /* UIPickerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 78CB48BA133AADCF008636DA /* UIPickerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		78CB48BD133AADD0008636DA /* UIPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CB48BB133AADD0008636DA /* UIPickerView.m */; };
+		78CB48D9133AB922008636DA /* UISlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 78CB48D7133AB91E008636DA /* UISlider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		78CB48DA133AB922008636DA /* UISlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CB48D8133AB920008636DA /* UISlider.m */; };
 		78D533DD133A9434006F17CA /* UISearchDisplayController.h in Headers */ = {isa = PBXBuildFile; fileRef = 78D533DB133A9434006F17CA /* UISearchDisplayController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		78D533DE133A9434006F17CA /* UISearchDisplayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D533DC133A9434006F17CA /* UISearchDisplayController.m */; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
@@ -496,6 +498,8 @@
 		78CB48B7133AAA22008636DA /* SSDrawingMacros.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSDrawingMacros.m; path = ../../../../../Documents/Projects/OpenSourceApps/sstoolkit/SSToolkit/SSDrawingMacros.m; sourceTree = "<group>"; };
 		78CB48BA133AADCF008636DA /* UIPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPickerView.h; sourceTree = "<group>"; };
 		78CB48BB133AADD0008636DA /* UIPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPickerView.m; sourceTree = "<group>"; };
+		78CB48D7133AB91E008636DA /* UISlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISlider.h; sourceTree = "<group>"; };
+		78CB48D8133AB920008636DA /* UISlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISlider.m; sourceTree = "<group>"; };
 		78D533DB133A9434006F17CA /* UISearchDisplayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISearchDisplayController.h; sourceTree = "<group>"; };
 		78D533DC133A9434006F17CA /* UISearchDisplayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISearchDisplayController.m; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -738,6 +742,8 @@
 				78CB48B7133AAA22008636DA /* SSDrawingMacros.m */,
 				78CB48BA133AADCF008636DA /* UIPickerView.h */,
 				78CB48BB133AADD0008636DA /* UIPickerView.m */,
+				78CB48D7133AB91E008636DA /* UISlider.h */,
+				78CB48D8133AB920008636DA /* UISlider.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -838,6 +844,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				789CF898133A3CD500250AB4 /* NSFetchedResultsController.h in Headers */,
+				78CB48D9133AB922008636DA /* UISlider.h in Headers */,
 				78CB48B4133AA8AF008636DA /* UISegmentedControl.h in Headers */,
 				14CC840611EFA8AF005988CC /* UIRoundedRectButton.h in Headers */,
 				78CB48BC133AADD0008636DA /* UIPickerView.h in Headers */,
@@ -1140,6 +1147,7 @@
 				78CB48B5133AA8AF008636DA /* UISegmentedControl.m in Sources */,
 				78CB48B9133AAA23008636DA /* SSDrawingMacros.m in Sources */,
 				78CB48BD133AADD0008636DA /* UIPickerView.m in Sources */,
+				78CB48DA133AB922008636DA /* UISlider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
