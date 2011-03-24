@@ -38,6 +38,7 @@
 #import "UISplitViewController.h"
 #import "UIToolbar.h"
 #import "UIScreen.h"
+#import "UITabBarController.h"
 
 @implementation UIViewController
 @synthesize view=_view, wantsFullScreenLayout=_wantsFullScreenLayout, title=_title, contentSizeForViewInPopover=_contentSizeForViewInPopover;
@@ -45,6 +46,7 @@
 @synthesize modalViewController=_modalViewController, parentViewController=_parentViewController;
 @synthesize modalTransitionStyle=_modalTransitionStyle, hidesBottomBarWhenPushed=_hidesBottomBarWhenPushed;
 @synthesize searchDisplayController = _searchDisplayController;
+@synthesize tabBarItem = _tabBarItem, tabBarController = _tabBarController;
 
 - (id)init
 {
