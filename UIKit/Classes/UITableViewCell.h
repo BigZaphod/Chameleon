@@ -82,6 +82,7 @@ typedef enum {
 	BOOL _highlighted;
     BOOL _showingDeleteConfirmation;
 	NSString *_reuseIdentifier;
+    CGFloat _indentationWidth;
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
@@ -104,5 +105,6 @@ typedef enum {
 @property (nonatomic, getter=isEditing) BOOL editing; // not yet implemented
 @property (nonatomic, readonly) BOOL showingDeleteConfirmation;  // not yet implemented
 @property (nonatomic, readonly, copy) NSString *reuseIdentifier;
+@property (nonatomic, assign) CGFloat indentationWidth; // 10 per default
 
 @end

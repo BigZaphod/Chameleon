@@ -41,10 +41,12 @@ extern CGFloat _UITableViewDefaultRowHeight;
 @synthesize imageView=_imageView, editingAccessoryType=_editingAccessoryType, selected=_selected, backgroundView=_backgroundView;
 @synthesize selectedBackgroundView=_selectedBackgroundView, highlighted=_highlighted, reuseIdentifier=_reuseIdentifier;
 @synthesize editing = _editing, detailTextLabel = _detailTextLabel, showingDeleteConfirmation = _showingDeleteConfirmation;
+@synthesize indentationWidth = _indentationWidth;
 
 - (id)initWithFrame:(CGRect)frame
 {
 	if ((self=[super initWithFrame:frame])) {
+        _indentationWidth = 10;
 		_style = UITableViewCellStyleDefault;
 
 		_seperatorView = [[UITableViewCellSeparator alloc] init];
