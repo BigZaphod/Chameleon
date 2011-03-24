@@ -51,7 +51,7 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 @synthesize maximumZoomScale=_maximumZoomScale, minimumZoomScale=_minimumZoomScale, scrollsToTop=_scrollsToTop;
 @synthesize indicatorStyle=_indicatorStyle, delaysContentTouches=_delaysContentTouches, delegate=_delegate, pagingEnabled=_pagingEnabled;
 @synthesize canCancelContentTouches=_canCancelContentTouches, bouncesZoom=_bouncesZoom, zooming=_zooming;
-@synthesize alwaysBounceVertical = _alwaysBounceVertical, alwaysBounceHorizontal = _alwaysBounceHorizontal;
+@synthesize alwaysBounceVertical, alwaysBounceHorizontal;
 
 - (id)initWithFrame:(CGRect)frame
 {
