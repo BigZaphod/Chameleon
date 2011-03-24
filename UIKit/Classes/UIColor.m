@@ -154,7 +154,7 @@ static UIColor *GroupTableViewBackgroundColor = nil;
 + (UIColor *)purpleColor		{ return PurpleColor ?: (PurpleColor = [[self alloc] initWithNSColor:[NSColor purpleColor]]); }
 + (UIColor *)brownColor			{ return BrownColor ?: (BrownColor = [[self alloc] initWithNSColor:[NSColor brownColor]]); }
 + (UIColor *)clearColor			{ return ClearColor ?: (ClearColor = [[self alloc] initWithNSColor:[NSColor clearColor]]); }
-+ (UIColor *)GroupTableViewBackgroundColor	{ return GroupTableViewBackgroundColor ?: (GroupTableViewBackgroundColor = [[self alloc] initWithNSColor:[NSColor lightGrayColor]]); } // TODO
++ (UIColor *)groupTableViewBackgroundColor	{ return GroupTableViewBackgroundColor ?: (GroupTableViewBackgroundColor = [[self alloc] initWithNSColor:[NSColor lightGrayColor]]); } // TODO
 
 - (id)initWithWhite:(CGFloat)white alpha:(CGFloat)alpha
 {
