@@ -76,6 +76,7 @@ typedef enum {
 	UIImage *_disabledBackground;
 	BOOL _editing;
 	BOOL _clearsOnBeginEditing;
+	BOOL _adjustsFontSizeToFitWidth;
 	NSString *_placeholder;
 	UITextBorderStyle _borderStyle;
 	
@@ -109,6 +110,7 @@ typedef enum {
 @property (nonatomic, retain) UIColor *textColor;
 @property (nonatomic, readonly, getter=isEditing) BOOL editing;
 @property (nonatomic) BOOL clearsOnBeginEditing;
+@property (nonatomic) BOOL adjustsFontSizeToFitWidth;
 
 @property (nonatomic, retain) UIImage *background;
 @property (nonatomic, retain) UIImage *disabledBackground;
