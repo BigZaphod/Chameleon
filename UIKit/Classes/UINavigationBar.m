@@ -297,6 +297,16 @@ typedef enum {
 	[self setItems:items animated:NO];
 }
 
+- (UIBarStyle)barStyle
+{
+    return UIBarStyleDefault; //stub
+}
+
+- (void)setBarStyle:(UIBarStyle)barStyle
+{
+    // stub
+}
+
 - (void)pushNavigationItem:(UINavigationItem *)item animated:(BOOL)animated
 {
 	BOOL shouldPush = YES;
