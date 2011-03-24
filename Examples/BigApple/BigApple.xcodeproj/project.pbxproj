@@ -14,6 +14,7 @@
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		4CD1A1A41339F9FE0053E6AD /* UIKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 147D65B0133917A30065FE3B /* UIKit.framework */; };
 		4CD1A1A51339FA040053E6AD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 147D65B0133917A30065FE3B /* UIKit.framework */; };
+		78CBF0E4133ADA0E00E75130 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78CBF0E3133ADA0E00E75130 /* Quartz.framework */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -66,6 +67,7 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		78CBF0E3133ADA0E00E75130 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* BigApple-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BigApple-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* BigApple.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BigApple.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -75,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78CBF0E4133ADA0E00E75130 /* Quartz.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				4CD1A1A51339FA040053E6AD /* UIKit.framework in Frameworks */,
 			);
@@ -138,6 +141,7 @@
 		29B97314FDCFA39411CA2CEA /* BigApple */ = {
 			isa = PBXGroup;
 			children = (
+				78CBF0E3133ADA0E00E75130 /* Quartz.framework */,
 				147D65A8133917A20065FE3B /* UIKit.xcodeproj */,
 				14EEFA7C12DFB3E800EB7D95 /* Chameleon Classes */,
 				080E96DDFE201D6D7F000001 /* AppKit Classes */,
