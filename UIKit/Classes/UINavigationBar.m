@@ -299,12 +299,11 @@ typedef enum {
 
 - (UIBarStyle)barStyle
 {
-    return UIBarStyleDefault; //stub
+    return UIBarStyleDefault;
 }
 
 - (void)setBarStyle:(UIBarStyle)barStyle
 {
-    // stub
 }
 
 - (void)pushNavigationItem:(UINavigationItem *)item animated:(BOOL)animated

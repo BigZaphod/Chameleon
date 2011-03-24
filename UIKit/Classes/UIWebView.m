@@ -32,12 +32,13 @@
 #import <WebKit/WebKit.h>
 
 @implementation UIWebView
-@synthesize request=_request, delegate=_delegate, dataDetectorTypes=_dataDetectorTypes;
-@synthesize scalesPageToFit = _scalesPageToFit; // stub
+@synthesize request=_request, delegate=_delegate, dataDetectorTypes=_dataDetectorTypes, scalesPageToFit=_scalesPageToFit;
 
 - (id)initWithFrame:(CGRect)frame
 {
 	if ((self=[super initWithFrame:frame])) {
+        _scalesPageToFit = NO;
+        
 		_webView = [(WebView *)[WebView alloc] initWithFrame:NSRectFromCGRect(self.bounds)];
 		[_webView setAutoresizingMask:(NSViewWidthSizable|NSViewHeightSizable)];
 		[_webView setPolicyDelegate:self];

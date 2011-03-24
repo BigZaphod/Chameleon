@@ -31,6 +31,8 @@
 #import "UITableViewCell.h"
 #import "NSIndexPath+UITableView.h"
 
+extern NSString *const UITableViewIndexSearch;
+
 @class UITableView;
 
 @protocol UITableViewDelegate <UIScrollViewDelegate>
@@ -162,5 +164,3 @@ typedef enum {
 @property (nonatomic) CGFloat sectionFooterHeight;
 
 @end
-
-NSString *const UITableViewIndexSearch;

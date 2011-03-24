@@ -38,14 +38,13 @@
 @class UIImageView, UIImage;
 
 @interface UISlider : UIControl {
-  float _value;
-  float _minimumValue;
-  float _maximumValue;
+    float _value;
+    float _minimumValue;
+    float _maximumValue;
 }
 
-// stubs
-@property(nonatomic) float value;
-@property(nonatomic) float minimumValue;
-@property(nonatomic) float maximumValue;
+@property (nonatomic) float value;
+@property (nonatomic) float minimumValue;
+@property (nonatomic) float maximumValue;
 
 @end

@@ -41,8 +41,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 @synthesize imageView=_imageView, editingAccessoryType=_editingAccessoryType, selected=_selected, backgroundView=_backgroundView;
 @synthesize selectedBackgroundView=_selectedBackgroundView, highlighted=_highlighted, reuseIdentifier=_reuseIdentifier;
 @synthesize editing = _editing, detailTextLabel = _detailTextLabel, showingDeleteConfirmation = _showingDeleteConfirmation;
-@synthesize indentationWidth = _indentationWidth;
-@synthesize accessoryView = _accessoryView;
+@synthesize indentationWidth=_indentationWidth, accessoryView=_accessoryView;
 
 - (id)initWithFrame:(CGRect)frame
 {

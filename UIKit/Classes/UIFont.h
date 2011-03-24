@@ -40,9 +40,9 @@
 
 - (UIFont *)fontWithSize:(CGFloat)fontSize;
 
-+ (CGFloat)systemFontSize; // size of the standard System font.
-+ (CGFloat)smallSystemFontSize; // size of standard small System font.
-+ (CGFloat)labelFontSize;	// size of the standard Label Font.
++ (CGFloat)systemFontSize;          // size of the standard System font.
++ (CGFloat)smallSystemFontSize;     // size of standard small System font.
++ (CGFloat)labelFontSize;           // size of the standard Label Font.
 
 @property (nonatomic, readonly, retain) NSString *fontName;
 

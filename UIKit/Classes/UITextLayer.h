@@ -29,6 +29,7 @@
 
 #import <QuartzCore/CALayer.h>
 #import <Foundation/Foundation.h>
+#import "UIStringDrawing.h"
 
 @class UICustomNSClipView, UICustomNSTextView, UIColor, UIFont, UIScrollView, UIWindow, UIView;
 
@@ -58,8 +59,6 @@
 - (void)_textDidEndEditing;
 - (BOOL)_textShouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
 
-//- (BOOL)_textShouldHandleKeyDown:(NSEvent *)event;
-
 @optional
 - (void)_textDidChange;
 - (void)_textDidChangeSelection;
@@ -76,7 +75,8 @@
 	UIColor *textColor;
 	UIFont *font;
 	BOOL changingResponderStatus;
-	
+    UITextAlignment textAlignment;
+
 	struct {
 		unsigned int didChange : 1;
 		unsigned int didChangeSelection : 1;
@@ -96,5 +96,6 @@
 @property (nonatomic, retain) UIFont *font;
 @property (nonatomic, assign) BOOL editable;
 @property (nonatomic, getter=isSecureTextEntry) BOOL secureTextEntry;
+@property (nonatomic, assign) UITextAlignment textAlignment;
 
 @end

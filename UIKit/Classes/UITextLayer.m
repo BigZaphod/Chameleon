@@ -46,7 +46,7 @@
 @end
 
 @implementation UITextLayer
-@synthesize textColor, font, editable, secureTextEntry;
+@synthesize textColor, font, editable, secureTextEntry, textAlignment;
 
 - (id)initWithContainer:(UIView <UITextLayerContainerViewProtocol, UITextLayerTextDelegate> *)aView isField:(BOOL)isField
 {
@@ -55,6 +55,7 @@
 		self.masksToBounds = NO;
 		
 		containerView = aView;
+        textAlignment = UITextAlignmentLeft;
 
 		textDelegateHas.didChange = [containerView respondsToSelector:@selector(_textDidChange)];
 		textDelegateHas.didChangeSelection = [containerView respondsToSelector:@selector(_textDidChangeSelection)];

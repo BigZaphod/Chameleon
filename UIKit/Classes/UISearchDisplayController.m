@@ -45,33 +45,37 @@
 @synthesize searchResultsDelegate = _tableViewDelegate;
 @synthesize delegate = _delegate;
 
-- (id)initWithSearchBar:(UISearchBar *)searchBar contentsController:(UIViewController *)viewController {
-  if ((self = [super init])) {
-    _searchBar = [searchBar retain];
-    _viewController = [viewController retain];
-  }
-  return self;
+- (id)initWithSearchBar:(UISearchBar *)searchBar contentsController:(UIViewController *)viewController
+{
+    if ((self = [super init])) {
+        _searchBar = [searchBar retain];
+        _viewController = [viewController retain];
+    }
+    return self;
 }
 
-- (void)dealloc {
-  _delegate = nil;
-  _tableViewDataSource = nil;
-  _tableViewDelegate = nil;
-  [_searchBar release];
-  [_viewController release];
-  [super dealloc];
+- (void)dealloc
+{
+    _delegate = nil;
+    _tableViewDataSource = nil;
+    _tableViewDelegate = nil;
+    [_searchBar release];
+    [_viewController release];
+    [super dealloc];
 }
 
-- (BOOL)active {
-  return NO; // stub
+- (BOOL)active
+{
+    return NO;
 }
 
-- (void)setActive:(BOOL)active {
-  [self setActive:active animated:NO];
+- (void)setActive:(BOOL)active
+{
+    [self setActive:active animated:NO];
 }
 
-- (void)setActive:(BOOL)visible animated:(BOOL)animated {
-  // stub
+- (void)setActive:(BOOL)visible animated:(BOOL)animated
+{
 }
 
 @end

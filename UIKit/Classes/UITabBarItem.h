@@ -38,23 +38,23 @@
 @class UIImage;
 
 typedef enum {
-  UITabBarSystemItemMore,
-  UITabBarSystemItemFavorites,
-  UITabBarSystemItemFeatured,
-  UITabBarSystemItemTopRated,
-  UITabBarSystemItemRecents,
-  UITabBarSystemItemContacts,
-  UITabBarSystemItemHistory,
-  UITabBarSystemItemBookmarks,
-  UITabBarSystemItemSearch,
-  UITabBarSystemItemDownloads,
-  UITabBarSystemItemMostRecent,
-  UITabBarSystemItemMostViewed,
+    UITabBarSystemItemMore,
+    UITabBarSystemItemFavorites,
+    UITabBarSystemItemFeatured,
+    UITabBarSystemItemTopRated,
+    UITabBarSystemItemRecents,
+    UITabBarSystemItemContacts,
+    UITabBarSystemItemHistory,
+    UITabBarSystemItemBookmarks,
+    UITabBarSystemItemSearch,
+    UITabBarSystemItemDownloads,
+    UITabBarSystemItemMostRecent,
+    UITabBarSystemItemMostViewed,
 } UITabBarSystemItem;
 
 
 @interface UITabBarItem : UIBarItem {
-  NSString *_badgeValue;
+    NSString *_badgeValue;
 }
 
 - (id)initWithTitle:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag;
