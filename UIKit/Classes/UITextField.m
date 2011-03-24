@@ -407,8 +407,13 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 	_textLayer.text = newText;
 }
 
+- (UITextAlignment)textAlignment {
+  return UITextAlignmentLeft; // STUB
+}
 
-
+- (void)setTextAlignment:(UITextAlignment)textAlignment {
+  // STUB
+}
 
 - (BOOL)_textShouldBeginEditing
 {
