@@ -237,7 +237,7 @@
 		789CF671133A34BC00250AB4 /* UITabBar.m in Headers */ = {isa = PBXBuildFile; fileRef = 7806ED29133A1D7500273BC6 /* UITabBar.m */; settings = {ATTRIBUTES = (Public, ); }; };
 		789CF898133A3CD500250AB4 /* NSFetchedResultsController.h in Headers */ = {isa = PBXBuildFile; fileRef = 789CF896133A3CD500250AB4 /* NSFetchedResultsController.h */; };
 		789CF899133A3CD500250AB4 /* NSFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 789CF897133A3CD500250AB4 /* NSFetchedResultsController.m */; };
-		78D533DD133A9434006F17CA /* UISearchDisplayController.h in Headers */ = {isa = PBXBuildFile; fileRef = 78D533DB133A9434006F17CA /* UISearchDisplayController.h */; };
+		78D533DD133A9434006F17CA /* UISearchDisplayController.h in Headers */ = {isa = PBXBuildFile; fileRef = 78D533DB133A9434006F17CA /* UISearchDisplayController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		78D533DE133A9434006F17CA /* UISearchDisplayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D533DC133A9434006F17CA /* UISearchDisplayController.m */; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -835,6 +835,7 @@
 				14F56F4412664D430045EC82 /* UIPopoverView.h in Headers */,
 				14CB384512689907003334AD /* UIPopoverNSWindow.h in Headers */,
 				14CB384912689949003334AD /* UIPopoverOverlayNSView.h in Headers */,
+				78D533DD133A9434006F17CA /* UISearchDisplayController.h in Headers */,
 				144156DB1284A22200532FE2 /* UIToolbarButton.h in Headers */,
 				1457DD3F128DDE610057A7F9 /* UITransitionView.h in Headers */,
 				1426FFDD129ADEA300BD31E5 /* UIControlAction.h in Headers */,
@@ -928,7 +929,6 @@
 				38E523B513396B5B00E041B3 /* UINavigationBar+UIPrivate.h in Headers */,
 				38615C78133A81B900841EEA /* UIFont+UIPrivate.h in Headers */,
 				789CF898133A3CD500250AB4 /* NSFetchedResultsController.h in Headers */,
-				78D533DD133A9434006F17CA /* UISearchDisplayController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1083,6 +1083,7 @@
 				148985D612EE2CFF003D4751 /* UITableView.m in Sources */,
 				148985D812EE2CFF003D4751 /* UITableViewCell.m in Sources */,
 				148985DA12EE2CFF003D4751 /* UITableViewController.m in Sources */,
+				78D533DE133A9434006F17CA /* UISearchDisplayController.m in Sources */,
 				148985DC12EE2CFF003D4751 /* UITapGestureRecognizer.m in Sources */,
 				148985DE12EE2CFF003D4751 /* UITextField.m in Sources */,
 				148985E112EE2CFF003D4751 /* UITextView.m in Sources */,
@@ -1099,7 +1100,6 @@
 				38615C6B133A54DF00841EEA /* UINSCellControl.m in Sources */,
 				7806ED2B133A1D7500273BC6 /* UITabBar.m in Sources */,
 				789CF899133A3CD500250AB4 /* NSFetchedResultsController.m in Sources */,
-				78D533DE133A9434006F17CA /* UISearchDisplayController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
