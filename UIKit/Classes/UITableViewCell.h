@@ -78,6 +78,7 @@ typedef enum {
 	NSInteger _indentationLevel;
 	BOOL _selected;
 	BOOL _highlighted;
+	BOOL _editing;
 	NSString *_reuseIdentifier;
 }
 
@@ -97,6 +98,7 @@ typedef enum {
 @property (nonatomic) UITableViewCellAccessoryType editingAccessoryType;
 @property (nonatomic, getter=isSelected) BOOL selected;
 @property (nonatomic, getter=isHighlighted) BOOL highlighted;
+@property (nonatomic, getter=isEditing) BOOL editing;
 @property (nonatomic, readonly, copy) NSString *reuseIdentifier;
 
 @end
