@@ -188,6 +188,16 @@ static BOOL TouchIsActive(UITouch *touch)
   // ignored on mac os
 }
 
+- (BOOL)canOpenURL:(NSURL *)URL {
+  NSString *urlString = [URL absoluteString];
+  if ([urlString hasPrefix:@"http://"]) {
+    return YES;
+  }else {
+    return NO;
+  }
+}
+
+
 - (void)_setKeyWindow:(UIWindow *)newKeyWindow
 {
 	_keyWindow = newKeyWindow;
