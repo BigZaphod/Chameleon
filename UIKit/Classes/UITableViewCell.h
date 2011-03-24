@@ -68,6 +68,7 @@ typedef enum {
 	UITableViewCellStyle _style;
 	UITableViewCellSeparator *_seperatorView;
 	UIView *_contentView;
+    UIView *_accessoryView; // stub
 	UILabel *_textLabel;
     UILabel *_detailTextLabel; // not yet displayed!
 	UIImageView *_imageView;
@@ -91,6 +92,7 @@ typedef enum {
 - (void)prepareForReuse;
 
 @property (nonatomic, readonly, retain) UIView *contentView;
+@property (nonatomic, readonly, retain) UIView *accessoryView;
 @property (nonatomic, readonly, retain) UILabel *textLabel;
 @property (nonatomic, readonly, retain) UILabel *detailTextLabel;
 @property (nonatomic, readonly, retain) UIImageView *imageView;
