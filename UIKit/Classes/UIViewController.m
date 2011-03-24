@@ -35,6 +35,7 @@
 #import "UINavigationController.h"
 #import "UISplitViewController.h"
 #import "UIToolbar.h"
+#import "UIScreen.h"
 
 @implementation UIViewController
 @synthesize view=_view, wantsFullScreenLayout=_wantsFullScreenLayout, title=_title, contentSizeForViewInPopover=_contentSizeForViewInPopover;
