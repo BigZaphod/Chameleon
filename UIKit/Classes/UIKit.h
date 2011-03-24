@@ -94,3 +94,4 @@
 #import "UIPinchGestureRecognizer.h"
 #import "UIRotationGestureRecognizer.h"
 #import "UISwipeGestureRecognizer.h"
+#import "UINSCellControl.h"		// non standard
