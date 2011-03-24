@@ -37,14 +37,14 @@
 @synthesize title=_title, rightBarButtonItem=_rightBarButtonItem, titleView=_titleView, hidesBackButton=_hidesBackButton;
 @synthesize leftBarButtonItem=_leftBarButtonItem, backBarButtonItem=_backBarButtonItem, prompt=_prompt;
 
-+ (NSSet *) _keyPathsTriggeringUIUpdates
++ (NSSet *)_keyPathsTriggeringUIUpdates
 {
 	static NSSet * __keyPaths = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		__keyPaths = [[NSSet alloc] initWithObjects: @"title", @"prompt", @"backBarButtonItem", @"leftBarButtonItem", @"rightBarButtonItem", @"titleView", @"hidesBackButton", nil];
+		__keyPaths = [[NSSet alloc] initWithObjects:@"title", @"prompt", @"backBarButtonItem", @"leftBarButtonItem", @"rightBarButtonItem", @"titleView", @"hidesBackButton", nil];
 	});
-	return ( __keyPaths );
+	return __keyPaths;
 }
 
 - (id)initWithTitle:(NSString *)theTitle
@@ -58,7 +58,7 @@
 - (void)dealloc
 {
 	// removes automatic observation
-	[self _setNavigationBar: nil];
+	[self _setNavigationBar:nil];
 	
 	[_backBarButtonItem release];
 	[_leftBarButtonItem release];
@@ -69,47 +69,42 @@
 	[super dealloc];
 }
 
-- (void) observeValueForKeyPath: (NSString *) keyPath ofObject: (id) object change: (NSDictionary *) change context: (void *) context
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-	if ( context != [self class] )
-	{
-		if ( [[self superclass] instancesRespondToSelector: _cmd] )
-			[super observeValueForKeyPath: keyPath ofObject: object change: change context: context];
+	if (context != [self class]) {
+		if ([[self superclass] instancesRespondToSelector:_cmd])
+			[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 		return;
 	}
 	
-	[[self _navigationBar] _updateNavigationItem: self animated: NO];
+	[[self _navigationBar] _updateNavigationItem:self animated:NO];
 }
 
-- (void) _setNavigationBar: (UINavigationBar *) navigationBar
+- (void)_setNavigationBar:(UINavigationBar *)navigationBar
 {
 	// weak reference
-	if ( _navigationBar == navigationBar )
+	if (_navigationBar == navigationBar)
 		return;
 	
-	if ( _navigationBar != nil && navigationBar == nil )
-	{
+	if (_navigationBar != nil && navigationBar == nil) {
 		// remove observation
-		for ( NSString * keyPath in [isa _keyPathsTriggeringUIUpdates] )
-		{
-			[self removeObserver: self forKeyPath: keyPath];
+		for (NSString * keyPath in [isa _keyPathsTriggeringUIUpdates]) {
+			[self removeObserver:self forKeyPath:keyPath];
 		}
 	}
-	else if ( navigationBar != nil )
-	{
+	else if (navigationBar != nil) {
 		// observe property changes to notify UI element
-		for ( NSString * keyPath in [isa _keyPathsTriggeringUIUpdates] )
-		{
-			[self addObserver: self forKeyPath: keyPath options: NSKeyValueObservingOptionNew context: [self class]];
+		for (NSString * keyPath in [isa _keyPathsTriggeringUIUpdates]) {
+			[self addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionNew context:[self class]];
 		}
 	}
 	
 	_navigationBar = navigationBar;
 }
 
-- (UINavigationBar *) _navigationBar
+- (UINavigationBar *)_navigationBar
 {
-	return ( _navigationBar );
+	return _navigationBar;
 }
 
 - (void)setLeftBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated

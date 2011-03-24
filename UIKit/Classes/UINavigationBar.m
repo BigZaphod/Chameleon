@@ -342,12 +342,11 @@ typedef enum {
 	return nil;
 }
 
-- (void) _updateNavigationItem: (UINavigationItem *) item animated: (BOOL) animated	// ignored for now
+- (void)_updateNavigationItem:(UINavigationItem *)item animated:(BOOL)animated	// ignored for now
 {
 	// let's sanity-check that the item is supposed to be talking to us
-	if ( item != self.topItem )
-	{
-		[item _setNavigationBar: nil];
+	if (item != self.topItem) {
+		[item _setNavigationBar:nil];
 		return;
 	}
 	
@@ -356,21 +355,19 @@ typedef enum {
 	//  such that it won't perform any coordinate translations, only fade in/out
 	
 	// don't just fire the damned thing-- set a flag & mark as needing layout
-	if ( _navigationBarFlags.reloadItem == 0 )
-	{
+	if (_navigationBarFlags.reloadItem == 0) {
 		_navigationBarFlags.reloadItem = 1;
 		[self setNeedsLayout];
 	}
 }
 
-- (void) layoutSubviews
+- (void)layoutSubviews
 {
 	[super layoutSubviews];
 	
-	if ( _navigationBarFlags.reloadItem )
-	{
+	if (_navigationBarFlags.reloadItem) {
 		_navigationBarFlags.reloadItem = 0;
-		[self _setViewsWithTransition: _UINavigationBarTransitionReload animated: NO];
+		[self _setViewsWithTransition:_UINavigationBarTransitionReload animated:NO];
 	}
 }
 
