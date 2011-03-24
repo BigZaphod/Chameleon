@@ -1,3 +1,9 @@
+//
+//  UITabBar.m
+//  UIKit
+//
+//  Created by Peter Steinberger on 23.03.11.
+//
 /*
  * Copyright (c) 2011, The Iconfactory. All rights reserved.
  *
@@ -27,37 +33,62 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIImage.h"
+#import "UITabBar.h"
+#import "UIImageView.h"
+#import "UIImage+UIPrivate.h"
+#import <QuartzCore/QuartzCore.h>
 
-@class NSImage;
+#define TABBAR_HEIGHT 60.0
 
-@interface UIImage (UIPrivate)
-+ (NSString *)_macPathForFile:(NSString *)path;		// inserts "@mac" into the filename of the file in the given path and returns the result
-+ (NSString *)_pathForFile:(NSString *)path;		// uses above, checks for existence, if found, returns it otherwise returns the path string un-altered (doesn't verify that the file at the original path exists, though)
+@implementation UITabBar
 
-+ (void)_cacheImage:(UIImage *)image forName:(NSString *)name;
-+ (NSString *)_nameForCachedImage:(UIImage *)image;
-+ (UIImage *)_cachedImageForName:(NSString *)name;
-+ (UIImage *)_backButtonImage;
-+ (UIImage *)_highlightedBackButtonImage;
-+ (UIImage *)_toolbarButtonImage;
-+ (UIImage *)_highlightedToolbarButtonImage;
-+ (UIImage *)_leftPopoverArrowImage;
-+ (UIImage *)_rightPopoverArrowImage;
-+ (UIImage *)_topPopoverArrowImage;
-+ (UIImage *)_bottomPopoverArrowImage;
-+ (UIImage *)_popoverBackgroundImage;
-+ (UIImage *)_roundedRectButtonImage;
-+ (UIImage *)_highlightedRoundedRectButtonImage;
-+ (UIImage *)_windowResizeGrabberImage;
-+ (UIImage *)_buttonBarSystemItemAdd;
-+ (UIImage *)_buttonBarSystemItemReply;
-+ (UIImage *)_tabBarBackgroundImage;
-+ (UIImage *)_tabBarItemImage;
+@synthesize items = _items, delegate = _delegate;
 
-- (UIImage *)_toolbarImage;		// returns a new image which is modified as required for toolbar buttons (turned into a solid color)
-+ (UIImage *)_imageFromNSImage:(NSImage *)ns;
+- (id)initWithFrame:(CGRect)rect {
+  if ((self = [super initWithFrame:rect])) {
+    rect.size.height = TABBAR_HEIGHT; // tabbar is always fixed
+    _selectedItemIndex = -1;
+    UIImage *backgroundImage = [UIImage _popoverBackgroundImage];
+    UIImageView *backgroundView = [[[UIImageView alloc] initWithImage:backgroundImage] autorelease];
+    backgroundView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    backgroundView.frame = rect;
+    [self addSubview:backgroundView];
+  }
+  return self;
+}
+
+- (void)dealloc {
+  _delegate = nil;
+  [_items release];
+  [super dealloc];
+}
+
+- (UITabBarItem *)selectedItem {
+  if (_selectedItemIndex >= 0) {
+    return [_items objectAtIndex:_selectedItemIndex];
+  }
+  return nil;
+}
+
+- (void)setSelectedItem:(UITabBarItem *)selectedItem {
+  // stub
+}
+
+- (void)setItems:(NSArray *)items animated:(BOOL)animated {
+  // stub
+}
+
+
+- (void)beginCustomizingItems:(NSArray *)items {
+  // stub
+}
+
+- (BOOL)endCustomizingAnimated:(BOOL)animated {
+  return YES; // stub
+}
+
+- (BOOL)isCustomizing {
+  return NO; // stub
+}
+
 @end
-
-// this is used by stretchable images to break the NSImage into multiple parts
-NSImage *_NSImageCreateSubimage(NSImage *theImage, CGRect rect);

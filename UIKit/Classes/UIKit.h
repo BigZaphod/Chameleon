@@ -68,6 +68,7 @@
 #import "UITextInputTraits.h"
 #import "UIWebView.h"
 #import "UIToolbar.h"
+#import "UITabBar.h"
 #import "UIActivityIndicatorView.h"
 #import "UIPopoverController.h"
 #import "UINavigationBar.h"
