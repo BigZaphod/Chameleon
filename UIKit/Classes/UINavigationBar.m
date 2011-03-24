@@ -28,10 +28,12 @@
  */
 
 #import "UINavigationBar.h"
+#import "UINavigationBar+UIPrivate.h"
 #import "UIGraphics.h"
 #import "UIColor.h"
 #import "UILabel.h"
 #import "UINavigationItem.h"
+#import "UINavigationItem+UIPrivate.h"
 #import "UIFont.h"
 #import "UIImage+UIPrivate.h"
 #import "UIBarButtonItem.h"
@@ -46,7 +48,8 @@ static const NSTimeInterval kAnimationDuration = 0.33;
 
 typedef enum {
 	_UINavigationBarTransitionPush,
-	_UINavigationBarTransitionPop
+	_UINavigationBarTransitionPop,
+	_UINavigationBarTransitionReload		// explicitly tag reloads from changed UINavigationItem data
 } _UINavigationBarTransition;
 
 @implementation UINavigationBar
@@ -108,6 +111,7 @@ typedef enum {
 
 - (void)dealloc
 {
+	[self.topItem _setNavigationBar: nil];
 	[_navStack release];
 	[_tintColor release];
 	[super dealloc];
@@ -184,6 +188,10 @@ typedef enum {
 	
 	if (topItem) {
 		UINavigationItem *backItem = self.backItem;
+		
+		// update weak references
+		[backItem _setNavigationBar: nil];
+		[topItem _setNavigationBar: self];
 
 		CGRect leftFrame = CGRectZero;
 		CGRect rightFrame = CGRectZero;
@@ -260,7 +268,7 @@ typedef enum {
 			_rightView.alpha = 1;
 			_centerView.alpha = 1;
 			[UIView commitAnimations];
-		}		
+		}
 	} else {
 		_leftView = _centerView = _rightView = nil;
 	}
@@ -332,6 +340,38 @@ typedef enum {
 	}
 	
 	return nil;
+}
+
+- (void) _updateNavigationItem: (UINavigationItem *) item animated: (BOOL) animated	// ignored for now
+{
+	// let's sanity-check that the item is supposed to be talking to us
+	if ( item != self.topItem )
+	{
+		[item _setNavigationBar: nil];
+		return;
+	}
+	
+	// this is going to remove & re-add all the item views. Not ideal, but simple enough that it's worth profiling.
+	// next step is to add animation support-- that will require changing _setViewsWithTransition:animated:
+	//  such that it won't perform any coordinate translations, only fade in/out
+	
+	// don't just fire the damned thing-- set a flag & mark as needing layout
+	if ( _navigationBarFlags.reloadItem == 0 )
+	{
+		_navigationBarFlags.reloadItem = 1;
+		[self setNeedsLayout];
+	}
+}
+
+- (void) layoutSubviews
+{
+	[super layoutSubviews];
+	
+	if ( _navigationBarFlags.reloadItem )
+	{
+		_navigationBarFlags.reloadItem = 0;
+		[self _setViewsWithTransition: _UINavigationBarTransitionReload animated: NO];
+	}
 }
 
 - (void)drawRect:(CGRect)rect

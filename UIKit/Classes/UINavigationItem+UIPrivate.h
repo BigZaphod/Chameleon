@@ -1,3 +1,9 @@
+//
+//  UINavigationItem+UIPrivate.h
+//  UIKit
+//
+//  Created by Jim Dovey on 11-03-22.
+//
 /*
  * Copyright (c) 2011, The Iconfactory. All rights reserved.
  *
@@ -27,50 +33,11 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIView.h"
+#import "UINavigationItem.h"
 
-@class UIColor, UINavigationItem, UINavigationBar;
+@class UINavigationBar;
 
-@protocol UINavigationBarDelegate <NSObject>
-@optional
-- (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPushItem:(UINavigationItem *)item;
-- (void)navigationBar:(UINavigationBar *)navigationBar didPushItem:(UINavigationItem *)item;
-- (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item;
-- (void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item;
-@end
-
-@interface UINavigationBar : UIView {
-@private
-	NSMutableArray *_navStack;
-	UIColor *_tintColor;
-	id _delegate;
-	
-	UIView *_leftView;
-	UIView *_centerView;
-	UIView *_rightView;
-	
-	struct {
-		BOOL shouldPushItem : 1;
-		BOOL didPushItem : 1;
-		BOOL shouldPopItem : 1;
-		BOOL didPopItem : 1;
-	} _delegateHas;
-	
-	// ideally this should share the same memory as the above flags structure...
-	struct {
-		unsigned reloadItem:1;
-		unsigned __RESERVED__:31;
-	} _navigationBarFlags;
-}
-
-- (void)setItems:(NSArray *)items animated:(BOOL)animated;
-- (void)pushNavigationItem:(UINavigationItem *)item animated:(BOOL)animated;
-- (UINavigationItem *)popNavigationItemAnimated:(BOOL)animated;
-
-@property (nonatomic, retain) UIColor *tintColor;
-@property (nonatomic, readonly, retain) UINavigationItem *topItem;
-@property (nonatomic, readonly, retain) UINavigationItem *backItem;
-@property (nonatomic, copy) NSArray *items;
-@property (nonatomic, assign) id delegate;
-
+@interface UINavigationItem (UIPrivate)
+- (void) _setNavigationBar: (UINavigationBar *) navigationBar;
+- (UINavigationBar *) _navigationBar;
 @end

@@ -29,7 +29,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class UIBarButtonItem, UIView;
+@class UIBarButtonItem, UIView, UINavigationBar;
 
 @interface UINavigationItem : NSObject {
 @private
@@ -40,6 +40,7 @@
 	UIBarButtonItem *_rightBarButtonItem;
 	UIView *_titleView;
 	BOOL _hidesBackButton;
+	UINavigationBar *_navigationBar;
 }
 
 - (id)initWithTitle:(NSString *)title;
