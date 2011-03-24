@@ -71,6 +71,7 @@ typedef enum {
 	BOOL _pagingEnabled;
 	NSTimer *_dragDelegateTimer;
 	BOOL _bouncesZoom;
+    BOOL _bounces;
 	BOOL _zooming;
 	NSMutableArray *_scrollAnimations;
 	NSTimer *_scrollTimer;
@@ -123,6 +124,7 @@ typedef enum {
 @property (nonatomic) float zoomScale;
 @property (nonatomic, readonly, getter=isZooming) BOOL zooming;
 @property (nonatomic, readonly, getter=isZoomBouncing) BOOL zoomBouncing;	// always NO
-@property (nonatomic) BOOL bouncesZoom;										// no effect
+@property (nonatomic, assign) BOOL bouncesZoom;				  			    // no effect
+@property (nonatomic, assign) BOOL bounces;                                 // no effect
 
 @end
