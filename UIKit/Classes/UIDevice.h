@@ -64,3 +64,5 @@ typedef enum {
 @property (nonatomic, readonly, retain) NSString *model;
 
 @end
+
+extern NSString *const UIDeviceOrientationDidChangeNotification;

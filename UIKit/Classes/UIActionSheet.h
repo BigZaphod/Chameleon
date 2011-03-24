@@ -28,6 +28,7 @@
  */
 
 #import "UIView.h"
+#import "UIInterface.h"
 
 @class UIActionSheet;
 
@@ -41,6 +42,13 @@
 - (void)actionSheetCancel:(UIActionSheet *)actionSheet;
 @end
 
+typedef enum {
+    UIActionSheetStyleAutomatic = -1,
+    UIActionSheetStyleDefault = UIBarStyleDefault,
+    UIActionSheetStyleBlackTranslucent = UIBarStyleBlackTranslucent,
+    UIActionSheetStyleBlackOpaque = UIBarStyleBlackOpaque
+} UIActionSheetStyle;
+
 @interface UIActionSheet : UIView {
 @private
 	id<UIActionSheetDelegate> _delegate;
@@ -51,6 +59,7 @@
 	NSMutableArray *_menuTitles;
 	NSMutableSet *_separatorIndexes;
 	id _menu;
+    UIActionSheetStyle _actionSheetStyle;
 	
 	struct {
 		BOOL clickedButtonAtIndex : 1;
@@ -75,5 +84,6 @@
 @property (nonatomic) NSInteger destructiveButtonIndex;
 @property (nonatomic) NSInteger cancelButtonIndex;
 @property (nonatomic, readonly) NSInteger firstOtherButtonIndex;
+@property (nonatomic, assign) UIActionSheetStyle actionSheetStyle;
 
 @end
