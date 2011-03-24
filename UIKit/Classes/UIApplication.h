@@ -98,6 +98,7 @@ typedef enum {
 @property (nonatomic, readonly) UIWindow *keyWindow;
 @property (nonatomic, readonly) NSArray *windows;
 @property (nonatomic, getter=isStatusBarHidden, readonly) BOOL statusBarHidden;
+@property (nonatomic, readonly) CGRect statusBarFrame;
 @property (nonatomic, getter=isNetworkActivityIndicatorVisible) BOOL networkActivityIndicatorVisible;	// does nothing, always returns NO
 @property (nonatomic) UIInterfaceOrientation statusBarOrientation;
 @property (nonatomic, readonly) NSTimeInterval statusBarOrientationAnimationDuration;

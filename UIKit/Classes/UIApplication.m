@@ -122,6 +122,10 @@ static BOOL TouchIsActive(UITouch *touch)
 	return YES;
 }
 
+- (CGRect)statusBarFrame {
+  return CGRectZero;
+}
+
 - (BOOL)isNetworkActivityIndicatorVisible
 {
 	return _networkActivityIndicatorVisible;
