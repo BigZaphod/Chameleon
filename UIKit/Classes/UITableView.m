@@ -397,6 +397,14 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	return CGRectZero;
 }
 
+- (void) beginUpdates
+{
+}
+
+- (void)endUpdates
+{
+}
+
 - (UITableViewCell *)cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// this is allowed to return nil if the cell isn't visible and is not restricted to only returning visible cells
@@ -687,12 +695,24 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	[self setEditing:editing animated:NO];
 }
 
+- (void)insertSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation
+{
+	[self reloadData];
+}
+
+- (void)deleteSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation
+{
+	[self reloadData];
+}
+
 - (void)insertRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation
 {
+	[self reloadData];
 }
 
 - (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation
 {
+	[self reloadData];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
