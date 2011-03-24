@@ -30,4 +30,13 @@
 #import "UITabBarController.h"
 
 @implementation UITabBarController
+
+@synthesize selectedViewController = _selectedViewController;
+@synthesize viewControllers = _viewControllers;
+@synthesize selectedIndex = _selectedIndex;
+
+- (void)setViewControllers:(NSArray *)viewController animated:(BOOL)animated {
+  // stub
+}
+
 @end
