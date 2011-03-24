@@ -56,6 +56,8 @@ NSString *const UIApplicationLaunchOptionsAnnotationKey = @"UIApplicationLaunchO
 NSString *const UIApplicationLaunchOptionsLocalNotificationKey = @"UIApplicationLaunchOptionsLocalNotificationKey";
 NSString *const UIApplicationLaunchOptionsLocationKey = @"UIApplicationLaunchOptionsLocationKey";
 
+NSString *const UIApplicationDidReceiveMemoryWarningNotification = @"UIApplicationDidReceiveMemoryWarningNotification";
+
 NSString *const UITrackingRunLoopMode = @"UITrackingRunLoopMode";
 
 UIBackgroundTaskIdentifier const UIBackgroundTaskInvalid = NSUIntegerMax; // correct?
@@ -126,18 +128,21 @@ static BOOL TouchIsActive(UITouch *touch)
 	return YES;
 }
 
-- (CGRect)statusBarFrame {
-  return CGRectZero;
+- (CGRect)statusBarFrame
+{
+    return CGRectZero;
 }
 
-- (UIApplicationState)applicationState {
-  return UIApplicationStateActive; // TODO: check if window is not focused, reuturn Inactive?
+- (UIApplicationState)applicationState
+{
+    // consider if checking if the application is main or not would be the right thing to do here
+    return UIApplicationStateActive;
 }
 
-- (NSTimeInterval)backgroundTimeRemaining {
-  return 0;
+- (NSTimeInterval)backgroundTimeRemaining
+{
+    return 0;
 }
-
 
 - (BOOL)isNetworkActivityIndicatorVisible
 {
@@ -176,34 +181,42 @@ static BOOL TouchIsActive(UITouch *touch)
 {
 }
 
-- (UIStatusBarStyle)statusBarStyle {
-  return UIStatusBarStyleDefault;
+- (UIStatusBarStyle)statusBarStyle
+{
+    return UIStatusBarStyleDefault;
 }
 
-- (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle {
-  // ignored on mac os
+- (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle
+{
+    // ignored on mac os
 }
 
-- (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle animated:(BOOL)animated {
-  // ignored on mac os
-}
-
-- (BOOL)canOpenURL:(NSURL *)URL {
-  NSString *urlString = [URL absoluteString];
-  if ([urlString hasPrefix:@"http://"]) {
-    return YES;
-  }else {
-    return NO;
-  }
+- (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle animated:(BOOL)animated
+{
+    // ignored on mac os
 }
 
 // local notification stubs
-- (void)presentLocalNotificationNow:(UILocalNotification *)notification {}
-- (void)cancelAllLocalNotifications {}
-- (void)cancelLocalNotification:(UILocalNotification *)notification {}
-- (NSArray *)scheduledLocalNotifications {}
-- (void)setScheduledLocalNotifications:(NSArray *)scheduledLocalNotifications {}
+- (void)presentLocalNotificationNow:(UILocalNotification *)notification
+{
+}
 
+- (void)cancelAllLocalNotifications
+{
+}
+
+- (void)cancelLocalNotification:(UILocalNotification *)notification
+{
+}
+
+- (NSArray *)scheduledLocalNotifications
+{
+    return nil;
+}
+
+- (void)setScheduledLocalNotifications:(NSArray *)scheduledLocalNotifications
+{
+}
 
 - (void)_setKeyWindow:(UIWindow *)newKeyWindow
 {
@@ -281,7 +294,7 @@ static BOOL TouchIsActive(UITouch *touch)
 - (BOOL)_sendActionToFirstResponder:(SEL)action withSender:(id)sender fromScreen:(UIScreen *)theScreen
 {
 	UIResponder *responder = [self _firstResponderForScreen:theScreen];
-
+    
 	while (responder) {
 		if ([responder respondsToSelector:action]) {
 			[responder performSelector:action withObject:sender];
@@ -311,18 +324,28 @@ static BOOL TouchIsActive(UITouch *touch)
 	return [[NSWorkspace sharedWorkspace] openURL:url];
 }
 
+- (BOOL)canOpenURL:(NSURL *)URL
+{
+    NSString *urlString = [URL absoluteString];
+    if ([urlString hasPrefix:@"http://"]) {
+        return YES;
+    }else {
+        return NO;
+    }
+}
+
 - (BOOL)_sendGlobalKeyboardNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
 {
 	if (![self isIgnoringInteractionEvents]) {
 		UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
-
+        
 		if (key.type == UIKeyTypeEnter || (key.commandKeyPressed && key.type == UIKeyTypeReturn)) {
 			if ([self _firstResponderCanPerformAction:@selector(commit:) withSender:key fromScreen:theScreen]) {
 				return [self _sendActionToFirstResponder:@selector(commit:) withSender:key fromScreen:theScreen];
 			}
 		}
 	}
-		
+    
 	return NO;
 }
 
@@ -336,13 +359,13 @@ static BOOL TouchIsActive(UITouch *touch)
 				UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
 				UIEvent *event = [[[UIEvent alloc] initWithEventType:UIEventTypeKeyPress] autorelease];
 				[event _setTimestamp:[theNSEvent timestamp]];
-
+                
 				[firstResponder keyPressed:key withEvent:event];
 				return ![event _isUnhandledKeyPressEvent];
 			}
 		}
 	}
-
+    
 	return NO;
 }
 
@@ -359,7 +382,7 @@ static BOOL TouchIsActive(UITouch *touch)
 	
 	if (TouchIsActive(touch)) {
 		isSupportedEvent = YES;
-
+        
 		switch ([theNSEvent type]) {
 			case NSLeftMouseUp:
 				[touch _setPhase:UITouchPhaseEnded screenLocation:screenLocation tapCount:touch.tapCount delta:delta timestamp:timestamp];
@@ -434,7 +457,7 @@ static BOOL TouchIsActive(UITouch *touch)
 	
 	if (shouldCancelTouch) {
 		const BOOL wasActiveTouch = TouchIsActive(touch);
-
+        
 		[touch _setTouchPhaseCancelled];
 		
 		if (!aView && wasActiveTouch) {
@@ -472,12 +495,12 @@ static BOOL TouchIsActive(UITouch *touch)
 
 @end
 
-NSString *const UIApplicationDidReceiveMemoryWarningNotification = @"UIApplicationDidReceiveMemoryWarningNotification";
 
 @implementation UIApplication(UIApplicationDeprecated)
 
-- (void)setStatusBarHidden:(BOOL)hidden animated:(BOOL)animated {
- // stub
+- (void)setStatusBarHidden:(BOOL)hidden animated:(BOOL)animated
+{
+    // stub
 }
 
 @end

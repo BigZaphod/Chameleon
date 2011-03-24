@@ -38,9 +38,9 @@
 @protocol UIPickerViewDataSource, UIPickerViewDelegate;
 
 @interface UIPickerView : UIView {
-  __weak id<UIPickerViewDataSource> _dataSource;
-  __weak id<UIPickerViewDelegate>   _delegate;
-  BOOL _showsSelectionIndicator;
+    id<UIPickerViewDataSource> _dataSource;
+    id<UIPickerViewDelegate>   _delegate;
+    BOOL _showsSelectionIndicator;
 }
 
 @property (nonatomic, assign) id<UIPickerViewDataSource> dataSource;
@@ -52,7 +52,7 @@
 @end
 
 
-@protocol UIPickerViewDataSource<NSObject>
+@protocol UIPickerViewDataSource <NSObject>
 @required
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView;
@@ -61,7 +61,7 @@
 @end
 
 
-@protocol UIPickerViewDelegate<NSObject>
+@protocol UIPickerViewDelegate <NSObject>
 @optional
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component;

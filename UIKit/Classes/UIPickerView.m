@@ -41,20 +41,23 @@
 @synthesize dataSource = _dataSource;
 @synthesize delegate = _delegate;
 
-- (id)initWithFrame:(CGRect)frame {
+- (id)initWithFrame:(CGRect)frame
+{
     if ((self = [super initWithFrame:frame])) {
     }
     return self;
 }
 
-- (void)dealloc {
-  _dataSource = nil;
-  _delegate = nil;
-  [super dealloc];
+- (void)dealloc
+{
+    _dataSource = nil;
+    _delegate = nil;
+    [super dealloc];
 }
 
-- (void)selectRow:(NSInteger)row inComponent:(NSInteger)component animated:(BOOL)animated {
-  // stub
+- (void)selectRow:(NSInteger)row inComponent:(NSInteger)component animated:(BOOL)animated
+{
+    // stub
 }
 
 @end

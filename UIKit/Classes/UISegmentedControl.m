@@ -10,8 +10,7 @@
 #import "UITouch.h"
 #import "UIColor.h"
 #import "UIStringDrawing.h"
-#import "SSDrawingMacros.h"
-//#import "UIImage+SSToolkitAdditions.h"
+#import "UIGraphics.h"
 
 static NSString *kSSSegmentedControlEnabledKey = @"enabled";
 
@@ -164,7 +163,7 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
 
 		// First segment
 		if (i == 0) {
-			backgroundRect = CGRectSetWidth(backgroundRect, backgroundRect.size.width + capWidth);
+			backgroundRect.size.width += capWidth;
 		}
 
 		// Last segment
@@ -189,9 +188,8 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
 			textRect = UIEdgeInsetsInsetRect(textRect, _textEdgeInsets);
 
 			if (enabled) {
-				[_textShadowColor set];
-				[string drawInRect:CGRectAddPoint(textRect, CGPointMake(_textShadowOffset.width, _textShadowOffset.height)) withFont:_font lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentCenter];
-
+				[_textShadowColor set];                
+				[string drawInRect:CGRectOffset(textRect, _textShadowOffset.width, _textShadowOffset.height) withFont:_font lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentCenter];
 				[_textColor set];
 			} else {
 				[_disabledTextColor set];
