@@ -69,6 +69,8 @@
 #import "UIWebView.h"
 #import "UIToolbar.h"
 #import "UITabBar.h"
+#import "UITabBarItem.h"
+#import "UISegmentedControl.h"
 #import "UIActivityIndicatorView.h"
 #import "UIPopoverController.h"
 #import "UINavigationBar.h"
@@ -92,6 +94,7 @@
 #import "UIViewAdapter.h"
 #import "UIPageControl.h"
 #import "UIProgressView.h"
+#import "UIPickerView.h"
 #import "UIKey.h"	// non standard
 #import "UIPanGestureRecognizer.h"
 #import "UIPinchGestureRecognizer.h"
@@ -101,3 +104,6 @@
 
 // only add if core data is included
 #import "NSFetchedResultsController.h"
+
+// AudioToolbox-Helper
+#define kSystemSoundID_Vibrate kSystemSoundID_UserPreferredAlert
