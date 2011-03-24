@@ -37,6 +37,10 @@
 
 @implementation UISearchBar
 
+@synthesize delegate = _delegate;
+@synthesize showsCancelButton = _showsCancelButton;
+@synthesize placeholder = _placeholder;
+
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
       _searchField = [[UITextField alloc] initWithFrame:frame];
@@ -47,6 +51,8 @@
 
 
 - (void)dealloc {
+  _delegate = nil;
+  [_placeholder release];
   [_searchField release];
   [super dealloc];
 }
