@@ -28,3 +28,4 @@
  */
 
 #import "MFMailComposeViewController.h"
+#import "MFMessageComposeViewController.h"
