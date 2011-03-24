@@ -144,6 +144,8 @@ const NSTimeInterval UIMinimumKeepAliveTimeout;
 @property (nonatomic, readonly) UIApplicationState applicationState;
 @property (nonatomic, readonly) NSTimeInterval backgroundTimeRemaining;
 
+@property(nonatomic) NSInteger applicationIconBadgeNumber; // stub
+
 @end
 
 
