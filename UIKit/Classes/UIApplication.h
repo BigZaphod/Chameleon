@@ -102,6 +102,7 @@ const NSTimeInterval UIMinimumKeepAliveTimeout;
 	BOOL _networkActivityIndicatorVisible;
 	BOOL _applicationSupportsShakeToEdit;
 	NSUInteger _ignoringInteractionEvents;
+    NSInteger _applicationIconBadgeNumber;
 }
 
 + (UIApplication *)sharedApplication;
@@ -130,6 +131,8 @@ const NSTimeInterval UIMinimumKeepAliveTimeout;
 
 @property (nonatomic, readonly) UIApplicationState applicationState;
 @property (nonatomic, readonly) NSTimeInterval backgroundTimeRemaining;
+
+@property(nonatomic) NSInteger applicationIconBadgeNumber; // stub
 
 @end
 
