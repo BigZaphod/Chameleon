@@ -31,6 +31,10 @@
 
 @class UIImage;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void UIGraphicsPushContext(CGContextRef ctx);
 void UIGraphicsPopContext();
 CGContextRef UIGraphicsGetCurrentContext();
@@ -45,3 +49,7 @@ void UIRectFillUsingBlendMode(CGRect rect, CGBlendMode blendMode);
 
 void UIRectFrame(CGRect rect);
 void UIRectFrameUsingBlendMode(CGRect rect, CGBlendMode blendMode);
+
+#ifdef __cplusplus
+}
+#endif
