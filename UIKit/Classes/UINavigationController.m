@@ -38,7 +38,7 @@ static const CGFloat NavBarHeight = 28;
 static const CGFloat ToolbarHeight = 28;
 
 @implementation UINavigationController
-@synthesize viewControllers=_viewControllers, delegate=_delegate, navigationBar=_navigationBar, toolbar=_toolbar, toolbarHidden=_toolbarHidden;
+@synthesize viewControllers=_viewControllers, delegate=_delegate, navigationBar=_navigationBar, navigationBarHidden=_navigationBarHidden, toolbar=_toolbar, toolbarHidden=_toolbarHidden;
 
 - (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)bundle
 {
@@ -95,8 +95,10 @@ static const CGFloat ToolbarHeight = 28;
 	CGRect controllerFrame = self.view.bounds;
 
 	// adjust for the nav bar
-	controllerFrame.origin.y += NavBarHeight;
-	controllerFrame.size.height -= NavBarHeight;
+	if (!self.navigationBarHidden) {
+		controllerFrame.origin.y += NavBarHeight;
+		controllerFrame.size.height -= NavBarHeight;
+	}
 	
 	// adjust for toolbar (if there is one)
 	if (!self.toolbarHidden) {
@@ -118,6 +120,7 @@ static const CGFloat ToolbarHeight = 28;
 
 	_navigationBar.frame = [self _navigationBarFrame];
 	_navigationBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	_navigationBar.hidden = self.navigationBarHidden;
 	[self.view addSubview:_navigationBar];
 	
 	_toolbar.frame = [self _toolbarFrame];
@@ -370,6 +373,12 @@ static const CGFloat ToolbarHeight = 28;
 {
 	[self _popViewControllerWithoutPoppingNavigationBarAnimated:YES];
 	return YES;
+}
+
+- (void)setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated
+{
+	_navigationBarHidden = hidden;
+	_navigationBar.hidden = hidden;
 }
 
 - (void)setToolbarHidden:(BOOL)hidden animated:(BOOL)animated
