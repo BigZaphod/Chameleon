@@ -79,5 +79,3 @@ typedef enum {
 - (void)endGeneratingDeviceOrientationNotifications;    // no effect
 
 @end
-
-extern NSString *const UIDeviceOrientationDidChangeNotification;
