@@ -37,6 +37,7 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
 @synthesize textShadowOffset = _textShadowOffset;
 @synthesize textEdgeInsets = _textEdgeInsets;
 @synthesize segmentedControlStyle = _segmentedControlStyle;
+@synthesize tintColor = _tintColor;
 
 #pragma mark NSObject
 
@@ -51,6 +52,7 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
 	[_disabledTextColor release];
 	[_textShadowColor release];
 	[_segmentMeta release];
+    [_tintColor release];
 	[super dealloc];
 }
 
