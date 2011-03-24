@@ -136,10 +136,10 @@ const NSTimeInterval UIMinimumKeepAliveTimeout;
 @property (nonatomic, getter=isIdleTimerDisabled) BOOL idleTimerDisabled;	// has no actual affect
 @property (nonatomic) BOOL applicationSupportsShakeToEdit;					// no effect
 @property (nonatomic) UIStatusBarStyle statusBarStyle;                      // always returns UIStatusBarStyleDefault
-@property (nonatomic, readonly) UIApplicationState applicationState;
-@property (nonatomic, readonly) NSTimeInterval backgroundTimeRemaining;
-@property(nonatomic) NSInteger applicationIconBadgeNumber;                  // stub
-@property (nonatomic,copy) NSArray *scheduledLocalNotifications;
+@property (nonatomic, readonly) UIApplicationState applicationState;        // always returns UIApplicationStateActive
+@property (nonatomic, readonly) NSTimeInterval backgroundTimeRemaining;     // always 0
+@property (nonatomic) NSInteger applicationIconBadgeNumber;                 // no effect, but does set/get the number correctly
+@property (nonatomic, copy) NSArray *scheduledLocalNotifications;           // no effect, returns nil
 
 @end
 

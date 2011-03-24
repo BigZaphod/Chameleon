@@ -44,51 +44,55 @@
 
 @synthesize items = _items, delegate = _delegate;
 
-- (id)initWithFrame:(CGRect)rect {
-  if ((self = [super initWithFrame:rect])) {
-    rect.size.height = TABBAR_HEIGHT; // tabbar is always fixed
-    _selectedItemIndex = -1;
-    UIImage *backgroundImage = [UIImage _popoverBackgroundImage];
-    UIImageView *backgroundView = [[[UIImageView alloc] initWithImage:backgroundImage] autorelease];
-    backgroundView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    backgroundView.frame = rect;
-    [self addSubview:backgroundView];
-  }
-  return self;
+- (id)initWithFrame:(CGRect)rect
+{
+    if ((self = [super initWithFrame:rect])) {
+        rect.size.height = TABBAR_HEIGHT; // tabbar is always fixed
+        _selectedItemIndex = -1;
+        UIImage *backgroundImage = [UIImage _popoverBackgroundImage];
+        UIImageView *backgroundView = [[[UIImageView alloc] initWithImage:backgroundImage] autorelease];
+        backgroundView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        backgroundView.frame = rect;
+        [self addSubview:backgroundView];
+    }
+    return self;
 }
 
-- (void)dealloc {
-  _delegate = nil;
-  [_items release];
-  [super dealloc];
+- (void)dealloc
+{
+    _delegate = nil;
+    [_items release];
+    [super dealloc];
 }
 
-- (UITabBarItem *)selectedItem {
-  if (_selectedItemIndex >= 0) {
-    return [_items objectAtIndex:_selectedItemIndex];
-  }
-  return nil;
+- (UITabBarItem *)selectedItem
+{
+    if (_selectedItemIndex >= 0) {
+        return [_items objectAtIndex:_selectedItemIndex];
+    }
+    return nil;
 }
 
-- (void)setSelectedItem:(UITabBarItem *)selectedItem {
-  // stub
+- (void)setSelectedItem:(UITabBarItem *)selectedItem
+{
 }
 
-- (void)setItems:(NSArray *)items animated:(BOOL)animated {
-  // stub
+- (void)setItems:(NSArray *)items animated:(BOOL)animated
+{
 }
 
-
-- (void)beginCustomizingItems:(NSArray *)items {
-  // stub
+- (void)beginCustomizingItems:(NSArray *)items
+{
 }
 
-- (BOOL)endCustomizingAnimated:(BOOL)animated {
-  return YES; // stub
+- (BOOL)endCustomizingAnimated:(BOOL)animated
+{
+    return YES;
 }
 
-- (BOOL)isCustomizing {
-  return NO; // stub
+- (BOOL)isCustomizing
+{
+    return NO;
 }
 
 @end

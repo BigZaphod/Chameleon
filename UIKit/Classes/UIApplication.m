@@ -135,7 +135,6 @@ static BOOL TouchIsActive(UITouch *touch)
 
 - (UIApplicationState)applicationState
 {
-    // consider if checking if the application is main or not would be the right thing to do here
     return UIApplicationStateActive;
 }
 
@@ -188,15 +187,12 @@ static BOOL TouchIsActive(UITouch *touch)
 
 - (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle
 {
-    // ignored on mac os
 }
 
 - (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle animated:(BOOL)animated
 {
-    // ignored on mac os
 }
 
-// local notification stubs
 - (void)presentLocalNotificationNow:(UILocalNotification *)notification
 {
 }
@@ -500,7 +496,6 @@ static BOOL TouchIsActive(UITouch *touch)
 
 - (void)setStatusBarHidden:(BOOL)hidden animated:(BOOL)animated
 {
-    // stub
 }
 
 @end

@@ -30,9 +30,12 @@
 #import "UIDevice.h"
 #import <SystemConfiguration/SystemConfiguration.h>
 
+NSString *const UIDeviceOrientationDidChangeNotification = @"UIDeviceOrientationDidChangeNotification";
+
 static UIDevice *theDevice;
 
 @implementation UIDevice
+
 + (void)initialize
 {
 	if (self == [UIDevice class]) {
@@ -43,18 +46,6 @@ static UIDevice *theDevice;
 + (UIDevice *)currentDevice
 {
 	return theDevice;
-}
-
-- (id)init
-{
-	if ((self=[super init])) {
-	}
-	return self;
-}
-
-- (void)dealloc
-{
-	[super dealloc];
 }
 
 - (UIUserInterfaceIdiom)userInterfaceIdiom
@@ -93,20 +84,22 @@ static UIDevice *theDevice;
 	return @"Mac";
 }
 
-- (NSString *)uniqueIdentifier {
-  return [[NSProcessInfo processInfo] globallyUniqueString];
+- (NSString *)uniqueIdentifier
+{
+    return [[NSProcessInfo processInfo] globallyUniqueString];
 }
 
-- (BOOL)isGeneratingDeviceOrientationNotifications {
-  return NO;
+- (BOOL)isGeneratingDeviceOrientationNotifications
+{
+    return NO;
 }
 
-// stub
-- (void)beginGeneratingDeviceOrientationNotifications {}
-- (void)endGeneratingDeviceOrientationNotifications {}
+- (void)beginGeneratingDeviceOrientationNotifications
+{
+}
 
+- (void)endGeneratingDeviceOrientationNotifications
+{
+}
 
 @end
-
-// will not be sended on mac
-NSString *const UIDeviceOrientationDidChangeNotification = @"UIDeviceOrientationDidChangeNotification";

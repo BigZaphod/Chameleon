@@ -282,18 +282,17 @@
 	}
 }
 
-- (void)showFromToolbar:(UIToolbar *)view {
-  NSLog(@"not implemented");
+- (void)showFromToolbar:(UIToolbar *)view
+{
 }
 
-- (void)showFromTabBar:(UITabBar *)view {
-  NSLog(@"not implemented");
+- (void)showFromTabBar:(UITabBar *)view
+{
 }
 
-- (void)showFromBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated {
-  NSLog(@"not implemented");
+- (void)showFromBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated
+{
 }
-
 
 - (void)dismissWithClickedButtonIndex:(NSInteger)buttonIndex animated:(BOOL)animated
 {

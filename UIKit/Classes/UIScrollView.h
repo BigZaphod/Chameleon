@@ -88,8 +88,8 @@ typedef enum {
 	} _delegateCan;
 
   // should be flag struct
-  BOOL alwaysBounceHorizontal;
-  BOOL alwaysBounceVertical;
+  BOOL _alwaysBounceHorizontal;
+  BOOL _alwaysBounceVertical;
 }
 
 - (void)scrollRectToVisible:(CGRect)rect animated:(BOOL)animated;

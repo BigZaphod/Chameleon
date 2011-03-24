@@ -37,26 +37,28 @@
 #import "UIImage.h"
 
 @implementation UITabBarItem
+@synthesize badgeValue=_badgeValue;
 
-@synthesize badgeValue = _badgeValue;
-
-- (id)initWithTitle:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag {
-  if ((self = [super init])) {
-    self.title = title;
-    self.image = image;
-  }
-  return self;
+- (id)initWithTitle:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag
+{
+    if ((self = [super init])) {
+        self.title = title;
+        self.image = image;
+    }
+    return self;
 }
 
-- (id)initWithTabBarSystemItem:(UITabBarSystemItem)systemItem tag:(NSInteger)tag {
-  if ((self = [super init])) {
-    // stub
-  }
-  return self;
+- (id)initWithTabBarSystemItem:(UITabBarSystemItem)systemItem tag:(NSInteger)tag
+{
+    if ((self = [super init])) {
+    }
+    return self;
 }
 
-- (void)dealloc {
-  [super dealloc];
+- (void)dealloc
+{
+    [_badgeValue release];
+    [super dealloc];
 }
 
 @end

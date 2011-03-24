@@ -202,6 +202,16 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 	_textLayer.textColor = newColor;
 }
 
+- (UITextAlignment)textAlignment
+{
+    return _textLayer.textAlignment;
+}
+
+- (void)setTextAlignment:(UITextAlignment)textAlignment
+{
+    _textLayer.textAlignment = textAlignment;
+}
+
 - (NSString *)text
 {
 	return _textLayer.text;
@@ -220,14 +230,6 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 - (void)setEditable:(BOOL)editable
 {
 	_textLayer.editable = editable;
-}
-
-- (UITextAlignment)textAlignment {
-  return UITextAlignmentLeft; // STUB
-}
-
-- (void)setTextAlignment:(UITextAlignment)textAlignment {
-  // STUB
 }
 
 - (NSRange)selectedRange

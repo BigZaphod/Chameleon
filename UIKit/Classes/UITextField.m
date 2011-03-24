@@ -54,6 +54,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 		_textLayer = [[UITextLayer alloc] initWithContainer:self isField:YES];
 		[self.layer insertSublayer:_textLayer atIndex:0];
 
+        self.textAlignment = UITextAlignmentLeft;
 		self.font = [UIFont systemFontOfSize:17];
 		self.borderStyle = UITextBorderStyleNone;
 		self.textColor = [UIColor blackColor];
@@ -397,6 +398,16 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 	_textLayer.textColor = newColor;
 }
 
+- (UITextAlignment)textAlignment
+{
+    return _textLayer.textAlignment;
+}
+
+- (void)setTextAlignment:(UITextAlignment)textAlignment
+{
+    _textLayer.textAlignment = textAlignment;
+}
+
 - (NSString *)text
 {
 	return _textLayer.text;
@@ -405,14 +416,6 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (void)setText:(NSString *)newText
 {
 	_textLayer.text = newText;
-}
-
-- (UITextAlignment)textAlignment {
-  return UITextAlignmentLeft; // STUB
-}
-
-- (void)setTextAlignment:(UITextAlignment)textAlignment {
-  // STUB
 }
 
 - (BOOL)_textShouldBeginEditing

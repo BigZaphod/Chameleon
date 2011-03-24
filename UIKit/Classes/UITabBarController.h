@@ -32,10 +32,10 @@
 @class UITabBar;
 
 @interface UITabBarController : UIViewController {
-  UITabBar *_tabBar;
-  UIViewController *_selectedViewController;
-  NSArray *_viewControllers;
-  NSUInteger _selectedIndex;
+    UITabBar *_tabBar;
+    UIViewController *_selectedViewController;
+    NSArray *_viewControllers;
+    NSUInteger _selectedIndex;
 }
 
 - (void)setViewControllers:(NSArray *)viewController animated:(BOOL)animated;

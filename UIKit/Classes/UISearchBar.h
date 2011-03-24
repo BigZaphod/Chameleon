@@ -39,16 +39,16 @@
 @protocol UISearchBarDelegate;
 
 @interface UISearchBar : UIView {
-  UITextField *_searchField;
-  BOOL _showsCancelButton;
-  __weak id<UISearchBarDelegate> _delegate;
-  NSString *_placeholder;
+    UITextField *_searchField;
+    BOOL _showsCancelButton;
+    __weak id<UISearchBarDelegate> _delegate;
+    NSString *_placeholder;
 }
 
 @property (nonatomic, copy) NSString *text;
-@property(nonatomic,assign) id<UISearchBarDelegate> delegate;              // weak reference. default is
-@property(nonatomic)        BOOL                    showsCancelButton;     // default is NO
-@property(nonatomic,copy)   NSString               *placeholder;           // default is nil
+@property (nonatomic,assign) id<UISearchBarDelegate> delegate;
+@property (nonatomic) BOOL showsCancelButton;
+@property (nonatomic,copy) NSString *placeholder;
 
 @end
 

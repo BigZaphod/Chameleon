@@ -37,20 +37,22 @@
 @synthesize selectedIndex = _selectedIndex;
 @synthesize tabBar = _tabBar;
 
-- (id)init {
-  if ((self = [super init])) {
-    _tabBar = [[UITabBar alloc] initWithFrame:CGRectZero];
-  }
-  return self;
+- (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)nibBundle
+{
+    if ((self = [super initWithNibName:nibName bundle:nibBundle])) {
+        _tabBar = [[UITabBar alloc] initWithFrame:CGRectZero];
+    }
+    return self;
 }
 
-- (void)dealloc {
-  [_tabBar release];
-  [super dealloc];
+- (void)dealloc
+{
+    [_tabBar release];
+    [super dealloc];
 }
 
-- (void)setViewControllers:(NSArray *)viewController animated:(BOOL)animated {
-  // stub
+- (void)setViewControllers:(NSArray *)viewController animated:(BOOL)animated
+{
 }
 
 @end

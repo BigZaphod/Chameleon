@@ -36,33 +36,33 @@
 #import "UISearchBar.h"
 
 @implementation UISearchBar
+@synthesize delegate=_delegate, showsCancelButton = _showsCancelButton, placeholder=_placeholder;
 
-@synthesize delegate = _delegate;
-@synthesize showsCancelButton = _showsCancelButton;
-@synthesize placeholder = _placeholder;
-
-- (id)initWithFrame:(CGRect)frame {
+- (id)initWithFrame:(CGRect)frame
+{
     if ((self = [super initWithFrame:frame])) {
-      _searchField = [[UITextField alloc] initWithFrame:frame];
-      [self addSubview:_searchField];
+        _searchField = [[UITextField alloc] initWithFrame:frame];
+        [self addSubview:_searchField];
     }
     return self;
 }
 
-
-- (void)dealloc {
-  _delegate = nil;
-  [_placeholder release];
-  [_searchField release];
-  [super dealloc];
+- (void)dealloc
+{
+    _delegate = nil;
+    [_placeholder release];
+    [_searchField release];
+    [super dealloc];
 }
 
-- (NSString *)text {
-  return _searchField.text;
+- (NSString *)text
+{
+    return _searchField.text;
 }
 
-- (void)setText:(NSString *)text {
-  _searchField.text = text;
+- (void)setText:(NSString *)text
+{
+    _searchField.text = text;
 }
 
 @end

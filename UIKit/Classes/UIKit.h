@@ -27,8 +27,13 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef IBAction
 #define IBAction void
+#endif
+
+#ifndef IBOutlet
 #define IBOutlet
+#endif
 
 #import "UIApplicationDelegate.h"
 #import "UIScreen.h"
@@ -96,12 +101,15 @@
 #import "UIPageControl.h"
 #import "UIProgressView.h"
 #import "UIPickerView.h"
-#import "UIKey.h"	// non standard
 #import "UIPanGestureRecognizer.h"
 #import "UIPinchGestureRecognizer.h"
 #import "UIRotationGestureRecognizer.h"
 #import "UISwipeGestureRecognizer.h"
-#import "UINSCellControl.h"		// non standard
+
+// non-standard imports
+#import "UIKey.h"
+#import "UINSCellControl.h"
+#import "CALayer+UIKitCompatibility.h"
 
 // only add if core data is included
 #import "NSFetchedResultsController.h"
@@ -111,15 +119,3 @@
 
 // SystemConfiguration-Helper
 #define kSCNetworkReachabilityFlagsIsWWAN kSCNetworkReachabilityFlagsConnectionOnDemand
-
-// stubs
-#import <Quartz/Quartz.h>
-@interface CALayer (UIKitExtensions)
-- (CGFloat)contentsScale;
-- (void)setContentsScale:(CGFloat)newContentsScale;
-@end
-
-@implementation CALayer (UIKitExtensions)
-- (CGFloat)contentsScale { return 1.0; }
-- (void)setContentsScale:(CGFloat)newContentsScale {}
-@end
