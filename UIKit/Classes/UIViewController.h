@@ -29,6 +29,7 @@
 
 #import "UIResponder.h"
 #import "UIApplication.h"
+#import "UISearchDisplayController.h"
 
 typedef enum {
 	UIModalPresentationFullScreen = 0,
@@ -60,6 +61,7 @@ typedef enum {
 	BOOL _hidesBottomBarWhenPushed;
 	UIViewController *_parentViewController;
 	UIViewController *_modalViewController;
+    UISearchDisplayController *_searchDisplayController;
 	UIModalTransitionStyle _modalTransitionStyle;
 }
 
@@ -109,5 +111,6 @@ typedef enum {
 @property (nonatomic, readonly) UIViewController *parentViewController;
 @property (nonatomic, readonly, retain) UINavigationController *navigationController;
 @property (nonatomic, readonly, retain) UISplitViewController *splitViewController;
+@property (nonatomic, readonly, retain) UISearchDisplayController *searchDisplayController; // stub
 
 @end
