@@ -184,6 +184,7 @@ static const CGFloat ToolbarHeight = 28;
 
 		if ([self isViewLoaded]) {
 			UIViewController *newTopController = self.topViewController;
+			newTopController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
 			[newTopController viewWillAppear:animated];
 			if (_delegateHas.willShowViewController) {
@@ -191,7 +192,6 @@ static const CGFloat ToolbarHeight = 28;
 			}
 			
 			newTopController.view.frame = [self _controllerFrame];
-			newTopController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 			[self.view insertSubview:newTopController.view atIndex:0];
 
 			[newTopController viewDidAppear:animated];
