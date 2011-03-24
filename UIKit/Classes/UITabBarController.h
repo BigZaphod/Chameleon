@@ -29,7 +29,10 @@
 
 #import "UIViewController.h"
 
+@class UITabBar;
+
 @interface UITabBarController : UIViewController {
+  UITabBar *_tabBar;
   UIViewController *_selectedViewController;
   NSArray *_viewControllers;
   NSUInteger _selectedIndex;
@@ -38,7 +41,8 @@
 - (void)setViewControllers:(NSArray *)viewController animated:(BOOL)animated;
 
 @property (nonatomic, assign) UIViewController *selectedViewController;
-@property (nonatomic, copy) NSArray *viewControllers;
-@property (nonatomic) NSUInteger selectedIndex;
+@property (nonatomic, copy)   NSArray *viewControllers;
+@property (nonatomic, assign) NSUInteger selectedIndex;
+@property (nonatomic, readonly) UITabBar *tabBar;
 
 @end
