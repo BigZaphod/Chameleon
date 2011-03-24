@@ -134,6 +134,8 @@ const NSTimeInterval UIMinimumKeepAliveTimeout;
 
 @property(nonatomic) NSInteger applicationIconBadgeNumber; // stub
 
+- (BOOL)canOpenURL:(NSURL *)URL;
+
 @end
 
 NSString *const UIApplicationDidReceiveMemoryWarningNotification;
