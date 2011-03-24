@@ -29,7 +29,7 @@
 
 #import "UIView.h"
 
-@class UIActionSheet;
+@class UIActionSheet, UITabBar, UIToolbar, UIBarButtonItem;
 
 @protocol UIActionSheetDelegate <NSObject>
 @optional
@@ -68,6 +68,11 @@
 - (void)showInView:(UIView *)view;														// menu will appear wherever the mouse cursor is
 - (void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated;		// if rect is CGRectNull, the menu will appear wherever the mouse cursor is
 - (void)dismissWithClickedButtonIndex:(NSInteger)buttonIndex animated:(BOOL)animated;
+
+// stubs!
+- (void)showFromToolbar:(UIToolbar *)view;
+- (void)showFromTabBar:(UITabBar *)view;
+- (void)showFromBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated;
 
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, assign) id<UIActionSheetDelegate> delegate;
