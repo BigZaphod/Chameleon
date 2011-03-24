@@ -223,6 +223,13 @@ static BOOL TouchIsActive(UITouch *touch)
   }
 }
 
+// local notification stubs
+- (void)presentLocalNotificationNow:(UILocalNotification *)notification {}
+- (void)cancelAllLocalNotifications {}
+- (void)cancelLocalNotification:(UILocalNotification *)notification {}
+- (NSArray *)scheduledLocalNotifications {}
+- (void)setScheduledLocalNotifications:(NSArray *)scheduledLocalNotifications {}
+
 
 - (void)_setKeyWindow:(UIWindow *)newKeyWindow
 {

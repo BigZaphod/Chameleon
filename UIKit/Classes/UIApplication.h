@@ -148,6 +148,12 @@ const NSTimeInterval UIMinimumKeepAliveTimeout;
 
 - (BOOL)canOpenURL:(NSURL *)URL;
 
+// local notifications
+- (void)presentLocalNotificationNow:(UILocalNotification *)notification;
+- (void)cancelLocalNotification:(UILocalNotification *)notification;
+- (void)cancelAllLocalNotifications;
+@property(nonatomic,copy) NSArray *scheduledLocalNotifications;
+
 @end
 
 
