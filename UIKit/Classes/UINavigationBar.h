@@ -27,6 +27,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import "UIToolbar.h"
 #import "UIView.h"
 
 @class UIColor, UINavigationItem, UINavigationBar;
@@ -38,13 +39,6 @@
 - (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item;
 - (void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item;
 @end
-
-typedef enum {
-  UIBarStyleDefault          = 0,
-  UIBarStyleBlack            = 1,
-  UIBarStyleBlackOpaque      = 1, // deprecated
-  UIBarStyleBlackTranslucent = 2, // deprecated
-} UIBarStyle;
 
 @interface UINavigationBar : UIView {
 @private
