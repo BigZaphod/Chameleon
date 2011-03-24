@@ -44,7 +44,7 @@
 @private
 	NSMutableArray *_navStack;
 	UIColor *_tintColor;
-    BOOL *_navigationBarHidden;
+    BOOL _navigationBarHidden;
 	id _delegate;
 	
 	UIView *_leftView;
