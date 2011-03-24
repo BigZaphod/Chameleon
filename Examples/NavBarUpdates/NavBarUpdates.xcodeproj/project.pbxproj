@@ -15,6 +15,7 @@
 		38E523D61339731100E041B3 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 38E523D41339731100E041B3 /* Credits.rtf */; };
 		38E523D91339731100E041B3 /* NavBarUpdatesAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E523D81339731100E041B3 /* NavBarUpdatesAppDelegate.m */; };
 		38E523DC1339731100E041B3 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38E523DA1339731100E041B3 /* MainMenu.xib */; };
+		7884CAA8133AC90400D050CF /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7884CAA7133AC90400D050CF /* Quartz.framework */; };
 		F4556120133A5D3B0021B1A6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3825F4661339775C005A267D /* UIKit.framework */; };
 		F455612E133A5D830021B1A6 /* UIKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 3825F4661339775C005A267D /* UIKit.framework */; };
 /* End PBXBuildFile section */
@@ -69,6 +70,7 @@
 		38E523D71339731100E041B3 /* NavBarUpdatesAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NavBarUpdatesAppDelegate.h; sourceTree = "<group>"; };
 		38E523D81339731100E041B3 /* NavBarUpdatesAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NavBarUpdatesAppDelegate.m; sourceTree = "<group>"; };
 		38E523DB1339731100E041B3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		7884CAA7133AC90400D050CF /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7884CAA8133AC90400D050CF /* Quartz.framework in Frameworks */,
 				F4556120133A5D3B0021B1A6 /* UIKit.framework in Frameworks */,
 				38E523C61339731100E041B3 /* Cocoa.framework in Frameworks */,
 			);
@@ -95,6 +98,7 @@
 		38E523B61339731100E041B3 = {
 			isa = PBXGroup;
 			children = (
+				7884CAA7133AC90400D050CF /* Quartz.framework */,
 				3825F4611339775C005A267D /* UIKit.xcodeproj */,
 				38E523CB1339731100E041B3 /* NavBarUpdates */,
 				38E523C41339731100E041B3 /* Frameworks */,
