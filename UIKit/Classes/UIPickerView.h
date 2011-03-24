@@ -47,6 +47,8 @@
 @property (nonatomic, assign) id<UIPickerViewDelegate>   delegate;
 @property (nonatomic, assign) BOOL                       showsSelectionIndicator;
 
+- (void)selectRow:(NSInteger)row inComponent:(NSInteger)component animated:(BOOL)animated; // stub
+
 @end
 
 
