@@ -34,8 +34,6 @@ NSString *const UIDeviceOrientationDidChangeNotification = @"UIDeviceOrientation
 
 static UIDevice *theDevice;
 
-NSString *const UIDeviceOrientationDidChangeNotification = @"UIDeviceOrientationDidChangeNotification";
-
 @implementation UIDevice
 
 + (void)initialize
