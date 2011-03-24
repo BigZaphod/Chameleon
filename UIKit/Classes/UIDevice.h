@@ -50,6 +50,9 @@ typedef enum {
 	[[UIDevice currentDevice] userInterfaceIdiom] : \
 	UIUserInterfaceIdiomPhone)
 
+#define UIDeviceOrientationIsPortrait(orientation)  (YES)
+#define UIDeviceOrientationIsLandscape(orientation) (NO)
+
 @interface UIDevice : NSObject {
 }
 
