@@ -90,7 +90,7 @@ typedef NSUInteger UIBackgroundTaskIdentifier;
 const UIBackgroundTaskIdentifier UIBackgroundTaskInvalid;
 const NSTimeInterval UIMinimumKeepAliveTimeout;
 
-@class UIWindow, UIApplication;
+@class UIWindow, UIApplication, UILocalNotification;
 
 @interface UIApplication : UIResponder {
 @private
@@ -135,6 +135,12 @@ const NSTimeInterval UIMinimumKeepAliveTimeout;
 @property(nonatomic) NSInteger applicationIconBadgeNumber; // stub
 
 - (BOOL)canOpenURL:(NSURL *)URL;
+
+// local notifications
+- (void)presentLocalNotificationNow:(UILocalNotification *)notification;
+- (void)cancelLocalNotification:(UILocalNotification *)notification;
+- (void)cancelAllLocalNotifications;
+@property(nonatomic,copy) NSArray *scheduledLocalNotifications;
 
 @end
 
