@@ -28,6 +28,7 @@
  */
 
 #import "UIView.h"
+#import "UIToolbar.h"
 
 @class UIActionSheet, UITabBar, UIToolbar, UIBarButtonItem;
 
@@ -41,15 +42,23 @@
 - (void)actionSheetCancel:(UIActionSheet *)actionSheet;
 @end
 
+typedef enum {
+  UIActionSheetStyleAutomatic        = -1,
+  UIActionSheetStyleDefault          = UIBarStyleDefault,
+  UIActionSheetStyleBlackTranslucent = UIBarStyleBlackTranslucent,
+  UIActionSheetStyleBlackOpaque      = UIBarStyleBlackOpaque,
+} UIActionSheetStyle;
+
 @interface UIActionSheet : UIView {
 @private
-	id<UIActionSheetDelegate> _delegate;
+	__weak id<UIActionSheetDelegate> _delegate;
 	NSInteger _destructiveButtonIndex;
 	NSInteger _cancelButtonIndex;
 	NSInteger _firstOtherButtonIndex;
 	NSString *_title;
 	NSMutableArray *_menuTitles;
 	NSMutableSet *_separatorIndexes;
+    UIActionSheetStyle _actionSheetStyle;
 	id _menu;
 	
 	struct {
@@ -76,6 +85,7 @@
 
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, assign) id<UIActionSheetDelegate> delegate;
+@property (nonatomic, assign) UIActionSheetStyle actionSheetStyle;
 @property (nonatomic, readonly, getter=isVisible) BOOL visible;
 @property (nonatomic) NSInteger destructiveButtonIndex;
 @property (nonatomic) NSInteger cancelButtonIndex;

@@ -40,6 +40,7 @@
 @implementation UIActionSheet
 @synthesize delegate=_delegate, destructiveButtonIndex=_destructiveButtonIndex, cancelButtonIndex=_cancelButtonIndex, title=_title;
 @synthesize firstOtherButtonIndex=_firstOtherButtonIndex;
+@synthesize actionSheetStyle = _actionSheetStyle;
 
 - (id)initWithFrame:(CGRect)frame
 {
