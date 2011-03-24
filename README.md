@@ -20,9 +20,9 @@ The UIKit port in Chameleon starts at a very low level and attempts to go so far
 
 The interface between AppKit's NSViews and NSWindows and Chameleon's UIWindow and UIViews occurs at the "screen" level. UIKitView is an NSView which you add to your NSView hierarchy in whatever way you want. The UIKitView hosts a UIScreen instance which is home to UIKit's interface elements.
 
-Each UIWindow belongs to a UIScreen, and UIViews must exist on UIWindows. This should mostly work the same as you've come to expect on iOS. An important thing to note is that Mac applications often have more than one window. If you use more than one UIKitView in your app, be aware that this means your application how has more than one UIScreen and as a result some methods such as [UIScreen mainScreen] may suddenly do unexpected things. When porting Twitterrific from iOS, this was one source of unexpected bugs as a few things were making assumptions about there only being a single, main screen since that is normal on current iOS devices.
+Each UIWindow belongs to a UIScreen, and UIViews must exist on UIWindows. This should mostly work the same as you've come to expect on iOS. An important thing to note is that Mac applications often have more than one window. If you use more than one UIKitView in your app, be aware that this means your application now has more than one UIScreen and as a result some methods such as [UIScreen mainScreen] may suddenly do unexpected things. When porting Twitterrific from iOS, this was one source of unexpected bugs as a few things were making assumptions about there only being a single, main screen since that is normal on current iOS devices.
 
-Once a UIKitView exists and there's a UIScreen available to work with, your code can proceed to build a UIWindow and UIViews on top of it and be largely unaware that it is actually running on OSX instead of iOS. For those cases where you need to customize some UI, `UIUserInterfaceIdiomDesktop` has been added so that your code can differentiate between running on a pad, phone, or desktop. To keep code cross platform, the following is a good way to structure things so that Apple's UIKit doesn't encounter the unknown `UIUserInterfaceIdiomDesktop` symbol when compiling for iOS:
+Once a UIKitView exists and there's a UIScreen available to work with, your code can proceed to build a UIWindow and UIViews on top of it and be largely unaware that it is actually running on OSX instead of iOS. For those cases where you need to customize some UI, `UIUserInterfaceIdiomDesktop` has been added so that your code can differentiate between running on a pad, phone, or desktop in a consistent way. To keep code cross platform, the following is a good way to structure things so that Apple's UIKit doesn't encounter the unknown `UIUserInterfaceIdiomDesktop` symbol when compiling for iOS:
 
 	if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
 	// iPhone
@@ -31,6 +31,8 @@ Once a UIKitView exists and there's a UIScreen available to work with, your code
 	} else {
 	// Mac
 	}
+
+(You can always use #ifdef or other compile-time approaches for platform differentiation, too - especially since a Mac app built with Chameleon doesn't need to adapt to multiple UI idioms at runtime the way a universal iOS app does. I just find it nice to have a similar pattern for all 3 idioms - but maybe that's just me.)
 
 You can usually just create an instance of your iOS app's UIApplicationDelegate object and then pass it into UIKitView's helper method `-launchApplicationWithDelegate:afterDelay:` which will emulate the startup process of an iOS app (it will even attempt to show a Default.png if a delay is given). You might perform this step in your NSApplicationDelegate object's `-applicationDidFinishLaunching:` method. It is not necessary to use UIKitView's helper method to "launch" your app, but it can be a good way to get started.
 
