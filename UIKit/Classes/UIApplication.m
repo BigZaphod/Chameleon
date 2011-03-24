@@ -58,6 +58,9 @@ NSString *const UIApplicationLaunchOptionsLocationKey = @"UIApplicationLaunchOpt
 
 NSString *const UITrackingRunLoopMode = @"UITrackingRunLoopMode";
 
+UIBackgroundTaskIdentifier const UIBackgroundTaskInvalid = NSUIntegerMax; // correct?
+NSTimeInterval const UIMinimumKeepAliveTimeout = 0;
+
 static UIApplication *_theApplication = nil;
 
 static CGPoint ScreenLocationFromNSEvent(UIScreen *theScreen, NSEvent *theNSEvent)
@@ -125,6 +128,15 @@ static BOOL TouchIsActive(UITouch *touch)
 - (CGRect)statusBarFrame {
   return CGRectZero;
 }
+
+- (UIApplicationState)applicationState {
+  return UIApplicationStateActive; // TODO: check if window is not focused, reuturn Inactive?
+}
+
+- (NSTimeInterval)backgroundTimeRemaining {
+  return 0;
+}
+
 
 - (BOOL)isNetworkActivityIndicatorVisible
 {
