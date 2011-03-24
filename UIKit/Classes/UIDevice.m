@@ -93,4 +93,8 @@ static UIDevice *theDevice;
 	return @"Mac";
 }
 
+- (NSString *)uniqueIdentifier {
+  return [[NSProcessInfo processInfo] globallyUniqueString];
+}
+
 @end
