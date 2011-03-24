@@ -241,6 +241,9 @@
 	// This sucks giant hairy monkey balls for our non-NSView-based stuff, however.
 	// However, it appears that NSCell (currently) actually draws in the current context, so that helps
 	[self drawWithFrame:cellFrame inView:nil];
+	
+	// revert to any prior graphics state
+	[NSGraphicsContext restoreGraphicsState];
 }
 
 @end
