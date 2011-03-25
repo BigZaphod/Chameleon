@@ -259,12 +259,6 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 
 - (CGRect)backgroundRectForBounds:(CGRect)bounds
 {
-	UIImage* image = [self currentBackgroundImage];
-	if(image) {
-		CGSize imageSize = image.size;
-		bounds.size.width = MAX(bounds.size.width, imageSize.width);
-		bounds.size.height = MAX(bounds.size.height, imageSize.height);
-	}
 	return bounds;
 }
 
@@ -391,7 +385,12 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 	fitSize.width = _contentEdgeInsets.left + _contentEdgeInsets.right + titleSize.width + imageSize.width;
 	fitSize.height = _contentEdgeInsets.top + _contentEdgeInsets.bottom + MAX(titleSize.height,imageSize.height);
 	
-	fitSize = [self backgroundRectForBounds:(CGRect){{0,0},fitSize}].size;
+	UIImage* background = [self currentBackgroundImage];
+	if(background) {
+		CGSize backgroundSize = background.size;
+		fitSize.width = MAX(fitSize.width, backgroundSize.width);
+		fitSize.height = MAX(fitSize.height, backgroundSize.height);
+	}
 	
 	return fitSize;
 }
