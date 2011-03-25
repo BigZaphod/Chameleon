@@ -200,19 +200,4 @@ NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFStringRef nam
 	return [NSFont fontWithName:self.fontName size:self.pointSize];
 }
 
-+ (CGFloat)systemFontSize
-{
-    return [NSFont systemFontSize];
-}
-
-+ (CGFloat)smallSystemFontSize
-{
-    return [NSFont smallSystemFontSize];
-}
-
-+ (CGFloat)labelFontSize
-{
-    return [NSFont labelFontSize];
-}
-
 @end

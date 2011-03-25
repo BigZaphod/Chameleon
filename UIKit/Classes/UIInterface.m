@@ -28,28 +28,39 @@
  */
 
 #import "UIInterface.h"
+#import <AppKit/NSFont.h>
+
+
+@implementation UIColor (UIColorSystemColors)
+
++ (UIColor *)groupTableViewBackgroundColor
+{
+    return [UIColor lightGrayColor];    // this is currently not likely to be correct, please fix!
+}
+
+@end
 
 
 @implementation UIFont (UIFontSystemFonts)
 
-+ (CGFloat)labelFontSize
++ (CGFloat)systemFontSize
 {
-	return 17;
-}
-
-+ (CGFloat)buttonFontSize
-{
-	return 18;
+    return [NSFont systemFontSize];
 }
 
 + (CGFloat)smallSystemFontSize
 {
-	return 12;
+    return [NSFont smallSystemFontSize];
 }
 
-+ (CGFloat)systemFontSize
++ (CGFloat)labelFontSize
 {
-	return 14;
+    return [NSFont labelFontSize];
+}
+
++ (CGFloat)buttonFontSize
+{
+	return [NSFont systemFontSizeForControlSize:NSRegularControlSize];
 }
 
 @end

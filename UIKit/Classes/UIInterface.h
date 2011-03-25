@@ -27,11 +27,26 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <UIKit/UIFont.h>
+#import "UIColor.h"
+#import "UIFont.h"
+
+
+typedef enum {
+    UIBarStyleDefault = 0,
+    UIBarStyleBlack = 1,
+    UIBarStyleBlackOpaque = 1, // Deprecated
+    UIBarStyleBlackTranslucent = 2 // Deprecated
+} UIBarStyle;
+
+
+@interface UIColor (UIColorSystemColors)
++ (UIColor *)groupTableViewBackgroundColor;
+@end
+
 
 @interface UIFont (UIFontSystemFonts)
++ (CGFloat)systemFontSize;
++ (CGFloat)smallSystemFontSize;
 + (CGFloat)labelFontSize;
 + (CGFloat)buttonFontSize;
-+ (CGFloat)smallSystemFontSize;
-+ (CGFloat)systemFontSize;
 @end

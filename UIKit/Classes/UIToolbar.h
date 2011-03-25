@@ -28,13 +28,7 @@
  */
 
 #import "UIView.h"
-
-typedef enum {
-    UIBarStyleDefault = 0,
-    UIBarStyleBlack = 1,
-    UIBarStyleBlackOpaque = 1, // Deprecated
-    UIBarStyleBlackTranslucent = 2 // Deprecated
-} UIBarStyle;
+#import "UIInterface.h"
 
 @interface UIToolbar : UIView {
 @private

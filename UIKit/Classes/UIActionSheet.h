@@ -28,7 +28,7 @@
  */
 
 #import "UIView.h"
-#import "UIToolbar.h"
+#import "UIInterface.h"
 
 @class UIActionSheet, UITabBar, UIToolbar, UIBarButtonItem;
 
