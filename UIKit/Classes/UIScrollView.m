@@ -579,4 +579,9 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 {
 }
 
+- (NSString *)description
+{
+	return [NSString stringWithFormat:@"<%@: %p; frame = (%.0f %.0f; %.0f %.0f); clipsToBounds = %@; layer = %@; contentOffset = {%.0f, %.0f}>", [self className], self, self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.frame.size.height, (self.clipsToBounds ? @"YES" : @"NO"), self.layer, self.contentOffset.x, self.contentOffset.y];
+}
+
 @end
