@@ -186,7 +186,7 @@
 			state = @"Cancelled";
 			break;
 		case UIGestureRecognizerStateFailed:
-			@"Failed";
+			state = @"Failed";
 			break;
 	}
 	return [NSString stringWithFormat:@"<%@: %p; state = %@; view = %@>", [self className], self, state, self.view];
