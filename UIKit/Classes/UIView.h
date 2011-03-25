@@ -182,7 +182,7 @@ typedef NSUInteger UIViewAnimationOptions;
 @property (nonatomic) CGRect bounds;
 @property (nonatomic) CGPoint center;
 @property (nonatomic) CGAffineTransform transform;
-@property (nonatomic, readonly) UIView *superview;
+@property (nonatomic, readonly) __weak UIView *superview;
 @property (nonatomic, readonly) UIWindow *window;
 @property (nonatomic, readonly) NSArray *subviews;
 @property (nonatomic) CGFloat alpha;
