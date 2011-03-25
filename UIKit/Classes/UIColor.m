@@ -223,4 +223,28 @@ static UIColor *ClearColor = nil;
 	return theColor;
 }
 
+- (NSString *)description
+{
+	// The color space string this gets isn't exactly the same as Apple's implementation.
+	// For instance, Apple's implementation returns UIDeviceRGBColorSpace for [UIColor redColor]
+	// This implementation returns kCGColorSpaceDeviceRGB instead.
+	// Apple doesn't actually define UIDeviceRGBColorSpace or any of the other responses anywhere public,
+	// so there isn't any easy way to emulate it.
+	CGColorSpaceRef colorSpaceRef = CGColorGetColorSpace(self.CGColor);
+	NSString *colorSpace = [NSString stringWithFormat:@"%@", (NSString *)CGColorSpaceCopyName(colorSpaceRef)];
+	// This could be done with a loop, but really...there are only 3 possible lengths.
+	size_t numberOfComponents = CGColorGetNumberOfComponents(self.CGColor);
+	NSLog(@"%lu", numberOfComponents);
+	NSString *componentsString;
+	const CGFloat *components = CGColorGetComponents(self.CGColor);
+	if (numberOfComponents == 2) {
+		componentsString = [NSString stringWithFormat:@"%.0f %.0f", components[0], components[1]];
+	} else if (numberOfComponents == 3) {
+		componentsString = [NSString stringWithFormat:@"%.0f %.0f %.0f", components[0], components[1], components[2]];
+	} else if (numberOfComponents == 4) {
+		componentsString = [NSString stringWithFormat:@"%.0f %.0f %.0f %.0f", components[0], components[1], components[2], components[3]];
+	}
+	return [NSString stringWithFormat:@"%@ %@", colorSpace, componentsString];
+}
+
 @end
