@@ -43,8 +43,8 @@
 	UIToolbar *_toolbar;
 	NSMutableArray *_viewControllers;
 	id _delegate;
-	BOOL _navigationBarHidden;
 	BOOL _toolbarHidden;
+    BOOL _navigationBarHidden;
 	
 	struct {
 		BOOL didShowViewController : 1;
@@ -73,6 +73,5 @@
 @property (nonatomic, readonly, retain) UIViewController *topViewController;
 @property (nonatomic,getter=isNavigationBarHidden) BOOL navigationBarHidden;
 @property (nonatomic,getter=isToolbarHidden) BOOL toolbarHidden;
-@property (nonatomic,getter=isNavigationBarHidden) BOOL navigationBarHidden;
 
 @end
