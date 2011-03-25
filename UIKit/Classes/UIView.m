@@ -882,28 +882,6 @@ static BOOL _animationsEnabled = YES;
 	return [_gestureRecognizers allObjects];
 }
 
-- (NSString *)description
-{
-	NSString* className = [[self class] description];
-	NSMutableString *desc = [NSMutableString stringWithFormat: @"<%@: %p;", className, self];
-	
-	CGRect frame = self.frame;
-	[desc appendFormat: @" frame = (%@ %@; %@ %@);", 
-		[NSNumber numberWithDouble: frame.origin.x],
-		[NSNumber numberWithDouble: frame.origin.y],
-		[NSNumber numberWithDouble: frame.size.width],
-		[NSNumber numberWithDouble: frame.size.height]];
-	
-	// add autoresize
-	
-	// add autoresizesSubviews
-	
-	[desc appendFormat: @" layer = %@", self.layer];
-	
-	[desc appendString: @">"];
-	return desc;
-}
-
 + (void)animateWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
 {
 	const BOOL ignoreInteractionEvents = !((options & UIViewAnimationOptionAllowUserInteraction) == UIViewAnimationOptionAllowUserInteraction);
