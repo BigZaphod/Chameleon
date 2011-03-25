@@ -219,4 +219,9 @@ NSMutableArray *_allScreens = nil;
 	return nil;
 }
 
+- (NSString *)description
+{
+	return [NSString stringWithFormat:@"<%@: %p; bounds = {{%.0f, %.0f}, {%.0f, %.0f}}; mode = %@>", [self className], self, self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, self.bounds.size.height, self.currentMode];
+}
+
 @end
