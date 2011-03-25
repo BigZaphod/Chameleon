@@ -325,8 +325,9 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	// the frame of the table view has actually animated down to the new, shorter size. So the animation is jumpy/ugly because
 	// the cells suddenly disappear instead of seemingly animating down and out of view like they should. This tries to leave them
 	// on screen as long as possible, but only if they don't get in the way.
+	NSArray* allCachedCells = [_cachedCells allValues];
 	for (UITableViewCell *cell in _reusableCells) {
-		if (CGRectIntersectsRect(cell.frame,visibleBounds)) {
+		if (CGRectIntersectsRect(cell.frame,visibleBounds) && ![allCachedCells containsObject: cell]) {
 			[cell removeFromSuperview];
 		}
 	}
@@ -398,6 +399,14 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	}
 	
 	return CGRectZero;
+}
+
+- (void) beginUpdates
+{
+}
+
+- (void)endUpdates
+{
 }
 
 - (UITableViewCell *)cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -690,12 +699,24 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	[self setEditing:editing animated:NO];
 }
 
+- (void)insertSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation
+{
+	[self reloadData];
+}
+
+- (void)deleteSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation
+{
+	[self reloadData];
+}
+
 - (void)insertRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation
 {
+	[self reloadData];
 }
 
 - (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation
 {
+	[self reloadData];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event

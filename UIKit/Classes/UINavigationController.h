@@ -43,6 +43,7 @@
 	UIToolbar *_toolbar;
 	NSMutableArray *_viewControllers;
 	id _delegate;
+	BOOL _navigationBarHidden;
 	BOOL _toolbarHidden;
 	
 	struct {
@@ -60,6 +61,7 @@
 - (NSArray *)popToViewController:(UIViewController *)viewController animated:(BOOL)animated;
 - (NSArray *)popToRootViewControllerAnimated:(BOOL)animated;
 
+- (void)setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated;
 - (void)setToolbarHidden:(BOOL)hidden animated:(BOOL)animated;
 
 - (void)setNavigationBarHidden:(BOOL)navigationBarHidden animated:(BOOL)animated; // doesn't yet animate
@@ -69,6 +71,7 @@
 @property (nonatomic, readonly) UIToolbar *toolbar;
 @property (nonatomic, assign) id<UINavigationControllerDelegate> delegate;
 @property (nonatomic, readonly, retain) UIViewController *topViewController;
+@property (nonatomic,getter=isNavigationBarHidden) BOOL navigationBarHidden;
 @property (nonatomic,getter=isToolbarHidden) BOOL toolbarHidden;
 @property (nonatomic,getter=isNavigationBarHidden) BOOL navigationBarHidden;
 

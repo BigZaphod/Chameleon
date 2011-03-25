@@ -456,7 +456,10 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 
 - (void)scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event
 {
-	if (self.scrollEnabled) {
+	// If this UIScrollView cannot scroll vertically and we get a vertical scroll wheel event we should pass it on to our parent.
+	// Otherwise this will totally stop wheel scrolling in its tracks if it suddenly hits an embedded UIScrollView that doesn't
+	// need to scroll.
+	if (self.scrollEnabled && ((delta.x && self._canScrollHorizontal) || (delta.y && self._canScrollVertical))) {
 		[self _delegateDraggingDidBegin];
 
 		// Increasing the delta because it just seems to feel better to me right now.

@@ -128,6 +128,15 @@
 	return [_webView canGoForward];
 }
 
+- (BOOL)scalesPageToFit
+{
+	return false;
+}
+
+- (void)setScalesPageToFit:(BOOL)scalesPageToFit
+{
+}
+
 - (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script
 {
 	return [_webView stringByEvaluatingJavaScriptFromString:script];

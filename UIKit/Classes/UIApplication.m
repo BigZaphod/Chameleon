@@ -320,14 +320,10 @@ static BOOL TouchIsActive(UITouch *touch)
 	return [[NSWorkspace sharedWorkspace] openURL:url];
 }
 
-- (BOOL)canOpenURL:(NSURL *)URL
+- (BOOL)canOpenURL:(NSURL *)url
 {
-    NSString *urlString = [URL absoluteString];
-    if ([urlString hasPrefix:@"http://"]) {
-        return YES;
-    }else {
-        return NO;
-    }
+	NSURL *appURL = [[NSWorkspace sharedWorkspace] URLForApplicationToOpenURL:url];
+	return (appURL != nil);
 }
 
 - (BOOL)_sendGlobalKeyboardNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen

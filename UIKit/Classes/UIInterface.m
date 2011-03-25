@@ -27,34 +27,29 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <Foundation/Foundation.h>
+#import "UIInterface.h"
 
-@interface UIFont : NSObject {
-@package
-	CTFontRef _font;
+
+@implementation UIFont (UIFontSystemFonts)
+
++ (CGFloat)labelFontSize
+{
+	return 17;
 }
 
-+ (UIFont *)fontWithName:(NSString *)fontName size:(CGFloat)fontSize;
-+ (NSArray *)familyNames;
-+ (NSArray *)fontNamesForFamilyName:(NSString *)familyName;
++ (CGFloat)buttonFontSize
+{
+	return 18;
+}
 
-+ (UIFont *)systemFontOfSize:(CGFloat)fontSize;
-+ (UIFont *)boldSystemFontOfSize:(CGFloat)fontSize;
++ (CGFloat)smallSystemFontSize
+{
+	return 12;
+}
 
-- (UIFont *)fontWithSize:(CGFloat)fontSize;
-
-+ (CGFloat)systemFontSize;          // size of the standard System font.
-+ (CGFloat)smallSystemFontSize;     // size of standard small System font.
-+ (CGFloat)labelFontSize;           // size of the standard Label Font.
-
-@property (nonatomic, readonly, retain) NSString *fontName;
-
-@property (nonatomic, readonly) CGFloat ascender;
-@property (nonatomic, readonly) CGFloat descender;
-@property (nonatomic, readonly) CGFloat lineHeight;
-@property (nonatomic, readonly) CGFloat pointSize;
-@property (nonatomic, readonly) CGFloat xHeight;
-@property (nonatomic, readonly) CGFloat capHeight;
-@property (nonatomic, readonly, retain) NSString *familyName;
++ (CGFloat)systemFontSize
+{
+	return 14;
+}
 
 @end

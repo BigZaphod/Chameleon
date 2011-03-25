@@ -27,34 +27,11 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIFont.h>
 
-@interface UIFont : NSObject {
-@package
-	CTFontRef _font;
-}
-
-+ (UIFont *)fontWithName:(NSString *)fontName size:(CGFloat)fontSize;
-+ (NSArray *)familyNames;
-+ (NSArray *)fontNamesForFamilyName:(NSString *)familyName;
-
-+ (UIFont *)systemFontOfSize:(CGFloat)fontSize;
-+ (UIFont *)boldSystemFontOfSize:(CGFloat)fontSize;
-
-- (UIFont *)fontWithSize:(CGFloat)fontSize;
-
-+ (CGFloat)systemFontSize;          // size of the standard System font.
-+ (CGFloat)smallSystemFontSize;     // size of standard small System font.
-+ (CGFloat)labelFontSize;           // size of the standard Label Font.
-
-@property (nonatomic, readonly, retain) NSString *fontName;
-
-@property (nonatomic, readonly) CGFloat ascender;
-@property (nonatomic, readonly) CGFloat descender;
-@property (nonatomic, readonly) CGFloat lineHeight;
-@property (nonatomic, readonly) CGFloat pointSize;
-@property (nonatomic, readonly) CGFloat xHeight;
-@property (nonatomic, readonly) CGFloat capHeight;
-@property (nonatomic, readonly, retain) NSString *familyName;
-
+@interface UIFont (UIFontSystemFonts)
++ (CGFloat)labelFontSize;
++ (CGFloat)buttonFontSize;
++ (CGFloat)smallSystemFontSize;
++ (CGFloat)systemFontSize;
 @end

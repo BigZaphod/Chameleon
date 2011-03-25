@@ -68,13 +68,13 @@ typedef enum {
 	UITableViewCellStyle _style;
 	UITableViewCellSeparator *_seperatorView;
 	UIView *_contentView;
-    UIView *_accessoryView; // stub
 	UILabel *_textLabel;
     UILabel *_detailTextLabel; // not yet displayed!
 	UIImageView *_imageView;
 	UIView *_backgroundView;
 	UIView *_selectedBackgroundView;
 	UITableViewCellAccessoryType _accessoryType;
+	UIView *_accessoryView;
 	UITableViewCellAccessoryType _editingAccessoryType;
 	UITableViewCellSelectionStyle _selectionStyle;
 	NSInteger _indentationLevel;
@@ -92,7 +92,6 @@ typedef enum {
 - (void)prepareForReuse;
 
 @property (nonatomic, readonly, retain) UIView *contentView;
-@property (nonatomic, retain) UIView *accessoryView;
 @property (nonatomic, readonly, retain) UILabel *textLabel;
 @property (nonatomic, readonly, retain) UILabel *detailTextLabel;
 @property (nonatomic, readonly, retain) UIImageView *imageView;
@@ -101,6 +100,7 @@ typedef enum {
 @property (nonatomic) UITableViewCellSelectionStyle selectionStyle;
 @property (nonatomic) NSInteger indentationLevel;
 @property (nonatomic) UITableViewCellAccessoryType accessoryType;
+@property (nonatomic, retain) UIView *accessoryView;
 @property (nonatomic) UITableViewCellAccessoryType editingAccessoryType;
 @property (nonatomic, getter=isSelected) BOOL selected;
 @property (nonatomic, getter=isHighlighted) BOOL highlighted;
