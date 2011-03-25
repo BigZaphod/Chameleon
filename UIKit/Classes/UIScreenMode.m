@@ -41,4 +41,9 @@
 	return [mode autorelease];
 }
 
+- (NSString *)description
+{
+	return [NSString stringWithFormat:@"<%@: %p; size = %f x %f>", [self className], self, self.size.width, self.size.height];
+}
+
 @end
