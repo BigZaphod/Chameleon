@@ -1041,4 +1041,9 @@ static BOOL _animationsEnabled = YES;
 	_animationsEnabled = enabled;
 }
 
+- (NSString *)description
+{
+	return [NSString stringWithFormat:@"<%@: %p; frame = (%.0f %.0f; %.0f %.0f); hidden = %@; layer = %@>", [self className], self, self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.frame.size.height, (self.hidden ? @"YES" : @"NO"), self.layer];
+}
+
 @end
