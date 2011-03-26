@@ -283,4 +283,21 @@
 	UIRectFill(CGRectMake(0,0,bounds.size.width,1));
 }
 
+- (NSString *)description
+{
+	NSString *barStyle = @"";
+	switch (self.barStyle) {
+		case UIBarStyleDefault:
+			barStyle = @"Default";
+			break;
+		case UIBarStyleBlack:
+			barStyle = @"Black";
+			break;
+		case UIBarStyleBlackTranslucent:
+			barStyle = @"Black Translucent (Deprecated)";
+			break;
+	}
+	return [NSString stringWithFormat:@"<%@: %p; barStyle = %@; tintColor = %@, isTranslucent = %@>", [self className], self, barStyle, ([self.tintColor description] ?: @"Default"), (self.translucent ? @"YES" : @"NO")];
+}
+
 @end
