@@ -482,4 +482,22 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 	}
 }
 
+- (NSString *)description
+{
+	NSString *textAlignment = @"";
+	switch (self.textAlignment) {
+		case UITextAlignmentLeft:
+			textAlignment = @"Left";
+			break;
+		case UITextAlignmentCenter:
+			textAlignment = @"Center";
+			break;
+		case UITextAlignmentRight:
+			textAlignment = @"Right";
+			break;
+	}
+	return [NSString stringWithFormat:@"<%@: %p; textAlignment = %@; editing = %@; textColor = %@; font = %@; delegate = %@>", [self className], self, textAlignment, (self.editing ? @"YES" : @"NO"), self.textColor, self.font, self.delegate];
+}
+
+
 @end
