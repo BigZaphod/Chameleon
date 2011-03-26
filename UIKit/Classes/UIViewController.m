@@ -281,4 +281,9 @@
 	return [self _nearestParentViewControllerThatIsKindOf:[UISplitViewController class]];
 }
 
+- (NSString *)description
+{
+	return [NSString stringWithFormat:@"<%@: %p; title = %@; view = %@>", [self className], self, self.title, self.view];
+}
+
 @end
