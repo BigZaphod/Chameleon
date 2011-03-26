@@ -96,7 +96,7 @@ static UIColor *GroupTableViewBackgroundColor = nil;
 - (id)initWithNSColor:(NSColor *)aColor
 {
 	if ((self=[super init])) {
-		NSColor *c = [aColor colorUsingColorSpace:[aColor colorSpace]];
+		NSColor *c = [aColor colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
 		CGFloat components[[c numberOfComponents]];
 		[c getComponents:components];
 		_color = CGColorCreate([[c colorSpace] CGColorSpace], components);
