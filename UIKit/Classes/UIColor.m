@@ -95,7 +95,7 @@ static UIColor *ClearColor = nil;
 - (id)initWithNSColor:(NSColor *)aColor
 {
 	if ((self=[super init])) {
-		NSColor *c = [aColor colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+		NSColor *c = [aColor colorUsingColorSpace:[aColor colorSpace]];
 		CGFloat components[[c numberOfComponents]];
 		[c getComponents:components];
 		_color = CGColorCreate([[c colorSpace] CGColorSpace], components);
