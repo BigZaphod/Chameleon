@@ -119,4 +119,36 @@
 	return [self _convertLocationPoint:_previousLocation toView:inView];
 }
 
+- (NSString *)description
+{
+	NSString *phase = @"";
+	switch (self.phase) {
+		case UITouchPhaseBegan:
+			phase = @"Began";
+			break;
+		case UITouchPhaseMoved:
+			phase = @"Moved";
+			break;
+		case UITouchPhaseStationary:
+			phase = @"Stationary";
+			break;
+		case UITouchPhaseEnded:
+			phase = @"Ended";
+			break;
+		case UITouchPhaseCancelled:
+			phase = @"Cancelled";
+			break;
+		case UITouchPhaseHovered:
+			phase = @"Hovered";
+			break;
+		case UITouchPhaseScrolled:
+			phase = @"Scrolled";
+			break;
+		case UITouchPhaseRightClicked:
+			phase = @"Right-clicked";
+			break;
+	}
+	return [NSString stringWithFormat:@"<%@: %p; timestamp = %e; tapCount = %d; phase = %@; view = %@; window = %@>", [self className], self, self.timestamp, self.tapCount, phase, self.view, self.window];
+}
+
 @end
