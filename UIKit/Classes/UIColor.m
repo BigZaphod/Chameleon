@@ -234,19 +234,16 @@ static UIColor *ClearColor = nil;
 	NSString *colorSpace = [NSString stringWithFormat:@"%@", [(NSString *)CGColorSpaceCopyName(colorSpaceRef) autorelease]];
 
 	const size_t numberOfComponents = CGColorGetNumberOfComponents(self.CGColor);
-	NSString *componentsString = nil;
 	const CGFloat *components = CGColorGetComponents(self.CGColor);
+	NSMutableString *componentsString = [NSMutableString stringWithString:@"{"];
+	
+	for (NSInteger index = 0; index < numberOfComponents; index++) {
+		if (index) [componentsString appendString:@", "];
+		[componentsString appendFormat:@"%.0f", components[index]];
+	}
+	[componentsString appendString:@"}"];
 
-	// This could be done with a loop, but really...there are only 3 possible lengths.
-	if (numberOfComponents == 2) {
-		componentsString = [NSString stringWithFormat:@"%.0f %.0f", components[0], components[1]];
-	} else if (numberOfComponents == 3) {
-		componentsString = [NSString stringWithFormat:@"%.0f %.0f %.0f", components[0], components[1], components[2]];
-	} else if (numberOfComponents == 4) {
-		componentsString = [NSString stringWithFormat:@"%.0f %.0f %.0f %.0f", components[0], components[1], components[2], components[3]];
-    }
-
-	return [NSString stringWithFormat:@"%@ %@", colorSpace, componentsString];
+	return [NSString stringWithFormat:@"<%@: %p; colorSpace = %@; components = %@>", [self className], self, colorSpace, componentsString];
 }
 
 @end
