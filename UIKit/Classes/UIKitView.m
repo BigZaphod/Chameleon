@@ -41,10 +41,6 @@
 - (void)configureLayers
 {
 	[self setWantsLayer:YES];
-
-	[[self layer] insertSublayer:[_screen _layer] atIndex:0];
-	[_screen _layer].frame = [self layer].bounds;
-	[_screen _layer].autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
 }
 
 - (id)initWithFrame:(NSRect)frame
@@ -88,6 +84,14 @@
 - (void)viewDidMoveToSuperview
 {	
 	[_screen _setUIKitView:self.superview? self : nil];
+}
+
+- (void)viewDidMoveToWindow {
+	if(self.window != nil) {
+		[[self layer] insertSublayer:[_screen _layer] atIndex:0];
+		[_screen _layer].frame = [self layer].bounds;
+		[_screen _layer].autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
+	}
 }
 
 - (BOOL)acceptsFirstResponder
