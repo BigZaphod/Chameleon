@@ -62,7 +62,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		_cachedCells = [[NSMutableDictionary alloc] init];
 		_sections = [[NSMutableArray alloc] init];
 		_reusableCells = [[NSMutableSet alloc] init];
-		_lastRowInSectionSeparatorColor = [UIColor colorWithRed:.445f green:.49f blue:.52f alpha:1];
+    _lastRowInSectionSeparatorColor = [[UIColor colorWithRed:.445f green:.49f blue:.52f alpha:1] retain];
 
 		self.separatorColor = [UIColor colorWithRed:.88f green:.88f blue:.88f alpha:1];
 		self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
