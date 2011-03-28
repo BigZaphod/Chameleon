@@ -621,6 +621,11 @@ static BOOL _animationsEnabled = YES;
 		CGRect oldBounds = _layer.bounds;
 		_layer.frame = newFrame;
 		[self _boundsDidChangeFrom:oldBounds to:_layer.bounds];
+        for (int ii=0; ii < [[self subviews] count]; ii++) 
+        {
+            // @@TODO: this is a tremendous hack, but it works. ideally, figure out what's going on...I fear the problem is that _boundsDidChangeFrom: is only going one layer deep into subviews.
+            [(UIView *)[[self subviews] objectAtIndex:ii] setFrame:newFrame];
+        }
 		[[NSNotificationCenter defaultCenter] postNotificationName:UIViewFrameDidChangeNotification object:self];
 	}
 }

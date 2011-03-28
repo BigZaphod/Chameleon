@@ -76,6 +76,16 @@
 	_delegateHas.didFailLoadWithError = [_delegate respondsToSelector:@selector(webView:didFailLoadWithError:)];
 }
 
+-(BOOL)becomeFirstResponder
+{
+    return YES;
+}
+
+-(BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
 - (void)loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL
 {
 	[[_webView mainFrame] loadHTMLString:string baseURL:baseURL];
@@ -144,7 +154,9 @@
 - (void)webView:(WebView *)webView decidePolicyForNavigationAction:(NSDictionary *)actionInformation request:(NSURLRequest *)request frame:(WebFrame *)frame decisionListener:(id < WebPolicyDecisionListener >)listener
 {
 	BOOL shouldStartLoad = NO;
-	
+    NSURL *url = [request URL];
+    NSString *path = [url path];
+    NSLog(@"Looking for %@", path);
 	if (_delegateHas.shouldStartLoadWithRequest) {
 		id navTypeObject = [actionInformation objectForKey:WebActionNavigationTypeKey];
 		NSInteger navTypeCode = [navTypeObject intValue];
@@ -175,6 +187,7 @@
 
 - (void)webView:(WebView *)sender didFailLoadWithError:(NSError *)error forFrame:(WebFrame *)frame
 {
+    NSLog(@"error of some kind");
 	if (_delegateHas.didFailLoadWithError) {
 		[_delegate webView:self didFailLoadWithError:error];
 	}
@@ -185,7 +198,7 @@
 
 - (void)webView:(WebView *)sender makeFirstResponder:(NSResponder *)responder
 {
-	//[[_webViewAdapter.NSView window] makeFirstResponder:responder];
+	[[_webViewAdapter.NSView window] makeFirstResponder:responder];
 }
 
 - (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems
