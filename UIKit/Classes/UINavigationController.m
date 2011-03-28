@@ -399,7 +399,11 @@ static const CGFloat ToolbarHeight = 28;
 
 - (CGSize)contentSizeForViewInPopover
 {
-	return self.topViewController.contentSizeForViewInPopover;
+	CGSize size = self.topViewController.contentSizeForViewInPopover;
+	if (!self.navigationBarHidden) {
+		size.height += self.navigationBar.frame.size.height;
+	}
+	return size;
 }
 
 - (void)setNavigationBarHidden:(BOOL)navigationBarHidden animated:(BOOL)animated; // doesn't yet animate
