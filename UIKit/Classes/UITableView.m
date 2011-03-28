@@ -44,7 +44,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 @end
 
 @implementation UITableView
-@synthesize style=_style, dataSource=_dataSource, rowHeight=_rowHeight, separatorStyle=_separatorStyle, separatorColor=_separatorColor;
+@synthesize style=_style, dataSource=_dataSource, rowHeight=_rowHeight, separatorStyle=_separatorStyle, separatorColor=_separatorColor, lastRowInSectionSeparatorColor=_lastRowInSectionSeparatorColor;
 @synthesize tableHeaderView=_tableHeaderView, tableFooterView=_tableFooterView, allowsSelection=_allowsSelection, editing=_editing;
 @synthesize sectionFooterHeight=_sectionFooterHeight, sectionHeaderHeight=_sectionHeaderHeight;
 @synthesize allowsSelectionDuringEditing=_allowsSelectionDuringEditing;
@@ -64,6 +64,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		_reusableCells = [[NSMutableSet alloc] init];
 
 		self.separatorColor = [UIColor colorWithRed:.88f green:.88f blue:.88f alpha:1];
+		self.lastRowInSectionSeparatorColor = [UIColor colorWithRed:.445f green:.49f blue:.52f alpha:1];
 		self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 		self.showsHorizontalScrollIndicator = NO;
 		self.allowsSelection = YES;
@@ -88,6 +89,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	[_sections release];
 	[_reusableCells release];
 	[_separatorColor release];
+	[_lastRowInSectionSeparatorColor release];
 	[super dealloc];
 }
 
@@ -296,7 +298,11 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 						cell.selected = [_selectedRow isEqual:indexPath];
 						cell.frame = rowRect;
 						cell.backgroundColor = self.backgroundColor;
-						[cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
+						if ((section < (numberOfSections - 1)) && (row == (numberOfRows - 1))) {
+							[cell _setSeparatorStyle:_separatorStyle color:_lastRowInSectionSeparatorColor];
+						} else {
+							[cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
+						}
 						[self addSubview:cell];
 					}
 				}

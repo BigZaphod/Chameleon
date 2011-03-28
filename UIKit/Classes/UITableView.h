@@ -88,6 +88,7 @@ typedef enum {
 	BOOL _needsReload;
 	CGFloat _rowHeight;
 	UIColor *_separatorColor;
+	UIColor *_lastRowInSectionSeparatorColor;
 	UITableViewCellSeparatorStyle _separatorStyle;
 	UIView *_tableHeaderView;
 	UIView *_tableFooterView;
@@ -161,6 +162,7 @@ typedef enum {
 @property (nonatomic) CGFloat rowHeight;
 @property (nonatomic) UITableViewCellSeparatorStyle separatorStyle;
 @property (nonatomic, retain) UIColor *separatorColor;
+@property (nonatomic, retain) UIColor *lastRowInSectionSeparatorColor;
 @property (nonatomic, retain) UIView *tableHeaderView;
 @property (nonatomic, retain) UIView *tableFooterView;
 @property (nonatomic) BOOL allowsSelection;
