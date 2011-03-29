@@ -298,7 +298,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 						cell.selected = [_selectedRow isEqual:indexPath];
 						cell.frame = rowRect;
 						cell.backgroundColor = self.backgroundColor;
-						if ((row == (numberOfRows - 1)) && (sectionRecord.footerView || ((section < (numberOfSections - 2)) && [[_sections objectAtIndex:section + 1] headerView]))) {
+						if ((row == (numberOfRows - 1)) && (sectionRecord.footerView || ((section < (numberOfSections - 1)) && [[_sections objectAtIndex:section + 1] headerView]))) {
 							[cell _setSeparatorStyle:_separatorStyle color:_lastRowInSectionSeparatorColor];
 						} else {
 							[cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
