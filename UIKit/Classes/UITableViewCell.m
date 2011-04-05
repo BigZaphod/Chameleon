@@ -48,6 +48,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	if ((self=[super initWithFrame:frame])) {
         _indentationWidth = 10;
 		_style = UITableViewCellStyleDefault;
+        _selectionStyle = UITableViewCellSelectionStyleBlue;
 
 		_seperatorView = [[UITableViewCellSeparator alloc] init];
 		[self addSubview:_seperatorView];
