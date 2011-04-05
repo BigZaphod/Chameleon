@@ -154,7 +154,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
-	if (selected != _selected) {
+	if (selected != _selected && _selectionStyle != UITableViewCellSelectionStyleNone) {
 		_selected = selected;
 		[self _updateSelectionState];
 	}
@@ -167,7 +167,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
 {
-	if (_highlighted != highlighted) {
+	if (_highlighted != highlighted && _selectionStyle != UITableViewCellSelectionStyleNone) {
 		_highlighted = highlighted;
 		[self _updateSelectionState];
 	}
