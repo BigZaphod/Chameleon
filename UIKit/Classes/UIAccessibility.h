@@ -60,8 +60,10 @@ extern UIAccessibilityNotifications UIAccessibilityLayoutChangedNotification;
 - (void)setAccessibilityHint:(NSString *)hint;
 - (NSString *)accessibilityValue;
 - (void)setAccessibilityValue:(NSString *)value;
+*/
 - (UIAccessibilityTraits)accessibilityTraits;
 - (void)setAccessibilityTraits:(UIAccessibilityTraits)traits;
+/*
 - (CGRect)accessibilityFrame;
 - (void)setAccessibilityFrame:(CGRect)frame;
  */

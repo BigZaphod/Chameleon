@@ -137,6 +137,12 @@ typedef enum {
 - (CGRect)rectForFooterInSection:(NSInteger)section;
 - (CGRect)rectForRowAtIndexPath:(NSIndexPath *)indexPath;
 
+- (void)beginUpdates;
+- (void)endUpdates;
+
+- (void)insertSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation;
+- (void)deleteSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation;
+
 - (void)insertRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation;	// not implemented
 - (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation;	// not implemented
 

@@ -34,11 +34,16 @@
  */
 
 #import "UINSCellControl.h"
-#import <Cocoa/Cocoa.h>
-#import <UIKit/UIKit.h>
+#import "UIColor.h"
+#import "UITouch.h"
+#import "UIGraphics.h"
 #import "UIImage+UIPrivate.h"
 #import "UIFont+UIPrivate.h"
 #import "UIControl+UIPrivate.h"
+#import <AppKit/NSCell.h>
+#import <AppKit/NSButtonCell.h>
+#import <AppKit/NSImage.h>
+#import <AppKit/NSGraphicsContext.h>
 
 @interface NSCell (DrawInCGContext)
 - (void)drawWithFrame:(NSRect)cellFrame inGraphicsContext:(CGContextRef)context;

@@ -30,7 +30,8 @@
 #import "UIColor.h"
 #import "UIImage.h"
 #import "UIGraphics.h"
-#import <AppKit/AppKit.h>
+#import <AppKit/NSColor.h>
+#import <AppKit/NSColorSpace.h>
 
 // callback for CreateImagePattern.
 static void drawPatternImage(void *info, CGContextRef ctx)
@@ -88,7 +89,6 @@ static UIColor *OrangeColor = nil;
 static UIColor *PurpleColor = nil;
 static UIColor *BrownColor = nil;
 static UIColor *ClearColor = nil;
-static UIColor *GroupTableViewBackgroundColor = nil;
 
 @implementation UIColor
 
@@ -154,7 +154,6 @@ static UIColor *GroupTableViewBackgroundColor = nil;
 + (UIColor *)purpleColor		{ return PurpleColor ?: (PurpleColor = [[self alloc] initWithNSColor:[NSColor purpleColor]]); }
 + (UIColor *)brownColor			{ return BrownColor ?: (BrownColor = [[self alloc] initWithNSColor:[NSColor brownColor]]); }
 + (UIColor *)clearColor			{ return ClearColor ?: (ClearColor = [[self alloc] initWithNSColor:[NSColor clearColor]]); }
-+ (UIColor *)groupTableViewBackgroundColor	{ return GroupTableViewBackgroundColor ?: (GroupTableViewBackgroundColor = [[self alloc] initWithNSColor:[NSColor lightGrayColor]]); } // TODO
 
 - (id)initWithWhite:(CGFloat)white alpha:(CGFloat)alpha
 {
@@ -222,6 +221,29 @@ static UIColor *GroupTableViewBackgroundColor = nil;
 	NSColor *theColor = [NSColor colorWithColorSpace:colorSpace components:components count:numberOfComponents];
 	[colorSpace release];
 	return theColor;
+}
+
+- (NSString *)description
+{
+	// The color space string this gets isn't exactly the same as Apple's implementation.
+	// For instance, Apple's implementation returns UIDeviceRGBColorSpace for [UIColor redColor]
+	// This implementation returns kCGColorSpaceDeviceRGB instead.
+	// Apple doesn't actually define UIDeviceRGBColorSpace or any of the other responses anywhere public,
+	// so there isn't any easy way to emulate it.
+	CGColorSpaceRef colorSpaceRef = CGColorGetColorSpace(self.CGColor);
+	NSString *colorSpace = [NSString stringWithFormat:@"%@", [(NSString *)CGColorSpaceCopyName(colorSpaceRef) autorelease]];
+
+	const size_t numberOfComponents = CGColorGetNumberOfComponents(self.CGColor);
+	const CGFloat *components = CGColorGetComponents(self.CGColor);
+	NSMutableString *componentsString = [NSMutableString stringWithString:@"{"];
+	
+	for (NSInteger index = 0; index < numberOfComponents; index++) {
+		if (index) [componentsString appendString:@", "];
+		[componentsString appendFormat:@"%.0f", components[index]];
+	}
+	[componentsString appendString:@"}"];
+
+	return [NSString stringWithFormat:@"<%@: %p; colorSpace = %@; components = %@>", [self className], self, colorSpace, componentsString];
 }
 
 @end

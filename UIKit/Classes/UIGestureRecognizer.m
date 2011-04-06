@@ -166,4 +166,30 @@
 {
 }
 
+- (NSString *)description
+{
+	NSString *state = @"";
+	switch (self.state) {
+		case UIGestureRecognizerStatePossible:
+			state = @"Possible";
+			break;
+		case UIGestureRecognizerStateBegan:
+			state = @"Began";
+			break;
+		case UIGestureRecognizerStateChanged:
+			state = @"Changed";
+			break;
+		case UIGestureRecognizerStateRecognized:
+			state = @"Recognized";
+			break;
+		case UIGestureRecognizerStateCancelled:
+			state = @"Cancelled";
+			break;
+		case UIGestureRecognizerStateFailed:
+			state = @"Failed";
+			break;
+	}
+	return [NSString stringWithFormat:@"<%@: %p; state = %@; view = %@>", [self className], self, state, self.view];
+}
+
 @end

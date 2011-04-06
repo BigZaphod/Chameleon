@@ -316,4 +316,21 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 	}
 }
 
+- (NSString *)description
+{
+	NSString *textAlignment = @"";
+	switch (self.textAlignment) {
+		case UITextAlignmentLeft:
+			textAlignment = @"Left";
+			break;
+		case UITextAlignmentCenter:
+			textAlignment = @"Center";
+			break;
+		case UITextAlignmentRight:
+			textAlignment = @"Right";
+			break;
+	}
+	return [NSString stringWithFormat:@"<%@: %p; textAlignment = %@; selectedRange = %@; editable = %@; textColor = %@; font = %@; delegate = %@>", [self className], self, textAlignment, NSStringFromRange(self.selectedRange), (self.editable ? @"YES" : @"NO"), self.textColor, self.font, self.delegate];
+}
+
 @end

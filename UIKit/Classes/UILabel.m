@@ -147,7 +147,15 @@
 
 - (CGRect)textRectForBounds:(CGRect)bounds limitedToNumberOfLines:(NSInteger)numberOfLines
 {
-	return bounds;
+	if ([_text length] > 0) {
+		CGSize maxSize = bounds.size;
+		if (numberOfLines > 0) {
+			maxSize.height = _font.lineHeight * numberOfLines;
+		}
+		CGSize size = [_text sizeWithFont: _font constrainedToSize: maxSize lineBreakMode: _lineBreakMode];
+		return (CGRect){bounds.origin, size};
+	}
+	return (CGRect){bounds.origin, {0, 0}};
 }
 
 - (void)drawTextInRect:(CGRect)rect

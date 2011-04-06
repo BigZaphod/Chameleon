@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, The Iconfactory. All rights reserved.
+ * Copyright (c) 2011, Casey Marshall. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,24 +27,30 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIScreenMode.h"
-#import "UIGeometry.h"
-#import <AppKit/AppKit.h>
+#import "UIDatePicker.h"
 
-@implementation UIScreenMode
-@synthesize pixelAspectRatio=_pixelAspectRatio, size=_size;
 
-+ (id)screenModeWithNSView:(NSView *)theNSView
+@implementation UIDatePicker
+
+@synthesize calendar = _calendar;
+@synthesize date = _date;
+@synthesize locale = _locale;
+@synthesize timeZone = _timeZone;
+@synthesize datePickerMode = _datePickerMode;
+@synthesize minimumDate = _minimumDate;
+@synthesize maximumDate = _maximumDate;
+@synthesize minuteInterval = _minuteInterval;
+@synthesize countDownDuration = _countDownDuration;
+
+- (void) dealloc
 {
-	UIScreenMode *mode = [[self alloc] init];
-	mode->_size = NSSizeToCGSize([theNSView bounds].size);
-	mode->_pixelAspectRatio = 1;
-	return [mode autorelease];
-}
-
-- (NSString *)description
-{
-	return [NSString stringWithFormat:@"<%@: %p; size = %@>", [self className], self, NSStringFromCGSize(self.size)];
+    [_calendar release];
+    [_date release];
+    [_locale release];
+    [_timeZone release];
+    [_minimumDate release];
+    [_maximumDate release];
+    [super dealloc];
 }
 
 @end

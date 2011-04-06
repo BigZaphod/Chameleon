@@ -48,7 +48,6 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	if ((self=[super initWithFrame:frame])) {
         _indentationWidth = 10;
 		_style = UITableViewCellStyleDefault;
-        _selectionStyle = UITableViewCellSelectionStyleBlue;
 
 		_seperatorView = [[UITableViewCellSeparator alloc] init];
 		[self addSubview:_seperatorView];
@@ -92,6 +91,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	[_imageView release];
 	[_backgroundView release];
 	[_selectedBackgroundView release];
+	[_accessoryView release];
 	[_reuseIdentifier release];
 	[super dealloc];
 }
@@ -104,6 +104,16 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	BOOL showingSeperator = !_seperatorView.hidden;
 	
 	CGRect contentFrame = CGRectMake(0,0,bounds.size.width,bounds.size.height-(showingSeperator? 1 : 0));
+	CGRect accessoryRect = CGRectMake(bounds.size.width, 0, 0, 0);
+	if(_accessoryView) {
+		accessoryRect.size = [_accessoryView sizeThatFits: bounds.size];
+		accessoryRect.origin.x = bounds.size.width - accessoryRect.size.width;
+		accessoryRect.origin.y = round(0.5*(bounds.size.height - accessoryRect.size.height));
+		_accessoryView.frame = accessoryRect;
+		if(_accessoryView.superview != self)
+			[self addSubview: _accessoryView];
+		contentFrame.size.width = accessoryRect.origin.x - 1;
+	}
 	
 	_backgroundView.frame = contentFrame;
 	_selectedBackgroundView.frame = contentFrame;
@@ -155,7 +165,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
-	if (selected != _selected && _selectionStyle != UITableViewCellSelectionStyleNone) {
+	if (selected != _selected) {
 		_selected = selected;
 		[self _updateSelectionState];
 	}
@@ -168,7 +178,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
 {
-	if (_highlighted != highlighted && _selectionStyle != UITableViewCellSelectionStyleNone) {
+	if (_highlighted != highlighted) {
 		_highlighted = highlighted;
 		[self _updateSelectionState];
 	}

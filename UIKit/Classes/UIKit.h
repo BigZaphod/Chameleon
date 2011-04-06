@@ -47,6 +47,7 @@
 #import "UIWindow.h"
 #import "UITouch.h"
 #import "UIApplication.h"
+#import "UIInterface.h"
 #import "UIImageView.h"
 #import "UIScrollView.h"
 #import "UITableView.h"
@@ -105,6 +106,7 @@
 #import "UIPinchGestureRecognizer.h"
 #import "UIRotationGestureRecognizer.h"
 #import "UISwipeGestureRecognizer.h"
+#import "UIDatePicker.h"
 
 // non-standard imports
 #import "UIKey.h"

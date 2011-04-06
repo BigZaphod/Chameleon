@@ -44,7 +44,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 @end
 
 @implementation UITextField
-@synthesize delegate=_delegate, background=_background, disabledBackground=_disabledBackground, editing=_editing, clearsOnBeginEditing=_clearsOnBeginEditing;
+@synthesize delegate=_delegate, background=_background, disabledBackground=_disabledBackground, editing=_editing, clearsOnBeginEditing=_clearsOnBeginEditing, adjustsFontSizeToFitWidth=_adjustsFontSizeToFitWidth;
 @synthesize clearButtonMode=_clearButtonMode, leftView=_leftView, rightView=_rightView, leftViewMode=_leftViewMode, rightViewMode=_rightViewMode;
 @synthesize placeholder=_placeholder, borderStyle=_borderStyle;
 
@@ -481,5 +481,23 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 		[_delegate textFieldShouldReturn:self];
 	}
 }
+
+- (NSString *)description
+{
+	NSString *textAlignment = @"";
+	switch (self.textAlignment) {
+		case UITextAlignmentLeft:
+			textAlignment = @"Left";
+			break;
+		case UITextAlignmentCenter:
+			textAlignment = @"Center";
+			break;
+		case UITextAlignmentRight:
+			textAlignment = @"Right";
+			break;
+	}
+	return [NSString stringWithFormat:@"<%@: %p; textAlignment = %@; editing = %@; textColor = %@; font = %@; delegate = %@>", [self className], self, textAlignment, (self.editing ? @"YES" : @"NO"), self.textColor, self.font, self.delegate];
+}
+
 
 @end

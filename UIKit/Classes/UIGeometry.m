@@ -81,6 +81,22 @@ NSString *NSStringFromCGAffineTransform(CGAffineTransform transform)
 {
 	return NSSizeToCGSize([self sizeValue]);
 }
+
++ (NSValue *)valueWithUIEdgeInsets:(UIEdgeInsets)insets
+{
+	return [NSValue valueWithBytes: &insets objCType: @encode(UIEdgeInsets)];
+}
+
+- (UIEdgeInsets)UIEdgeInsetsValue
+{
+	if(strcmp([self objCType], @encode(UIEdgeInsets)) == 0)
+	{
+		UIEdgeInsets insets;
+		[self getValue: &insets];
+		return insets;
+	}
+	return (UIEdgeInsets){0,0,0,0};
+}
 @end
 
 @implementation NSCoder (NSCoderUIGeometryExtensions)

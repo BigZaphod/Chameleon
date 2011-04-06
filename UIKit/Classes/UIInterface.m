@@ -27,24 +27,40 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIScreenMode.h"
-#import "UIGeometry.h"
-#import <AppKit/AppKit.h>
+#import "UIInterface.h"
+#import <AppKit/NSFont.h>
 
-@implementation UIScreenMode
-@synthesize pixelAspectRatio=_pixelAspectRatio, size=_size;
 
-+ (id)screenModeWithNSView:(NSView *)theNSView
+@implementation UIColor (UIColorSystemColors)
+
++ (UIColor *)groupTableViewBackgroundColor
 {
-	UIScreenMode *mode = [[self alloc] init];
-	mode->_size = NSSizeToCGSize([theNSView bounds].size);
-	mode->_pixelAspectRatio = 1;
-	return [mode autorelease];
+    return [UIColor lightGrayColor];    // this is currently not likely to be correct, please fix!
 }
 
-- (NSString *)description
+@end
+
+
+@implementation UIFont (UIFontSystemFonts)
+
++ (CGFloat)systemFontSize
 {
-	return [NSString stringWithFormat:@"<%@: %p; size = %@>", [self className], self, NSStringFromCGSize(self.size)];
+    return [NSFont systemFontSize];
+}
+
++ (CGFloat)smallSystemFontSize
+{
+    return [NSFont smallSystemFontSize];
+}
+
++ (CGFloat)labelFontSize
+{
+    return [NSFont labelFontSize];
+}
+
++ (CGFloat)buttonFontSize
+{
+	return [NSFont systemFontSizeForControlSize:NSRegularControlSize];
 }
 
 @end

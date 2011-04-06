@@ -234,9 +234,10 @@
 		38615C78133A81B900841EEA /* UIFont+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 38615C77133A81B900841EEA /* UIFont+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		38E523B11339680400E041B3 /* UINavigationItem+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 38E523AF1339680400E041B3 /* UINavigationItem+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		38E523B513396B5B00E041B3 /* UINavigationBar+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 38E523B413396B5B00E041B3 /* UINavigationBar+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		7011107C133BE0F400C86512 /* UIDatePicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 7011107A133BE0F300C86512 /* UIDatePicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7011107D133BE0F400C86512 /* UIDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7011107B133BE0F300C86512 /* UIDatePicker.m */; };
 		7806ED2A133A1D7500273BC6 /* UITabBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 7806ED28133A1D7500273BC6 /* UITabBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7806ED2B133A1D7500273BC6 /* UITabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7806ED29133A1D7500273BC6 /* UITabBar.m */; };
-		789CF671133A34BC00250AB4 /* UITabBar.m in Headers */ = {isa = PBXBuildFile; fileRef = 7806ED29133A1D7500273BC6 /* UITabBar.m */; settings = {ATTRIBUTES = (Public, ); }; };
 		789CF898133A3CD500250AB4 /* NSFetchedResultsController.h in Headers */ = {isa = PBXBuildFile; fileRef = 789CF896133A3CD500250AB4 /* NSFetchedResultsController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		789CF899133A3CD500250AB4 /* NSFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 789CF897133A3CD500250AB4 /* NSFetchedResultsController.m */; };
 		78CB48AC133A9C51008636DA /* UISearchBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 78CB48AA133A9C51008636DA /* UISearchBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -251,6 +252,8 @@
 		78CB48DA133AB922008636DA /* UISlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CB48D8133AB920008636DA /* UISlider.m */; };
 		78D533DD133A9434006F17CA /* UISearchDisplayController.h in Headers */ = {isa = PBXBuildFile; fileRef = 78D533DB133A9434006F17CA /* UISearchDisplayController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		78D533DE133A9434006F17CA /* UISearchDisplayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D533DC133A9434006F17CA /* UISearchDisplayController.m */; };
+		537472D5133ADD4B00EBD5EA /* UIInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 537472D3133ADD4B00EBD5EA /* UIInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		537472D6133ADD4B00EBD5EA /* UIInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 537472D4133ADD4B00EBD5EA /* UIInterface.m */; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -486,6 +489,8 @@
 		38615C77133A81B900841EEA /* UIFont+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+UIPrivate.h"; sourceTree = "<group>"; };
 		38E523AF1339680400E041B3 /* UINavigationItem+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationItem+UIPrivate.h"; sourceTree = "<group>"; };
 		38E523B413396B5B00E041B3 /* UINavigationBar+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+UIPrivate.h"; sourceTree = "<group>"; };
+		7011107A133BE0F300C86512 /* UIDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDatePicker.h; sourceTree = "<group>"; };
+		7011107B133BE0F300C86512 /* UIDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIDatePicker.m; sourceTree = "<group>"; };
 		7806ED28133A1D7500273BC6 /* UITabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITabBar.h; sourceTree = "<group>"; };
 		7806ED29133A1D7500273BC6 /* UITabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITabBar.m; sourceTree = "<group>"; };
 		789CF896133A3CD500250AB4 /* NSFetchedResultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSFetchedResultsController.h; sourceTree = "<group>"; };
@@ -502,6 +507,8 @@
 		78CB48D8133AB920008636DA /* UISlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISlider.m; sourceTree = "<group>"; };
 		78D533DB133A9434006F17CA /* UISearchDisplayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISearchDisplayController.h; sourceTree = "<group>"; };
 		78D533DC133A9434006F17CA /* UISearchDisplayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISearchDisplayController.m; sourceTree = "<group>"; };
+		537472D3133ADD4B00EBD5EA /* UIInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIInterface.h; sourceTree = "<group>"; };
+		537472D4133ADD4B00EBD5EA /* UIInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIInterface.m; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* UIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -586,6 +593,8 @@
 				148984E412EE2CFE003D4751 /* AppKitIntegration.h */,
 				14C6C120133AFC91002F111E /* CALayer+UIKitCompatibility.h */,
 				14C6C121133AFC92002F111E /* CALayer+UIKitCompatibility.m */,
+				789CF896133A3CD500250AB4 /* NSFetchedResultsController.h */,
+				789CF897133A3CD500250AB4 /* NSFetchedResultsController.m */,
 				148984E512EE2CFE003D4751 /* NSIndexPath+UITableView.h */,
 				148984E612EE2CFE003D4751 /* NSIndexPath+UITableView.m */,
 				148984E712EE2CFE003D4751 /* UIAcceleration.h */,
@@ -621,6 +630,8 @@
 				1489850512EE2CFE003D4751 /* UIControl.h */,
 				1489850612EE2CFE003D4751 /* UIControl.m */,
 				1489850712EE2CFE003D4751 /* UIDataDetectors.h */,
+				7011107A133BE0F300C86512 /* UIDatePicker.h */,
+				7011107B133BE0F300C86512 /* UIDatePicker.m */,
 				1489850812EE2CFE003D4751 /* UIDevice.h */,
 				1489850912EE2CFE003D4751 /* UIDevice.m */,
 				1489850A12EE2CFE003D4751 /* UIEvent.h */,
@@ -642,6 +653,8 @@
 				1489851912EE2CFE003D4751 /* UIImagePickerController.m */,
 				1489851A12EE2CFE003D4751 /* UIImageView.h */,
 				1489851B12EE2CFE003D4751 /* UIImageView.m */,
+				537472D3133ADD4B00EBD5EA /* UIInterface.h */,
+				537472D4133ADD4B00EBD5EA /* UIInterface.m */,
 				1489851C12EE2CFE003D4751 /* UIKey.h */,
 				1489851D12EE2CFE003D4751 /* UIKey.m */,
 				1489851E12EE2CFE003D4751 /* UIKit.h */,
@@ -661,16 +674,18 @@
 				1489852C12EE2CFE003D4751 /* UINavigationController.m */,
 				1489852D12EE2CFE003D4751 /* UINavigationItem.h */,
 				1489852E12EE2CFE003D4751 /* UINavigationItem.m */,
-				38615C68133A54DF00841EEA /* UINSCellControl.h */,
-				38615C69133A54DF00841EEA /* UINSCellControl.m */,
 				1489852F12EE2CFE003D4751 /* UINibLoading.h */,
 				1489853012EE2CFE003D4751 /* UINibLoading.m */,
+				38615C68133A54DF00841EEA /* UINSCellControl.h */,
+				38615C69133A54DF00841EEA /* UINSCellControl.m */,
 				1489853112EE2CFE003D4751 /* UIPageControl.h */,
 				1489853212EE2CFE003D4751 /* UIPageControl.m */,
 				1489860812EE2DDC003D4751 /* UIPanGestureRecognizer.h */,
 				1489860912EE2DDC003D4751 /* UIPanGestureRecognizer.m */,
 				1489853312EE2CFE003D4751 /* UIPasteboard.h */,
 				1489853412EE2CFE003D4751 /* UIPasteboard.m */,
+				78CB48BA133AADCF008636DA /* UIPickerView.h */,
+				78CB48BB133AADD0008636DA /* UIPickerView.m */,
 				1489853512EE2CFE003D4751 /* UIPinchGestureRecognizer.h */,
 				1489853612EE2CFE003D4751 /* UIPinchGestureRecognizer.m */,
 				1489853712EE2CFE003D4751 /* UIPopoverController.h */,
@@ -691,6 +706,14 @@
 				1489854412EE2CFE003D4751 /* UIScreenMode.m */,
 				1489854512EE2CFE003D4751 /* UIScrollView.h */,
 				1489854612EE2CFE003D4751 /* UIScrollView.m */,
+				78CB48AA133A9C51008636DA /* UISearchBar.h */,
+				78CB48AB133A9C51008636DA /* UISearchBar.m */,
+				78D533DB133A9434006F17CA /* UISearchDisplayController.h */,
+				78D533DC133A9434006F17CA /* UISearchDisplayController.m */,
+				78CB48B2133AA8AF008636DA /* UISegmentedControl.h */,
+				78CB48B3133AA8AF008636DA /* UISegmentedControl.m */,
+				78CB48D7133AB91E008636DA /* UISlider.h */,
+				78CB48D8133AB920008636DA /* UISlider.m */,
 				1489854712EE2CFE003D4751 /* UISplitViewController.h */,
 				1489854812EE2CFE003D4751 /* UISplitViewController.m */,
 				1489854912EE2CFE003D4751 /* UIStringDrawing.h */,
@@ -699,8 +722,12 @@
 				1489860512EE2DBD003D4751 /* UISwipeGestureRecognizer.m */,
 				1489854B12EE2CFE003D4751 /* UISwitch.h */,
 				1489854C12EE2CFE003D4751 /* UISwitch.m */,
+				7806ED28133A1D7500273BC6 /* UITabBar.h */,
+				7806ED29133A1D7500273BC6 /* UITabBar.m */,
 				1489854D12EE2CFE003D4751 /* UITabBarController.h */,
 				1489854E12EE2CFE003D4751 /* UITabBarController.m */,
+				78CB48AE133AA535008636DA /* UITabBarItem.h */,
+				78CB48AF133AA535008636DA /* UITabBarItem.m */,
 				1489854F12EE2CFE003D4751 /* UITableView.h */,
 				1489855012EE2CFE003D4751 /* UITableView.m */,
 				1489855112EE2CFE003D4751 /* UITableViewCell.h */,
@@ -716,8 +743,6 @@
 				1489855B12EE2CFE003D4751 /* UITextView.m */,
 				1489855C12EE2CFE003D4751 /* UIToolbar.h */,
 				1489855D12EE2CFE003D4751 /* UIToolbar.m */,
-				7806ED28133A1D7500273BC6 /* UITabBar.h */,
-				7806ED29133A1D7500273BC6 /* UITabBar.m */,
 				1489855E12EE2CFE003D4751 /* UITouch.h */,
 				1489855F12EE2CFE003D4751 /* UITouch.m */,
 				1489856012EE2CFE003D4751 /* UIView.h */,
@@ -730,20 +755,6 @@
 				1489856712EE2CFE003D4751 /* UIWebView.m */,
 				1489856812EE2CFE003D4751 /* UIWindow.h */,
 				1489856912EE2CFE003D4751 /* UIWindow.m */,
-				789CF896133A3CD500250AB4 /* NSFetchedResultsController.h */,
-				789CF897133A3CD500250AB4 /* NSFetchedResultsController.m */,
-				78D533DB133A9434006F17CA /* UISearchDisplayController.h */,
-				78D533DC133A9434006F17CA /* UISearchDisplayController.m */,
-				78CB48AA133A9C51008636DA /* UISearchBar.h */,
-				78CB48AB133A9C51008636DA /* UISearchBar.m */,
-				78CB48AE133AA535008636DA /* UITabBarItem.h */,
-				78CB48AF133AA535008636DA /* UITabBarItem.m */,
-				78CB48B2133AA8AF008636DA /* UISegmentedControl.h */,
-				78CB48B3133AA8AF008636DA /* UISegmentedControl.m */,
-				78CB48BA133AADCF008636DA /* UIPickerView.h */,
-				78CB48BB133AADD0008636DA /* UIPickerView.m */,
-				78CB48D7133AB91E008636DA /* UISlider.h */,
-				78CB48D8133AB920008636DA /* UISlider.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -843,7 +854,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14C6C122133AFC94002F111E /* CALayer+UIKitCompatibility.h in Headers */,
 				789CF898133A3CD500250AB4 /* NSFetchedResultsController.h in Headers */,
 				78CB48D9133AB922008636DA /* UISlider.h in Headers */,
 				78CB48B4133AA8AF008636DA /* UISegmentedControl.h in Headers */,
@@ -878,7 +888,6 @@
 				1489858012EE2CFF003D4751 /* UIBarButtonItem.h in Headers */,
 				1489858212EE2CFF003D4751 /* UIBarItem.h in Headers */,
 				1489858412EE2CFF003D4751 /* UIBezierPath.h in Headers */,
-				789CF671133A34BC00250AB4 /* UITabBar.m in Headers */,
 				1489858612EE2CFF003D4751 /* UIButton.h in Headers */,
 				1489858812EE2CFF003D4751 /* UIColor.h in Headers */,
 				1489858A12EE2CFF003D4751 /* UIColorAppKitIntegration.h in Headers */,
@@ -905,10 +914,8 @@
 				148985AD12EE2CFF003D4751 /* UIMenuItem.h in Headers */,
 				38615C6A133A54DF00841EEA /* UINSCellControl.h in Headers */,
 				148985AF12EE2CFF003D4751 /* UINavigationBar.h in Headers */,
-				148984A512EE278D003D4751 /* UIGestureRecognizer+UIPrivate.h in Headers */,
-				14EEF76712DF67CF00EB7D95 /* UIEvent+UIPrivate.h in Headers */,
-				14EEF7A912DF6D9C00EB7D95 /* UIKey+UIPrivate.h in Headers */,
-				14805F5A12A6E2AE0080C4BA /* UIScrollView+UIPrivate.h in Headers */,
+				148985B112EE2CFF003D4751 /* UINavigationController.h in Headers */,
+				1490AFE01219C31C00774286 /* UIPopoverController+UIPrivate.h in Headers */,
 				14FA8C5F121DA4A000C4264B /* UINinePartImage.h in Headers */,
 				14FA8C67121DA4A000C4264B /* UIScroller.h in Headers */,
 				14FA8C69121DA4A000C4264B /* UITableViewCellSeparator.h in Headers */,
@@ -925,17 +932,19 @@
 				14F56F4412664D430045EC82 /* UIPopoverView.h in Headers */,
 				14CB384512689907003334AD /* UIPopoverNSWindow.h in Headers */,
 				14CB384912689949003334AD /* UIPopoverOverlayNSView.h in Headers */,
-				144156DB1284A22200532FE2 /* UIToolbarButton.h in Headers */,
 				1457DD3F128DDE610057A7F9 /* UITransitionView.h in Headers */,
-				1426FFDD129ADEA300BD31E5 /* UIControlAction.h in Headers */,
-				14805D4112A6B0E80080C4BA /* UINSClipView.h in Headers */,
+				14805F5A12A6E2AE0080C4BA /* UIScrollView+UIPrivate.h in Headers */,
 				14D0C43812DCEF910040035C /* UIScrollViewScrollAnimation.h in Headers */,
+				14EEF76712DF67CF00EB7D95 /* UIEvent+UIPrivate.h in Headers */,
+				14EEF7A912DF6D9C00EB7D95 /* UIKey+UIPrivate.h in Headers */,
 				14BF16DB12E621EB007DAA01 /* UIViewBlockAnimationDelegate.h in Headers */,
-				38615C78133A81B900841EEA /* UIFont+UIPrivate.h in Headers */,
+				148984A512EE278D003D4751 /* UIGestureRecognizer+UIPrivate.h in Headers */,
 				38E523B11339680400E041B3 /* UINavigationItem+UIPrivate.h in Headers */,
+				14805D4112A6B0E80080C4BA /* UINSClipView.h in Headers */,
+				144156DB1284A22200532FE2 /* UIToolbarButton.h in Headers */,
+				1426FFDD129ADEA300BD31E5 /* UIControlAction.h in Headers */,
 				38E523B513396B5B00E041B3 /* UINavigationBar+UIPrivate.h in Headers */,
-				1490AFE01219C31C00774286 /* UIPopoverController+UIPrivate.h in Headers */,
-				148985B112EE2CFF003D4751 /* UINavigationController.h in Headers */,
+				38615C78133A81B900841EEA /* UIFont+UIPrivate.h in Headers */,
 				148985B312EE2CFF003D4751 /* UINavigationItem.h in Headers */,
 				148985B512EE2CFF003D4751 /* UINibLoading.h in Headers */,
 				148985B712EE2CFF003D4751 /* UIPageControl.h in Headers */,
@@ -971,6 +980,9 @@
 				1489860612EE2DBD003D4751 /* UISwipeGestureRecognizer.h in Headers */,
 				1489860A12EE2DDC003D4751 /* UIPanGestureRecognizer.h in Headers */,
 				149148BC12EE45ED00F7C34E /* UIGestureRecognizerSubclass.h in Headers */,
+				14C6C122133AFC94002F111E /* CALayer+UIKitCompatibility.h in Headers */,
+				7011107C133BE0F400C86512 /* UIDatePicker.h in Headers */,
+				537472D5133ADD4B00EBD5EA /* UIInterface.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1148,6 +1160,8 @@
 				78CB48BD133AADD0008636DA /* UIPickerView.m in Sources */,
 				78CB48DA133AB922008636DA /* UISlider.m in Sources */,
 				14C6C123133AFC94002F111E /* CALayer+UIKitCompatibility.m in Sources */,
+				7011107D133BE0F400C86512 /* UIDatePicker.m in Sources */,
+				537472D6133ADD4B00EBD5EA /* UIInterface.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

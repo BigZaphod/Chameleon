@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, The Iconfactory. All rights reserved.
+ * Copyright (c) 2011, Casey Marshall. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,24 +27,43 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIScreenMode.h"
-#import "UIGeometry.h"
-#import <AppKit/AppKit.h>
 
-@implementation UIScreenMode
-@synthesize pixelAspectRatio=_pixelAspectRatio, size=_size;
+#import <Foundation/Foundation.h>
+#import "UIControl.h"
 
-+ (id)screenModeWithNSView:(NSView *)theNSView
+typedef enum {
+    UIDatePickerModeTime,
+    UIDatePickerModeDate,
+    UIDatePickerModeDateAndTime,
+    UIDatePickerModeCountDownTimer
+} UIDatePickerMode;
+
+@interface UIDatePicker : UIControl
 {
-	UIScreenMode *mode = [[self alloc] init];
-	mode->_size = NSSizeToCGSize([theNSView bounds].size);
-	mode->_pixelAspectRatio = 1;
-	return [mode autorelease];
+    @private
+    NSCalendar *_calendar;
+    NSDate *_date;
+    NSLocale *_locale;
+    NSTimeZone *_timeZone;
+    
+    UIDatePickerMode _datePickerMode;
+    
+    NSDate *_minimumDate;
+    NSDate *_maximumDate;
+    NSInteger _minuteInterval;
+    NSTimeInterval _countDownDuration;
 }
 
-- (NSString *)description
-{
-	return [NSString stringWithFormat:@"<%@: %p; size = %@>", [self className], self, NSStringFromCGSize(self.size)];
-}
+@property (nonatomic, retain) NSCalendar *calendar;
+@property (nonatomic, retain) NSDate *date;
+@property (nonatomic, retain) NSLocale *locale;
+@property (nonatomic, retain) NSTimeZone *timeZone;
+
+@property (nonatomic, assign) UIDatePickerMode datePickerMode;
+
+@property (nonatomic, retain) NSDate *minimumDate;
+@property (nonatomic, retain) NSDate *maximumDate;
+@property (nonatomic, assign) NSInteger minuteInterval;
+@property (nonatomic, assign) NSTimeInterval countDownDuration;
 
 @end

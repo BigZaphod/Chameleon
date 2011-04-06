@@ -38,7 +38,8 @@ static const CGFloat NavBarHeight = 28;
 static const CGFloat ToolbarHeight = 28;
 
 @implementation UINavigationController
-@synthesize viewControllers=_viewControllers, delegate=_delegate, navigationBar=_navigationBar, toolbar=_toolbar, toolbarHidden=_toolbarHidden;
+@synthesize viewControllers=_viewControllers, delegate=_delegate, navigationBar=_navigationBar;
+@synthesize toolbar=_toolbar, toolbarHidden=_toolbarHidden, navigationBarHidden=_navigationBarHidden;
 
 - (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)bundle
 {
@@ -95,8 +96,10 @@ static const CGFloat ToolbarHeight = 28;
 	CGRect controllerFrame = self.view.bounds;
     
 	// adjust for the nav bar
-	controllerFrame.origin.y += NavBarHeight;
-	controllerFrame.size.height -= NavBarHeight;
+	if (!self.navigationBarHidden) {
+		controllerFrame.origin.y += NavBarHeight;
+		controllerFrame.size.height -= NavBarHeight;
+	}
 	
 	// adjust for toolbar (if there is one)
 	if (!self.toolbarHidden) {
@@ -118,6 +121,7 @@ static const CGFloat ToolbarHeight = 28;
     
 	_navigationBar.frame = [self _navigationBarFrame];
 	_navigationBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	_navigationBar.hidden = self.navigationBarHidden;
 	[self.view addSubview:_navigationBar];
 	
 	_toolbar.frame = [self _toolbarFrame];
@@ -185,7 +189,7 @@ static const CGFloat ToolbarHeight = 28;
 		if ([self isViewLoaded]) {
 			UIViewController *newTopController = self.topViewController;
 			newTopController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-
+            
 			[newTopController viewWillAppear:animated];
 			if (_delegateHas.willShowViewController) {
 				[_delegate navigationController:self willShowViewController:newTopController animated:animated];
@@ -398,19 +402,18 @@ static const CGFloat ToolbarHeight = 28;
 	return self.topViewController.contentSizeForViewInPopover;
 }
 
-- (void)setNavigationBarHidden:(BOOL)navigationBarHidden
-{
-    _navigationBar.navigationBarHidden = navigationBarHidden;
-}
-
-- (BOOL)navigationBarHidden
-{
-    return _navigationBar.navigationBarHidden;
-}
-
 - (void)setNavigationBarHidden:(BOOL)navigationBarHidden animated:(BOOL)animated; // doesn't yet animate
 {
-    _navigationBar.navigationBarHidden = navigationBarHidden;
+    _navigationBarHidden = navigationBarHidden;
+    
+    // this shouldn't just hide it, but should animate it out of view (if animated==YES) and then adjust the layout
+    // so the main view fills the whole space, etc.
+    _navigationBar.hidden = navigationBarHidden;
+}
+
+- (void)setNavigationBarHidden:(BOOL)navigationBarHidden
+{
+    [self setNavigationBarHidden:navigationBarHidden animated:NO];
 }
 
 @end

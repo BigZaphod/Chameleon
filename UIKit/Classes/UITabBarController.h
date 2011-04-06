@@ -29,8 +29,18 @@
 
 #import "UIViewController.h"
 
-@class UITabBar;
+@class UITabBarController;
+@protocol UITabBarControllerDelegate <NSObject>
 
+- (void)tabBarController:(UITabBarController *)tabBarController didEndCustomizingViewControllers:(NSArray *)viewControllers changed:(BOOL)changed;
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController;
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController;
+- (void)tabBarController:(UITabBarController *)tabBarController willBeginCustomizingViewControllers:(NSArray *)viewControllers;
+- (void)tabBarController:(UITabBarController *)tabBarController willEndCustomizingViewControllers:(NSArray *)viewControllers changed:(BOOL)changed;
+
+@end
+
+@class UITabBar;
 @interface UITabBarController : UIViewController {
     UITabBar *_tabBar;
     UIViewController *_selectedViewController;

@@ -27,24 +27,26 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIScreenMode.h"
-#import "UIGeometry.h"
-#import <AppKit/AppKit.h>
+#import "UIColor.h"
+#import "UIFont.h"
 
-@implementation UIScreenMode
-@synthesize pixelAspectRatio=_pixelAspectRatio, size=_size;
 
-+ (id)screenModeWithNSView:(NSView *)theNSView
-{
-	UIScreenMode *mode = [[self alloc] init];
-	mode->_size = NSSizeToCGSize([theNSView bounds].size);
-	mode->_pixelAspectRatio = 1;
-	return [mode autorelease];
-}
+typedef enum {
+    UIBarStyleDefault = 0,
+    UIBarStyleBlack = 1,
+    UIBarStyleBlackOpaque = 1, // Deprecated
+    UIBarStyleBlackTranslucent = 2 // Deprecated
+} UIBarStyle;
 
-- (NSString *)description
-{
-	return [NSString stringWithFormat:@"<%@: %p; size = %@>", [self className], self, NSStringFromCGSize(self.size)];
-}
 
+@interface UIColor (UIColorSystemColors)
++ (UIColor *)groupTableViewBackgroundColor;
+@end
+
+
+@interface UIFont (UIFontSystemFonts)
++ (CGFloat)systemFontSize;
++ (CGFloat)smallSystemFontSize;
++ (CGFloat)labelFontSize;
++ (CGFloat)buttonFontSize;
 @end

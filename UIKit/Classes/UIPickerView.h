@@ -46,8 +46,15 @@
 @property (nonatomic, assign) id<UIPickerViewDataSource> dataSource;
 @property (nonatomic, assign) id<UIPickerViewDelegate>   delegate;
 @property (nonatomic, assign) BOOL                       showsSelectionIndicator;
+@property (nonatomic, readonly) NSInteger                numberOfComponents;
 
+- (NSInteger) numberOfRowsInComponent: (NSInteger) component; // stub
+- (void) reloadAllComponents; // stub
+- (void) reloadComponent: (NSInteger) component; // stub
+- (CGSize) rowSizeForComponent: (NSInteger) component; // stub
+- (NSInteger) selectedRowInComponent: (NSInteger) component; // stub
 - (void)selectRow:(NSInteger)row inComponent:(NSInteger)component animated:(BOOL)animated; // stub
+- (UIView *) viewForRow: (NSInteger) row inComponent: (NSInteger) component; // stub
 
 @end
 
