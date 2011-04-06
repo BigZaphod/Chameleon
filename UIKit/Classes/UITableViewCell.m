@@ -37,7 +37,7 @@
 extern CGFloat _UITableViewDefaultRowHeight;
 
 @implementation UITableViewCell
-@synthesize contentView=_contentView, accessoryType=_accessoryType, accessoryView=_accessoryView, textLabel=_textLabel, selectionStyle=_selectionStyle, indentationLevel=_indentationLevel;
+@synthesize contentView=_contentView, accessoryType=_accessoryType, textLabel=_textLabel, selectionStyle=_selectionStyle, indentationLevel=_indentationLevel;
 @synthesize imageView=_imageView, editingAccessoryType=_editingAccessoryType, selected=_selected, backgroundView=_backgroundView;
 @synthesize selectedBackgroundView=_selectedBackgroundView, highlighted=_highlighted, reuseIdentifier=_reuseIdentifier;
 @synthesize editing = _editing, detailTextLabel = _detailTextLabel, showingDeleteConfirmation = _showingDeleteConfirmation;
