@@ -48,6 +48,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	if ((self=[super initWithFrame:frame])) {
         _indentationWidth = 10;
 		_style = UITableViewCellStyleDefault;
+        _selectionStyle = UITableViewCellSelectionStyleBlue;
 
 		_seperatorView = [[UITableViewCellSeparator alloc] init];
 		[self addSubview:_seperatorView];
@@ -165,7 +166,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
-	if (selected != _selected) {
+	if (selected != _selected && _selectionStyle != UITableViewCellSelectionStyleNone) {
 		_selected = selected;
 		[self _updateSelectionState];
 	}
@@ -178,7 +179,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
 {
-	if (_highlighted != highlighted) {
+	if (_highlighted != highlighted && _selectionStyle != UITableViewCellSelectionStyleNone) {
 		_highlighted = highlighted;
 		[self _updateSelectionState];
 	}
