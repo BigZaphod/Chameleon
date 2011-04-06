@@ -30,16 +30,16 @@
 #import "UIView.h"
 
 typedef enum {
-	UIActivityIndicatorViewStyleWhiteLarge,
-	UIActivityIndicatorViewStyleWhite,
-	UIActivityIndicatorViewStyleGray,
+    UIActivityIndicatorViewStyleWhiteLarge,
+    UIActivityIndicatorViewStyleWhite,
+    UIActivityIndicatorViewStyleGray,
 } UIActivityIndicatorViewStyle;
 
 @interface UIActivityIndicatorView : UIView {
 @private
-	UIActivityIndicatorViewStyle _activityIndicatorViewStyle;
-	BOOL _hidesWhenStopped;
-	BOOL _animating;
+    UIActivityIndicatorViewStyle _activityIndicatorViewStyle;
+    BOOL _hidesWhenStopped;
+    BOOL _animating;
 }
 
 - (id)initWithActivityIndicatorStyle:(UIActivityIndicatorViewStyle)style;

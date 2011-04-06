@@ -35,12 +35,12 @@ NSString *const MPMusicPlayerControllerPlaybackStateDidChangeNotification = @"MP
 
 + (MPMusicPlayerController *)iPodMusicPlayer
 {
-	return nil;
+    return nil;
 }
 
 - (MPMusicPlaybackState)playbackState
 {
-	return MPMusicPlaybackStateStopped;
+    return MPMusicPlaybackStateStopped;
 }
 
 - (void)beginGeneratingPlaybackNotifications

@@ -30,23 +30,23 @@ enum {
 
 @private
 
-	NSMutableArray *_segments;
-	NSInteger _selectedSegmentIndex;
+    NSMutableArray *_segments;
+    NSInteger _selectedSegmentIndex;
     NSUInteger _numberOfSegments;
-	BOOL _momentary;
-	NSMutableDictionary *_segmentMeta;
+    BOOL _momentary;
+    NSMutableDictionary *_segmentMeta;
 
-	UIImage *_buttonImage;
-	UIImage *_highlightedButtonImage;
-	UIImage *_dividerImage;
-	UIImage *_highlightedDividerImage;
+    UIImage *_buttonImage;
+    UIImage *_highlightedButtonImage;
+    UIImage *_dividerImage;
+    UIImage *_highlightedDividerImage;
 
-	UIFont *_font;
-	UIColor *_textColor;
-	UIColor *_disabledTextColor;
-	UIColor *_textShadowColor;
-	CGSize _textShadowOffset;
-	UIEdgeInsets _textEdgeInsets;
+    UIFont *_font;
+    UIColor *_textColor;
+    UIColor *_disabledTextColor;
+    UIColor *_textShadowColor;
+    CGSize _textShadowOffset;
+    UIEdgeInsets _textEdgeInsets;
 
     UISegmentedControlStyle _segmentedControlStyle;
     UIColor *_tintColor;

@@ -36,13 +36,13 @@
 
 - (id)initWithTarget:(id)target action:(SEL)action
 {
-	if ((self=[super initWithTarget:target action:action])) {
-		_allowableMovement = 10;
-		_minimumPressDuration = 0.5;
-		_numberOfTapsRequired = 0;
-		_numberOfTouchesRequired = 1;
-	}
-	return self;
+    if ((self=[super initWithTarget:target action:action])) {
+        _allowableMovement = 10;
+        _minimumPressDuration = 0.5;
+        _numberOfTapsRequired = 0;
+        _numberOfTouchesRequired = 1;
+    }
+    return self;
 }
 
 @end

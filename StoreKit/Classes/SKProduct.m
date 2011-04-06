@@ -33,27 +33,27 @@
 
 - (NSString *)productIdentifier
 {
-	return nil;
+    return nil;
 }
 
 - (NSString *)localizedTitle;
 {
-	return nil;
+    return nil;
 }
 
 - (NSString *)localizedDescription;
 {
-	return nil;
+    return nil;
 }
 
 - (NSDecimalNumber *)price;
 {
-	return nil;
+    return nil;
 }
 
 - (NSLocale *)priceLocale
 {
-	return nil;
+    return nil;
 }
 
 @end

@@ -59,10 +59,10 @@ typedef enum {
 } UIStatusBarStyle;
 
 typedef enum {
-	UIInterfaceOrientationPortrait           = UIDeviceOrientationPortrait,
-	UIInterfaceOrientationPortraitUpsideDown = UIDeviceOrientationPortraitUpsideDown,
-	UIInterfaceOrientationLandscapeLeft      = UIDeviceOrientationLandscapeRight,
-	UIInterfaceOrientationLandscapeRight     = UIDeviceOrientationLandscapeLeft
+    UIInterfaceOrientationPortrait           = UIDeviceOrientationPortrait,
+    UIInterfaceOrientationPortraitUpsideDown = UIDeviceOrientationPortraitUpsideDown,
+    UIInterfaceOrientationLandscapeLeft      = UIDeviceOrientationLandscapeRight,
+    UIInterfaceOrientationLandscapeRight     = UIDeviceOrientationLandscapeLeft
 } UIInterfaceOrientation;
 
 #define UIInterfaceOrientationIsPortrait(orientation) \
@@ -96,14 +96,14 @@ const NSTimeInterval UIMinimumKeepAliveTimeout;
 
 @interface UIApplication : UIResponder {
 @private
-	UIEvent *_currentEvent;
-	__weak UIWindow *_keyWindow;
-	NSMutableSet *_visibleWindows;
-	id<UIApplicationDelegate> _delegate;
-	BOOL _idleTimerDisabled;
-	BOOL _networkActivityIndicatorVisible;
-	BOOL _applicationSupportsShakeToEdit;
-	NSUInteger _ignoringInteractionEvents;
+    UIEvent *_currentEvent;
+    __weak UIWindow *_keyWindow;
+    NSMutableSet *_visibleWindows;
+    id<UIApplicationDelegate> _delegate;
+    BOOL _idleTimerDisabled;
+    BOOL _networkActivityIndicatorVisible;
+    BOOL _applicationSupportsShakeToEdit;
+    NSUInteger _ignoringInteractionEvents;
     NSInteger _applicationIconBadgeNumber;
 }
 

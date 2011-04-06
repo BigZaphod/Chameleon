@@ -35,37 +35,37 @@
 @class UITabBarController;
 
 typedef enum {
-	UIModalPresentationFullScreen = 0,
-	UIModalPresentationPageSheet,
-	UIModalPresentationFormSheet,
-	UIModalPresentationCurrentContext,
+    UIModalPresentationFullScreen = 0,
+    UIModalPresentationPageSheet,
+    UIModalPresentationFormSheet,
+    UIModalPresentationCurrentContext,
 } UIModalPresentationStyle;
 
 typedef enum {
-	UIModalTransitionStyleCoverVertical = 0,
-	UIModalTransitionStyleFlipHorizontal,
-	UIModalTransitionStyleCrossDissolve,
-	UIModalTransitionStylePartialCurl,
+    UIModalTransitionStyleCoverVertical = 0,
+    UIModalTransitionStyleFlipHorizontal,
+    UIModalTransitionStyleCrossDissolve,
+    UIModalTransitionStylePartialCurl,
 } UIModalTransitionStyle;
 
 @class UINavigationItem, UINavigationController, UIBarButtonItem, UISplitViewController;
 
 @interface UIViewController : UIResponder {
 @private
-	UIView *_view;
-	BOOL _wantsFullScreenLayout;
-	NSString *_title;
-	CGSize _contentSizeForViewInPopover;
-	BOOL _modalInPopover;
-	UINavigationItem *_navigationItem;
-	NSArray *_toolbarItems;
-	UIModalPresentationStyle _modalPresentationStyle;
-	BOOL _editing;
-	BOOL _hidesBottomBarWhenPushed;
-	UIViewController *_parentViewController;
-	UIViewController *_modalViewController;
+    UIView *_view;
+    BOOL _wantsFullScreenLayout;
+    NSString *_title;
+    CGSize _contentSizeForViewInPopover;
+    BOOL _modalInPopover;
+    UINavigationItem *_navigationItem;
+    NSArray *_toolbarItems;
+    UIModalPresentationStyle _modalPresentationStyle;
+    BOOL _editing;
+    BOOL _hidesBottomBarWhenPushed;
+    UIViewController *_parentViewController;
+    UIViewController *_modalViewController;
     UISearchDisplayController *_searchDisplayController;
-	UIModalTransitionStyle _modalTransitionStyle;
+    UIModalTransitionStyle _modalTransitionStyle;
 
     UITabBarItem *_tabBarItem;
     UITabBarController *_tabBarController;

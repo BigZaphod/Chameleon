@@ -32,10 +32,10 @@
 @class SKPayment, SKPaymentTransaction;
 
 enum {
-	SKPaymentTransactionStatePurchasing,
-	SKPaymentTransactionStatePurchased,
-	SKPaymentTransactionStateFailed,
-	SKPaymentTransactionStateRestored
+    SKPaymentTransactionStatePurchasing,
+    SKPaymentTransactionStatePurchased,
+    SKPaymentTransactionStateFailed,
+    SKPaymentTransactionStateRestored
 };
 typedef NSInteger SKPaymentTransactionState;
 

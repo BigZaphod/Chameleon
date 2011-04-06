@@ -30,7 +30,7 @@
 #import "UIGestureRecognizer.h"
 
 @interface UIPinchGestureRecognizer : UIGestureRecognizer {
-	CGFloat _scale;
+    CGFloat _scale;
 }
 
 @property (nonatomic) CGFloat scale;

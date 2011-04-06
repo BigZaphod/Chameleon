@@ -38,50 +38,50 @@ static UIDevice *theDevice;
 
 + (void)initialize
 {
-	if (self == [UIDevice class]) {
-		theDevice = [[UIDevice alloc] init];
-	}
+    if (self == [UIDevice class]) {
+        theDevice = [[UIDevice alloc] init];
+    }
 }
 
 + (UIDevice *)currentDevice
 {
-	return theDevice;
+    return theDevice;
 }
 
 - (UIUserInterfaceIdiom)userInterfaceIdiom
 {
-	return UIUserInterfaceIdiomDesktop;
+    return UIUserInterfaceIdiomDesktop;
 }
 
 - (NSString *)name
 {
-	CFStringRef name = SCDynamicStoreCopyComputerName(NULL,NULL);
-	return [(NSString *)name autorelease];
+    CFStringRef name = SCDynamicStoreCopyComputerName(NULL,NULL);
+    return [(NSString *)name autorelease];
 }
 
 - (UIDeviceOrientation)orientation
 {
-	return UIDeviceOrientationPortrait;
+    return UIDeviceOrientationPortrait;
 }
 
 - (BOOL)isMultitaskingSupported
 {
-	return YES;
+    return YES;
 }
 
 - (NSString *)systemName
 {
-	return [[NSProcessInfo processInfo] operatingSystemName];
+    return [[NSProcessInfo processInfo] operatingSystemName];
 }
 
 - (NSString *)systemVersion
 {
-	return [[NSProcessInfo processInfo] operatingSystemVersionString];
+    return [[NSProcessInfo processInfo] operatingSystemVersionString];
 }
 
 - (NSString *)model
 {
-	return @"Mac";
+    return @"Mac";
 }
 
 - (NSString *)uniqueIdentifier

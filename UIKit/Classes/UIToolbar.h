@@ -32,10 +32,10 @@
 
 @interface UIToolbar : UIView {
 @private
-	UIBarStyle _barStyle;
-	UIColor *_tintColor;
-	NSMutableArray *_toolbarItems;
-	BOOL _translucent;
+    UIBarStyle _barStyle;
+    UIColor *_tintColor;
+    NSMutableArray *_toolbarItems;
+    BOOL _translucent;
 }
 
 - (void)setItems:(NSArray *)items animated:(BOOL)animated;

@@ -49,7 +49,7 @@ UIAccessibilityNotifications UIAccessibilityLayoutChangedNotification = 1001;
 @implementation NSObject (UIAccessibility)
 - (BOOL)isAccessibilityElement
 {
-	return NO;
+    return NO;
 }
 
 - (void)setIsAccessibilityElement:(BOOL)isElement
@@ -58,7 +58,7 @@ UIAccessibilityNotifications UIAccessibilityLayoutChangedNotification = 1001;
 
 - (NSString *)accessibilityLabel
 {
-	return nil;
+    return nil;
 }
 
 - (void)setAccessibilityLabel:(NSString *)label
@@ -67,12 +67,12 @@ UIAccessibilityNotifications UIAccessibilityLayoutChangedNotification = 1001;
 
 - (UIAccessibilityTraits)accessibilityTraits
 {
-	return UIAccessibilityTraitNone; // STUB
+    return UIAccessibilityTraitNone; // STUB
 }
 
 - (void)setAccessibilityTraits:(UIAccessibilityTraits)traits
 {
-	// STUB
+    // STUB
 }
 
 @end
@@ -83,5 +83,5 @@ void UIAccessibilityPostNotification(UIAccessibilityNotifications notification, 
 
 BOOL UIAccessibilityIsVoiceOverRunning()
 {
-	return NO;
+    return NO;
 }

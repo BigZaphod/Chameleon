@@ -30,13 +30,13 @@
 #import <Foundation/Foundation.h>
 
 enum {
-	UIPopoverArrowDirectionUp = 1UL << 0,
-	UIPopoverArrowDirectionDown = 1UL << 1,
-	UIPopoverArrowDirectionLeft = 1UL << 2,
-	UIPopoverArrowDirectionRight = 1UL << 3,
-	UIPopoverArrowDirectionAny = UIPopoverArrowDirectionUp | UIPopoverArrowDirectionDown |
-	UIPopoverArrowDirectionLeft | UIPopoverArrowDirectionRight,
-	UIPopoverArrowDirectionUnknown = NSUIntegerMax
+    UIPopoverArrowDirectionUp = 1UL << 0,
+    UIPopoverArrowDirectionDown = 1UL << 1,
+    UIPopoverArrowDirectionLeft = 1UL << 2,
+    UIPopoverArrowDirectionRight = 1UL << 3,
+    UIPopoverArrowDirectionAny = UIPopoverArrowDirectionUp | UIPopoverArrowDirectionDown |
+    UIPopoverArrowDirectionLeft | UIPopoverArrowDirectionRight,
+    UIPopoverArrowDirectionUnknown = NSUIntegerMax
 };
 typedef NSUInteger UIPopoverArrowDirection;
 
@@ -50,19 +50,19 @@ typedef NSUInteger UIPopoverArrowDirection;
 
 @interface UIPopoverController : NSObject {
 @private
-	UIViewController *_contentViewController;
-	NSArray *_passthroughViews;
-	UIPopoverArrowDirection _popoverArrowDirection;
+    UIViewController *_contentViewController;
+    NSArray *_passthroughViews;
+    UIPopoverArrowDirection _popoverArrowDirection;
 
-	UIPopoverView *_popoverView;
-	id _popoverWindow;
-	id _overlayWindow;
-	
-	id _delegate;
-	struct {
-		BOOL popoverControllerDidDismissPopover : 1;
-		BOOL popoverControllerShouldDismissPopover : 1;
-	} _delegateHas;	
+    UIPopoverView *_popoverView;
+    id _popoverWindow;
+    id _overlayWindow;
+    
+    id _delegate;
+    struct {
+        BOOL popoverControllerDidDismissPopover : 1;
+        BOOL popoverControllerShouldDismissPopover : 1;
+    } _delegateHas;	
 }
 
 - (id)initWithContentViewController:(UIViewController *)viewController;

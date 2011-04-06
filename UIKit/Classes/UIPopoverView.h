@@ -32,10 +32,10 @@
 @class UIImageView;
 
 @interface UIPopoverView : UIView {
-	UIImageView *_backgroundView;
-	UIImageView *_arrowView;
-	UIView *_contentView;
-	UIView *_contentContainerView;
+    UIImageView *_backgroundView;
+    UIImageView *_arrowView;
+    UIView *_contentView;
+    UIView *_contentContainerView;
 }
 
 - (id)initWithContentView:(UIView *)aView size:(CGSize)aSize;

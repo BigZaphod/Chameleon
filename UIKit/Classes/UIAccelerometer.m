@@ -34,7 +34,7 @@
 
 + (UIAccelerometer *)sharedAccelerometer
 {
-	return nil;
+    return nil;
 }
 
 @end

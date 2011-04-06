@@ -35,11 +35,11 @@
 
 - (id)initWithTarget:(id)target action:(SEL)action
 {
-	if ((self=[super initWithTarget:target action:action])) {
-		_direction = UISwipeGestureRecognizerDirectionRight;
-		_numberOfTouchesRequired = 1;
-	}
-	return self;
+    if ((self=[super initWithTarget:target action:action])) {
+        _direction = UISwipeGestureRecognizerDirectionRight;
+        _numberOfTouchesRequired = 1;
+    }
+    return self;
 }
 
 @end

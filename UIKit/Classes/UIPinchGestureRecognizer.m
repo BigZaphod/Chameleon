@@ -35,15 +35,15 @@
 
 - (id)initWithTarget:(id)target action:(SEL)action
 {
-	if ((self=[super initWithTarget:target action:action])) {
-		_scale = 1;
-	}
-	return self;
+    if ((self=[super initWithTarget:target action:action])) {
+        _scale = 1;
+    }
+    return self;
 }
 
 - (CGFloat)velocity
 {
-	return 0;
+    return 0;
 }
 
 @end

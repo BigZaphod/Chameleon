@@ -31,8 +31,8 @@
 
 @interface UIMenuItem : NSObject {
 @private
-	SEL _action;
-	NSString *_title;
+    SEL _action;
+    NSString *_title;
 }
 
 - (id)initWithTitle:(NSString *)title action:(SEL)action;

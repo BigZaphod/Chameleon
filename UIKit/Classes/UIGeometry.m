@@ -33,81 +33,81 @@ const UIEdgeInsets UIEdgeInsetsZero = {0,0,0,0};
 
 NSString *NSStringFromCGPoint(CGPoint p)
 {
-	return NSStringFromPoint(NSPointFromCGPoint(p));
+    return NSStringFromPoint(NSPointFromCGPoint(p));
 }
 
 NSString *NSStringFromCGRect(CGRect r)
 {
-	return NSStringFromRect(NSRectFromCGRect(r));
+    return NSStringFromRect(NSRectFromCGRect(r));
 }
 
 NSString *NSStringFromCGSize(CGSize s)
 {
-	return NSStringFromSize(NSSizeFromCGSize(s));
+    return NSStringFromSize(NSSizeFromCGSize(s));
 }
 
 NSString *NSStringFromCGAffineTransform(CGAffineTransform transform)
 {
-	return [NSString stringWithFormat:@"[%g, %g, %g, %g, %g, %g]", transform.a, transform.b, transform.c, transform.d, transform.tx, transform.ty];
+    return [NSString stringWithFormat:@"[%g, %g, %g, %g, %g, %g]", transform.a, transform.b, transform.c, transform.d, transform.tx, transform.ty];
 }
 
 @implementation NSValue (NSValueUIGeometryExtensions)
 + (NSValue *)valueWithCGPoint:(CGPoint)point
 {
-	return [NSValue valueWithPoint:NSPointFromCGPoint(point)];
+    return [NSValue valueWithPoint:NSPointFromCGPoint(point)];
 }
 
 - (CGPoint)CGPointValue
 {
-	return NSPointToCGPoint([self pointValue]);
+    return NSPointToCGPoint([self pointValue]);
 }
 
 + (NSValue *)valueWithCGRect:(CGRect)rect
 {
-	return [NSValue valueWithRect:NSRectFromCGRect(rect)];
+    return [NSValue valueWithRect:NSRectFromCGRect(rect)];
 }
 
 - (CGRect)CGRectValue
 {
-	return NSRectToCGRect([self rectValue]);
+    return NSRectToCGRect([self rectValue]);
 }
 
 + (NSValue *)valueWithCGSize:(CGSize)size
 {
-	return [NSValue valueWithSize:NSSizeFromCGSize(size)];
+    return [NSValue valueWithSize:NSSizeFromCGSize(size)];
 }
 
 - (CGSize)CGSizeValue
 {
-	return NSSizeToCGSize([self sizeValue]);
+    return NSSizeToCGSize([self sizeValue]);
 }
 
 + (NSValue *)valueWithUIEdgeInsets:(UIEdgeInsets)insets
 {
-	return [NSValue valueWithBytes: &insets objCType: @encode(UIEdgeInsets)];
+    return [NSValue valueWithBytes: &insets objCType: @encode(UIEdgeInsets)];
 }
 
 - (UIEdgeInsets)UIEdgeInsetsValue
 {
-	if(strcmp([self objCType], @encode(UIEdgeInsets)) == 0)
-	{
-		UIEdgeInsets insets;
-		[self getValue: &insets];
-		return insets;
-	}
-	return (UIEdgeInsets){0,0,0,0};
+    if(strcmp([self objCType], @encode(UIEdgeInsets)) == 0)
+    {
+        UIEdgeInsets insets;
+        [self getValue: &insets];
+        return insets;
+    }
+    return (UIEdgeInsets){0,0,0,0};
 }
 @end
 
 @implementation NSCoder (NSCoderUIGeometryExtensions)
 - (void)encodeCGPoint:(CGPoint)point forKey:(NSString *)key
 {
-	[self encodePoint:NSPointFromCGPoint(point) forKey:key];
+    [self encodePoint:NSPointFromCGPoint(point) forKey:key];
 }
 
 - (CGPoint)decodeCGPointForKey:(NSString *)key
 {
-	return NSPointToCGPoint([self decodePointForKey:key]);
+    return NSPointToCGPoint([self decodePointForKey:key]);
 }
 @end
 

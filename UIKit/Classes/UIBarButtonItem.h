@@ -30,48 +30,48 @@
 #import "UIBarItem.h"
 
 typedef enum {
-	UIBarButtonSystemItemDone,
-	UIBarButtonSystemItemCancel,
-	UIBarButtonSystemItemEdit,
-	UIBarButtonSystemItemSave,
-	UIBarButtonSystemItemAdd,
-	UIBarButtonSystemItemFlexibleSpace,
-	UIBarButtonSystemItemFixedSpace,
-	UIBarButtonSystemItemCompose,
-	UIBarButtonSystemItemReply,
-	UIBarButtonSystemItemAction,
-	UIBarButtonSystemItemOrganize,
-	UIBarButtonSystemItemBookmarks,
-	UIBarButtonSystemItemSearch,
-	UIBarButtonSystemItemRefresh,
-	UIBarButtonSystemItemStop,
-	UIBarButtonSystemItemCamera,
-	UIBarButtonSystemItemTrash,
-	UIBarButtonSystemItemPlay,
-	UIBarButtonSystemItemPause,
-	UIBarButtonSystemItemRewind,
-	UIBarButtonSystemItemFastForward,
-	UIBarButtonSystemItemUndo,        // iPhoneOS 3.0
-	UIBarButtonSystemItemRedo,        // iPhoneOS 3.0
+    UIBarButtonSystemItemDone,
+    UIBarButtonSystemItemCancel,
+    UIBarButtonSystemItemEdit,
+    UIBarButtonSystemItemSave,
+    UIBarButtonSystemItemAdd,
+    UIBarButtonSystemItemFlexibleSpace,
+    UIBarButtonSystemItemFixedSpace,
+    UIBarButtonSystemItemCompose,
+    UIBarButtonSystemItemReply,
+    UIBarButtonSystemItemAction,
+    UIBarButtonSystemItemOrganize,
+    UIBarButtonSystemItemBookmarks,
+    UIBarButtonSystemItemSearch,
+    UIBarButtonSystemItemRefresh,
+    UIBarButtonSystemItemStop,
+    UIBarButtonSystemItemCamera,
+    UIBarButtonSystemItemTrash,
+    UIBarButtonSystemItemPlay,
+    UIBarButtonSystemItemPause,
+    UIBarButtonSystemItemRewind,
+    UIBarButtonSystemItemFastForward,
+    UIBarButtonSystemItemUndo,        // iPhoneOS 3.0
+    UIBarButtonSystemItemRedo,        // iPhoneOS 3.0
 } UIBarButtonSystemItem;
 
 typedef enum {
-	UIBarButtonItemStylePlain,
-	UIBarButtonItemStyleBordered,
-	UIBarButtonItemStyleDone,
+    UIBarButtonItemStylePlain,
+    UIBarButtonItemStyleBordered,
+    UIBarButtonItemStyleDone,
 } UIBarButtonItemStyle;
 
 @class UIView, UIImage;
 
 @interface UIBarButtonItem : UIBarItem {
 @package
-	CGFloat _width;
-	UIView *_customView;
-	id _target;
-	SEL _action;
-	BOOL _isSystemItem;
-	UIBarButtonSystemItem _systemItem;
-	UIBarButtonItemStyle _style;
+    CGFloat _width;
+    UIView *_customView;
+    id _target;
+    SEL _action;
+    BOOL _isSystemItem;
+    UIBarButtonSystemItem _systemItem;
+    UIBarButtonItemStyle _style;
 }
 
 - (id)initWithBarButtonSystemItem:(UIBarButtonSystemItem)systemItem target:(id)target action:(SEL)action;

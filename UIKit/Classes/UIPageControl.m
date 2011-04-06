@@ -34,10 +34,10 @@
 
 - (void)setCurrentPage:(NSInteger)page
 {
-	if (page != _currentPage) {
-		_currentPage = MIN(MAX(0,page), self.numberOfPages-1);
-		[self setNeedsDisplay];
-	}
+    if (page != _currentPage) {
+        _currentPage = MIN(MAX(0,page), self.numberOfPages-1);
+        [self setNeedsDisplay];
+    }
 }
 
 @end

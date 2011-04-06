@@ -30,8 +30,8 @@
 #import <Foundation/Foundation.h>
 
 @interface UIViewBlockAnimationDelegate : NSObject {
-	void (^_completion)(BOOL finished);
-	BOOL _ignoreInteractionEvents;
+    void (^_completion)(BOOL finished);
+    BOOL _ignoreInteractionEvents;
 }
 
 @property (nonatomic, copy) void (^completion)(BOOL finished);

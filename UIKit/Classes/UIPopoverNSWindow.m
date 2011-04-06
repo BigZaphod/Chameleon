@@ -34,17 +34,17 @@
 
 - (void)setPopoverController:(UIPopoverController *)controller
 {
-	_popoverController = controller;
+    _popoverController = controller;
 }
 
 - (BOOL)canBecomeKeyWindow
 {
-	return YES;
+    return YES;
 }
 
 - (void)cancelOperation:(id)sender
 {
-	[_popoverController _closePopoverWindowIfPossible];
+    [_popoverController _closePopoverWindowIfPossible];
 }
 
 @end

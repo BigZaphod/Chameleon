@@ -34,16 +34,16 @@
 
 - (CGFloat)sectionHeight
 {
-	return rowsHeight + headerHeight + footerHeight;
+    return rowsHeight + headerHeight + footerHeight;
 }
 
 - (void)dealloc
 {
-	[headerView release];
-	[footerView release];
-	[rowHeights release];
-	[headerTitle release];
-	[footerTitle release];
-	[super dealloc];
+    [headerView release];
+    [footerView release];
+    [rowHeights release];
+    [headerTitle release];
+    [footerTitle release];
+    [super dealloc];
 }
 @end

@@ -33,9 +33,9 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
-	if ((self=[super initWithFrame:frame])) {		// this should enforce the proper size, etc. blah blah...
-	}
-	return self;
+    if ((self=[super initWithFrame:frame])) {		// this should enforce the proper size, etc. blah blah...
+    }
+    return self;
 }
 
 - (void)setOn:(BOOL)on animated:(BOOL)animated
@@ -44,12 +44,12 @@
 
 - (void)setOn:(BOOL)on
 {
-	[self setOn:on animated:NO];
+    [self setOn:on animated:NO];
 }
 
 - (BOOL)isOn
 {
-	return NO;
+    return NO;
 }
 
 @end

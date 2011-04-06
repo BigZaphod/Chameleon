@@ -31,8 +31,8 @@
 
 
 @interface UIPageControl : UIControl {
-	NSInteger _currentPage;
-	NSInteger _numberOfPages;
+    NSInteger _currentPage;
+    NSInteger _numberOfPages;
 }
 
 @property (nonatomic) NSInteger currentPage;

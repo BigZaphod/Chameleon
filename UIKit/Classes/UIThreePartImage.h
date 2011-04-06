@@ -31,10 +31,10 @@
 
 @interface UIThreePartImage : UIImage {
 @private
-	id _startCap;
-	id _centerFill;
-	id _endCap;
-	BOOL _vertical;
+    id _startCap;
+    id _centerFill;
+    id _endCap;
+    BOOL _vertical;
 }
 
 - (id)initWithNSImage:(id)theImage capSize:(NSInteger)capSize vertical:(BOOL)isVertical;

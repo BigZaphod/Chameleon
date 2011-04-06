@@ -34,9 +34,9 @@
 
 - (void)dealloc
 {
-	[_image release];
-	[_title release];
-	[super dealloc];
+    [_image release];
+    [_title release];
+    [super dealloc];
 }
 
 @end

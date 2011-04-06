@@ -32,15 +32,15 @@
 @class UIView;
 
 @interface UITableViewSection : NSObject {
-	CGFloat rowsHeight;
-	CGFloat headerHeight;
-	CGFloat footerHeight;
-	NSInteger numberOfRows;
-	NSArray *rowHeights;
-	UIView *headerView;
-	UIView *footerView;
-	NSString *headerTitle;
-	NSString *footerTitle;
+    CGFloat rowsHeight;
+    CGFloat headerHeight;
+    CGFloat footerHeight;
+    NSInteger numberOfRows;
+    NSArray *rowHeights;
+    UIView *headerView;
+    UIView *footerView;
+    NSString *headerTitle;
+    NSString *footerTitle;
 }
 
 - (CGFloat)sectionHeight;

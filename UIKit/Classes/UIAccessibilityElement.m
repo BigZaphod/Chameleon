@@ -35,17 +35,17 @@
 
 - (id)initWithAccessibilityContainer:(id)container
 {
-	if ((self=[super init])) {
-	}
-	return self;
+    if ((self=[super init])) {
+    }
+    return self;
 }
 
 - (void)dealloc
 {
-	[_accessibilityLabel release];
-	[_accessibilityHint release];
-	[_accessibilityValue release];
-	[super dealloc];
+    [_accessibilityLabel release];
+    [_accessibilityHint release];
+    [_accessibilityValue release];
+    [super dealloc];
 }
 
 @end

@@ -60,7 +60,7 @@
 
 + (CGFloat)buttonFontSize
 {
-	return [NSFont systemFontSizeForControlSize:NSRegularControlSize];
+    return [NSFont systemFontSizeForControlSize:NSRegularControlSize];
 }
 
 @end

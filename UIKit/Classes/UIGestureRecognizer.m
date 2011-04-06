@@ -36,43 +36,43 @@
 
 - (id)initWithTarget:(id)target action:(SEL)action
 {
-	if ((self=[super init])) {
-		_state = UIGestureRecognizerStatePossible;
-		_cancelsTouchesInView = YES;
-		_delaysTouchesBegan = NO;
-		_delaysTouchesEnded = YES;
-		_enabled = YES;
+    if ((self=[super init])) {
+        _state = UIGestureRecognizerStatePossible;
+        _cancelsTouchesInView = YES;
+        _delaysTouchesBegan = NO;
+        _delaysTouchesEnded = YES;
+        _enabled = YES;
 
-		[self addTarget:target action:action];
-	}
-	return self;
+        [self addTarget:target action:action];
+    }
+    return self;
 }
 
 - (void)dealloc
 {
-	[super dealloc];
+    [super dealloc];
 }
 
 - (void)_setView:(UIView *)v
 {
-	[self reset];	// not sure about this, but it kinda makes sense
-	_view = v;
+    [self reset];	// not sure about this, but it kinda makes sense
+    _view = v;
 }
 
 - (void)setDelegate:(id<UIGestureRecognizerDelegate>)aDelegate
 {
-	if (aDelegate != _delegate) {
-		_delegate = aDelegate;
-		_delegateHas.shouldBegin = [_delegate respondsToSelector:@selector(gestureRecognizerShouldBegin:)];
-		_delegateHas.shouldReceiveTouch = [_delegate respondsToSelector:@selector(gestureRecognizer:shouldReceiveTouch:)];
-		_delegateHas.shouldRecognizeSimultaneouslyWithGestureRecognizer = [_delegate respondsToSelector:@selector(gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:)];
-	}
+    if (aDelegate != _delegate) {
+        _delegate = aDelegate;
+        _delegateHas.shouldBegin = [_delegate respondsToSelector:@selector(gestureRecognizerShouldBegin:)];
+        _delegateHas.shouldReceiveTouch = [_delegate respondsToSelector:@selector(gestureRecognizer:shouldReceiveTouch:)];
+        _delegateHas.shouldRecognizeSimultaneouslyWithGestureRecognizer = [_delegate respondsToSelector:@selector(gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:)];
+    }
 }
 
 - (void)addTarget:(id)target action:(SEL)action
 {
-	NSAssert(target != nil, nil);
-	NSAssert(action != NULL, nil);
+    NSAssert(target != nil, nil);
+    NSAssert(action != NULL, nil);
 }
 
 - (void)removeTarget:(id)target action:(SEL)action
@@ -85,51 +85,51 @@
 
 - (CGPoint)locationInView:(UIView *)view
 {
-	return CGPointZero;
+    return CGPointZero;
 }
 
 - (void)setState:(UIGestureRecognizerState)state
 {
-	if (state != _state) {
+    if (state != _state) {
 
-		// the docs didn't say explicitly if these state transitions were verified, but I suspect they are. if anything, a check like this
-		// should help debug things. it also helps me better understand the whole thing, so it's not a total waste of time :)
+        // the docs didn't say explicitly if these state transitions were verified, but I suspect they are. if anything, a check like this
+        // should help debug things. it also helps me better understand the whole thing, so it's not a total waste of time :)
 
-		typedef struct { UIGestureRecognizerState fromState, toState; } StateTransition;
+        typedef struct { UIGestureRecognizerState fromState, toState; } StateTransition;
 
-		#define UIGestureRecognizerStateTransitions 12
-		static const StateTransition allowedTransitions[UIGestureRecognizerStateTransitions] = {
-			// discrete gestures
-			{UIGestureRecognizerStatePossible,		UIGestureRecognizerStateRecognized},
-			{UIGestureRecognizerStatePossible,		UIGestureRecognizerStateFailed},
-			{UIGestureRecognizerStateFailed,		UIGestureRecognizerStatePossible},
-			{UIGestureRecognizerStatePossible,		UIGestureRecognizerStateBegan},
-			{UIGestureRecognizerStateRecognized,	UIGestureRecognizerStatePossible},
-			// continuous gestures
-			{UIGestureRecognizerStateBegan,			UIGestureRecognizerStateChanged},
-			{UIGestureRecognizerStateBegan,			UIGestureRecognizerStateCancelled},
-			{UIGestureRecognizerStateBegan,			UIGestureRecognizerStateEnded},
-			{UIGestureRecognizerStateChanged,		UIGestureRecognizerStateCancelled},
-			{UIGestureRecognizerStateChanged,		UIGestureRecognizerStateEnded},
-			{UIGestureRecognizerStateCancelled,		UIGestureRecognizerStatePossible},
-			{UIGestureRecognizerStateEnded,			UIGestureRecognizerStatePossible}
-		};
-		
-		BOOL isValidStateTransition = NO;
-		
-		for (NSUInteger t=0; t<UIGestureRecognizerStateTransitions; t++) {
-			if (allowedTransitions[t].fromState == _state && allowedTransitions[t].toState == state) {
-				isValidStateTransition = YES;
-				break;
-			}
-		}
+        #define UIGestureRecognizerStateTransitions 12
+        static const StateTransition allowedTransitions[UIGestureRecognizerStateTransitions] = {
+            // discrete gestures
+            {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateRecognized},
+            {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateFailed},
+            {UIGestureRecognizerStateFailed,		UIGestureRecognizerStatePossible},
+            {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateBegan},
+            {UIGestureRecognizerStateRecognized,	UIGestureRecognizerStatePossible},
+            // continuous gestures
+            {UIGestureRecognizerStateBegan,			UIGestureRecognizerStateChanged},
+            {UIGestureRecognizerStateBegan,			UIGestureRecognizerStateCancelled},
+            {UIGestureRecognizerStateBegan,			UIGestureRecognizerStateEnded},
+            {UIGestureRecognizerStateChanged,		UIGestureRecognizerStateCancelled},
+            {UIGestureRecognizerStateChanged,		UIGestureRecognizerStateEnded},
+            {UIGestureRecognizerStateCancelled,		UIGestureRecognizerStatePossible},
+            {UIGestureRecognizerStateEnded,			UIGestureRecognizerStatePossible}
+        };
+        
+        BOOL isValidStateTransition = NO;
+        
+        for (NSUInteger t=0; t<UIGestureRecognizerStateTransitions; t++) {
+            if (allowedTransitions[t].fromState == _state && allowedTransitions[t].toState == state) {
+                isValidStateTransition = YES;
+                break;
+            }
+        }
 
-		NSAssert(isValidStateTransition, nil);
+        NSAssert(isValidStateTransition, nil);
 
-		_state = state;
-			
-		// probably do stuff here like send messages if we're in the right state now.
-	}
+        _state = state;
+            
+        // probably do stuff here like send messages if we're in the right state now.
+    }
 }
 
 - (void)reset
@@ -138,12 +138,12 @@
 
 - (BOOL)canPreventGestureRecognizer:(UIGestureRecognizer *)preventedGestureRecognizer
 {
-	return YES;
+    return YES;
 }
 
 - (BOOL)canBePreventedByGestureRecognizer:(UIGestureRecognizer *)preventingGestureRecognizer
 {
-	return YES;
+    return YES;
 }
 
 - (void)ignoreTouch:(UITouch*)touch forEvent:(UIEvent*)event
@@ -168,28 +168,28 @@
 
 - (NSString *)description
 {
-	NSString *state = @"";
-	switch (self.state) {
-		case UIGestureRecognizerStatePossible:
-			state = @"Possible";
-			break;
-		case UIGestureRecognizerStateBegan:
-			state = @"Began";
-			break;
-		case UIGestureRecognizerStateChanged:
-			state = @"Changed";
-			break;
-		case UIGestureRecognizerStateRecognized:
-			state = @"Recognized";
-			break;
-		case UIGestureRecognizerStateCancelled:
-			state = @"Cancelled";
-			break;
-		case UIGestureRecognizerStateFailed:
-			state = @"Failed";
-			break;
-	}
-	return [NSString stringWithFormat:@"<%@: %p; state = %@; view = %@>", [self className], self, state, self.view];
+    NSString *state = @"";
+    switch (self.state) {
+        case UIGestureRecognizerStatePossible:
+            state = @"Possible";
+            break;
+        case UIGestureRecognizerStateBegan:
+            state = @"Began";
+            break;
+        case UIGestureRecognizerStateChanged:
+            state = @"Changed";
+            break;
+        case UIGestureRecognizerStateRecognized:
+            state = @"Recognized";
+            break;
+        case UIGestureRecognizerStateCancelled:
+            state = @"Cancelled";
+            break;
+        case UIGestureRecognizerStateFailed:
+            state = @"Failed";
+            break;
+    }
+    return [NSString stringWithFormat:@"<%@: %p; state = %@; view = %@>", [self className], self, state, self.view];
 }
 
 @end

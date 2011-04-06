@@ -49,7 +49,7 @@ static void releasePatternImage(void *info)
 CGPatternRef CreateImagePattern(CGImageRef image)
 {
     NSCParameterAssert(image);
-	CGImageRetain(image);
+    CGImageRetain(image);
     int width = CGImageGetWidth(image);
     int height = CGImageGetHeight(image);
     static const CGPatternCallbacks callbacks = {0, &drawPatternImage, &releasePatternImage};
@@ -94,49 +94,49 @@ static UIColor *ClearColor = nil;
 
 - (id)initWithNSColor:(NSColor *)aColor
 {
-	if ((self=[super init])) {
-		NSColor *c = [aColor colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
-		CGFloat components[[c numberOfComponents]];
-		[c getComponents:components];
-		_color = CGColorCreate([[c colorSpace] CGColorSpace], components);
-	}
-	return self;
+    if ((self=[super init])) {
+        NSColor *c = [aColor colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+        CGFloat components[[c numberOfComponents]];
+        [c getComponents:components];
+        _color = CGColorCreate([[c colorSpace] CGColorSpace], components);
+    }
+    return self;
 }
 
 - (void)dealloc
 {
-	CGColorRelease(_color);
-	[super dealloc];
+    CGColorRelease(_color);
+    [super dealloc];
 }
 
 + (id)colorWithNSColor:(NSColor *)c
 {
-	return [[[self alloc] initWithNSColor:c] autorelease];
+    return [[[self alloc] initWithNSColor:c] autorelease];
 }
 
 + (UIColor *)colorWithWhite:(CGFloat)white alpha:(CGFloat)alpha
 {
-	return [[[self alloc] initWithWhite:white alpha:alpha] autorelease];
+    return [[[self alloc] initWithWhite:white alpha:alpha] autorelease];
 }
 
 + (UIColor *)colorWithHue:(CGFloat)hue saturation:(CGFloat)saturation brightness:(CGFloat)brightness alpha:(CGFloat)alpha
 {
-	return [[[self alloc] initWithHue:hue saturation:saturation brightness:brightness alpha:alpha] autorelease];
+    return [[[self alloc] initWithHue:hue saturation:saturation brightness:brightness alpha:alpha] autorelease];
 }
 
 + (UIColor *)colorWithRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha
 {
-	return [[[self alloc] initWithRed:red green:green blue:blue alpha:alpha] autorelease];
+    return [[[self alloc] initWithRed:red green:green blue:blue alpha:alpha] autorelease];
 }
 
 + (UIColor *)colorWithCGColor:(CGColorRef)ref
 {
-	return [[[self alloc] initWithCGColor:ref] autorelease];
+    return [[[self alloc] initWithCGColor:ref] autorelease];
 }
 
 + (UIColor *)colorWithPatternImage:(UIImage *)patternImage
 {
-	return [[[self alloc] initWithPatternImage:patternImage] autorelease];
+    return [[[self alloc] initWithPatternImage:patternImage] autorelease];
 }
 
 + (UIColor *)blackColor			{ return BlackColor ?: (BlackColor = [[self alloc] initWithNSColor:[NSColor blackColor]]); }
@@ -157,93 +157,93 @@ static UIColor *ClearColor = nil;
 
 - (id)initWithWhite:(CGFloat)white alpha:(CGFloat)alpha
 {
-	return [self initWithNSColor:[NSColor colorWithDeviceWhite:white alpha:alpha]];
+    return [self initWithNSColor:[NSColor colorWithDeviceWhite:white alpha:alpha]];
 }
 
 - (id)initWithHue:(CGFloat)hue saturation:(CGFloat)saturation brightness:(CGFloat)brightness alpha:(CGFloat)alpha
 {
-	return [self initWithNSColor:[NSColor colorWithDeviceHue:hue saturation:saturation brightness:brightness alpha:alpha]];
+    return [self initWithNSColor:[NSColor colorWithDeviceHue:hue saturation:saturation brightness:brightness alpha:alpha]];
 }
 
 - (id)initWithRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha
 {
-	return [self initWithNSColor:[NSColor colorWithDeviceRed:red green:green blue:blue alpha:alpha]];
+    return [self initWithNSColor:[NSColor colorWithDeviceRed:red green:green blue:blue alpha:alpha]];
 }
 
 - (id)initWithCGColor:(CGColorRef)ref
 {
-	return [self initWithNSColor:[NSColor colorWithCIColor:[CIColor colorWithCGColor:ref]]];
+    return [self initWithNSColor:[NSColor colorWithCIColor:[CIColor colorWithCGColor:ref]]];
 }
 
 - (id)initWithPatternImage:(UIImage *)patternImage
 {
-	if ((self=[super init])) {
-		_color = CreatePatternColor(patternImage.CGImage);
-	}
+    if ((self=[super init])) {
+        _color = CreatePatternColor(patternImage.CGImage);
+    }
 
-	return self;
+    return self;
 }
 
 - (void)set
 {
-	[self setFill];
-	[self setStroke];
+    [self setFill];
+    [self setStroke];
 }
 
 - (void)setFill
 {
-	CGContextSetFillColorWithColor(UIGraphicsGetCurrentContext(), _color);
+    CGContextSetFillColorWithColor(UIGraphicsGetCurrentContext(), _color);
 }
 
 - (void)setStroke
 {
-	CGContextSetStrokeColorWithColor(UIGraphicsGetCurrentContext(), _color);
+    CGContextSetStrokeColorWithColor(UIGraphicsGetCurrentContext(), _color);
 }
 
 - (CGColorRef)CGColor
 {
-	return _color;
+    return _color;
 }
 
 - (UIColor *)colorWithAlphaComponent:(CGFloat)alpha
 {
-	CGColorRef newColor = CGColorCreateCopyWithAlpha(_color, alpha);
-	UIColor *resultingUIColor = [UIColor colorWithCGColor:newColor];
-	CGColorRelease(newColor);
-	return resultingUIColor;
+    CGColorRef newColor = CGColorCreateCopyWithAlpha(_color, alpha);
+    UIColor *resultingUIColor = [UIColor colorWithCGColor:newColor];
+    CGColorRelease(newColor);
+    return resultingUIColor;
 }
 
 - (NSColor *)NSColor
 {
-	NSColorSpace *colorSpace = [[NSColorSpace alloc] initWithCGColorSpace:CGColorGetColorSpace(_color)];
-	const NSInteger numberOfComponents = CGColorGetNumberOfComponents(_color);
-	const CGFloat *components = CGColorGetComponents(_color);
-	NSColor *theColor = [NSColor colorWithColorSpace:colorSpace components:components count:numberOfComponents];
-	[colorSpace release];
-	return theColor;
+    NSColorSpace *colorSpace = [[NSColorSpace alloc] initWithCGColorSpace:CGColorGetColorSpace(_color)];
+    const NSInteger numberOfComponents = CGColorGetNumberOfComponents(_color);
+    const CGFloat *components = CGColorGetComponents(_color);
+    NSColor *theColor = [NSColor colorWithColorSpace:colorSpace components:components count:numberOfComponents];
+    [colorSpace release];
+    return theColor;
 }
 
 - (NSString *)description
 {
-	// The color space string this gets isn't exactly the same as Apple's implementation.
-	// For instance, Apple's implementation returns UIDeviceRGBColorSpace for [UIColor redColor]
-	// This implementation returns kCGColorSpaceDeviceRGB instead.
-	// Apple doesn't actually define UIDeviceRGBColorSpace or any of the other responses anywhere public,
-	// so there isn't any easy way to emulate it.
-	CGColorSpaceRef colorSpaceRef = CGColorGetColorSpace(self.CGColor);
-	NSString *colorSpace = [NSString stringWithFormat:@"%@", [(NSString *)CGColorSpaceCopyName(colorSpaceRef) autorelease]];
+    // The color space string this gets isn't exactly the same as Apple's implementation.
+    // For instance, Apple's implementation returns UIDeviceRGBColorSpace for [UIColor redColor]
+    // This implementation returns kCGColorSpaceDeviceRGB instead.
+    // Apple doesn't actually define UIDeviceRGBColorSpace or any of the other responses anywhere public,
+    // so there isn't any easy way to emulate it.
+    CGColorSpaceRef colorSpaceRef = CGColorGetColorSpace(self.CGColor);
+    NSString *colorSpace = [NSString stringWithFormat:@"%@", [(NSString *)CGColorSpaceCopyName(colorSpaceRef) autorelease]];
 
-	const size_t numberOfComponents = CGColorGetNumberOfComponents(self.CGColor);
-	const CGFloat *components = CGColorGetComponents(self.CGColor);
-	NSMutableString *componentsString = [NSMutableString stringWithString:@"{"];
-	
-	for (NSInteger index = 0; index < numberOfComponents; index++) {
-		if (index) [componentsString appendString:@", "];
-		[componentsString appendFormat:@"%.0f", components[index]];
-	}
-	[componentsString appendString:@"}"];
+    const size_t numberOfComponents = CGColorGetNumberOfComponents(self.CGColor);
+    const CGFloat *components = CGColorGetComponents(self.CGColor);
+    NSMutableString *componentsString = [NSMutableString stringWithString:@"{"];
+    
+    for (NSInteger index = 0; index < numberOfComponents; index++) {
+        if (index) [componentsString appendString:@", "];
+        [componentsString appendFormat:@"%.0f", components[index]];
+    }
+    [componentsString appendString:@"}"];
 
-	return [NSString stringWithFormat:@"<%@: %p; colorSpace = %@; components = %@>", [self className], self, colorSpace, componentsString];
+    return [NSString stringWithFormat:@"<%@: %p; colorSpace = %@; components = %@>", [self className], self, colorSpace, componentsString];
 }
 
 @end

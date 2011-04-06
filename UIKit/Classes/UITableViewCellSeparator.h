@@ -34,8 +34,8 @@
 
 @interface UITableViewCellSeparator : UIView {
 @private
-	UITableViewCellSeparatorStyle _style;
-	UIColor *_color;
+    UITableViewCellSeparatorStyle _style;
+    UIColor *_color;
 }
 
 - (void)setSeparatorStyle:(UITableViewCellSeparatorStyle)theStyle color:(UIColor *)theColor;

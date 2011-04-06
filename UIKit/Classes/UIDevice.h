@@ -32,25 +32,25 @@
 extern NSString *const UIDeviceOrientationDidChangeNotification;
 
 typedef enum {
-	UIDeviceOrientationUnknown,
-	UIDeviceOrientationPortrait,
-	UIDeviceOrientationPortraitUpsideDown,
-	UIDeviceOrientationLandscapeLeft,
-	UIDeviceOrientationLandscapeRight,
-	UIDeviceOrientationFaceUp,
-	UIDeviceOrientationFaceDown
+    UIDeviceOrientationUnknown,
+    UIDeviceOrientationPortrait,
+    UIDeviceOrientationPortraitUpsideDown,
+    UIDeviceOrientationLandscapeLeft,
+    UIDeviceOrientationLandscapeRight,
+    UIDeviceOrientationFaceUp,
+    UIDeviceOrientationFaceDown
 } UIDeviceOrientation;
 
 typedef enum {
-	UIUserInterfaceIdiomPhone,
-	UIUserInterfaceIdiomPad,
-	UIUserInterfaceIdiomDesktop,
+    UIUserInterfaceIdiomPhone,
+    UIUserInterfaceIdiomPad,
+    UIUserInterfaceIdiomDesktop,
 } UIUserInterfaceIdiom;
 
 #define UI_USER_INTERFACE_IDIOM() \
-	([[UIDevice currentDevice] respondsToSelector:@selector(userInterfaceIdiom)] ? \
-	[[UIDevice currentDevice] userInterfaceIdiom] : \
-	UIUserInterfaceIdiomPhone)
+    ([[UIDevice currentDevice] respondsToSelector:@selector(userInterfaceIdiom)] ? \
+    [[UIDevice currentDevice] userInterfaceIdiom] : \
+    UIUserInterfaceIdiomPhone)
 
 #define UIDeviceOrientationIsPortrait(orientation)  \
     ((orientation) == UIDeviceOrientationPortrait || \

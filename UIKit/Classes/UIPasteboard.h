@@ -32,7 +32,7 @@
 @class UIImage, UIColor, NSPasteboard;
 
 @interface UIPasteboard : NSObject {
-	NSPasteboard *pasteboard;
+    NSPasteboard *pasteboard;
 }
 
 + (UIPasteboard *)generalPasteboard;

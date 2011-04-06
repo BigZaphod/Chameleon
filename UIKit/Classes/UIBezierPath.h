@@ -30,26 +30,26 @@
 #import <Foundation/Foundation.h>
 
 enum {
-	UIRectCornerTopLeft     = 1 << 0,
-	UIRectCornerTopRight    = 1 << 1,
-	UIRectCornerBottomLeft  = 1 << 2,
-	UIRectCornerBottomRight = 1 << 3,
-	UIRectCornerAllCorners  = ~0
+    UIRectCornerTopLeft     = 1 << 0,
+    UIRectCornerTopRight    = 1 << 1,
+    UIRectCornerBottomLeft  = 1 << 2,
+    UIRectCornerBottomRight = 1 << 3,
+    UIRectCornerAllCorners  = ~0
 };
 typedef NSUInteger UIRectCorner;
 
 @interface UIBezierPath : NSObject {
 @private
-	CGPathRef _path;
-	CGFloat _lineWidth;
-	CGLineCap _lineCapStyle;
-	CGLineJoin _lineJoinStyle;
-	CGFloat _miterLimit;
-	CGFloat _flatness;
-	BOOL _usesEvenOddFillRule;
-	CGFloat *_lineDashPattern;
-	NSInteger _lineDashCount;
-	CGFloat _lineDashPhase;
+    CGPathRef _path;
+    CGFloat _lineWidth;
+    CGLineCap _lineCapStyle;
+    CGLineJoin _lineJoinStyle;
+    CGFloat _miterLimit;
+    CGFloat _flatness;
+    BOOL _usesEvenOddFillRule;
+    CGFloat *_lineDashPattern;
+    NSInteger _lineDashCount;
+    CGFloat _lineDashPhase;
 }
 
 + (UIBezierPath *)bezierPath;

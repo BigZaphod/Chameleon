@@ -33,12 +33,12 @@
 
 - (NSArray *)products
 {
-	return nil;
+    return nil;
 }
 
 - (NSArray *)invalidProductIdentifiers
 {
-	return nil;
+    return nil;
 }
 
 @end

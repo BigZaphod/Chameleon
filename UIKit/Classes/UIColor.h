@@ -33,7 +33,7 @@
 
 @interface UIColor : NSObject {
 @private
-	CGColorRef _color;
+    CGColorRef _color;
 }
 
 - (id)initWithNSColor:(NSColor *)c;

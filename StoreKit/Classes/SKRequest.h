@@ -34,7 +34,7 @@
 
 @interface SKRequest : NSObject {
 @private
-	id<SKRequestDelegate> _delegate;
+    id<SKRequestDelegate> _delegate;
 }
 
 @property(nonatomic, assign) id<SKRequestDelegate> delegate;

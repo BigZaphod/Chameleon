@@ -33,10 +33,10 @@
 
 @interface UIBarItem : NSObject {
 @private
-	BOOL _enabled;
-	UIImage *_image;
-	NSString *_title;
-	NSInteger _tag;
+    BOOL _enabled;
+    UIImage *_image;
+    NSString *_title;
+    NSInteger _tag;
 }
 
 @property (nonatomic, getter=isEnabled) BOOL enabled;

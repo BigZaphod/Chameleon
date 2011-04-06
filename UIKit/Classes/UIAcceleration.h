@@ -32,10 +32,10 @@
 typedef double UIAccelerationValue;
 
 @interface UIAcceleration : NSObject {
-	UIAccelerationValue _x;
-	UIAccelerationValue _y;
-	UIAccelerationValue _z;
-	NSTimeInterval _timestamp;
+    UIAccelerationValue _x;
+    UIAccelerationValue _y;
+    UIAccelerationValue _z;
+    NSTimeInterval _timestamp;
 }
 
 @property (nonatomic, readonly) UIAccelerationValue x;

@@ -69,270 +69,270 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 
 - (id)initWithFrame:(CGRect)theFrame
 {
-	if ((self=[super initWithFrame:theFrame])) {
-		_undoManager = [[NSUndoManager alloc] init];
-		[self _makeHidden];	// do this first because before the screen is set, it will prevent any visibility notifications from being sent.
-		self.screen = [UIScreen mainScreen];
-		self.opaque = NO;
-	}
-	return self;
+    if ((self=[super initWithFrame:theFrame])) {
+        _undoManager = [[NSUndoManager alloc] init];
+        [self _makeHidden];	// do this first because before the screen is set, it will prevent any visibility notifications from being sent.
+        self.screen = [UIScreen mainScreen];
+        self.opaque = NO;
+    }
+    return self;
 }
 
 - (void)dealloc
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[self _makeHidden];	// I don't really like this here, but the real UIKit seems to do something like this on window destruction as it sends a notification and we also need to remove it from the app's list of windows
-	[_screen release];
-	[_undoManager release];
-	[super dealloc];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self _makeHidden];	// I don't really like this here, but the real UIKit seems to do something like this on window destruction as it sends a notification and we also need to remove it from the app's list of windows
+    [_screen release];
+    [_undoManager release];
+    [super dealloc];
 }
 
 - (UIResponder *)_firstResponder
 {
-	return _firstResponder;
+    return _firstResponder;
 }
 
 - (void)_setFirstResponder:(UIResponder *)newFirstResponder
 {
-	_firstResponder = newFirstResponder;
+    _firstResponder = newFirstResponder;
 }
 
 - (NSUndoManager *)undoManager
 {
-	return _undoManager;
+    return _undoManager;
 }
 
 - (UIView *)superview
 {
-	return nil;		// lies!
+    return nil;		// lies!
 }
 
 - (void)removeFromSuperview
 {
-	// does nothing
+    // does nothing
 }
 
 - (UIWindow *)window
 {
-	return self;
+    return self;
 }
 
 - (UIResponder *)nextResponder
 {
-	return [UIApplication sharedApplication];
+    return [UIApplication sharedApplication];
 }
 
 - (void)setScreen:(UIScreen *)theScreen
 {
-	if (theScreen != _screen) {
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIScreenModeDidChangeNotification object:_screen];
-		
-		const BOOL wasHidden = self.hidden;
-		[self _makeHidden];
+    if (theScreen != _screen) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIScreenModeDidChangeNotification object:_screen];
+        
+        const BOOL wasHidden = self.hidden;
+        [self _makeHidden];
 
-		[self.layer removeFromSuperlayer];
-		[_screen release];
-		_screen = [theScreen retain];
-		[[_screen _layer] addSublayer:self.layer];
+        [self.layer removeFromSuperlayer];
+        [_screen release];
+        _screen = [theScreen retain];
+        [[_screen _layer] addSublayer:self.layer];
 
-		if (!wasHidden) {
-			[self _makeVisible];
-		}
+        if (!wasHidden) {
+            [self _makeVisible];
+        }
 
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_screenModeChangedNotification:) name:UIScreenModeDidChangeNotification object:_screen];
-	}
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_screenModeChangedNotification:) name:UIScreenModeDidChangeNotification object:_screen];
+    }
 }
 
 - (void)_screenModeChangedNotification:(NSNotification *)note
 {
-	UIScreenMode *previousMode = [[note userInfo] objectForKey:@"_previousMode"];
-	UIScreenMode *newMode = _screen.currentMode;
+    UIScreenMode *previousMode = [[note userInfo] objectForKey:@"_previousMode"];
+    UIScreenMode *newMode = _screen.currentMode;
 
-	if (!CGSizeEqualToSize(previousMode.size,newMode.size)) {
-		[self _superviewSizeDidChangeFrom:previousMode.size to:newMode.size];
-	}
+    if (!CGSizeEqualToSize(previousMode.size,newMode.size)) {
+        [self _superviewSizeDidChangeFrom:previousMode.size to:newMode.size];
+    }
 }
 
 - (CGPoint)convertPoint:(CGPoint)toConvert toWindow:(UIWindow *)toWindow
 {
-	if (toWindow == self) {
-		return toConvert;
-	} else {
-		// Convert to screen coordinates
-		toConvert.x += self.frame.origin.x;
-		toConvert.y += self.frame.origin.y;
-		
-		if (toWindow) {
-			// Now convert the screen coords into the other screen's coordinate space
-			toConvert = [self.screen convertPoint:toConvert toScreen:toWindow.screen];
+    if (toWindow == self) {
+        return toConvert;
+    } else {
+        // Convert to screen coordinates
+        toConvert.x += self.frame.origin.x;
+        toConvert.y += self.frame.origin.y;
+        
+        if (toWindow) {
+            // Now convert the screen coords into the other screen's coordinate space
+            toConvert = [self.screen convertPoint:toConvert toScreen:toWindow.screen];
 
-			// And now convert it from the new screen's space into the window's space
-			toConvert.x -= toWindow.frame.origin.x;
-			toConvert.y -= toWindow.frame.origin.y;
-		}
-		
-		return toConvert;
-	}
+            // And now convert it from the new screen's space into the window's space
+            toConvert.x -= toWindow.frame.origin.x;
+            toConvert.y -= toWindow.frame.origin.y;
+        }
+        
+        return toConvert;
+    }
 }
 
 - (CGPoint)convertPoint:(CGPoint)toConvert fromWindow:(UIWindow *)fromWindow
 {
-	if (fromWindow == self) {
-		return toConvert;
-	} else {
-		if (fromWindow) {
-			// Convert to screen coordinates
-			toConvert.x += fromWindow.frame.origin.x;
-			toConvert.y += fromWindow.frame.origin.y;
-			
-			// Change to this screen.
-			toConvert = [self.screen convertPoint:toConvert fromScreen:fromWindow.screen];
-		}
-		
-		// Convert to window coordinates
-		toConvert.x -= self.frame.origin.x;
-		toConvert.y -= self.frame.origin.y;
+    if (fromWindow == self) {
+        return toConvert;
+    } else {
+        if (fromWindow) {
+            // Convert to screen coordinates
+            toConvert.x += fromWindow.frame.origin.x;
+            toConvert.y += fromWindow.frame.origin.y;
+            
+            // Change to this screen.
+            toConvert = [self.screen convertPoint:toConvert fromScreen:fromWindow.screen];
+        }
+        
+        // Convert to window coordinates
+        toConvert.x -= self.frame.origin.x;
+        toConvert.y -= self.frame.origin.y;
 
-		return toConvert;
-	}
+        return toConvert;
+    }
 }
 
 - (CGRect)convertRect:(CGRect)toConvert fromWindow:(UIWindow *)fromWindow
 {
-	CGPoint convertedOrigin = [self convertPoint:toConvert.origin fromWindow:fromWindow];
-	return CGRectMake(convertedOrigin.x, convertedOrigin.y, toConvert.size.width, toConvert.size.height);
+    CGPoint convertedOrigin = [self convertPoint:toConvert.origin fromWindow:fromWindow];
+    return CGRectMake(convertedOrigin.x, convertedOrigin.y, toConvert.size.width, toConvert.size.height);
 }
 
 - (CGRect)convertRect:(CGRect)toConvert toWindow:(UIWindow *)toWindow
 {
-	CGPoint convertedOrigin = [self convertPoint:toConvert.origin toWindow:toWindow];
-	return CGRectMake(convertedOrigin.x, convertedOrigin.y, toConvert.size.width, toConvert.size.height);
+    CGPoint convertedOrigin = [self convertPoint:toConvert.origin toWindow:toWindow];
+    return CGRectMake(convertedOrigin.x, convertedOrigin.y, toConvert.size.width, toConvert.size.height);
 }
 
 - (void)becomeKeyWindow
 {
-	if ([[self _firstResponder] respondsToSelector:@selector(becomeKeyWindow)]) {
-		[(id)[self _firstResponder] becomeKeyWindow];
-	}
-	[[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidBecomeKeyNotification object:self];
+    if ([[self _firstResponder] respondsToSelector:@selector(becomeKeyWindow)]) {
+        [(id)[self _firstResponder] becomeKeyWindow];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidBecomeKeyNotification object:self];
 }
 
 - (void)makeKeyWindow
 {
-	if (!self.isKeyWindow) {
-		[[UIApplication sharedApplication].keyWindow resignKeyWindow];
-		[[UIApplication sharedApplication] _setKeyWindow:self];
-		[self becomeKeyWindow];
-	}
+    if (!self.isKeyWindow) {
+        [[UIApplication sharedApplication].keyWindow resignKeyWindow];
+        [[UIApplication sharedApplication] _setKeyWindow:self];
+        [self becomeKeyWindow];
+    }
 }
 
 - (BOOL)isKeyWindow
 {
-	return ([UIApplication sharedApplication].keyWindow == self);
+    return ([UIApplication sharedApplication].keyWindow == self);
 }
 
 - (void)resignKeyWindow
 {
-	if ([[self _firstResponder] respondsToSelector:@selector(resignKeyWindow)]) {
-		[(id)[self _firstResponder] resignKeyWindow];
-	}
-	[[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidResignKeyNotification object:self];
+    if ([[self _firstResponder] respondsToSelector:@selector(resignKeyWindow)]) {
+        [(id)[self _firstResponder] resignKeyWindow];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidResignKeyNotification object:self];
 }
 
 - (void)_makeHidden
 {
-	if (!self.hidden) {
-		[super setHidden:YES];
-		if (self.screen) {
-			[[UIApplication sharedApplication] _windowDidBecomeHidden:self];
-			[[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidBecomeHiddenNotification object:self];
-		}
-	}
+    if (!self.hidden) {
+        [super setHidden:YES];
+        if (self.screen) {
+            [[UIApplication sharedApplication] _windowDidBecomeHidden:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidBecomeHiddenNotification object:self];
+        }
+    }
 }
 
 - (void)_makeVisible
 {
-	if (self.hidden) {
-		[super setHidden:NO];
-		if (self.screen) {
-			[[UIApplication sharedApplication] _windowDidBecomeVisible:self];
-			[[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidBecomeVisibleNotification object:self];
-		}
-	}
+    if (self.hidden) {
+        [super setHidden:NO];
+        if (self.screen) {
+            [[UIApplication sharedApplication] _windowDidBecomeVisible:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidBecomeVisibleNotification object:self];
+        }
+    }
 }
 
 - (void)setHidden:(BOOL)hide
 {
-	if (hide) {
-		[self _makeHidden];
-	} else {
-		[self _makeVisible];
-	}
+    if (hide) {
+        [self _makeHidden];
+    } else {
+        [self _makeVisible];
+    }
 }
 
 - (void)makeKeyAndVisible
 {
-	[self _makeVisible];
-	[self makeKeyWindow];
+    [self _makeVisible];
+    [self makeKeyWindow];
 }
 
 - (void)setWindowLevel:(UIWindowLevel)level
 {
-	self.layer.zPosition = level;
+    self.layer.zPosition = level;
 }
 
 - (UIWindowLevel)windowLevel
 {
-	return self.layer.zPosition;
+    return self.layer.zPosition;
 }
 
 - (void)sendEvent:(UIEvent *)event
 {
-	if (event.type == UIEventTypeTouches) {
-		NSSet *touches = [event touchesForWindow:self];
+    if (event.type == UIEventTypeTouches) {
+        NSSet *touches = [event touchesForWindow:self];
 
-		for (UITouch *touch in touches) {
-			switch (touch.phase) {
-				case UITouchPhaseBegan:
-					[touch.view touchesBegan:touches withEvent:event];
-					break;
+        for (UITouch *touch in touches) {
+            switch (touch.phase) {
+                case UITouchPhaseBegan:
+                    [touch.view touchesBegan:touches withEvent:event];
+                    break;
 
-				case UITouchPhaseMoved:
-					[touch.view touchesMoved:touches withEvent:event];
-					break;
+                case UITouchPhaseMoved:
+                    [touch.view touchesMoved:touches withEvent:event];
+                    break;
 
-				case UITouchPhaseEnded:
-					[touch.view touchesEnded:touches withEvent:event];
-					break;
+                case UITouchPhaseEnded:
+                    [touch.view touchesEnded:touches withEvent:event];
+                    break;
 
-				case UITouchPhaseCancelled:
-					[touch.view touchesCancelled:touches withEvent:event];
-					break;
-					
-				case UITouchPhaseHovered:
-					if ([touch.view hitTest:[touch locationInView:touch.view] withEvent:event]) {
-						[touch.view mouseMoved:[touch _delta] withEvent:event];
-					}
-					break;
+                case UITouchPhaseCancelled:
+                    [touch.view touchesCancelled:touches withEvent:event];
+                    break;
+                    
+                case UITouchPhaseHovered:
+                    if ([touch.view hitTest:[touch locationInView:touch.view] withEvent:event]) {
+                        [touch.view mouseMoved:[touch _delta] withEvent:event];
+                    }
+                    break;
 
-				case UITouchPhaseScrolled:
-					[touch.view scrollWheelMoved:[touch _delta] withEvent:event];
-					break;
+                case UITouchPhaseScrolled:
+                    [touch.view scrollWheelMoved:[touch _delta] withEvent:event];
+                    break;
 
-				case UITouchPhaseRightClicked:
-					[touch.view rightClick:touch withEvent:event];
-					break;
-					
-				case UITouchPhaseStationary:
-					break;
-			}
+                case UITouchPhaseRightClicked:
+                    [touch.view rightClick:touch withEvent:event];
+                    break;
+                    
+                case UITouchPhaseStationary:
+                    break;
+            }
 
-			NSCursor *newCursor = [touch.view mouseCursorForEvent:event] ?: [NSCursor arrowCursor];
-			if ([NSCursor currentCursor] != newCursor) {
-				[newCursor set];
-			}			
-		}
-	}
+            NSCursor *newCursor = [touch.view mouseCursorForEvent:event] ?: [NSCursor arrowCursor];
+            if ([NSCursor currentCursor] != newCursor) {
+                [newCursor set];
+            }			
+        }
+    }
 }
 
 @end

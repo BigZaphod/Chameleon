@@ -33,9 +33,9 @@
 @class UIScreen, UIWindow;
 
 @interface UIKitView : NSView {
-	UIScreen *_screen;
-	UIWindow *_mainWindow;
-	NSTrackingArea *_trackingArea;
+    UIScreen *_screen;
+    UIWindow *_mainWindow;
+    NSTrackingArea *_trackingArea;
 }
 
 // if UIApplication's keyWindow is on the screen represented by this UIKitView, this will send -canPerformAction:withSender: to the keyWindow's

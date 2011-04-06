@@ -30,9 +30,9 @@
 #import "UIControl.h"
 
 @interface UIControlAction : NSObject {
-	id target;
-	SEL action;
-	UIControlEvents controlEvents;
+    id target;
+    SEL action;
+    UIControlEvents controlEvents;
 }
 
 @property (nonatomic, assign) id target;

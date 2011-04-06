@@ -39,56 +39,56 @@
 
 - (id)initWithFrame:(NSRect)frame parentView:(UIScrollView *)aView
 {
-	if ((self=[super initWithFrame:frame])) {
-		parentView = aView;
-		[self setDrawsBackground:NO];
-		[self setCopiesOnScroll:NO];
-		[self setWantsLayer:YES];
-		[self setAutoresizingMask:NSViewNotSizable];
-	}
-	return self;
+    if ((self=[super initWithFrame:frame])) {
+        parentView = aView;
+        [self setDrawsBackground:NO];
+        [self setCopiesOnScroll:NO];
+        [self setWantsLayer:YES];
+        [self setAutoresizingMask:NSViewNotSizable];
+    }
+    return self;
 }
 
 - (BOOL)isFlipped
 {
-	return YES;
+    return YES;
 }
 
 - (BOOL)isOpaque
 {
-	return NO;
+    return NO;
 }
 
 - (void)scrollWheel:(NSEvent *)event
 {
-	if (parentView.scrollEnabled) {
-		NSPoint offset = [self bounds].origin;
-		offset.x -= [event deltaX];
-		offset.y -= [event deltaY];
-		
-		[parentView _quickFlashScrollIndicators];
-		[parentView setContentOffset:NSPointToCGPoint(offset) animated:NO];
-	} else {
-		[super scrollWheel:event];
-	}
+    if (parentView.scrollEnabled) {
+        NSPoint offset = [self bounds].origin;
+        offset.x -= [event deltaX];
+        offset.y -= [event deltaY];
+        
+        [parentView _quickFlashScrollIndicators];
+        [parentView setContentOffset:NSPointToCGPoint(offset) animated:NO];
+    } else {
+        [super scrollWheel:event];
+    }
 }
 
 - (void)viewDidMoveToSuperview
 {
-	[super viewDidMoveToSuperview];
-	[parentView setNeedsLayout];
+    [super viewDidMoveToSuperview];
+    [parentView setNeedsLayout];
 }
 
 - (void)viewWillDraw
 {
-	[parentView setNeedsLayout];
-	[super viewWillDraw];
+    [parentView setNeedsLayout];
+    [super viewWillDraw];
 }
 
 - (void)setFrame:(NSRect)frame
 {
-	[super setFrame:frame];
-	[parentView setNeedsLayout];
+    [super setFrame:frame];
+    [parentView setNeedsLayout];
 }
 
 // this is used to fake out AppKit when the UIView that "owns" this NSView's layer is actually *behind* another UIView. Since the NSViews are
@@ -96,26 +96,26 @@
 // be less than ideal. This makes it ideal. It is awesome.
 - (NSView *)hitTest:(NSPoint)aPoint
 {
-	NSView *hitNSView = [super hitTest:aPoint];
+    NSView *hitNSView = [super hitTest:aPoint];
 
-	if (hitNSView) {
-		UIScreen *screen = parentView.window.screen;
-		BOOL didHitUIView = NO;
-		
-		if (screen) {
-			if (![[screen UIKitView] isFlipped]) {
-				aPoint.y = screen.bounds.size.height - aPoint.y - 1;
-			}
+    if (hitNSView) {
+        UIScreen *screen = parentView.window.screen;
+        BOOL didHitUIView = NO;
+        
+        if (screen) {
+            if (![[screen UIKitView] isFlipped]) {
+                aPoint.y = screen.bounds.size.height - aPoint.y - 1;
+            }
 
-			didHitUIView = (parentView == [screen _hitTest:NSPointToCGPoint(aPoint) event:nil]);
-		}
-		
-		if (!didHitUIView) {
-			hitNSView = nil;
-		}
-	}
+            didHitUIView = (parentView == [screen _hitTest:NSPointToCGPoint(aPoint) event:nil]);
+        }
+        
+        if (!didHitUIView) {
+            hitNSView = nil;
+        }
+    }
 
-	return hitNSView;
+    return hitNSView;
 }
 
 @end

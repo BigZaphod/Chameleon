@@ -60,64 +60,64 @@ extern NSString *const UITableViewIndexSearch;
 @end
 
 typedef enum {
-	UITableViewStylePlain,
-	UITableViewStyleGrouped
+    UITableViewStylePlain,
+    UITableViewStyleGrouped
 } UITableViewStyle;
 
 typedef enum {
-	UITableViewScrollPositionNone,
-	UITableViewScrollPositionTop,
-	UITableViewScrollPositionMiddle,
-	UITableViewScrollPositionBottom
+    UITableViewScrollPositionNone,
+    UITableViewScrollPositionTop,
+    UITableViewScrollPositionMiddle,
+    UITableViewScrollPositionBottom
 } UITableViewScrollPosition;
 
 typedef enum {
-	UITableViewRowAnimationFade,
-	UITableViewRowAnimationRight,
-	UITableViewRowAnimationLeft,
-	UITableViewRowAnimationTop,
-	UITableViewRowAnimationBottom,
-	UITableViewRowAnimationNone,
-	UITableViewRowAnimationMiddle
+    UITableViewRowAnimationFade,
+    UITableViewRowAnimationRight,
+    UITableViewRowAnimationLeft,
+    UITableViewRowAnimationTop,
+    UITableViewRowAnimationBottom,
+    UITableViewRowAnimationNone,
+    UITableViewRowAnimationMiddle
 } UITableViewRowAnimation;
 
 @interface UITableView : UIScrollView {
 @private
-	UITableViewStyle _style;
-	id<UITableViewDataSource> _dataSource;
-	BOOL _needsReload;
-	CGFloat _rowHeight;
-	UIColor *_separatorColor;
-	UITableViewCellSeparatorStyle _separatorStyle;
-	UIView *_tableHeaderView;
-	UIView *_tableFooterView;
-	BOOL _allowsSelection;
-	BOOL _allowsSelectionDuringEditing;
-	BOOL _editing;
-	NSIndexPath *_selectedRow;
-	NSMutableDictionary *_cachedCells;
-	NSMutableSet *_reusableCells;
-	NSMutableArray *_sections;
-	CGFloat _sectionHeaderHeight;
-	CGFloat _sectionFooterHeight;
-	
-	struct {
-		BOOL heightForRowAtIndexPath : 1;
-		BOOL heightForHeaderInSection : 1;
-		BOOL heightForFooterInSection : 1;
-		BOOL viewForHeaderInSection : 1;
-		BOOL viewForFooterInSection : 1;
-		BOOL willSelectRowAtIndexPath : 1;
-		BOOL didSelectRowAtIndexPath : 1;
-		BOOL willDeselectRowAtIndexPath : 1;
-		BOOL didDeselectRowAtIndexPath : 1;
-	} _delegateHas;
-	
-	struct {
-		BOOL numberOfSectionsInTableView : 1;
-		BOOL titleForHeaderInSection : 1;
-		BOOL titleForFooterInSection : 1;
-	} _dataSourceHas;
+    UITableViewStyle _style;
+    id<UITableViewDataSource> _dataSource;
+    BOOL _needsReload;
+    CGFloat _rowHeight;
+    UIColor *_separatorColor;
+    UITableViewCellSeparatorStyle _separatorStyle;
+    UIView *_tableHeaderView;
+    UIView *_tableFooterView;
+    BOOL _allowsSelection;
+    BOOL _allowsSelectionDuringEditing;
+    BOOL _editing;
+    NSIndexPath *_selectedRow;
+    NSMutableDictionary *_cachedCells;
+    NSMutableSet *_reusableCells;
+    NSMutableArray *_sections;
+    CGFloat _sectionHeaderHeight;
+    CGFloat _sectionFooterHeight;
+    
+    struct {
+        BOOL heightForRowAtIndexPath : 1;
+        BOOL heightForHeaderInSection : 1;
+        BOOL heightForFooterInSection : 1;
+        BOOL viewForHeaderInSection : 1;
+        BOOL viewForFooterInSection : 1;
+        BOOL willSelectRowAtIndexPath : 1;
+        BOOL didSelectRowAtIndexPath : 1;
+        BOOL willDeselectRowAtIndexPath : 1;
+        BOOL didDeselectRowAtIndexPath : 1;
+    } _delegateHas;
+    
+    struct {
+        BOOL numberOfSectionsInTableView : 1;
+        BOOL titleForHeaderInSection : 1;
+        BOOL titleForFooterInSection : 1;
+    } _dataSourceHas;
 }
 
 - (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style;
