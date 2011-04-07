@@ -30,59 +30,59 @@
 #import "UIView.h"
 
 typedef enum {
-	UITableViewCellAccessoryNone,
-	UITableViewCellAccessoryDisclosureIndicator,
-	UITableViewCellAccessoryDetailDisclosureButton,
-	UITableViewCellAccessoryCheckmark
+    UITableViewCellAccessoryNone,
+    UITableViewCellAccessoryDisclosureIndicator,
+    UITableViewCellAccessoryDetailDisclosureButton,
+    UITableViewCellAccessoryCheckmark
 } UITableViewCellAccessoryType;
 
 typedef enum {
-	UITableViewCellSeparatorStyleNone,
-	UITableViewCellSeparatorStyleSingleLine,
-	UITableViewCellSeparatorStyleSingleLineEtched
+    UITableViewCellSeparatorStyleNone,
+    UITableViewCellSeparatorStyleSingleLine,
+    UITableViewCellSeparatorStyleSingleLineEtched
 } UITableViewCellSeparatorStyle;
 
 typedef enum {
-	UITableViewCellStyleDefault,
-	UITableViewCellStyleValue1,
-	UITableViewCellStyleValue2,
-	UITableViewCellStyleSubtitle
+    UITableViewCellStyleDefault,
+    UITableViewCellStyleValue1,
+    UITableViewCellStyleValue2,
+    UITableViewCellStyleSubtitle
 } UITableViewCellStyle;
 
 typedef enum {
-	UITableViewCellSelectionStyleNone,
-	UITableViewCellSelectionStyleBlue,
-	UITableViewCellSelectionStyleGray
+    UITableViewCellSelectionStyleNone,
+    UITableViewCellSelectionStyleBlue,
+    UITableViewCellSelectionStyleGray
 } UITableViewCellSelectionStyle;
 
 typedef enum {
-	UITableViewCellEditingStyleNone,
-	UITableViewCellEditingStyleDelete,
-	UITableViewCellEditingStyleInsert
+    UITableViewCellEditingStyleNone,
+    UITableViewCellEditingStyleDelete,
+    UITableViewCellEditingStyleInsert
 } UITableViewCellEditingStyle;
 
 @class UITableViewCellSeparator, UILabel, UIImageView;
 
 @interface UITableViewCell : UIView {
 @private
-	UITableViewCellStyle _style;
-	UITableViewCellSeparator *_seperatorView;
-	UIView *_contentView;
-	UILabel *_textLabel;
+    UITableViewCellStyle _style;
+    UITableViewCellSeparator *_seperatorView;
+    UIView *_contentView;
+    UILabel *_textLabel;
     UILabel *_detailTextLabel; // not yet displayed!
-	UIImageView *_imageView;
-	UIView *_backgroundView;
-	UIView *_selectedBackgroundView;
-	UITableViewCellAccessoryType _accessoryType;
-	UIView *_accessoryView;
-	UITableViewCellAccessoryType _editingAccessoryType;
-	UITableViewCellSelectionStyle _selectionStyle;
-	NSInteger _indentationLevel;
-	BOOL _editing;
-	BOOL _selected;
-	BOOL _highlighted;
+    UIImageView *_imageView;
+    UIView *_backgroundView;
+    UIView *_selectedBackgroundView;
+    UITableViewCellAccessoryType _accessoryType;
+    UIView *_accessoryView;
+    UITableViewCellAccessoryType _editingAccessoryType;
+    UITableViewCellSelectionStyle _selectionStyle;
+    NSInteger _indentationLevel;
+    BOOL _editing;
+    BOOL _selected;
+    BOOL _highlighted;
     BOOL _showingDeleteConfirmation;
-	NSString *_reuseIdentifier;
+    NSString *_reuseIdentifier;
     CGFloat _indentationWidth;
 }
 

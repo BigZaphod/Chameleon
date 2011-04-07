@@ -31,68 +31,68 @@
 #import "UIGeometry.h"
 
 enum {
-	UIViewAutoresizingNone                 = 0,
-	UIViewAutoresizingFlexibleLeftMargin   = 1 << 0,
-	UIViewAutoresizingFlexibleWidth        = 1 << 1,
-	UIViewAutoresizingFlexibleRightMargin  = 1 << 2,
-	UIViewAutoresizingFlexibleTopMargin    = 1 << 3,
-	UIViewAutoresizingFlexibleHeight       = 1 << 4,
-	UIViewAutoresizingFlexibleBottomMargin = 1 << 5
+    UIViewAutoresizingNone                 = 0,
+    UIViewAutoresizingFlexibleLeftMargin   = 1 << 0,
+    UIViewAutoresizingFlexibleWidth        = 1 << 1,
+    UIViewAutoresizingFlexibleRightMargin  = 1 << 2,
+    UIViewAutoresizingFlexibleTopMargin    = 1 << 3,
+    UIViewAutoresizingFlexibleHeight       = 1 << 4,
+    UIViewAutoresizingFlexibleBottomMargin = 1 << 5
 };
 typedef NSUInteger UIViewAutoresizing;
 
 typedef enum {
-	UIViewContentModeScaleToFill,
-	UIViewContentModeScaleAspectFit,
-	UIViewContentModeScaleAspectFill,
-	UIViewContentModeRedraw,
-	UIViewContentModeCenter,
-	UIViewContentModeTop,
-	UIViewContentModeBottom,
-	UIViewContentModeLeft,
-	UIViewContentModeRight,
-	UIViewContentModeTopLeft,
-	UIViewContentModeTopRight,
-	UIViewContentModeBottomLeft,
-	UIViewContentModeBottomRight,
+    UIViewContentModeScaleToFill,
+    UIViewContentModeScaleAspectFit,
+    UIViewContentModeScaleAspectFill,
+    UIViewContentModeRedraw,
+    UIViewContentModeCenter,
+    UIViewContentModeTop,
+    UIViewContentModeBottom,
+    UIViewContentModeLeft,
+    UIViewContentModeRight,
+    UIViewContentModeTopLeft,
+    UIViewContentModeTopRight,
+    UIViewContentModeBottomLeft,
+    UIViewContentModeBottomRight,
 } UIViewContentMode;
 
 typedef enum {
-	UIViewAnimationCurveEaseInOut,
-	UIViewAnimationCurveEaseIn,
-	UIViewAnimationCurveEaseOut,
-	UIViewAnimationCurveLinear
+    UIViewAnimationCurveEaseInOut,
+    UIViewAnimationCurveEaseIn,
+    UIViewAnimationCurveEaseOut,
+    UIViewAnimationCurveLinear
 } UIViewAnimationCurve;
 
 typedef enum {
-	UIViewAnimationTransitionNone,
-	UIViewAnimationTransitionFlipFromLeft,
-	UIViewAnimationTransitionFlipFromRight,
-	UIViewAnimationTransitionCurlUp,
-	UIViewAnimationTransitionCurlDown,
+    UIViewAnimationTransitionNone,
+    UIViewAnimationTransitionFlipFromLeft,
+    UIViewAnimationTransitionFlipFromRight,
+    UIViewAnimationTransitionCurlUp,
+    UIViewAnimationTransitionCurlDown,
 } UIViewAnimationTransition;
 
 enum {
-	UIViewAnimationOptionLayoutSubviews            = 1 <<  0,		// not currently supported
-	UIViewAnimationOptionAllowUserInteraction      = 1 <<  1,
-	UIViewAnimationOptionBeginFromCurrentState     = 1 <<  2,
-	UIViewAnimationOptionRepeat                    = 1 <<  3,
-	UIViewAnimationOptionAutoreverse               = 1 <<  4,
-	UIViewAnimationOptionOverrideInheritedDuration = 1 <<  5,		// not currently supported
-	UIViewAnimationOptionOverrideInheritedCurve    = 1 <<  6,		// not currently supported
-	UIViewAnimationOptionAllowAnimatedContent      = 1 <<  7,		// not currently supported
-	UIViewAnimationOptionShowHideTransitionViews   = 1 <<  8,		// not currently supported
-	
-	UIViewAnimationOptionCurveEaseInOut            = 0 << 16,
-	UIViewAnimationOptionCurveEaseIn               = 1 << 16,
-	UIViewAnimationOptionCurveEaseOut              = 2 << 16,
-	UIViewAnimationOptionCurveLinear               = 3 << 16,
-	
-	UIViewAnimationOptionTransitionNone            = 0 << 20,		// not currently supported
-	UIViewAnimationOptionTransitionFlipFromLeft    = 1 << 20,		// not currently supported
-	UIViewAnimationOptionTransitionFlipFromRight   = 2 << 20,		// not currently supported
-	UIViewAnimationOptionTransitionCurlUp          = 3 << 20,		// not currently supported
-	UIViewAnimationOptionTransitionCurlDown        = 4 << 20,		// not currently supported
+    UIViewAnimationOptionLayoutSubviews            = 1 <<  0,		// not currently supported
+    UIViewAnimationOptionAllowUserInteraction      = 1 <<  1,
+    UIViewAnimationOptionBeginFromCurrentState     = 1 <<  2,
+    UIViewAnimationOptionRepeat                    = 1 <<  3,
+    UIViewAnimationOptionAutoreverse               = 1 <<  4,
+    UIViewAnimationOptionOverrideInheritedDuration = 1 <<  5,		// not currently supported
+    UIViewAnimationOptionOverrideInheritedCurve    = 1 <<  6,		// not currently supported
+    UIViewAnimationOptionAllowAnimatedContent      = 1 <<  7,		// not currently supported
+    UIViewAnimationOptionShowHideTransitionViews   = 1 <<  8,		// not currently supported
+    
+    UIViewAnimationOptionCurveEaseInOut            = 0 << 16,
+    UIViewAnimationOptionCurveEaseIn               = 1 << 16,
+    UIViewAnimationOptionCurveEaseOut              = 2 << 16,
+    UIViewAnimationOptionCurveLinear               = 3 << 16,
+    
+    UIViewAnimationOptionTransitionNone            = 0 << 20,		// not currently supported
+    UIViewAnimationOptionTransitionFlipFromLeft    = 1 << 20,		// not currently supported
+    UIViewAnimationOptionTransitionFlipFromRight   = 2 << 20,		// not currently supported
+    UIViewAnimationOptionTransitionCurlUp          = 3 << 20,		// not currently supported
+    UIViewAnimationOptionTransitionCurlDown        = 4 << 20,		// not currently supported
 };
 typedef NSUInteger UIViewAnimationOptions;
 
@@ -100,22 +100,22 @@ typedef NSUInteger UIViewAnimationOptions;
 
 @interface UIView : UIResponder {
 @private
-	__weak UIView *_superview;
-	NSMutableSet *_subviews;
-	BOOL _clearsContextBeforeDrawing;
-	BOOL _autoresizesSubviews;
-	BOOL _userInteractionEnabled;
-	CALayer *_layer;
-	NSInteger _tag;
-	UIViewContentMode _contentMode;
-	UIColor *_backgroundColor;
-	BOOL _implementsDrawRect;
-	BOOL _multipleTouchEnabled;
-	BOOL _exclusiveTouch;
-	__weak UIViewController *_viewController;
-	UIViewAutoresizing _autoresizingMask;
-	BOOL _needsDidAppearOrDisappear;
-	NSMutableSet *_gestureRecognizers;
+    __weak UIView *_superview;
+    NSMutableSet *_subviews;
+    BOOL _clearsContextBeforeDrawing;
+    BOOL _autoresizesSubviews;
+    BOOL _userInteractionEnabled;
+    CALayer *_layer;
+    NSInteger _tag;
+    UIViewContentMode _contentMode;
+    UIColor *_backgroundColor;
+    BOOL _implementsDrawRect;
+    BOOL _multipleTouchEnabled;
+    BOOL _exclusiveTouch;
+    __weak UIViewController *_viewController;
+    UIViewAutoresizing _autoresizingMask;
+    BOOL _needsDidAppearOrDisappear;
+    NSMutableSet *_gestureRecognizers;
 }
 
 + (Class)layerClass;

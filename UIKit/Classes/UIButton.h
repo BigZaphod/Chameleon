@@ -30,33 +30,33 @@
 #import "UIControl.h"
 
 typedef enum {
-	UIButtonTypeCustom = 0,
-	UIButtonTypeRoundedRect,
-	UIButtonTypeDetailDisclosure,
-	UIButtonTypeInfoLight,
-	UIButtonTypeInfoDark,
-	UIButtonTypeContactAdd,
+    UIButtonTypeCustom = 0,
+    UIButtonTypeRoundedRect,
+    UIButtonTypeDetailDisclosure,
+    UIButtonTypeInfoLight,
+    UIButtonTypeInfoDark,
+    UIButtonTypeContactAdd,
 } UIButtonType;
 
 @class UILabel, UIImageView, UIImage;
 
 @interface UIButton : UIControl {
 @protected
-	UIButtonType _buttonType;
+    UIButtonType _buttonType;
 @private
-	UILabel *_titleLabel;
-	UIImageView *_imageView;
-	UIImageView *_backgroundImageView;
-	BOOL _reversesTitleShadowWhenHighlighted;
-	BOOL _adjustsImageWhenHighlighted;
-	BOOL _adjustsImageWhenDisabled;
-	BOOL _showsTouchWhenHighlighted;
-	UIEdgeInsets _contentEdgeInsets;
-	UIEdgeInsets _titleEdgeInsets;
-	UIEdgeInsets _imageEdgeInsets;
-	NSMutableDictionary *_content;
-	UIImage *_adjustedHighlightImage;
-	UIImage *_adjustedDisabledImage;
+    UILabel *_titleLabel;
+    UIImageView *_imageView;
+    UIImageView *_backgroundImageView;
+    BOOL _reversesTitleShadowWhenHighlighted;
+    BOOL _adjustsImageWhenHighlighted;
+    BOOL _adjustsImageWhenDisabled;
+    BOOL _showsTouchWhenHighlighted;
+    UIEdgeInsets _contentEdgeInsets;
+    UIEdgeInsets _titleEdgeInsets;
+    UIEdgeInsets _imageEdgeInsets;
+    NSMutableDictionary *_content;
+    UIImage *_adjustedHighlightImage;
+    UIImage *_adjustedDisabledImage;
 }
 
 + (id)buttonWithType:(UIButtonType)buttonType;

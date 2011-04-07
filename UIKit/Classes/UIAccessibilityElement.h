@@ -30,11 +30,11 @@
 #import "UIAccessibility.h"
 
 @interface UIAccessibilityElement : NSObject {
-	NSString *_accessibilityLabel;
-	NSString *_accessibilityHint;
-	NSString *_accessibilityValue;
-	CGRect _accessibilityFrame;
-	UIAccessibilityTraits _accessibilityTraits;
+    NSString *_accessibilityLabel;
+    NSString *_accessibilityHint;
+    NSString *_accessibilityValue;
+    CGRect _accessibilityFrame;
+    UIAccessibilityTraits _accessibilityTraits;
 }
 
 - (id)initWithAccessibilityContainer:(id)container;

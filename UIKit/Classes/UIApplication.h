@@ -59,10 +59,10 @@ typedef enum {
 } UIStatusBarStyle;
 
 typedef enum {
-	UIInterfaceOrientationPortrait           = UIDeviceOrientationPortrait,
-	UIInterfaceOrientationPortraitUpsideDown = UIDeviceOrientationPortraitUpsideDown,
-	UIInterfaceOrientationLandscapeLeft      = UIDeviceOrientationLandscapeRight,
-	UIInterfaceOrientationLandscapeRight     = UIDeviceOrientationLandscapeLeft
+    UIInterfaceOrientationPortrait           = UIDeviceOrientationPortrait,
+    UIInterfaceOrientationPortraitUpsideDown = UIDeviceOrientationPortraitUpsideDown,
+    UIInterfaceOrientationLandscapeLeft      = UIDeviceOrientationLandscapeRight,
+    UIInterfaceOrientationLandscapeRight     = UIDeviceOrientationLandscapeLeft
 } UIInterfaceOrientation;
 
 #define UIInterfaceOrientationIsPortrait(orientation) \
@@ -96,14 +96,14 @@ const NSTimeInterval UIMinimumKeepAliveTimeout;
 
 @interface UIApplication : UIResponder {
 @private
-	UIEvent *_currentEvent;
-	__weak UIWindow *_keyWindow;
-	NSMutableSet *_visibleWindows;
-	id<UIApplicationDelegate> _delegate;
-	BOOL _idleTimerDisabled;
-	BOOL _networkActivityIndicatorVisible;
-	BOOL _applicationSupportsShakeToEdit;
-	NSUInteger _ignoringInteractionEvents;
+    UIEvent *_currentEvent;
+    __weak UIWindow *_keyWindow;
+    NSMutableSet *_visibleWindows;
+    id<UIApplicationDelegate> _delegate;
+    BOOL _idleTimerDisabled;
+    BOOL _networkActivityIndicatorVisible;
+    BOOL _applicationSupportsShakeToEdit;
+    NSUInteger _ignoringInteractionEvents;
     NSInteger _applicationIconBadgeNumber;
 }
 
@@ -140,19 +140,6 @@ const NSTimeInterval UIMinimumKeepAliveTimeout;
 @property (nonatomic, readonly) NSTimeInterval backgroundTimeRemaining;     // always 0
 @property (nonatomic) NSInteger applicationIconBadgeNumber;                 // no effect, but does set/get the number correctly
 @property (nonatomic, copy) NSArray *scheduledLocalNotifications;           // no effect, returns nil
-
-@property (nonatomic, readonly) UIApplicationState applicationState;
-@property (nonatomic, readonly) NSTimeInterval backgroundTimeRemaining;
-
-@property(nonatomic) NSInteger applicationIconBadgeNumber; // stub
-
-- (BOOL)canOpenURL:(NSURL *)URL;
-
-// local notifications
-- (void)presentLocalNotificationNow:(UILocalNotification *)notification;
-- (void)cancelLocalNotification:(UILocalNotification *)notification;
-- (void)cancelAllLocalNotifications;
-@property(nonatomic,copy) NSArray *scheduledLocalNotifications;
 
 @end
 

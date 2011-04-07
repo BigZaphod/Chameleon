@@ -32,7 +32,7 @@
 @class UIScrollView;
 
 @interface UINSClipView : NSClipView {
-	UIScrollView *parentView;
+    UIScrollView *parentView;
 }
 
 - (id)initWithFrame:(NSRect)frame parentView:(UIScrollView *)aView;

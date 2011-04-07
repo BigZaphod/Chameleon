@@ -51,24 +51,24 @@ typedef enum {
 
 @interface UIActionSheet : UIView {
 @private
-	__weak id<UIActionSheetDelegate> _delegate;
-	NSInteger _destructiveButtonIndex;
-	NSInteger _cancelButtonIndex;
-	NSInteger _firstOtherButtonIndex;
-	NSString *_title;
-	NSMutableArray *_menuTitles;
-	NSMutableSet *_separatorIndexes;
+    __weak id<UIActionSheetDelegate> _delegate;
+    NSInteger _destructiveButtonIndex;
+    NSInteger _cancelButtonIndex;
+    NSInteger _firstOtherButtonIndex;
+    NSString *_title;
+    NSMutableArray *_menuTitles;
+    NSMutableSet *_separatorIndexes;
     UIActionSheetStyle _actionSheetStyle;
-	id _menu;
-	
-	struct {
-		BOOL clickedButtonAtIndex : 1;
-		BOOL willPresentActionSheet : 1;
-		BOOL didPresentActionSheet : 1;
-		BOOL willDismissWithButtonIndex : 1;
-		BOOL didDismissWithButtonIndex : 1;
-		BOOL actionSheetCancel : 1;
-	} _delegateHas;
+    id _menu;
+    
+    struct {
+        BOOL clickedButtonAtIndex : 1;
+        BOOL willPresentActionSheet : 1;
+        BOOL didPresentActionSheet : 1;
+        BOOL willDismissWithButtonIndex : 1;
+        BOOL didDismissWithButtonIndex : 1;
+        BOOL actionSheetCancel : 1;
+    } _delegateHas;
 }
 
 - (id)initWithTitle:(NSString *)title delegate:(id<UIActionSheetDelegate>)delegate cancelButtonTitle:(NSString *)cancelButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ...;

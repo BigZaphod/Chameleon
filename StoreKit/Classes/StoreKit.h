@@ -28,11 +28,11 @@
  */
 
 enum {
-	SKErrorUnknown,
-	SKErrorClientInvalid,
-	SKErrorPaymentCancelled,
-	SKErrorPaymentInvalid,
-	SKErrorPaymentNotAllowed
+    SKErrorUnknown,
+    SKErrorClientInvalid,
+    SKErrorPaymentCancelled,
+    SKErrorPaymentInvalid,
+    SKErrorPaymentNotAllowed
 };
 
 #import "SKProduct.h"

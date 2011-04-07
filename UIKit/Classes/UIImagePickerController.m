@@ -41,18 +41,18 @@ NSString *const UIImagePickerControllerMediaURL = @"UIImagePickerControllerMedia
 
 + (NSArray *)availableMediaTypesForSourceType:(UIImagePickerControllerSourceType)sourceType
 {
-	return nil;
+    return nil;
 }
 
 + (BOOL)isSourceTypeAvailable:(UIImagePickerControllerSourceType)sourceType
 {
-	return NO;
+    return NO;
 }
 
 - (void)dealloc
 {
-	[_mediaTypes release];
-	[super dealloc];
+    [_mediaTypes release];
+    [super dealloc];
 }
 
 @end

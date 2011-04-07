@@ -13,9 +13,9 @@
 
 @interface NavBarUpdatesAppDelegate : NSObject <NSApplicationDelegate> {
 @private
-	NSWindow *window;
-	UIKitView *chameleonNSView;
-	ChameleonAppDelegate *chameleonApp;
+    NSWindow *window;
+    UIKitView *chameleonNSView;
+    ChameleonAppDelegate *chameleonApp;
 }
 
 @property (assign) IBOutlet NSWindow *window;

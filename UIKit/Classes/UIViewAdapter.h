@@ -33,8 +33,8 @@
 
 @interface UIViewAdapter : UIScrollView {
 @private
-	UINSClipView *_clipView;
-	NSView *_view;
+    UINSClipView *_clipView;
+    NSView *_view;
 }
 
 - (id)initWithNSView:(NSView *)aNSView;

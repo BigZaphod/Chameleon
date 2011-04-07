@@ -33,7 +33,7 @@
 
 @interface UIColor : NSObject {
 @private
-	CGColorRef _color;
+    CGColorRef _color;
 }
 
 - (id)initWithNSColor:(NSColor *)c;
@@ -59,9 +59,6 @@
 + (UIColor *)purpleColor;
 + (UIColor *)brownColor;
 + (UIColor *)clearColor;
-
-// system colors
-+ (UIColor *)groupTableViewBackgroundColor;
 
 - (id)initWithWhite:(CGFloat)white alpha:(CGFloat)alpha;
 - (id)initWithHue:(CGFloat)hue saturation:(CGFloat)saturation brightness:(CGFloat)brightness alpha:(CGFloat)alpha;

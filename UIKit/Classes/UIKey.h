@@ -34,28 +34,28 @@
 // then all of this should change to reflect the official API.
 
 typedef enum {
-	UIKeyTypeCharacter,		// the catch-all/default... I wouldn't depend much on this at this point
-	UIKeyTypeUpArrow,
-	UIKeyTypeDownArrow,
-	UIKeyTypeLeftArrow,
-	UIKeyTypeRightArrow,
-	UIKeyTypeReturn,
-	UIKeyTypeEnter,
-	UIKeyTypeHome,
-	UIKeyTypeInsert,
-	UIKeyTypeDelete,
-	UIKeyTypeEnd,
-	UIKeyTypePageUp,
-	UIKeyTypePageDown,
+    UIKeyTypeCharacter,		// the catch-all/default... I wouldn't depend much on this at this point
+    UIKeyTypeUpArrow,
+    UIKeyTypeDownArrow,
+    UIKeyTypeLeftArrow,
+    UIKeyTypeRightArrow,
+    UIKeyTypeReturn,
+    UIKeyTypeEnter,
+    UIKeyTypeHome,
+    UIKeyTypeInsert,
+    UIKeyTypeDelete,
+    UIKeyTypeEnd,
+    UIKeyTypePageUp,
+    UIKeyTypePageDown,
 } UIKeyType;
 
 @interface UIKey : NSObject {
 @private
-	unsigned short _keyCode;
-	NSString *_characters;
-	NSString *_charactersWithModifiers;
-	NSUInteger _modifierFlags;
-	BOOL _repeat;
+    unsigned short _keyCode;
+    NSString *_characters;
+    NSString *_charactersWithModifiers;
+    NSUInteger _modifierFlags;
+    BOOL _repeat;
 }
 
 @property (nonatomic, readonly) UIKeyType type;

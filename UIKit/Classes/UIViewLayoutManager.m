@@ -36,19 +36,19 @@ static UIViewLayoutManager *theLayoutManager = nil;
 
 + (void)initialize
 {
-	if (self == [UIViewLayoutManager class]) {
-		theLayoutManager = [[self alloc] init];
-	}
+    if (self == [UIViewLayoutManager class]) {
+        theLayoutManager = [[self alloc] init];
+    }
 }
 
 + (UIViewLayoutManager *)layoutManager
 {
-	return theLayoutManager;
+    return theLayoutManager;
 }
 
 - (void)layoutSublayersOfLayer:(CALayer *)theLayer
 {
-	[[theLayer delegate] layoutSubviews];
+    [[theLayer delegate] layoutSubviews];
 }
 
 @end

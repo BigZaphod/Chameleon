@@ -66,22 +66,22 @@
 @end
 
 @interface UITextLayer : CALayer {
-	id containerView;
-	BOOL containerCanScroll;
-	UICustomNSTextView *textView;
-	UICustomNSClipView *clipView;
-	BOOL secureTextEntry;
-	BOOL editable;
-	UIColor *textColor;
-	UIFont *font;
-	BOOL changingResponderStatus;
+    id containerView;
+    BOOL containerCanScroll;
+    UICustomNSTextView *textView;
+    UICustomNSClipView *clipView;
+    BOOL secureTextEntry;
+    BOOL editable;
+    UIColor *textColor;
+    UIFont *font;
+    BOOL changingResponderStatus;
     UITextAlignment textAlignment;
 
-	struct {
-		unsigned int didChange : 1;
-		unsigned int didChangeSelection : 1;
-		unsigned int didReturnKey : 1;
-	} textDelegateHas;
+    struct {
+        unsigned int didChange : 1;
+        unsigned int didChangeSelection : 1;
+        unsigned int didReturnKey : 1;
+    } textDelegateHas;
 }
 
 - (id)initWithContainer:(UIView <UITextLayerContainerViewProtocol,UITextLayerTextDelegate> *)aView isField:(BOOL)isField;

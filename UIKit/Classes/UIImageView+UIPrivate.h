@@ -30,9 +30,9 @@
 #import "UIImageView.h"
 
 enum {
-	_UIImageViewDrawModeNormal,
-	_UIImageViewDrawModeHighlighted,
-	_UIImageViewDrawModeDisabled,
+    _UIImageViewDrawModeNormal,
+    _UIImageViewDrawModeHighlighted,
+    _UIImageViewDrawModeDisabled,
 };
 
 @interface UIImageView (UIPrivate)

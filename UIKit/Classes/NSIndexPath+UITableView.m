@@ -33,18 +33,18 @@
 
 + (NSIndexPath *)indexPathForRow:(NSUInteger)row inSection:(NSUInteger)section
 {
-	NSUInteger path[2] = {section, row};
-	return [self indexPathWithIndexes:path length:2];
+    NSUInteger path[2] = {section, row};
+    return [self indexPathWithIndexes:path length:2];
 }
 
 - (NSUInteger)row
 {
-	return [self indexAtPosition:1];
+    return [self indexAtPosition:1];
 }
 
 -(NSUInteger)section
 {
-	return [self indexAtPosition:0];
+    return [self indexAtPosition:0];
 }
 
 @end

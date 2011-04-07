@@ -92,8 +92,4 @@
     return nil;
 }
 
-- (void)selectRow:(NSInteger)row inComponent:(NSInteger)component animated:(BOOL)animated {
-  // stub
-}
-
 @end

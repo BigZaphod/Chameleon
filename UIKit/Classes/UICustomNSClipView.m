@@ -36,87 +36,87 @@
 
 - (id)initWithFrame:(NSRect)frame layerParent:(CALayer *)layer behaviorDelegate:(id<UICustomNSClipViewBehaviorDelegate>)aBehaviorDelegate
 {
-	if ((self=[super initWithFrame:frame])) {
-		parentLayer = layer;
-		behaviorDelegate = aBehaviorDelegate;
-		[self setDrawsBackground:NO];
-		[self setWantsLayer:YES];
-	}
-	return self;
+    if ((self=[super initWithFrame:frame])) {
+        parentLayer = layer;
+        behaviorDelegate = aBehaviorDelegate;
+        [self setDrawsBackground:NO];
+        [self setWantsLayer:YES];
+    }
+    return self;
 }
 
 - (void)scrollWheel:(NSEvent *)event
 {
-	if ([behaviorDelegate clipViewShouldScroll]) {
-		NSPoint offset = [self bounds].origin;
-		offset.x += [event deltaX];
-		offset.y -= [event deltaY];
-		offset.x = floor(offset.x);
-		offset.y = floor(offset.y);
-		[self scrollToPoint:[self constrainScrollPoint:offset]];
-	}
+    if ([behaviorDelegate clipViewShouldScroll]) {
+        NSPoint offset = [self bounds].origin;
+        offset.x += [event deltaX];
+        offset.y -= [event deltaY];
+        offset.x = floor(offset.x);
+        offset.y = floor(offset.y);
+        [self scrollToPoint:[self constrainScrollPoint:offset]];
+    }
 }
 
 - (void)fixupTheLayer
 {
-	if ([self superview]) {
-		[CATransaction begin];
-		[CATransaction setValue:(id)kCFBooleanTrue
-						 forKey:kCATransactionDisableActions];
-		
-		CALayer *layer = [self layer];
+    if ([self superview]) {
+        [CATransaction begin];
+        [CATransaction setValue:(id)kCFBooleanTrue
+                         forKey:kCATransactionDisableActions];
+        
+        CALayer *layer = [self layer];
 
-		if (parentLayer != layer.superlayer) {
-			[parentLayer addSublayer:layer];
-		}
-		
-		if (!CGRectEqualToRect(layer.frame, parentLayer.bounds)) {
-			layer.frame = parentLayer.bounds;
-		}
-		
-		[CATransaction commit];
-	}
+        if (parentLayer != layer.superlayer) {
+            [parentLayer addSublayer:layer];
+        }
+        
+        if (!CGRectEqualToRect(layer.frame, parentLayer.bounds)) {
+            layer.frame = parentLayer.bounds;
+        }
+        
+        [CATransaction commit];
+    }
 }
 
 - (void)viewDidMoveToSuperview
 {
-	[super viewDidMoveToSuperview];
-	[self fixupTheLayer];
+    [super viewDidMoveToSuperview];
+    [self fixupTheLayer];
 }
 
 - (void)viewWillDraw
 {
-	[super viewWillDraw];
-	[self fixupTheLayer];
+    [super viewWillDraw];
+    [self fixupTheLayer];
 }
 
 - (void)setFrame:(NSRect)frame
 {
-	[super setFrame:frame];
-	[self fixupTheLayer];
+    [super setFrame:frame];
+    [self fixupTheLayer];
 }
 
 - (void)viewDidUnhide
 {
-	[super viewDidUnhide];
-	[self fixupTheLayer];
+    [super viewDidUnhide];
+    [self fixupTheLayer];
 }
 
 - (NSView *)hitTest:(NSPoint)aPoint
 {
-	NSView *hit = [super hitTest:aPoint];
+    NSView *hit = [super hitTest:aPoint];
 
-	if (hit && behaviorDelegate) {
-		// call out to the text layer via a delegate or something and ask if this point should be considered a hit or not.
-		// if not, then we set hit to nil, otherwise we return it like normal.
-		// the purpose of this is to make the NSView act invisible/hidden to clicks when it's visually behind other UIViews.
-		// super tricky, eh?
-		if (![behaviorDelegate hitTestForClipViewPoint:aPoint]) {
-			hit = nil;
-		}
-	}
+    if (hit && behaviorDelegate) {
+        // call out to the text layer via a delegate or something and ask if this point should be considered a hit or not.
+        // if not, then we set hit to nil, otherwise we return it like normal.
+        // the purpose of this is to make the NSView act invisible/hidden to clicks when it's visually behind other UIViews.
+        // super tricky, eh?
+        if (![behaviorDelegate hitTestForClipViewPoint:aPoint]) {
+            hit = nil;
+        }
+    }
 
-	return hit;
+    return hit;
 }
 
 @end

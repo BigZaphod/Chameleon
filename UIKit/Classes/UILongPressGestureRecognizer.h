@@ -31,10 +31,10 @@
 
 @interface UILongPressGestureRecognizer : UIGestureRecognizer {
 @private
-	CFTimeInterval _minimumPressDuration;
-	CGFloat _allowableMovement;
-	NSUInteger _numberOfTapsRequired;
-	NSInteger _numberOfTouchesRequired;
+    CFTimeInterval _minimumPressDuration;
+    CGFloat _allowableMovement;
+    NSUInteger _numberOfTapsRequired;
+    NSInteger _numberOfTouchesRequired;
 }
 
 @property (nonatomic) CFTimeInterval minimumPressDuration;

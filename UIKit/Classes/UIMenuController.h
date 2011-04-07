@@ -39,13 +39,13 @@ extern NSString *const UIMenuControllerMenuFrameDidChangeNotification;
 
 @interface UIMenuController : NSObject {
 @private
-	NSArray *_menuItems;
-	NSMutableArray *_enabledMenuItems;
-	id _menu;
-	CGRect _menuFrame;
-	CGPoint _menuLocation;
-	BOOL _rightAlignMenu;
-	UIWindow *_window;
+    NSArray *_menuItems;
+    NSMutableArray *_enabledMenuItems;
+    id _menu;
+    CGRect _menuFrame;
+    CGPoint _menuLocation;
+    BOOL _rightAlignMenu;
+    UIWindow *_window;
 }
 
 + (UIMenuController *)sharedMenuController;
@@ -64,9 +64,3 @@ extern NSString *const UIMenuControllerMenuFrameDidChangeNotification;
 @property (nonatomic, readonly) CGRect menuFrame;
 
 @end
-
-NSString *const UIMenuControllerWillShowMenuNotification;
-NSString *const UIMenuControllerDidShowMenuNotification;
-NSString *const UIMenuControllerWillHideMenuNotification;
-NSString *const UIMenuControllerDidHideMenuNotification;
-NSString *const UIMenuControllerMenuFrameDidChangeNotification;

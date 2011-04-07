@@ -30,13 +30,13 @@
 #import "UIView.h"
 
 typedef enum {
-	UIProgressViewStyleDefault,
-	UIProgressViewStyleBar,
+    UIProgressViewStyleDefault,
+    UIProgressViewStyleBar,
 } UIProgressViewStyle;
 
 @interface UIProgressView : UIView {
-	UIProgressViewStyle _progressViewStyle;
-	float _progress;
+    UIProgressViewStyle _progressViewStyle;
+    float _progress;
 }
 
 - (id)initWithProgressViewStyle:(UIProgressViewStyle)style;

@@ -30,29 +30,29 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
-	UITouchPhaseBegan,
-	UITouchPhaseMoved,
-	UITouchPhaseStationary,
-	UITouchPhaseEnded,
-	UITouchPhaseCancelled,
-	UITouchPhaseHovered,
-	UITouchPhaseScrolled,
-	UITouchPhaseRightClicked
+    UITouchPhaseBegan,
+    UITouchPhaseMoved,
+    UITouchPhaseStationary,
+    UITouchPhaseEnded,
+    UITouchPhaseCancelled,
+    UITouchPhaseHovered,
+    UITouchPhaseScrolled,
+    UITouchPhaseRightClicked
 } UITouchPhase;
 
 @class UIView, UIWindow;
 
 @interface UITouch : NSObject {
 @private
-	NSTimeInterval _timestamp;
-	NSUInteger _tapCount;
-	UITouchPhase _phase;
-	CGPoint _delta;
-	CGPoint _location;
-	CGPoint _previousLocation;
-	UIView *_view;
-	UIWindow *_window;
-	NSArray *_gestureRecognizers;
+    NSTimeInterval _timestamp;
+    NSUInteger _tapCount;
+    UITouchPhase _phase;
+    CGPoint _delta;
+    CGPoint _location;
+    CGPoint _previousLocation;
+    UIView *_view;
+    UIWindow *_window;
+    NSArray *_gestureRecognizers;
 }
 
 - (CGPoint)locationInView:(UIView *)inView;

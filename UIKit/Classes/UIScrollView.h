@@ -30,9 +30,9 @@
 #import "UIView.h"
 
 typedef enum {
-	UIScrollViewIndicatorStyleDefault,
-	UIScrollViewIndicatorStyleBlack,
-	UIScrollViewIndicatorStyleWhite
+    UIScrollViewIndicatorStyleDefault,
+    UIScrollViewIndicatorStyleBlack,
+    UIScrollViewIndicatorStyleWhite
 } UIScrollViewIndicatorStyle;
 
 @class UIScroller, UIImageView, UIScrollView;
@@ -51,41 +51,41 @@ typedef enum {
 
 @interface UIScrollView : UIView {
 @package
-	id _delegate;
+    id _delegate;
 @private
-	CGPoint _contentOffset;
-	CGSize _contentSize;
-	UIEdgeInsets _contentInset;
-	UIEdgeInsets _scrollIndicatorInsets;
-	UIScroller *_verticalScroller;
-	UIScroller *_horizontalScroller;
-	BOOL _scrollEnabled;
-	BOOL _showsVerticalScrollIndicator;
-	BOOL _showsHorizontalScrollIndicator;
-	float _maximumZoomScale;
-	float _minimumZoomScale;
-	BOOL _scrollsToTop;
-	UIScrollViewIndicatorStyle _indicatorStyle;
-	BOOL _delaysContentTouches;
-	BOOL _canCancelContentTouches;
-	BOOL _pagingEnabled;
-	NSTimer *_dragDelegateTimer;
-	BOOL _bouncesZoom;
+    CGPoint _contentOffset;
+    CGSize _contentSize;
+    UIEdgeInsets _contentInset;
+    UIEdgeInsets _scrollIndicatorInsets;
+    UIScroller *_verticalScroller;
+    UIScroller *_horizontalScroller;
+    BOOL _scrollEnabled;
+    BOOL _showsVerticalScrollIndicator;
+    BOOL _showsHorizontalScrollIndicator;
+    float _maximumZoomScale;
+    float _minimumZoomScale;
+    BOOL _scrollsToTop;
+    UIScrollViewIndicatorStyle _indicatorStyle;
+    BOOL _delaysContentTouches;
+    BOOL _canCancelContentTouches;
+    BOOL _pagingEnabled;
+    NSTimer *_dragDelegateTimer;
+    BOOL _bouncesZoom;
     BOOL _bounces;
-	BOOL _zooming;
-	NSMutableArray *_scrollAnimations;
-	NSTimer *_scrollTimer;
-	NSTimeInterval _scrollAnimationTime;
-	
-	struct {
-		BOOL scrollViewDidScroll : 1;
-		BOOL scrollViewWillBeginDragging : 1;
-		BOOL scrollViewDidEndDragging : 1;
-		BOOL viewForZoomingInScrollView : 1;
-		BOOL scrollViewWillBeginZooming : 1;
-		BOOL scrollViewDidEndZooming : 1;
-		BOOL scrollViewDidZoom : 1;
-	} _delegateCan;
+    BOOL _zooming;
+    NSMutableArray *_scrollAnimations;
+    NSTimer *_scrollTimer;
+    NSTimeInterval _scrollAnimationTime;
+    
+    struct {
+        BOOL scrollViewDidScroll : 1;
+        BOOL scrollViewWillBeginDragging : 1;
+        BOOL scrollViewDidEndDragging : 1;
+        BOOL viewForZoomingInScrollView : 1;
+        BOOL scrollViewWillBeginZooming : 1;
+        BOOL scrollViewDidEndZooming : 1;
+        BOOL scrollViewDidZoom : 1;
+    } _delegateCan;
 
   // should be flag struct
   BOOL _alwaysBounceHorizontal;

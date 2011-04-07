@@ -31,12 +31,12 @@
 #import "UIDataDetectors.h"
 
 enum {
-	UIWebViewNavigationTypeLinkClicked,
-	UIWebViewNavigationTypeFormSubmitted,
-	UIWebViewNavigationTypeBackForward,
-	UIWebViewNavigationTypeReload,
-	UIWebViewNavigationTypeFormResubmitted,
-	UIWebViewNavigationTypeOther
+    UIWebViewNavigationTypeLinkClicked,
+    UIWebViewNavigationTypeFormSubmitted,
+    UIWebViewNavigationTypeBackForward,
+    UIWebViewNavigationTypeReload,
+    UIWebViewNavigationTypeFormResubmitted,
+    UIWebViewNavigationTypeOther
 };
 typedef NSUInteger UIWebViewNavigationType;
 
@@ -50,17 +50,17 @@ typedef NSUInteger UIWebViewNavigationType;
 
 @interface UIWebView : UIView {
 @private
-	id _delegate;
-	NSURLRequest *_request;
-	UIDataDetectorTypes _dataDetectorTypes;
-	WebView *_webView;
-	UIViewAdapter *_webViewAdapter;
+    id _delegate;
+    NSURLRequest *_request;
+    UIDataDetectorTypes _dataDetectorTypes;
+    WebView *_webView;
+    UIViewAdapter *_webViewAdapter;
     BOOL _scalesPageToFit;
-	
-	struct {
-		BOOL shouldStartLoadWithRequest : 1;
-		BOOL didFailLoadWithError : 1;
-	} _delegateHas;
+    
+    struct {
+        BOOL shouldStartLoadWithRequest : 1;
+        BOOL didFailLoadWithError : 1;
+    } _delegateHas;
 }
 
 - (void)loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL;

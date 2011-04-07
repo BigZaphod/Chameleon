@@ -32,7 +32,7 @@
 @class UIPopoverController;
 
 @interface UIPopoverOverlayNSView : NSView {
-	__weak UIPopoverController *_popoverController;
+    __weak UIPopoverController *_popoverController;
 }
 
 - (id)initWithFrame:(NSRect)frame popoverController:(UIPopoverController *)controller;

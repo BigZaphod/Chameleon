@@ -12,25 +12,25 @@
 
 - (void) viewDidLoad
 {
-	UINSCellControl * checkbox = [UINSCellControl checkboxWithFrame: CGRectMake(20.0, 20.0, 140.0, 40.0)];
-	checkbox.title = @"I'm unchecked";
-	checkbox.selected = NO;
-	[checkbox addTarget: self action: @selector(toggledCheckbox:) forControlEvents: UIControlEventValueChanged];
-	
-	[self.view addSubview: checkbox];
+    UINSCellControl * checkbox = [UINSCellControl checkboxWithFrame: CGRectMake(20.0, 20.0, 140.0, 40.0)];
+    checkbox.title = @"I'm unchecked";
+    checkbox.selected = NO;
+    [checkbox addTarget: self action: @selector(toggledCheckbox:) forControlEvents: UIControlEventValueChanged];
+    
+    [self.view addSubview: checkbox];
 }
 
 - (void) viewDidAppear: (BOOL) animated
 {
-	[self.navigationItem performSelector: @selector(setTitle:) withObject: @"New Title" afterDelay: 5.0];
+    [self.navigationItem performSelector: @selector(setTitle:) withObject: @"New Title" afterDelay: 5.0];
 }
 
 - (void) toggledCheckbox: (UINSCellControl *) checkbox
 {
-	if ( checkbox.selected )
-		checkbox.title = @"I'm checked!";
-	else
-		checkbox.title = @"I'm unchecked";
+    if ( checkbox.selected )
+        checkbox.title = @"I'm checked!";
+    else
+        checkbox.title = @"I'm unchecked";
 }
 
 @end

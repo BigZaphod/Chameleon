@@ -2,8 +2,8 @@
 #import <UIKit/UIKit.h>
 
 @interface ChameleonAppDelegate : NSObject <UIApplicationDelegate> {
-	UIWindow *window;
-	UINavigationController *navController;
+    UIWindow *window;
+    UINavigationController *navController;
 }
 
 @end

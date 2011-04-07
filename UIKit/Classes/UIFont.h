@@ -31,7 +31,7 @@
 
 @interface UIFont : NSObject {
 @package
-	CTFontRef _font;
+    CTFontRef _font;
 }
 
 + (UIFont *)fontWithName:(NSString *)fontName size:(CGFloat)fontSize;
@@ -42,10 +42,6 @@
 + (UIFont *)boldSystemFontOfSize:(CGFloat)fontSize;
 
 - (UIFont *)fontWithSize:(CGFloat)fontSize;
-
-+ (CGFloat)systemFontSize; // size of the standard System font.
-+ (CGFloat)smallSystemFontSize; // size of standard small System font.
-+ (CGFloat)labelFontSize;	// size of the standard Label Font.
 
 @property (nonatomic, readonly, retain) NSString *fontName;
 
