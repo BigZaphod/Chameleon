@@ -89,8 +89,9 @@ typedef enum {
 } UIApplicationState;
 
 typedef NSUInteger UIBackgroundTaskIdentifier;
-const UIBackgroundTaskIdentifier UIBackgroundTaskInvalid;
-const NSTimeInterval UIMinimumKeepAliveTimeout;
+
+extern const UIBackgroundTaskIdentifier UIBackgroundTaskInvalid;
+extern const NSTimeInterval UIMinimumKeepAliveTimeout;
 
 @class UIWindow, UIApplication, UILocalNotification;
 
