@@ -46,6 +46,7 @@ typedef NSUInteger UIWebViewNavigationType;
 @optional
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
 - (void)webView:(UIWebView *)aWebView didFailLoadWithError:(NSError *)error;
+- (void)webViewDidFinishLoad:(UIWebView *)webView;
 @end
 
 @interface UIWebView : UIView {
@@ -60,6 +61,7 @@ typedef NSUInteger UIWebViewNavigationType;
     struct {
         BOOL shouldStartLoadWithRequest : 1;
         BOOL didFailLoadWithError : 1;
+        BOOL didFinishLoad : 1;
     } _delegateHas;
 }
 
