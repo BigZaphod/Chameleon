@@ -393,7 +393,7 @@
 - (BOOL)resignFirstResponder
 {
     changingResponderStatus = YES;
-    const BOOL result = [[textView window] makeFirstResponder:nil];
+    const BOOL result = [[textView window] makeFirstResponder:[[containerView window].screen UIKitView]];
     changingResponderStatus = NO;
     return result;
 }

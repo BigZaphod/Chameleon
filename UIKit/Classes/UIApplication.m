@@ -217,6 +217,16 @@ static BOOL TouchIsActive(UITouch *touch)
 - (void)_setKeyWindow:(UIWindow *)newKeyWindow
 {
     _keyWindow = newKeyWindow;
+
+    if (_keyWindow) {
+        // this will make the NSView that the key window lives on the first responder in its NSWindow
+        // highly confusing, but I think this is mostly the correct thing to do
+        // when a UIView is made first responder, it also tells its window to become the key window
+        // which means that we can ultimately end up here and if keyboard stuff is to work as expected
+        // (for example) the underlying NSView really needs to be the first responder as far as AppKit
+        // is concerned. this is all very confusing in my mind right now, but I think it makes sense.
+        [[[_keyWindow.screen UIKitView] window] makeFirstResponder:[_keyWindow.screen UIKitView]];
+    }
 }
 
 - (void)_windowDidBecomeVisible:(UIWindow *)theWindow
