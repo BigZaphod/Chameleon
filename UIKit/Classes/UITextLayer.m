@@ -306,6 +306,11 @@
 
 - (void)textDidChange:(NSNotification *)aNotification
 {
+    if (textDelegateHas.didChangeSelection) {
+        // IMPORTANT! see notes about why this hack exists down in -textViewDidChangeSelection:!
+        [NSObject cancelPreviousPerformRequestsWithTarget:containerView selector:@selector(_textDidChangeSelection) object:nil];
+    }
+
     if (textDelegateHas.didChange) {
         [containerView _textDidChange];
     }
@@ -314,7 +319,16 @@
 - (void)textViewDidChangeSelection:(NSNotification *)aNotification
 {
     if (textDelegateHas.didChangeSelection) {
-        [containerView _textDidChangeSelection];
+        // this defers the sending of the selection change delegate message. the reason is that on the real iOS, Apple does not appear to send
+        // the selection changing delegate messages when text is actually changing. since I can't find a decent way to check here if text is
+        // actually changing or if the cursor is just moving, I'm deferring the actual sending of this message. above in -textDidChange:, it
+        // cancels the deferred send if it ends up that text actually changed. this only works if -textDidChange: is sent after
+        // -textViewDidChangeSelection: which appears to be the case, but I don't think this is documented anywhere so this could possibly
+        // break someday. anyway, the end result of this nasty hack is that UITextLayer shouldn't send out the selection changing notifications
+        // while text is being changed, which mirrors how the real UIKit appears to work in this regard. note that the real UIKit also appears
+        // to NOT send the selection change notification if you had multiple characters selected and then typed a single character thus
+        // replacing the selected text with the single new character. happily this hack appears to function the same way.
+        [containerView performSelector:@selector(_textDidChangeSelection) withObject:nil afterDelay:0];
     }
 }
 
