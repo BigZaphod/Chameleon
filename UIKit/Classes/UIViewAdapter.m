@@ -35,6 +35,7 @@
 #import "UIScreen+UIPrivate.h"
 #import "UIScreenAppKitIntegration.h"
 #import "UIView+UIPrivate.h"
+#import "UIApplication.h"
 #import <AppKit/NSView.h>
 #import <AppKit/NSWindow.h>
 #import <QuartzCore/CALayer.h>
@@ -256,7 +257,7 @@
     const BOOL didResign = [super resignFirstResponder];
     
     if (didResign && [[_view window] firstResponder] == _view) {
-        [[_view window] makeFirstResponder:nil];
+        [[_view window] makeFirstResponder:[self.window.screen UIKitView]];
     }
     
     return didResign;
