@@ -384,7 +384,7 @@ static BOOL TouchIsActive(UITouch *touch)
     CGEventRef cgEvent = [theNSEvent CGEvent];
     const double dx = CGEventGetDoubleValueField(cgEvent, kCGScrollWheelEventPointDeltaAxis2);
     const double dy = CGEventGetDoubleValueField(cgEvent, kCGScrollWheelEventPointDeltaAxis1);
-    const CGPoint delta = CGPointMake(dx, -dy);
+    const CGPoint delta = CGPointMake(-dx, -dy);
 
     if (TouchIsActive(touch)) {
         isSupportedEvent = YES;
