@@ -461,12 +461,6 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
     // need to scroll.
     if (self.scrollEnabled && ((delta.x && self._canScrollHorizontal) || (delta.y && self._canScrollVertical))) {
         [self _delegateDraggingDidBegin];
-
-        // Increasing the delta because it just seems to feel better to me right now.
-        // Dunno if this is something standard that OSX is doing or if OSX actually scales it somehow based on content size.
-        delta.x *= -10.f;
-        delta.y *= -10.f;
-        
         [self _scrollContentOffsetBy:delta withAnimationDuration:0.1];
         [self _quickFlashScrollIndicators];
     } else {
