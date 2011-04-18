@@ -44,9 +44,10 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 @end
 
 @implementation UITextField
-@synthesize delegate=_delegate, background=_background, disabledBackground=_disabledBackground, editing=_editing, clearsOnBeginEditing=_clearsOnBeginEditing, adjustsFontSizeToFitWidth=_adjustsFontSizeToFitWidth;
-@synthesize clearButtonMode=_clearButtonMode, leftView=_leftView, rightView=_rightView, leftViewMode=_leftViewMode, rightViewMode=_rightViewMode;
-@synthesize placeholder=_placeholder, borderStyle=_borderStyle;
+@synthesize delegate=_delegate, background=_background, disabledBackground=_disabledBackground, editing=_editing, clearsOnBeginEditing=_clearsOnBeginEditing;
+@synthesize adjustsFontSizeToFitWidth=_adjustsFontSizeToFitWidth, clearButtonMode=_clearButtonMode, leftView=_leftView, rightView=_rightView;
+@synthesize leftViewMode=_leftViewMode, rightViewMode=_rightViewMode, placeholder=_placeholder, borderStyle=_borderStyle;
+@synthesize inputAccessoryView=_inputAccessoryView, inputView=_inputView;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -75,6 +76,8 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     [_background release];
     [_disabledBackground release];
     [_placeholder release];
+    [_inputAccessoryView release];
+    [_inputView release];
     [super dealloc];
 }
 
@@ -375,8 +378,6 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
         return NO;
     }
 }
-
-
 
 - (UIFont *)font
 {

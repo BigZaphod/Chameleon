@@ -127,6 +127,16 @@
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event		{}
 - (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event	{}
 
+- (UIView *)inputAccessoryView
+{
+    return nil;
+}
+
+- (UIView *)inputView
+{
+    return nil;
+}
+
 - (NSUndoManager *)undoManager
 {
     return [[self nextResponder] undoManager];

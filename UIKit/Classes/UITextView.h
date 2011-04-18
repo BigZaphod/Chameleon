@@ -53,6 +53,9 @@ extern NSString *const UITextViewTextDidEndEditingNotification;
 @private
     UITextLayer *_textLayer;
     UIDataDetectorTypes _dataDetectorTypes;
+
+    UIView *_inputAccessoryView;
+    UIView *_inputView;
     
     struct {
         BOOL shouldBeginEditing : 1;
@@ -76,6 +79,9 @@ extern NSString *const UITextViewTextDidEndEditingNotification;
 @property (nonatomic, retain) UIFont *font;
 @property (nonatomic) UIDataDetectorTypes dataDetectorTypes;
 @property (nonatomic, assign) id<UITextViewDelegate> delegate;
+
+@property (nonatomic, readwrite, retain) UIView *inputAccessoryView;
+@property (nonatomic, readwrite, retain) UIView *inputView;
 
 - (BOOL)hasText;
 
