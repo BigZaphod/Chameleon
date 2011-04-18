@@ -1,0 +1,91 @@
+// !$*UTF8*$!
+{
+	38E523B81339731100E041B3 /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = 6648A6D2135CCBB7007646AB /* NavBarTableView */;
+		activeTarget = 38E523C01339731100E041B3 /* NavBarTableView */;
+		codeSenseManager = 6648A6F3135CCBBA007646AB /* Code sense */;
+		executables = (
+			6648A6D2135CCBB7007646AB /* NavBarTableView */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					341,
+					20,
+					48.16259765625,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 324848567;
+			PBXWorkspaceStateSaveDate = 324848567;
+		};
+		sourceControlManager = 6648A6F2135CCBBA007646AB /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	38E523C01339731100E041B3 /* NavBarTableView */ = {
+		activeExec = 0;
+		executables = (
+			6648A6D2135CCBB7007646AB /* NavBarTableView */,
+		);
+	};
+	6648A6D2135CCBB7007646AB /* NavBarTableView */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = NavBarTableView;
+		savedGlobals = {
+		};
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+	};
+	6648A6F2135CCBBA007646AB /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
+		};
+	};
+	6648A6F3135CCBBA007646AB /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+}
