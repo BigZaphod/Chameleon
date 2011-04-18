@@ -39,7 +39,11 @@
 
 - (UIWindow *)_responderWindow
 {
-    return [self isKindOfClass:[UIView class]]? [(UIView *)self window] : nil;
+    if ([self isKindOfClass:[UIView class]]) {
+        return [(UIView *)self window];
+    } else {
+        return [[self nextResponder] _responderWindow];
+    }
 }
 
 - (BOOL)isFirstResponder
