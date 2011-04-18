@@ -45,7 +45,7 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 
 
 @implementation UITextView
-@synthesize dataDetectorTypes=_dataDetectorTypes;
+@synthesize dataDetectorTypes=_dataDetectorTypes, inputAccessoryView=_inputAccessoryView, inputView=_inputView;
 @dynamic delegate;
 
 - (id)initWithFrame:(CGRect)frame
@@ -68,10 +68,10 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 {
     [_textLayer removeFromSuperlayer];
     [_textLayer release];
+    [_inputAccessoryView release];
+    [_inputView release];
     [super dealloc];
 }
-
-
 
 - (void)layoutSubviews
 {
@@ -89,8 +89,6 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 {
     [_textLayer scrollRangeToVisible:range];
 }
-
-
 
 - (UITextAutocapitalizationType)autocapitalizationType
 {
@@ -180,8 +178,6 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
     }
 }
 
-
-
 - (UIFont *)font
 {
     return _textLayer.font;
@@ -241,13 +237,6 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 {
     _textLayer.selectedRange = range;
 }
-
-/*
-- (id)mouseCursorForEvent:(UIEvent *)event
-{
-    return [_textContainer mouseCursorForEvent:event];
-}
- */
 
 - (BOOL)hasText
 {

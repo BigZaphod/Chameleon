@@ -80,7 +80,10 @@ typedef enum {
     BOOL _adjustsFontSizeToFitWidth;
     NSString *_placeholder;
     UITextBorderStyle _borderStyle;
-    
+
+    UIView *_inputAccessoryView;
+    UIView *_inputView;
+
     struct {
         BOOL shouldBeginEditing : 1;
         BOOL didBeginEditing : 1;
@@ -122,5 +125,8 @@ typedef enum {
 @property (nonatomic) UITextFieldViewMode leftViewMode;
 @property (nonatomic, retain) UIView *rightView;
 @property (nonatomic) UITextFieldViewMode rightViewMode;
+
+@property (nonatomic, readwrite, retain) UIView *inputAccessoryView;
+@property (nonatomic, readwrite, retain) UIView *inputView;
 
 @end
