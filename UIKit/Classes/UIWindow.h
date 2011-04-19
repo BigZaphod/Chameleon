@@ -31,8 +31,8 @@
 
 typedef CGFloat UIWindowLevel;
 extern const UIWindowLevel UIWindowLevelNormal;
-extern const UIWindowLevel UIWindowLevelAlert;
 extern const UIWindowLevel UIWindowLevelStatusBar;
+extern const UIWindowLevel UIWindowLevelAlert;
 
 extern NSString *const UIWindowDidBecomeVisibleNotification;
 extern NSString *const UIWindowDidBecomeHiddenNotification;
