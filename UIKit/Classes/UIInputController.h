@@ -27,16 +27,23 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIView.h"
+#import <Foundation/Foundation.h>
 
-extern NSString *const UIViewFrameDidChangeNotification;
-extern NSString *const UIViewBoundsDidChangeNotification;
-extern NSString *const UIViewDidMoveToSuperviewNotification;
-extern NSString *const UIViewHiddenDidChangeNotification;
+@class UIView, UIWindow;
 
-@interface UIView (UIPrivate)
-- (void)_removeFromSuperview:(BOOL)notifyViewController;
-- (void)_setViewController:(UIViewController *)theViewController;
-- (UIViewController *)_viewController;
-- (void)_superviewSizeDidChangeFrom:(CGSize)oldSize to:(CGSize)newSize;
+@interface UIInputController : NSObject {
+    UIWindow *_inputWindow;
+    UIView *_inputAccessoryView;
+    UIView *_inputView;
+}
+
++ (UIInputController *)sharedInputController;
+
+- (void)setInputVisible:(BOOL)visible animated:(BOOL)animated;
+
+@property (nonatomic, retain) UIView *inputAccessoryView;
+@property (nonatomic, retain) UIView *inputView;
+@property (nonatomic, assign) BOOL inputVisible;
+
+
 @end
