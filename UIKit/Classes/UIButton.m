@@ -299,7 +299,7 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
     
     switch (self.contentHorizontalAlignment) {
         case UIControlContentHorizontalAlignmentCenter:
-            rect.origin.x += roundf((contentRect.size.width/2.f) - (rect.size.width/2.f));
+            rect.origin.x += floorf((contentRect.size.width/2.f) - (rect.size.width/2.f));
             break;
             
         case UIControlContentHorizontalAlignmentRight:
@@ -317,7 +317,7 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
     
     switch (self.contentVerticalAlignment) {
         case UIControlContentVerticalAlignmentCenter:
-            rect.origin.y += roundf((contentRect.size.height/2.f) - (rect.size.height/2.f));
+            rect.origin.y += floorf((contentRect.size.height/2.f) - (rect.size.height/2.f));
             break;
             
         case UIControlContentVerticalAlignmentBottom:
