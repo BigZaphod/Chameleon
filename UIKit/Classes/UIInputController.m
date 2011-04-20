@@ -144,8 +144,9 @@ static UIView *ContainerForView(UIView *view)
 - (void)_viewChangedNotification:(NSNotification *)note
 {
     UIView *view = [note object];
+    UIView *referenceView = [self _referenceView];
 
-    if (self.inputVisible && [ContainerForView([self _referenceView]) isDescendantOfView:view]) {
+    if (self.inputVisible && (view == referenceView || [ContainerForView(referenceView) isDescendantOfView:view])) {
         [self _repositionInputWindow];
     }
 }
