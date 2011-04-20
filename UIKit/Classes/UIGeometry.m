@@ -51,6 +51,11 @@ NSString *NSStringFromCGAffineTransform(CGAffineTransform transform)
     return [NSString stringWithFormat:@"[%g, %g, %g, %g, %g, %g]", transform.a, transform.b, transform.c, transform.d, transform.tx, transform.ty];
 }
 
+NSString *NSStringFromUIEdgeInsets(UIEdgeInsets insets)
+{
+    return [NSString stringWithFormat:@"{%g, %g, %g, %g}", insets.top, insets.left, insets.bottom, insets.right];
+}
+
 @implementation NSValue (NSValueUIGeometryExtensions)
 + (NSValue *)valueWithCGPoint:(CGPoint)point
 {
