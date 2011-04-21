@@ -231,7 +231,7 @@
 
 void UIImageWriteToSavedPhotosAlbum(UIImage *image, id completionTarget, SEL completionSelector, void *contextInfo)
 {
-    [[UIPhotosAlbum sharedPhotosAlbum] saveImage:image completionTarget:completionTarget action:completionSelector context:contextInfo];
+    [[UIPhotosAlbum sharedPhotosAlbum] writeImage:image completionTarget:completionTarget action:completionSelector context:contextInfo];
 }
 
 void UISaveVideoAtPathToSavedPhotosAlbum(NSString *videoPath, id completionTarget, SEL completionSelector, void *contextInfo)

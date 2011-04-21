@@ -44,7 +44,7 @@
     return album;
 }
 
-- (void)_saveImageWithInfo:(NSDictionary *)info
+- (void)_writeImageWithInfo:(NSDictionary *)info
 {
     UIImage *image = [info objectForKey:@"image"];
     NSError *error = nil;
@@ -80,7 +80,7 @@
     }
 }
 
-- (void)saveImage:(UIImage *)image completionTarget:(id)target action:(SEL)action context:(void *)context
+- (void)writeImage:(UIImage *)image completionTarget:(id)target action:(SEL)action context:(void *)context
 {
     if (image) {
         NSMutableDictionary *info = [NSMutableDictionary dictionaryWithCapacity:4];
@@ -97,7 +97,7 @@
         
         // deferring this partly because the save dialog is modal and partly because I don't think code is going
         // to expect the target/action to be sent before the save function even returns.
-        [self performSelector:@selector(_saveImageWithInfo:) withObject:info afterDelay:0];
+        [self performSelector:@selector(_writeImageWithInfo:) withObject:info afterDelay:0];
     }
 }
 

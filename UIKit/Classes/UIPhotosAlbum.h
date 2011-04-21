@@ -35,6 +35,6 @@
 
 + (UIPhotosAlbum *)sharedPhotosAlbum;
 
-- (void)saveImage:(UIImage *)image completionTarget:(id)target action:(SEL)action context:(void *)context;
+- (void)writeImage:(UIImage *)image completionTarget:(id)target action:(SEL)action context:(void *)context;
 
 @end
