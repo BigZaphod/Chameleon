@@ -288,7 +288,7 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 - (CGRect)_componentRectForSize:(CGSize)size inContentRect:(CGRect)contentRect withState:(UIControlState)state
 {
     CGRect rect;
-
+    
     rect.origin = contentRect.origin;
     rect.size = size;
     
@@ -351,7 +351,7 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
     const UIControlState state = self.state;
     
     UIEdgeInsets inset = _imageEdgeInsets;
-    inset.right += [self _titleSizeForState:state].width;
+    inset.right += [self titleRectForContentRect:contentRect].size.width;
     
     return [self _componentRectForSize:[self _imageSizeForState:state] inContentRect:UIEdgeInsetsInsetRect(contentRect,inset) withState:state];
 }
