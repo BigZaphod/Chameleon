@@ -30,47 +30,47 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
-	UITextAutocapitalizationTypeNone,
-	UITextAutocapitalizationTypeWords,
-	UITextAutocapitalizationTypeSentences,
-	UITextAutocapitalizationTypeAllCharacters,
+    UITextAutocapitalizationTypeNone,
+    UITextAutocapitalizationTypeWords,
+    UITextAutocapitalizationTypeSentences,
+    UITextAutocapitalizationTypeAllCharacters,
 } UITextAutocapitalizationType;
 
 typedef enum {
-	UITextAutocorrectionTypeDefault,
-	UITextAutocorrectionTypeNo,
-	UITextAutocorrectionTypeYes,
+    UITextAutocorrectionTypeDefault,
+    UITextAutocorrectionTypeNo,
+    UITextAutocorrectionTypeYes,
 } UITextAutocorrectionType;
 
 typedef enum {
-	UIKeyboardAppearanceDefault,
-	UIKeyboardAppearanceAlert,
+    UIKeyboardAppearanceDefault,
+    UIKeyboardAppearanceAlert,
 } UIKeyboardAppearance;
 
 typedef enum {
-	UIKeyboardTypeDefault,
-	UIKeyboardTypeASCIICapable,
-	UIKeyboardTypeNumbersAndPunctuation,
-	UIKeyboardTypeURL,
-	UIKeyboardTypeNumberPad,
-	UIKeyboardTypePhonePad,
-	UIKeyboardTypeNamePhonePad,
-	UIKeyboardTypeEmailAddress,
-	UIKeyboardTypeAlphabet = UIKeyboardTypeASCIICapable
+    UIKeyboardTypeDefault,
+    UIKeyboardTypeASCIICapable,
+    UIKeyboardTypeNumbersAndPunctuation,
+    UIKeyboardTypeURL,
+    UIKeyboardTypeNumberPad,
+    UIKeyboardTypePhonePad,
+    UIKeyboardTypeNamePhonePad,
+    UIKeyboardTypeEmailAddress,
+    UIKeyboardTypeAlphabet = UIKeyboardTypeASCIICapable
 } UIKeyboardType;
 
 typedef enum {
-	UIReturnKeyDefault,
-	UIReturnKeyGo,
-	UIReturnKeyGoogle,
-	UIReturnKeyJoin,
-	UIReturnKeyNext,
-	UIReturnKeyRoute,
-	UIReturnKeySearch,
-	UIReturnKeySend,
-	UIReturnKeyYahoo,
-	UIReturnKeyDone,
-	UIReturnKeyEmergencyCall,
+    UIReturnKeyDefault,
+    UIReturnKeyGo,
+    UIReturnKeyGoogle,
+    UIReturnKeyJoin,
+    UIReturnKeyNext,
+    UIReturnKeyRoute,
+    UIReturnKeySearch,
+    UIReturnKeySend,
+    UIReturnKeyYahoo,
+    UIReturnKeyDone,
+    UIReturnKeyEmergencyCall,
 } UIReturnKeyType;
 
 @protocol UITextInputTraits <NSObject>

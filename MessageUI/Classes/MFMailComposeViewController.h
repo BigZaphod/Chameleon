@@ -32,10 +32,10 @@
 @class MFMailComposeViewController;
 
 enum MFMailComposeResult {
-	MFMailComposeResultCancelled,
-	MFMailComposeResultSaved,
-	MFMailComposeResultSent,
-	MFMailComposeResultFailed
+    MFMailComposeResultCancelled,
+    MFMailComposeResultSaved,
+    MFMailComposeResultSent,
+    MFMailComposeResultFailed
 };
 typedef enum MFMailComposeResult MFMailComposeResult;
 
@@ -46,7 +46,7 @@ typedef enum MFMailComposeResult MFMailComposeResult;
 
 @interface MFMailComposeViewController : UINavigationController {
 @private
-	id<MFMailComposeViewControllerDelegate> _mailComposeDelegate;
+    id<MFMailComposeViewControllerDelegate> _mailComposeDelegate;
 }
 
 + (BOOL)canSendMail;

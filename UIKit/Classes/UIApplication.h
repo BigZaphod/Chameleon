@@ -59,10 +59,10 @@ typedef enum {
 } UIStatusBarStyle;
 
 typedef enum {
-	UIInterfaceOrientationPortrait           = UIDeviceOrientationPortrait,
-	UIInterfaceOrientationPortraitUpsideDown = UIDeviceOrientationPortraitUpsideDown,
-	UIInterfaceOrientationLandscapeLeft      = UIDeviceOrientationLandscapeRight,
-	UIInterfaceOrientationLandscapeRight     = UIDeviceOrientationLandscapeLeft
+    UIInterfaceOrientationPortrait           = UIDeviceOrientationPortrait,
+    UIInterfaceOrientationPortraitUpsideDown = UIDeviceOrientationPortraitUpsideDown,
+    UIInterfaceOrientationLandscapeLeft      = UIDeviceOrientationLandscapeRight,
+    UIInterfaceOrientationLandscapeRight     = UIDeviceOrientationLandscapeLeft
 } UIInterfaceOrientation;
 
 #define UIInterfaceOrientationIsPortrait(orientation) \
@@ -89,21 +89,22 @@ typedef enum {
 } UIApplicationState;
 
 typedef NSUInteger UIBackgroundTaskIdentifier;
-const UIBackgroundTaskIdentifier UIBackgroundTaskInvalid;
-const NSTimeInterval UIMinimumKeepAliveTimeout;
+
+extern const UIBackgroundTaskIdentifier UIBackgroundTaskInvalid;
+extern const NSTimeInterval UIMinimumKeepAliveTimeout;
 
 @class UIWindow, UIApplication, UILocalNotification;
 
 @interface UIApplication : UIResponder {
 @private
-	UIEvent *_currentEvent;
-	__weak UIWindow *_keyWindow;
-	NSMutableSet *_visibleWindows;
-	id<UIApplicationDelegate> _delegate;
-	BOOL _idleTimerDisabled;
-	BOOL _networkActivityIndicatorVisible;
-	BOOL _applicationSupportsShakeToEdit;
-	NSUInteger _ignoringInteractionEvents;
+    UIEvent *_currentEvent;
+    __weak UIWindow *_keyWindow;
+    NSMutableSet *_visibleWindows;
+    id<UIApplicationDelegate> _delegate;
+    BOOL _idleTimerDisabled;
+    BOOL _networkActivityIndicatorVisible;
+    BOOL _applicationSupportsShakeToEdit;
+    NSUInteger _ignoringInteractionEvents;
     NSInteger _applicationIconBadgeNumber;
 }
 

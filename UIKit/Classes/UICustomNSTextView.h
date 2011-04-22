@@ -38,7 +38,7 @@
 @end
 
 @interface UICustomNSTextView: NSTextView {
-	BOOL secureTextEntry;
+    BOOL secureTextEntry;
 }
 
 - (id)initWithFrame:(NSRect)frame secureTextEntry:(BOOL)isSecure isField:(BOOL)isField;

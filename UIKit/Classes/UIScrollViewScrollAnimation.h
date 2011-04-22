@@ -30,8 +30,8 @@
 #import <Foundation/Foundation.h>
 
 @interface UIScrollViewScrollAnimation : NSObject {
-	CGPoint contentOffsetVelocity;
-	NSTimeInterval stopTime;
+    CGPoint contentOffsetVelocity;
+    NSTimeInterval stopTime;
 }
 
 @property (nonatomic, assign) CGPoint contentOffsetVelocity;

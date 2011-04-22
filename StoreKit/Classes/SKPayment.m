@@ -33,12 +33,12 @@
 
 + (id)paymentWithProductIdentifier:(NSString *)identifier
 {
-	return nil;
+    return nil;
 }
 
 - (NSString *)productIdentifier
 {
-	return nil;
+    return nil;
 }
 
 @end

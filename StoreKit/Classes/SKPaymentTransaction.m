@@ -33,37 +33,37 @@
 
 - (NSError *)error
 {
-	return nil;
+    return nil;
 }
 
 - (SKPayment *)payment
 {
-	return nil;
+    return nil;
 }
 
 - (SKPaymentTransactionState)transactionState
 {
-	return SKPaymentTransactionStateFailed;
+    return SKPaymentTransactionStateFailed;
 }
 
 - (NSString *)transactionIdentifier
 {
-	return nil;
+    return nil;
 }
 
 - (NSData *)transactionReceipt
 {
-	return nil;
+    return nil;
 }
 
 - (NSDate *)transactionDate
 {
-	return nil;
+    return nil;
 }
 
 - (SKPaymentTransaction *)originalTransaction
 {
-	return nil;
+    return nil;
 }
 
 @end

@@ -37,167 +37,167 @@ static NSString *UIFontBoldSystemFontName = nil;
 
 + (void)setSystemFontName:(NSString *)aName
 {
-	[UIFontSystemFontName release];
-	UIFontSystemFontName = [aName copy];
+    [UIFontSystemFontName release];
+    UIFontSystemFontName = [aName copy];
 }
 
 + (void)setBoldSystemFontName:(NSString *)aName
 {
-	[UIFontBoldSystemFontName release];
-	UIFontBoldSystemFontName = [aName copy];
+    [UIFontBoldSystemFontName release];
+    UIFontBoldSystemFontName = [aName copy];
 }
 
 + (UIFont *)_fontWithCTFont:(CTFontRef)aFont
 {
-	UIFont *theFont = [[UIFont alloc] init];
-	theFont->_font = CFRetain(aFont);
-	return [theFont autorelease];
+    UIFont *theFont = [[UIFont alloc] init];
+    theFont->_font = CFRetain(aFont);
+    return [theFont autorelease];
 }
 
 + (UIFont *)fontWithNSFont:(NSFont *)aFont
 {
-	if (aFont) {
-		CTFontRef newFont = CTFontCreateWithName((CFStringRef)[aFont fontName], [aFont pointSize], NULL);
-		if (newFont) {
-			UIFont *theFont = [self _fontWithCTFont:newFont];
-			CFRelease(newFont);
-			return theFont;
-		}
-	}
-	return nil;
+    if (aFont) {
+        CTFontRef newFont = CTFontCreateWithName((CFStringRef)[aFont fontName], [aFont pointSize], NULL);
+        if (newFont) {
+            UIFont *theFont = [self _fontWithCTFont:newFont];
+            CFRelease(newFont);
+            return theFont;
+        }
+    }
+    return nil;
 }
 
 + (UIFont *)fontWithName:(NSString *)fontName size:(CGFloat)fontSize
 {
-	return [self fontWithNSFont:[NSFont fontWithName:fontName size:fontSize]];
+    return [self fontWithNSFont:[NSFont fontWithName:fontName size:fontSize]];
 }
 
 NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFStringRef nameAttr)
 {
-	NSMutableSet *names = [NSMutableSet set];
-	if (collection) {
-		CFArrayRef descriptors = CTFontCollectionCreateMatchingFontDescriptors(collection);
-		if (descriptors) {
-			NSInteger count = CFArrayGetCount(descriptors);
-			for (NSInteger i = 0; i < count; i++) {
-				CTFontDescriptorRef descriptor = (CTFontDescriptorRef) CFArrayGetValueAtIndex(descriptors, i);
-				CFTypeRef name = CTFontDescriptorCopyAttribute(descriptor, nameAttr);
-				if(name) {
-					if (CFGetTypeID(name) == CFStringGetTypeID()) {
-						[names addObject: (NSString*) name];
-					}
-					CFRelease(name);
-				}
-			}
-			CFRelease(descriptors);
-		}
-	}
-	return [names allObjects];
+    NSMutableSet *names = [NSMutableSet set];
+    if (collection) {
+        CFArrayRef descriptors = CTFontCollectionCreateMatchingFontDescriptors(collection);
+        if (descriptors) {
+            NSInteger count = CFArrayGetCount(descriptors);
+            for (NSInteger i = 0; i < count; i++) {
+                CTFontDescriptorRef descriptor = (CTFontDescriptorRef) CFArrayGetValueAtIndex(descriptors, i);
+                CFTypeRef name = CTFontDescriptorCopyAttribute(descriptor, nameAttr);
+                if(name) {
+                    if (CFGetTypeID(name) == CFStringGetTypeID()) {
+                        [names addObject: (NSString*) name];
+                    }
+                    CFRelease(name);
+                }
+            }
+            CFRelease(descriptors);
+        }
+    }
+    return [names allObjects];
 }
 
 + (NSArray *)familyNames
 {
-	CTFontCollectionRef collection = CTFontCollectionCreateFromAvailableFonts(NULL);
-	NSArray* names = _getFontCollectionNames(collection, kCTFontFamilyNameAttribute);
-	if (collection) {
-		CFRelease(collection);
-	}
-	return names;
+    CTFontCollectionRef collection = CTFontCollectionCreateFromAvailableFonts(NULL);
+    NSArray* names = _getFontCollectionNames(collection, kCTFontFamilyNameAttribute);
+    if (collection) {
+        CFRelease(collection);
+    }
+    return names;
 }
 
 + (NSArray *)fontNamesForFamilyName:(NSString *)familyName
 {
-	NSArray *names = nil;
-	CTFontDescriptorRef descriptor = CTFontDescriptorCreateWithAttributes((CFDictionaryRef)
-		[NSDictionary dictionaryWithObjectsAndKeys: familyName, (NSString*)kCTFontFamilyNameAttribute, nil, nil]);
-	if (descriptor) {
-		CFArrayRef descriptors = CFArrayCreate(NULL, (CFTypeRef*) &descriptor, 1, &kCFTypeArrayCallBacks);
-		if (descriptors) {
-			CTFontCollectionRef collection = CTFontCollectionCreateWithFontDescriptors(descriptors, NULL);
-			names = _getFontCollectionNames(collection, kCTFontNameAttribute);
-			if (collection) {
-				CFRelease(collection);
-			}
-			CFRelease(descriptors);
-		}
-		CFRelease(descriptor);
-	}
-	return names;
+    NSArray *names = nil;
+    CTFontDescriptorRef descriptor = CTFontDescriptorCreateWithAttributes((CFDictionaryRef)
+        [NSDictionary dictionaryWithObjectsAndKeys: familyName, (NSString*)kCTFontFamilyNameAttribute, nil, nil]);
+    if (descriptor) {
+        CFArrayRef descriptors = CFArrayCreate(NULL, (CFTypeRef*) &descriptor, 1, &kCFTypeArrayCallBacks);
+        if (descriptors) {
+            CTFontCollectionRef collection = CTFontCollectionCreateWithFontDescriptors(descriptors, NULL);
+            names = _getFontCollectionNames(collection, kCTFontNameAttribute);
+            if (collection) {
+                CFRelease(collection);
+            }
+            CFRelease(descriptors);
+        }
+        CFRelease(descriptor);
+    }
+    return names;
 }
 
 + (UIFont *)systemFontOfSize:(CGFloat)fontSize
 {
-	NSFont *systemFont = UIFontSystemFontName? [NSFont fontWithName:UIFontSystemFontName size:fontSize] : [NSFont systemFontOfSize:fontSize];
-	return [self fontWithNSFont:systemFont];
+    NSFont *systemFont = UIFontSystemFontName? [NSFont fontWithName:UIFontSystemFontName size:fontSize] : [NSFont systemFontOfSize:fontSize];
+    return [self fontWithNSFont:systemFont];
 }
 
 + (UIFont *)boldSystemFontOfSize:(CGFloat)fontSize
 {
-	NSFont *systemFont = UIFontBoldSystemFontName? [NSFont fontWithName:UIFontBoldSystemFontName size:fontSize] : [NSFont boldSystemFontOfSize:fontSize];
-	return [self fontWithNSFont:systemFont];
+    NSFont *systemFont = UIFontBoldSystemFontName? [NSFont fontWithName:UIFontBoldSystemFontName size:fontSize] : [NSFont boldSystemFontOfSize:fontSize];
+    return [self fontWithNSFont:systemFont];
 }
 
 - (void)dealloc
 {
-	CFRelease(_font);
-	[super dealloc];
+    CFRelease(_font);
+    [super dealloc];
 }
 
 - (NSString *)fontName
 {
-	return [(NSString *)CTFontCopyFullName(_font) autorelease];
+    return [(NSString *)CTFontCopyFullName(_font) autorelease];
 }
 
 - (CGFloat)ascender
 {
-	return CTFontGetAscent(_font);
+    return CTFontGetAscent(_font);
 }
 
 - (CGFloat)descender
 {
-	return -CTFontGetDescent(_font);
+    return -CTFontGetDescent(_font);
 }
 
 - (CGFloat)pointSize
 {
-	return CTFontGetSize(_font);
+    return CTFontGetSize(_font);
 }
 
 - (CGFloat)xHeight
 {
-	return CTFontGetXHeight(_font);
+    return CTFontGetXHeight(_font);
 }
 
 - (CGFloat)capHeight
 {
-	return CTFontGetCapHeight(_font);
+    return CTFontGetCapHeight(_font);
 }
 
 - (CGFloat)lineHeight
 {
-	return ceilf(self.ascender - self.descender + CTFontGetLeading(_font));
+    return ceilf(self.ascender - self.descender + CTFontGetLeading(_font));
 }
 
 - (NSString *)familyName
 {
-	return [(NSString *)CTFontCopyFamilyName(_font) autorelease];
+    return [(NSString *)CTFontCopyFamilyName(_font) autorelease];
 }
 
 - (UIFont *)fontWithSize:(CGFloat)fontSize
 {
-	CTFontRef newFont = CTFontCreateCopyWithAttributes(_font, fontSize, NULL, NULL);
-	if (newFont) {
-		UIFont *theFont = [isa _fontWithCTFont:newFont];
-		CFRelease(newFont);
-		return theFont;
-	} else {
-		return nil;
-	}
+    CTFontRef newFont = CTFontCreateCopyWithAttributes(_font, fontSize, NULL, NULL);
+    if (newFont) {
+        UIFont *theFont = [isa _fontWithCTFont:newFont];
+        CFRelease(newFont);
+        return theFont;
+    } else {
+        return nil;
+    }
 }
 
 - (NSFont *)NSFont
 {
-	return [NSFont fontWithName:self.fontName size:self.pointSize];
+    return [NSFont fontWithName:self.fontName size:self.pointSize];
 }
 
 @end

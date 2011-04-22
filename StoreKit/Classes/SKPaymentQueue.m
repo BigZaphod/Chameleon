@@ -33,12 +33,12 @@
 
 + (BOOL)canMakePayments
 {
-	return NO;
+    return NO;
 }
 
 + (SKPaymentQueue *)defaultQueue
 {
-	return nil;
+    return nil;
 }
 
 - (void)addTransactionObserver:(id<SKPaymentTransactionObserver>)observer
@@ -63,7 +63,7 @@
 
 - (NSArray *)transactions
 {
-	return nil;
+    return nil;
 }
 
 @end

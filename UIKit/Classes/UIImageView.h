@@ -33,14 +33,14 @@
 
 @interface UIImageView : UIView {
 @private
-	UIImage *_image;
-	NSArray *_animationImages;
-	NSArray *_highlightedAnimationImages;
-	NSTimeInterval _animationDuration;
-	NSInteger _animationRepeatCount;
-	UIImage *_highlightedImage;
-	BOOL _highlighted;
-	NSInteger _drawMode;
+    UIImage *_image;
+    NSArray *_animationImages;
+    NSArray *_highlightedAnimationImages;
+    NSTimeInterval _animationDuration;
+    NSInteger _animationRepeatCount;
+    UIImage *_highlightedImage;
+    BOOL _highlighted;
+    NSInteger _drawMode;
 }
 
 - (id)initWithImage:(UIImage *)theImage;

@@ -34,7 +34,7 @@
 
 + (BOOL)canSendMail
 {
-	return NO;
+    return NO;
 }
 
 - (void)setSubject:(NSString*)subject

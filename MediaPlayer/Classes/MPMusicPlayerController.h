@@ -30,12 +30,12 @@
 #import <Foundation/Foundation.h>
 
 enum {
-	MPMusicPlaybackStateStopped,
-	MPMusicPlaybackStatePlaying,
-	MPMusicPlaybackStatePaused,
-	MPMusicPlaybackStateInterrupted,
-	MPMusicPlaybackStateSeekingForward,
-	MPMusicPlaybackStateSeekingBackward
+    MPMusicPlaybackStateStopped,
+    MPMusicPlaybackStatePlaying,
+    MPMusicPlaybackStatePaused,
+    MPMusicPlaybackStateInterrupted,
+    MPMusicPlaybackStateSeekingForward,
+    MPMusicPlaybackStateSeekingBackward
 };
 typedef NSInteger MPMusicPlaybackState;
 

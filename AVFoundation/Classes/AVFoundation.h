@@ -30,7 +30,7 @@
 
 // This probably doesn't belong here, but it's good enough for now
 enum {
-	kSystemSoundID_Vibrate            = 0x0
+    kSystemSoundID_Vibrate            = 0x0
 };
 
 #import "AVAudioPlayer.h"

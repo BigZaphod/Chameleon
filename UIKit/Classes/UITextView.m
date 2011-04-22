@@ -45,56 +45,54 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 
 
 @implementation UITextView
-@synthesize dataDetectorTypes=_dataDetectorTypes;
+@synthesize dataDetectorTypes=_dataDetectorTypes, inputAccessoryView=_inputAccessoryView, inputView=_inputView;
 @dynamic delegate;
 
 - (id)initWithFrame:(CGRect)frame
 {
-	if ((self=[super initWithFrame:frame])) {
-		_textLayer = [[UITextLayer alloc] initWithContainer:self isField:NO];
-		[self.layer insertSublayer:_textLayer atIndex:0];
+    if ((self=[super initWithFrame:frame])) {
+        _textLayer = [[UITextLayer alloc] initWithContainer:self isField:NO];
+        [self.layer insertSublayer:_textLayer atIndex:0];
 
-		self.textColor = [UIColor blackColor];
-		self.font = [UIFont systemFontOfSize:17];
-		self.dataDetectorTypes = UIDataDetectorTypeAll;
-		self.editable = YES;
-		self.contentMode = UIViewContentModeScaleToFill;
-		self.clipsToBounds = YES;
-	}
-	return self;
+        self.textColor = [UIColor blackColor];
+        self.font = [UIFont systemFontOfSize:17];
+        self.dataDetectorTypes = UIDataDetectorTypeAll;
+        self.editable = YES;
+        self.contentMode = UIViewContentModeScaleToFill;
+        self.clipsToBounds = YES;
+    }
+    return self;
 }
 
 - (void)dealloc
 {
-	[_textLayer removeFromSuperlayer];
-	[_textLayer release];
-	[super dealloc];
+    [_textLayer removeFromSuperlayer];
+    [_textLayer release];
+    [_inputAccessoryView release];
+    [_inputView release];
+    [super dealloc];
 }
-
-
 
 - (void)layoutSubviews
 {
-	[super layoutSubviews];
-	_textLayer.frame = self.bounds;
+    [super layoutSubviews];
+    _textLayer.frame = self.bounds;
 }
 
 - (void)setContentOffset:(CGPoint)theOffset animated:(BOOL)animated
 {
-	[super setContentOffset:theOffset animated:animated];
-	[_textLayer setContentOffset:theOffset];
+    [super setContentOffset:theOffset animated:animated];
+    [_textLayer setContentOffset:theOffset];
 }
 
 - (void)scrollRangeToVisible:(NSRange)range
 {
-	[_textLayer scrollRangeToVisible:range];
+    [_textLayer scrollRangeToVisible:range];
 }
-
-
 
 - (UITextAutocapitalizationType)autocapitalizationType
 {
-	return UITextAutocapitalizationTypeNone;
+    return UITextAutocapitalizationTypeNone;
 }
 
 - (void)setAutocapitalizationType:(UITextAutocapitalizationType)type
@@ -103,7 +101,7 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 
 - (UITextAutocorrectionType)autocorrectionType
 {
-	return UITextAutocorrectionTypeDefault;
+    return UITextAutocorrectionTypeDefault;
 }
 
 - (void)setAutocorrectionType:(UITextAutocorrectionType)type
@@ -112,7 +110,7 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 
 - (BOOL)enablesReturnKeyAutomatically
 {
-	return YES;
+    return YES;
 }
 
 - (void)setEnablesReturnKeyAutomatically:(BOOL)enabled
@@ -121,7 +119,7 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 
 - (UIKeyboardAppearance)keyboardAppearance
 {
-	return UIKeyboardAppearanceDefault;
+    return UIKeyboardAppearanceDefault;
 }
 
 - (void)setKeyboardAppearance:(UIKeyboardAppearance)type
@@ -130,7 +128,7 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 
 - (UIKeyboardType)keyboardType
 {
-	return UIKeyboardTypeDefault;
+    return UIKeyboardTypeDefault;
 }
 
 - (void)setKeyboardType:(UIKeyboardType)type
@@ -139,7 +137,7 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 
 - (UIReturnKeyType)returnKeyType
 {
-	return UIReturnKeyDefault;
+    return UIReturnKeyDefault;
 }
 
 - (void)setReturnKeyType:(UIReturnKeyType)type
@@ -148,58 +146,56 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 
 - (BOOL)isSecureTextEntry
 {
-	return [_textLayer isSecureTextEntry];
+    return [_textLayer isSecureTextEntry];
 }
 
 - (void)setSecureTextEntry:(BOOL)secure
 {
-	[_textLayer setSecureTextEntry:secure];
+    [_textLayer setSecureTextEntry:secure];
 }
 
 
 - (BOOL)canBecomeFirstResponder
 {
-	return (self.window != nil);
+    return (self.window != nil);
 }
 
 - (BOOL)becomeFirstResponder
 {
-	if ([super becomeFirstResponder] ){
-		return [_textLayer becomeFirstResponder];
-	} else {
-		return NO;
-	}
+    if ([super becomeFirstResponder] ){
+        return [_textLayer becomeFirstResponder];
+    } else {
+        return NO;
+    }
 }
 
 - (BOOL)resignFirstResponder
 {
-	if ([super resignFirstResponder]) {
-		return [_textLayer resignFirstResponder];
-	} else {
-		return NO;
-	}
+    if ([super resignFirstResponder]) {
+        return [_textLayer resignFirstResponder];
+    } else {
+        return NO;
+    }
 }
-
-
 
 - (UIFont *)font
 {
-	return _textLayer.font;
+    return _textLayer.font;
 }
 
 - (void)setFont:(UIFont *)newFont
 {
-	_textLayer.font = newFont;
+    _textLayer.font = newFont;
 }
 
 - (UIColor *)textColor
 {
-	return _textLayer.textColor;
+    return _textLayer.textColor;
 }
 
 - (void)setTextColor:(UIColor *)newColor
 {
-	_textLayer.textColor = newColor;
+    _textLayer.textColor = newColor;
 }
 
 - (UITextAlignment)textAlignment
@@ -214,40 +210,33 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 
 - (NSString *)text
 {
-	return _textLayer.text;
+    return _textLayer.text;
 }
 
 - (void)setText:(NSString *)newText
 {
-	_textLayer.text = newText;
+    _textLayer.text = newText;
 }
 
 - (BOOL)isEditable
 {
-	return _textLayer.editable;
+    return _textLayer.editable;
 }
 
 - (void)setEditable:(BOOL)editable
 {
-	_textLayer.editable = editable;
+    _textLayer.editable = editable;
 }
 
 - (NSRange)selectedRange
 {
-	return _textLayer.selectedRange;
+    return _textLayer.selectedRange;
 }
 
 - (void)setSelectedRange:(NSRange)range
 {
-	_textLayer.selectedRange = range;
+    _textLayer.selectedRange = range;
 }
-
-/*
-- (id)mouseCursorForEvent:(UIEvent *)event
-{
-	return [_textContainer mouseCursorForEvent:event];
-}
- */
 
 - (BOOL)hasText
 {
@@ -257,63 +246,80 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 
 - (void)setDelegate:(id<UITextViewDelegate>)theDelegate
 {
-	if (theDelegate != self.delegate) {
-		[super setDelegate:theDelegate];
-		_delegateHas.shouldBeginEditing = [theDelegate respondsToSelector:@selector(textViewShouldBeginEditing:)];
-		_delegateHas.didBeginEditing = [theDelegate respondsToSelector:@selector(textViewDidBeginEditing:)];
-		_delegateHas.shouldEndEditing = [theDelegate respondsToSelector:@selector(textViewShouldEndEditing:)];
-		_delegateHas.didEndEditing = [theDelegate respondsToSelector:@selector(textViewDidEndEditing:)];
-		_delegateHas.shouldChangeText = [theDelegate respondsToSelector:@selector(textView:shouldChangeTextInRange:replacementText:)];
-		_delegateHas.didChange = [theDelegate respondsToSelector:@selector(textViewDidChange:)];
-		_delegateHas.didChangeSelection = [theDelegate respondsToSelector:@selector(textViewDidChangeSelection:)];
-	}
+    if (theDelegate != self.delegate) {
+        [super setDelegate:theDelegate];
+        _delegateHas.shouldBeginEditing = [theDelegate respondsToSelector:@selector(textViewShouldBeginEditing:)];
+        _delegateHas.didBeginEditing = [theDelegate respondsToSelector:@selector(textViewDidBeginEditing:)];
+        _delegateHas.shouldEndEditing = [theDelegate respondsToSelector:@selector(textViewShouldEndEditing:)];
+        _delegateHas.didEndEditing = [theDelegate respondsToSelector:@selector(textViewDidEndEditing:)];
+        _delegateHas.shouldChangeText = [theDelegate respondsToSelector:@selector(textView:shouldChangeTextInRange:replacementText:)];
+        _delegateHas.didChange = [theDelegate respondsToSelector:@selector(textViewDidChange:)];
+        _delegateHas.didChangeSelection = [theDelegate respondsToSelector:@selector(textViewDidChangeSelection:)];
+    }
 }
 
 
 - (BOOL)_textShouldBeginEditing
 {
-	return _delegateHas.shouldBeginEditing? [self.delegate textViewShouldBeginEditing:self] : YES;
+    return _delegateHas.shouldBeginEditing? [self.delegate textViewShouldBeginEditing:self] : YES;
 }
 
 - (void)_textDidBeginEditing
 {
-	if (_delegateHas.didBeginEditing) {
-		[self.delegate textViewDidBeginEditing:self];
-	}
-	[[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidBeginEditingNotification object:self];
+    if (_delegateHas.didBeginEditing) {
+        [self.delegate textViewDidBeginEditing:self];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidBeginEditingNotification object:self];
 }
 
 - (BOOL)_textShouldEndEditing
 {
-	return _delegateHas.shouldEndEditing? [self.delegate textViewShouldEndEditing:self] : YES;
+    return _delegateHas.shouldEndEditing? [self.delegate textViewShouldEndEditing:self] : YES;
 }
 
 - (void)_textDidEndEditing
 {
-	if (_delegateHas.didEndEditing) {
-		[self.delegate textViewDidEndEditing:self];
-	}
-	[[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidEndEditingNotification object:self];
+    if (_delegateHas.didEndEditing) {
+        [self.delegate textViewDidEndEditing:self];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidEndEditingNotification object:self];
 }
 
 - (BOOL)_textShouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-	return _delegateHas.shouldChangeText? [self.delegate textView:self shouldChangeTextInRange:range replacementText:text] : YES;
+    return _delegateHas.shouldChangeText? [self.delegate textView:self shouldChangeTextInRange:range replacementText:text] : YES;
 }
 
 - (void)_textDidChange
 {
-	if (_delegateHas.didChange) {
-		[self.delegate textViewDidChange:self];
-	}
-	[[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidChangeNotification object:self];
+    if (_delegateHas.didChange) {
+        [self.delegate textViewDidChange:self];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidChangeNotification object:self];
 }
 
 - (void)_textDidChangeSelection
 {
-	if (_delegateHas.didChangeSelection) {
-		[self.delegate textViewDidChangeSelection:self];
-	}
+    if (_delegateHas.didChangeSelection) {
+        [self.delegate textViewDidChangeSelection:self];
+    }
+}
+
+- (NSString *)description
+{
+    NSString *textAlignment = @"";
+    switch (self.textAlignment) {
+        case UITextAlignmentLeft:
+            textAlignment = @"Left";
+            break;
+        case UITextAlignmentCenter:
+            textAlignment = @"Center";
+            break;
+        case UITextAlignmentRight:
+            textAlignment = @"Right";
+            break;
+    }
+    return [NSString stringWithFormat:@"<%@: %p; textAlignment = %@; selectedRange = %@; editable = %@; textColor = %@; font = %@; delegate = %@>", [self className], self, textAlignment, NSStringFromRange(self.selectedRange), (self.editable ? @"YES" : @"NO"), self.textColor, self.font, self.delegate];
 }
 
 @end

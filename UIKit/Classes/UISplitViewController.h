@@ -33,14 +33,14 @@
 
 @interface UISplitViewController : UIViewController {
 @private
-	id <UISplitViewControllerDelegate> _delegate;
-	NSArray *_viewControllers;
-	
-	struct {
-		BOOL willPresentViewController : 1;
-		BOOL willHideViewController : 1;
-		BOOL willShowViewController : 1;
-	} _delegateHas;
+    id <UISplitViewControllerDelegate> _delegate;
+    NSArray *_viewControllers;
+    
+    struct {
+        BOOL willPresentViewController : 1;
+        BOOL willHideViewController : 1;
+        BOOL willShowViewController : 1;
+    } _delegateHas;
 }
 
 @property (nonatomic, assign) id <UISplitViewControllerDelegate> delegate;

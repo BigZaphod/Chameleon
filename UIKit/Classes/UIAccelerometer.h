@@ -37,8 +37,8 @@
 
 @interface UIAccelerometer : NSObject {
 @private
-	NSTimeInterval _updateInterval;
-	id<UIAccelerometerDelegate> _delegate;
+    NSTimeInterval _updateInterval;
+    id<UIAccelerometerDelegate> _delegate;
 }
 
 + (UIAccelerometer *)sharedAccelerometer;

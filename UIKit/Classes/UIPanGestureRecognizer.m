@@ -35,16 +35,16 @@
 
 - (id)initWithTarget:(id)target action:(SEL)action
 {
-	if ((self=[super initWithTarget:target action:action])) {
-		_minimumNumberOfTouches = 1;
-		_maximumNumberOfTouches = NSUIntegerMax;
-	}
-	return self;
+    if ((self=[super initWithTarget:target action:action])) {
+        _minimumNumberOfTouches = 1;
+        _maximumNumberOfTouches = NSUIntegerMax;
+    }
+    return self;
 }
 
 - (CGPoint)translationInView:(UIView *)view
 {
-	return CGPointZero;
+    return CGPointZero;
 }
 
 - (void)setTranslation:(CGPoint)translation inView:(UIView *)view
@@ -53,7 +53,7 @@
 
 - (CGPoint)velocityInView:(UIView *)view
 {
-	return CGPointZero;
+    return CGPointZero;
 }
 
 @end

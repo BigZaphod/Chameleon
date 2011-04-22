@@ -34,25 +34,25 @@
 
 - (id)initWithFrame:(NSRect)frame popoverController:(UIPopoverController *)controller
 {
-	if ((self=[super initWithFrame:frame])) {
-		_popoverController = controller;
-	}
-	return self;
+    if ((self=[super initWithFrame:frame])) {
+        _popoverController = controller;
+    }
+    return self;
 }
 
 - (BOOL)acceptsFirstMouse:(NSEvent *)theEvent
 {
-	return YES;
+    return YES;
 }
 
 - (BOOL)canBecomeKeyView
 {
-	return NO;
+    return NO;
 }
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
-	[_popoverController _closePopoverWindowIfPossible];
+    [_popoverController _closePopoverWindowIfPossible];
 }
 
 @end

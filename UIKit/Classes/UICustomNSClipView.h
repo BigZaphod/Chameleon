@@ -41,8 +41,8 @@
 @end
 
 @interface UICustomNSClipView : NSClipView {
-	CALayer *parentLayer;
-	id<UICustomNSClipViewBehaviorDelegate> behaviorDelegate;
+    CALayer *parentLayer;
+    id<UICustomNSClipViewBehaviorDelegate> behaviorDelegate;
 }
 
 // A layer parent is just a layer that UICustonNSClipView will attempt to always remain a sublayer of.

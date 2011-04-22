@@ -30,9 +30,9 @@
 #import "UINavigationController.h"
 
 enum {
-	UIImagePickerControllerSourceTypePhotoLibrary,
-	UIImagePickerControllerSourceTypeCamera,
-	UIImagePickerControllerSourceTypeSavedPhotosAlbum
+    UIImagePickerControllerSourceTypePhotoLibrary,
+    UIImagePickerControllerSourceTypeCamera,
+    UIImagePickerControllerSourceTypeSavedPhotosAlbum
 };
 typedef NSUInteger UIImagePickerControllerSourceType;
 
@@ -47,8 +47,8 @@ extern NSString *const UIImagePickerControllerMediaURL;
 
 @interface UIImagePickerController : UINavigationController {
 @private
-	UIImagePickerControllerSourceType _sourceType;
-	NSArray *_mediaTypes;
+    UIImagePickerControllerSourceType _sourceType;
+    NSArray *_mediaTypes;
 }
 
 + (NSArray *)availableMediaTypesForSourceType:(UIImagePickerControllerSourceType)sourceType;

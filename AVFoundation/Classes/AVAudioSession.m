@@ -40,17 +40,17 @@ NSString *const AVAudioSessionCategoryAudioProcessing = @"AVAudioSessionCategory
 
 + (id)sharedInstance
 {
-	return nil;
+    return nil;
 }
 
 - (BOOL)setActive:(BOOL)beActive error:(NSError**)outError
 {
-	return NO;
+    return NO;
 }
 
 - (BOOL)setCategory:(NSString*)theCategory error:(NSError**)outError
 {
-	return NO;
+    return NO;
 }
 
 @end

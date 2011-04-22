@@ -49,6 +49,8 @@
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event;
 - (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event;
 
+@property (readonly, retain) UIView *inputAccessoryView;
+@property (readonly, retain) UIView *inputView;
 @property (readonly) NSUndoManager *undoManager;
 
 @end

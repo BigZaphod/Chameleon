@@ -16,14 +16,14 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-	chameleonApp = [[ChameleonAppDelegate alloc] init];
-	[chameleonNSView launchApplicationWithDelegate:chameleonApp afterDelay:1];
+    chameleonApp = [[ChameleonAppDelegate alloc] init];
+    [chameleonNSView launchApplicationWithDelegate:chameleonApp afterDelay:1];
 }
 
 - (void) dealloc
 {
-	[chameleonApp release];
-	[super dealloc];
+    [chameleonApp release];
+    [super dealloc];
 }
 
 @end

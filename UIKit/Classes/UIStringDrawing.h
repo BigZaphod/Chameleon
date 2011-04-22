@@ -30,24 +30,24 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
-	UILineBreakModeWordWrap = 0,
-	UILineBreakModeCharacterWrap,
-	UILineBreakModeClip,
-	UILineBreakModeHeadTruncation,
-	UILineBreakModeTailTruncation,
-	UILineBreakModeMiddleTruncation,
+    UILineBreakModeWordWrap = 0,
+    UILineBreakModeCharacterWrap,
+    UILineBreakModeClip,
+    UILineBreakModeHeadTruncation,
+    UILineBreakModeTailTruncation,
+    UILineBreakModeMiddleTruncation,
 } UILineBreakMode;
 
 typedef enum {
-	UITextAlignmentLeft,
-	UITextAlignmentCenter,
-	UITextAlignmentRight,
+    UITextAlignmentLeft,
+    UITextAlignmentCenter,
+    UITextAlignmentRight,
 } UITextAlignment;
 
 typedef enum {
-	UIBaselineAdjustmentAlignBaselines,
-	UIBaselineAdjustmentAlignCenters,
-	UIBaselineAdjustmentNone,
+    UIBaselineAdjustmentAlignBaselines,
+    UIBaselineAdjustmentAlignCenters,
+    UIBaselineAdjustmentNone,
 } UIBaselineAdjustment;
 
 @class UIFont;

@@ -95,4 +95,9 @@
     return NO;
 }
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@: %p; selectedItem = %@; items = %@; delegate = %@>", [self className], self, self.selectedItem, self.items, self.delegate];
+}
+
 @end

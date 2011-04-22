@@ -34,62 +34,67 @@
 
 - (id)init
 {
-	return [self initWithStyle:UITableViewStylePlain];
+    return [self initWithStyle:UITableViewStylePlain];
 }
 
 - (id)initWithStyle:(UITableViewStyle)theStyle
 {
-	if ((self=[super initWithNibName:nil bundle:nil])) {
-		_style = theStyle;
-	}
-	return self;
+    if ((self=[super initWithNibName:nil bundle:nil])) {
+        _style = theStyle;
+    }
+    return self;
 }
 
 - (void)loadView
 {
-	self.tableView = [[[UITableView alloc] initWithFrame:CGRectMake(0,0,320,480) style:_style] autorelease];
-	self.tableView.delegate = self;
-	self.tableView.dataSource = self;
+    self.tableView = [[[UITableView alloc] initWithFrame:CGRectMake(0,0,320,480) style:_style] autorelease];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
 }
 
 - (UITableView *)tableView
 {
-	return (UITableView *)self.view;
+    return (UITableView *)self.view;
 }
 
 - (void)setTableView:(UITableView *)theTableView
 {
-	self.view = theTableView;
+    self.view = theTableView;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-	[super viewWillAppear:animated];
+    [super viewWillAppear:animated];
 
-	if (!_hasReloaded) {
-		[self.tableView reloadData];
-		_hasReloaded = YES;
-	}
-	
-	if (_clearsSelectionOnViewWillAppear) {
-		[self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:animated];
-	}
+    if (!_hasReloaded) {
+        [self.tableView reloadData];
+        _hasReloaded = YES;
+    }
+    
+    if (_clearsSelectionOnViewWillAppear) {
+        [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:animated];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
-	[super viewDidAppear:animated];
-	[self.tableView flashScrollIndicators];
+    [super viewDidAppear:animated];
+    [self.tableView flashScrollIndicators];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return 0;
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	return nil;
+    return nil;
+}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@: %p; tableView = %@>", [self className], self, self.tableView];
 }
 
 @end

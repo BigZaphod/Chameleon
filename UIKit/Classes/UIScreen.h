@@ -38,11 +38,11 @@ extern NSString *const UIScreenModeDidChangeNotification;
 
 @interface UIScreen : NSObject {
 @private
-	UIImageView *_grabber;
-	CALayer *_layer;
-	__weak UIKitView *_UIKitView;
-	UIScreenMode *_currentMode;
-	__weak UIPopoverController *_popoverController;
+    UIImageView *_grabber;
+    CALayer *_layer;
+    __weak UIKitView *_UIKitView;
+    UIScreenMode *_currentMode;
+    __weak UIPopoverController *_popoverController;
 }
 
 + (UIScreen *)mainScreen;

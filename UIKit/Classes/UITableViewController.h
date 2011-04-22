@@ -32,9 +32,9 @@
 
 @interface UITableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
 @private
-	UITableViewStyle _style;
-	BOOL _clearsSelectionOnViewWillAppear;
-	BOOL _hasReloaded;
+    UITableViewStyle _style;
+    BOOL _clearsSelectionOnViewWillAppear;
+    BOOL _hasReloaded;
 }
 
 - (id)initWithStyle:(UITableViewStyle)style;

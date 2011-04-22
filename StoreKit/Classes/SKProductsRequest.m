@@ -34,9 +34,9 @@
 
 - (id)initWithProductIdentifiers:(NSSet *)productIdentifiers
 {
-	if ((self=[super init])) {
-	}
-	return self;
+    if ((self=[super init])) {
+    }
+    return self;
 }
 
 - (void)start

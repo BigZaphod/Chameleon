@@ -30,8 +30,8 @@
 #import "UIGestureRecognizer.h"
 
 @interface UIPanGestureRecognizer : UIGestureRecognizer {
-	NSUInteger _maximumNumberOfTouches;
-	NSUInteger _minimumNumberOfTouches;
+    NSUInteger _maximumNumberOfTouches;
+    NSUInteger _minimumNumberOfTouches;
 }
 
 - (CGPoint)translationInView:(UIView *)view;

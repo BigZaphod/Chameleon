@@ -30,24 +30,24 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
-	UIEventTypeTouches,
-	UIEventTypeMotion,
-	UIEventTypeKeyPress			// nonstandard
+    UIEventTypeTouches,
+    UIEventTypeMotion,
+    UIEventTypeKeyPress			// nonstandard
 } UIEventType;
 
 typedef enum {
-	UIEventSubtypeNone        = 0,
-	UIEventSubtypeMotionShake = 1,
+    UIEventSubtypeNone        = 0,
+    UIEventSubtypeMotionShake = 1,
 } UIEventSubtype;
 
 @class UITouch, UIWindow, UIView;
 
 @interface UIEvent : NSObject {
 @private
-	UIEventType _type;
-	UITouch *_touch;
-	NSTimeInterval _timestamp;
-	BOOL _unhandledKeyPressEvent;
+    UIEventType _type;
+    UITouch *_touch;
+    NSTimeInterval _timestamp;
+    BOOL _unhandledKeyPressEvent;
 }
 
 @property (nonatomic, readonly) NSTimeInterval timestamp;

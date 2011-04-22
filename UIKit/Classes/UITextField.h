@@ -36,17 +36,17 @@ extern NSString *const UITextFieldTextDidChangeNotification;
 extern NSString *const UITextFieldTextDidEndEditingNotification;
 
 typedef enum {
-	UITextBorderStyleNone,
-	UITextBorderStyleLine,
-	UITextBorderStyleBezel,
-	UITextBorderStyleRoundedRect
+    UITextBorderStyleNone,
+    UITextBorderStyleLine,
+    UITextBorderStyleBezel,
+    UITextBorderStyleRoundedRect
 } UITextBorderStyle;
 
 typedef enum {
-	UITextFieldViewModeNever,
-	UITextFieldViewModeWhileEditing,
-	UITextFieldViewModeUnlessEditing,
-	UITextFieldViewModeAlways
+    UITextFieldViewModeNever,
+    UITextFieldViewModeWhileEditing,
+    UITextFieldViewModeUnlessEditing,
+    UITextFieldViewModeAlways
 } UITextFieldViewMode;
 
 @class UIFont, UIColor, UITextField, UIImage, UITextLayer;
@@ -65,31 +65,34 @@ typedef enum {
 
 @interface UITextField : UIControl <UITextInputTraits> {
 @private
-	UITextLayer *_textLayer;
+    UITextLayer *_textLayer;
 
-	id _delegate;
-	UITextFieldViewMode _clearButtonMode;
-	UIView *_leftView;
-	UITextFieldViewMode _leftViewMode;
-	UIView *_rightView;
-	UITextFieldViewMode _rightViewMode;
-	UIImage *_background;
-	UIImage *_disabledBackground;
-	BOOL _editing;
-	BOOL _clearsOnBeginEditing;
-	BOOL _adjustsFontSizeToFitWidth;
-	NSString *_placeholder;
-	UITextBorderStyle _borderStyle;
-	
-	struct {
-		BOOL shouldBeginEditing : 1;
-		BOOL didBeginEditing : 1;
-		BOOL shouldEndEditing : 1;
-		BOOL didEndEditing : 1;
-		BOOL shouldChangeCharacters : 1;
-		BOOL shouldClear : 1;
-		BOOL shouldReturn : 1;
-	} _delegateHas;	
+    id _delegate;
+    UITextFieldViewMode _clearButtonMode;
+    UIView *_leftView;
+    UITextFieldViewMode _leftViewMode;
+    UIView *_rightView;
+    UITextFieldViewMode _rightViewMode;
+    UIImage *_background;
+    UIImage *_disabledBackground;
+    BOOL _editing;
+    BOOL _clearsOnBeginEditing;
+    BOOL _adjustsFontSizeToFitWidth;
+    NSString *_placeholder;
+    UITextBorderStyle _borderStyle;
+
+    UIView *_inputAccessoryView;
+    UIView *_inputView;
+
+    struct {
+        BOOL shouldBeginEditing : 1;
+        BOOL didBeginEditing : 1;
+        BOOL shouldEndEditing : 1;
+        BOOL didEndEditing : 1;
+        BOOL shouldChangeCharacters : 1;
+        BOOL shouldClear : 1;
+        BOOL shouldReturn : 1;
+    } _delegateHas;	
 }
 
 - (CGRect)borderRectForBounds:(CGRect)bounds;
@@ -122,5 +125,8 @@ typedef enum {
 @property (nonatomic) UITextFieldViewMode leftViewMode;
 @property (nonatomic, retain) UIView *rightView;
 @property (nonatomic) UITextFieldViewMode rightViewMode;
+
+@property (nonatomic, readwrite, retain) UIView *inputAccessoryView;
+@property (nonatomic, readwrite, retain) UIView *inputView;
 
 @end
