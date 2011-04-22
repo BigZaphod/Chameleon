@@ -88,8 +88,16 @@ typedef enum {
         return item.customView;
     } else {
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        [button setBackgroundImage:[UIImage _toolbarButtonImage] forState:UIControlStateNormal];
-        [button setBackgroundImage:[UIImage _highlightedToolbarButtonImage] forState:UIControlStateHighlighted];
+		if(item.style==UIBarButtonItemStyleDone)
+		{
+			[button setBackgroundImage:[UIImage _buttonBarSystemItemDone] forState:UIControlStateNormal];
+			[button setBackgroundImage:[UIImage _highlightedButtonBarSystemItemDone] forState:UIControlStateHighlighted];
+		}
+		else 
+		{
+			[button setBackgroundImage:[UIImage _buttonBarSystemItemPlain] forState:UIControlStateNormal];
+			[button setBackgroundImage:[UIImage _highlightedButtonBarSystemItemPlain] forState:UIControlStateHighlighted];	
+		}
         [button setTitle:item.title forState:UIControlStateNormal];
         [button setImage:item.image forState:UIControlStateNormal];
         button.titleLabel.font = [UIFont systemFontOfSize:11];

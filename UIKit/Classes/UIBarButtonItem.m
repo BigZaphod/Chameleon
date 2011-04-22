@@ -43,14 +43,35 @@
 
 - (id)initWithBarButtonSystemItem:(UIBarButtonSystemItem)systemItem target:(id)target action:(SEL)action
 {
-    if ((self=[self init])) {
-        _isSystemItem = YES;
-        _systemItem = systemItem;
-
-        self.target = target;
-        self.action = action;
-    }
-    return self;
+	if ((self=[self init])) {
+		_isSystemItem = YES;
+		_systemItem = systemItem;
+		
+		self.target = target;
+		self.action = action;
+		
+		switch (systemItem) {
+			case UIBarButtonSystemItemDone:
+				self.title = @"Done";
+				self.style = UIBarButtonItemStyleDone;
+				break;
+			case UIBarButtonSystemItemSave:
+				self.title = @"Save";
+				self.style = UIBarButtonItemStyleDone;
+				break;
+			case UIBarButtonSystemItemCancel:
+				self.title = @"Cancel";
+				self.style = UIBarButtonItemStylePlain;
+				break;
+			case UIBarButtonSystemItemEdit:
+				self.title = @"Edit";
+				self.style = UIBarButtonItemStylePlain;
+				break;
+		}
+		
+		
+	}
+	return self;
 }
 
 - (id)initWithCustomView:(UIView *)customView
