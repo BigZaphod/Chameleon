@@ -268,6 +268,8 @@
 		78D533DD133A9434006F17CA /* UISearchDisplayController.h in Headers */ = {isa = PBXBuildFile; fileRef = 78D533DB133A9434006F17CA /* UISearchDisplayController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		78D533DE133A9434006F17CA /* UISearchDisplayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D533DC133A9434006F17CA /* UISearchDisplayController.m */; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
+		EF5C2F5513643C3400FA1BC7 /* <UITabBar> background.png in Resources */ = {isa = PBXBuildFile; fileRef = EF5C2F5313643C3000FA1BC7 /* <UITabBar> background.png */; };
+		EF5C2F5613643C3400FA1BC7 /* <UITabBar> button.png in Resources */ = {isa = PBXBuildFile; fileRef = EF5C2F5413643C3100FA1BC7 /* <UITabBar> button.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -537,6 +539,8 @@
 		78D533DC133A9434006F17CA /* UISearchDisplayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISearchDisplayController.m; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* UIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF5C2F5313643C3000FA1BC7 /* <UITabBar> background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITabBar> background.png"; path = "Resources/<UITabBar> background.png"; sourceTree = "<group>"; };
+		EF5C2F5413643C3100FA1BC7 /* <UITabBar> button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITabBar> button.png"; path = "Resources/<UITabBar> button.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -608,6 +612,8 @@
 				14CC842D11EFA8BA005988CC /* <UIRoundedRectButton> highlighted.png */,
 				14CC842E11EFA8BA005988CC /* <UIRoundedRectButton> normal.png */,
 				14CC842F11EFA8BA005988CC /* <UIScreen> grabber.png */,
+				EF5C2F5313643C3000FA1BC7 /* <UITabBar> background.png */,
+				EF5C2F5413643C3100FA1BC7 /* <UITabBar> button.png */,
 				14DD1C341289B4D500DCF231 /* <UIToolbar> button-highlighted.png */,
 				14DD1C351289B4D500DCF231 /* <UIToolbar> button.png */,
 				8DC2EF5A0486A6940098B216 /* Info.plist */,
@@ -1101,6 +1107,8 @@
 				14F0BC0E1288A67F00BA54F9 /* <UIBarButtonSystemItem> reply.png in Resources */,
 				14DD1C361289B4D500DCF231 /* <UIToolbar> button-highlighted.png in Resources */,
 				14DD1C371289B4D500DCF231 /* <UIToolbar> button.png in Resources */,
+				EF5C2F5513643C3400FA1BC7 /* <UITabBar> background.png in Resources */,
+				EF5C2F5613643C3400FA1BC7 /* <UITabBar> button.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
