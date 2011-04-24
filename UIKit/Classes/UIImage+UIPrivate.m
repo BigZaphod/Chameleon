@@ -224,6 +224,11 @@ NSMutableDictionary *imageCache = nil;
   return [self _frameworkImageWithName:@"<UITabBar> button.png" leftCapWidth:8 topCapHeight:8];
 }
 
++ (UIImage *)_highlightedTabBarImage
+{
+  return [self _frameworkImageWithName:@"<UITabBarButtonImage> highlighted.png" leftCapWidth:3 topCapHeight:5];
+}
+
 @end
 
 
