@@ -216,7 +216,7 @@ NSMutableDictionary *imageCache = nil;
 
 + (UIImage *)_tabBarBackgroundImage
 {
-  return [self _frameworkImageWithName:@"<UITabBar> background.png" leftCapWidth:6 topCapHeight:0];
+  return [self _frameworkImageWithName:@"<UITabBar> background.png" leftCapWidth:3 topCapHeight:5];
 }
 
 + (UIImage *)_tabBarButtonImage
