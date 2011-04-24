@@ -53,7 +53,7 @@
 + (UIImage *)_buttonBarSystemItemAdd;
 + (UIImage *)_buttonBarSystemItemReply;
 + (UIImage *)_tabBarBackgroundImage;
-+ (UIImage *)_tabBarItemImage;
++ (UIImage *)_tabBarButtonImage;
 
 - (UIImage *)_toolbarImage;		// returns a new image which is modified as required for toolbar buttons (turned into a solid color)
 + (UIImage *)_imageFromNSImage:(NSImage *)ns;
