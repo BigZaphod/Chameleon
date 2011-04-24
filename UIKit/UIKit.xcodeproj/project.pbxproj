@@ -268,6 +268,11 @@
 		78D533DD133A9434006F17CA /* UISearchDisplayController.h in Headers */ = {isa = PBXBuildFile; fileRef = 78D533DB133A9434006F17CA /* UISearchDisplayController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		78D533DE133A9434006F17CA /* UISearchDisplayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D533DC133A9434006F17CA /* UISearchDisplayController.m */; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
+		EF2DD0E01364D80B00B866AF /* <UITabBarButtonBadge> background.png in Resources */ = {isa = PBXBuildFile; fileRef = EF2DD0DF1364D80B00B866AF /* <UITabBarButtonBadge> background.png */; };
+		EF2DD0FF1364DE5400B866AF /* UITabBarButtonBadge.h in Headers */ = {isa = PBXBuildFile; fileRef = EF2DD0FD1364DE5400B866AF /* UITabBarButtonBadge.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EF2DD1001364DE5400B866AF /* UITabBarButtonBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2DD0FE1364DE5400B866AF /* UITabBarButtonBadge.m */; };
+		EF5C2F4D1364118000FA1BC7 /* UITabBarButton.h in Headers */ = {isa = PBXBuildFile; fileRef = EF5C2F4B1364117F00FA1BC7 /* UITabBarButton.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EF5C2F4E1364118000FA1BC7 /* UITabBarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = EF5C2F4C1364118000FA1BC7 /* UITabBarButton.m */; };
 		EF5C2F5513643C3400FA1BC7 /* <UITabBar> background.png in Resources */ = {isa = PBXBuildFile; fileRef = EF5C2F5313643C3000FA1BC7 /* <UITabBar> background.png */; };
 		EF5C2F5613643C3400FA1BC7 /* <UITabBar> button.png in Resources */ = {isa = PBXBuildFile; fileRef = EF5C2F5413643C3100FA1BC7 /* <UITabBar> button.png */; };
 		EF756802136477780043079B /* <UITabBarButtonImage> highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = EF756801136477780043079B /* <UITabBarButtonImage> highlighted.png */; };
@@ -540,6 +545,11 @@
 		78D533DC133A9434006F17CA /* UISearchDisplayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISearchDisplayController.m; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* UIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF2DD0DF1364D80B00B866AF /* <UITabBarButtonBadge> background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITabBarButtonBadge> background.png"; path = "Resources/<UITabBarButtonBadge> background.png"; sourceTree = "<group>"; };
+		EF2DD0FD1364DE5400B866AF /* UITabBarButtonBadge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITabBarButtonBadge.h; sourceTree = "<group>"; };
+		EF2DD0FE1364DE5400B866AF /* UITabBarButtonBadge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITabBarButtonBadge.m; sourceTree = "<group>"; };
+		EF5C2F4B1364117F00FA1BC7 /* UITabBarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITabBarButton.h; sourceTree = "<group>"; };
+		EF5C2F4C1364118000FA1BC7 /* UITabBarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITabBarButton.m; sourceTree = "<group>"; };
 		EF5C2F5313643C3000FA1BC7 /* <UITabBar> background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITabBar> background.png"; path = "Resources/<UITabBar> background.png"; sourceTree = "<group>"; };
 		EF5C2F5413643C3100FA1BC7 /* <UITabBar> button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITabBar> button.png"; path = "Resources/<UITabBar> button.png"; sourceTree = "<group>"; };
 		EF756801136477780043079B /* <UITabBarButtonImage> highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITabBarButtonImage> highlighted.png"; path = "Resources/<UITabBarButtonImage> highlighted.png"; sourceTree = "<group>"; };
@@ -616,6 +626,7 @@
 				14CC842F11EFA8BA005988CC /* <UIScreen> grabber.png */,
 				EF5C2F5313643C3000FA1BC7 /* <UITabBar> background.png */,
 				EF5C2F5413643C3100FA1BC7 /* <UITabBar> button.png */,
+				EF2DD0DF1364D80B00B866AF /* <UITabBarButtonBadge> background.png */,
 				EF756801136477780043079B /* <UITabBarButtonImage> highlighted.png */,
 				14DD1C341289B4D500DCF231 /* <UIToolbar> button-highlighted.png */,
 				14DD1C351289B4D500DCF231 /* <UIToolbar> button.png */,
@@ -835,6 +846,10 @@
 				1413D20F13D72A06004D77E9 /* UIScrollViewAnimationDeceleration.m */,
 				1413D21013D72A06004D77E9 /* UIScrollViewAnimationScroll.h */,
 				1413D21113D72A06004D77E9 /* UIScrollViewAnimationScroll.m */,
+				EF5C2F4B1364117F00FA1BC7 /* UITabBarButton.h */,
+				EF5C2F4C1364118000FA1BC7 /* UITabBarButton.m */,
+				EF2DD0FD1364DE5400B866AF /* UITabBarButtonBadge.h */,
+				EF2DD0FE1364DE5400B866AF /* UITabBarButtonBadge.m */,
 				14FA8C51121DA4A000C4264B /* UITableViewCellSeparator.h */,
 				14FA8C52121DA4A000C4264B /* UITableViewCellSeparator.m */,
 				14FA8C53121DA4A000C4264B /* UITableViewSection.h */,
@@ -993,6 +1008,7 @@
 				1426FFDD129ADEA300BD31E5 /* UIControlAction.h in Headers */,
 				14C0716213CF66B800B76E35 /* UIScrollWheelGestureRecognizer.h in Headers */,
 				38E523B513396B5B00E041B3 /* UINavigationBar+UIPrivate.h in Headers */,
+				EF5C2F4D1364118000FA1BC7 /* UITabBarButton.h in Headers */,
 				38615C78133A81B900841EEA /* UIFont+UIPrivate.h in Headers */,
 				148985B312EE2CFF003D4751 /* UINavigationItem.h in Headers */,
 				148985B512EE2CFF003D4751 /* UINibLoading.h in Headers */,
@@ -1031,6 +1047,7 @@
 				149148BC12EE45ED00F7C34E /* UIGestureRecognizerSubclass.h in Headers */,
 				14C6C122133AFC94002F111E /* CALayer+UIKitCompatibility.h in Headers */,
 				7011107C133BE0F400C86512 /* UIDatePicker.h in Headers */,
+				EF2DD0FF1364DE5400B866AF /* UITabBarButtonBadge.h in Headers */,
 				537472D5133ADD4B00EBD5EA /* UIInterface.h in Headers */,
 				14D8D941135DE90A00FE639A /* UIInputController.h in Headers */,
 				14541DB21360D6F300C1006D /* UIPhotosAlbum.h in Headers */,
@@ -1113,6 +1130,7 @@
 				EF5C2F5513643C3400FA1BC7 /* <UITabBar> background.png in Resources */,
 				EF5C2F5613643C3400FA1BC7 /* <UITabBar> button.png in Resources */,
 				EF756802136477780043079B /* <UITabBarButtonImage> highlighted.png in Resources */,
+				EF2DD0E01364D80B00B866AF /* <UITabBarButtonBadge> background.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1229,6 +1247,8 @@
 				1413D21313D72A06004D77E9 /* UIScrollViewAnimation.m in Sources */,
 				1413D21513D72A06004D77E9 /* UIScrollViewAnimationDeceleration.m in Sources */,
 				1413D21713D72A06004D77E9 /* UIScrollViewAnimationScroll.m in Sources */,
+				EF5C2F4E1364118000FA1BC7 /* UITabBarButton.m in Sources */,
+				EF2DD1001364DE5400B866AF /* UITabBarButtonBadge.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
