@@ -27,16 +27,14 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIView.h"
+#import <Foundation/Foundation.h>
 
-extern NSString *const UIViewFrameDidChangeNotification;
-extern NSString *const UIViewBoundsDidChangeNotification;
-extern NSString *const UIViewDidMoveToSuperviewNotification;
-extern NSString *const UIViewHiddenDidChangeNotification;
+@class UIImage;
 
-@interface UIView (UIPrivate)
-- (void)_removeFromSuperview:(BOOL)notifyViewController;
-- (void)_setViewController:(UIViewController *)theViewController;
-- (UIViewController *)_viewController;
-- (void)_superviewSizeDidChangeFrom:(CGSize)oldSize to:(CGSize)newSize;
+@interface UIPhotosAlbum : NSObject
+
++ (UIPhotosAlbum *)sharedPhotosAlbum;
+
+- (void)writeImage:(UIImage *)image completionTarget:(id)target action:(SEL)action context:(void *)context;
+
 @end

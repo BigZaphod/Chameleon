@@ -74,14 +74,16 @@ void UIGraphicsBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloat sc
     
     const size_t width = size.width * scale;
     const size_t height = size.height * scale;
-
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGContextRef ctx = CGBitmapContextCreate(NULL, width, height, 8, 4*width, colorSpace, (opaque? kCGImageAlphaNoneSkipFirst : kCGImageAlphaPremultipliedFirst));
-    CGContextConcatCTM(ctx, CGAffineTransformMake(1, 0, 0, -1, 0, height));
-    CGContextScaleCTM(ctx, 1.f/scale, 1.f/scale);
-    CGColorSpaceRelease(colorSpace);
-    UIGraphicsPushContext(ctx);
-    CGContextRelease(ctx);
+    
+    if (width > 0 && height > 0) {
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+        CGContextRef ctx = CGBitmapContextCreate(NULL, width, height, 8, 4*width, colorSpace, (opaque? kCGImageAlphaNoneSkipFirst : kCGImageAlphaPremultipliedFirst));
+        CGContextConcatCTM(ctx, CGAffineTransformMake(1, 0, 0, -1, 0, height));
+        CGContextScaleCTM(ctx, 1.f/scale, 1.f/scale);
+        CGColorSpaceRelease(colorSpace);
+        UIGraphicsPushContext(ctx);
+        CGContextRelease(ctx);
+    }
 }
 
 void UIGraphicsBeginImageContext(CGSize size)

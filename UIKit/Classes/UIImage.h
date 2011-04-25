@@ -72,5 +72,8 @@ typedef enum {
 @end
 
 void UIImageWriteToSavedPhotosAlbum(UIImage *image, id completionTarget, SEL completionSelector, void *contextInfo);
+void UISaveVideoAtPathToSavedPhotosAlbum(NSString *videoPath, id completionTarget, SEL completionSelector, void *contextInfo);
+BOOL UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(NSString *videoPath);
+
 NSData *UIImageJPEGRepresentation(UIImage *image, CGFloat compressionQuality);
 NSData *UIImagePNGRepresentation(UIImage *image);
