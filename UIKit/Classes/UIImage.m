@@ -31,6 +31,7 @@
 #import "UIThreePartImage.h"
 #import "UINinePartImage.h"
 #import "UIGraphics.h"
+#import "UIPhotosAlbum.h"
 #import <AppKit/NSImage.h>
 
 @implementation UIImage
@@ -230,6 +231,16 @@
 
 void UIImageWriteToSavedPhotosAlbum(UIImage *image, id completionTarget, SEL completionSelector, void *contextInfo)
 {
+    [[UIPhotosAlbum sharedPhotosAlbum] writeImage:image completionTarget:completionTarget action:completionSelector context:contextInfo];
+}
+
+void UISaveVideoAtPathToSavedPhotosAlbum(NSString *videoPath, id completionTarget, SEL completionSelector, void *contextInfo)
+{
+}
+
+BOOL UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(NSString *videoPath)
+{
+    return NO;
 }
 
 NSData *UIImageJPEGRepresentation(UIImage *image, CGFloat compressionQuality)

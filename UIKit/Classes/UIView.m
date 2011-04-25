@@ -113,6 +113,11 @@ static BOOL _animationsEnabled = YES;
     _viewController = theViewController;
 }
 
+- (UIViewController *)_viewController
+{
+    return _viewController;
+}
+
 - (UIWindow *)window
 {
     return _superview.window;
@@ -120,7 +125,7 @@ static BOOL _animationsEnabled = YES;
 
 - (UIResponder *)nextResponder
 {
-    return _viewController ? (UIResponder *)_viewController : (UIResponder *)_superview;
+    return (UIResponder *)[self _viewController] ?: (UIResponder *)_superview;
 }
 
 - (NSArray *)subviews
@@ -177,7 +182,7 @@ static BOOL _animationsEnabled = YES;
     UIView *view = self;
 
     while (view) {
-        if (view->_viewController != nil) {
+        if ([view _viewController] != nil) {
             return NO;
         } else {
             view = [view superview];
@@ -195,8 +200,8 @@ static BOOL _animationsEnabled = YES;
         
         subview->_needsDidAppearOrDisappear = [self _subviewControllersNeedAppearAndDisappear];
         
-        if (subview->_viewController && subview->_needsDidAppearOrDisappear) {
-            [subview->_viewController viewWillAppear:NO];
+        if ([subview _viewController] && subview->_needsDidAppearOrDisappear) {
+            [[subview _viewController] viewWillAppear:NO];
         }
 
         [subview _willMoveFromWindow:oldWindow toWindow:newWindow];
@@ -226,8 +231,8 @@ static BOOL _animationsEnabled = YES;
 
         [self didAddSubview:subview];
         
-        if (subview->_viewController && subview->_needsDidAppearOrDisappear) {
-            [subview->_viewController viewDidAppear:NO];
+        if ([subview _viewController] && subview->_needsDidAppearOrDisappear) {
+            [[subview _viewController] viewDidAppear:NO];
         }
     }
 }
@@ -280,8 +285,8 @@ static BOOL _animationsEnabled = YES;
         
         UIWindow *oldWindow = self.window;
         
-        if (_needsDidAppearOrDisappear && _viewController) {
-            [_viewController viewWillDisappear:NO];
+        if (_needsDidAppearOrDisappear && [self _viewController]) {
+            [[self _viewController] viewWillDisappear:NO];
         }
         
         [_superview willRemoveSubview:self];
@@ -298,8 +303,8 @@ static BOOL _animationsEnabled = YES;
         [self didMoveToSuperview];
         [[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:self];
         
-        if (_needsDidAppearOrDisappear && _viewController) {
-            [_viewController viewDidDisappear:NO];
+        if (_needsDidAppearOrDisappear && [self _viewController]) {
+            [[self _viewController] viewDidDisappear:NO];
         }
         
         [self release];
