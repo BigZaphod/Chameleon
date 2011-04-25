@@ -34,6 +34,9 @@
  */
 
 #import "UISearchBar.h"
+#import "UISearchField.h"
+#import "UIGraphics.h"
+#import "UIColor.h"
 
 @implementation UISearchBar
 @synthesize delegate=_delegate, showsCancelButton = _showsCancelButton, placeholder=_placeholder;
@@ -41,7 +44,8 @@
 - (id)initWithFrame:(CGRect)frame
 {
     if ((self = [super initWithFrame:frame])) {
-        _searchField = [[UITextField alloc] initWithFrame:frame];
+        _searchField = [[UISearchField alloc] initWithFrame:frame];
+		_searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self addSubview:_searchField];
     }
     return self;
@@ -63,6 +67,25 @@
 - (void)setText:(NSString *)text
 {
     _searchField.text = text;
+}
+
+- (void)drawRect:(CGRect)rect {
+	[super drawRect:rect];
+	
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	
+	const CGFloat locations[] = { 0.0f, 1.0f };
+	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+	NSArray *colors = [NSArray arrayWithObjects:(id) [UIColor colorWithRed:215.0f/255.0f green:223.0f/255.0f blue:225.0f/255.0f alpha:1.0f].CGColor, (id) [UIColor colorWithRed:233.0f/255.0f green:236.0f/255.0f blue:239.0f/255.0f alpha:1.0f].CGColor, nil];
+	CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef) colors, locations);
+	
+	CGContextDrawLinearGradient(context, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0.0f, self.bounds.size.height), kCGGradientDrawsBeforeStartLocation);
+	
+	[[UIColor colorWithRed:178.0f/255.0f green:188.0f/255.0f blue:195.0f/255.0f alpha:1.0f] set];
+	CGContextFillRect(context, CGRectMake(0.0f, CGRectGetMaxY(self.bounds) - 1.0f, self.bounds.size.width, 1.0f));
+	
+	CFRelease(gradient);
+	CFRelease(colorSpace);
 }
 
 @end

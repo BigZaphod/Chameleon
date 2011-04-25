@@ -216,4 +216,16 @@ extern CGFloat _UITableViewDefaultRowHeight;
 {
 }
 
+
+- (void)setAccessoryView:(UIView *)newView {
+	if(newView != self.accessoryView) {
+		[_accessoryView removeFromSuperview];
+		
+		[newView retain];
+		
+		[_accessoryView release];
+		_accessoryView = newView;
+	}
+}
+
 @end

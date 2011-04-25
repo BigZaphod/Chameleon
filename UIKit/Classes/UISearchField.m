@@ -1,8 +1,8 @@
 //
-//  UISearchBar.h
+//  UISearchField.m
 //  UIKit
 //
-//  Created by Peter Steinberger on 23.03.11.
+//  Created by Josh Abernathy on 4/25/11.
 //
 /*
  * Copyright (c) 2011, The Iconfactory. All rights reserved.
@@ -33,42 +33,9 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIView.h"
-
-@protocol UISearchBarDelegate;
-@class UISearchField;
-
-@interface UISearchBar : UIView {
-    UISearchField *_searchField;
-    BOOL _showsCancelButton;
-    __weak id<UISearchBarDelegate> _delegate;
-    NSString *_placeholder;
-}
-
-@property (nonatomic, copy) NSString *text;
-@property (nonatomic,assign) __weak id<UISearchBarDelegate> delegate;
-@property (nonatomic) BOOL showsCancelButton;
-@property (nonatomic,copy) NSString *placeholder;
-
-@end
+#import "UISearchField.h"
 
 
-@protocol UISearchBarDelegate <NSObject>
-
-@optional
-
-- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar;
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar;
-- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar;
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar;
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText;
-- (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
-
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar;
-- (void)searchBarBookmarkButtonClicked:(UISearchBar *)searchBar;
-- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
-- (void)searchBarResultsListButtonClicked:(UISearchBar *)searchBar;
-
-- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope;
+@implementation UISearchField
 
 @end

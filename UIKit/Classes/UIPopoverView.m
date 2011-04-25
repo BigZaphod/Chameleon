@@ -100,7 +100,7 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 
 + (UIEdgeInsets)insetForArrows
 {
-    return UIEdgeInsetsMake(17,12,8,12);
+    return UIEdgeInsetsMake(17,13,8,12);
 }
 
 + (CGRect)backgroundRectForBounds:(CGRect)bounds
@@ -111,7 +111,9 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 + (CGRect)contentRectForBounds:(CGRect)bounds withNavigationBar:(BOOL)hasNavBar
 {
     const CGFloat navBarOffset = hasNavBar? 32 : 0;
-    return UIEdgeInsetsInsetRect(CGRectMake(14,9+navBarOffset,bounds.size.width-28,bounds.size.height-28-navBarOffset), [self insetForArrows]);
+    static const CGFloat xPadding = 18.0f;
+	static const CGFloat yPadding = 16.0f;
+	return UIEdgeInsetsInsetRect(CGRectMake(xPadding, yPadding + navBarOffset, bounds.size.width-xPadding*2, bounds.size.height - yPadding*2.0f - 4.0f - navBarOffset), [self insetForArrows]);
 }
 
 + (CGSize)frameSizeForContentSize:(CGSize)contentSize withNavigationBar:(BOOL)hasNavBar
