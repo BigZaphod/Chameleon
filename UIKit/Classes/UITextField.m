@@ -46,12 +46,16 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 @implementation UITextField
 @synthesize delegate=_delegate, background=_background, disabledBackground=_disabledBackground, editing=_editing, clearsOnBeginEditing=_clearsOnBeginEditing;
 @synthesize adjustsFontSizeToFitWidth=_adjustsFontSizeToFitWidth, clearButtonMode=_clearButtonMode, leftView=_leftView, rightView=_rightView;
-@synthesize leftViewMode=_leftViewMode, rightViewMode=_rightViewMode, placeholder=_placeholder, borderStyle=_borderStyle;
+@synthesize leftViewMode=_leftViewMode, rightViewMode=_rightViewMode, borderStyle=_borderStyle;
 @synthesize inputAccessoryView=_inputAccessoryView, inputView=_inputView;
 
 - (id)initWithFrame:(CGRect)frame
 {
     if ((self=[super initWithFrame:frame])) {
+		_placeholderTextLayer = [[UITextLayer alloc] initWithContainer:self isField:YES];
+		_placeholderTextLayer.textColor = [UIColor colorWithWhite:0.6f alpha:1.0f];
+        [self.layer insertSublayer:_placeholderTextLayer atIndex:0];
+		
         _textLayer = [[UITextLayer alloc] initWithContainer:self isField:YES];
         [self.layer insertSublayer:_textLayer atIndex:0];
 
@@ -69,6 +73,8 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
 - (void)dealloc
 {
+	[_placeholderTextLayer removeFromSuperlayer];
+	[_placeholderTextLayer release];
     [_textLayer removeFromSuperlayer];
     [_textLayer release];
     [_leftView release];
@@ -100,6 +106,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     [super layoutSubviews];
     const CGRect bounds = self.bounds;
     _textLayer.frame = [self textRectForBounds:bounds];
+	_placeholderTextLayer.frame = [self textRectForBounds:bounds];
 
     if ([self _isLeftViewVisible]) {
         _leftView.hidden = NO;
@@ -132,11 +139,11 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
 - (void)setPlaceholder:(NSString *)thePlaceholder
 {
-    if (![thePlaceholder isEqualToString:_placeholder]) {
-        [_placeholder release];
-        _placeholder = [thePlaceholder copy];
-        [self setNeedsDisplay];
-    }
+    _placeholderTextLayer.text = thePlaceholder;
+}
+
+- (NSString *)placeholder {
+	return _placeholderTextLayer.text;
 }
 
 - (void)setBorderStyle:(UITextBorderStyle)style
@@ -387,6 +394,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (void)setFont:(UIFont *)newFont
 {
     _textLayer.font = newFont;
+	_placeholderTextLayer.font = newFont;
 }
 
 - (UIColor *)textColor
@@ -407,6 +415,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (void)setTextAlignment:(UITextAlignment)textAlignment
 {
     _textLayer.textAlignment = textAlignment;
+	_placeholderTextLayer.textAlignment = textAlignment;
 }
 
 - (NSString *)text
@@ -438,6 +447,8 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
         //self.text = @"";
         [self performSelector:@selector(setText:) withObject:@"" afterDelay:0];
     }
+	
+	_placeholderTextLayer.hidden = YES;
     
     _editing = YES;
     [self setNeedsDisplay];
@@ -459,6 +470,8 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     _editing = NO;
     [self setNeedsDisplay];
     [self setNeedsLayout];
+	
+	_placeholderTextLayer.hidden = NO;
 
     if (_delegateHas.didEndEditing) {
         [_delegate textFieldDidEndEditing:self];

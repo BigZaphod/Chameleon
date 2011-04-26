@@ -46,6 +46,7 @@
     if ((self = [super initWithFrame:frame])) {
         _searchField = [[UISearchField alloc] initWithFrame:frame];
 		_searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		_searchField.font = [UIFont fontWithName:@"Helvetica" size:12.0f];
         [self addSubview:_searchField];
     }
     return self;
@@ -57,16 +58,6 @@
     [_placeholder release];
     [_searchField release];
     [super dealloc];
-}
-
-- (NSString *)text
-{
-    return _searchField.text;
-}
-
-- (void)setText:(NSString *)text
-{
-    _searchField.text = text;
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -86,6 +77,24 @@
 	
 	CFRelease(gradient);
 	CFRelease(colorSpace);
+}
+
+- (NSString *)text
+{
+    return _searchField.text;
+}
+
+- (void)setText:(NSString *)text
+{
+    _searchField.text = text;
+}
+
+- (NSString *)placeholder {
+	return _searchField.placeholder;
+}
+
+- (void)setPlaceholder:(NSString *)placeholder {
+	_searchField.placeholder = placeholder;
 }
 
 @end

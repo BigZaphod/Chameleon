@@ -66,6 +66,7 @@ typedef enum {
 @interface UITextField : UIControl <UITextInputTraits> {
 @private
     UITextLayer *_textLayer;
+	UITextLayer *_placeholderTextLayer;
 
     id _delegate;
     UITextFieldViewMode _clearButtonMode;
