@@ -52,13 +52,13 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (id)initWithFrame:(CGRect)frame
 {
     if ((self=[super initWithFrame:frame])) {
-		_placeholderTextLayer = [[UITextLayer alloc] initWithContainer:self isField:YES];
+		_placeholderTextLayer = [[UITextLayer alloc] initWithContainer:self isField:NO];
 		_placeholderTextLayer.textColor = [UIColor colorWithWhite:0.6f alpha:1.0f];
-        [self.layer insertSublayer:_placeholderTextLayer atIndex:0];
+        [self.layer addSublayer:_placeholderTextLayer];
 		
         _textLayer = [[UITextLayer alloc] initWithContainer:self isField:YES];
-        [self.layer insertSublayer:_textLayer atIndex:0];
-
+		[self.layer addSublayer:_textLayer];
+		
         self.textAlignment = UITextAlignmentLeft;
         self.font = [UIFont systemFontOfSize:17];
         self.borderStyle = UITextBorderStyleNone;
@@ -371,6 +371,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (BOOL)becomeFirstResponder
 {
     if ([super becomeFirstResponder]) {
+		_placeholderTextLayer.hidden = YES;
         return [_textLayer becomeFirstResponder];
     } else {
         return NO;
@@ -426,6 +427,9 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (void)setText:(NSString *)newText
 {
     _textLayer.text = newText;
+	
+	_placeholderTextLayer.hidden = _textLayer.text.length > 0 || _editing;
+	_textLayer.hidden = !_placeholderTextLayer.hidden;
 }
 
 - (BOOL)_textShouldBeginEditing
@@ -447,8 +451,6 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
         //self.text = @"";
         [self performSelector:@selector(setText:) withObject:@"" afterDelay:0];
     }
-	
-	_placeholderTextLayer.hidden = YES;
     
     _editing = YES;
     [self setNeedsDisplay];
@@ -467,11 +469,12 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
 - (void)_textDidEndEditing
 {
+	_placeholderTextLayer.hidden = _textLayer.text.length > 0;
+	_textLayer.hidden = !_placeholderTextLayer.hidden;
+	
     _editing = NO;
     [self setNeedsDisplay];
     [self setNeedsLayout];
-	
-	_placeholderTextLayer.hidden = NO;
 
     if (_delegateHas.didEndEditing) {
         [_delegate textFieldDidEndEditing:self];
