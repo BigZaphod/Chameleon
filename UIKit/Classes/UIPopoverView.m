@@ -100,7 +100,7 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 
 + (UIEdgeInsets)insetForArrows
 {
-    return UIEdgeInsetsMake(17,13,8,12);
+    return UIEdgeInsetsMake(15,13,8,12);
 }
 
 + (CGRect)backgroundRectForBounds:(CGRect)bounds
