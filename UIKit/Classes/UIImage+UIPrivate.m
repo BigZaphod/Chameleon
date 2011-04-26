@@ -182,6 +182,21 @@ NSMutableDictionary *imageCache = nil;
     return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> add.png" leftCapWidth:0 topCapHeight:0];
 }
 
++ (UIImage *)_buttonBarSystemItemReply
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> reply.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemCompose
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> compose.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemAction
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> action.png" leftCapWidth:0 topCapHeight:0];
+}
+
 + (UIImage *)_buttonBarSystemItemDone
 {
 	return [self _frameworkImageWithName:@"<UIBarButtonItemStyleDone>.png" leftCapWidth:8 topCapHeight:0];
@@ -200,11 +215,6 @@ NSMutableDictionary *imageCache = nil;
 + (UIImage *)_highlightedButtonBarSystemItemPlain
 {
 	return [self _frameworkImageWithName:@"<UIBarButtonItemStylePlain> hi.png" leftCapWidth:8 topCapHeight:0];
-}
-
-+ (UIImage *)_buttonBarSystemItemReply
-{
-    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> reply.png" leftCapWidth:0 topCapHeight:0];
 }
 
 - (UIImage *)_toolbarImage

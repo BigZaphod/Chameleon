@@ -17,7 +17,7 @@
 	
 	[super viewDidLoad];
 	
-	UIBarButtonItem *doneButton=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:nil];
+	UIBarButtonItem *doneButton=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:nil];
 	self.navigationItem.rightBarButtonItem = doneButton;
 	[doneButton release];
 	

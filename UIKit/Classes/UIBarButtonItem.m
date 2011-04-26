@@ -28,6 +28,7 @@
  */
 
 #import "UIBarButtonItem.h"
+#import "UIImage+UIPrivate.h"
 
 @implementation UIBarButtonItem
 @synthesize width=_width, customView=_customView, action=_action, target=_target, style=_style;
@@ -65,6 +66,30 @@
 				break;
 			case UIBarButtonSystemItemEdit:
 				self.title = @"Edit";
+				self.style = UIBarButtonItemStylePlain;
+				break;
+			case UIBarButtonSystemItemUndo:
+				self.title = @"Undo";
+				self.style = UIBarButtonItemStylePlain;
+				break;
+			case UIBarButtonSystemItemRedo:
+				self.title = @"Redo";
+				self.style = UIBarButtonItemStylePlain;
+				break;
+			case UIBarButtonSystemItemAdd:
+				self.image = [UIImage _buttonBarSystemItemAdd];
+				self.style = UIBarButtonItemStylePlain;
+				break;
+			case UIBarButtonSystemItemAction:
+				self.image = [UIImage _buttonBarSystemItemAction];
+				self.style = UIBarButtonItemStylePlain;
+				break;
+			case UIBarButtonSystemItemCompose:
+				self.image = [UIImage _buttonBarSystemItemCompose];
+				self.style = UIBarButtonItemStylePlain;
+				break;
+			case UIBarButtonSystemItemReply:
+				self.image = [UIImage _buttonBarSystemItemReply];
 				self.style = UIBarButtonItemStylePlain;
 				break;
 		}
