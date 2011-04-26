@@ -46,8 +46,9 @@
 {
     if ((self = [super initWithFrame:frame])) {
         _searchField = [[UISearchField alloc] initWithFrame:frame];
+		_searchField.borderStyle = UITextBorderStyleRoundedRect;
 		_searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
-		_searchField.font = [UIFont fontWithName:@"Helvetica" size:12.0f];
+		_searchField.font = [UIFont fontWithName:@"Helvetica" size:11.0f];
         [self addSubview:_searchField];
     }
     return self;

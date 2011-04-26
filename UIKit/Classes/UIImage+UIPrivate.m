@@ -187,6 +187,11 @@ NSMutableDictionary *imageCache = nil;
     return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> reply.png" leftCapWidth:0 topCapHeight:0];
 }
 
++ (UIImage *)_textFieldRoundedRectBackground
+{
+    return [self _frameworkImageWithName:@"<UITextField> roundedRectBackgroundImage.png" leftCapWidth:12.0f topCapHeight:0];
+}
+
 - (UIImage *)_toolbarImage
 {
     // NOTE.. I don't know where to put this, really, but it seems like the real UIKit reduces image size by 75% if they are too

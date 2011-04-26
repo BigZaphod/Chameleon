@@ -32,6 +32,7 @@
 #import "UIColor.h"
 #import "UIFont.h"
 #import "UIImage.h"
+#import "UIImage+UIPrivate.h"
 
 NSString *const UITextFieldTextDidBeginEditingNotification = @"UITextFieldTextDidBeginEditingNotification";
 NSString *const UITextFieldTextDidChangeNotification = @"UITextFieldTextDidChangeNotification";
@@ -203,7 +204,14 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
 - (CGRect)borderRectForBounds:(CGRect)bounds
 {
-    return bounds;
+	CGRect borderRect = bounds;
+	
+	if(self.borderStyle == UITextBorderStyleRoundedRect) {
+		UIImage *image = [UIImage _textFieldRoundedRectBackground];
+		borderRect = CGRectMake(4.0f, self.bounds.size.height/2 - image.size.height/2, self.bounds.size.width - 8.0f, image.size.height);
+	}
+	
+    return CGRectIntegral(borderRect);
 }
 
 - (CGRect)clearButtonRectForBounds:(CGRect)bounds
@@ -257,6 +265,10 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     
     if (_borderStyle != UITextBorderStyleNone) {
         textRect = [self borderRectForBounds:bounds];
+		if(self.borderStyle == UITextBorderStyleRoundedRect) {
+			textRect = CGRectOffset(CGRectInset(textRect, 2.0f, 2.0f), 4.0f, 1.0f);
+		}
+		
         // TODO: inset the bounds based on border types...
     }
     
@@ -278,7 +290,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
         }
     }
     
-    return CGRectIntegral(bounds);
+    return CGRectIntegral(textRect);
 }
 
 
@@ -293,8 +305,14 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
 - (void)drawRect:(CGRect)rect
 {
-    UIImage *background = self.enabled? _background : _disabledBackground;
-    [background drawInRect:self.bounds];
+    UIImage *currentBackgroundImage = nil;
+	if(self.borderStyle == UITextBorderStyleRoundedRect) {
+		currentBackgroundImage = [UIImage _textFieldRoundedRectBackground];
+	} else {
+		currentBackgroundImage = self.enabled? _background : _disabledBackground;
+	}
+	
+    [currentBackgroundImage drawInRect:[self borderRectForBounds:self.bounds]];
 }
 
 
