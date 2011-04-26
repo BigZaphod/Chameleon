@@ -39,6 +39,10 @@
 #import "UIColor.h"
 #import "UIFont.h"
 
+@interface UISearchBar () <UITextFieldDelegate>
+- (void)sendTextDidChange;
+@end
+
 @implementation UISearchBar
 @synthesize delegate=_delegate, showsCancelButton = _showsCancelButton, placeholder=_placeholder;
 
@@ -46,6 +50,7 @@
 {
     if ((self = [super initWithFrame:frame])) {
         _searchField = [[UISearchField alloc] initWithFrame:frame];
+		_searchField.delegate = self;
 		_searchField.borderStyle = UITextBorderStyleRoundedRect;
 		_searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
 		_searchField.font = [UIFont fontWithName:@"Helvetica" size:11.0f];
@@ -97,6 +102,39 @@
 
 - (void)setPlaceholder:(NSString *)placeholder {
 	_searchField.placeholder = placeholder;
+}
+
+- (void)setDelegate:(__weak id <UISearchBarDelegate>)newDelegate {
+	_delegate = newDelegate;
+	
+	_delegateHas.shouldBeginEditing = [self.delegate respondsToSelector:@selector(searchBarShouldBeginEditing:)];
+	_delegateHas.didBeginEditing = [self.delegate respondsToSelector:@selector(searchBarTextDidBeginEditing:)];
+	_delegateHas.shouldEndEditing = [self.delegate respondsToSelector:@selector(searchBarShouldEndEditing:)];
+	_delegateHas.didEndEditing = [self.delegate respondsToSelector:@selector(searchBarTextDidEndEditing:)];
+	_delegateHas.textDidChange = [self.delegate respondsToSelector:@selector(searchBar:textDidChange:)];
+	_delegateHas.shouldChangeText = [self.delegate respondsToSelector:@selector(searchBar:shouldChangeTextInRange:replacementText:)];
+	_delegateHas.searchButtonClicked = [self.delegate respondsToSelector:@selector(searchBarSearchButtonClicked:)];
+	_delegateHas.bookmarkButtonClicked = [self.delegate respondsToSelector:@selector(searchBarBookmarkButtonClicked:)];
+	_delegateHas.resultsButtonClicked = [self.delegate respondsToSelector:@selector(searchBarResultsListButtonClicked:)];;
+	_delegateHas.selectedScopeButtonChanged = [self.delegate respondsToSelector:@selector(searchBar:selectedScopeButtonIndexDidChange:)];
+}
+
+
+#pragma mark UITextFieldDelegate
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+	BOOL shouldChange = YES;
+	if(_delegateHas.shouldChangeText) shouldChange = [self.delegate searchBar:self shouldChangeTextInRange:range replacementText:string];
+	
+	if(shouldChange && _delegateHas.textDidChange) {
+		[self performSelector:@selector(sendTextDidChange) withObject:nil afterDelay:0];
+	}
+	
+	return shouldChange;
+}
+
+- (void)sendTextDidChange {
+	[self.delegate searchBar:self textDidChange:_searchField.text];
 }
 
 @end
