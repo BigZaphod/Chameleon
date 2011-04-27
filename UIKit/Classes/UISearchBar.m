@@ -74,6 +74,7 @@
 	
 	const CGFloat locations[] = { 0.0f, 1.0f };
 	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+	
 	NSArray *colors = [NSArray arrayWithObjects:(id) [UIColor colorWithRed:233.0f/255.0f green:236.0f/255.0f blue:239.0f/255.0f alpha:1.0f].CGColor, (id) [UIColor colorWithRed:215.0f/255.0f green:223.0f/255.0f blue:225.0f/255.0f alpha:1.0f].CGColor, nil];
 	CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef) colors, locations);
 	

@@ -469,6 +469,8 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
         //self.text = @"";
         [self performSelector:@selector(setText:) withObject:@"" afterDelay:0];
     }
+	
+	_placeholderTextLayer.hidden = YES;
     
     _editing = YES;
     [self setNeedsDisplay];
@@ -493,6 +495,8 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     _editing = NO;
     [self setNeedsDisplay];
     [self setNeedsLayout];
+	
+	_placeholderTextLayer.hidden = NO;
 
     if (_delegateHas.didEndEditing) {
         [_delegate textFieldDidEndEditing:self];
