@@ -38,6 +38,8 @@
 #import "UIGraphics.h"
 #import "UIColor.h"
 #import "UIFont.h"
+#import "UIImage+UIPrivate.h"
+#import "UIImageView.h"
 
 @interface UISearchBar () <UITextFieldDelegate>
 - (void)sendTextDidChange;
@@ -54,6 +56,8 @@
 		_searchField.borderStyle = UITextBorderStyleRoundedRect;
 		_searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
 		_searchField.font = [UIFont fontWithName:@"Helvetica" size:11.0f];
+		_searchField.leftView = [[[UIImageView alloc] initWithImage:[UIImage _searchBarIcon]] autorelease];
+		_searchField.leftViewMode = UITextFieldViewModeAlways;
         [self addSubview:_searchField];
     }
     return self;

@@ -227,7 +227,13 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (CGRect)leftViewRectForBounds:(CGRect)bounds
 {
     const CGRect frame = _leftView.frame;
-    bounds.origin.x = 0;
+    bounds.origin.x = [self borderRectForBounds:bounds].origin.x;
+	
+	if(self.borderStyle == UITextBorderStyleRoundedRect) {
+		bounds.origin.x += 6.0f;
+		bounds.origin.y -= 3.0f;
+	}
+	
     bounds.origin.y = (bounds.size.height / 2.f) - (frame.size.height/2.f);
     bounds.size = frame.size;
     return CGRectIntegral(bounds);
