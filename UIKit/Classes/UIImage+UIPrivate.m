@@ -197,6 +197,61 @@ NSMutableDictionary *imageCache = nil;
     return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> action.png" leftCapWidth:0 topCapHeight:0];
 }
 
++ (UIImage *)_buttonBarSystemItemOrganize;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> organize.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemTrash;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> trash.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemBookmarks;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> bookmarks.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemSearch;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> search.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemRefresh;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> refresh.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemStop;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> stop.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemCamera;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> camera.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemPlay;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> play.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemPause;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> search.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemRewind;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> rewind.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemFastForward;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> fastforward.png" leftCapWidth:0 topCapHeight:0];
+}
+
 + (UIImage *)_buttonBarSystemItemDone
 {
 	return [self _frameworkImageWithName:@"<UIBarButtonItemStyleDone>.png" leftCapWidth:8 topCapHeight:0];
