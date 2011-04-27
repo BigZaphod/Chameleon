@@ -149,6 +149,13 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
     _titleLabel.text = [self titleForState:state];
     _titleLabel.textColor = [self titleColorForState:state] ?: [self _defaultTitleColor];
     _titleLabel.shadowColor = [self titleShadowColorForState:state] ?: [self _defaultTitleShadowColor];
+	if(self.reversesTitleShadowWhenHighlighted) {
+		if(!self.highlighted) {
+			originalShadowOffset = self.titleLabel.shadowOffset;
+		}
+		
+		self.titleLabel.shadowOffset = CGSizeMake(originalShadowOffset.width, self.highlighted ? -originalShadowOffset.height : originalShadowOffset.height);
+	}
     
     UIImage *image = [self _contentForState:state type:UIButtonContentTypeImage];
     UIImage *backgroundImage = [self _contentForState:state type:UIButtonContentTypeBackgroundImage];
