@@ -33,6 +33,7 @@
 #import "UILabel.h"
 #import "UIImageView.h"
 #import "UIFont.h"
+#import "UIGraphics.h"
 
 extern CGFloat _UITableViewDefaultRowHeight;
 
@@ -42,6 +43,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 @synthesize selectedBackgroundView=_selectedBackgroundView, highlighted=_highlighted, reuseIdentifier=_reuseIdentifier;
 @synthesize editing = _editing, detailTextLabel = _detailTextLabel, showingDeleteConfirmation = _showingDeleteConfirmation;
 @synthesize indentationWidth=_indentationWidth, accessoryView=_accessoryView;
+@synthesize sectionLocation=_sectionLocation;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -144,9 +146,20 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	}
 }
 
+
+
+
 - (void)drawRect:(CGRect)rect
 {
 	const CGRect bounds = self.bounds;
+	
+	int minX = NSMinX(bounds);
+	int midX = NSMidX(bounds);
+	int maxX = NSMaxX(bounds);
+	int minY = NSMinY(bounds);
+	int midY = NSMidY(bounds);
+	int maxY = NSMaxY(bounds);
+	
 	if(self.isSelected==YES)
 	{
 		NSGradient *aGradient=[[NSGradient alloc] initWithColors:[NSArray arrayWithObjects:[NSColor colorWithCalibratedRed:(1.0/255.0) green:(93.0/255.0) blue:(230.0/255.0) alpha:1.0],[NSColor colorWithCalibratedRed:(5.0/255.0) green:(140.0/255.0) blue:(245.0/255.0) alpha:1.0],nil]];
@@ -160,12 +173,62 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		[aGradient drawInRect:fadeFrame angle:270.0];
 	}
 	
+	float radius = 5.0;
+	
+	if (self.sectionLocation==UITableViewCellSectionLocationTop) {
+
+		CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 1.0);
+		CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), .67f, .67f, .67f, 1.0);
+		CGContextBeginPath(UIGraphicsGetCurrentContext());
+		CGContextMoveToPoint(UIGraphicsGetCurrentContext(), minX+0.5,maxY);
+		CGContextAddArcToPoint(UIGraphicsGetCurrentContext(),minX+0.5, minY-0.5, midX, maxY, radius);
+		CGContextAddArcToPoint(UIGraphicsGetCurrentContext(),maxX+0.5, minY+0.5, maxX-1.5, midY, radius);
+		CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), maxX-1.5, maxY+0.5);
+		/*
+		 CGContextMoveToPoint(UIGraphicsGetCurrentContext(), minX+0.5,maxY+0.5);
+		 CGContextAddArcToPoint(UIGraphicsGetCurrentContext(),minX+0.5, minY+0.5, midX+0.5, maxY+0.5, radius);
+		 CGContextAddArcToPoint(UIGraphicsGetCurrentContext(),maxX+0.5, minY+0.5, maxX+0.5, midY+0.5, radius);
+		 */
+		CGContextStrokePath(UIGraphicsGetCurrentContext());
+	}
+	
+	if (self.sectionLocation==UITableViewCellSectionLocationBottom) {
+		
+		CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 1.0);
+		CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), .67f, .67f, .67f, 1.0);
+		CGContextBeginPath(UIGraphicsGetCurrentContext());
+		CGContextMoveToPoint(UIGraphicsGetCurrentContext(), minX,minY);
+		CGContextAddArcToPoint(UIGraphicsGetCurrentContext(),minX, maxY-1, midX, maxY-1, radius);
+		CGContextAddArcToPoint(UIGraphicsGetCurrentContext(),maxX, maxY-1, maxX-9, midY, radius);
+		CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), maxX+0.5, minY+0.5);
+		CGContextStrokePath(UIGraphicsGetCurrentContext());
+	}
+	
+	if (self.sectionLocation==UITableViewCellSectionLocationMiddle) {
+		
+		CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 1.0f);
+		CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), .67f, .67f, .67f, 1.0);
+		CGContextBeginPath(UIGraphicsGetCurrentContext());
+		CGContextMoveToPoint(UIGraphicsGetCurrentContext(), minX+.5f,minY);
+		CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), minX+.5f, maxY-1);
+		CGContextStrokePath(UIGraphicsGetCurrentContext());
+		
+		CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 1.0f);
+		CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), .67f, .67f, .67f, 1.0);
+		CGContextBeginPath(UIGraphicsGetCurrentContext());
+		CGContextMoveToPoint(UIGraphicsGetCurrentContext(), maxX-.5f, minY);
+		CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), maxX-.5f, maxY);
+		CGContextStrokePath(UIGraphicsGetCurrentContext());
+	}
+	
+	/*
 	NSBezierPath *bottomPath = [NSBezierPath bezierPath];
 	[bottomPath setLineWidth:2.0f];
 	[bottomPath moveToPoint:NSMakePoint(bounds.origin.x,bounds.size.height)];
 	[bottomPath lineToPoint:NSMakePoint(bounds.size.width,bounds.size.height)];
 	[[NSColor colorWithDeviceRed:(224.0/255.0) green:(224.0/255.0) blue:(224.0/255.0) alpha:1.0] set];
 	[bottomPath stroke];
+	 */
 }
 
 - (void)_setSeparatorStyle:(UITableViewCellSeparatorStyle)theStyle color:(UIColor *)theColor

@@ -62,6 +62,13 @@ typedef enum {
     UITableViewCellEditingStyleInsert
 } UITableViewCellEditingStyle;
 
+typedef enum {
+    UITableViewCellSectionLocationUnique,
+    UITableViewCellSectionLocationTop,
+    UITableViewCellSectionLocationMiddle,
+	UITableViewCellSectionLocationBottom
+} UITableViewCellSectionLocation;
+
 @class UITableViewCellSeparator, UILabel, UIImageView;
 
 @interface UITableViewCell : UIView {
@@ -78,6 +85,7 @@ typedef enum {
     UIView *_accessoryView;
     UITableViewCellAccessoryType _editingAccessoryType;
     UITableViewCellSelectionStyle _selectionStyle;
+	UITableViewCellSectionLocation _sectionLocation;
     NSInteger _indentationLevel;
     BOOL _editing;
     BOOL _selected;
@@ -99,6 +107,7 @@ typedef enum {
 @property (nonatomic, retain) UIView *backgroundView;
 @property (nonatomic, retain) UIView *selectedBackgroundView;
 @property (nonatomic) UITableViewCellSelectionStyle selectionStyle;
+@property (nonatomic) UITableViewCellSectionLocation sectionLocation;
 @property (nonatomic) NSInteger indentationLevel;
 @property (nonatomic) UITableViewCellAccessoryType accessoryType;
 @property (nonatomic, retain) UIView *accessoryView;
