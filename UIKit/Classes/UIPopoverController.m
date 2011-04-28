@@ -69,10 +69,10 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
     const BOOL allowTopOrBottom = (pointTo->x >= NSMinX(screenRect)+minimumPadding && pointTo->x <= NSMaxX(screenRect)-minimumPadding);
     const BOOL allowLeftOrRight = (pointTo->y >= NSMinY(screenRect)+minimumPadding && pointTo->y <= NSMaxY(screenRect)-minimumPadding);
     
-    const BOOL allowTopQuad = (arrowDirections | UIPopoverArrowDirectionDown) && topQuad.size.width > 0 && topQuad.size.height > 0 && allowTopOrBottom;
-    const BOOL allowBottomQuad = (arrowDirections | UIPopoverArrowDirectionUp) && bottomQuad.size.width > 0 && bottomQuad.size.height > 0 && allowTopOrBottom;
-    const BOOL allowLeftQuad = (arrowDirections | UIPopoverArrowDirectionRight) && leftQuad.size.width > 0 && leftQuad.size.height > 0 && allowLeftOrRight;
-    const BOOL allowRightQuad = (arrowDirections | UIPopoverArrowDirectionLeft) && rightQuad.size.width > 0 && rightQuad.size.height > 0 && allowLeftOrRight;
+    const BOOL allowTopQuad = ((arrowDirections & UIPopoverArrowDirectionDown) != 0) && topQuad.size.width > 0 && topQuad.size.height > 0 && allowTopOrBottom;
+    const BOOL allowBottomQuad = ((arrowDirections & UIPopoverArrowDirectionUp) != 0) && bottomQuad.size.width > 0 && bottomQuad.size.height > 0 && allowTopOrBottom;
+    const BOOL allowLeftQuad = ((arrowDirections & UIPopoverArrowDirectionRight) != 0) && leftQuad.size.width > 0 && leftQuad.size.height > 0 && allowLeftOrRight;
+    const BOOL allowRightQuad = ((arrowDirections & UIPopoverArrowDirectionLeft) != 0) && rightQuad.size.width > 0 && rightQuad.size.height > 0 && allowLeftOrRight;
     
     const CGFloat arrowPadding = 8;		// the arrow images are slightly larger to account for shadows, but the arrow point needs to be up against the rect exactly so this helps with that
         
