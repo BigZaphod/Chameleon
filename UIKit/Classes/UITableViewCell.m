@@ -35,7 +35,9 @@
 #import "UIFont.h"
 #import "UIGraphics.h"
 
+
 extern CGFloat _UITableViewDefaultRowHeight;
+
 
 @implementation UITableViewCell
 @synthesize contentView=_contentView, accessoryType=_accessoryType, textLabel=_textLabel, selectionStyle=_selectionStyle, indentationLevel=_indentationLevel;
@@ -44,6 +46,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 @synthesize editing = _editing, detailTextLabel = _detailTextLabel, showingDeleteConfirmation = _showingDeleteConfirmation;
 @synthesize indentationWidth=_indentationWidth, accessoryView=_accessoryView;
 @synthesize sectionLocation=_sectionLocation;
+@synthesize tableViewStyle;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -57,6 +60,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		_contentView = [[UIView alloc] init];
 		[self addSubview:_contentView];
 		
+
 		_imageView = [[UIImageView alloc] init];
 		_imageView.contentMode = UIViewContentModeCenter;
 		[_contentView addSubview:_imageView];
@@ -68,8 +72,10 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		_textLabel.font = [UIFont boldSystemFontOfSize:17];
 		[_contentView addSubview:_textLabel];
 		
+		self.backgroundColor = [UIColor whiteColor];
 		self.accessoryType = UITableViewCellAccessoryNone;
 		self.editingAccessoryType = UITableViewCellAccessoryNone;
+		self.selectionStyle = UITableViewCellSelectionStyleBlue;
 	}
 	return self;
 }
@@ -147,88 +153,238 @@ extern CGFloat _UITableViewDefaultRowHeight;
 }
 
 
-
-
 - (void)drawRect:(CGRect)rect
 {
+	
+	/*******
+	 some of the code from Mike Akers
+	 http://stackoverflow.com/questions/400965/how-to-customize-the-background-border-colors-of-a-grouped-table-view
+	 *******/
+	
+	 
+	 
 	const CGRect bounds = self.bounds;
 	
-	int minX = NSMinX(bounds);
-	int midX = NSMidX(bounds);
-	int maxX = NSMaxX(bounds);
-	int minY = NSMinY(bounds);
-	int midY = NSMidY(bounds);
-	int maxY = NSMaxY(bounds);
+	CGFloat minX = CGRectGetMinX(rect), midX = CGRectGetMidX(rect), maxX = CGRectGetMaxX(rect);
+	CGFloat minY = CGRectGetMinY(rect), midY = CGRectGetMidY(rect), maxY = CGRectGetMaxY(rect);
 	
-	if(self.isSelected==YES)
+	
+	
+	
+	if(self.tableViewStyle == 0)
 	{
-		NSGradient *aGradient=[[NSGradient alloc] initWithColors:[NSArray arrayWithObjects:[NSColor colorWithCalibratedRed:(1.0/255.0) green:(93.0/255.0) blue:(230.0/255.0) alpha:1.0],[NSColor colorWithCalibratedRed:(5.0/255.0) green:(140.0/255.0) blue:(245.0/255.0) alpha:1.0],nil]];
-		CGRect fadeFrame = CGRectMake(0, 0, bounds.size.width, bounds.size.height-1);
-		[aGradient drawInRect:fadeFrame angle:270.0];
+		
+		if(self.isSelected==YES)
+		{
+			if(self.selectionStyle==UITableViewCellSelectionStyleBlue)
+			{
+				CGGradientRef blueGradient;
+				CGColorSpaceRef cellColorspace;
+				size_t num_locations = 2;
+				CGFloat locations[2] = { 0.0, 1.0 };
+				CGFloat components[8] = { 0.02, 0.55, 0.96, 1.0,  // Start color
+					0.0, 0.36, 0.90, 1.0 }; // End color
+				
+				cellColorspace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
+				blueGradient = CGGradientCreateWithColorComponents (cellColorspace, components, locations, num_locations);
+				
+				CGPoint startPoint, endPoint;
+				
+				startPoint = CGPointMake(CGRectGetMidX(bounds), 0.0f);
+				endPoint = CGPointMake(CGRectGetMidX(bounds), CGRectGetMaxY(bounds));
+				CGContextDrawLinearGradient (UIGraphicsGetCurrentContext(), blueGradient, startPoint, endPoint, 0);
+				CGGradientRelease(blueGradient);
+				CGColorSpaceRelease(cellColorspace);
+			}
+			
+			if(self.selectionStyle==UITableViewCellSelectionStyleGray)
+			{
+				CGGradientRef blueGradient;
+				CGColorSpaceRef cellColorspace;
+				size_t num_locations = 2;
+				CGFloat locations[2] = { 0.0, 1.0 };
+				CGFloat components[8] = { 0.81, 0.81, 0.81, 1.0,  // Start color
+					0.67, 0.67, 0.67, 1.0 }; // End color
+				
+				cellColorspace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
+				blueGradient = CGGradientCreateWithColorComponents (cellColorspace, components, locations, num_locations);
+				
+				CGPoint startPoint, endPoint;
+				
+				startPoint = CGPointMake(CGRectGetMidX(bounds), 0.0f);
+				endPoint = CGPointMake(CGRectGetMidX(bounds), CGRectGetMaxY(bounds));
+				CGContextDrawLinearGradient (UIGraphicsGetCurrentContext(), blueGradient, startPoint, endPoint, 0);
+				CGGradientRelease(blueGradient);
+				CGColorSpaceRelease(cellColorspace);
+			}
+		}
+		
 	}
 	else 
 	{
-		NSGradient *aGradient=[[NSGradient alloc] initWithColors:[NSArray arrayWithObjects:[NSColor colorWithCalibratedRed:(255.0/255.0) green:(255.0/255.0) blue:(255.0/255.0) alpha:1.0],[NSColor colorWithCalibratedRed:(255.0/255.0) green:(255.0/255.0) blue:(255.0/255.0) alpha:1.0],nil]];
-		CGRect fadeFrame = CGRectMake(0, 0, bounds.size.width, bounds.size.height-1);
-		[aGradient drawInRect:fadeFrame angle:270.0];
-	}
-	
-	float radius = 5.0;
-	
-	if (self.sectionLocation==UITableViewCellSectionLocationTop) {
+		
+		
+		float radius = 10.0;
+		
+		int lineWidth = 1;
+		
+		CGRect rect = [self bounds];
+		rect.size.width -= lineWidth;
+		rect.size.height -= lineWidth;
+		rect.origin.x += lineWidth / 2.0;
+		rect.origin.y += lineWidth / 2.0;
+		
+		
+		maxY += 1;
+		
+		CGContextRef c = UIGraphicsGetCurrentContext();
+		CGColorSpaceRef myColorspace = CGColorSpaceCreateDeviceRGB();
+		CGGradientRef blueGradient = nil;
+		CGFloat locations[2] = { 0.0, 1.0 };
+		CGFloat components[8] = { 0.02, 0.55, 0.96, 1.0,  // Start color
+				0.0, 0.36, 0.90, 1.0 }; // End color
 
-		CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 1.0);
-		CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), .67f, .67f, .67f, 1.0);
-		CGContextBeginPath(UIGraphicsGetCurrentContext());
-		CGContextMoveToPoint(UIGraphicsGetCurrentContext(), minX+0.5,maxY);
-		CGContextAddArcToPoint(UIGraphicsGetCurrentContext(),minX+0.5, minY-0.5, midX, maxY, radius);
-		CGContextAddArcToPoint(UIGraphicsGetCurrentContext(),maxX+0.5, minY+0.5, maxX-1.5, midY, radius);
-		CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), maxX-1.5, maxY+0.5);
-		/*
-		 CGContextMoveToPoint(UIGraphicsGetCurrentContext(), minX+0.5,maxY+0.5);
-		 CGContextAddArcToPoint(UIGraphicsGetCurrentContext(),minX+0.5, minY+0.5, midX+0.5, maxY+0.5, radius);
-		 CGContextAddArcToPoint(UIGraphicsGetCurrentContext(),maxX+0.5, minY+0.5, maxX+0.5, midY+0.5, radius);
-		 */
-		CGContextStrokePath(UIGraphicsGetCurrentContext());
+			//	CGFloat components[8] = { 0.81, 0.81, 0.81, 1.0,  // Start color
+			//		0.67, 0.67, 0.67, 1.0 }; // End color
+		
+		
+		CGContextSetStrokeColorWithColor(c, [[UIColor grayColor] CGColor]);
+		CGContextSetLineWidth(c, lineWidth);
+		CGContextSetAllowsAntialiasing(c, YES);
+		CGContextSetShouldAntialias(c, YES);
+		
+		if (self.sectionLocation==UITableViewCellSectionLocationTop) {
+			
+			
+			
+			if(self.isSelected==YES)
+			{
+				
+				minY += 1;
+				
+				CGMutablePathRef path = CGPathCreateMutable();
+				CGPathMoveToPoint(path, NULL, minX, maxY);
+				CGPathAddArcToPoint(path, NULL, minX, minY, midX, minY, radius);
+				CGPathAddArcToPoint(path, NULL, maxX, minY, maxX, maxY, radius);
+				CGPathAddLineToPoint(path, NULL, maxX, maxY);
+				CGPathAddLineToPoint(path, NULL, minX, maxY);
+				CGPathCloseSubpath(path);
+				
+				// Fill and stroke the path
+				CGContextSaveGState(c);
+				CGContextAddPath(c, path);
+				CGContextClip(c);
+				
+				blueGradient = CGGradientCreateWithColorComponents(myColorspace, components, locations, 2);
+				CGContextDrawLinearGradient(c, blueGradient, CGPointMake(minX,minY), CGPointMake(minX,maxY), 0);
+				
+				CGContextAddPath(c, path);
+				CGPathRelease(path);
+				CGContextStrokePath(c);
+				CGContextRestoreGState(c);
+				
+				CGColorSpaceRelease(myColorspace);
+				CGGradientRelease(blueGradient);
+				return;
+			}
+			else
+			{
+				
+				CGContextSetRGBStrokeColor(c, .67f, .67f, .67f, 1.0);
+				CGContextBeginPath(c);
+				CGContextMoveToPoint(c, minX,maxY);
+				CGContextAddArcToPoint(c,minX, minY, midX, minY, radius);
+				CGContextAddArcToPoint(c,maxX, minY, maxX, maxY, radius);
+				CGContextAddLineToPoint(c, maxX, maxY);
+				//CGContextStrokePath(c);
+				[self.backgroundColor setFill];
+				CGContextDrawPath(c, kCGPathFillStroke);
+				
+			}
+			
+		}
+		
+		if (self.sectionLocation==UITableViewCellSectionLocationBottom) {
+			if(self.isSelected==YES)
+			{
+				CGMutablePathRef path = CGPathCreateMutable();
+				CGPathMoveToPoint(path, NULL, minX, minY);
+				CGPathAddArcToPoint(path, NULL, minX, maxY, midX, maxY, radius);
+				CGPathAddArcToPoint(path, NULL, maxX, maxY, maxX, minY, radius);
+				CGPathAddLineToPoint(path, NULL, maxX, minY);
+				CGPathAddLineToPoint(path, NULL, minX, minY);
+				CGPathCloseSubpath(path);
+				
+				// Fill and stroke the path
+				CGContextSaveGState(c);
+				CGContextAddPath(c, path);
+				CGContextClip(c);
+				
+				blueGradient = CGGradientCreateWithColorComponents(myColorspace, components, locations, 2);
+				CGContextDrawLinearGradient(c, blueGradient, CGPointMake(minX,minY), CGPointMake(minX,maxY), 0);
+				
+				CGContextAddPath(c, path);
+				CGPathRelease(path);
+				CGContextStrokePath(c);
+				CGContextRestoreGState(c);
+			}
+			else
+			{
+				
+				maxY -= 1;
+				CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 1.0);
+				CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), .67f, .67f, .67f, 1.0);
+				CGContextBeginPath(UIGraphicsGetCurrentContext());
+				CGContextMoveToPoint(UIGraphicsGetCurrentContext(), minX,minY);
+				CGContextAddArcToPoint(UIGraphicsGetCurrentContext(),minX, maxY, midX, maxY, radius);
+				CGContextAddArcToPoint(UIGraphicsGetCurrentContext(),maxX, maxY, maxX, minY, radius);
+				CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), maxX, minY);
+				//CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), minX, minY);
+				CGContextStrokePath(UIGraphicsGetCurrentContext());
+			}
+		}
+		
+		if (self.sectionLocation==UITableViewCellSectionLocationMiddle) {
+			
+			if (self.isSelected==YES) 
+			{
+				CGMutablePathRef path = CGPathCreateMutable();
+				CGPathMoveToPoint(path, NULL, minX, minY);
+				CGPathAddLineToPoint(path, NULL, maxX, minY);
+				CGPathAddLineToPoint(path, NULL, maxX, maxY);
+				CGPathAddLineToPoint(path, NULL, minX, maxY);
+				CGPathAddLineToPoint(path, NULL, minX, minY);
+				CGPathCloseSubpath(path);
+				
+				// Fill and stroke the path
+				CGContextSaveGState(c);
+				CGContextAddPath(c, path);
+				CGContextClip(c);
+				
+				blueGradient = CGGradientCreateWithColorComponents(myColorspace, components, locations, 2);
+				CGContextDrawLinearGradient(c, blueGradient, CGPointMake(minX,minY), CGPointMake(minX,maxY), 0);
+				
+				CGContextAddPath(c, path);
+				CGPathRelease(path);
+				CGContextStrokePath(c);
+				CGContextRestoreGState(c);
+			}
+			else {
+				
+				CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), .67f, .67f, .67f, 1.0);
+				CGContextBeginPath(UIGraphicsGetCurrentContext());
+				CGContextMoveToPoint(UIGraphicsGetCurrentContext(), minX,minY);
+				CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), minX, maxY-1);
+				CGContextStrokePath(UIGraphicsGetCurrentContext());
+				
+				CGContextBeginPath(UIGraphicsGetCurrentContext());
+				CGContextMoveToPoint(UIGraphicsGetCurrentContext(), maxX, minY);
+				CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), maxX, maxY);
+				CGContextStrokePath(UIGraphicsGetCurrentContext());
+			}
+		}
 	}
 	
-	if (self.sectionLocation==UITableViewCellSectionLocationBottom) {
-		
-		CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 1.0);
-		CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), .67f, .67f, .67f, 1.0);
-		CGContextBeginPath(UIGraphicsGetCurrentContext());
-		CGContextMoveToPoint(UIGraphicsGetCurrentContext(), minX,minY);
-		CGContextAddArcToPoint(UIGraphicsGetCurrentContext(),minX, maxY-1, midX, maxY-1, radius);
-		CGContextAddArcToPoint(UIGraphicsGetCurrentContext(),maxX, maxY-1, maxX-9, midY, radius);
-		CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), maxX+0.5, minY+0.5);
-		CGContextStrokePath(UIGraphicsGetCurrentContext());
-	}
-	
-	if (self.sectionLocation==UITableViewCellSectionLocationMiddle) {
-		
-		CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 1.0f);
-		CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), .67f, .67f, .67f, 1.0);
-		CGContextBeginPath(UIGraphicsGetCurrentContext());
-		CGContextMoveToPoint(UIGraphicsGetCurrentContext(), minX+.5f,minY);
-		CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), minX+.5f, maxY-1);
-		CGContextStrokePath(UIGraphicsGetCurrentContext());
-		
-		CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 1.0f);
-		CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), .67f, .67f, .67f, 1.0);
-		CGContextBeginPath(UIGraphicsGetCurrentContext());
-		CGContextMoveToPoint(UIGraphicsGetCurrentContext(), maxX-.5f, minY);
-		CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), maxX-.5f, maxY);
-		CGContextStrokePath(UIGraphicsGetCurrentContext());
-	}
-	
-	/*
-	NSBezierPath *bottomPath = [NSBezierPath bezierPath];
-	[bottomPath setLineWidth:2.0f];
-	[bottomPath moveToPoint:NSMakePoint(bounds.origin.x,bounds.size.height)];
-	[bottomPath lineToPoint:NSMakePoint(bounds.size.width,bounds.size.height)];
-	[[NSColor colorWithDeviceRed:(224.0/255.0) green:(224.0/255.0) blue:(224.0/255.0) alpha:1.0] set];
-	[bottomPath stroke];
-	 */
 }
 
 - (void)_setSeparatorStyle:(UITableViewCellSeparatorStyle)theStyle color:(UIColor *)theColor
@@ -287,7 +443,6 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		[_backgroundView release];
 		_backgroundView = [theBackgroundView retain];
 		[self addSubview:_backgroundView];
-		self.backgroundColor = [UIColor clearColor];
 	}
 }
 

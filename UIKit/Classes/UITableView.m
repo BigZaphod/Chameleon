@@ -295,20 +295,31 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
                         [availableCells removeObjectForKey:indexPath];
                         cell.selected = [_selectedRow isEqual:indexPath];
                         cell.frame = rowRect;
-                        cell.backgroundColor = self.backgroundColor;
-                        [cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
+						
+						if(self.style == UITableViewStylePlain)
+							cell.tableViewStyle = 0;
+						else 
+							cell.tableViewStyle = 1;
+						
 
+                        //cell.backgroundColor = self.backgroundColor;//[UIColor whiteColor];
+						
+                        
 						if (indexPath.row == 0 && numberOfRows == 1) {
 							cell.sectionLocation = UITableViewCellSectionLocationUnique;
+							[cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
 						}
 						else if (indexPath.row == 0) {
 							cell.sectionLocation = UITableViewCellSectionLocationTop;
+							[cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
 						}
 						else if (indexPath.row != numberOfRows - 1) {
 							cell.sectionLocation = UITableViewCellSectionLocationMiddle;
+							[cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
 						}
 						else {
 							cell.sectionLocation = UITableViewCellSectionLocationBottom;
+							[cell _setSeparatorStyle:UITableViewCellSeparatorStyleNone color:_separatorColor];
 						}
 						
                         [self addSubview:cell];
@@ -358,9 +369,9 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (CGRect)_CGRectFromVerticalOffset:(CGFloat)offset height:(CGFloat)height
 {
-	//if(self.style==UITableViewStylePlain)
-    //return CGRectMake(0,offset,self.bounds.size.width,height);
-	//else
+	if(self.style==UITableViewStylePlain)
+    return CGRectMake(0,offset,self.bounds.size.width,height);
+	else
     return CGRectMake(9,offset,self.bounds.size.width-29,height);
 	
 }

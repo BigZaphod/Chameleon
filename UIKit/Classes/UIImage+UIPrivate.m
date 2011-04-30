@@ -272,6 +272,16 @@ NSMutableDictionary *imageCache = nil;
 	return [self _frameworkImageWithName:@"<UIBarButtonItemStylePlain> hi.png" leftCapWidth:8 topCapHeight:0];
 }
 
++ (UIImage *)_tableSelection
+{
+	return [self _frameworkImageWithName:@"UITableSelection.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_tableSelectionGray
+{
+	return [self _frameworkImageWithName:@"UITableSelectionGray.png" leftCapWidth:0 topCapHeight:0];
+}
+
 - (UIImage *)_toolbarImage
 {
     // NOTE.. I don't know where to put this, really, but it seems like the real UIKit reduces image size by 75% if they are too

@@ -69,6 +69,7 @@ typedef enum {
 	UITableViewCellSectionLocationBottom
 } UITableViewCellSectionLocation;
 
+
 @class UITableViewCellSeparator, UILabel, UIImageView;
 
 @interface UITableViewCell : UIView {
@@ -86,6 +87,7 @@ typedef enum {
     UITableViewCellAccessoryType _editingAccessoryType;
     UITableViewCellSelectionStyle _selectionStyle;
 	UITableViewCellSectionLocation _sectionLocation;
+	unsigned int tableViewStyle;
     NSInteger _indentationLevel;
     BOOL _editing;
     BOOL _selected;
@@ -118,5 +120,6 @@ typedef enum {
 @property (nonatomic, readonly) BOOL showingDeleteConfirmation;  // not yet implemented
 @property (nonatomic, readonly, copy) NSString *reuseIdentifier;
 @property (nonatomic, assign) CGFloat indentationWidth; // 10 per default
+@property (nonatomic, assign) unsigned int tableViewStyle;
 
 @end

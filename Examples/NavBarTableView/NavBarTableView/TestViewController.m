@@ -32,8 +32,9 @@
 	UIView *background=[[UIView alloc] init];
 	background.backgroundColor=[UIColor whiteColor];
 	
-	UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 0, 0) style:UITableViewStylePlain];
-	tableView.backgroundColor=[UIColor whiteColor];
+	UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 0, 0) style:UITableViewStyleGrouped];
+	
+	
 	tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     tableView.delegate = self;
     tableView.dataSource = self;
@@ -57,6 +58,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
+	
     return 10;
 }
 
@@ -70,9 +72,8 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-    
+
     cell.textLabel.text=@"ABCD";
-	
     return cell;
 }
 
