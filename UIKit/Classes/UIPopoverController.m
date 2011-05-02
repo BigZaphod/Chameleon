@@ -278,6 +278,9 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 
 - (void)_destroyPopover
 {
+	[_overlayWindow orderOut:nil];
+	[_popoverWindow orderOut:nil];
+	
 	NSWindow *parentWindow = [_overlayWindow parentWindow];
     [_overlayWindow removeChildWindow:_popoverWindow];
     [parentWindow removeChildWindow:_overlayWindow];
