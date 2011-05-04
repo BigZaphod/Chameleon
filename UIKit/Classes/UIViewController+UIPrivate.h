@@ -28,7 +28,9 @@
  */
 
 #import "UIViewController.h"
+#import "UITabBarController.h"
 
 @interface UIViewController (UIPrivate)
 - (void)_setParentViewController:(UIViewController *)controller;
+- (void)_setTabBarController:(UITabBarController *)controller;
 @end

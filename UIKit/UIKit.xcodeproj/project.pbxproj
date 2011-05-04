@@ -276,6 +276,7 @@
 		EF5C2F5513643C3400FA1BC7 /* <UITabBar> background.png in Resources */ = {isa = PBXBuildFile; fileRef = EF5C2F5313643C3000FA1BC7 /* <UITabBar> background.png */; };
 		EF5C2F5613643C3400FA1BC7 /* <UITabBar> button.png in Resources */ = {isa = PBXBuildFile; fileRef = EF5C2F5413643C3100FA1BC7 /* <UITabBar> button.png */; };
 		EF756802136477780043079B /* <UITabBarButtonImage> highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = EF756801136477780043079B /* <UITabBarButtonImage> highlighted.png */; };
+		EFC0455F1370B35B006FB9DC /* UITabBarController+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = EFC0455D1370B35B006FB9DC /* UITabBarController+UIPrivate.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -553,6 +554,7 @@
 		EF5C2F5313643C3000FA1BC7 /* <UITabBar> background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITabBar> background.png"; path = "Resources/<UITabBar> background.png"; sourceTree = "<group>"; };
 		EF5C2F5413643C3100FA1BC7 /* <UITabBar> button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITabBar> button.png"; path = "Resources/<UITabBar> button.png"; sourceTree = "<group>"; };
 		EF756801136477780043079B /* <UITabBarButtonImage> highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITabBarButtonImage> highlighted.png"; path = "Resources/<UITabBarButtonImage> highlighted.png"; sourceTree = "<group>"; };
+		EFC0455D1370B35B006FB9DC /* UITabBarController+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarController+UIPrivate.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -890,6 +892,7 @@
 				14A726B71213303400648C9B /* UIScreen+UIPrivate.h */,
 				1443DF23121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h */,
 				14805F5812A6E2AE0080C4BA /* UIScrollView+UIPrivate.h */,
+				EFC0455D1370B35B006FB9DC /* UITabBarController+UIPrivate.h */,
 				14A726B91213303400648C9B /* UITableViewCell+UIPrivate.h */,
 				14A726BA1213303400648C9B /* UITouch+UIPrivate.h */,
 				14A726BB1213303400648C9B /* UIView+UIPrivate.h */,
@@ -1055,6 +1058,7 @@
 				1413D21213D72A06004D77E9 /* UIScrollViewAnimation.h in Headers */,
 				1413D21413D72A06004D77E9 /* UIScrollViewAnimationDeceleration.h in Headers */,
 				1413D21613D72A06004D77E9 /* UIScrollViewAnimationScroll.h in Headers */,
+				EFC0455F1370B35B006FB9DC /* UITabBarController+UIPrivate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
