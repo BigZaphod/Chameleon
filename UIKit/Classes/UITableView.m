@@ -300,10 +300,10 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
                         [self addSubview:cell];
                     }
                 }
-                [rowPool release];
+                [rowPool drain];
             }
         }
-        [sectionPool release];
+        [sectionPool drain];
     }
     
     // remove old cells, but save off any that might be reusable

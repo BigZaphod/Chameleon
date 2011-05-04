@@ -56,7 +56,11 @@ static UIDevice *theDevice;
 - (NSString *)name
 {
     CFStringRef name = SCDynamicStoreCopyComputerName(NULL,NULL);
-    return [(NSString *)name autorelease];
+	if(name == NULL) return NULL;
+	
+	NSString *fullName = [(id) name copy];
+	CFRelease(name);
+    return [fullName autorelease];
 }
 
 - (UIDeviceOrientation)orientation
