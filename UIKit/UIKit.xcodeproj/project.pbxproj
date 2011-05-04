@@ -20,6 +20,8 @@
 		145335721226F2720005644F /* UICustomNSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 145335701226F2720005644F /* UICustomNSTextView.m */; };
 		145335851226F3490005644F /* UICustomNSClipView.h in Headers */ = {isa = PBXBuildFile; fileRef = 145335831226F3490005644F /* UICustomNSClipView.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		145335861226F3490005644F /* UICustomNSClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 145335841226F3490005644F /* UICustomNSClipView.m */; };
+		14541DB21360D6F300C1006D /* UIPhotosAlbum.h in Headers */ = {isa = PBXBuildFile; fileRef = 14541DB01360D6F300C1006D /* UIPhotosAlbum.h */; };
+		14541DB31360D6F300C1006D /* UIPhotosAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = 14541DB11360D6F300C1006D /* UIPhotosAlbum.m */; };
 		1457DD3F128DDE610057A7F9 /* UITransitionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1457DD3D128DDE610057A7F9 /* UITransitionView.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		1457DD40128DDE610057A7F9 /* UITransitionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1457DD3E128DDE610057A7F9 /* UITransitionView.m */; };
 		1464960B11FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */; };
@@ -199,6 +201,8 @@
 		14CC844511EFA91A005988CC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14CC844411EFA91A005988CC /* SystemConfiguration.framework */; };
 		14D0C43812DCEF910040035C /* UIScrollViewScrollAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 14D0C43612DCEF910040035C /* UIScrollViewScrollAnimation.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14D0C43912DCEF910040035C /* UIScrollViewScrollAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D0C43712DCEF910040035C /* UIScrollViewScrollAnimation.m */; };
+		14D8D941135DE90A00FE639A /* UIInputController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14D8D93F135DE90A00FE639A /* UIInputController.h */; };
+		14D8D942135DE90A00FE639A /* UIInputController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D8D940135DE90A00FE639A /* UIInputController.m */; };
 		14DD1C281289B3C900DCF231 /* UIImage+UIPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = 14DD1C271289B3C900DCF231 /* UIImage+UIPrivate.m */; };
 		14DD1C361289B4D500DCF231 /* <UIToolbar> button-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 14DD1C341289B4D500DCF231 /* <UIToolbar> button-highlighted.png */; };
 		14DD1C371289B4D500DCF231 /* <UIToolbar> button.png in Resources */ = {isa = PBXBuildFile; fileRef = 14DD1C351289B4D500DCF231 /* <UIToolbar> button.png */; };
@@ -283,6 +287,8 @@
 		145335701226F2720005644F /* UICustomNSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICustomNSTextView.m; sourceTree = "<group>"; };
 		145335831226F3490005644F /* UICustomNSClipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICustomNSClipView.h; sourceTree = "<group>"; };
 		145335841226F3490005644F /* UICustomNSClipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICustomNSClipView.m; sourceTree = "<group>"; };
+		14541DB01360D6F300C1006D /* UIPhotosAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPhotosAlbum.h; sourceTree = "<group>"; };
+		14541DB11360D6F300C1006D /* UIPhotosAlbum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPhotosAlbum.m; sourceTree = "<group>"; };
 		1457DD3D128DDE610057A7F9 /* UITransitionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITransitionView.h; sourceTree = "<group>"; };
 		1457DD3E128DDE610057A7F9 /* UITransitionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITransitionView.m; sourceTree = "<group>"; };
 		1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> back-highlighted.png"; path = "Resources/<UINavigationBar> back-highlighted.png"; sourceTree = "<group>"; };
@@ -462,6 +468,8 @@
 		14CC844411EFA91A005988CC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		14D0C43612DCEF910040035C /* UIScrollViewScrollAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewScrollAnimation.h; sourceTree = "<group>"; };
 		14D0C43712DCEF910040035C /* UIScrollViewScrollAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScrollViewScrollAnimation.m; sourceTree = "<group>"; };
+		14D8D93F135DE90A00FE639A /* UIInputController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIInputController.h; sourceTree = "<group>"; };
+		14D8D940135DE90A00FE639A /* UIInputController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIInputController.m; sourceTree = "<group>"; };
 		14DD1C271289B3C900DCF231 /* UIImage+UIPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+UIPrivate.m"; sourceTree = "<group>"; };
 		14DD1C341289B4D500DCF231 /* <UIToolbar> button-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIToolbar> button-highlighted.png"; path = "Resources/<UIToolbar> button-highlighted.png"; sourceTree = "<group>"; };
 		14DD1C351289B4D500DCF231 /* <UIToolbar> button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIToolbar> button.png"; path = "Resources/<UIToolbar> button.png"; sourceTree = "<group>"; };
@@ -792,10 +800,14 @@
 				145335841226F3490005644F /* UICustomNSClipView.m */,
 				1453356F1226F2720005644F /* UICustomNSTextView.h */,
 				145335701226F2720005644F /* UICustomNSTextView.m */,
+				14D8D93F135DE90A00FE639A /* UIInputController.h */,
+				14D8D940135DE90A00FE639A /* UIInputController.m */,
 				14FA8C47121DA4A000C4264B /* UINinePartImage.h */,
 				14FA8C48121DA4A000C4264B /* UINinePartImage.m */,
 				14805D3F12A6B0E80080C4BA /* UINSClipView.h */,
 				14805D4012A6B0E80080C4BA /* UINSClipView.m */,
+				14541DB01360D6F300C1006D /* UIPhotosAlbum.h */,
+				14541DB11360D6F300C1006D /* UIPhotosAlbum.m */,
 				14CB384312689907003334AD /* UIPopoverNSWindow.h */,
 				14CB384412689907003334AD /* UIPopoverNSWindow.m */,
 				14CB384712689949003334AD /* UIPopoverOverlayNSView.h */,
@@ -1013,6 +1025,8 @@
 				EF2DD0FF1364DE5400B866AF /* UITabBarButtonBadge.h in Headers */,
 				537472D5133ADD4B00EBD5EA /* UIInterface.h in Headers */,
 				EFC0455F1370B35B006FB9DC /* UITabBarController+UIPrivate.h in Headers */,
+				14D8D941135DE90A00FE639A /* UIInputController.h in Headers */,
+				14541DB21360D6F300C1006D /* UIPhotosAlbum.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1198,6 +1212,8 @@
 				537472D6133ADD4B00EBD5EA /* UIInterface.m in Sources */,
 				EF5C2F4E1364118000FA1BC7 /* UITabBarButton.m in Sources */,
 				EF2DD1001364DE5400B866AF /* UITabBarButtonBadge.m in Sources */,
+				14D8D942135DE90A00FE639A /* UIInputController.m in Sources */,
+				14541DB31360D6F300C1006D /* UIPhotosAlbum.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

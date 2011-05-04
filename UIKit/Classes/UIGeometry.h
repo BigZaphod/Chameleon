@@ -60,6 +60,8 @@ NSString *NSStringFromCGSize(CGSize s);
 
 NSString *NSStringFromCGAffineTransform(CGAffineTransform transform);
 
+NSString *NSStringFromUIEdgeInsets(UIEdgeInsets insets);
+
 @interface NSValue (NSValueUIGeometryExtensions)
 + (NSValue *)valueWithCGPoint:(CGPoint)point;
 + (NSValue *)valueWithCGRect:(CGRect)rect;

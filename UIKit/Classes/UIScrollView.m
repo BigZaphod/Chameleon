@@ -144,12 +144,12 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 
 - (BOOL)_canScrollHorizontal
 {
-    return self.scrollEnabled && self.showsHorizontalScrollIndicator && (_contentSize.width > self.bounds.size.width);
+    return self.scrollEnabled && (_contentSize.width > self.bounds.size.width);
 }
 
 - (BOOL)_canScrollVertical
 {
-    return self.scrollEnabled && self.showsVerticalScrollIndicator && (_contentSize.height > self.bounds.size.height);
+    return self.scrollEnabled && (_contentSize.height > self.bounds.size.height);
 }
 
 - (void)_constrainContent

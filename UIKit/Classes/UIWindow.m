@@ -40,8 +40,8 @@
 #import <QuartzCore/QuartzCore.h>
 
 const UIWindowLevel UIWindowLevelNormal = 0;
-const UIWindowLevel UIWindowLevelAlert = 0;
-const UIWindowLevel UIWindowLevelStatusBar = 0;
+const UIWindowLevel UIWindowLevelStatusBar = 1000;
+const UIWindowLevel UIWindowLevelAlert = 2000;
 
 NSString *const UIWindowDidBecomeVisibleNotification = @"UIWindowDidBecomeVisibleNotification";
 NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenNotification";
