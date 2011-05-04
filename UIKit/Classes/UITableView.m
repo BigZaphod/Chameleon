@@ -178,12 +178,12 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
                 sectionRecord.footerHeight = 0;
             }
             
-            NSMutableArray *rowHeights = [[NSMutableArray alloc] initWithCapacity:numberOfRowsInSection];
+			CGFloat *rowHeights = (CGFloat *) malloc(sizeof(CGFloat) * numberOfRowsInSection);
             CGFloat totalRowsHeight = 0;
             
             for (NSInteger row=0; row<numberOfRowsInSection; row++) {
                 const CGFloat rowHeight = _delegateHas.heightForRowAtIndexPath? [self.delegate tableView:self heightForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section]] : defaultRowHeight;
-                [rowHeights addObject:[NSNumber numberWithFloat:rowHeight]];
+				rowHeights[row] = rowHeight;
                 totalRowsHeight += rowHeight;
             }
             
@@ -192,7 +192,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
             
             [_sections addObject:sectionRecord];
             [sectionRecord release];
-            [rowHeights release];
         }
     }
 }
@@ -391,10 +390,10 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
             offset += sectionRecord.headerHeight;
             
             for (NSInteger row=0; row<indexPath.row; row++) {
-                offset += [[sectionRecord.rowHeights objectAtIndex:row] floatValue];
+				offset += sectionRecord.rowHeights[row];
             }
             
-            return [self _CGRectFromVerticalOffset:offset height:[[sectionRecord.rowHeights objectAtIndex:indexPath.row] floatValue]];
+            return [self _CGRectFromVerticalOffset:offset height:sectionRecord.rowHeights[indexPath.row]];
         }
     }
     
@@ -436,7 +435,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
         if (offset + sectionRecord.rowsHeight >= rect.origin.y) {
             for (NSInteger row=0; row<numberOfRows; row++) {
-                const CGFloat height = [[sectionRecord.rowHeights objectAtIndex:row] floatValue];
+                const CGFloat height = sectionRecord.rowHeights[row];
                 CGRect simpleRowRect = CGRectMake(rect.origin.x, offset, rect.size.width, height);
                 
                 if (CGRectIntersectsRect(rect,simpleRowRect)) {

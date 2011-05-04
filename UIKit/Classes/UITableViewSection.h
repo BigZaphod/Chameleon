@@ -36,7 +36,7 @@
     CGFloat headerHeight;
     CGFloat footerHeight;
     NSInteger numberOfRows;
-    NSArray *rowHeights;
+    CGFloat *rowHeights;
     UIView *headerView;
     UIView *footerView;
     NSString *headerTitle;
@@ -48,7 +48,7 @@
 @property (nonatomic, assign) CGFloat headerHeight;
 @property (nonatomic, assign) CGFloat footerHeight;
 @property (nonatomic, assign) NSInteger numberOfRows;
-@property (nonatomic, copy) NSArray *rowHeights;
+@property (nonatomic, assign) CGFloat *rowHeights;
 @property (nonatomic, retain) UIView *headerView;
 @property (nonatomic, retain) UIView *footerView;
 @property (nonatomic, copy) NSString *headerTitle;
