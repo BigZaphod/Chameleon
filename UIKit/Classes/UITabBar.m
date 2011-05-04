@@ -36,6 +36,7 @@
 #import "UITabBar.h"
 #import "UITabBarItem.h"
 #import "UITabBarButton.h"
+#import "UITabBarController+UIPrivate.h"
 #import "UIImageView.h"
 #import "UIImage+UIPrivate.h"
 #import "UIColor.h"
@@ -83,6 +84,8 @@
     if (_delegate && [_delegate respondsToSelector:@selector(tabBar:didSelectItem:)])
         [_delegate tabBar:self didSelectItem:_selectedItem];
 
+    if ([_delegate isKindOfClass:[UITabBarController class]])
+        [(UITabBarController *)_delegate _updateSelectionOnButtonDown:_selectedItem];
 }
 
 - (UITabBarItem *)selectedItem
