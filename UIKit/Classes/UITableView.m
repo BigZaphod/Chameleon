@@ -402,10 +402,16 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void) beginUpdates
 {
+	[UIView beginAnimations:NSStringFromSelector(_cmd) context:NULL];
 }
 
 - (void)endUpdates
 {
+	[self _updateSectionsCache];
+	[self _setContentSize];
+	[self _layoutTableView];
+	
+	[UIView commitAnimations];
 }
 
 - (UITableViewCell *)cellForRowAtIndexPath:(NSIndexPath *)indexPath
