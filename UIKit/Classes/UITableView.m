@@ -400,7 +400,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
     return CGRectZero;
 }
 
-- (void) beginUpdates
+- (void)beginUpdates
 {
 	[UIView beginAnimations:NSStringFromSelector(_cmd) context:NULL];
 }
