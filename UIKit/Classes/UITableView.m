@@ -288,15 +288,23 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
                 CGRect rowRect = [self rectForRowAtIndexPath:indexPath];
                 if (CGRectIntersectsRect(rowRect,visibleBounds) && rowRect.size.height > 0) {
+					BOOL isNewCell = [availableCells objectForKey:indexPath] == nil;
                     UITableViewCell *cell = [availableCells objectForKey:indexPath] ?: [self.dataSource tableView:self cellForRowAtIndexPath:indexPath];
                     if (cell) {
                         [_cachedCells setObject:cell forKey:indexPath];
                         [availableCells removeObjectForKey:indexPath];
                         cell.selected = [_selectedRow isEqual:indexPath];
-                        cell.frame = rowRect;
-                        cell.backgroundColor = self.backgroundColor;
+						cell.backgroundColor = self.backgroundColor;
                         [cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
-                        [self addSubview:cell];
+						if(isNewCell) {
+							// Right now we assume that if it's new then it's coming in from the bottom.
+							cell.frame = CGRectOffset(rowRect, 0.0f, rowRect.size.height);
+							[self addSubview:cell];
+							
+							cell.frame = rowRect;
+						} else {
+							cell.frame = rowRect;
+						}
                     }
                 }
                 [rowPool drain];
