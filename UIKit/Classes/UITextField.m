@@ -33,6 +33,8 @@
 #import "UIFont.h"
 #import "UIImage.h"
 #import "UIImage+UIPrivate.h"
+#import "UIBezierPath.h"
+#import "UIGraphics.h"
 
 NSString *const UITextFieldTextDidBeginEditingNotification = @"UITextFieldTextDidBeginEditingNotification";
 NSString *const UITextFieldTextDidChangeNotification = @"UITextFieldTextDidChangeNotification";
@@ -273,6 +275,8 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
         textRect = [self borderRectForBounds:bounds];
 		if(self.borderStyle == UITextBorderStyleRoundedRect) {
 			textRect = CGRectOffset(CGRectInset(textRect, 2.0f, 2.0f), 4.0f, 1.0f);
+		} else if(self.borderStyle == UITextBorderStyleBezel) {
+			textRect = CGRectOffset(CGRectInset(textRect, 2.0f, 2.0f), 2.0f, 3.0f);
 		}
 		
         // TODO: inset the bounds based on border types...
@@ -318,7 +322,52 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 		currentBackgroundImage = self.enabled? _background : _disabledBackground;
 	}
 	
-    [currentBackgroundImage drawInRect:[self borderRectForBounds:self.bounds]];
+	CGRect borderFrame = [self borderRectForBounds:self.bounds];
+	if(currentBackgroundImage != nil) {
+		[currentBackgroundImage drawInRect:borderFrame];
+	} else {
+		// TODO: draw the appropriate background for the borderStyle
+		
+		if(self.borderStyle == UITextBorderStyleBezel) {
+			// bottom white highlight
+			CGRect hightlightFrame = CGRectMake(0.0, 10.0, borderFrame.size.width, borderFrame.size.height-10.0);
+			[[UIColor colorWithWhite:1.0 alpha:1.0] set];
+			[[UIBezierPath bezierPathWithRoundedRect:hightlightFrame cornerRadius:3.6] fill];
+			
+			// top white highlight
+			CGRect topHightlightFrame = CGRectMake(0.0, 0.0, borderFrame.size.width, borderFrame.size.height-10.0);
+			[[UIColor colorWithWhite:0.7f alpha:1.0] set];
+			[[UIBezierPath bezierPathWithRoundedRect:topHightlightFrame cornerRadius:3.6] fill];
+			
+			// black outline
+			CGRect blackOutlineFrame = CGRectMake(0.0, 1.0, borderFrame.size.width, borderFrame.size.height-2.0);
+			
+			CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+			CGFloat locations[] = { 1.0f, 0.0f };
+			CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef) [NSArray arrayWithObjects:(id) [UIColor colorWithWhite:0.5 alpha:1.0].CGColor, (id) [UIColor colorWithWhite:0.65 alpha:1.0].CGColor, nil], locations);
+			
+			CGContextRef context = UIGraphicsGetCurrentContext();
+			CGContextSaveGState(context);
+			CGContextAddPath(context, [UIBezierPath bezierPathWithRoundedRect:blackOutlineFrame cornerRadius:3.6f].CGPath);
+			CGContextClip(context);
+			
+			CGContextDrawLinearGradient(context, gradient, CGPointMake(0.0f, CGRectGetMinY(blackOutlineFrame)), CGPointMake(0.0f, CGRectGetMaxY(blackOutlineFrame)), 0);
+			CFRelease(colorSpace);
+			CFRelease(gradient);
+			
+			CGContextRestoreGState(context);
+						
+			// top inner shadow
+			CGRect shadowFrame = CGRectMake(1, 2, borderFrame.size.width-2.0, 10.0);
+			[[UIColor colorWithWhite:0.88 alpha:1.0] set];
+			[[UIBezierPath bezierPathWithRoundedRect:shadowFrame cornerRadius:2.9] fill];	
+			
+			// main white area
+			CGRect whiteFrame = CGRectMake(1, 3, borderFrame.size.width-2.0, borderFrame.size.height-5.0);
+			[[UIColor whiteColor] set];
+			[[UIBezierPath bezierPathWithRoundedRect:whiteFrame cornerRadius:2.6] fill];
+		}
+	}
 }
 
 
@@ -502,8 +551,6 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     [self setNeedsDisplay];
     [self setNeedsLayout];
 	
-	_placeholderTextLayer.hidden = NO;
-
     if (_delegateHas.didEndEditing) {
         [_delegate textFieldDidEndEditing:self];
     }
