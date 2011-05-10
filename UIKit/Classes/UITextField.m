@@ -277,10 +277,10 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 			textRect = CGRectOffset(CGRectInset(textRect, 2.0f, 2.0f), 4.0f, 1.0f);
 		} else if(self.borderStyle == UITextBorderStyleBezel) {
 			textRect = CGRectOffset(CGRectInset(textRect, 2.0f, 2.0f), 2.0f, 3.0f);
+		} else if(self.borderStyle == UITextBorderStyleLine) {
+//			textRect = CGRectOffset(CGRectInset(textRect, 2.0f, 2.0f), 2.0f, 3.0f);
 		}
-		
-        // TODO: inset the bounds based on border types...
-    }
+	}
     
     // Going to go ahead and assume that the left view is on the left, the right view is on the right, and there's space between..
     // I imagine this is a dangerous assumption...
@@ -326,6 +326,8 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 	if(currentBackgroundImage != nil) {
 		[currentBackgroundImage drawInRect:borderFrame];
 	} else {
+		CGContextRef context = UIGraphicsGetCurrentContext();
+		
 		// TODO: draw the appropriate background for the borderStyle
 		
 		if(self.borderStyle == UITextBorderStyleBezel) {
@@ -346,7 +348,6 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 			CGFloat locations[] = { 1.0f, 0.0f };
 			CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef) [NSArray arrayWithObjects:(id) [UIColor colorWithWhite:0.5 alpha:1.0].CGColor, (id) [UIColor colorWithWhite:0.65 alpha:1.0].CGColor, nil], locations);
 			
-			CGContextRef context = UIGraphicsGetCurrentContext();
 			CGContextSaveGState(context);
 			CGContextAddPath(context, [UIBezierPath bezierPathWithRoundedRect:blackOutlineFrame cornerRadius:3.6f].CGPath);
 			CGContextClip(context);
@@ -366,6 +367,12 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 			CGRect whiteFrame = CGRectMake(1, 3, borderFrame.size.width-2.0, borderFrame.size.height-5.0);
 			[[UIColor whiteColor] set];
 			[[UIBezierPath bezierPathWithRoundedRect:whiteFrame cornerRadius:2.6] fill];
+		} else if(self.borderStyle == UITextBorderStyleLine) {
+			[[UIColor colorWithWhite:0.1f alpha:0.8f] set];
+			CGContextStrokeRect(context, borderFrame);
+			
+			[[UIColor colorWithWhite:1.0f alpha:1.0f] set];
+			CGContextFillRect(context, CGRectInset(borderFrame, 1.0f, 1.0f));
 		}
 	}
 }
