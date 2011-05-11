@@ -74,6 +74,10 @@ static BOOL _animationsEnabled = YES;
     return [self initWithFrame:CGRectZero];
 }
 
+- (id)initWithCGRectFrame:(CGRect)frame{
+    return [self initWithFrame:frame];
+}
+
 - (id)initWithFrame:(CGRect)theFrame
 {
     if ((self=[super init])) {
