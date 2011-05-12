@@ -39,7 +39,8 @@ NSString *const UITableViewIndexSearch = @"{search}";
 
 const CGFloat _UITableViewDefaultRowHeight = 43;
 
-@interface UITableView ()
+@interface UITableView (Internal)
+
 - (void)_setNeedsReload;
 @end
 
@@ -49,6 +50,8 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 @synthesize sectionFooterHeight=_sectionFooterHeight, sectionHeaderHeight=_sectionHeaderHeight;
 @synthesize allowsSelectionDuringEditing=_allowsSelectionDuringEditing;
 @dynamic delegate;
+
+BOOL _selectionActive;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -75,6 +78,8 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
         }
         
         [self _setNeedsReload];
+		
+		_selectionActive = NO;
     }
     return self;
 }
@@ -721,7 +726,26 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    UITouch *touch = [touches anyObject];
+    _selectionActive = YES;
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+	_selectionActive = NO;
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+	_selectionActive = NO;
+}
+
+// do selection here, to imitate NSTableView behavior: selection isn't set until I release the mouse button
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+	if (_selectionActive == NO)
+		return;
+	
+	UITouch *touch = [touches anyObject];
     CGPoint location = [touch locationInView:self];
     NSIndexPath *touchedRow = [self indexPathForRowAtPoint:location];
 
