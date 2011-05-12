@@ -29,16 +29,17 @@
 
 #import "UIView.h"
 
-@class UIImageView;
+@class UIImageView, UIPopoverController;
 
 @interface UIPopoverView : UIView {
     UIImageView *_backgroundView;
     UIImageView *_arrowView;
     UIView *_contentView;
     UIView *_contentContainerView;
+	__weak UIPopoverController *_popoverController;
 }
 
-- (id)initWithContentView:(UIView *)aView size:(CGSize)aSize;
+- (id)initWithContentView:(UIView *)aView size:(CGSize)aSize popoverController:(__weak UIPopoverController *)controller;
 
 - (void)pointTo:(CGPoint)point inView:(UIView *)view;
 - (void)setContentView:(UIView *)aView animated:(BOOL)animated;

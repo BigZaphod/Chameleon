@@ -38,6 +38,7 @@
 #import "UIPopoverView.h"
 #import "UIPopoverNSWindow.h"
 #import "UIPopoverOverlayNSView.h"
+#import "UIImage+UIPrivate.h"
 
 
 static BOOL SizeIsLessThanOrEqualSize(NSSize size1, NSSize size2)
@@ -200,7 +201,7 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 
         // now build the actual popover view which represents the popover's chrome, and since it's a UIView, we need to build a UIKitView 
         // as well to put it in our NSWindow...
-        _popoverView = [[UIPopoverView alloc] initWithContentView:_contentViewController.view size:_contentViewController.contentSizeForViewInPopover];
+        _popoverView = [[UIPopoverView alloc] initWithContentView:_contentViewController.view size:_contentViewController.contentSizeForViewInPopover popoverController:self];
 
         UIKitView *hostingView = [(UIKitView *)[UIKitView alloc] initWithFrame:NSRectFromCGRect([_popoverView bounds])];
         [[hostingView UIScreen] _setPopoverController:self];
@@ -324,6 +325,53 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
             [_delegate popoverControllerDidDismissPopover:self];
         }
     }
+}
+
++ (UIEdgeInsets)insetForArrows
+{
+    return UIEdgeInsetsMake(17,12,8,12);
+}
+
++ (CGRect)backgroundRectForBounds:(CGRect)bounds
+{
+    return UIEdgeInsetsInsetRect(bounds, [self insetForArrows]);
+}
+
++ (CGRect)contentRectForBounds:(CGRect)bounds withNavigationBar:(BOOL)hasNavBar
+{
+    const CGFloat navBarOffset = hasNavBar? 32 : 0;
+    return UIEdgeInsetsInsetRect(CGRectMake(14,9+navBarOffset,bounds.size.width-28,bounds.size.height-28-navBarOffset), [self insetForArrows]);
+}
+
++ (CGSize)frameSizeForContentSize:(CGSize)contentSize withNavigationBar:(BOOL)hasNavBar
+{
+    UIEdgeInsets insets = [self insetForArrows];
+    CGSize frameSize;
+    
+    frameSize.width = contentSize.width + 28 + insets.left + insets.right;
+    frameSize.height = contentSize.height + 28 + (hasNavBar? 32 : 0) + insets.top + insets.bottom;
+    
+    return frameSize;
+}
+
++ (UIImage *)backgroundImage {
+	return [UIImage _popoverBackgroundImage];
+}
+
++ (UIImage *)leftArrowImage {
+	return [UIImage _leftPopoverArrowImage];
+}
+
++ (UIImage *)rightArrowImage {
+	return [UIImage _rightPopoverArrowImage];
+}
+
++ (UIImage *)topArrowImage {
+	return [UIImage _topPopoverArrowImage];
+}
+
++ (UIImage *)bottomArrowImage {
+	return [UIImage _bottomPopoverArrowImage];
 }
 
 @end
