@@ -10,14 +10,14 @@
     window.backgroundColor = [UIColor whiteColor];
     window.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
-    TestViewController * controller = [[TestViewController alloc] initWithNibName: nil bundle: nil];
+	// just use init, since we can't really use nibs in Cham
+    TestViewController * controller = [[[TestViewController alloc] init] autorelease];
     controller.title = @"Initial Title";
     
     navController = [[UINavigationController alloc] initWithRootViewController: controller];
     navController.view.frame = window.bounds;
     navController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     navController.view.autoresizesSubviews = YES;
-    [controller release];
     
     [window addSubview: navController.view];
     
