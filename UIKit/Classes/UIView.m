@@ -534,8 +534,21 @@ static BOOL _animationsEnabled = YES;
      with straight ports but at this point I really can't come up with a much better solution so it'll have to do.
      */
     
-    const BOOL shouldSmoothFonts = (_backgroundColor && (CGColorGetAlpha(_backgroundColor.CGColor) == 1)) || self.opaque;
-    CGContextSetShouldSmoothFonts(ctx, shouldSmoothFonts);
+    /*
+     UPDATE AGAIN: So, subpixel with light text against a dark background looks kinda crap and we can't seem to figure out how
+     to make it not-crap right now. After messing with some fonts and things, we're currently turning subpixel off again instead.
+     I have a feeling this may go round and round forever because some people can't stand subpixel and others can't stand not
+     having it - even when its light-on-dark. We could turn it on here and selectively disable it in Twitterrific when using the
+     dark theme, but that seems weird, too. We'd all rather there be just one approach here and skipping smoothing at least means
+     that the whole app is consistent (views that aren't flattened won't look any different from the flattened views in terms of
+     text rendering, at least). Bah.
+     */
+
+    //const BOOL shouldSmoothFonts = (_backgroundColor && (CGColorGetAlpha(_backgroundColor.CGColor) == 1)) || self.opaque;
+    //CGContextSetShouldSmoothFonts(ctx, shouldSmoothFonts);
+
+    CGContextSetShouldSmoothFonts(ctx, NO);
+
     CGContextSetShouldSubpixelPositionFonts(ctx, YES);
     CGContextSetShouldSubpixelQuantizeFonts(ctx, YES);
     
