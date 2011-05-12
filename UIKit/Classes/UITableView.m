@@ -53,6 +53,11 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 BOOL _selectionActive;
 
+BOOL _movingRows;
+NSTimer * movingRowTimer; // count the fraction of a second before we start reordering
+BOOL _movingIndexPath;
+BOOL _dropTargetIndexPath;
+
 - (id)initWithFrame:(CGRect)frame
 {
     return [self initWithFrame:frame style:UITableViewStylePlain];
@@ -727,57 +732,98 @@ BOOL _selectionActive;
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     _selectionActive = YES;
+	_movingIndexPath = nil;
+	
+	if (movingRowTimer)
+	{
+		[movingRowTimer release];
+		movingRowTimer = nil;
+	}
+	movingRowTimer = [[NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_startReorderingRows) userInfo:nil repeats:NO] retain];
 }
+
+- (void)_startReorderingRows
+{
+	[movingRowTimer release];
+	movingRowTimer = nil;
+	
+	if (_selectionActive == NO)
+	{
+		_movingIndexPath = nil;
+		_dropTargetIndexPath = nil;
+		
+		_movingRows = NO;
+	}
+	else
+	{
+		_movingRows = YES;
+	}
+}
+
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
 	_selectionActive = NO;
+	
+	if (_movingRows == YES)
+	{
+		
+	}
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
 	_selectionActive = NO;
+	_movingRows = NO;
 }
 
 // do selection here, to imitate NSTableView behavior: selection isn't set until I release the mouse button
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	if (_selectionActive == NO)
-		return;
-	
-	UITouch *touch = [touches anyObject];
-    CGPoint location = [touch locationInView:self];
-    NSIndexPath *touchedRow = [self indexPathForRowAtPoint:location];
+	if (_selectionActive)
+	{
+		UITouch *touch = [touches anyObject];
+		CGPoint location = [touch locationInView:self];
+		NSIndexPath *touchedRow = [self indexPathForRowAtPoint:location];
 
-    if (touchedRow) {
-        NSIndexPath *selectedRow = [self indexPathForSelectedRow];
+		if (touchedRow) {
+			NSIndexPath *selectedRow = [self indexPathForSelectedRow];
 
-        if (selectedRow) {
-            NSIndexPath *rowToDeselect = selectedRow;
-            
-            if (_delegateHas.willDeselectRowAtIndexPath) {
-                rowToDeselect = [_delegate tableView:self willDeselectRowAtIndexPath:rowToDeselect];
-            }
-            
-            [self deselectRowAtIndexPath:rowToDeselect animated:NO];
-            
-            if (_delegateHas.didDeselectRowAtIndexPath) {
-                [_delegate tableView:self didDeselectRowAtIndexPath:rowToDeselect];
-            }
-        }
+			if (selectedRow) {
+				NSIndexPath *rowToDeselect = selectedRow;
+				
+				if (_delegateHas.willDeselectRowAtIndexPath) {
+					rowToDeselect = [_delegate tableView:self willDeselectRowAtIndexPath:rowToDeselect];
+				}
+				
+				[self deselectRowAtIndexPath:rowToDeselect animated:NO];
+				
+				if (_delegateHas.didDeselectRowAtIndexPath) {
+					[_delegate tableView:self didDeselectRowAtIndexPath:rowToDeselect];
+				}
+			}
 
-        NSIndexPath *rowToSelect = touchedRow;
-        
-        if (_delegateHas.willSelectRowAtIndexPath) {
-            rowToSelect = [_delegate tableView:self willSelectRowAtIndexPath:rowToSelect];
-        }
+			NSIndexPath *rowToSelect = touchedRow;
+			
+			if (_delegateHas.willSelectRowAtIndexPath) {
+				rowToSelect = [_delegate tableView:self willSelectRowAtIndexPath:rowToSelect];
+			}
 
-        [self selectRowAtIndexPath:rowToSelect animated:NO scrollPosition:UITableViewScrollPositionNone];
-        
-        if (_delegateHas.didSelectRowAtIndexPath) {
-            [_delegate tableView:self didSelectRowAtIndexPath:rowToSelect];
-        }
-    }
+			[self selectRowAtIndexPath:rowToSelect animated:NO scrollPosition:UITableViewScrollPositionNone];
+			
+			if (_delegateHas.didSelectRowAtIndexPath) {
+				[_delegate tableView:self didSelectRowAtIndexPath:rowToSelect];
+			}
+		}
+	}
+	else if (_movingRows)
+	{
+		if (_movingIndexPath != _dropTargetIndexPath)
+		{
+			// animate the moved row to the new location
+			
+		}
+	}
 }
 
 @end
