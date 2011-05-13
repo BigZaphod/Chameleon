@@ -44,6 +44,8 @@ UIAccessibilityTraits UIAccessibilityTraitSearchField = 1024;
 
 UIAccessibilityNotifications UIAccessibilityScreenChangedNotification = 1000;
 UIAccessibilityNotifications UIAccessibilityLayoutChangedNotification = 1001;
+UIAccessibilityNotifications UIAccessibilityAnnouncementNotification = 1002;
+UIAccessibilityNotifications UIAccessibilityPageScrolledNotification = 1003;
 
 
 @implementation NSObject (UIAccessibility)

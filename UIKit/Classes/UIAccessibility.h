@@ -48,6 +48,8 @@ extern UIAccessibilityTraits UIAccessibilityTraitUpdatesFrequently;
 typedef uint32_t UIAccessibilityNotifications;
 extern UIAccessibilityNotifications UIAccessibilityScreenChangedNotification;
 extern UIAccessibilityNotifications UIAccessibilityLayoutChangedNotification;
+extern UIAccessibilityNotifications UIAccessibilityAnnouncementNotification;
+extern UIAccessibilityNotifications UIAccessibilityPageScrolledNotification;
 
 
 @interface NSObject (UIAccessibility)
