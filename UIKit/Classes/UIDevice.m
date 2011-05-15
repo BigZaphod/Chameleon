@@ -28,7 +28,6 @@
  */
 
 #import "UIDevice.h"
-#import <IOKit/IOKitLib.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 
 NSString *const UIDeviceOrientationDidChangeNotification = @"UIDeviceOrientationDidChangeNotification";
@@ -86,32 +85,7 @@ static UIDevice *theDevice;
 
 - (NSString *)uniqueIdentifier
 {
-    NSString *aUniqueIdentifier = nil;
-
-    io_service_t platformExpertDevice =
-        IOServiceGetMatchingService(kIOMasterPortDefault,
-                                    IOServiceMatching("IOPlatformExpertDevice"));
-    if (platformExpertDevice)
-    {
-        CFTypeRef platformUUIDTypeRef =
-            IORegistryEntryCreateCFProperty(platformExpertDevice,
-                                            CFSTR(kIOPlatformUUIDKey),
-                                            kCFAllocatorDefault,
-                                            0);
-        if (platformUUIDTypeRef)
-        {
-            CFTypeID typeID = CFGetTypeID(platformUUIDTypeRef);
-            if (typeID == CFStringGetTypeID())
-            {
-                aUniqueIdentifier = [NSString stringWithString:(NSString *)platformUUIDTypeRef];
-            }
-            CFRelease(platformUUIDTypeRef);
-        }
-
-        IOObjectRelease(platformExpertDevice);
-    }
-
-    return aUniqueIdentifier;
+    return [[NSProcessInfo processInfo] globallyUniqueString];
 }
 
 - (BOOL)isGeneratingDeviceOrientationNotifications
