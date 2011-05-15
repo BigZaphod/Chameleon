@@ -123,6 +123,7 @@ BOOL _dropTargetIndexPath;
     _delegateHas.viewForFooterInSection = [_delegate respondsToSelector:@selector(tableView:viewForFooterInSection:)];
     _delegateHas.willSelectRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)];
     _delegateHas.didSelectRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)];
+	_delegateHas.didDoubleClickRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:didDoubleClickRowAtIndexPath:)];
     _delegateHas.willDeselectRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:willDeselectRowAtIndexPath:)];
     _delegateHas.didDeselectRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:didDeselectRowAtIndexPath:)];
 }
@@ -805,17 +806,18 @@ BOOL _dropTargetIndexPath;
 
 			NSIndexPath *rowToSelect = touchedRow;
 			
-			if (_delegateHas.willSelectRowAtIndexPath && [touch tapCount] == 1) {
+			if (_delegateHas.willSelectRowAtIndexPath) {
 				rowToSelect = [_delegate tableView:self willSelectRowAtIndexPath:rowToSelect];
 			}
 
 			[self selectRowAtIndexPath:rowToSelect animated:NO scrollPosition:UITableViewScrollPositionNone];
 			
-			if (_delegateHas.didSelectRowAtIndexPath && [touch tapCount] == 1)
+			if (_delegateHas.didSelectRowAtIndexPath)
 			{
 				[_delegate tableView:self didSelectRowAtIndexPath:rowToSelect];
 			}
-			else if ([_delegate respondsToSelector:@selector(tableView:didDoubleClickRowAtIndexPath:)])
+			
+			if (_delegateHas.didDoubleClickRowAtIndexPath && [touch tapCount] == 2)
 			{
 				[_delegate tableView:self didDoubleClickRowAtIndexPath:rowToSelect];
 			}

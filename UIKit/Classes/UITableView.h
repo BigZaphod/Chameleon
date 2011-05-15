@@ -112,6 +112,7 @@ typedef enum {
         BOOL viewForFooterInSection : 1;
         BOOL willSelectRowAtIndexPath : 1;
         BOOL didSelectRowAtIndexPath : 1;
+		BOOL didDoubleClickRowAtIndexPath: 1;
         BOOL willDeselectRowAtIndexPath : 1;
         BOOL didDeselectRowAtIndexPath : 1;
     } _delegateHas;
