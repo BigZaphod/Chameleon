@@ -33,15 +33,15 @@
 #import <AppKit/AppKit.h>
 
 typedef struct UISavedGraphicsContext_ {
-    NSGraphicsContext * __strong context;
-    struct UISavedGraphicsContext_ * __strong previous;
+    NSGraphicsContext *context;
+    struct __strong UISavedGraphicsContext_ *previous;
 } UISavedGraphicsContext;
 
-static UISavedGraphicsContext * __strong contextStack = NULL;
+static UISavedGraphicsContext *contextStack = NULL;
 
 void UIGraphicsPushContext(CGContextRef ctx)
 {
-    UISavedGraphicsContext *savedContext = NSAllocateCollectable(sizeof(UISavedGraphicsContext), NSScannedOption);
+    UISavedGraphicsContext *savedContext = (UISavedGraphicsContext *) malloc(sizeof(UISavedGraphicsContext));
     savedContext->context = [[NSGraphicsContext currentContext] retain];
     savedContext->previous = contextStack;
     contextStack = savedContext;
@@ -57,6 +57,7 @@ void UIGraphicsPopContext()
         contextStack = popContext->previous;
         [NSGraphicsContext setCurrentContext:popContext->context];
         [popContext->context release];
+		free(popContext);
     }
 }
 
