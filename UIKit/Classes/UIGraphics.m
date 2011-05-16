@@ -53,11 +53,12 @@ void UIGraphicsPopContext()
 {
     UISavedGraphicsContext *popContext = contextStack;
     if (popContext) {
-        CGContextRelease([[NSGraphicsContext currentContext] graphicsPort]);
+		CGContextRef oldContext = [[NSGraphicsContext currentContext] graphicsPort];
+        CGContextRelease(oldContext);
         contextStack = popContext->previous;
         [NSGraphicsContext setCurrentContext:popContext->context];
         [popContext->context release];
-		free(popContext);
+		free(popContext), popContext = NULL;
     }
 }
 
