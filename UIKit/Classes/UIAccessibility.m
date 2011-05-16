@@ -44,6 +44,8 @@ UIAccessibilityTraits UIAccessibilityTraitSearchField = 1024;
 
 UIAccessibilityNotifications UIAccessibilityScreenChangedNotification = 1000;
 UIAccessibilityNotifications UIAccessibilityLayoutChangedNotification = 1001;
+UIAccessibilityNotifications UIAccessibilityAnnouncementNotification = 1002;
+UIAccessibilityNotifications UIAccessibilityPageScrolledNotification = 1003;
 
 
 @implementation NSObject (UIAccessibility)
@@ -65,6 +67,24 @@ UIAccessibilityNotifications UIAccessibilityLayoutChangedNotification = 1001;
 {
 }
 
+- (NSString *)accessibilityHint
+{
+    return nil;
+}
+
+- (void)setAccessibilityHint:(NSString *)hint
+{
+}
+
+- (NSString *)accessibilityValue
+{
+    return nil;
+}
+
+- (void)setAccessibilityValue:(NSString *)value
+{
+}
+
 - (UIAccessibilityTraits)accessibilityTraits
 {
     return UIAccessibilityTraitNone; // STUB
@@ -72,10 +92,53 @@ UIAccessibilityNotifications UIAccessibilityLayoutChangedNotification = 1001;
 
 - (void)setAccessibilityTraits:(UIAccessibilityTraits)traits
 {
-    // STUB
+}
+
+- (CGRect)accessibilityFrame
+{
+    return CGRectNull;
+}
+
+- (void)setAccessibilityFrame:(CGRect)frame
+{
 }
 
 @end
+
+
+@implementation NSObject (UIAccessibilityContainer)
+- (NSInteger)accessibilityElementCount
+{
+    return 0;
+}
+
+- (id)accessibilityElementAtIndex:(NSInteger)index
+{
+    return nil;
+}
+
+- (NSInteger)indexOfAccessibilityElement:(id)element
+{
+    return NSNotFound;
+}
+@end
+
+
+@implementation NSObject (UIAccessibilityFocus)
+- (void)accessibilityElementDidBecomeFocused
+{
+}
+
+- (void)accessibilityElementDidLoseFocus
+{
+}
+
+- (BOOL)accessibilityElementIsFocused
+{
+    return NO;
+}
+@end
+
 
 void UIAccessibilityPostNotification(UIAccessibilityNotifications notification, id argument)
 {

@@ -27,40 +27,23 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIEvent.h"
+#import <Foundation/Foundation.h>
 
-@interface UIResponder : NSObject
+@class UIView, UIWindow;
 
-- (UIResponder *)nextResponder;
-- (BOOL)isFirstResponder;
-- (BOOL)canBecomeFirstResponder;
-- (BOOL)becomeFirstResponder;
-- (BOOL)canResignFirstResponder;
-- (BOOL)resignFirstResponder;
+@interface UIInputController : NSObject {
+    UIWindow *_inputWindow;
+    UIView *_inputAccessoryView;
+    UIView *_inputView;
+}
 
-- (BOOL)canPerformAction:(SEL)action withSender:(id)sender;
++ (UIInputController *)sharedInputController;
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
+- (void)setInputVisible:(BOOL)visible animated:(BOOL)animated;
 
-- (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event;
-- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event;
-- (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event;
-
-@property (readonly, retain) UIView *inputAccessoryView;
-@property (readonly, retain) UIView *inputView;
-@property (readonly) NSUndoManager *undoManager;
-
-@end
+@property (nonatomic, retain) UIView *inputAccessoryView;
+@property (nonatomic, retain) UIView *inputView;
+@property (nonatomic, assign) BOOL inputVisible;
 
 
-@interface NSObject (UIResponderStandardEditActions)
-- (void)copy:(id)sender;
-- (void)cut:(id)sender;
-- (void)delete:(id)sender;
-- (void)paste:(id)sender;
-- (void)select:(id)sender;
-- (void)selectAll:(id)sender;
 @end

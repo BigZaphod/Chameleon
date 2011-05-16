@@ -75,6 +75,36 @@ static CGPoint ScreenLocationFromNSEvent(UIScreen *theScreen, NSEvent *theNSEven
     return screenLocation;
 }
 
+static CGPoint ScrollDeltaFromNSEvent(NSEvent *theNSEvent)
+{
+    double dx, dy;
+
+    CGEventRef cgEvent = [theNSEvent CGEvent];
+    const int64_t isContinious = CGEventGetIntegerValueField(cgEvent, kCGScrollWheelEventIsContinuous);
+    
+    if (isContinious == 0) {
+        CGEventSourceRef source = CGEventCreateSourceFromEvent(cgEvent);
+        double pixelsPerLine;
+        
+        if (source) {
+           pixelsPerLine = CGEventSourceGetPixelsPerLine(source);
+            CFRelease(source);
+        } else {
+            // docs often say things like, "the default is near 10" so it seems reasonable that if the source doesn't work
+            // for some reason to fetch the pixels per line, then 10 is probably a decent fallback value. :)
+            pixelsPerLine = 10;
+        }
+
+        dx = CGEventGetDoubleValueField(cgEvent, kCGScrollWheelEventFixedPtDeltaAxis2) * pixelsPerLine;
+        dy = CGEventGetDoubleValueField(cgEvent, kCGScrollWheelEventFixedPtDeltaAxis1) * pixelsPerLine;
+    } else {
+        dx = CGEventGetIntegerValueField(cgEvent, kCGScrollWheelEventPointDeltaAxis2);
+        dy = CGEventGetIntegerValueField(cgEvent, kCGScrollWheelEventPointDeltaAxis1);
+    }
+
+    return CGPointMake(-dx, -dy);
+}
+
 static BOOL TouchIsActive(UITouch *touch)
 {
     return (touch.phase == UITouchPhaseBegan || touch.phase == UITouchPhaseMoved || touch.phase == UITouchPhaseStationary);
@@ -378,13 +408,9 @@ static BOOL TouchIsActive(UITouch *touch)
     
     [_currentEvent _setTimestamp:[theNSEvent timestamp]];
     
-    const CGPoint screenLocation = ScreenLocationFromNSEvent(theScreen, theNSEvent);
     const NSTimeInterval timestamp = [theNSEvent timestamp];
-    
-    CGEventRef cgEvent = [theNSEvent CGEvent];
-    const double dx = CGEventGetDoubleValueField(cgEvent, kCGScrollWheelEventPointDeltaAxis2);
-    const double dy = CGEventGetDoubleValueField(cgEvent, kCGScrollWheelEventPointDeltaAxis1);
-    const CGPoint delta = CGPointMake(-dx, -dy);
+    const CGPoint screenLocation = ScreenLocationFromNSEvent(theScreen, theNSEvent);
+    const CGPoint delta = ScrollDeltaFromNSEvent(theNSEvent);
 
     if (TouchIsActive(touch)) {
         isSupportedEvent = YES;

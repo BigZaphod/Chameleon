@@ -27,40 +27,14 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIEvent.h"
+#import <Foundation/Foundation.h>
 
-@interface UIResponder : NSObject
+@class UIImage;
 
-- (UIResponder *)nextResponder;
-- (BOOL)isFirstResponder;
-- (BOOL)canBecomeFirstResponder;
-- (BOOL)becomeFirstResponder;
-- (BOOL)canResignFirstResponder;
-- (BOOL)resignFirstResponder;
+@interface UIPhotosAlbum : NSObject
 
-- (BOOL)canPerformAction:(SEL)action withSender:(id)sender;
++ (UIPhotosAlbum *)sharedPhotosAlbum;
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
+- (void)writeImage:(UIImage *)image completionTarget:(id)target action:(SEL)action context:(void *)context;
 
-- (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event;
-- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event;
-- (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event;
-
-@property (readonly, retain) UIView *inputAccessoryView;
-@property (readonly, retain) UIView *inputView;
-@property (readonly) NSUndoManager *undoManager;
-
-@end
-
-
-@interface NSObject (UIResponderStandardEditActions)
-- (void)copy:(id)sender;
-- (void)cut:(id)sender;
-- (void)delete:(id)sender;
-- (void)paste:(id)sender;
-- (void)select:(id)sender;
-- (void)selectAll:(id)sender;
 @end

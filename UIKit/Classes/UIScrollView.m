@@ -144,12 +144,12 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 
 - (BOOL)_canScrollHorizontal
 {
-    return self.scrollEnabled && self.showsHorizontalScrollIndicator && (_contentSize.width > self.bounds.size.width);
+    return self.scrollEnabled && (_contentSize.width > self.bounds.size.width);
 }
 
 - (BOOL)_canScrollVertical
 {
-    return self.scrollEnabled && self.showsVerticalScrollIndicator && (_contentSize.height > self.bounds.size.height);
+    return self.scrollEnabled && (_contentSize.height > self.bounds.size.height);
 }
 
 - (void)_constrainContent
@@ -461,7 +461,10 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
     // need to scroll.
     if (self.scrollEnabled && ((delta.x && self._canScrollHorizontal) || (delta.y && self._canScrollVertical))) {
         [self _delegateDraggingDidBegin];
-        [self _scrollContentOffsetBy:delta withAnimationDuration:0.1];
+        CGPoint offset = self.contentOffset;
+        offset.x += delta.x;
+        offset.y += delta.y;
+        self.contentOffset = offset;
         [self _quickFlashScrollIndicators];
     } else {
         [super scrollWheelMoved:delta withEvent:event];

@@ -37,5 +37,6 @@ extern NSString *const UIViewHiddenDidChangeNotification;
 @interface UIView (UIPrivate)
 - (void)_removeFromSuperview:(BOOL)notifyViewController;
 - (void)_setViewController:(UIViewController *)theViewController;
+- (UIViewController *)_viewController;
 - (void)_superviewSizeDidChangeFrom:(CGSize)oldSize to:(CGSize)newSize;
 @end

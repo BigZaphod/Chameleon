@@ -113,6 +113,11 @@ static BOOL _animationsEnabled = YES;
     _viewController = theViewController;
 }
 
+- (UIViewController *)_viewController
+{
+    return _viewController;
+}
+
 - (UIWindow *)window
 {
     return _superview.window;
@@ -120,7 +125,7 @@ static BOOL _animationsEnabled = YES;
 
 - (UIResponder *)nextResponder
 {
-    return _viewController ? (UIResponder *)_viewController : (UIResponder *)_superview;
+    return (UIResponder *)[self _viewController] ?: (UIResponder *)_superview;
 }
 
 - (NSArray *)subviews
@@ -177,7 +182,7 @@ static BOOL _animationsEnabled = YES;
     UIView *view = self;
 
     while (view) {
-        if (view->_viewController != nil) {
+        if ([view _viewController] != nil) {
             return NO;
         } else {
             view = [view superview];
@@ -195,8 +200,8 @@ static BOOL _animationsEnabled = YES;
         
         subview->_needsDidAppearOrDisappear = [self _subviewControllersNeedAppearAndDisappear];
         
-        if (subview->_viewController && subview->_needsDidAppearOrDisappear) {
-            [subview->_viewController viewWillAppear:NO];
+        if ([subview _viewController] && subview->_needsDidAppearOrDisappear) {
+            [[subview _viewController] viewWillAppear:NO];
         }
 
         [subview _willMoveFromWindow:oldWindow toWindow:newWindow];
@@ -226,8 +231,8 @@ static BOOL _animationsEnabled = YES;
 
         [self didAddSubview:subview];
         
-        if (subview->_viewController && subview->_needsDidAppearOrDisappear) {
-            [subview->_viewController viewDidAppear:NO];
+        if ([subview _viewController] && subview->_needsDidAppearOrDisappear) {
+            [[subview _viewController] viewDidAppear:NO];
         }
     }
 }
@@ -280,8 +285,8 @@ static BOOL _animationsEnabled = YES;
         
         UIWindow *oldWindow = self.window;
         
-        if (_needsDidAppearOrDisappear && _viewController) {
-            [_viewController viewWillDisappear:NO];
+        if (_needsDidAppearOrDisappear && [self _viewController]) {
+            [[self _viewController] viewWillDisappear:NO];
         }
         
         [_superview willRemoveSubview:self];
@@ -298,8 +303,8 @@ static BOOL _animationsEnabled = YES;
         [self didMoveToSuperview];
         [[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:self];
         
-        if (_needsDidAppearOrDisappear && _viewController) {
-            [_viewController viewDidDisappear:NO];
+        if (_needsDidAppearOrDisappear && [self _viewController]) {
+            [[self _viewController] viewDidDisappear:NO];
         }
         
         [self release];
@@ -529,8 +534,23 @@ static BOOL _animationsEnabled = YES;
      with straight ports but at this point I really can't come up with a much better solution so it'll have to do.
      */
     
-    const BOOL shouldSmoothFonts = (_backgroundColor && (CGColorGetAlpha(_backgroundColor.CGColor) == 1)) || self.opaque;
-    CGContextSetShouldSmoothFonts(ctx, shouldSmoothFonts);
+    /*
+     UPDATE AGAIN: So, subpixel with light text against a dark background looks kinda crap and we can't seem to figure out how
+     to make it not-crap right now. After messing with some fonts and things, we're currently turning subpixel off again instead.
+     I have a feeling this may go round and round forever because some people can't stand subpixel and others can't stand not
+     having it - even when its light-on-dark. We could turn it on here and selectively disable it in Twitterrific when using the
+     dark theme, but that seems weird, too. We'd all rather there be just one approach here and skipping smoothing at least means
+     that the whole app is consistent (views that aren't flattened won't look any different from the flattened views in terms of
+     text rendering, at least). Bah.
+     */
+
+    //const BOOL shouldSmoothFonts = (_backgroundColor && (CGColorGetAlpha(_backgroundColor.CGColor) == 1)) || self.opaque;
+    //CGContextSetShouldSmoothFonts(ctx, shouldSmoothFonts);
+
+    CGContextSetShouldSmoothFonts(ctx, NO);
+
+    CGContextSetShouldSubpixelPositionFonts(ctx, YES);
+    CGContextSetShouldSubpixelQuantizeFonts(ctx, YES);
     
     [[UIColor blackColor] set];
     [self drawRect:bounds];
