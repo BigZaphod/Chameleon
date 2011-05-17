@@ -36,6 +36,7 @@
 #import "UIScreenAppKitIntegration.h"
 #import "UIWindow.h"
 #import "UIKitView.h"
+#import "UIApplication+UIPrivate.h"
 #import <AppKit/NSMenu.h>
 #import <AppKit/NSMenuItem.h>
 #import <AppKit/NSEvent.h>
@@ -760,7 +761,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
             [_delegate tableView:self willBeginEditingRowAtIndexPath:indexPath];
         }
         
-        // deferring this because it presents a modal menu and that's what we do everywher else in Chameleon
+        // deferring this because it presents a modal menu and that's what we do everywhere else in Chameleon
         [self performSelector:@selector(_showEditMenuForRowAtIndexPath:) withObject:indexPath afterDelay:0];
     }
 }
@@ -803,14 +804,18 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
         // calculate the mouse's current position so we can present the menu from there since that's normal OSX behavior
         NSPoint mouseLocation = [NSEvent mouseLocation];
         CGPoint screenPoint = [self.window.screen convertPoint:NSPointToCGPoint(mouseLocation) fromScreen:nil];
-        
+
         // modally present a menu with the single delete option on it, if it was selected, then do the delete, otherwise do nothing
-        if ([menu popUpMenuPositioningItem:theItem atLocation:NSPointFromCGPoint(screenPoint) inView:[self.window.screen UIKitView]]) {
-            [_dataSource tableView:self commitEditingStyle:UITableViewCellEditingStyleDelete forRowAtIndexPath:indexPath];
-        }
+        const BOOL didSelectItem = [menu popUpMenuPositioningItem:nil atLocation:NSPointFromCGPoint(screenPoint) inView:[self.window.screen UIKitView]];
         
         [menu release];
         [theItem release];
+        
+        [[UIApplication sharedApplication] _cancelTouchesInView:nil];
+
+        if (didSelectItem) {
+            [_dataSource tableView:self commitEditingStyle:UITableViewCellEditingStyleDelete forRowAtIndexPath:indexPath];
+        }
 
         cell.highlighted = NO;
     }
