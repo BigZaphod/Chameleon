@@ -33,7 +33,7 @@
 #import <AppKit/AppKit.h>
 
 typedef struct UISavedGraphicsContext_ {
-    __strong NSGraphicsContext *context;
+    NSGraphicsContext *context;
     struct __strong UISavedGraphicsContext_ *previous;
 } UISavedGraphicsContext;
 
