@@ -33,6 +33,13 @@
 #import "UITouch.h"
 #import "UITableViewSection.h"
 #import "UITableViewSectionLabel.h"
+#import "UIScreenAppKitIntegration.h"
+#import "UIWindow.h"
+#import "UIKitView.h"
+#import "UIApplication+UIPrivate.h"
+#import <AppKit/NSMenu.h>
+#import <AppKit/NSMenuItem.h>
+#import <AppKit/NSEvent.h>
 
 // http://stackoverflow.com/questions/235120/whats-the-uitableview-index-magnifying-glass-character
 NSString *const UITableViewIndexSearch = @"{search}";
@@ -771,6 +778,95 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		if([touch tapCount] == 2 && _delegateHas.didDoubleClickRowAtIndexPath) {
 			[_delegate tableView:self didDoubleClickRowAtIndexPath:rowToSelect];
 		}
+    }
+}
+
+- (BOOL)_canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // it's YES by default until the dataSource overrules
+    return _dataSourceHas.commitEditingStyle && (!_dataSourceHas.canEditRowAtIndexPath || [_dataSource tableView:self canEditRowAtIndexPath:indexPath]);
+}
+
+- (void)_beginEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([self _canEditRowAtIndexPath:indexPath]) {
+        self.editing = YES;
+        
+        if (_delegateHas.willBeginEditingRowAtIndexPath) {
+            [_delegate tableView:self willBeginEditingRowAtIndexPath:indexPath];
+        }
+        
+        // deferring this because it presents a modal menu and that's what we do everywhere else in Chameleon
+        [self performSelector:@selector(_showEditMenuForRowAtIndexPath:) withObject:indexPath afterDelay:0];
+    }
+}
+
+- (void)_endEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.editing) {
+        self.editing = NO;
+
+        if (_delegateHas.didEndEditingRowAtIndexPath) {
+            [_delegate tableView:self didEndEditingRowAtIndexPath:indexPath];
+        }
+    }
+}
+
+- (void)_showEditMenuForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // re-checking for safety since _showEditMenuForRowAtIndexPath is deferred. this may be overly paranoid.
+    if ([self _canEditRowAtIndexPath:indexPath]) {
+        UITableViewCell *cell = [self cellForRowAtIndexPath:indexPath];
+        NSString *menuItemTitle = nil;
+        
+        // fetch the title for the delete menu item
+        if (_delegateHas.titleForDeleteConfirmationButtonForRowAtIndexPath) {
+            menuItemTitle = [_delegate tableView:self titleForDeleteConfirmationButtonForRowAtIndexPath:indexPath];
+        }
+        if ([menuItemTitle length] == 0) {
+            menuItemTitle = @"Delete";
+        }
+
+        cell.highlighted = YES;
+        
+        NSMenuItem *theItem = [[NSMenuItem alloc] initWithTitle:menuItemTitle action:NULL keyEquivalent:@""];
+
+        NSMenu *menu = [[NSMenu alloc] initWithTitle:@""];
+        [menu setAutoenablesItems:NO];
+        [menu setAllowsContextMenuPlugIns:NO];
+        [menu addItem:theItem];
+        
+        // calculate the mouse's current position so we can present the menu from there since that's normal OSX behavior
+        NSPoint mouseLocation = [NSEvent mouseLocation];
+        CGPoint screenPoint = [self.window.screen convertPoint:NSPointToCGPoint(mouseLocation) fromScreen:nil];
+
+        // modally present a menu with the single delete option on it, if it was selected, then do the delete, otherwise do nothing
+        const BOOL didSelectItem = [menu popUpMenuPositioningItem:nil atLocation:NSPointFromCGPoint(screenPoint) inView:[self.window.screen UIKitView]];
+        
+        [menu release];
+        [theItem release];
+        
+        [[UIApplication sharedApplication] _cancelTouchesInView:nil];
+
+        if (didSelectItem) {
+            [_dataSource tableView:self commitEditingStyle:UITableViewCellEditingStyleDelete forRowAtIndexPath:indexPath];
+        }
+
+        cell.highlighted = NO;
+    }
+
+    // all done
+    [self _endEditingRowAtIndexPath:indexPath];
+}
+
+- (void)rightClick:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    CGPoint location = [touch locationInView:self];
+    NSIndexPath *touchedRow = [self indexPathForRowAtPoint:location];
+    
+    // this is meant to emulate UIKit's swipe-to-delete feature on Mac by way of a right-click menu
+    if (touchedRow && [self _canEditRowAtIndexPath:touchedRow]) {
+        [self _beginEditingRowAtIndexPath:touchedRow];
     }
 }
 

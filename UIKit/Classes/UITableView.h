@@ -113,12 +113,17 @@ typedef enum {
 		BOOL didDoubleClickRowAtIndexPath: 1;
         BOOL willDeselectRowAtIndexPath : 1;
         BOOL didDeselectRowAtIndexPath : 1;
+		BOOL willBeginEditingRowAtIndexPath : 1;
+		BOOL didEndEditingRowAtIndexPath : 1;
+		BOOL titleForDeleteConfirmationButtonForRowAtIndexPath : 1;
     } _delegateHas;
     
     struct {
         BOOL numberOfSectionsInTableView : 1;
         BOOL titleForHeaderInSection : 1;
         BOOL titleForFooterInSection : 1;
+		BOOL commitEditingStyle : 1;
+		BOOL canEditRowAtIndexPath : 1;
     } _dataSourceHas;
 }
 
