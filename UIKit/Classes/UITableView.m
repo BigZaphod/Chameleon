@@ -661,6 +661,8 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void)_scrollRectToVisible:(CGRect)aRect atScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated
 {
+	if(scrollPosition == UITableViewScrollPositionNone) return;
+	
     if (!CGRectIsNull(aRect) && aRect.size.height > 0) {
         // adjust the rect based on the desired scroll position setting
         switch (scrollPosition) {
