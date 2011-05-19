@@ -267,29 +267,20 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
         NSAutoreleasePool *sectionPool = [[NSAutoreleasePool alloc] init];
         CGRect sectionRect = [self rectForSection:section];
         tableHeight += sectionRect.size.height;
+		UITableViewSection *sectionRecord = [_sections objectAtIndex:section];
+		const CGRect headerRect = [self rectForHeaderInSection:section];
+		const CGRect footerRect = [self rectForFooterInSection:section];
+		
+		if (sectionRecord.headerView) {
+			sectionRecord.headerView.frame = headerRect;
+		}
+		
+		if (sectionRecord.footerView) {
+			sectionRecord.footerView.frame = footerRect;
+		}
+		
         if (CGRectIntersectsRect(sectionRect, visibleBounds)) {
-            const CGRect headerRect = [self rectForHeaderInSection:section];
-            const CGRect footerRect = [self rectForFooterInSection:section];
-            UITableViewSection *sectionRecord = [_sections objectAtIndex:section];
             const NSInteger numberOfRows = sectionRecord.numberOfRows;
-            
-            if (sectionRecord.headerView) {
-                if (CGRectIntersectsRect(headerRect,visibleBounds)) {
-                    sectionRecord.headerView.frame = headerRect;
-                    sectionRecord.headerView.hidden = NO;
-                } else {
-                    sectionRecord.headerView.hidden = YES;
-                }
-            }
-            
-            if (sectionRecord.footerView) {
-                if (CGRectIntersectsRect(footerRect,visibleBounds)) {
-                    sectionRecord.footerView.frame = footerRect;
-                    sectionRecord.footerView.hidden = NO;
-                } else {
-                    sectionRecord.footerView.hidden = YES;
-                }
-            }
             
             for (NSInteger row=0; row<numberOfRows; row++) {
                 NSAutoreleasePool *rowPool = [[NSAutoreleasePool alloc] init];
@@ -318,6 +309,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
                 [rowPool drain];
             }
         }
+		
         [sectionPool drain];
     }
     
