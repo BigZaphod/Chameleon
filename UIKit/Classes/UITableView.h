@@ -40,6 +40,7 @@ extern NSString *const UITableViewIndexSearch;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)tableView:(UITableView *)tableView didDoubleClickRowAtIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath;
 
@@ -109,6 +110,7 @@ typedef enum {
         BOOL viewForFooterInSection : 1;
         BOOL willSelectRowAtIndexPath : 1;
         BOOL didSelectRowAtIndexPath : 1;
+		BOOL didDoubleClickRowAtIndexPath: 1;
         BOOL willDeselectRowAtIndexPath : 1;
         BOOL didDeselectRowAtIndexPath : 1;
     } _delegateHas;
