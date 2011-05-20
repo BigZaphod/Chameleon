@@ -29,6 +29,7 @@
 
 #import "UIResponder.h"
 #import "UIGeometry.h"
+#import <AppKit/NSView.h>
 
 enum {
     UIViewAutoresizingNone                 = 0,
@@ -116,6 +117,8 @@ typedef NSUInteger UIViewAnimationOptions;
     UIViewAutoresizing _autoresizingMask;
     BOOL _needsDidAppearOrDisappear;
     NSMutableSet *_gestureRecognizers;
+	NSString *_tooltip;
+	NSToolTipTag _tooltipTag;
 }
 
 + (Class)layerClass;
@@ -201,5 +204,6 @@ typedef NSUInteger UIViewAnimationOptions;
 @property (nonatomic, getter=isMultipleTouchEnabled) BOOL multipleTouchEnabled;	// state is maintained, but it has no effect
 @property (nonatomic, getter=isExclusiveTouch) BOOL exclusiveTouch; // state is maintained, but it has no effect
 @property (nonatomic,copy) NSArray *gestureRecognizers;
+@property (nonatomic, copy) NSString *tooltip;
 
 @end
