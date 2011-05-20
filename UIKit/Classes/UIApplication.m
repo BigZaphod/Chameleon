@@ -112,6 +112,15 @@ static BOOL TouchIsActive(UITouch *touch)
     return (touch.phase == UITouchPhaseBegan || touch.phase == UITouchPhaseMoved || touch.phase == UITouchPhaseStationary);
 }
 
+
+@interface UIApplication (ChameleonPrivate)
+
+- (void)_idleTimerFired;
+
+@end
+
+
+
 @implementation UIApplication
 @synthesize keyWindow=_keyWindow, delegate=_delegate, idleTimerDisabled=_idleTimerDisabled, applicationSupportsShakeToEdit=_applicationSupportsShakeToEdit;
 @synthesize applicationIconBadgeNumber = _applicationIconBadgeNumber;
@@ -226,7 +235,7 @@ static BOOL TouchIsActive(UITouch *touch)
 }
 
 - (void)setIdleTimerDisabled:(BOOL)flag;
-{
+{	
 	if (_idleTimer)
 	{
 		[_idleTimer invalidate];
@@ -239,6 +248,8 @@ static BOOL TouchIsActive(UITouch *touch)
 	{
 		_idleTimer = [[NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(_idleTimerFired) userInfo:nil repeats:YES] retain];
 	}
+	
+	_idleTimerDisabled = flag;
 }
 
 - (void)_idleTimerFired;
