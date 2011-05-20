@@ -37,6 +37,11 @@
 #import "UIScreenMode.h"
 #import "UIResponderAppKitIntegration.h"
 #import <AppKit/NSCursor.h>
+#import <AppKit/NSHelpManager.h>
+#import <AppKit/NSEvent.h>
+#import <AppKit/NSWindow.h>
+#import <AppKit/NSFont.h>
+#import <AppKit/NSAttributedString.h>
 #import <QuartzCore/QuartzCore.h>
 
 const UIWindowLevel UIWindowLevelNormal = 0;
@@ -62,6 +67,10 @@ NSString *const UIKeyboardAnimationCurveUserInfoKey = @"UIKeyboardAnimationCurve
 NSString *const UIKeyboardCenterBeginUserInfoKey = @"UIKeyboardCenterBeginUserInfoKey";
 NSString *const UIKeyboardCenterEndUserInfoKey = @"UIKeyboardCenterEndUserInfoKey";
 NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
+
+@interface UIWindow ()
+- (void)_showToolTipForView:(UIView *)view;
+@end
 
 
 @implementation UIWindow
@@ -330,9 +339,45 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
             NSCursor *newCursor = [touch.view mouseCursorForEvent:event] ?: [NSCursor arrowCursor];
             if ([NSCursor currentCursor] != newCursor) {
                 [newCursor set];
-            }			
+            }
+			
+			if(touch.view != _currentToolTipView) {
+				[[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(_showToolTipForView:) object:_currentToolTipView];
+				
+				if(_currentToolTipView != nil) {
+					[[NSHelpManager sharedHelpManager] removeContextHelpForObject:_currentToolTipView];
+					
+					// Post fake events to force the tooltip to hide. It doesn't fade away like standard tooltips do, but it's the only way I've found.
+					NSEvent	*newEvent = [NSEvent mouseEventWithType:NSLeftMouseDown location:[NSEvent mouseLocation] modifierFlags:0 timestamp:0 windowNumber:[[self.screen.UIKitView window] windowNumber] context:[[self.screen.UIKitView window] graphicsContext] eventNumber:0 clickCount:1 pressure:0];
+					[NSApp postEvent:newEvent atStart:NO];
+					
+					newEvent = [NSEvent mouseEventWithType:NSLeftMouseUp location:[NSEvent mouseLocation] modifierFlags:0 timestamp:0 windowNumber:[[self.screen.UIKitView window] windowNumber] context:[[self.screen.UIKitView window] graphicsContext] eventNumber:0 clickCount:1 pressure:0];
+					[NSApp postEvent:newEvent atStart:NO];
+					
+					_currentToolTipView = nil;
+				}
+				
+				if(touch.view.toolTip.length > 0) {
+					[self performSelector:@selector(_showToolTipForView:) withObject:touch.view afterDelay:3];
+				}
+			}
         }
     }
+}
+
+- (void)_showToolTipForView:(UIView *)view {
+	NSMutableAttributedString *attributedToolTip = [[[NSMutableAttributedString alloc] initWithString:view.toolTip] autorelease];
+	NSRange wholeStringRange = NSMakeRange(0, view.toolTip.length);
+	[attributedToolTip addAttribute:NSFontAttributeName value:[NSFont systemFontOfSize:11.0f] range:wholeStringRange];
+	
+	NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+	[paragraphStyle setAlignment:NSLeftTextAlignment];
+	
+	[attributedToolTip addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:wholeStringRange];
+	
+	[[NSHelpManager sharedHelpManager] setContextHelp:attributedToolTip forObject:view];
+	[[NSHelpManager sharedHelpManager] showContextHelpForObject:view locationHint:[NSEvent mouseLocation]];
+	_currentToolTipView = view;
 }
 
 @end

@@ -48,16 +48,11 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
 static NSMutableArray *_animationGroups;
 static BOOL _animationsEnabled = YES;
 
-@interface UIView ()
-- (void)_addToolTipRect;
-- (void)_removeToolTipRect;
-@end
-
 @implementation UIView
 @synthesize layer=_layer, superview=_superview, clearsContextBeforeDrawing=_clearsContextBeforeDrawing, autoresizesSubviews=_autoresizesSubviews;
 @synthesize tag=_tag, userInteractionEnabled=_userInteractionEnabled, contentMode=_contentMode, backgroundColor=_backgroundColor;
 @synthesize multipleTouchEnabled=_multipleTouchEnabled, exclusiveTouch=_exclusiveTouch, autoresizingMask=_autoresizingMask;
-@synthesize tooltip=_tooltip;
+@synthesize toolTip=_toolTip;
 
 + (void)initialize
 {
@@ -177,9 +172,6 @@ static BOOL _animationsEnabled = YES;
 {
     if (fromWindow != toWindow) {
         [self didMoveToWindow];
-
-		[self _removeToolTipRect];
-		[self _addToolTipRect];
 		
         for (UIView *subview in self.subviews) {
             [subview _didMoveFromWindow:fromWindow toWindow:toWindow];
@@ -606,9 +598,6 @@ static BOOL _animationsEnabled = YES;
 
 - (void)_boundsDidChangeFrom:(CGRect)oldBounds to:(CGRect)newBounds
 {
-	[self _removeToolTipRect];
-	[self _addToolTipRect];
-	
     if (!CGRectEqualToRect(oldBounds, newBounds)) {
         // setNeedsLayout doesn't seem like it should be necessary, however there was a rendering bug in a table in Flamingo that
         // went away when this was placed here. There must be some strange ordering issue with how that layout manager stuff works.
@@ -755,13 +744,6 @@ static BOOL _animationsEnabled = YES;
     if (h != _layer.hidden) {
         _layer.hidden = h;
         [[NSNotificationCenter defaultCenter] postNotificationName:UIViewHiddenDidChangeNotification object:self];
-		
-		if(h) {
-			[self _removeToolTipRect];
-		} else {
-			[self _removeToolTipRect];
-			[self _addToolTipRect];
-		}
     }
 }
 
@@ -907,33 +889,6 @@ static BOOL _animationsEnabled = YES;
 - (NSArray *)gestureRecognizers
 {
     return [_gestureRecognizers allObjects];
-}
-
-- (void)setTooltip:(NSString *)newTooltip {
-	if(newTooltip == _tooltip) return;
-	
-	[_tooltip release];
-	_tooltip = [newTooltip copy];
-	
-	[self _removeToolTipRect];
-	[self _addToolTipRect];
-}
-
-- (void)_addToolTipRect {
-	if(self.tooltip.length > 0 && self.window.screen.UIKitView != nil) {
-		CGRect convertedRect = [self.window convertRect:self.bounds fromView:self];
-		_tooltipTag = [self.window.screen.UIKitView addToolTipRect:NSRectFromCGRect(convertedRect) owner:self userData:NULL];
-	}
-}
-
-- (void)_removeToolTipRect {
-	if(_tooltipTag > 0) {
-		[self.window.screen.UIKitView removeToolTip:_tooltipTag];
-	}
-}
-
-- (NSString *)view:(NSView *)view stringForToolTip:(NSToolTipTag)tag point:(NSPoint)point userData:(void *)userData {
-	return self.tooltip;
 }
 
 + (void)animateWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
