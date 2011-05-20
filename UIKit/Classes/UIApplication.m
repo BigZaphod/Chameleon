@@ -37,7 +37,9 @@
 #import "UIPopoverController+UIPrivate.h"
 #import "UIResponderAppKitIntegration.h"
 #import "UIKey+UIPrivate.h"
+
 #import <Cocoa/Cocoa.h>
+#import <CoreServices/CoreServices.h>
 
 NSString *const UIApplicationWillChangeStatusBarOrientationNotification = @"UIApplicationWillChangeStatusBarOrientationNotification";
 NSString *const UIApplicationDidChangeStatusBarOrientationNotification = @"UIApplicationDidChangeStatusBarOrientationNotification";
@@ -222,6 +224,29 @@ static BOOL TouchIsActive(UITouch *touch)
 - (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle animated:(BOOL)animated
 {
 }
+
+- (void)setIdleTimerDisabled:(BOOL)flag;
+{
+	if (_idleTimer)
+	{
+		[_idleTimer invalidate];
+		_idleTimer = nil;
+	}
+	
+	// this might seem counter-intuitive, but we have to set up a timer when the app wants to disable sleep/screensaver (when flag is YES)
+	
+	if (flag)
+	{
+		_idleTimer = [[NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(_idleTimerFired) userInfo:nil repeats:YES] retain];
+	}
+}
+
+- (void)_idleTimerFired;
+{
+	UpdateSystemActivity(OverallAct);
+}
+
+
 
 - (void)presentLocalNotificationNow:(UILocalNotification *)notification
 {

@@ -106,6 +106,8 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
     BOOL _applicationSupportsShakeToEdit;
     NSUInteger _ignoringInteractionEvents;
     NSInteger _applicationIconBadgeNumber;
+	
+	NSTimer * _idleTimer;
 }
 
 + (UIApplication *)sharedApplication;
