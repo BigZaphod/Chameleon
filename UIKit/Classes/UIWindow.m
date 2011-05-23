@@ -36,6 +36,7 @@
 #import "UITouch+UIPrivate.h"
 #import "UIScreenMode.h"
 #import "UIResponderAppKitIntegration.h"
+#import "UIKitView.h"
 #import <AppKit/NSCursor.h>
 #import <AppKit/NSHelpManager.h>
 #import <AppKit/NSEvent.h>
@@ -70,6 +71,8 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 
 @interface UIWindow ()
 - (void)_showToolTipForView:(UIView *)view;
+- (void)_hideCurrentToolTip;
+- (void)_toolTipViewDidChangeSuperview:(NSNotification *)notification;
 @end
 
 
@@ -344,28 +347,39 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 			if(touch.view != _currentToolTipView) {
 				[[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(_showToolTipForView:) object:_currentToolTipView];
 				
-				if(_currentToolTipView != nil) {
-					[[NSHelpManager sharedHelpManager] removeContextHelpForObject:_currentToolTipView];
-					
-					// Post fake events to force the tooltip to hide. It doesn't fade away like standard tooltips do, but it's the only way I've found.
-					NSEvent	*newEvent = [NSEvent mouseEventWithType:NSLeftMouseDown location:[NSEvent mouseLocation] modifierFlags:0 timestamp:0 windowNumber:[[self.screen.UIKitView window] windowNumber] context:[[self.screen.UIKitView window] graphicsContext] eventNumber:0 clickCount:1 pressure:0];
-					[NSApp postEvent:newEvent atStart:NO];
-					
-					newEvent = [NSEvent mouseEventWithType:NSLeftMouseUp location:[NSEvent mouseLocation] modifierFlags:0 timestamp:0 windowNumber:[[self.screen.UIKitView window] windowNumber] context:[[self.screen.UIKitView window] graphicsContext] eventNumber:0 clickCount:1 pressure:0];
-					[NSApp postEvent:newEvent atStart:NO];
-					
-					_currentToolTipView = nil;
-				}
-				
 				if(touch.view.toolTip.length > 0) {
-					[self performSelector:@selector(_showToolTipForView:) withObject:touch.view afterDelay:3];
+					// when your mouse moves from one view showing a tooltip to another, the new tooltip shows instantly instead of doing the normal delay
+					if(_currentToolTipView != nil) {
+						[self _hideCurrentToolTip];
+						[self _showToolTipForView:touch.view];
+					} else {
+						[self performSelector:@selector(_showToolTipForView:) withObject:touch.view afterDelay:3];
+					}
+				} else {
+					[self _hideCurrentToolTip];
 				}
 			}
         }
-    }
+		
+		if(touches.count < 1) {
+			[self _hideCurrentToolTip];
+		}
+    } else {
+		[self _hideCurrentToolTip];
+	}
+}
+
+- (void)mouseExitedView:(UIView *)exited enteredView:(UIView *)entered withEvent:(UIEvent *)event {	
+	if(exited == nil || entered == nil) {
+		[self _hideCurrentToolTip];
+	}
+	
+	[super mouseExitedView:exited enteredView:entered withEvent:event];
 }
 
 - (void)_showToolTipForView:(UIView *)view {
+	if(view == nil) return;
+	
 	NSMutableAttributedString *attributedToolTip = [[[NSMutableAttributedString alloc] initWithString:view.toolTip] autorelease];
 	NSRange wholeStringRange = NSMakeRange(0, view.toolTip.length);
 	[attributedToolTip addAttribute:NSFontAttributeName value:[NSFont systemFontOfSize:11.0f] range:wholeStringRange];
@@ -378,6 +392,31 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 	[[NSHelpManager sharedHelpManager] setContextHelp:attributedToolTip forObject:view];
 	[[NSHelpManager sharedHelpManager] showContextHelpForObject:view locationHint:[NSEvent mouseLocation]];
 	_currentToolTipView = view;
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_toolTipViewDidChangeSuperview:) name:UIViewDidMoveToSuperviewNotification object:_currentToolTipView];
+}
+
+- (void)_hideCurrentToolTip {
+	if(_currentToolTipView == nil) return;
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewDidMoveToSuperviewNotification object:_currentToolTipView];
+	
+	[[NSHelpManager sharedHelpManager] removeContextHelpForObject:_currentToolTipView];
+	
+	// Post fake events to force the tooltip to hide. It doesn't fade away like standard tooltips do, but it's the only way I've found.
+	NSEvent	*newEvent = [NSEvent mouseEventWithType:NSLeftMouseDown location:[NSEvent mouseLocation] modifierFlags:0 timestamp:0 windowNumber:[[self.screen.UIKitView window] windowNumber] context:[[self.screen.UIKitView window] graphicsContext] eventNumber:0 clickCount:1 pressure:0];
+	[NSApp postEvent:newEvent atStart:NO];
+	
+	newEvent = [NSEvent mouseEventWithType:NSLeftMouseUp location:[NSEvent mouseLocation] modifierFlags:0 timestamp:0 windowNumber:[[self.screen.UIKitView window] windowNumber] context:[[self.screen.UIKitView window] graphicsContext] eventNumber:0 clickCount:1 pressure:0];
+	[NSApp postEvent:newEvent atStart:NO];
+	
+	_currentToolTipView = nil;
+}
+
+- (void)_toolTipViewDidChangeSuperview:(NSNotification *)notification {
+	if(_currentToolTipView.window.screen.UIKitView.superview == nil || _currentToolTipView.superview == nil) {
+		[self _hideCurrentToolTip];
+	}
 }
 
 @end
