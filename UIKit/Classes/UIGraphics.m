@@ -30,7 +30,7 @@
 #import "UIGraphics.h"
 #import "UIImage.h"
 #import "UIScreen.h"
-#import <AppKit/AppKit.h>
+#import <AppKit/NSGraphicsContext.h>
 
 typedef struct UISavedGraphicsContext_ {
 	NSGraphicsContext *context;

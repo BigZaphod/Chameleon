@@ -202,7 +202,7 @@
         
         CGContextRestoreGState(UIGraphicsGetCurrentContext());
     } else if(self.attributedText.length > 0) {
-		[self.attributedText drawInRect:self.bounds];
+		[self.attributedText drawInRect:NSRectFromCGRect(self.bounds)];
 	}
 }
 

@@ -108,7 +108,7 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
         
         _backgroundView = [[UIImageView alloc] initWithImage:[[_popoverController class] backgroundImage]];
         
-        _arrowView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        _arrowView = [(UIImageView *)[UIImageView alloc] initWithFrame:CGRectZero];
         
         _contentContainerView = [[UIView alloc] init];
         _contentContainerView.layer.cornerRadius = 3;
