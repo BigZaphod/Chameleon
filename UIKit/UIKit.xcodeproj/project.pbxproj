@@ -238,8 +238,6 @@
 		66371E4413675020007B9873 /* <UIBarButtonSystemItem> action.png in Resources */ = {isa = PBXBuildFile; fileRef = 66371E4313675020007B9873 /* <UIBarButtonSystemItem> action.png */; };
 		66371E461367502C007B9873 /* <UIBarButtonSystemItem> compose.png in Resources */ = {isa = PBXBuildFile; fileRef = 66371E451367502C007B9873 /* <UIBarButtonSystemItem> compose.png */; };
 		66371E481367503A007B9873 /* <UIBarButtonSystemItem> reply.png in Resources */ = {isa = PBXBuildFile; fileRef = 66371E471367503A007B9873 /* <UIBarButtonSystemItem> reply.png */; };
-		66971D6F136B3E6D00FE780D /* UITableViewCellBackgroundView.h in Headers */ = {isa = PBXBuildFile; fileRef = 66971D6D136B3E6D00FE780D /* UITableViewCellBackgroundView.h */; };
-		66971D70136B3E6D00FE780D /* UITableViewCellBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66971D6E136B3E6D00FE780D /* UITableViewCellBackgroundView.m */; };
 		6699B8C4136BF60F001B5577 /* UITableSelectionGrayBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 6699B8C1136BF60F001B5577 /* UITableSelectionGrayBlue.png */; };
 		6699B8C5136BF60F001B5577 /* UITableSelectionGray.png in Resources */ = {isa = PBXBuildFile; fileRef = 6699B8C2136BF60F001B5577 /* UITableSelectionGray.png */; };
 		6699B8C6136BF60F001B5577 /* UITableSelection.png in Resources */ = {isa = PBXBuildFile; fileRef = 6699B8C3136BF60F001B5577 /* UITableSelection.png */; };
@@ -515,8 +513,6 @@
 		66371E4313675020007B9873 /* <UIBarButtonSystemItem> action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> action.png"; path = "Resources/<UIBarButtonSystemItem> action.png"; sourceTree = "<group>"; };
 		66371E451367502C007B9873 /* <UIBarButtonSystemItem> compose.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> compose.png"; path = "Resources/<UIBarButtonSystemItem> compose.png"; sourceTree = "<group>"; };
 		66371E471367503A007B9873 /* <UIBarButtonSystemItem> reply.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> reply.png"; path = "Resources/<UIBarButtonSystemItem> reply.png"; sourceTree = "<group>"; };
-		66971D6D136B3E6D00FE780D /* UITableViewCellBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellBackgroundView.h; sourceTree = "<group>"; };
-		66971D6E136B3E6D00FE780D /* UITableViewCellBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellBackgroundView.m; sourceTree = "<group>"; };
 		6699B8C1136BF60F001B5577 /* UITableSelectionGrayBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UITableSelectionGrayBlue.png; sourceTree = "<group>"; };
 		6699B8C2136BF60F001B5577 /* UITableSelectionGray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UITableSelectionGray.png; sourceTree = "<group>"; };
 		6699B8C3136BF60F001B5577 /* UITableSelection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UITableSelection.png; sourceTree = "<group>"; };
@@ -796,8 +792,6 @@
 				1489855012EE2CFE003D4751 /* UITableView.m */,
 				1489855112EE2CFE003D4751 /* UITableViewCell.h */,
 				1489855212EE2CFE003D4751 /* UITableViewCell.m */,
-				66971D6D136B3E6D00FE780D /* UITableViewCellBackgroundView.h */,
-				66971D6E136B3E6D00FE780D /* UITableViewCellBackgroundView.m */,
 				1489855312EE2CFE003D4751 /* UITableViewController.h */,
 				1489855412EE2CFE003D4751 /* UITableViewController.m */,
 				1489855512EE2CFE003D4751 /* UITapGestureRecognizer.h */,
@@ -1049,7 +1043,6 @@
 				14C6C122133AFC94002F111E /* CALayer+UIKitCompatibility.h in Headers */,
 				7011107C133BE0F400C86512 /* UIDatePicker.h in Headers */,
 				537472D5133ADD4B00EBD5EA /* UIInterface.h in Headers */,
-				66971D6F136B3E6D00FE780D /* UITableViewCellBackgroundView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1249,7 +1242,6 @@
 				14C6C123133AFC94002F111E /* CALayer+UIKitCompatibility.m in Sources */,
 				7011107D133BE0F400C86512 /* UIDatePicker.m in Sources */,
 				537472D6133ADD4B00EBD5EA /* UIInterface.m in Sources */,
-				66971D70136B3E6D00FE780D /* UITableViewCellBackgroundView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

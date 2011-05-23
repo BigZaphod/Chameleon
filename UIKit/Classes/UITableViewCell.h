@@ -95,6 +95,7 @@ typedef enum {
     BOOL _showingDeleteConfirmation;
     NSString *_reuseIdentifier;
     CGFloat _indentationWidth;
+	//UIColor *_backgroundColor;
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
@@ -121,5 +122,6 @@ typedef enum {
 @property (nonatomic, readonly, copy) NSString *reuseIdentifier;
 @property (nonatomic, assign) CGFloat indentationWidth; // 10 per default
 @property (nonatomic, assign) unsigned int tableViewStyle;
+//@property (nonatomic, copy) UIColor *backgroundColor;
 
 @end

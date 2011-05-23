@@ -38,6 +38,7 @@
 	tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     tableView.delegate = self;
     tableView.dataSource = self;
+	//tableView.backgroundColor=[UIColor greenColor];
     [tableView reloadData];
 	
 	[background addSubview:tableView];
@@ -73,6 +74,10 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
 
+	
+	
+	cell.backgroundColor=[UIColor redColor];
+	cell.selectionStyle=UITableViewCellSelectionStyleGray;
     cell.textLabel.text=@"ABCD";
     return cell;
 }
