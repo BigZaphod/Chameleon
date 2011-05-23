@@ -36,9 +36,9 @@
 	
 	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 	CGFloat locations[2];
-	locations[0] = 0.0f;
-	locations[1] = 1.0f;
-	_gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef) [NSArray arrayWithObjects:starting, ending, nil], locations);
+	locations[0] = 1.0f;
+	locations[1] = 0.0f;
+	_gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef) [NSArray arrayWithObjects:(id) starting.CGColor, (id) ending.CGColor, nil], locations);
 	CGColorSpaceRelease(colorSpace);
 	
 	return self;
@@ -60,7 +60,12 @@
 		index++;
 	}
 	
-	_gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef) colors, locations);
+	NSMutableArray *cgColors = [NSMutableArray arrayWithCapacity:colors.count];
+	for(UIColor *color in colors) {
+		[cgColors addObject:(id) color.CGColor];
+	}
+	
+	_gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef) cgColors, locations);
 	CGColorSpaceRelease(colorSpace);
 	
 	return self;
