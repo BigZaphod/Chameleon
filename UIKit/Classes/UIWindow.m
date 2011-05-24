@@ -345,7 +345,8 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
             }
 			
 			if(touch.view != _currentToolTipView) {
-				[[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(_showToolTipForView:) object:_currentToolTipView];
+				[[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(_showToolTipForView:) object:_toolTipToShow];
+				_toolTipToShow = nil;
 				
 				if(touch.view.toolTip.length > 0) {
 					// when your mouse moves from one view showing a tooltip to another, the new tooltip shows instantly instead of doing the normal delay
@@ -353,7 +354,8 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 						[self _hideCurrentToolTip];
 						[self _showToolTipForView:touch.view];
 					} else {
-						[self performSelector:@selector(_showToolTipForView:) withObject:touch.view afterDelay:3];
+						_toolTipToShow = touch.view;
+						[self performSelector:@selector(_showToolTipForView:) withObject:_toolTipToShow afterDelay:3];
 					}
 				} else {
 					[self _hideCurrentToolTip];
@@ -394,9 +396,13 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 	_currentToolTipView = view;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_toolTipViewDidChangeSuperview:) name:UIViewDidMoveToSuperviewNotification object:_currentToolTipView];
+	
+	_toolTipToShow = nil;
 }
 
 - (void)_hideCurrentToolTip {
+	[[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(_showToolTipForView:) object:_toolTipToShow];
+	
 	if(_currentToolTipView == nil) return;
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewDidMoveToSuperviewNotification object:_currentToolTipView];
@@ -411,6 +417,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 	[NSApp postEvent:newEvent atStart:NO];
 	
 	_currentToolTipView = nil;
+	_toolTipToShow = nil;
 }
 
 - (void)_toolTipViewDidChangeSuperview:(NSNotification *)notification {
