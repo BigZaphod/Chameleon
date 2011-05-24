@@ -72,6 +72,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 @interface UIWindow ()
 - (void)_showToolTipForView:(UIView *)view;
 - (void)_hideCurrentToolTip;
+- (void)_stopTrackingPotentiallyNewToolTip;
 - (void)_toolTipViewDidChangeSuperview:(NSNotification *)notification;
 @end
 
@@ -93,10 +94,18 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+	[self _stopTrackingPotentiallyNewToolTip];
+	[self _hideCurrentToolTip];
     [self _makeHidden];	// I don't really like this here, but the real UIKit seems to do something like this on window destruction as it sends a notification and we also need to remove it from the app's list of windows
     [_screen release];
     [_undoManager release];
     [super dealloc];
+}
+
+- (void)finalize {
+	[self _stopTrackingPotentiallyNewToolTip];
+	[self _hideCurrentToolTip];
+	[super finalize];
 }
 
 - (UIResponder *)_firstResponder
@@ -344,18 +353,19 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
                 [newCursor set];
             }
 			
+			if(touch.view != _toolTipViewToShow) {
+				[self _stopTrackingPotentiallyNewToolTip];
+			}
+			
 			if(touch.view != _currentToolTipView) {
-				[[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(_showToolTipForView:) object:_toolTipToShow];
-				_toolTipToShow = nil;
-				
 				if(touch.view.toolTip.length > 0) {
 					// when your mouse moves from one view showing a tooltip to another, the new tooltip shows instantly instead of doing the normal delay
 					if(_currentToolTipView != nil) {
 						[self _hideCurrentToolTip];
 						[self _showToolTipForView:touch.view];
 					} else {
-						_toolTipToShow = touch.view;
-						[self performSelector:@selector(_showToolTipForView:) withObject:_toolTipToShow afterDelay:3];
+						_toolTipViewToShow = touch.view;
+						[self performSelector:@selector(_showToolTipForView:) withObject:_toolTipViewToShow afterDelay:3];
 					}
 				} else {
 					[self _hideCurrentToolTip];
@@ -364,15 +374,18 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
         }
 		
 		if(touches.count < 1) {
+			[self _stopTrackingPotentiallyNewToolTip];
 			[self _hideCurrentToolTip];
 		}
     } else {
+		[self _stopTrackingPotentiallyNewToolTip];
 		[self _hideCurrentToolTip];
 	}
 }
 
 - (void)mouseExitedView:(UIView *)exited enteredView:(UIView *)entered withEvent:(UIEvent *)event {	
 	if(exited == nil || entered == nil) {
+		[self _stopTrackingPotentiallyNewToolTip];
 		[self _hideCurrentToolTip];
 	}
 	
@@ -386,7 +399,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 	NSRange wholeStringRange = NSMakeRange(0, view.toolTip.length);
 	[attributedToolTip addAttribute:NSFontAttributeName value:[NSFont systemFontOfSize:11.0f] range:wholeStringRange];
 	
-	NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+	NSMutableParagraphStyle *paragraphStyle = [[[NSMutableParagraphStyle alloc] init] autorelease];
 	[paragraphStyle setAlignment:NSLeftTextAlignment];
 	
 	[attributedToolTip addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:wholeStringRange];
@@ -397,12 +410,10 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_toolTipViewDidChangeSuperview:) name:UIViewDidMoveToSuperviewNotification object:_currentToolTipView];
 	
-	_toolTipToShow = nil;
+	_toolTipViewToShow = nil;
 }
 
-- (void)_hideCurrentToolTip {
-	[[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(_showToolTipForView:) object:_toolTipToShow];
-	
+- (void)_hideCurrentToolTip {	
 	if(_currentToolTipView == nil) return;
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewDidMoveToSuperviewNotification object:_currentToolTipView];
@@ -417,7 +428,11 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 	[NSApp postEvent:newEvent atStart:NO];
 	
 	_currentToolTipView = nil;
-	_toolTipToShow = nil;
+}
+
+- (void)_stopTrackingPotentiallyNewToolTip {
+	[[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(_showToolTipForView:) object:_toolTipViewToShow];
+	_toolTipViewToShow = nil;
 }
 
 - (void)_toolTipViewDidChangeSuperview:(NSNotification *)notification {
