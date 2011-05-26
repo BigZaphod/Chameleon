@@ -137,6 +137,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
         _delegateHas.shouldChangeCharacters = [_delegate respondsToSelector:@selector(textField:shouldChangeCharactersInRange:replacementString:)];
         _delegateHas.shouldClear = [_delegate respondsToSelector:@selector(textFieldShouldClear:)];
         _delegateHas.shouldReturn = [_delegate respondsToSelector:@selector(textFieldShouldReturn:)];
+		_delegateHas.doCommandBySelector = [_delegate respondsToSelector:@selector(textField:doCommandBySelector:)];
     }
 }
 
@@ -579,6 +580,19 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     if (_delegateHas.shouldReturn) {
         [_delegate textFieldShouldReturn:self];
     }
+}
+
+- (BOOL)_textShouldDoCommandBySelector:(SEL)selector {
+	if(_delegateHas.doCommandBySelector) {
+		return [self.delegate textField:self doCommandBySelector:selector];
+	} else {
+		if(selector == @selector(insertNewline:) || selector == @selector(insertNewlineIgnoringFieldEditor:)) {
+			[self _textDidReceiveReturnKey];
+			return YES;
+		}
+	}
+	
+	return NO;
 }
 
 - (NSString *)description

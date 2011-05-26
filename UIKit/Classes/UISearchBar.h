@@ -37,6 +37,7 @@
 
 @protocol UISearchBarDelegate;
 @class UISearchField;
+@class UIKey;
 
 @interface UISearchBar : UIView {
     UISearchField *_searchField;
@@ -55,6 +56,7 @@
 		BOOL bookmarkButtonClicked : 1;
 		BOOL resultsButtonClicked : 1;
 		BOOL selectedScopeButtonChanged : 1;
+		BOOL doCommandBySelector : 1;
     } _delegateHas;
 }
 
@@ -76,6 +78,7 @@
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar;
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText;
 - (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
+- (BOOL)searchBar:(UISearchBar *)searchBar doCommandBySelector:(SEL)selector;
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar;
 - (void)searchBarBookmarkButtonClicked:(UISearchBar *)searchBar;

@@ -122,8 +122,16 @@
 	_delegateHas.bookmarkButtonClicked = [self.delegate respondsToSelector:@selector(searchBarBookmarkButtonClicked:)];
 	_delegateHas.resultsButtonClicked = [self.delegate respondsToSelector:@selector(searchBarResultsListButtonClicked:)];;
 	_delegateHas.selectedScopeButtonChanged = [self.delegate respondsToSelector:@selector(searchBar:selectedScopeButtonIndexDidChange:)];
+	_delegateHas.doCommandBySelector = [self.delegate respondsToSelector:@selector(searchBar:doCommandBySelector:)];
 }
 
+- (BOOL)becomeFirstResponder {
+	return [_searchField becomeFirstResponder];
+}
+
+- (BOOL)resignFirstResponder {
+	return [_searchField resignFirstResponder];
+}
 
 #pragma mark UITextFieldDelegate
 
@@ -136,6 +144,14 @@
 	}
 	
 	return shouldChange;
+}
+
+- (BOOL)textField:(UITextField *)textField doCommandBySelector:(SEL)selector {
+	if(_delegateHas.doCommandBySelector) {
+		return [self.delegate searchBar:self doCommandBySelector:selector];
+	}
+	
+	return NO;
 }
 
 - (void)sendTextDidChange {
