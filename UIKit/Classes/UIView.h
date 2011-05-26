@@ -118,6 +118,7 @@ typedef NSUInteger UIViewAnimationOptions;
     BOOL _needsDidAppearOrDisappear;
     NSMutableSet *_gestureRecognizers;
 	NSString *_toolTip;
+	BOOL _suppressAppearanceEvents;
 }
 
 + (Class)layerClass;

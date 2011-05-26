@@ -202,7 +202,7 @@ static BOOL _animationsEnabled = YES;
         
         subview->_needsDidAppearOrDisappear = [self _subviewControllersNeedAppearAndDisappear];
         
-        if ([subview _viewController] && subview->_needsDidAppearOrDisappear) {
+        if ([subview _viewController] && subview->_needsDidAppearOrDisappear && !_suppressAppearanceEvents) {
             [[subview _viewController] viewWillAppear:NO];
         }
 
@@ -233,7 +233,7 @@ static BOOL _animationsEnabled = YES;
 
         [self didAddSubview:subview];
         
-        if ([subview _viewController] && subview->_needsDidAppearOrDisappear) {
+        if ([subview _viewController] && subview->_needsDidAppearOrDisappear && !_suppressAppearanceEvents) {
             [[subview _viewController] viewDidAppear:NO];
         }
     }
@@ -889,6 +889,10 @@ static BOOL _animationsEnabled = YES;
 - (NSArray *)gestureRecognizers
 {
     return [_gestureRecognizers allObjects];
+}
+
+- (void)_setSuppressAppearanceEvents:(BOOL)suppress {
+	_suppressAppearanceEvents = suppress;
 }
 
 + (void)animateWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
