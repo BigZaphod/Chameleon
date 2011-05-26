@@ -37,6 +37,8 @@
 #import "UIWindow.h"
 #import "UIKitView.h"
 #import "UIApplication+UIPrivate.h"
+#import "UIKey.h"
+#import "UIResponderAppKitIntegration.h"
 #import <AppKit/NSMenu.h>
 #import <AppKit/NSMenuItem.h>
 #import <AppKit/NSEvent.h>
@@ -48,6 +50,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 @interface UITableView ()
 - (void)_setNeedsReload;
+- (NSIndexPath *)_selectRowAtIndexPath:(NSIndexPath *)indexPath sendDelegateMessages:(BOOL)sendDelegateMessage animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition;
 @end
 
 @implementation UITableView
@@ -741,38 +744,44 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
     NSIndexPath *touchedRow = [self indexPathForRowAtPoint:location];
 
     if (touchedRow) {
-        NSIndexPath *selectedRow = [self indexPathForSelectedRow];
-
-        if (selectedRow) {
-            NSIndexPath *rowToDeselect = selectedRow;
-            
-            if (_delegateHas.willDeselectRowAtIndexPath) {
-                rowToDeselect = [_delegate tableView:self willDeselectRowAtIndexPath:rowToDeselect];
-            }
-            
-            [self deselectRowAtIndexPath:rowToDeselect animated:NO];
-            
-            if (_delegateHas.didDeselectRowAtIndexPath) {
-                [_delegate tableView:self didDeselectRowAtIndexPath:rowToDeselect];
-            }
-        }
-
-        NSIndexPath *rowToSelect = touchedRow;
-        
-        if (_delegateHas.willSelectRowAtIndexPath) {
-            rowToSelect = [_delegate tableView:self willSelectRowAtIndexPath:rowToSelect];
-        }
-
-        [self selectRowAtIndexPath:rowToSelect animated:NO scrollPosition:UITableViewScrollPositionNone];
-        
-        if (_delegateHas.didSelectRowAtIndexPath) {
-            [_delegate tableView:self didSelectRowAtIndexPath:rowToSelect];
-        }
+		NSIndexPath *rowToSelect = [self _selectRowAtIndexPath:touchedRow sendDelegateMessages:YES animated:NO scrollPosition:UITableViewScrollPositionNone];
 		
 		if([touch tapCount] == 2 && _delegateHas.didDoubleClickRowAtIndexPath) {
 			[_delegate tableView:self didDoubleClickRowAtIndexPath:rowToSelect];
 		}
     }
+}
+
+- (NSIndexPath *)_selectRowAtIndexPath:(NSIndexPath *)indexPath sendDelegateMessages:(BOOL)sendDelegateMessages animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition {
+	NSIndexPath *selectedRow = [self indexPathForSelectedRow];
+	
+	if (selectedRow) {
+		NSIndexPath *rowToDeselect = selectedRow;
+		
+		if (sendDelegateMessages && _delegateHas.willDeselectRowAtIndexPath) {
+			rowToDeselect = [_delegate tableView:self willDeselectRowAtIndexPath:rowToDeselect];
+		}
+		
+		[self deselectRowAtIndexPath:rowToDeselect animated:animated];
+		
+		if (sendDelegateMessages && _delegateHas.didDeselectRowAtIndexPath) {
+			[_delegate tableView:self didDeselectRowAtIndexPath:rowToDeselect];
+		}
+	}
+	
+	NSIndexPath *rowToSelect = indexPath;
+	
+	if (sendDelegateMessages && _delegateHas.willSelectRowAtIndexPath) {
+		rowToSelect = [_delegate tableView:self willSelectRowAtIndexPath:rowToSelect];
+	}
+	
+	[self selectRowAtIndexPath:rowToSelect animated:animated scrollPosition:scrollPosition];
+	
+	if (sendDelegateMessages && _delegateHas.didSelectRowAtIndexPath) {
+		[_delegate tableView:self didSelectRowAtIndexPath:rowToSelect];
+	}
+	
+	return rowToSelect;
 }
 
 - (BOOL)_canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -862,6 +871,56 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
     if (touchedRow && [self _canEditRowAtIndexPath:touchedRow]) {
         [self _beginEditingRowAtIndexPath:touchedRow];
     }
+}
+
+- (void)keyPressed:(UIKey *)key withEvent:(UIEvent *)event {
+	NSIndexPath *indexPath = [self indexPathForSelectedRow];
+	
+	if(key.type == UIKeyTypeEnter || key.type == UIKeyTypeReturn) {
+		if(indexPath != nil) {
+			[self _selectRowAtIndexPath:indexPath sendDelegateMessages:YES animated:NO scrollPosition:UITableViewScrollPositionNone];
+		}
+	} else if(key.type == UIKeyTypeUpArrow) {
+		NSIndexPath *previousIndexPath = nil;
+		if(indexPath == nil) {
+			NSUInteger lastSection = [self numberOfSections] - 1;
+			previousIndexPath = [NSIndexPath indexPathForRow:[self numberOfRowsInSection:lastSection] - 1 inSection:lastSection];
+		} else if(indexPath.row > 0) {
+			previousIndexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+		} else if(indexPath.section > 0) {
+			previousIndexPath = [NSIndexPath indexPathForRow:[self numberOfRowsInSection:indexPath.section - 1] inSection:indexPath.section - 1];
+		}
+		
+		if(previousIndexPath != nil) {
+			[self _selectRowAtIndexPath:previousIndexPath sendDelegateMessages:NO animated:NO scrollPosition:UITableViewScrollPositionNone];
+			[self scrollRectToVisible:[self rectForRowAtIndexPath:previousIndexPath] animated:NO];
+		}
+	} else if(key.type == UIKeyTypeDownArrow) {
+		NSUInteger numberOfRowsInSection = [self numberOfRowsInSection:indexPath.section];
+		NSIndexPath *nextIndexPath = nil;
+		if(indexPath == nil) {
+			nextIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+		} else if(indexPath.row < numberOfRowsInSection - 1) {
+			nextIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
+		} else if(indexPath.section < [self numberOfSections] - 1) {
+			nextIndexPath = [NSIndexPath indexPathForRow:0 inSection:indexPath.section + 1];
+		}
+		
+		if(nextIndexPath != nil) {
+			[self _selectRowAtIndexPath:nextIndexPath sendDelegateMessages:NO animated:NO scrollPosition:UITableViewScrollPositionNone];
+			[self scrollRectToVisible:[self rectForRowAtIndexPath:nextIndexPath] animated:NO];
+		}
+	} else if(key.type == UIKeyTypePageUp) {
+		// TODO: page up
+	} else if(key.type == UIKeyTypePageDown) {
+		// TODO: page down
+	} else {
+		[super keyPressed:key withEvent:event];
+	}
+}
+
+- (BOOL)canBecomeFirstResponder {
+	return self.window != nil;
 }
 
 @end
