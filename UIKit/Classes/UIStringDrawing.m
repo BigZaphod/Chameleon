@@ -46,6 +46,14 @@ static CFArrayRef CreateCTLinesForAttributedString(NSAttributedString *attribute
 	CFMutableArrayRef lines = CFArrayCreateMutable(NULL, 0, &kCFTypeArrayCallBacks);
     CGSize drawSize = CGSizeZero;
 	
+	if(attributedString.length < 1) {
+		if (renderSize) {
+			*renderSize = drawSize;
+		}
+		
+		return lines;
+	}
+	
 	NSDictionary *attributes = [attributedString attributesAtIndex:0 effectiveRange:NULL];
 	CTFontRef font = (CTFontRef) [attributes objectForKey:(id) kCTFontAttributeName];
 	
