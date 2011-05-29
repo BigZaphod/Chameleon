@@ -46,16 +46,9 @@ extern CGFloat _UITableViewDefaultRowHeight;
 
 @implementation UITableViewCellBackgroundView
 
-- (id)initWithFrame:(CGRect)frame {
-	if((self = [super initWithFrame:frame])) {
-		self.contentMode = UIViewContentModeRedraw;
-	}
-	
-	return self;
-}
-
 - (void)drawRect:(CGRect)dirtyRect
 {
+
 	float radius = 10.0;
 	
 	int lineWidth = 1;
@@ -68,30 +61,20 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	rect.origin.y += lineWidth / 2.0;
 	
 	CGFloat minX = CGRectGetMinX(rect), midX = CGRectGetMidX(rect), maxX = CGRectGetMaxX(rect);
-	CGFloat minY = CGRectGetMinY(rect), midY = CGRectGetMidY(rect), maxY = CGRectGetMaxY(rect);
+	CGFloat minY = CGRectGetMinY(rect), maxY = CGRectGetMaxY(rect);
 	
 	maxY += 1;
 	
 	CGContextRef c = UIGraphicsGetCurrentContext();
 	
-	/*
-	 CGColorSpaceRef myColorspace = CGColorSpaceCreateDeviceRGB();
-	 CGGradientRef blueGradient = nil;
-	 CGFloat locations[2] = { 0.0, 1.0 };
-	 CGFloat components[8] = { 0.81, 0.81, 0.81, 1.0,  // Start color
-	 0.67, 0.67, 0.67, 1.0 }; // End color
-	 */
-	
 	CGContextSetLineWidth(c, lineWidth);
-	CGContextSetAllowsAntialiasing(c, YES);
-	CGContextSetShouldAntialias(c, YES);
+//	CGContextSetAllowsAntialiasing(c, YES);
+//	CGContextSetShouldAntialias(c, YES);
 	
 	
-	if([[self superview ] sectionLocation]==UITableViewCellSectionLocationTop)
-	{
+	if ([[self superview ] sectionLocation] == UITableViewCellSectionLocationTop) {
 		//minY += 1;
-		
-		
+				
 		CGContextClearRect(c, [self bounds]);
 		CGContextBeginPath(c);
 		CGContextMoveToPoint(c, minX,maxY);
@@ -106,8 +89,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		CGContextDrawPath(c, kCGPathFillStroke);
 		CGContextRestoreGState(c);
 	}
-	else if ([[self superview ] sectionLocation]==UITableViewCellSectionLocationBottom)
-	{
+	else if ([[self superview ] sectionLocation] == UITableViewCellSectionLocationBottom) {
 		CGContextSaveGState(c);
 		CGContextClearRect(c, [self bounds]);
 		CGContextSetRGBStrokeColor(c, .67f, .67f, .67f, 1.0);
@@ -121,8 +103,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		CGContextDrawPath(c, kCGPathFillStroke);
 		CGContextRestoreGState(c);
 	}
-	else 
-	{
+	else {
 		
 		
 		CGContextSaveGState(c);
@@ -158,16 +139,9 @@ extern CGFloat _UITableViewDefaultRowHeight;
 
 @implementation UITableViewCellSelectedBackgroundView
 
-- (id)initWithFrame:(CGRect)frame {
-	if((self = [super initWithFrame:frame])) {
-		self.contentMode = UIViewContentModeRedraw;
-	}
-	
-	return self;
-}
-
 - (void)drawRect:(CGRect)dirtyRect
 {
+
 	float radius = 10.0;
 	
 	int lineWidth = 1;
@@ -180,30 +154,22 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	rect.origin.y += lineWidth / 2.0;
 	
 	CGFloat minX = CGRectGetMinX(rect), midX = CGRectGetMidX(rect), maxX = CGRectGetMaxX(rect);
-	CGFloat minY = CGRectGetMinY(rect), midY = CGRectGetMidY(rect), maxY = CGRectGetMaxY(rect);
+	CGFloat minY = CGRectGetMinY(rect), maxY = CGRectGetMaxY(rect);
 	
 	maxY += 1;
 	
 	CGContextRef c = UIGraphicsGetCurrentContext();
-	/*
-	 CGColorSpaceRef myColorspace = CGColorSpaceCreateDeviceRGB();
-	 CGGradientRef blueGradient = nil;
-	 CGFloat locations[2] = { 0.0, 1.0 };
-	 CGFloat components[8] = { 0.81, 0.81, 0.81, 1.0,  // Start color
-	 0.67, 0.67, 0.67, 1.0 }; // End color
-	 */
 	
 	CGContextSetLineWidth(c, lineWidth);
-	CGContextSetAllowsAntialiasing(c, YES);
-	CGContextSetShouldAntialias(c, YES);
+	//CGContextSetAllowsAntialiasing(c, YES);
+	//CGContextSetShouldAntialias(c, YES);
 	
-	if([[self superview] sectionLocation]==UITableViewCellSectionLocationTop)
-	{
+	if ([[self superview] sectionLocation]==UITableViewCellSectionLocationTop) {
 		
 		CGContextClearRect(c, rect);
 		
-		
 		CGRect imageRect = self.bounds;
+
 		CGMutablePathRef path = CGPathCreateMutable();
 		CGPathMoveToPoint(path, NULL, minX, maxY);
 		CGPathAddArcToPoint(path, NULL, minX, minY, midX, minY, radius);
@@ -212,40 +178,18 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		CGPathAddLineToPoint(path, NULL, minX, maxY);
 		CGPathCloseSubpath(path);
 		CGContextAddPath(c, path);
+		CGPathRelease(path);
+		
 		CGContextSaveGState(c);
-		
-		
-		
-		
-		
-		// Fill and stroke the path
-		/*
-		 CGContextSaveGState(c);
-		 CGContextAddPath(c, path);
-		 CGContextClip(c);
-		 
-		 blueGradient = CGGradientCreateWithColorComponents(myColorspace, components, locations, 2);
-		 CGContextDrawLinearGradient(c, blueGradient, CGPointMake(minX,minY), CGPointMake(minX,maxY), 0);
-		 
-		 CGContextAddPath(c, path);
-		 CGPathRelease(path);
-		 CGContextStrokePath(c);
-		 CGContextRestoreGState(c);
-		 
-		 CGColorSpaceRelease(myColorspace);
-		 CGGradientRelease(blueGradient);
-		 */ 
 		CGContextClip(c);
 		UIImage *currentBackgroundImage = nil;
 		
-		if([[self superview] selectionStyle]==UITableViewCellSelectionStyleBlue)
-		{
+		if ([[self superview] selectionStyle]==UITableViewCellSelectionStyleBlue) {
 			currentBackgroundImage = [UIImage _tableSelection];
 		}
 		else {
 			currentBackgroundImage = [UIImage _tableSelectionGray];
 		}
-		
 		[currentBackgroundImage drawInRect:imageRect];
 		CGContextRestoreGState(c);
 		
@@ -255,20 +199,18 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		CGPathAddArcToPoint(spath, NULL, maxX, minY, maxX, maxY, radius);
 		CGPathAddLineToPoint(spath, NULL, maxX, maxY);
 		CGContextAddPath(c, spath);
+		CGPathRelease(path);
 		CGContextSaveGState(c);
-		
 		CGContextSetRGBStrokeColor(c, .67f, .67f, .67f, 1.0);
 		CGContextStrokePath(c);
 		CGContextRestoreGState(c);
 		
 	}	
-	else if ([[self superview ] sectionLocation]==UITableViewCellSectionLocationBottom)
-	{
+	else if ([[self superview ] sectionLocation]==UITableViewCellSectionLocationBottom) {
 		
-		
+		CGContextClearRect(c, rect);
 		
 		CGRect imageRect = self.bounds;
-		
 		
 		CGMutablePathRef path = CGPathCreateMutable();
 		CGPathMoveToPoint(path, NULL, minX, minY-1.0f);
@@ -278,12 +220,11 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		CGPathAddLineToPoint(path, NULL, minX, minY-1.0f);
 		CGPathCloseSubpath(path);
 		CGContextAddPath(c, path);
+		CGPathRelease(path);
 		CGContextSaveGState(c);
-		
 		CGContextClip(c);
 		UIImage *currentBackgroundImage = nil;
-		if([[self superview] selectionStyle]==UITableViewCellSelectionStyleBlue)
-		{
+		if ([[self superview] selectionStyle] == UITableViewCellSelectionStyleBlue) {
 			currentBackgroundImage = [UIImage _tableSelection];
 		}
 		else {
@@ -292,14 +233,13 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		[currentBackgroundImage drawInRect:imageRect];
 		CGContextRestoreGState(c);
 		
-		
-		CGContextSaveGState(c);
-		CGContextSetRGBStrokeColor(c, .67f, .67f, .67f, 1.0);
 		CGContextBeginPath(c);
 		CGContextMoveToPoint(c, minX,minY-1.0f);
 		CGContextAddArcToPoint(c,minX, maxY-1.0f, midX, maxY, radius);
 		CGContextAddArcToPoint(c,maxX, maxY-1.0f, maxX, minY-1.0f, radius);
 		CGContextAddLineToPoint(c, maxX, minY-1.0f);
+		CGContextSaveGState(c);
+		CGContextSetRGBStrokeColor(c, .67f, .67f, .67f, 1.0);
 		CGContextStrokePath(c);
 		CGContextRestoreGState(c);
 		
@@ -307,11 +247,11 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	else {
 		
 		CGContextSaveGState(c);
+
 		CGRect imageRect = self.bounds;
-		CGContextClip(c);
+		
 		UIImage *currentBackgroundImage = nil;
-		if([[self superview] selectionStyle]==UITableViewCellSelectionStyleBlue)
-		{
+		if ([[self superview] selectionStyle] == UITableViewCellSelectionStyleBlue) {
 			currentBackgroundImage = [UIImage _tableSelection];
 		}
 		else {
@@ -323,8 +263,8 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		CGContextBeginPath(c);
 		CGContextMoveToPoint(c, minX,minY-1.0f);
 		CGContextAddLineToPoint(c, minX, maxY+1.0f);
-		CGContextSaveGState(c);
 		
+		CGContextSaveGState(c);
 		CGContextSetRGBStrokeColor(c, .67f, .67f, .67f, 1.0);
 		CGContextStrokePath(c);
 		CGContextRestoreGState(c);
@@ -332,22 +272,14 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		CGContextBeginPath(c);
 		CGContextMoveToPoint(c, maxX,minY-1.0f);
 		CGContextAddLineToPoint(c, maxX, maxY+1.0f);
-		CGContextSaveGState(c);
 		
+		CGContextSaveGState(c);
 		CGContextSetRGBStrokeColor(c, .67f, .67f, .67f, 1.0);
 		CGContextStrokePath(c);
 		CGContextRestoreGState(c);
 		
 	}
-	
-	
 }
-@end
-
-
-@interface UITableViewCell ()
-@property (nonatomic, retain) UIView * backgroudView;
-//@property (nonatomic, copy) NSString * reuseIdentifier;
 @end
 
 @implementation UITableViewCell
@@ -385,13 +317,19 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		_textLabel.font = [UIFont boldSystemFontOfSize:17];
 		[_contentView addSubview:_textLabel];
 		
-		
+		if (_style = UITableViewCellStyleSubtitle) {
+			_detailTextLabel = [[UILabel alloc] init];
+			_detailTextLabel.backgroundColor = [UIColor clearColor];
+			_detailTextLabel.textColor = [UIColor grayColor];
+			_detailTextLabel.highlightedTextColor = [UIColor whiteColor];
+			_detailTextLabel.font = [UIFont boldSystemFontOfSize:14];
+			[_contentView addSubview:_detailTextLabel];
+		}
 		
 		self.backgroundColor = [UIColor whiteColor];
 		self.accessoryType = UITableViewCellAccessoryNone;
 		self.editingAccessoryType = UITableViewCellAccessoryNone;
 		self.selectionStyle = UITableViewCellSelectionStyleBlue;
-		//self.clearsContextBeforeDrawing=NO;
 	}
 	return self;
 }
@@ -417,13 +355,14 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	[_selectedBackgroundView release];
 	[_accessoryView release];
 	[_reuseIdentifier release];
+	
 	[super dealloc];
 }
 
 - (void)layoutSubviews
 {
-	[super layoutSubviews];
 	
+	[super layoutSubviews];
 	
 	CGRect bounds = self.bounds;
 	BOOL showingSeperator = !_seperatorView.hidden;
@@ -440,63 +379,47 @@ extern CGFloat _UITableViewDefaultRowHeight;
 			[self addSubview: _accessoryView];
 		contentFrame.size.width = accessoryRect.origin.x - 1;
 	}
-	
-	
-	
-	
-	if(self.tableViewStyle==0)
-	{	
-	}
-	else
-	{
 		
+	if (self.tableViewStyle == 1) {
 		
-		
-		if(self.isSelected==YES)
-		{
-			if(self.selectedBackgroundView==nil)
-			{
-				self.backgroundColor=[UIColor clearColor];
-				self.contentView.backgroundColor=[UIColor clearColor];
-				self.contentView.opaque=NO;
-				self.selectedBackgroundView=[[UITableViewCellSelectedBackgroundView alloc] init];//]WithFrame:contentFrame];
-				self.selectedBackgroundView.backgroundColor=[UIColor clearColor];//self.contentView.backgroundColor;
-				self.selectedBackgroundView.opaque=NO;
+		if (self.isSelected == YES) {
+			if (self.selectedBackgroundView == nil) {
+				self.backgroundColor = [UIColor clearColor];
+				self.contentView.backgroundColor = [UIColor clearColor];
+				self.contentView.opaque = NO;
+				self.selectedBackgroundView = [[UITableViewCellSelectedBackgroundView alloc] init];
+				self.selectedBackgroundView.backgroundColor = [UIColor clearColor];
+				self.selectedBackgroundView.opaque = NO;
 				[self bringSubviewToFront:_selectedBackgroundView];
-				//self.selectedBackgroundView.alpha=0;
 			}
 			else {
-				[self.backgroundView removeFromSuperview];
-				[self addSubview:self.selectedBackgroundView];
-				
+				[self.backgroundView setHidden:YES];
+				[self.selectedBackgroundView setHidden:NO];
+				[self.selectedBackgroundView setNeedsDisplay];
 			}
 			
 		}
 		else
 		{
-			if(self.backgroundView==nil)
-			{
-				//	self.backgroundColor=[UIColor clearColor];
-				self.contentView.backgroundColor=[UIColor clearColor];
-				self.contentView.opaque=NO;
-				self.backgroundView=[[UITableViewCellBackgroundView alloc] init];//WithFrame:contentFrame];
-				//	self.backgroundView.backgroundColor=[UIColor redColor];//self.backgroundColor;
-				self.backgroundView.opaque=NO;
+			if (self.backgroundView == nil) {
+				self.contentView.backgroundColor = [UIColor clearColor];
+				self.contentView.opaque = NO;
+				self.backgroundView = [[UITableViewCellBackgroundView alloc] init];
+				self.backgroundView.opaque = NO;
 				[self bringSubviewToFront:_backgroundView];
 			}
-			else{
-				[self.selectedBackgroundView removeFromSuperview];
-				[self addSubview:self.backgroundView];
+			else {
+				[self.selectedBackgroundView setHidden:YES];
+				[self.backgroundView setHidden:NO];
+				[self.backgroundView setNeedsDisplay];
 			}
 		}
 		
-		if(self.backgroundColor!=[UIColor clearColor])
-		{
-		//	NSLog(@"color color %@",self.backgroundColor);
-			_backgroundView.backgroundColor=self.backgroundColor;
-			self.backgroundColor=[UIColor clearColor];
-			_contentView.opaque=NO;
-			_backgroundView.opaque=NO;
+		if (self.backgroundColor != [UIColor clearColor]) {
+			_backgroundView.backgroundColor = self.backgroundColor;
+			self.backgroundColor = [UIColor clearColor];
+			_contentView.opaque = NO;
+			_backgroundView.opaque = NO;
 		}
 	}
 	
@@ -505,22 +428,6 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	_selectedBackgroundView.frame = contentFrame;
 	
 	_contentView.frame = contentFrame;
-	
-	/*
-	 if(self.isSelected==YES)
-	 {
-	 NSLog(@"is selected *****************");
-	 
-	 
-	 }
-	 else 
-	 {
-	 NSLog(@"is not selected *****************");
-	 
-	 
-	 
-	 }
-	 */
 	
 	[self bringSubviewToFront:_contentView];
 	
@@ -540,119 +447,70 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		textRect.origin = CGPointMake(padding+_imageView.frame.size.width+padding,0);
 		textRect.size = CGSizeMake(MAX(0,contentFrame.size.width-textRect.origin.x-padding),contentFrame.size.height);
 		_textLabel.frame = textRect;
+	}
+	
+	if (_style == UITableViewCellStyleSubtitle) {
+		const CGFloat padding = 5;
 		
+		BOOL showImage = (_imageView.image != nil);
+		_imageView.frame = CGRectMake(padding,0,(showImage? 30:0),contentFrame.size.height);
 		
+		CGSize textSize = [_textLabel.text sizeWithFont:_textLabel.font];
+		
+		CGRect textRect;
+		textRect.origin = CGPointMake(padding+_imageView.frame.size.width+padding,round(-0.5*textSize.height));
+		textRect.size = CGSizeMake(MAX(0,contentFrame.size.width-textRect.origin.x-padding),contentFrame.size.height);
+		_textLabel.frame = textRect;
+		
+		CGSize detailTextSize = [_detailTextLabel.text sizeWithFont:_detailTextLabel.font];
+		
+		CGRect detailTextRect;
+		detailTextRect.origin = CGPointMake(padding+_imageView.frame.size.width+padding,round(0.5*detailTextSize.height));
+		detailTextRect.size = CGSizeMake(MAX(0,contentFrame.size.width-textRect.origin.x-padding),contentFrame.size.height);
+		_detailTextLabel.frame = detailTextRect;
 		
 	}
 }
-
-/*
-- (void)setBackgroundColor:(UIColor *)newColor
-{
-	if (self.tableViewStyle==0) 
-	{
-		[super setBackgroundColor:newColor];
-	}
-	else {
-		
-		if (self.backgroundColor != newColor) {
-			//[self.backgroundColor release];
-			//self.backgroundColor = [newColor retain];
-			
-			CGColorRef color = [newColor CGColor];
-			
-			if (color) {
-				self.opaque = (CGColorGetAlpha(color) == 1);
-				_backgroundView.backgroundColor=newColor;
-				[super setBackgroundColor:[UIColor clearColor]];
-				_contentView.opaque=NO;
-				_backgroundView.opaque=NO;
-				
-				
-			}
-			
-			//if (!_implementsDrawRect) {
-            //_layer.backgroundColor = color;
-			//}
-		}
-	}
-}
-*/
 
 - (void)drawRect:(CGRect)rect
 {
-	
 	/*******
 	 some of the code from Mike Akers
 	 http://stackoverflow.com/questions/400965/how-to-customize-the-background-border-colors-of-a-grouped-table-view
 	 *******/
 	
+    const CGRect bounds = self.bounds;
 	
-	
-	const CGRect bounds = self.bounds;
-	
-	CGFloat minX = CGRectGetMinX(rect), midX = CGRectGetMidX(rect), maxX = CGRectGetMaxX(rect);
-	CGFloat minY = CGRectGetMinY(rect), midY = CGRectGetMidY(rect), maxY = CGRectGetMaxY(rect);
-	
-	
-	
-	
-	if(self.tableViewStyle == 0)
-	{
-		
-		if(self.isSelected==YES)
-		{
-			if(self.selectionStyle==UITableViewCellSelectionStyleBlue)
-			{
-				CGGradientRef blueGradient;
-				CGColorSpaceRef cellColorspace;
-				size_t num_locations = 2;
-				CGFloat locations[2] = { 0.0, 1.0 };
-				CGFloat components[8] = { 0.02, 0.55, 0.96, 1.0,  // Start color
-					0.0, 0.36, 0.90, 1.0 }; // End color
+    if (self.tableViewStyle == 0) {
+        CGContextRef c = UIGraphicsGetCurrentContext();
+        
+		if (self.isSelected == YES) {
+			
+            if (self.selectionStyle == UITableViewCellSelectionStyleBlue) {
 				
-				cellColorspace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
-				blueGradient = CGGradientCreateWithColorComponents (cellColorspace, components, locations, num_locations);
+                UIImage *currentBackgroundImage = nil;
+				currentBackgroundImage = [UIImage _tableSelection];
 				
-				CGPoint startPoint, endPoint;
-				
-				startPoint = CGPointMake(CGRectGetMidX(bounds), 0.0f);
-				endPoint = CGPointMake(CGRectGetMidX(bounds), CGRectGetMaxY(bounds));
-				CGContextDrawLinearGradient (UIGraphicsGetCurrentContext(), blueGradient, startPoint, endPoint, 0);
-				CGGradientRelease(blueGradient);
-				CGColorSpaceRelease(cellColorspace);
+				CGContextSaveGState(c);
+				[currentBackgroundImage drawInRect:bounds];
+				CGContextRestoreGState(c);
 			}
 			
-			if(self.selectionStyle==UITableViewCellSelectionStyleGray)
-			{
-				CGGradientRef blueGradient;
-				CGColorSpaceRef cellColorspace;
-				size_t num_locations = 2;
-				CGFloat locations[2] = { 0.0, 1.0 };
-				CGFloat components[8] = { 0.81, 0.81, 0.81, 1.0,  // Start color
-					0.67, 0.67, 0.67, 1.0 }; // End color
+			if (self.selectionStyle == UITableViewCellSelectionStyleGray) {
 				
-				cellColorspace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
-				blueGradient = CGGradientCreateWithColorComponents (cellColorspace, components, locations, num_locations);
+				UIImage *currentBackgroundImage = nil;
+				currentBackgroundImage = [UIImage _tableSelectionGray];
 				
-				CGPoint startPoint, endPoint;
-				
-				startPoint = CGPointMake(CGRectGetMidX(bounds), 0.0f);
-				endPoint = CGPointMake(CGRectGetMidX(bounds), CGRectGetMaxY(bounds));
-				CGContextDrawLinearGradient (UIGraphicsGetCurrentContext(), blueGradient, startPoint, endPoint, 0);
-				CGGradientRelease(blueGradient);
-				CGColorSpaceRelease(cellColorspace);
+				CGContextSaveGState(c);
+				[currentBackgroundImage drawInRect:bounds];
+				CGContextRestoreGState(c);
 			}
 		}
 		
 	}
-	
-	//else 
-	//{
-	//	[self.backgroundView drawRect:rect];
-	//	[self.selectedBackgroundView drawRect:rect];
-	
-	//}
+	else {
+			[self setNeedsLayout];
+	}
 }
 
 - (void)_setSeparatorStyle:(UITableViewCellSeparatorStyle)theStyle color:(UIColor *)theColor
@@ -673,27 +531,6 @@ extern CGFloat _UITableViewDefaultRowHeight;
 - (void)_updateSelectionState
 {
 	BOOL shouldHighlight = (_highlighted || _selected);
-	
-	_selectedBackgroundView.hidden=!shouldHighlight;
-	
-	/*
-	 if(_selected)
-	 {
-	 //[_backgroundView removeFromSuperview];
-	 //[self addSubview:_selectedBackgroundView];
-	 	_selectedBackgroundView.hidden = NO;
-	 _backgroundView.hidden= YES;
-	 }
-	 else {
-	 
-	 //[_selectedBackgroundView removeFromSuperview];
-		 _backgroundView.opaque=YES;
-	 //[self addSubview:_backgroundView];
-	 	_selectedBackgroundView.hidden = YES;
-	 
-	 _backgroundView.hidden= NO;
-	 }
-	 */
 	
 	[self setNeedsLayout];
 	[self setNeedsDisplay];

@@ -401,23 +401,45 @@ typedef enum {
 	
 	const CGRect bounds = self.bounds;
 	
-	NSBezierPath *topPath = [NSBezierPath bezierPath];
-	[topPath setLineWidth:2.0f];
-	[topPath moveToPoint:NSMakePoint(bounds.origin.x,bounds.origin.y)];
-	[topPath lineToPoint:NSMakePoint(bounds.size.width,bounds.origin.y)];
-	[[NSColor colorWithDeviceRed:(214.0/255.0) green:(221.0/255.0) blue:(229.0/255.0) alpha:1.0] set];
-	[topPath stroke];
+	CGContextRef c = UIGraphicsGetCurrentContext();
+
+	if(self.barStyle == UIBarStyleDefault) {
+		
+		UIImage *currentBackgroundImage = nil;
+		currentBackgroundImage = [UIImage _defaultNavigationBarBackgroundImage];
+		
+		CGContextSaveGState(c);
+		[currentBackgroundImage drawInRect:bounds];
+		CGContextRestoreGState(c);
+	}
+	else if(self.barStyle == UIBarStyleBlackTranslucent) {
+		
+		UIImage *currentBackgroundImage = nil;
+		currentBackgroundImage = [UIImage _blackTranslucentNavigationBarBackgroundImage];
+		
+		CGContextSaveGState(c);
+		[currentBackgroundImage drawInRect:bounds];
+		CGContextRestoreGState(c);
+	}
+	else if(self.barStyle == UIBarStyleBlackOpaque) {
+		
+		UIImage *currentBackgroundImage = nil;
+		currentBackgroundImage = [UIImage _blackOpaqueNavigationBarBackgroundImage];
+		
+		CGContextSaveGState(c);
+		[currentBackgroundImage drawInRect:bounds];
+		CGContextRestoreGState(c);
+	}
+	else {
+		
+		UIImage *currentBackgroundImage = nil;
+		currentBackgroundImage = [UIImage _blackOpaqueNavigationBarBackgroundImage];
+		
+		CGContextSaveGState(c);
+		[currentBackgroundImage drawInRect:bounds];
+		CGContextRestoreGState(c);
+	}
 	
-	NSGradient * bar = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithDeviceRed:(128.0/255.0) green:(150.0/255.0) blue:(178.0/255.0) alpha:1.0] endingColor:[NSColor colorWithDeviceRed:(189.0/255.0) green:(201.0/255.0) blue:(214.0/255.0) alpha:1.0]];
-	CGRect barFrame = CGRectMake(0, 1, bounds.size.width, bounds.size.height-1);
-	[bar drawInRect:barFrame angle:270.0];
-	
-	NSBezierPath *bottomPath = [NSBezierPath bezierPath];
-	[bottomPath setLineWidth:2.0f];
-	[bottomPath moveToPoint:NSMakePoint(bounds.origin.x,bounds.size.height)];
-	[bottomPath lineToPoint:NSMakePoint(bounds.size.width,bounds.size.height)];
-	[[NSColor colorWithDeviceRed:(58.0/255.0) green:(69.0/255.0) blue:(84.0/255.0) alpha:1.0] set];
-	[bottomPath stroke];
 }
 
 @end

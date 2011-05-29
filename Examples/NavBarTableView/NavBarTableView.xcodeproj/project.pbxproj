@@ -15,6 +15,8 @@
 		38E523D61339731100E041B3 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 38E523D41339731100E041B3 /* Credits.rtf */; };
 		38E523D91339731100E041B3 /* NavBarTableViewAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E523D81339731100E041B3 /* NavBarTableViewAppDelegate.m */; };
 		38E523DC1339731100E041B3 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38E523DA1339731100E041B3 /* MainMenu.xib */; };
+		6627E9D813925C37004A4610 /* UIRed.m in Sources */ = {isa = PBXBuildFile; fileRef = 6627E9D713925C37004A4610 /* UIRed.m */; };
+		6627E9ED13925CD7004A4610 /* UIGreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 6627E9EC13925CD7004A4610 /* UIGreen.m */; };
 		7884CAA8133AC90400D050CF /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7884CAA7133AC90400D050CF /* Quartz.framework */; };
 		F4556120133A5D3B0021B1A6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3825F4661339775C005A267D /* UIKit.framework */; };
 		F455612E133A5D830021B1A6 /* UIKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 3825F4661339775C005A267D /* UIKit.framework */; };
@@ -70,6 +72,10 @@
 		38E523D71339731100E041B3 /* NavBarTableViewAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NavBarTableViewAppDelegate.h; sourceTree = "<group>"; };
 		38E523D81339731100E041B3 /* NavBarTableViewAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NavBarTableViewAppDelegate.m; sourceTree = "<group>"; };
 		38E523DB1339731100E041B3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		6627E9D613925C37004A4610 /* UIRed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIRed.h; sourceTree = "<group>"; };
+		6627E9D713925C37004A4610 /* UIRed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIRed.m; sourceTree = "<group>"; };
+		6627E9EB13925CD7004A4610 /* UIGreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIGreen.h; sourceTree = "<group>"; };
+		6627E9EC13925CD7004A4610 /* UIGreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIGreen.m; sourceTree = "<group>"; };
 		7884CAA7133AC90400D050CF /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -142,6 +148,10 @@
 				388BF77E13397877006EC779 /* ChameleonAppDelegate.m */,
 				388BF780133978CB006EC779 /* TestViewController.h */,
 				388BF781133978CB006EC779 /* TestViewController.m */,
+				6627E9EB13925CD7004A4610 /* UIGreen.h */,
+				6627E9EC13925CD7004A4610 /* UIGreen.m */,
+				6627E9D613925C37004A4610 /* UIRed.h */,
+				6627E9D713925C37004A4610 /* UIRed.m */,
 				38E523DA1339731100E041B3 /* MainMenu.xib */,
 				38E523CC1339731100E041B3 /* Supporting Files */,
 			);
@@ -245,6 +255,8 @@
 				38E523D91339731100E041B3 /* NavBarTableViewAppDelegate.m in Sources */,
 				388BF77F13397877006EC779 /* ChameleonAppDelegate.m in Sources */,
 				388BF782133978CB006EC779 /* TestViewController.m in Sources */,
+				6627E9D813925C37004A4610 /* UIRed.m in Sources */,
+				6627E9ED13925CD7004A4610 /* UIGreen.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

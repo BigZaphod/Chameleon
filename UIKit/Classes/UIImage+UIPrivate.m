@@ -319,6 +319,22 @@ NSMutableDictionary *imageCache = nil;
   return [self _frameworkImageWithName:@"<UITabBar> item.png" leftCapWidth:8 topCapHeight:0];
 }
 
++ (UIImage *)_defaultNavigationBarBackgroundImage
+{
+	return [self _frameworkImageWithName:@"<UINavigationBarBackground> default.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_blackTranslucentNavigationBarBackgroundImage
+{
+	return [self _frameworkImageWithName:@"<UINavigationBarBackground> blackTranslucent.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_blackOpaqueNavigationBarBackgroundImage
+{
+	return [self _frameworkImageWithName:@"<UINavigationBarBackground> blackOpaque.png" leftCapWidth:0 topCapHeight:0];
+}
+
+
 @end
 
 

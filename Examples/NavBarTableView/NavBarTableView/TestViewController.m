@@ -7,6 +7,8 @@
 //
 
 #import "TestViewController.h"
+#import "UIRed.h"
+#import "UIGreen.h"
 
 @implementation TestViewController
 
@@ -38,7 +40,7 @@
 	tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     tableView.delegate = self;
     tableView.dataSource = self;
-	//tableView.backgroundColor=[UIColor greenColor];
+	tableView.backgroundColor=[UIColor greenColor];
     [tableView reloadData];
 	
 	[background addSubview:tableView];
@@ -50,6 +52,10 @@
 
 #pragma mark -
 #pragma mark Table view data source
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return 80.0f;
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
 {
@@ -60,7 +66,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
 	
-    return 10;
+    return 30;
 }
 
 
@@ -71,14 +77,22 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+		
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     }
 
 	
 	
-	cell.backgroundColor=[UIColor redColor];
-	cell.selectionStyle=UITableViewCellSelectionStyleGray;
+	//cell.backgroundColor=[UIColor redColor];
+	cell.selectionStyle=UITableViewCellSelectionStyleBlue;
     cell.textLabel.text=@"ABCD";
+    cell.detailTextLabel.text=@"1234";
+	/*
+	UIRed *bg=[[UIRed alloc] initWithFrame:cell.frame];
+	cell.backgroundView=bg;
+	UIGreen *sbg=[[UIGreen alloc] initWithFrame:cell.frame];
+	cell.selectedBackgroundView=sbg;*/
+	
     return cell;
 }
 

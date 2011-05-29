@@ -300,7 +300,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 							cell.tableViewStyle = 0;
 						else 
 							cell.tableViewStyle = 1;
-						NSLog(@"bgc : %@",self.backgroundColor);
+						//NSLog(@"bgc : %@",self.backgroundColor);
 						
 
                         //cell.backgroundColor = [UIColor grayColor];
