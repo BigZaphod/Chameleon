@@ -893,7 +893,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		
 		if(previousIndexPath != nil) {
 			[self _selectRowAtIndexPath:previousIndexPath sendDelegateMessages:NO animated:NO scrollPosition:UITableViewScrollPositionNone];
-			[self scrollRectToVisible:[self rectForRowAtIndexPath:previousIndexPath] animated:NO];
+			[self scrollRectToVisible:[self rectForRowAtIndexPath:previousIndexPath] animated:YES];
 		}
 	} else if(key.type == UIKeyTypeDownArrow) {
 		NSUInteger numberOfRowsInSection = [self numberOfRowsInSection:indexPath.section];
@@ -908,12 +908,12 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		
 		if(nextIndexPath != nil) {
 			[self _selectRowAtIndexPath:nextIndexPath sendDelegateMessages:NO animated:NO scrollPosition:UITableViewScrollPositionNone];
-			[self scrollRectToVisible:[self rectForRowAtIndexPath:nextIndexPath] animated:NO];
+			[self scrollRectToVisible:[self rectForRowAtIndexPath:nextIndexPath] animated:YES];
 		}
 	} else if(key.type == UIKeyTypePageUp) {
-		// TODO: page up
-	} else if(key.type == UIKeyTypePageDown) {
-		// TODO: page down
+		[self scrollRectToVisible:CGRectMake(0.0f, MAX(self.contentOffset.y - self.bounds.size.height, 0), self.bounds.size.width, self.bounds.size.height) animated:YES];
+	} else if(key.type == UIKeyTypePageDown || [key.characters isEqualToString:@" "]) {
+		[self scrollRectToVisible:CGRectMake(0.0f, MIN(self.contentOffset.y + self.bounds.size.height, self.contentSize.height), self.bounds.size.width, self.bounds.size.height) animated:YES];
 	} else {
 		[super keyPressed:key withEvent:event];
 	}
