@@ -92,7 +92,6 @@ extern CGFloat _UITableViewDefaultRowHeight;
     [_imageView release];
     [_backgroundView release];
     [_selectedBackgroundView release];
-    [_accessoryView release];
     [_reuseIdentifier release];
     [super dealloc];
 }
