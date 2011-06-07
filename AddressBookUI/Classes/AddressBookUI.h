@@ -27,4 +27,10 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+typedef int32_t ABMultiValueIdentifier;
+typedef int32_t ABPropertyID;
+
+#import "ABNewPersonViewController.h"
+#import "ABPeoplePickerNavigationController.h"
+#import "ABPersonViewController.h"
 #import "ABUnknownPersonViewController.h"

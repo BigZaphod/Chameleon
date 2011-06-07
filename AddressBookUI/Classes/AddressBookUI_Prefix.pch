@@ -27,16 +27,6 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "ABUnknownPersonViewController.h"
-
-@implementation ABUnknownPersonViewController
-
-@synthesize displayedPerson;
-@synthesize unknownPersonViewDelegate;
-@synthesize addressBook;
-@synthesize alternateName;
-@synthesize message;
-@synthesize allowsActions;
-@synthesize allowsAddingToAddressBook;
-
-@end
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+#endif
