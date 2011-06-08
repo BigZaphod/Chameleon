@@ -120,7 +120,6 @@ typedef enum {
 @property (nonatomic, readonly, retain) UISplitViewController *splitViewController;
 @property (nonatomic, readonly, retain) UISearchDisplayController *searchDisplayController; // stub
 
-// stubs
 @property (nonatomic, retain) UITabBarItem *tabBarItem;
 @property (nonatomic, readonly, retain) UITabBarController *tabBarController;
 

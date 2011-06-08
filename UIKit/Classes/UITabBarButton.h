@@ -27,36 +27,19 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIViewController.h"
-#import "UITabBar.h"
+#import "UIButton.h"
+#import "UITabBarButtonBadge.h"
+#import "UITabBarItem.h"
 
-@class UITabBarController;
-
-@protocol UITabBarControllerDelegate <NSObject>
-
-@optional
-- (void)tabBarController:(UITabBarController *)tabBarController didEndCustomizingViewControllers:(NSArray *)viewControllers changed:(BOOL)changed;
-- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController;
-- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController;
-- (void)tabBarController:(UITabBarController *)tabBarController willBeginCustomizingViewControllers:(NSArray *)viewControllers;
-- (void)tabBarController:(UITabBarController *)tabBarController willEndCustomizingViewControllers:(NSArray *)viewControllers changed:(BOOL)changed;
-
-@end
-
-@interface UITabBarController : UIViewController <UITabBarDelegate> {
-    UITabBar *_tabBar;
-    UIViewController *_selectedViewController;
-    NSArray *_viewControllers;
-    NSDictionary *_viewControllerByTabBarItem;
-    id<UITabBarControllerDelegate> _delegate;
+@interface UITabBarButton : UIButton {
+    UITabBarButtonBadge *_buttonBadge;
 }
 
-- (void)setViewControllers:(NSArray *)viewControllers animated:(BOOL)animated;
+- (id)initWithTabBarItem:(UITabBarItem *)item;
+- (void)_updateImageAndTitleFromTabBarItem:(UITabBarItem *)item;
+- (UIImage *)_unselectedTabBarImageFromImage:(UIImage *)image;
+- (UIImage *)_selectedTabBarImageFromImage:(UIImage *)image;
 
-@property (nonatomic, assign) UIViewController *selectedViewController;
-@property (nonatomic) NSUInteger selectedIndex;
-@property (nonatomic, copy)   NSArray *viewControllers;
-@property (nonatomic, readonly) UITabBar *tabBar;
-@property (nonatomic, assign) id<UITabBarControllerDelegate> delegate;
+@property (nonatomic, copy) NSString *badgeValue;
 
 @end
