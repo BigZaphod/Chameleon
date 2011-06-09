@@ -147,7 +147,7 @@
 
 - (UIInterfaceOrientation)interfaceOrientation
 {
-    return UIDeviceOrientationPortrait;
+    return (UIInterfaceOrientation) UIDeviceOrientationPortrait;
 }
 
 - (UINavigationItem *)navigationItem

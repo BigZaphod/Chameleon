@@ -57,7 +57,7 @@ typedef enum {
     NSInteger _firstOtherButtonIndex;
     NSString *_title;
     NSMutableArray *_menuTitles;
-    NSMutableSet *_separatorIndexes;
+    NSMutableArray *_separatorIndexes;
     UIActionSheetStyle _actionSheetStyle;
     id _menu;
     
