@@ -198,7 +198,10 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 
 - (BOOL)becomeFirstResponder
 {
-    return [[self delegate] textViewBecomeFirstResponder:self];
+	isBecomingFirstResponder = YES;
+    BOOL result = [[self delegate] textViewBecomeFirstResponder:self];
+	isBecomingFirstResponder = NO;
+	return result;
 }
 
 - (BOOL)reallyBecomeFirstResponder
@@ -208,6 +211,8 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 
 - (BOOL)resignFirstResponder
 {
+	if(isBecomingFirstResponder) return NO;
+	
     return [[self delegate] textViewResignFirstResponder:self];
 }
 
