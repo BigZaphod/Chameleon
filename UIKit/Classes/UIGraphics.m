@@ -45,7 +45,6 @@ void UIGraphicsPushContext(CGContextRef ctx)
     savedContext->context = CFRetain([NSGraphicsContext currentContext]);
     savedContext->previous = contextStack;
     contextStack = savedContext;
-    CGContextRetain(ctx);
     [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:(void *)ctx flipped:YES]];
 }
 
@@ -53,15 +52,12 @@ void UIGraphicsPopContext()
 {
     UISavedGraphicsContext *popContext = contextStack;
     if (popContext) {
-		CGContextRef oldContext = [[NSGraphicsContext currentContext] graphicsPort];
         
         contextStack = popContext->previous;
         [NSGraphicsContext setCurrentContext:popContext->context];
         CFRelease(popContext->context);
 		free(popContext), popContext = NULL;
-		
-		CGContextRelease(oldContext);
-    }
+	}
 }
 
 CGContextRef UIGraphicsGetCurrentContext()
