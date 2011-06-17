@@ -34,7 +34,7 @@
 
 typedef struct UISavedGraphicsContext_ {
 	NSGraphicsContext *context;
-    __strong struct UISavedGraphicsContext_ *previous;
+	struct UISavedGraphicsContext_ *previous;
 } UISavedGraphicsContext;
 
 static UISavedGraphicsContext *contextStack = NULL;
@@ -52,7 +52,6 @@ void UIGraphicsPopContext()
 {
     UISavedGraphicsContext *popContext = contextStack;
     if (popContext) {
-        
         contextStack = popContext->previous;
         [NSGraphicsContext setCurrentContext:popContext->context];
         CFRelease(popContext->context);
