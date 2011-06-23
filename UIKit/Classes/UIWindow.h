@@ -62,8 +62,8 @@ extern NSString *const UIKeyboardBoundsUserInfoKey;
     UIScreen *_screen;
     __weak UIResponder *_firstResponder;
     NSUndoManager *_undoManager;
-	__weak UIView *_currentToolTipView;
-	__weak UIView *_toolTipViewToShow;
+	UIView *_currentToolTipView;
+	UIView *_toolTipViewToShow;
 }
 
 - (CGPoint)convertPoint:(CGPoint)toConvert toWindow:(UIWindow *)toWindow;

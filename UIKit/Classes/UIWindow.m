@@ -74,11 +74,16 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 - (void)_hideCurrentToolTip;
 - (void)_stopTrackingPotentiallyNewToolTip;
 - (void)_toolTipViewDidChangeSuperview:(NSNotification *)notification;
+
+@property (nonatomic, retain) UIView *currentToolTipView;
+@property (nonatomic, retain) UIView *toolTipViewToShow;
 @end
 
 
 @implementation UIWindow
 @synthesize screen=_screen;
+@synthesize currentToolTipView=_currentToolTipView;
+@synthesize toolTipViewToShow=_toolTipViewToShow;
 
 - (id)initWithFrame:(CGRect)theFrame
 {
@@ -353,7 +358,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
                 [newCursor set];
             }
 			
-			if(touch.view != _toolTipViewToShow) {
+			if(touch.view != self.toolTipViewToShow) {
 				[self _stopTrackingPotentiallyNewToolTip];
 			}
 			
@@ -364,7 +369,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 						[self _hideCurrentToolTip];
 						[self _showToolTipForView:touch.view];
 					} else {
-						_toolTipViewToShow = touch.view;
+						self.toolTipViewToShow = touch.view;
 						[self performSelector:@selector(_showToolTipForView:) withObject:_toolTipViewToShow afterDelay:3];
 					}
 				} else {
@@ -406,19 +411,19 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 	
 	[[NSHelpManager sharedHelpManager] setContextHelp:attributedToolTip forObject:view];
 	[[NSHelpManager sharedHelpManager] showContextHelpForObject:view locationHint:[NSEvent mouseLocation]];
-	_currentToolTipView = view;
+	self.currentToolTipView = view;
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_toolTipViewDidChangeSuperview:) name:UIViewDidMoveToSuperviewNotification object:_currentToolTipView];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_toolTipViewDidChangeSuperview:) name:UIViewDidMoveToSuperviewNotification object:self.currentToolTipView];
 	
-	_toolTipViewToShow = nil;
+	self.toolTipViewToShow = nil;
 }
 
 - (void)_hideCurrentToolTip {	
-	if(_currentToolTipView == nil) return;
+	if(self.currentToolTipView == nil) return;
 	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewDidMoveToSuperviewNotification object:_currentToolTipView];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewDidMoveToSuperviewNotification object:self.currentToolTipView];
 	
-	[[NSHelpManager sharedHelpManager] removeContextHelpForObject:_currentToolTipView];
+	[[NSHelpManager sharedHelpManager] removeContextHelpForObject:self.currentToolTipView];
 	
 	// Post fake events to force the tooltip to hide. It doesn't fade away like standard tooltips do, but it's the only way I've found.
 	NSEvent	*newEvent = [NSEvent mouseEventWithType:NSLeftMouseDown location:[NSEvent mouseLocation] modifierFlags:0 timestamp:0 windowNumber:[[self.screen.UIKitView window] windowNumber] context:[[self.screen.UIKitView window] graphicsContext] eventNumber:0 clickCount:1 pressure:0];
@@ -427,16 +432,16 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 	newEvent = [NSEvent mouseEventWithType:NSLeftMouseUp location:[NSEvent mouseLocation] modifierFlags:0 timestamp:0 windowNumber:[[self.screen.UIKitView window] windowNumber] context:[[self.screen.UIKitView window] graphicsContext] eventNumber:0 clickCount:1 pressure:0];
 	[NSApp postEvent:newEvent atStart:NO];
 	
-	_currentToolTipView = nil;
+	self.currentToolTipView = nil;
 }
 
 - (void)_stopTrackingPotentiallyNewToolTip {
-	[[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(_showToolTipForView:) object:_toolTipViewToShow];
-	_toolTipViewToShow = nil;
+	[[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(_showToolTipForView:) object:self.toolTipViewToShow];
+	self.toolTipViewToShow = nil;
 }
 
 - (void)_toolTipViewDidChangeSuperview:(NSNotification *)notification {
-	if(_currentToolTipView.window.screen.UIKitView.superview == nil || _currentToolTipView.superview == nil) {
+	if(self.currentToolTipView.window.screen.UIKitView.superview == nil || self.currentToolTipView.superview == nil) {
 		[self _hideCurrentToolTip];
 	}
 }
