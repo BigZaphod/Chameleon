@@ -62,6 +62,7 @@ extern NSString *const UIKeyboardBoundsUserInfoKey;
     UIScreen *_screen;
     __weak UIResponder *_firstResponder;
     NSUndoManager *_undoManager;
+	UIViewController *_rootViewController;
 }
 
 - (CGPoint)convertPoint:(CGPoint)toConvert toWindow:(UIWindow *)toWindow;
@@ -78,5 +79,6 @@ extern NSString *const UIKeyboardBoundsUserInfoKey;
 @property (nonatomic, readonly, getter=isKeyWindow) BOOL keyWindow;
 @property (nonatomic, retain) UIScreen *screen;
 @property (nonatomic, assign) UIWindowLevel windowLevel;
+@property (nonatomic,retain) UIViewController *rootViewController;
 
 @end

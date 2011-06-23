@@ -27,6 +27,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import "UIViewController.h"
 #import "UIWindow+UIPrivate.h"
 #import "UIView+UIPrivate.h"
 #import "UIScreen+UIPrivate.h"
@@ -66,6 +67,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 
 @implementation UIWindow
 @synthesize screen=_screen;
+@synthesize rootViewController=_rootViewController;
 
 - (id)initWithFrame:(CGRect)theFrame
 {
@@ -85,6 +87,17 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
     [_screen release];
     [_undoManager release];
     [super dealloc];
+}
+
+- (void)setRootViewController:(UIViewController *)rootViewController
+{
+	if (rootViewController != _rootViewController) {
+		rootViewController.view.frame = self.bounds;
+		[self addSubview:rootViewController.view];
+		
+		[_rootViewController release];
+		_rootViewController = [rootViewController retain];
+	}
 }
 
 - (UIResponder *)_firstResponder
