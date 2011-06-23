@@ -41,6 +41,11 @@ static const CGFloat ToolbarHeight = 28;
 @synthesize viewControllers=_viewControllers, delegate=_delegate, navigationBar=_navigationBar;
 @synthesize toolbar=_toolbar, toolbarHidden=_toolbarHidden, navigationBarHidden=_navigationBarHidden;
 
+- (UIViewController *)visibleViewController
+{
+	return [self.viewControllers lastObject];
+}
+
 - (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)bundle
 {
     if ((self=[super initWithNibName:nibName bundle:bundle])) {
