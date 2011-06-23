@@ -41,6 +41,7 @@
 @synthesize value = _value;
 @synthesize minimumValue = _minimumValue;
 @synthesize maximumValue = _maximumValue;
+@synthesize continuous = _continuous;
 
 - (NSString *)description
 {
