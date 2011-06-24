@@ -29,6 +29,7 @@
 
 #import "UIScreenAppKitIntegration.h"
 #import "UIScreen+UIPrivate.h"
+#import "UIKitView.h"
 #import <AppKit/AppKit.h>
 
 extern NSMutableArray *_allScreens;
@@ -45,7 +46,7 @@ extern NSMutableArray *_allScreens;
         return toConvert;
     } else {
         // Go all the way through OSX screen coordinates.
-        NSPoint screenCoords = [[_UIKitView window] convertBaseToScreen:[_UIKitView convertPoint:NSPointFromCGPoint(toConvert) toView:nil]];
+        NSPoint screenCoords = [[[self UIKitView] window] convertBaseToScreen:[_UIKitView convertPoint:NSPointFromCGPoint(toConvert) toView:nil]];
         
         if (toScreen) {
             // Now from there back to the toScreen's window's base

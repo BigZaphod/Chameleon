@@ -84,24 +84,15 @@ static CGPoint ScrollDeltaFromNSEvent(NSEvent *theNSEvent)
     
     if (isContinious == 0) {
         CGEventSourceRef source = CGEventCreateSourceFromEvent(cgEvent);
-        double pixelsPerLine;
-        
-        if (source) {
-           pixelsPerLine = CGEventSourceGetPixelsPerLine(source);
-            CFRelease(source);
-        } else {
-            // docs often say things like, "the default is near 10" so it seems reasonable that if the source doesn't work
-            // for some reason to fetch the pixels per line, then 10 is probably a decent fallback value. :)
-            pixelsPerLine = 10;
-        }
-
+        const double pixelsPerLine = CGEventSourceGetPixelsPerLine(source);
         dx = CGEventGetDoubleValueField(cgEvent, kCGScrollWheelEventFixedPtDeltaAxis2) * pixelsPerLine;
         dy = CGEventGetDoubleValueField(cgEvent, kCGScrollWheelEventFixedPtDeltaAxis1) * pixelsPerLine;
+		CFRelease(source);
     } else {
         dx = CGEventGetIntegerValueField(cgEvent, kCGScrollWheelEventPointDeltaAxis2);
         dy = CGEventGetIntegerValueField(cgEvent, kCGScrollWheelEventPointDeltaAxis1);
     }
-
+    
     return CGPointMake(-dx, -dy);
 }
 

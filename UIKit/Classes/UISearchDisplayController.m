@@ -64,7 +64,7 @@
     [super dealloc];
 }
 
-- (BOOL)active
+- (BOOL)isActive
 {
     return NO;
 }

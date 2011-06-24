@@ -61,11 +61,14 @@ typedef enum {
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;
 - (BOOL)textFieldShouldClear:(UITextField *)textField;
 - (BOOL)textFieldShouldReturn:(UITextField *)textField;
+
+- (BOOL)textField:(UITextField *)textField doCommandBySelector:(SEL)selector;
 @end
 
 @interface UITextField : UIControl <UITextInputTraits> {
 @private
     UITextLayer *_textLayer;
+	UITextLayer *_placeholderTextLayer;
 
     id _delegate;
     UITextFieldViewMode _clearButtonMode;
@@ -92,6 +95,7 @@ typedef enum {
         BOOL shouldChangeCharacters : 1;
         BOOL shouldClear : 1;
         BOOL shouldReturn : 1;
+		BOOL doCommandBySelector : 1;
     } _delegateHas;	
 }
 

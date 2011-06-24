@@ -57,27 +57,27 @@ extern UIAccessibilityNotifications UIAccessibilityPageScrolledNotification;
 - (void)setIsAccessibilityElement:(BOOL)isElement;
 - (NSString *)accessibilityLabel;
 - (void)setAccessibilityLabel:(NSString *)label;
+/*
 - (NSString *)accessibilityHint;
 - (void)setAccessibilityHint:(NSString *)hint;
 - (NSString *)accessibilityValue;
 - (void)setAccessibilityValue:(NSString *)value;
+*/
 - (UIAccessibilityTraits)accessibilityTraits;
 - (void)setAccessibilityTraits:(UIAccessibilityTraits)traits;
+/*
 - (CGRect)accessibilityFrame;
 - (void)setAccessibilityFrame:(CGRect)frame;
+ */
 @end
 
+/*
 @interface NSObject (UIAccessibilityContainer)
 - (NSInteger)accessibilityElementCount;
 - (id)accessibilityElementAtIndex:(NSInteger)index;
 - (NSInteger)indexOfAccessibilityElement:(id)element;
 @end
-
-@interface NSObject (UIAccessibilityFocus)
-- (void)accessibilityElementDidBecomeFocused;
-- (void)accessibilityElementDidLoseFocus;
-- (BOOL)accessibilityElementIsFocused;
-@end
+*/
 
 extern void UIAccessibilityPostNotification(UIAccessibilityNotifications notification, id argument);
 extern BOOL UIAccessibilityIsVoiceOverRunning();

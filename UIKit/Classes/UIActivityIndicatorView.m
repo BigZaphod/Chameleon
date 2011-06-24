@@ -51,7 +51,7 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
     const CGFloat radius = frameSize.width / 2.f;
     const CGFloat TWOPI = M_PI * 2.f;
     const CGFloat numberOfTeeth = 12;
-    const CGFloat toothWidth = (style == UIActivityIndicatorViewStyleWhiteLarge)? 3 : 2;
+    const CGFloat toothWidth = (style == UIActivityIndicatorViewStyleWhiteLarge)? 3.5 : 2;
 
     UIColor *toothColor = (style == UIActivityIndicatorViewStyleGray)? [UIColor grayColor] : [UIColor whiteColor];
     

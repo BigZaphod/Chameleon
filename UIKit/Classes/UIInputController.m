@@ -64,7 +64,7 @@ static UIView *ContainerForView(UIView *view)
 - (id)init
 {
     if ((self=[super init])) {
-        _inputWindow = [[UIWindow alloc] initWithFrame:CGRectZero];
+        _inputWindow = [(UIWindow *)[UIWindow alloc] initWithFrame:CGRectZero];
         _inputWindow.windowLevel = UIWindowLevelStatusBar;
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewChangedNotification:) name:UIViewFrameDidChangeNotification object:nil];

@@ -28,6 +28,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "UIGeometry.h"
 
 enum {
     UIPopoverArrowDirectionUp = 1UL << 0,
@@ -40,7 +41,7 @@ enum {
 };
 typedef NSUInteger UIPopoverArrowDirection;
 
-@class UIView, UIViewController, UIPopoverController, UIBarButtonItem, UIPopoverView;
+@class UIView, UIViewController, UIPopoverController, UIBarButtonItem, UIPopoverView, UIImage;
 
 @protocol UIPopoverControllerDelegate <NSObject>
 @optional
@@ -72,6 +73,17 @@ typedef NSUInteger UIPopoverArrowDirection;
 - (void)presentPopoverFromRect:(CGRect)rect inView:(UIView *)view permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated;
 - (void)presentPopoverFromBarButtonItem:(UIBarButtonItem *)item permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated;
 - (void)dismissPopoverAnimated:(BOOL)animated;
+
++ (UIEdgeInsets)insetForArrows;
++ (CGRect)backgroundRectForBounds:(CGRect)bounds;
++ (CGRect)contentRectForBounds:(CGRect)bounds withNavigationBar:(BOOL)hasNavBar;
++ (CGSize)frameSizeForContentSize:(CGSize)contentSize withNavigationBar:(BOOL)hasNavBar;
+
++ (UIImage *)backgroundImage;
++ (UIImage *)leftArrowImage;
++ (UIImage *)rightArrowImage;
++ (UIImage *)topArrowImage;
++ (UIImage *)bottomArrowImage;
 
 @property (nonatomic, assign) id <UIPopoverControllerDelegate> delegate;
 @property (nonatomic, retain) UIViewController *contentViewController;

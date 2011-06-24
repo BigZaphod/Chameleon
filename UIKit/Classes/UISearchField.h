@@ -1,3 +1,9 @@
+//
+//  UISearchField.h
+//  UIKit
+//
+//  Created by Josh Abernathy on 4/25/11.
+//
 /*
  * Copyright (c) 2011, The Iconfactory. All rights reserved.
  *
@@ -27,9 +33,11 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIControl.h"
+#import "UITextField.h"
 
-@interface UIControl (UIPrivate)
-- (void)_stateWillChange;
-- (void)_stateDidChange;
+
+@interface UISearchField : UITextField {
+
+}
+
 @end

@@ -60,6 +60,7 @@
         textDelegateHas.didChange = [containerView respondsToSelector:@selector(_textDidChange)];
         textDelegateHas.didChangeSelection = [containerView respondsToSelector:@selector(_textDidChangeSelection)];
         textDelegateHas.didReturnKey = [containerView respondsToSelector:@selector(_textDidReceiveReturnKey)];
+		textDelegateHas.doCommandBySelector = [containerView respondsToSelector:@selector(_textShouldDoCommandBySelector:)];
         
         containerCanScroll = [containerView respondsToSelector:@selector(setContentOffset:)]
             && [containerView respondsToSelector:@selector(contentOffset)]
@@ -347,9 +348,12 @@
 
 - (BOOL)textView:(NSTextView *)aTextView doCommandBySelector:(SEL)aSelector
 {
+	if(textDelegateHas.doCommandBySelector) {
+		return [containerView _textShouldDoCommandBySelector:aSelector];
+	}
     // this makes sure there's no newlines added when in field editing mode.
     // it also allows us to handle when return/enter is pressed differently for fields. Dunno if there's a better way or not.
-    if ([textView isFieldEditor] && ((aSelector == @selector(insertNewline:) || (aSelector == @selector(insertNewlineIgnoringFieldEditor:))))) {
+    else if ([textView isFieldEditor] && ((aSelector == @selector(insertNewline:) || (aSelector == @selector(insertNewlineIgnoringFieldEditor:))))) {
         if (textDelegateHas.didReturnKey) {
             [containerView _textDidReceiveReturnKey];
         }

@@ -32,23 +32,37 @@
 #import <AppKit/AppKit.h>
 #import "UIGraphics.h"
 
-static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToSize, UIFont *font, UILineBreakMode lineBreakMode, CGSize *renderSize)
-{
-    CFMutableArrayRef lines = CFArrayCreateMutable(NULL, 0, &kCFTypeArrayCallBacks);
-    CGSize drawSize = CGSizeZero;
+static CGFloat CalculateCTFontLineHeight(CTFontRef font) {
+	return ceilf(CTFontGetAscent(font)) - floorf(-CTFontGetDescent(font)) + ceilf(CTFontGetLeading(font));
+}
 
-    if (font) {
-        CFMutableDictionaryRef attributes = CFDictionaryCreateMutable(NULL, 2, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-        CFDictionarySetValue(attributes, kCTFontAttributeName,font->_font);
-        CFDictionarySetValue(attributes, kCTForegroundColorFromContextAttributeName, kCFBooleanTrue);
+static CTFontRef GetPrimaryFontForAttributedString(NSAttributedString *string) {
+	NSDictionary *attributes = [string attributesAtIndex:0 effectiveRange:NULL];
+	return (CTFontRef) [attributes objectForKey:(id) kCTFontAttributeName];
+}
+
+static CFArrayRef CreateCTLinesForAttributedString(NSAttributedString *attributedString, CGSize constrainedToSize, UILineBreakMode lineBreakMode, CGSize *renderSize)
+{
+	CFMutableArrayRef lines = CFArrayCreateMutable(NULL, 0, &kCFTypeArrayCallBacks);
+    CGSize drawSize = CGSizeZero;
+	
+	if(attributedString.length < 1) {
+		if (renderSize) {
+			*renderSize = drawSize;
+		}
+		
+		return lines;
+	}
+	
+	NSDictionary *attributes = [attributedString attributesAtIndex:0 effectiveRange:NULL];
+	CTFontRef font = (CTFontRef) [attributes objectForKey:(id) kCTFontAttributeName];
+	
+    if (font) {        
+        CTTypesetterRef typesetter = CTTypesetterCreateWithAttributedString((CFAttributedStringRef) attributedString);
         
-        CFAttributedStringRef attributedString = CFAttributedStringCreate(NULL, (CFStringRef)string, attributes);
-        
-        CTTypesetterRef typesetter = CTTypesetterCreateWithAttributedString(attributedString);
-        
-        const CFIndex stringLength = CFAttributedStringGetLength(attributedString);
-        const CGFloat lineHeight = font.lineHeight;
-        const CGFloat capHeight = font.capHeight;
+        const CFIndex stringLength = CFAttributedStringGetLength((CFAttributedStringRef) attributedString);
+        const CGFloat lineHeight = CalculateCTFontLineHeight(font);
+        const CGFloat capHeight = CTFontGetCapHeight(font);
         
         CFIndex start = 0;
         BOOL isLastLine = NO;
@@ -76,7 +90,7 @@ static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToS
                     }
                     
                     usedCharacters = stringLength - start;
-                    CFAttributedStringRef ellipsisString = CFAttributedStringCreate(NULL, CFSTR("…"), attributes);
+                    CFAttributedStringRef ellipsisString = CFAttributedStringCreate(NULL, CFSTR("…"), (CFDictionaryRef) attributes);
                     CTLineRef ellipsisLine = CTLineCreateWithAttributedString(ellipsisString);
                     CTLineRef tempLine = CTTypesetterCreateLine(typesetter, CFRangeMake(start, usedCharacters));
                     line = CTLineCreateTruncatedLine(tempLine, constrainedToSize.width, truncType, ellipsisLine);
@@ -104,8 +118,6 @@ static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToS
         }
         
         CFRelease(typesetter);
-        CFRelease(attributedString);
-        CFRelease(attributes);
     }
     
     if (renderSize) {
@@ -114,6 +126,28 @@ static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToS
     
     return lines;
 }
+
+static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToSize, UIFont *font, UILineBreakMode lineBreakMode, CGSize *renderSize)
+{
+	// this is to keep the original behavior where a nil font returns an empty array
+    if(font == nil) {
+		return CFArrayCreateMutable(NULL, 0, &kCFTypeArrayCallBacks);
+	}
+	
+	CFMutableDictionaryRef attributes = CFDictionaryCreateMutable(NULL, 2, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+	CFDictionarySetValue(attributes, kCTFontAttributeName,font->_font);
+	CFDictionarySetValue(attributes, kCTForegroundColorFromContextAttributeName, kCFBooleanTrue);
+	
+	CFAttributedStringRef attributedString = CFAttributedStringCreate(NULL, (CFStringRef)string, attributes);
+	
+	CFArrayRef lines = CreateCTLinesForAttributedString((NSAttributedString *) attributedString, constrainedToSize, lineBreakMode, renderSize);
+    
+	CFRelease(attributedString);
+	CFRelease(attributes);
+    
+    return lines;
+}
+
 
 @implementation NSString (UIStringDrawing)
 
@@ -219,5 +253,94 @@ static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToS
 {
     return [self drawInRect:rect withFont:font lineBreakMode:lineBreakMode alignment:UITextAlignmentLeft];
 }
+
+@end
+
+
+@implementation NSAttributedString (UIStringDrawing)
+
+//- (CGSize)size {
+//	return [self sizeConstrainedToSize:CGSizeMake(CGFLOAT_MAX, CalculateCTFontLineHeight(GetPrimaryFontForAttributedString(self)))];
+//}
+//
+//- (CGSize)sizeForWidth:(CGFloat)width lineBreakMode:(UILineBreakMode)lineBreakMode {
+//	return [self sizeConstrainedToSize:CGSizeMake(width, CalculateCTFontLineHeight(GetPrimaryFontForAttributedString(self))) lineBreakMode:lineBreakMode];
+//}
+//
+//- (CGSize)sizeConstrainedToSize:(CGSize)size {
+//	return [self sizeConstrainedToSize:size lineBreakMode:UILineBreakModeWordWrap];
+//}
+//
+//- (CGSize)sizeConstrainedToSize:(CGSize)size lineBreakMode:(UILineBreakMode)lineBreakMode {
+//	CGSize resultingSize = CGSizeZero;
+//    
+//    CFArrayRef lines = CreateCTLinesForAttributedString(self, size, lineBreakMode, &resultingSize);
+//    if (lines) CFRelease(lines);
+//    
+//    return resultingSize;
+//}
+//
+//- (CGSize)drawAtPoint:(CGPoint)point {
+//	return [self drawAtPoint:point forWidth:CGFLOAT_MAX lineBreakMode:UILineBreakModeWordWrap];
+//}
+//
+//- (CGSize)drawAtPoint:(CGPoint)point forWidth:(CGFloat)width lineBreakMode:(UILineBreakMode)lineBreakMode {
+//	return [self drawAtPoint:point forWidth:width lineBreakMode:lineBreakMode baselineAdjustment:UIBaselineAdjustmentNone];
+//}
+//
+//- (CGSize)drawAtPoint:(CGPoint)point forWidth:(CGFloat)width lineBreakMode:(UILineBreakMode)lineBreakMode baselineAdjustment:(UIBaselineAdjustment)baselineAdjustment {
+//	return [self drawInRect:CGRectMake(point.x ,point.y, width, CalculateCTFontLineHeight(GetPrimaryFontForAttributedString(self))) lineBreakMode:lineBreakMode];
+//}
+//
+//- (CGSize)drawInRect:(CGRect)rect {
+//	return [self drawInRect:rect lineBreakMode:UILineBreakModeWordWrap];
+//}
+//
+//- (CGSize)drawInRect:(CGRect)rect lineBreakMode:(UILineBreakMode)lineBreakMode {
+//	return [self drawInRect:rect lineBreakMode:lineBreakMode alignment:UITextAlignmentLeft];
+//}
+//
+//- (CGSize)drawInRect:(CGRect)rect lineBreakMode:(UILineBreakMode)lineBreakMode alignment:(UITextAlignment)alignment {
+//	CGSize actualSize = CGSizeZero;
+//    CFArrayRef lines = CreateCTLinesForAttributedString(self,rect.size,lineBreakMode,&actualSize);
+//	
+//    if (lines) {
+//		CTFontRef primaryFont = GetPrimaryFontForAttributedString(self);
+//		
+//        const CFIndex numberOfLines = CFArrayGetCount(lines);
+//        const CGFloat fontLineHeight = CalculateCTFontLineHeight(primaryFont);
+//        CGFloat textOffset = 0;
+//		
+//        CGContextRef ctx = UIGraphicsGetCurrentContext();
+//        CGContextSaveGState(ctx);
+//        CGContextTranslateCTM(ctx, rect.origin.x, rect.origin.y+CTFontGetAscent(primaryFont));
+//        CGContextSetTextMatrix(ctx, CGAffineTransformMakeScale(1,-1));
+//        
+//        for (CFIndex lineNumber=0; lineNumber<numberOfLines; lineNumber++) {
+//            CTLineRef line = CFArrayGetValueAtIndex(lines, lineNumber);
+//            float flush;
+//            switch (alignment) {
+//                case UITextAlignmentCenter:	flush = 0.5;	break;
+//                case UITextAlignmentRight:	flush = 1;		break;
+//                case UITextAlignmentLeft:
+//                default:					flush = 0;		break;
+//            }
+//            
+//            CGFloat penOffset = CTLineGetPenOffsetForFlush(line, flush, rect.size.width);
+//            CGContextSetTextPosition(ctx, penOffset, textOffset);
+//            CTLineDraw(line, ctx);
+//            textOffset += fontLineHeight;
+//        }
+//		
+//        CGContextRestoreGState(ctx);
+//		
+//        CFRelease(lines);
+//    }
+//	
+//    // the real UIKit appears to do this.. so shall we.
+//    actualSize.height = MIN(actualSize.height, rect.size.height);
+//	
+//    return actualSize;
+//}
 
 @end

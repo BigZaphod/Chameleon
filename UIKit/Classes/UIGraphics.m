@@ -30,22 +30,25 @@
 #import "UIGraphics.h"
 #import "UIImage.h"
 #import "UIScreen.h"
-#import <AppKit/AppKit.h>
+#import <AppKit/NSGraphicsContext.h>
 
 typedef struct UISavedGraphicsContext_ {
-    NSGraphicsContext *context;
-    struct UISavedGraphicsContext_ *previous;
+	NSGraphicsContext *context;
+	struct UISavedGraphicsContext_ *previous;
 } UISavedGraphicsContext;
 
 static UISavedGraphicsContext *contextStack = NULL;
 
 void UIGraphicsPushContext(CGContextRef ctx)
 {
-    UISavedGraphicsContext *savedContext = malloc(sizeof(UISavedGraphicsContext));
-    savedContext->context = [[NSGraphicsContext currentContext] retain];
-    savedContext->previous = contextStack;
-    contextStack = savedContext;
-    CGContextRetain(ctx);
+	NSGraphicsContext *currentContext = [NSGraphicsContext currentContext];
+	if(currentContext != nil) {
+		UISavedGraphicsContext *savedContext = (UISavedGraphicsContext *) malloc(sizeof(UISavedGraphicsContext));
+		savedContext->context = CFRetain(currentContext);
+		savedContext->previous = contextStack;
+		contextStack = savedContext;
+	}
+    
     [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:(void *)ctx flipped:YES]];
 }
 
@@ -53,12 +56,11 @@ void UIGraphicsPopContext()
 {
     UISavedGraphicsContext *popContext = contextStack;
     if (popContext) {
-        CGContextRelease([[NSGraphicsContext currentContext] graphicsPort]);
         contextStack = popContext->previous;
         [NSGraphicsContext setCurrentContext:popContext->context];
-        [popContext->context release];
-        free(popContext);
-    }
+        CFRelease(popContext->context);
+		free(popContext), popContext = NULL;
+	}
 }
 
 CGContextRef UIGraphicsGetCurrentContext()

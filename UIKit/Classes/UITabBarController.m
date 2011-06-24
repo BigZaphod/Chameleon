@@ -40,7 +40,7 @@
 - (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)nibBundle
 {
     if ((self = [super initWithNibName:nibName bundle:nibBundle])) {
-        _tabBar = [[UITabBar alloc] initWithFrame:CGRectZero];
+        _tabBar = [(UITabBar *)[UITabBar alloc] initWithFrame:CGRectZero];
     }
     return self;
 }

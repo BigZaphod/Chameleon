@@ -109,6 +109,11 @@ static UIColor *ClearColor = nil;
     [super dealloc];
 }
 
+- (void)finalize {
+	CGColorRelease(_color);
+	[super dealloc];
+}
+
 + (id)colorWithNSColor:(NSColor *)c
 {
     return [[[self alloc] initWithNSColor:c] autorelease];
@@ -231,7 +236,9 @@ static UIColor *ClearColor = nil;
     // Apple doesn't actually define UIDeviceRGBColorSpace or any of the other responses anywhere public,
     // so there isn't any easy way to emulate it.
     CGColorSpaceRef colorSpaceRef = CGColorGetColorSpace(self.CGColor);
-    NSString *colorSpace = [NSString stringWithFormat:@"%@", [(NSString *)CGColorSpaceCopyName(colorSpaceRef) autorelease]];
+	CFStringRef colorSpaceName = CGColorSpaceCopyName(colorSpaceRef);
+    NSString *colorSpace = [NSString stringWithFormat:@"%@", (NSString *) colorSpaceName];
+	CFRelease(colorSpaceName);
 
     const size_t numberOfComponents = CGColorGetNumberOfComponents(self.CGColor);
     const CGFloat *components = CGColorGetComponents(self.CGColor);
