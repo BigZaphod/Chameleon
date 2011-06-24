@@ -41,10 +41,14 @@ static UISavedGraphicsContext *contextStack = NULL;
 
 void UIGraphicsPushContext(CGContextRef ctx)
 {
-    UISavedGraphicsContext *savedContext = (UISavedGraphicsContext *) malloc(sizeof(UISavedGraphicsContext));
-    savedContext->context = CFRetain([NSGraphicsContext currentContext]);
-    savedContext->previous = contextStack;
-    contextStack = savedContext;
+	NSGraphicsContext *currentContext = [NSGraphicsContext currentContext];
+	if(currentContext != nil) {
+		UISavedGraphicsContext *savedContext = (UISavedGraphicsContext *) malloc(sizeof(UISavedGraphicsContext));
+		savedContext->context = CFRetain(currentContext);
+		savedContext->previous = contextStack;
+		contextStack = savedContext;
+	}
+    
     [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:(void *)ctx flipped:YES]];
 }
 
