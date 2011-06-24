@@ -414,6 +414,10 @@ static BOOL TouchIsActive(UITouch *touch)
             case NSLeftMouseDragged:
                 [touch _setPhase:UITouchPhaseMoved screenLocation:screenLocation tapCount:touch.tapCount delta:delta timestamp:timestamp];
                 break;
+				
+			case NSScrollWheel:
+                [touch _setPhase:UITouchPhaseScrolled screenLocation:screenLocation tapCount:0 delta:delta timestamp:timestamp];
+                break;
                 
             default:
                 [touch _setPhase:UITouchPhaseStationary screenLocation:screenLocation tapCount:touch.tapCount delta:delta timestamp:timestamp];
