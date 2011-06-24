@@ -283,6 +283,8 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 
 - (void)_destroyPopover
 {
+	NSDisableScreenUpdates();
+	
 	[_overlayWindow orderOut:nil];
 	[_popoverWindow orderOut:nil];
 	
@@ -291,6 +293,8 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
     [parentWindow removeChildWindow:_overlayWindow];
 	
 	[parentWindow makeKeyAndOrderFront:self];
+	
+	NSEnableScreenUpdates();
     
     [_popoverView release];
     [_popoverWindow release];
