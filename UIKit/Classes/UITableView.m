@@ -681,7 +681,9 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
                 .origin = self.contentOffset,
                 .size = self.bounds.size
             };
-            if (!CGRectIntersectsRect(aRect, visibleRect)) {
+            if (CGRectContainsRect(aRect, visibleRect)) {
+                // Fully contained... Do nothing.
+            } else if (!CGRectIntersectsRect(aRect, visibleRect)) {
                 if (aRect.origin.y > visibleRect.origin.y) {
                     scrollPosition = UITableViewScrollPositionBottom;
                 } else {
@@ -689,6 +691,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
                 }
             }
         }
+
         // adjust the rect based on the desired scroll position setting
         switch (scrollPosition) {
             case UITableViewScrollPositionTop: {
@@ -708,11 +711,11 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
                 break;
             }
                 
-            default: {
+            case UITableViewScrollPositionNone: {
                 return;
             }
         }
-        
+
         [self scrollRectToVisible:aRect animated:animated];
     }
 }
