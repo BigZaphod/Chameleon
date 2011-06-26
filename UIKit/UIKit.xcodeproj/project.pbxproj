@@ -609,7 +609,6 @@
 		0867D691FE84028FC02AAC07 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
-				1444318D137D7FEE00B81304 /* IOKit.framework */,
 				147A838C120C902C00422EDC /* Private Classes */,
 				14FA8C44121DA47500C4264B /* Private Categories */,
 				08FB77AEFE84172EC02AAC07 /* Classes */,
@@ -627,6 +626,7 @@
 				1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */,
 				14CC844011EFA901005988CC /* QuartzCore.framework */,
 				14CC844411EFA91A005988CC /* SystemConfiguration.framework */,
+				1444318D137D7FEE00B81304 /* IOKit.framework */,
 				0867D6A5FE840307C02AAC07 /* AppKit.framework */,
 				0867D69BFE84028FC02AAC07 /* Foundation.framework */,
 				1480633512A851230080C4BA /* QTKit.framework */,
