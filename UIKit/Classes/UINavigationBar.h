@@ -27,6 +27,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import <Quartz/Quartz.h>
 #import "UIToolbar.h"
 #import "UIView.h"
 

@@ -1,6 +1,6 @@
 //
 //  TestViewController.h
-//  NavBarUpdates
+//  NavBarTableView
 //
 //  Created by Jim Dovey on 11-03-22.
 //  Copyright 2011 Jim Dovey. All rights reserved.

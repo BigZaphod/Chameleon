@@ -33,7 +33,7 @@
 #import "UITouch.h"
 #import "UIColor.h"
 #import "UIResponderAppKitIntegration.h"
-#import <AppKit/NSCursor.h>
+
 
 static const CGFloat SplitterPadding = 3;
 
@@ -74,8 +74,8 @@ static const CGFloat SplitterPadding = 3;
 - (void)addViewControllers:(NSArray *)viewControllers
 {
     if ([viewControllers count] == 2) {
-        UIView *leftView = [[viewControllers objectAtIndex:0] view];
-        UIView *rightView = [[viewControllers objectAtIndex:1] view];
+        UIView *leftView = (UIView*)[[viewControllers objectAtIndex:0] view];
+        UIView *rightView = (UIView*)[[viewControllers objectAtIndex:1] view];
         
         leftView.autoresizingMask = rightView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         

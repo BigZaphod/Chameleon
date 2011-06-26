@@ -197,6 +197,101 @@ NSMutableDictionary *imageCache = nil;
 	return [self _frameworkImageWithName:@"<UISearchBar> search-icon.png" leftCapWidth:0.0f topCapHeight:0.0f];
 }
 
++ (UIImage *)_buttonBarSystemItemCompose
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> compose.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemAction
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> action.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemOrganize;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> organize.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemTrash;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> trash.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemBookmarks;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> bookmarks.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemSearch;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> search.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemRefresh;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> refresh.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemStop;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> stop.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemCamera;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> camera.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemPlay;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> play.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemPause;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> search.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemRewind;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> rewind.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemFastForward;
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> fastforward.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemDone
+{
+	return [self _frameworkImageWithName:@"<UIBarButtonItemStyleDone>.png" leftCapWidth:8 topCapHeight:0];
+}
+
++ (UIImage *)_highlightedButtonBarSystemItemDone
+{
+	return [self _frameworkImageWithName:@"<UIBarButtonItemStyleDone> hi.png" leftCapWidth:8 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemPlain
+{
+	return [self _frameworkImageWithName:@"<UIBarButtonItemStylePlain>.png" leftCapWidth:8 topCapHeight:0];
+}
+
++ (UIImage *)_highlightedButtonBarSystemItemPlain
+{
+	return [self _frameworkImageWithName:@"<UIBarButtonItemStylePlain> hi.png" leftCapWidth:8 topCapHeight:0];
+}
+
++ (UIImage *)_tableSelection
+{
+	return [self _frameworkImageWithName:@"UITableSelection.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_tableSelectionGray
+{
+	return [self _frameworkImageWithName:@"UITableSelectionGray.png" leftCapWidth:0 topCapHeight:0];
+}
+
 - (UIImage *)_toolbarImage
 {
     // NOTE.. I don't know where to put this, really, but it seems like the real UIKit reduces image size by 75% if they are too
@@ -233,6 +328,22 @@ NSMutableDictionary *imageCache = nil;
 {
   return [self _frameworkImageWithName:@"<UITabBar> item.png" leftCapWidth:8 topCapHeight:0];
 }
+
++ (UIImage *)_defaultNavigationBarBackgroundImage
+{
+	return [self _frameworkImageWithName:@"<UINavigationBarBackground> default.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_blackTranslucentNavigationBarBackgroundImage
+{
+	return [self _frameworkImageWithName:@"<UINavigationBarBackground> blackTranslucent.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_blackOpaqueNavigationBarBackgroundImage
+{
+	return [self _frameworkImageWithName:@"<UINavigationBarBackground> blackOpaque.png" leftCapWidth:0 topCapHeight:0];
+}
+
 
 @end
 

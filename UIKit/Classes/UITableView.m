@@ -73,7 +73,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
         _sections = [[NSMutableArray alloc] init];
         _reusableCells = [[NSMutableSet alloc] init];
 
-        self.separatorColor = [UIColor colorWithRed:.88f green:.88f blue:.88f alpha:1];
+        self.separatorColor = [UIColor colorWithRed:.67f green:.67f blue:.67f alpha:1];
         self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.showsHorizontalScrollIndicator = NO;
         self.allowsSelection = YES;
@@ -290,23 +290,38 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
                 CGRect rowRect = [self rectForRowAtIndexPath:indexPath];
                 if (CGRectIntersectsRect(rowRect,visibleBounds) && rowRect.size.height > 0) {
-					BOOL isNewCell = [availableCells objectForKey:indexPath] == nil;
                     UITableViewCell *cell = [availableCells objectForKey:indexPath] ?: [self.dataSource tableView:self cellForRowAtIndexPath:indexPath];
                     if (cell) {
                         [_cachedCells setObject:cell forKey:indexPath];
                         [availableCells removeObjectForKey:indexPath];
                         cell.selected = [_selectedRow isEqual:indexPath];
-						cell.backgroundColor = self.backgroundColor;
-                        [cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
-						if(isNewCell) {
-							// Right now we assume that if it's new then it's coming in from the bottom.
-							cell.frame = CGRectOffset(rowRect, 0.0f, rowRect.size.height);
-							[self addSubview:cell];
-							
-							cell.frame = rowRect;
-						} else {
-							cell.frame = rowRect;
+                        cell.frame = rowRect;
+						
+						if(self.style == UITableViewStylePlain)
+							cell.tableViewStyle = 0;
+						else 
+							cell.tableViewStyle = 1;
+						
+                        
+						if (indexPath.row == 0 && numberOfRows == 1) {
+							cell.sectionLocation = UITableViewCellSectionLocationUnique;
+							[cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
 						}
+						else if (indexPath.row == 0) {
+							cell.sectionLocation = UITableViewCellSectionLocationTop;
+							[cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
+						}
+						else if (indexPath.row != numberOfRows - 1) {
+							cell.sectionLocation = UITableViewCellSectionLocationMiddle;
+							[cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
+						}
+						else {
+							cell.sectionLocation = UITableViewCellSectionLocationBottom;
+							[cell _setSeparatorStyle:UITableViewCellSeparatorStyleNone color:_separatorColor];
+						}
+						
+                        [self addSubview:cell];
+						[cell setNeedsDisplay];
                     }
                 }
                 [rowPool drain];
@@ -353,7 +368,11 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (CGRect)_CGRectFromVerticalOffset:(CGFloat)offset height:(CGFloat)height
 {
+	if(self.style==UITableViewStylePlain)
     return CGRectMake(0,offset,self.bounds.size.width,height);
+	else
+    return CGRectMake(9,offset,self.bounds.size.width-29,height);
+	
 }
 
 - (CGFloat)_offsetForSection:(NSInteger)index
@@ -656,8 +675,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void)_scrollRectToVisible:(CGRect)aRect atScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated
 {
-	if(scrollPosition == UITableViewScrollPositionNone) return;
-	
     if (!CGRectIsNull(aRect) && aRect.size.height > 0) {
         if (UITableViewScrollPositionNone == scrollPosition) {
             CGRect visibleRect = {

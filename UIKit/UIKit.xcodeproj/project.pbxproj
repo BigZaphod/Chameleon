@@ -209,8 +209,6 @@
 		14DD1C371289B4D500DCF231 /* <UIToolbar> button.png in Resources */ = {isa = PBXBuildFile; fileRef = 14DD1C351289B4D500DCF231 /* <UIToolbar> button.png */; };
 		14EEF76712DF67CF00EB7D95 /* UIEvent+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14EEF76512DF67CF00EB7D95 /* UIEvent+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14EEF7A912DF6D9C00EB7D95 /* UIKey+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14EEF7A812DF6D9C00EB7D95 /* UIKey+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		14F0BC0D1288A67F00BA54F9 /* <UIBarButtonSystemItem> add.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F0BC0B1288A67F00BA54F9 /* <UIBarButtonSystemItem> add.png */; };
-		14F0BC0E1288A67F00BA54F9 /* <UIBarButtonSystemItem> reply.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F0BC0C1288A67F00BA54F9 /* <UIBarButtonSystemItem> reply.png */; };
 		14F56F3D12664D350045EC82 /* <UIPopoverView> arrow-bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F56F3812664D350045EC82 /* <UIPopoverView> arrow-bottom.png */; };
 		14F56F3E12664D350045EC82 /* <UIPopoverView> arrow-left.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F56F3912664D350045EC82 /* <UIPopoverView> arrow-left.png */; };
 		14F56F3F12664D350045EC82 /* <UIPopoverView> arrow-right.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F56F3A12664D350045EC82 /* <UIPopoverView> arrow-right.png */; };
@@ -241,6 +239,31 @@
 		38E523B513396B5B00E041B3 /* UINavigationBar+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 38E523B413396B5B00E041B3 /* UINavigationBar+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		537472D5133ADD4B00EBD5EA /* UIInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 537472D3133ADD4B00EBD5EA /* UIInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		537472D6133ADD4B00EBD5EA /* UIInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 537472D4133ADD4B00EBD5EA /* UIInterface.m */; };
+		6627EA1E13926815004A4610 /* <UINavigationBarBackground> default.png in Resources */ = {isa = PBXBuildFile; fileRef = 6627EA1B13926815004A4610 /* <UINavigationBarBackground> default.png */; };
+		6627EA1F13926815004A4610 /* <UINavigationBarBackground> blackTranslucent.png in Resources */ = {isa = PBXBuildFile; fileRef = 6627EA1C13926815004A4610 /* <UINavigationBarBackground> blackTranslucent.png */; };
+		6627EA2013926815004A4610 /* <UINavigationBarBackground> blackOpaque.png in Resources */ = {isa = PBXBuildFile; fileRef = 6627EA1D13926815004A4610 /* <UINavigationBarBackground> blackOpaque.png */; };
+		66371E3913674EF1007B9873 /* <UIBarButtonSystemItem> add.png in Resources */ = {isa = PBXBuildFile; fileRef = 66371E3813674EF1007B9873 /* <UIBarButtonSystemItem> add.png */; };
+		66371E4413675020007B9873 /* <UIBarButtonSystemItem> action.png in Resources */ = {isa = PBXBuildFile; fileRef = 66371E4313675020007B9873 /* <UIBarButtonSystemItem> action.png */; };
+		66371E461367502C007B9873 /* <UIBarButtonSystemItem> compose.png in Resources */ = {isa = PBXBuildFile; fileRef = 66371E451367502C007B9873 /* <UIBarButtonSystemItem> compose.png */; };
+		66371E481367503A007B9873 /* <UIBarButtonSystemItem> reply.png in Resources */ = {isa = PBXBuildFile; fileRef = 66371E471367503A007B9873 /* <UIBarButtonSystemItem> reply.png */; };
+		6699B8C4136BF60F001B5577 /* UITableSelectionGrayBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 6699B8C1136BF60F001B5577 /* UITableSelectionGrayBlue.png */; };
+		6699B8C5136BF60F001B5577 /* UITableSelectionGray.png in Resources */ = {isa = PBXBuildFile; fileRef = 6699B8C2136BF60F001B5577 /* UITableSelectionGray.png */; };
+		6699B8C6136BF60F001B5577 /* UITableSelection.png in Resources */ = {isa = PBXBuildFile; fileRef = 6699B8C3136BF60F001B5577 /* UITableSelection.png */; };
+		669E5E6B1368977900293194 /* <UIBarButtonSystemItem> trash.png in Resources */ = {isa = PBXBuildFile; fileRef = 669E5E6A1368977900293194 /* <UIBarButtonSystemItem> trash.png */; };
+		669E5E6F1368979600293194 /* <UIBarButtonSystemItem> rewind.png in Resources */ = {isa = PBXBuildFile; fileRef = 669E5E6C1368979600293194 /* <UIBarButtonSystemItem> rewind.png */; };
+		669E5E701368979600293194 /* <UIBarButtonSystemItem> search.png in Resources */ = {isa = PBXBuildFile; fileRef = 669E5E6D1368979600293194 /* <UIBarButtonSystemItem> search.png */; };
+		669E5E711368979600293194 /* <UIBarButtonSystemItem> stop.png in Resources */ = {isa = PBXBuildFile; fileRef = 669E5E6E1368979600293194 /* <UIBarButtonSystemItem> stop.png */; };
+		669E5E79136897D500293194 /* <UIBarButtonSystemItem> bookmarks.png in Resources */ = {isa = PBXBuildFile; fileRef = 669E5E72136897D500293194 /* <UIBarButtonSystemItem> bookmarks.png */; };
+		669E5E7A136897D500293194 /* <UIBarButtonSystemItem> camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 669E5E73136897D500293194 /* <UIBarButtonSystemItem> camera.png */; };
+		669E5E7B136897D500293194 /* <UIBarButtonSystemItem> fastforward.png in Resources */ = {isa = PBXBuildFile; fileRef = 669E5E74136897D500293194 /* <UIBarButtonSystemItem> fastforward.png */; };
+		669E5E7C136897D500293194 /* <UIBarButtonSystemItem> organize.png in Resources */ = {isa = PBXBuildFile; fileRef = 669E5E75136897D500293194 /* <UIBarButtonSystemItem> organize.png */; };
+		669E5E7D136897D500293194 /* <UIBarButtonSystemItem> pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 669E5E76136897D500293194 /* <UIBarButtonSystemItem> pause.png */; };
+		669E5E7E136897D500293194 /* <UIBarButtonSystemItem> play.png in Resources */ = {isa = PBXBuildFile; fileRef = 669E5E77136897D500293194 /* <UIBarButtonSystemItem> play.png */; };
+		669E5E7F136897D500293194 /* <UIBarButtonSystemItem> refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 669E5E78136897D500293194 /* <UIBarButtonSystemItem> refresh.png */; };
+		66BAC4AD1362035200724D64 /* <UIBarButtonItemStylePlain> hi.png in Resources */ = {isa = PBXBuildFile; fileRef = 66BAC4A91362035200724D64 /* <UIBarButtonItemStylePlain> hi.png */; };
+		66BAC4AE1362035200724D64 /* <UIBarButtonItemStylePlain>.png in Resources */ = {isa = PBXBuildFile; fileRef = 66BAC4AA1362035200724D64 /* <UIBarButtonItemStylePlain>.png */; };
+		66BAC4AF1362035200724D64 /* <UIBarButtonItemStyleDone>.png in Resources */ = {isa = PBXBuildFile; fileRef = 66BAC4AB1362035200724D64 /* <UIBarButtonItemStyleDone>.png */; };
+		66BAC4B01362035200724D64 /* <UIBarButtonItemStyleDone> hi.png in Resources */ = {isa = PBXBuildFile; fileRef = 66BAC4AC1362035200724D64 /* <UIBarButtonItemStyleDone> hi.png */; };
 		7011107C133BE0F400C86512 /* UIDatePicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 7011107A133BE0F300C86512 /* UIDatePicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7011107D133BE0F400C86512 /* UIDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7011107B133BE0F300C86512 /* UIDatePicker.m */; };
 		7806ED2A133A1D7500273BC6 /* UITabBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 7806ED28133A1D7500273BC6 /* UITabBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -474,8 +497,6 @@
 		14DD1C351289B4D500DCF231 /* <UIToolbar> button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIToolbar> button.png"; path = "Resources/<UIToolbar> button.png"; sourceTree = "<group>"; };
 		14EEF76512DF67CF00EB7D95 /* UIEvent+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIEvent+UIPrivate.h"; sourceTree = "<group>"; };
 		14EEF7A812DF6D9C00EB7D95 /* UIKey+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIKey+UIPrivate.h"; sourceTree = "<group>"; };
-		14F0BC0B1288A67F00BA54F9 /* <UIBarButtonSystemItem> add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> add.png"; path = "Resources/<UIBarButtonSystemItem> add.png"; sourceTree = "<group>"; };
-		14F0BC0C1288A67F00BA54F9 /* <UIBarButtonSystemItem> reply.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> reply.png"; path = "Resources/<UIBarButtonSystemItem> reply.png"; sourceTree = "<group>"; };
 		14F56F3812664D350045EC82 /* <UIPopoverView> arrow-bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIPopoverView> arrow-bottom.png"; path = "Resources/<UIPopoverView> arrow-bottom.png"; sourceTree = "<group>"; };
 		14F56F3912664D350045EC82 /* <UIPopoverView> arrow-left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIPopoverView> arrow-left.png"; path = "Resources/<UIPopoverView> arrow-left.png"; sourceTree = "<group>"; };
 		14F56F3A12664D350045EC82 /* <UIPopoverView> arrow-right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIPopoverView> arrow-right.png"; path = "Resources/<UIPopoverView> arrow-right.png"; sourceTree = "<group>"; };
@@ -507,6 +528,31 @@
 		38E523B413396B5B00E041B3 /* UINavigationBar+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+UIPrivate.h"; sourceTree = "<group>"; };
 		537472D3133ADD4B00EBD5EA /* UIInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIInterface.h; sourceTree = "<group>"; };
 		537472D4133ADD4B00EBD5EA /* UIInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIInterface.m; sourceTree = "<group>"; };
+		6627EA1B13926815004A4610 /* <UINavigationBarBackground> default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "<UINavigationBarBackground> default.png"; sourceTree = "<group>"; };
+		6627EA1C13926815004A4610 /* <UINavigationBarBackground> blackTranslucent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "<UINavigationBarBackground> blackTranslucent.png"; sourceTree = "<group>"; };
+		6627EA1D13926815004A4610 /* <UINavigationBarBackground> blackOpaque.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "<UINavigationBarBackground> blackOpaque.png"; sourceTree = "<group>"; };
+		66371E3813674EF1007B9873 /* <UIBarButtonSystemItem> add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> add.png"; path = "Resources/<UIBarButtonSystemItem> add.png"; sourceTree = "<group>"; };
+		66371E4313675020007B9873 /* <UIBarButtonSystemItem> action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> action.png"; path = "Resources/<UIBarButtonSystemItem> action.png"; sourceTree = "<group>"; };
+		66371E451367502C007B9873 /* <UIBarButtonSystemItem> compose.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> compose.png"; path = "Resources/<UIBarButtonSystemItem> compose.png"; sourceTree = "<group>"; };
+		66371E471367503A007B9873 /* <UIBarButtonSystemItem> reply.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> reply.png"; path = "Resources/<UIBarButtonSystemItem> reply.png"; sourceTree = "<group>"; };
+		6699B8C1136BF60F001B5577 /* UITableSelectionGrayBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UITableSelectionGrayBlue.png; sourceTree = "<group>"; };
+		6699B8C2136BF60F001B5577 /* UITableSelectionGray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UITableSelectionGray.png; sourceTree = "<group>"; };
+		6699B8C3136BF60F001B5577 /* UITableSelection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UITableSelection.png; sourceTree = "<group>"; };
+		669E5E6A1368977900293194 /* <UIBarButtonSystemItem> trash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> trash.png"; path = "Resources/<UIBarButtonSystemItem> trash.png"; sourceTree = "<group>"; };
+		669E5E6C1368979600293194 /* <UIBarButtonSystemItem> rewind.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> rewind.png"; path = "Resources/<UIBarButtonSystemItem> rewind.png"; sourceTree = "<group>"; };
+		669E5E6D1368979600293194 /* <UIBarButtonSystemItem> search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> search.png"; path = "Resources/<UIBarButtonSystemItem> search.png"; sourceTree = "<group>"; };
+		669E5E6E1368979600293194 /* <UIBarButtonSystemItem> stop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> stop.png"; path = "Resources/<UIBarButtonSystemItem> stop.png"; sourceTree = "<group>"; };
+		669E5E72136897D500293194 /* <UIBarButtonSystemItem> bookmarks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> bookmarks.png"; path = "Resources/<UIBarButtonSystemItem> bookmarks.png"; sourceTree = "<group>"; };
+		669E5E73136897D500293194 /* <UIBarButtonSystemItem> camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> camera.png"; path = "Resources/<UIBarButtonSystemItem> camera.png"; sourceTree = "<group>"; };
+		669E5E74136897D500293194 /* <UIBarButtonSystemItem> fastforward.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> fastforward.png"; path = "Resources/<UIBarButtonSystemItem> fastforward.png"; sourceTree = "<group>"; };
+		669E5E75136897D500293194 /* <UIBarButtonSystemItem> organize.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> organize.png"; path = "Resources/<UIBarButtonSystemItem> organize.png"; sourceTree = "<group>"; };
+		669E5E76136897D500293194 /* <UIBarButtonSystemItem> pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> pause.png"; path = "Resources/<UIBarButtonSystemItem> pause.png"; sourceTree = "<group>"; };
+		669E5E77136897D500293194 /* <UIBarButtonSystemItem> play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> play.png"; path = "Resources/<UIBarButtonSystemItem> play.png"; sourceTree = "<group>"; };
+		669E5E78136897D500293194 /* <UIBarButtonSystemItem> refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> refresh.png"; path = "Resources/<UIBarButtonSystemItem> refresh.png"; sourceTree = "<group>"; };
+		66BAC4A91362035200724D64 /* <UIBarButtonItemStylePlain> hi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonItemStylePlain> hi.png"; path = "Resources/<UIBarButtonItemStylePlain> hi.png"; sourceTree = "<group>"; };
+		66BAC4AA1362035200724D64 /* <UIBarButtonItemStylePlain>.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonItemStylePlain>.png"; path = "Resources/<UIBarButtonItemStylePlain>.png"; sourceTree = "<group>"; };
+		66BAC4AB1362035200724D64 /* <UIBarButtonItemStyleDone>.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonItemStyleDone>.png"; path = "Resources/<UIBarButtonItemStyleDone>.png"; sourceTree = "<group>"; };
+		66BAC4AC1362035200724D64 /* <UIBarButtonItemStyleDone> hi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonItemStyleDone> hi.png"; path = "Resources/<UIBarButtonItemStyleDone> hi.png"; sourceTree = "<group>"; };
 		7011107A133BE0F300C86512 /* UIDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDatePicker.h; sourceTree = "<group>"; };
 		7011107B133BE0F300C86512 /* UIDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIDatePicker.m; sourceTree = "<group>"; };
 		7806ED28133A1D7500273BC6 /* UITabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITabBar.h; sourceTree = "<group>"; };
@@ -592,8 +638,31 @@
 		089C1665FE841158C02AAC07 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				14F0BC0B1288A67F00BA54F9 /* <UIBarButtonSystemItem> add.png */,
-				14F0BC0C1288A67F00BA54F9 /* <UIBarButtonSystemItem> reply.png */,
+				6627EA1B13926815004A4610 /* <UINavigationBarBackground> default.png */,
+				6627EA1C13926815004A4610 /* <UINavigationBarBackground> blackTranslucent.png */,
+				6627EA1D13926815004A4610 /* <UINavigationBarBackground> blackOpaque.png */,
+				6699B8C1136BF60F001B5577 /* UITableSelectionGrayBlue.png */,
+				6699B8C2136BF60F001B5577 /* UITableSelectionGray.png */,
+				6699B8C3136BF60F001B5577 /* UITableSelection.png */,
+				669E5E6A1368977900293194 /* <UIBarButtonSystemItem> trash.png */,
+				669E5E6C1368979600293194 /* <UIBarButtonSystemItem> rewind.png */,
+				669E5E6D1368979600293194 /* <UIBarButtonSystemItem> search.png */,
+				669E5E72136897D500293194 /* <UIBarButtonSystemItem> bookmarks.png */,
+				669E5E73136897D500293194 /* <UIBarButtonSystemItem> camera.png */,
+				669E5E74136897D500293194 /* <UIBarButtonSystemItem> fastforward.png */,
+				669E5E75136897D500293194 /* <UIBarButtonSystemItem> organize.png */,
+				669E5E76136897D500293194 /* <UIBarButtonSystemItem> pause.png */,
+				669E5E77136897D500293194 /* <UIBarButtonSystemItem> play.png */,
+				669E5E78136897D500293194 /* <UIBarButtonSystemItem> refresh.png */,
+				669E5E6E1368979600293194 /* <UIBarButtonSystemItem> stop.png */,
+				66371E3813674EF1007B9873 /* <UIBarButtonSystemItem> add.png */,
+				66BAC4A91362035200724D64 /* <UIBarButtonItemStylePlain> hi.png */,
+				66371E4313675020007B9873 /* <UIBarButtonSystemItem> action.png */,
+				66BAC4AA1362035200724D64 /* <UIBarButtonItemStylePlain>.png */,
+				66BAC4AB1362035200724D64 /* <UIBarButtonItemStyleDone>.png */,
+				66371E451367502C007B9873 /* <UIBarButtonSystemItem> compose.png */,
+				66371E471367503A007B9873 /* <UIBarButtonSystemItem> reply.png */,
+				66BAC4AC1362035200724D64 /* <UIBarButtonItemStyleDone> hi.png */,
 				14F56F3812664D350045EC82 /* <UIPopoverView> arrow-bottom.png */,
 				14F56F3912664D350045EC82 /* <UIPopoverView> arrow-left.png */,
 				14F56F3A12664D350045EC82 /* <UIPopoverView> arrow-right.png */,
@@ -1086,12 +1155,35 @@
 				14F56F3F12664D350045EC82 /* <UIPopoverView> arrow-right.png in Resources */,
 				14F56F4012664D350045EC82 /* <UIPopoverView> arrow-top.png in Resources */,
 				14F56F4112664D350045EC82 /* <UIPopoverView> background.png in Resources */,
-				14F0BC0D1288A67F00BA54F9 /* <UIBarButtonSystemItem> add.png in Resources */,
-				14F0BC0E1288A67F00BA54F9 /* <UIBarButtonSystemItem> reply.png in Resources */,
 				14DD1C361289B4D500DCF231 /* <UIToolbar> button-highlighted.png in Resources */,
 				14DD1C371289B4D500DCF231 /* <UIToolbar> button.png in Resources */,
 				88D0B2A613674EF2008A073F /* <UITextField> roundedRectBackgroundImage.png in Resources */,
 				882C32C61368DD03007B6E4B /* <UISearchBar> search-icon.png in Resources */,
+				66BAC4AD1362035200724D64 /* <UIBarButtonItemStylePlain> hi.png in Resources */,
+				66BAC4AE1362035200724D64 /* <UIBarButtonItemStylePlain>.png in Resources */,
+				66BAC4AF1362035200724D64 /* <UIBarButtonItemStyleDone>.png in Resources */,
+				66BAC4B01362035200724D64 /* <UIBarButtonItemStyleDone> hi.png in Resources */,
+				66371E3913674EF1007B9873 /* <UIBarButtonSystemItem> add.png in Resources */,
+				66371E4413675020007B9873 /* <UIBarButtonSystemItem> action.png in Resources */,
+				66371E461367502C007B9873 /* <UIBarButtonSystemItem> compose.png in Resources */,
+				66371E481367503A007B9873 /* <UIBarButtonSystemItem> reply.png in Resources */,
+				669E5E6B1368977900293194 /* <UIBarButtonSystemItem> trash.png in Resources */,
+				669E5E6F1368979600293194 /* <UIBarButtonSystemItem> rewind.png in Resources */,
+				669E5E701368979600293194 /* <UIBarButtonSystemItem> search.png in Resources */,
+				669E5E711368979600293194 /* <UIBarButtonSystemItem> stop.png in Resources */,
+				669E5E79136897D500293194 /* <UIBarButtonSystemItem> bookmarks.png in Resources */,
+				669E5E7A136897D500293194 /* <UIBarButtonSystemItem> camera.png in Resources */,
+				669E5E7B136897D500293194 /* <UIBarButtonSystemItem> fastforward.png in Resources */,
+				669E5E7C136897D500293194 /* <UIBarButtonSystemItem> organize.png in Resources */,
+				669E5E7D136897D500293194 /* <UIBarButtonSystemItem> pause.png in Resources */,
+				669E5E7E136897D500293194 /* <UIBarButtonSystemItem> play.png in Resources */,
+				669E5E7F136897D500293194 /* <UIBarButtonSystemItem> refresh.png in Resources */,
+				6699B8C4136BF60F001B5577 /* UITableSelectionGrayBlue.png in Resources */,
+				6699B8C5136BF60F001B5577 /* UITableSelectionGray.png in Resources */,
+				6699B8C6136BF60F001B5577 /* UITableSelection.png in Resources */,
+				6627EA1E13926815004A4610 /* <UINavigationBarBackground> default.png in Resources */,
+				6627EA1F13926815004A4610 /* <UINavigationBarBackground> blackTranslucent.png in Resources */,
+				6627EA2013926815004A4610 /* <UINavigationBarBackground> blackOpaque.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
