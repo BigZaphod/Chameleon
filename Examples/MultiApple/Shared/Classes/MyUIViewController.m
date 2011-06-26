@@ -35,7 +35,7 @@
 
 - (void)loadView
 {
-    self.view = [[[UIView alloc] initWithFrame:CGRectMake(0,0,320,460)] autorelease];
+    self.view = [[(UIView *)[UIView alloc] initWithFrame:CGRectMake(0,0,320,460)] autorelease];
 
     self.view.backgroundColor = [UIColor whiteColor];
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;

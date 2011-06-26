@@ -126,6 +126,12 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
 - (void)cancelLocalNotification:(UILocalNotification *)notification;
 - (void)cancelAllLocalNotifications;
 
+- (UIBackgroundTaskIdentifier)beginBackgroundTaskWithExpirationHandler:(void(^)(void))handler;
+
+- (void)registerForRemoteNotificationTypes:(UIRemoteNotificationType)types;
+- (void)unregisterForRemoteNotifications;
+- (UIRemoteNotificationType)enabledRemoteNotificationTypes;
+
 @property (nonatomic, readonly) __weak UIWindow *keyWindow;
 @property (nonatomic, readonly) NSArray *windows;
 @property (nonatomic, getter=isStatusBarHidden, readonly) BOOL statusBarHidden;

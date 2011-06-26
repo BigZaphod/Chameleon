@@ -27,6 +27,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import "UIViewController.h"
 #import "UIWindow+UIPrivate.h"
 #import "UIView+UIPrivate.h"
 #import "UIScreen+UIPrivate.h"
@@ -84,6 +85,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 @synthesize screen=_screen;
 @synthesize currentToolTipView=_currentToolTipView;
 @synthesize toolTipViewToShow=_toolTipViewToShow;
+@synthesize rootViewController=_rootViewController;
 
 - (id)initWithFrame:(CGRect)theFrame
 {
@@ -111,6 +113,17 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 	[self _stopTrackingPotentiallyNewToolTip];
 	[self _hideCurrentToolTip];
 	[super finalize];
+}
+
+- (void)setRootViewController:(UIViewController *)rootViewController
+{
+	if (rootViewController != _rootViewController) {
+		rootViewController.view.frame = self.bounds;
+		[self addSubview:rootViewController.view];
+		
+		[_rootViewController release];
+		_rootViewController = [rootViewController retain];
+	}
 }
 
 - (UIResponder *)_firstResponder

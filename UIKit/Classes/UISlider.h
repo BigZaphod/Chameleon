@@ -41,10 +41,12 @@
     float _value;
     float _minimumValue;
     float _maximumValue;
+	BOOL _continuous;
 }
 
 @property (nonatomic) float value;
 @property (nonatomic) float minimumValue;
 @property (nonatomic) float maximumValue;
+@property (nonatomic, getter=isContinuous) BOOL continuous;
 
 @end

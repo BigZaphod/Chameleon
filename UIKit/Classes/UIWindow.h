@@ -64,6 +64,7 @@ extern NSString *const UIKeyboardBoundsUserInfoKey;
     NSUndoManager *_undoManager;
 	UIView *_currentToolTipView;
 	UIView *_toolTipViewToShow;
+	UIViewController *_rootViewController;
 }
 
 - (CGPoint)convertPoint:(CGPoint)toConvert toWindow:(UIWindow *)toWindow;
@@ -80,5 +81,6 @@ extern NSString *const UIKeyboardBoundsUserInfoKey;
 @property (nonatomic, readonly, getter=isKeyWindow) BOOL keyWindow;
 @property (nonatomic, retain) UIScreen *screen;
 @property (nonatomic, assign) UIWindowLevel windowLevel;
+@property (nonatomic,retain) UIViewController *rootViewController;
 
 @end

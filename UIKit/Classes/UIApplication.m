@@ -516,6 +516,26 @@ static BOOL TouchIsActive(UITouch *touch)
     [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidBecomeActiveNotification object:self];
 }
 
+- (UIBackgroundTaskIdentifier)beginBackgroundTaskWithExpirationHandler:(void(^)(void))handler
+{
+	return UIBackgroundTaskInvalid;
+}
+
+- (void)registerForRemoteNotificationTypes:(UIRemoteNotificationType)types
+{
+	
+}
+
+- (void)unregisterForRemoteNotifications
+{
+	
+}
+
+- (UIRemoteNotificationType)enabledRemoteNotificationTypes
+{
+	return UIRemoteNotificationTypeNone;
+}
+
 @end
 
 

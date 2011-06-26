@@ -31,6 +31,12 @@
 
 @implementation ABUnknownPersonViewController
 
-@synthesize displayedPerson = _displayedPerson;
+@synthesize displayedPerson;
+@synthesize unknownPersonViewDelegate;
+@synthesize addressBook;
+@synthesize alternateName;
+@synthesize message;
+@synthesize allowsActions;
+@synthesize allowsAddingToAddressBook;
 
 @end
