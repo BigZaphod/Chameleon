@@ -550,23 +550,19 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
     scale = MIN(MAX(scale, _minimumZoomScale), _maximumZoomScale);
 
     if (zoomingView && self.zoomScale != scale) {
-        if (animated) {
-            [UIView beginAnimations:@"setZoomScale" context:NULL];
-            [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-            [UIView setAnimationBeginsFromCurrentState:YES];
-            [UIView setAnimationDuration:UIScrollViewAnimationDuration];
-        }
-
-        zoomingView.transform = CGAffineTransformMakeScale(scale, scale);
-        
-        const CGSize size = zoomingView.frame.size;
-        zoomingView.layer.position = CGPointMake(size.width/2.f, size.height/2.f);
-
-        self.contentSize = size;
-        
-        if (animated) {
-            [UIView commitAnimations];
-        }
+        [UIView animateWithDuration:!animated ? 0.0 : UIScrollViewAnimationDuration
+            delay:0
+            options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionBeginFromCurrentState
+            animations:^{
+                zoomingView.transform = CGAffineTransformMakeScale(scale, scale);
+                
+                const CGSize size = zoomingView.frame.size;
+                zoomingView.layer.position = CGPointMake(size.width/2.f, size.height/2.f);
+                
+                self.contentSize = size;
+            }
+            completion:nil
+        ];
     }
 }
 
