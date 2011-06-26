@@ -165,7 +165,7 @@ typedef enum {
         ];
 
         [UIView animateWithDuration:!animated ? 0.0 : kAnimationDuration * .8 
-            delay:kAnimationDuration * .2 
+            delay:!animated ? 0.0 : kAnimationDuration * .2 
             options:0 
             animations:^{
                 _leftView.alpha = 0;
@@ -255,7 +255,7 @@ typedef enum {
         }];
 
         [UIView animateWithDuration:!animated ? 0.0 : kAnimationDuration * .8 
-            delay:kAnimationDuration * .2 
+            delay:!animated ? 0.0 : kAnimationDuration * .2 
             options:0 
             animations:^{
                 _leftView.alpha = 1;
