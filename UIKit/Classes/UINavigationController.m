@@ -259,29 +259,6 @@ static const CGFloat ToolbarHeight = 28;
 		if (_delegateHas.willShowViewController) {
 			[_delegate navigationController:self willShowViewController:viewController animated:animated];
 		}
-		
-		if (animated) {
-			viewController.view.frame = nextFrameStart;
-			oldViewController.view.frame = oldFrameStart;
-			
-			[oldViewController retain];
-			
-			[UIView beginAnimations:@"PushViewController" context:(void *)oldViewController];
-			[UIView setAnimationDuration:kAnimationDuration];
-			[UIView setAnimationDelegate:self];
-			[UIView setAnimationDidStopSelector:@selector(_pushAnimationDidStop:finished:removeOldViewController:)];
-			viewController.view.frame = nextFrameEnd;
-			oldViewController.view.frame = oldFrameEnd;
-			[UIView commitAnimations];
-		} else {
-			viewController.view.frame = nextFrameEnd;
-			[oldViewController.view removeFromSuperview];
-		}
-        
-		[viewController viewDidAppear:animated];
-		if (_delegateHas.didShowViewController) {
-			[_delegate navigationController:self didShowViewController:viewController animated:animated];
-		}
         
         [oldViewController retain];
         viewController.view.frame = nextFrameStart;
