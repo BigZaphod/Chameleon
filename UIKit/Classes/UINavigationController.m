@@ -277,17 +277,30 @@ static const CGFloat ToolbarHeight = 28;
 		if (_delegateHas.didShowViewController) {
 			[_delegate navigationController:self didShowViewController:viewController animated:animated];
 		}
-	}
+        
+        [oldViewController retain];
+        viewController.view.frame = nextFrameStart;
+        oldViewController.view.frame = oldFrameStart;
+        [UIView animateWithDuration:!animated ? 0.0 : kAnimationDuration 
+            animations:^{
+                viewController.view.frame = nextFrameEnd;
+                oldViewController.view.frame = oldFrameEnd;
+            }
+            completion:^(BOOL finished){
+                [oldViewController.view removeFromSuperview];
+                [oldViewController release];
+            }
+        ];
+        
+        [viewController viewDidAppear:animated];
+        if (_delegateHas.didShowViewController) {
+            [_delegate navigationController:self didShowViewController:viewController animated:animated];
+        }
+    }
     
 	[_viewControllers addObject:viewController];
 	[_navigationBar pushNavigationItem:viewController.navigationItem animated:animated];
 	[self _updateToolbar:animated];
-}
-
-- (void)_pushAnimationDidStop:(NSString *)name finished:(NSNumber *)finished removeOldViewController:(UIViewController *)controller
-{
-	[controller.view removeFromSuperview];
-	[controller release];
 }
 
 - (UIViewController *)_popViewControllerWithoutPoppingNavigationBarAnimated:(BOOL)animated
@@ -315,23 +328,19 @@ static const CGFloat ToolbarHeight = 28;
 				[_delegate navigationController:self willShowViewController:nextViewController animated:animated];
 			}
             
-			if (animated) {
-				nextViewController.view.frame = nextFrameStart;
-				oldViewController.view.frame = oldFrameStart;
-				
-				[oldViewController retain];
-                
-				[UIView beginAnimations:@"PopViewController" context:(void *)oldViewController];
-				[UIView setAnimationDuration:kAnimationDuration];
-				[UIView setAnimationDelegate:self];
-				[UIView setAnimationDidStopSelector:@selector(_popAnimationDidStop:finished:removeOldViewController:)];
-				nextViewController.view.frame = nextFrameEnd;
-				oldViewController.view.frame = oldFrameEnd;
-				[UIView commitAnimations];
-			} else {
-				nextViewController.view.frame = nextFrameEnd;
-				[oldViewController.view removeFromSuperview];
-			}
+            [oldViewController retain];
+            nextViewController.view.frame = nextFrameStart;
+            oldViewController.view.frame = oldFrameStart;
+            [UIView animateWithDuration:!animated ? 0.0 : kAnimationDuration 
+                animations:^{
+                    nextViewController.view.frame = nextFrameEnd;
+                    oldViewController.view.frame = oldFrameEnd;
+                }
+                completion:^(BOOL finished){
+                    [oldViewController.view removeFromSuperview];
+                    [oldViewController release];
+                }
+            ];
             
 			[nextViewController viewDidAppear:animated];
 			if (_delegateHas.didShowViewController) {
@@ -344,12 +353,6 @@ static const CGFloat ToolbarHeight = 28;
 	} else {
 		return nil;
 	}
-}
-
-- (void)_popAnimationDidStop:(NSString *)name finished:(NSNumber *)finished removeOldViewController:(UIViewController *)controller
-{
-	[controller.view removeFromSuperview];
-	[controller release];
 }
 
 - (UIViewController *)popViewControllerAnimated:(BOOL)animate

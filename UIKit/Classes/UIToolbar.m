@@ -222,17 +222,16 @@
     if (![self.items isEqualToArray:newItems]) {
         // if animated, fade old item views out, otherwise just remove them
         for (UIToolbarItem *toolbarItem in _toolbarItems) {
-            UIView *view = toolbarItem.view;
+            UIView* view = toolbarItem.view;
             if (view) {
-                if (animated) {
-                    [UIView beginAnimations:@"fadeOut" context:NULL];
-                    [UIView setAnimationDidStopSelector:@selector(removeFromSuperview)];
-                    [UIView setAnimationDelegate:view];
-                    view.alpha = 0;
-                    [UIView commitAnimations];
-                } else {
-                    [view removeFromSuperview];
-                }
+                [UIView animateWithDuration:!animated ? 0.0 : 0.2
+                    animations:^(void) {
+                        view.alpha = 0;
+                    }
+                    completion:^(BOOL finished) {
+                        [view removeFromSuperview];
+                    }
+                ];
             }
         }
         
@@ -241,21 +240,18 @@
         for (UIBarButtonItem *item in newItems) {
             UIToolbarItem *toolbarItem = [[UIToolbarItem alloc] initWithBarButtonItem:item];
             [_toolbarItems addObject:toolbarItem];
-            [self addSubview:toolbarItem.view];
-            [toolbarItem release];
-        }
-                
-        // if animated, fade them in
-        if (animated) {
-            for (UIToolbarItem *toolbarItem in _toolbarItems) {
-                UIView *view = toolbarItem.view;
-                if (view) {
-                    view.alpha = 0;
-                    [UIView beginAnimations:@"fadeIn" context:NULL];
-                    view.alpha = 1;
-                    [UIView commitAnimations];
-                }
+
+            UIView* view = toolbarItem.view;
+            if (view) {
+                view.alpha = 0.0;
+                [self addSubview:view];
+                [UIView animateWithDuration:!animated ? 0.0 : 0.2
+                    animations:^(void) {
+                        view.alpha = 1.0;
+                    }
+                ];
             }
+            [toolbarItem release];
         }
     }
 }

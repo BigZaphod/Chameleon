@@ -149,146 +149,132 @@ typedef enum {
 	[self popNavigationItemAnimated:YES];
 }
 
-- (void)_removeAnimatedViews:(NSArray *)views
-{
-	[views makeObjectsPerformSelector:@selector(removeFromSuperview)];
-	[views release];
-}
-
 - (void)_setViewsWithTransition:(_UINavigationBarTransition)transition animated:(BOOL)animated
 {
-	{
-		NSMutableArray *previousViews = [[NSMutableArray alloc] init];
-		if (_leftView) [previousViews addObject:_leftView];
-		if (_centerView) [previousViews addObject:_centerView];
-		if (_rightView) [previousViews addObject:_rightView];
+    {
+        NSMutableArray *previousViews = [[NSMutableArray alloc] init];
+        if (_leftView) [previousViews addObject:_leftView];
+        if (_centerView) [previousViews addObject:_centerView];
+        if (_rightView) [previousViews addObject:_rightView];
 
-		if (animated) {
-			
-			CGFloat moveCenterBy = self.bounds.size.width - _centerView.frame.origin.x;
-			CGFloat moveLeftBy = self.bounds.size.width * 0.33f;
-			
-			if (transition == _UINavigationBarTransitionPush) {
-				moveCenterBy *= -1.f;
-				moveLeftBy *= -1.f;
-			}
-			
-			[UIView beginAnimations:@"move out" context:NULL];
-			[UIView setAnimationDuration:kAnimationDuration];
-			_leftView.frame = CGRectOffset(_leftView.frame, moveLeftBy, 0);
-			_centerView.frame = CGRectOffset(_centerView.frame, moveCenterBy, 0);
-			[UIView commitAnimations];
-			
-			[UIView beginAnimations:@"fade out" context:NULL];
-			[UIView setAnimationDuration:kAnimationDuration * .8];
-			[UIView setAnimationDelay:kAnimationDuration * .2];
-			_leftView.alpha = 0;
-			_rightView.alpha = 0;
-			_centerView.alpha = 0;
-			[UIView commitAnimations];
-			
-			[self performSelector:@selector(_removeAnimatedViews:) withObject:previousViews afterDelay:kAnimationDuration];
-		} else {
-			[self _removeAnimatedViews:previousViews];
-		}
-	}
-	
-	UINavigationItem *topItem = self.topItem;
-	
-	if (topItem) {
-		
-		UINavigationItem *backItem = self.backItem;
-		
-		// update weak references
-		[backItem _setNavigationBar: nil];
-		[topItem _setNavigationBar: self];
-		
-		CGRect leftFrame = CGRectZero;
-		CGRect rightFrame = CGRectZero;
-		
-		if (backItem) {
-			_leftView = [isa _backButtonWithBarButtonItem:backItem.backBarButtonItem];
-		} else {
-			_leftView = [isa _viewWithBarButtonItem:topItem.leftBarButtonItem];
-		}
-		
-		if (_leftView) {
-			leftFrame = _leftView.frame;
-			leftFrame.origin = CGPointMake(kButtonEdgeInsets.left, kButtonEdgeInsets.top);
-			_leftView.frame = leftFrame;
-			[self addSubview:_leftView];
-		}
-		
-		_rightView = [isa _viewWithBarButtonItem:topItem.rightBarButtonItem];
-		
-		if (_rightView) {
-			_rightView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-			rightFrame = _rightView.frame;
-			rightFrame.origin.x = self.bounds.size.width-rightFrame.size.width - kButtonEdgeInsets.right;
-			rightFrame.origin.y = kButtonEdgeInsets.top;
-			_rightView.frame = rightFrame;
-			[self addSubview:_rightView];
-		}
-		
-		_centerView = topItem.titleView;
-		
-		CGSize sizeTitle;
-		
-		if (!_centerView) {
-			UILabel *titleLabel = [[[UILabel alloc] init] autorelease];
-			titleLabel.text = topItem.title;
-			titleLabel.textAlignment = UITextAlignmentCenter;
-			titleLabel.backgroundColor = [UIColor clearColor];
-			titleLabel.textColor = [UIColor whiteColor];
-			titleLabel.shadowColor = [UIColor colorWithWhite:0.0 alpha:0.5];
-			titleLabel.font = [UIFont boldSystemFontOfSize:14];
-			_centerView = titleLabel;
-			sizeTitle=[titleLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:14]];
-		}
-		
-		
-		const CGFloat centerPadding = MAX(leftFrame.size.width, rightFrame.size.width);
-		_centerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		_centerView.frame = CGRectMake(kButtonEdgeInsets.left+centerPadding,kButtonEdgeInsets.top,self.bounds.size.width-kButtonEdgeInsets.right-kButtonEdgeInsets.left-centerPadding-centerPadding,kMaxButtonHeight);
-		
-		
-		[self addSubview:_centerView];
-		
-		if (animated) {
-			CGFloat moveCenterBy = self.bounds.size.width - _centerView.frame.origin.x;
-			CGFloat moveLeftBy = self.bounds.size.width * 0.33f;
-			
-			if (transition == _UINavigationBarTransitionPush) {
-				moveLeftBy *= -1.f;
-				moveCenterBy *= -1.f;
-			}
-			
-			CGRect destinationLeftFrame = _leftView.frame;
-			CGRect destinationCenterFrame = _centerView.frame;
-			
-			_leftView.frame = CGRectOffset(_leftView.frame, -moveLeftBy, 0);
-			_centerView.frame = CGRectOffset(_centerView.frame, -moveCenterBy, 0);
-			_leftView.alpha = 0;
-			_rightView.alpha = 0;
-			_centerView.alpha = 0;
-			
-			[UIView beginAnimations:@"move in" context:NULL];
-			[UIView setAnimationDuration:kAnimationDuration];
-			_leftView.frame = destinationLeftFrame;
-			_centerView.frame = destinationCenterFrame;
-			[UIView commitAnimations];
-			
-			[UIView beginAnimations:@"fade in" context:NULL];
-			[UIView setAnimationDuration:kAnimationDuration * .8];
-			[UIView setAnimationDelay:kAnimationDuration * .2];
-			_leftView.alpha = 1;
-			_rightView.alpha = 1;
-			_centerView.alpha = 1;
-			[UIView commitAnimations];
-		}
-	} else {
-		_leftView = _centerView = _rightView = nil;
-	}
+        CGFloat moveCenterBy = self.bounds.size.width - _centerView.frame.origin.x;
+        CGFloat moveLeftBy = self.bounds.size.width * 0.33f;
+
+        if (transition == _UINavigationBarTransitionPush) {
+            moveCenterBy *= -1.f;
+            moveLeftBy *= -1.f;
+        }
+        
+        [UIView animateWithDuration:!animated ? 0.0 : kAnimationDuration 
+            animations:^{
+                _leftView.frame = CGRectOffset(_leftView.frame, moveLeftBy, 0);
+                _centerView.frame = CGRectOffset(_centerView.frame, moveCenterBy, 0);
+            }
+        ];
+
+        [UIView animateWithDuration:!animated ? 0.0 : kAnimationDuration * .8 
+            delay:!animated ? 0.0 : kAnimationDuration * .2 
+            options:0 
+            animations:^{
+                _leftView.alpha = 0;
+                _rightView.alpha = 0;
+                _centerView.alpha = 0;
+            }
+            completion:^(BOOL finished){
+                [previousViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+                [previousViews release];
+            }
+        ];
+    }
+    
+    UINavigationItem *topItem = self.topItem;
+    
+    if (topItem) {
+        UINavigationItem *backItem = self.backItem;
+        
+        // update weak references
+        [backItem _setNavigationBar: nil];
+        [topItem _setNavigationBar: self];
+
+        CGRect leftFrame = CGRectZero;
+        CGRect rightFrame = CGRectZero;
+        
+        if (backItem) {
+            _leftView = [isa _backButtonWithBarButtonItem:backItem.backBarButtonItem];
+        } else {
+            _leftView = [isa _viewWithBarButtonItem:topItem.leftBarButtonItem];
+        }
+
+        if (_leftView) {
+            leftFrame = _leftView.frame;
+            leftFrame.origin = CGPointMake(kButtonEdgeInsets.left, kButtonEdgeInsets.top);
+            _leftView.frame = leftFrame;
+            [self addSubview:_leftView];
+        }
+
+        _rightView = [isa _viewWithBarButtonItem:topItem.rightBarButtonItem];
+
+        if (_rightView) {
+            _rightView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+            rightFrame = _rightView.frame;
+            rightFrame.origin.x = self.bounds.size.width-rightFrame.size.width - kButtonEdgeInsets.right;
+            rightFrame.origin.y = kButtonEdgeInsets.top;
+            _rightView.frame = rightFrame;
+            [self addSubview:_rightView];
+        }
+        
+        _centerView = topItem.titleView;
+
+        if (!_centerView) {
+            UILabel *titleLabel = [[[UILabel alloc] init] autorelease];
+            titleLabel.text = topItem.title;
+            titleLabel.textAlignment = UITextAlignmentCenter;
+            titleLabel.backgroundColor = [UIColor clearColor];
+            titleLabel.textColor = [UIColor whiteColor];
+            titleLabel.font = [UIFont boldSystemFontOfSize:14];
+            _centerView = titleLabel;
+        }
+
+        const CGFloat centerPadding = MAX(leftFrame.size.width, rightFrame.size.width);
+        _centerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        _centerView.frame = CGRectMake(kButtonEdgeInsets.left+centerPadding,kButtonEdgeInsets.top,self.bounds.size.width-kButtonEdgeInsets.right-kButtonEdgeInsets.left-centerPadding-centerPadding,kMaxButtonHeight);
+        [self addSubview:_centerView];
+
+        CGFloat moveCenterBy = self.bounds.size.width - _centerView.frame.origin.x;
+        CGFloat moveLeftBy = self.bounds.size.width * 0.33f;
+
+        if (transition == _UINavigationBarTransitionPush) {
+            moveLeftBy *= -1.f;
+            moveCenterBy *= -1.f;
+        }
+
+        CGRect destinationLeftFrame = _leftView.frame;
+        CGRect destinationCenterFrame = _centerView.frame;
+        
+        _leftView.frame = CGRectOffset(_leftView.frame, -moveLeftBy, 0);
+        _centerView.frame = CGRectOffset(_centerView.frame, -moveCenterBy, 0);
+        _leftView.alpha = 0;
+        _rightView.alpha = 0;
+        _centerView.alpha = 0;
+        
+        [UIView animateWithDuration:!animated ? 0.0 : kAnimationDuration animations:^{
+            _leftView.frame = destinationLeftFrame;
+            _centerView.frame = destinationCenterFrame;
+        }];
+
+        [UIView animateWithDuration:!animated ? 0.0 : kAnimationDuration * .8 
+            delay:!animated ? 0.0 : kAnimationDuration * .2 
+            options:0 
+            animations:^{
+                _leftView.alpha = 1;
+                _rightView.alpha = 1;
+                _centerView.alpha = 1;
+            }
+            completion:nil
+        ];
+    } else {
+        _leftView = _centerView = _rightView = nil;
+    }
 }
 
 - (void)setTintColor:(UIColor *)newColor
