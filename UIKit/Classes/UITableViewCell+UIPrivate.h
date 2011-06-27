@@ -31,4 +31,5 @@
 
 @interface UITableViewCell (UIPrivate)
 - (void)_setSeparatorStyle:(UITableViewCellSeparatorStyle)theStyle color:(UIColor *)theColor;
+- (void)_setTableViewStyle:(NSUInteger)tableViewStyle;
 @end

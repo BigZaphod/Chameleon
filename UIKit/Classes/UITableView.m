@@ -297,11 +297,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
                         cell.selected = [_selectedRow isEqual:indexPath];
                         cell.frame = rowRect;
 						
-						if(self.style == UITableViewStylePlain)
-							cell.tableViewStyle = 0;
-						else 
-							cell.tableViewStyle = 1;
-						
+                        [cell _setTableViewStyle:UITableViewStylePlain != self.style];
                         
 						if (indexPath.row == 0 && numberOfRows == 1) {
 							cell.sectionLocation = UITableViewCellSectionLocationUnique;

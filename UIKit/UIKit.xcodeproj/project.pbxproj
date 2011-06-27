@@ -286,6 +286,10 @@
 		F9647ED013B90D560040B2D6 /* <UITableView> selection.png in Resources */ = {isa = PBXBuildFile; fileRef = F9647ECD13B90D560040B2D6 /* <UITableView> selection.png */; };
 		F9647ED113B90D560040B2D6 /* <UITableView> selectionGray.png in Resources */ = {isa = PBXBuildFile; fileRef = F9647ECE13B90D560040B2D6 /* <UITableView> selectionGray.png */; };
 		F9647ED213B90D560040B2D6 /* <UITableView> selectionGrayBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = F9647ECF13B90D560040B2D6 /* <UITableView> selectionGrayBlue.png */; };
+		F9647EE413B91BDC0040B2D6 /* UITableViewCellBackgroundView.h in Headers */ = {isa = PBXBuildFile; fileRef = F9647EE213B91BDC0040B2D6 /* UITableViewCellBackgroundView.h */; };
+		F9647EE513B91BDC0040B2D6 /* UITableViewCellBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9647EE313B91BDC0040B2D6 /* UITableViewCellBackgroundView.m */; };
+		F9647EE913B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.h in Headers */ = {isa = PBXBuildFile; fileRef = F9647EE713B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.h */; };
+		F9647EEA13B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9647EE813B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.m */; };
 		F9D9773013B794710086F226 /* UITextInput.h in Headers */ = {isa = PBXBuildFile; fileRef = F9D9772F13B794700086F226 /* UITextInput.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F9D9774113B7958E0086F226 /* <UINavigationBarBackground> blackOpaque.png in Resources */ = {isa = PBXBuildFile; fileRef = F9D9773E13B7958E0086F226 /* <UINavigationBarBackground> blackOpaque.png */; };
 		F9D9774213B7958E0086F226 /* <UINavigationBarBackground> blackTranslucent.png in Resources */ = {isa = PBXBuildFile; fileRef = F9D9773F13B7958E0086F226 /* <UINavigationBarBackground> blackTranslucent.png */; };
@@ -579,6 +583,10 @@
 		F9647ECD13B90D560040B2D6 /* <UITableView> selection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITableView> selection.png"; path = "Resources/<UITableView> selection.png"; sourceTree = "<group>"; };
 		F9647ECE13B90D560040B2D6 /* <UITableView> selectionGray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITableView> selectionGray.png"; path = "Resources/<UITableView> selectionGray.png"; sourceTree = "<group>"; };
 		F9647ECF13B90D560040B2D6 /* <UITableView> selectionGrayBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITableView> selectionGrayBlue.png"; path = "Resources/<UITableView> selectionGrayBlue.png"; sourceTree = "<group>"; };
+		F9647EE213B91BDC0040B2D6 /* UITableViewCellBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellBackgroundView.h; sourceTree = "<group>"; };
+		F9647EE313B91BDC0040B2D6 /* UITableViewCellBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellBackgroundView.m; sourceTree = "<group>"; };
+		F9647EE713B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellSelectedBackgroundView.h; sourceTree = "<group>"; };
+		F9647EE813B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellSelectedBackgroundView.m; sourceTree = "<group>"; };
 		F9D9772F13B794700086F226 /* UITextInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITextInput.h; sourceTree = "<group>"; };
 		F9D9773E13B7958E0086F226 /* <UINavigationBarBackground> blackOpaque.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBarBackground> blackOpaque.png"; path = "Resources/<UINavigationBarBackground> blackOpaque.png"; sourceTree = "<group>"; };
 		F9D9773F13B7958E0086F226 /* <UINavigationBarBackground> blackTranslucent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBarBackground> blackTranslucent.png"; path = "Resources/<UINavigationBarBackground> blackTranslucent.png"; sourceTree = "<group>"; };
@@ -898,6 +906,10 @@
 				14FA8C50121DA4A000C4264B /* UIScroller.m */,
 				14D0C43612DCEF910040035C /* UIScrollViewScrollAnimation.h */,
 				14D0C43712DCEF910040035C /* UIScrollViewScrollAnimation.m */,
+				F9647EE213B91BDC0040B2D6 /* UITableViewCellBackgroundView.h */,
+				F9647EE313B91BDC0040B2D6 /* UITableViewCellBackgroundView.m */,
+				F9647EE713B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.h */,
+				F9647EE813B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.m */,
 				14FA8C51121DA4A000C4264B /* UITableViewCellSeparator.h */,
 				14FA8C52121DA4A000C4264B /* UITableViewCellSeparator.m */,
 				14FA8C53121DA4A000C4264B /* UITableViewSection.h */,
@@ -1100,6 +1112,8 @@
 				14541DB21360D6F300C1006D /* UIPhotosAlbum.h in Headers */,
 				882B8EF6136636C8002E8F21 /* UISearchField.h in Headers */,
 				8842BC771387316400D148FF /* UIGradient.h in Headers */,
+				F9647EE413B91BDC0040B2D6 /* UITableViewCellBackgroundView.h in Headers */,
+				F9647EE913B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1310,6 +1324,8 @@
 				14541DB31360D6F300C1006D /* UIPhotosAlbum.m in Sources */,
 				882B8EF7136636C8002E8F21 /* UISearchField.m in Sources */,
 				8842BC781387316400D148FF /* UIGradient.m in Sources */,
+				F9647EE513B91BDC0040B2D6 /* UITableViewCellBackgroundView.m in Sources */,
+				F9647EEA13B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
