@@ -284,12 +284,12 @@ NSMutableDictionary *imageCache = nil;
 
 + (UIImage *)_tableSelection
 {
-	return [self _frameworkImageWithName:@"UITableSelection.png" leftCapWidth:0 topCapHeight:0];
+	return [self _frameworkImageWithName:@"<UITableView> selection.png" leftCapWidth:0 topCapHeight:0];
 }
 
 + (UIImage *)_tableSelectionGray
 {
-	return [self _frameworkImageWithName:@"UITableSelectionGray.png" leftCapWidth:0 topCapHeight:0];
+	return [self _frameworkImageWithName:@"<UITableView> selectionGray.png" leftCapWidth:0 topCapHeight:0];
 }
 
 - (UIImage *)_toolbarImage
