@@ -111,7 +111,7 @@ static UIColor *ClearColor = nil;
 
 - (void)finalize {
 	CGColorRelease(_color);
-	[super dealloc];
+	[super finalize];
 }
 
 + (id)colorWithNSColor:(NSColor *)c
