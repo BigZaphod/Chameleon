@@ -37,13 +37,14 @@
 #import "UITableView.h"
 #import "UITableViewCellBackgroundView.h"
 #import "UITableViewCellSelectedBackgroundView.h"
+#import "UITableViewCellLayoutManager.h"
 
 
 extern CGFloat _UITableViewDefaultRowHeight;
 
 
 @interface UITableViewCell (UITableViewCellInternal)
-- (UITableViewCellSeparator*) separatorView;
+- (UITableViewCellLayoutManager*) layoutManager;
 - (void) _setSeparatorStyle:(UITableViewCellSeparatorStyle)theStyle color:(UIColor*)theColor;
 - (void) _setTableViewStyle:(NSUInteger)tableViewStyle;
 - (void) _setHighlighted:(BOOL)highlighted forViews:(id)subviews;
@@ -51,7 +52,9 @@ extern CGFloat _UITableViewDefaultRowHeight;
 @end
 
 
-@implementation UITableViewCell
+@implementation UITableViewCell {
+    UITableViewCellLayoutManager* _layoutManager;
+}
 @synthesize accessoryType=_accessoryType; 
 @synthesize accessoryView=_accessoryView;
 @synthesize backgroundView=_backgroundView;
@@ -93,7 +96,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
         _indentationWidth = 10;
 		_style = UITableViewCellStyleDefault;
 		
-		self.backgroundColor = [UIColor whiteColor];
+		super.backgroundColor = [UIColor whiteColor];
 		self.accessoryType = UITableViewCellAccessoryNone;
 		self.editingAccessoryType = UITableViewCellAccessoryNone;
 		self.selectionStyle = UITableViewCellSelectionStyleBlue;
@@ -106,6 +109,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	if (nil != (self = [self initWithFrame:CGRectMake(0,0,320,_UITableViewDefaultRowHeight)])) {
 		_style = style;
 		_reuseIdentifier = [reuseIdentifier copy];
+        _layoutManager = [[UITableViewCellLayoutManager layoutManagerForTableViewCellStyle:style] retain];
 	}
 	return self;
 }
@@ -135,7 +139,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 
 - (UILabel*) detailTextLabel
 {
-    if (!_detailTextLabel) {
+    if (!_detailTextLabel && _style == UITableViewCellStyleSubtitle) {
         _detailTextLabel = [[UILabel alloc] init];
         _detailTextLabel.backgroundColor = [UIColor clearColor];
         _detailTextLabel.textColor = [UIColor grayColor];
@@ -167,6 +171,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	if (_accessoryView != accessoryView) {
 		[_accessoryView removeFromSuperview];
 		[_accessoryView release], _accessoryView = [accessoryView retain];
+        [self.contentView addSubview:_accessoryView];
 	}
 }
 
@@ -178,15 +183,16 @@ extern CGFloat _UITableViewDefaultRowHeight;
     if (!_contentView) {
         _contentView = [[UIView alloc] init];
 		_contentView.backgroundColor = [UIColor clearColor];
-		[self addSubview:_contentView];
+        [self addSubview:_contentView];
     }
     return _contentView;
 }
 
 - (UIView*) backgroundView
 {
-    if (!_selectedBackgroundView && _tableCellFlags.tableViewStyleIsGrouped) {
+    if (!_backgroundView && _tableCellFlags.tableViewStyleIsGrouped) {
         _backgroundView = [[UITableViewCellBackgroundView alloc] init];
+        [self insertSubview:_backgroundView atIndex:0];
     }
     return _backgroundView;
 }
@@ -197,7 +203,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		[_backgroundView removeFromSuperview];
 		[_backgroundView release];
 		_backgroundView = [backgroundView retain];
-		[self addSubview:_backgroundView];
+        [self insertSubview:_backgroundView atIndex:0];
 	}
 }
 
@@ -215,8 +221,13 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		[_selectedBackgroundView removeFromSuperview];
 		[_selectedBackgroundView release];
 		_selectedBackgroundView = [selectedBackgroundView retain];
-		_selectedBackgroundView.hidden = !_selected;
-		[self addSubview:_selectedBackgroundView];
+        if (self.selected) {
+            if (_backgroundView) {
+                [self insertSubview:_selectedBackgroundView aboveSubview:_backgroundView];
+            } else {
+                [self insertSubview:_selectedBackgroundView atIndex:0];
+            }
+        }
 	}
 }
 
@@ -252,101 +263,70 @@ extern CGFloat _UITableViewDefaultRowHeight;
 
 #pragma mark Overridden
 
+- (UIColor*) backgroundColor
+{
+    return self.backgroundView.backgroundColor;
+}
+
+- (void) setBackgroundColor:(UIColor*)backgroundColor
+{
+    self.backgroundView.backgroundColor = backgroundColor;
+}
+
 - (void) layoutSubviews
 {
 	[super layoutSubviews];
-	
-    [self textLabel];
-    [self imageView];
-    if (_style == UITableViewCellStyleSubtitle) {
-        [self detailTextLabel];
-    }
-    [self separatorView];
-    
 	CGRect bounds = self.bounds;
-	BOOL showingSeparator = !_separatorView.hidden;
 	
-	CGRect contentFrame = CGRectMake(0,0,bounds.size.width,bounds.size.height-(showingSeparator? 1 : 0));
-	
-	CGRect accessoryRect = CGRectMake(bounds.size.width, 0, 0, 0);
-	if(_accessoryView) {
-		accessoryRect.size = [_accessoryView sizeThatFits: bounds.size];
-		accessoryRect.origin.x = bounds.size.width - accessoryRect.size.width;
-		accessoryRect.origin.y = round(0.5*(bounds.size.height - accessoryRect.size.height));
-		_accessoryView.frame = accessoryRect;
-		if (_accessoryView.superview != self) {
-			[self addSubview: _accessoryView];
+	CGRect contentFrame = {
+        .origin = { 
+            .x = 0.0,
+            .y = 0.0,
+        },
+        .size = {
+            .width = bounds.size.width,
+            .height = bounds.size.height - (_separatorView ? 1.0 : 0.0)
         }
-		contentFrame.size.width = accessoryRect.origin.x - 1;
+    };
+    
+	if (_accessoryView) {
+		CGSize accessorySize = [_accessoryView sizeThatFits:bounds.size];
+        CGRect accessoryFrame = {
+            .origin = { 
+                .x = bounds.size.width - accessorySize.width,
+                .y = round(0.5 * (bounds.size.height - accessorySize.height)),
+            },
+            .size = accessorySize
+        };
+		_accessoryView.frame = accessoryFrame;
+		contentFrame.size.width = accessoryFrame.origin.x - 1.0;
 	}
 		
-	if (_tableCellFlags.tableViewStyleIsGrouped) {
-		
-		if (self.isSelected) {
-			if (self.selectedBackgroundView == nil) {
-				self.backgroundColor = [UIColor clearColor];
-				self.contentView.backgroundColor = [UIColor clearColor];
-				self.contentView.opaque = NO;
-				[self bringSubviewToFront:_selectedBackgroundView];
-			}
-			else {
-				[self.backgroundView setHidden:YES];
-				[self.selectedBackgroundView setHidden:NO];
-				[self.selectedBackgroundView setNeedsDisplay];
-			}
-			
-		}
-		else
-		{
-			if (self.backgroundView == nil) {
-				self.contentView.backgroundColor = [UIColor clearColor];
-				self.contentView.opaque = NO;
-				self.backgroundView = [[UITableViewCellBackgroundView alloc] init];
-				self.backgroundView.opaque = NO;
-				[self bringSubviewToFront:_backgroundView];
-			}
-			else {
-				[self.selectedBackgroundView setHidden:YES];
-				[self.backgroundView setHidden:NO];
-				[self.backgroundView setNeedsDisplay];
-			}
-		}
-		
-		if (self.backgroundColor != [UIColor clearColor]) {
-			_backgroundView.backgroundColor = self.backgroundColor;
-			self.backgroundColor = [UIColor clearColor];
-			_contentView.opaque = NO;
-			_backgroundView.opaque = NO;
-		}
+	if (_backgroundView) {
+        _backgroundView.frame = contentFrame;
 	}
-	
-	_backgroundView.frame = contentFrame;
-	
-	_selectedBackgroundView.frame = contentFrame;
-	
-	_contentView.frame = contentFrame;
-	
-	[self bringSubviewToFront:_contentView];
-	
-	
-	if (showingSeparator) {
-		_separatorView.frame = CGRectMake(0,bounds.size.height-1,bounds.size.width,1);
-		[self bringSubviewToFront:_separatorView];
+    if (_selectedBackgroundView) {
+        _selectedBackgroundView.frame = contentFrame;
+    }
+    if (_contentView) {
+        _contentView.frame = contentFrame;
+	}
+	if (_separatorView) {
+		_separatorView.frame = CGRectMake(0.0, bounds.size.height - 1.0, bounds.size.width, 1.0);
 	}
 	
 	if (_style == UITableViewCellStyleDefault) {
-		const CGFloat padding = 5;
+		const CGFloat padding = 5.0;
 		
-		BOOL showImage = (_imageView.image != nil);
-		_imageView.frame = CGRectMake(padding,0,(showImage? 30:0),contentFrame.size.height);
+        if (_imageView) {
+            _imageView.frame = CGRectMake(padding, 0.0, 30.0, contentFrame.size.height);
+        }
 		
 		CGRect textRect;
 		textRect.origin = CGPointMake(padding+_imageView.frame.size.width+padding,0);
 		textRect.size = CGSizeMake(MAX(0,contentFrame.size.width-textRect.origin.x-padding),contentFrame.size.height);
 		_textLabel.frame = textRect;
-	}
-	
-	if (_style == UITableViewCellStyleSubtitle) {
+	} else if (_style == UITableViewCellStyleSubtitle) {
 		const CGFloat padding = 5;
 		
 		BOOL showImage = (_imageView.image != nil);
@@ -365,25 +345,42 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		detailTextRect.origin = CGPointMake(padding+_imageView.frame.size.width+padding,round(0.5*detailTextSize.height));
 		detailTextRect.size = CGSizeMake(MAX(0,contentFrame.size.width-textRect.origin.x-padding),contentFrame.size.height);
 		_detailTextLabel.frame = detailTextRect;
-		
 	}
 }
 
 
 #pragma mark Internals
 
-- (UITableViewCellSeparator*) separatorView
+- (UITableViewCellLayoutManager*) layoutManager
 {
-    if (!_separatorView) {
-        _separatorView = [[UITableViewCellSeparator alloc] init];
-        [self addSubview:_separatorView];
-    }
-    return _separatorView;
+    return nil;
 }
 
-- (void) _setSeparatorStyle:(UITableViewCellSeparatorStyle)theStyle color:(UIColor *)theColor
+- (void) _setSeparatorStyle:(UITableViewCellSeparatorStyle)style color:(UIColor*)color
 {
-	[self.separatorView setSeparatorStyle:theStyle color:theColor];
+    switch (style) {
+        case UITableViewCellSeparatorStyleNone: {
+            if (_separatorView) {
+                [_separatorView removeFromSuperview];
+                [_separatorView release], _separatorView = nil;
+                [self setNeedsLayout];
+            }
+            break;
+        }
+            
+        case UITableViewCellSeparatorStyleSingleLine:
+        case UITableViewCellSeparatorStyleSingleLineEtched: {
+            if (!_separatorView) {
+                _separatorView = [[UITableViewCellSeparator alloc] init];
+                _separatorView.autoresizingMask = NSViewWidthSizable | NSViewMinXMargin;
+                [self addSubview:_separatorView];
+                [self setNeedsLayout];
+            }
+            _separatorView.color = color;
+            _separatorView.style = style;
+            break;
+        }
+    }
 }
 
 - (void) _setTableViewStyle:(NSUInteger)tableViewStyle
@@ -407,10 +404,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 - (void) _updateSelectionState
 {
 	BOOL shouldHighlight = (_highlighted || _selected);
-	
-	[self setNeedsLayout];
-	[self setNeedsDisplay];
-	[self _setHighlighted:shouldHighlight forViews:[self subviews]];
+	[self _setHighlighted:shouldHighlight forViews:[self.contentView subviews]];
 }
 
 @end
