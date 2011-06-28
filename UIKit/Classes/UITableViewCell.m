@@ -38,71 +38,42 @@
 #import "UITableViewCellBackgroundView.h"
 #import "UITableViewCellSelectedBackgroundView.h"
 
+
 extern CGFloat _UITableViewDefaultRowHeight;
 
+
+@interface UITableViewCell (UITableViewCellInternal)
+- (UITableViewCellSeparator*) separatorView;
+- (void) _setSeparatorStyle:(UITableViewCellSeparatorStyle)theStyle color:(UIColor*)theColor;
+- (void) _setTableViewStyle:(NSUInteger)tableViewStyle;
+- (void) _setHighlighted:(BOOL)highlighted forViews:(id)subviews;
+- (void) _updateSelectionState;
+@end
+
+
 @implementation UITableViewCell
-@synthesize contentView=_contentView, accessoryType=_accessoryType, textLabel=_textLabel, selectionStyle=_selectionStyle, indentationLevel=_indentationLevel;
-@synthesize imageView=_imageView, editingAccessoryType=_editingAccessoryType, selected=_selected, backgroundView=_backgroundView;
-@synthesize selectedBackgroundView=_selectedBackgroundView, highlighted=_highlighted, reuseIdentifier=_reuseIdentifier;
-@synthesize editing = _editing, detailTextLabel = _detailTextLabel, showingDeleteConfirmation = _showingDeleteConfirmation;
-@synthesize indentationWidth=_indentationWidth, accessoryView=_accessoryView;
+@synthesize accessoryType=_accessoryType; 
+@synthesize accessoryView=_accessoryView;
+@synthesize backgroundView=_backgroundView;
+@synthesize contentView=_contentView;
+@synthesize detailTextLabel = _detailTextLabel;
+@synthesize editing = _editing;
+@synthesize editingAccessoryType=_editingAccessoryType;
+@synthesize highlighted=_highlighted;
+@synthesize imageView=_imageView;
+@synthesize indentationLevel=_indentationLevel;
+@synthesize indentationWidth=_indentationWidth;
+@synthesize reuseIdentifier=_reuseIdentifier;
 @synthesize sectionLocation=_sectionLocation;
+@synthesize selected=_selected;
+@synthesize selectedBackgroundView=_selectedBackgroundView;
+@synthesize selectionStyle=_selectionStyle;
+@synthesize showingDeleteConfirmation = _showingDeleteConfirmation;
+@synthesize textLabel=_textLabel;
 
-
-
-- (id)initWithFrame:(CGRect)frame
+- (void) dealloc
 {
-	if ((self=[super initWithFrame:frame])) {
-        _indentationWidth = 10;
-		_style = UITableViewCellStyleDefault;
-		
-		_seperatorView = [[UITableViewCellSeparator alloc] init];
-		[self addSubview:_seperatorView];
-		
-		_contentView = [[UIView alloc] init];
-		_contentView.backgroundColor=[UIColor clearColor];
-		[self addSubview:_contentView];
-		
-		_imageView = [[UIImageView alloc] init];
-		_imageView.contentMode = UIViewContentModeCenter;
-		[_contentView addSubview:_imageView];
-		
-		_textLabel = [[UILabel alloc] init];
-		_textLabel.backgroundColor = [UIColor clearColor];
-		_textLabel.textColor = [UIColor blackColor];
-		_textLabel.highlightedTextColor = [UIColor whiteColor];
-		_textLabel.font = [UIFont boldSystemFontOfSize:17];
-		[_contentView addSubview:_textLabel];
-		
-		if (_style == UITableViewCellStyleSubtitle) {
-			_detailTextLabel = [[UILabel alloc] init];
-			_detailTextLabel.backgroundColor = [UIColor clearColor];
-			_detailTextLabel.textColor = [UIColor grayColor];
-			_detailTextLabel.highlightedTextColor = [UIColor whiteColor];
-			_detailTextLabel.font = [UIFont boldSystemFontOfSize:14];
-			[_contentView addSubview:_detailTextLabel];
-		}
-		
-		self.backgroundColor = [UIColor whiteColor];
-		self.accessoryType = UITableViewCellAccessoryNone;
-		self.editingAccessoryType = UITableViewCellAccessoryNone;
-		self.selectionStyle = UITableViewCellSelectionStyleBlue;
-	}
-	return self;
-}
-
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-	if ((self=[self initWithFrame:CGRectMake(0,0,320,_UITableViewDefaultRowHeight)])) {
-		_style = style;
-		_reuseIdentifier = [reuseIdentifier copy];
-	}
-	return self;
-}
-
-- (void)dealloc
-{
-	[_seperatorView release];
+	[_separatorView release];
 	[_contentView release];
     [_accessoryView release];
 	[_textLabel release];
@@ -116,15 +87,186 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	[super dealloc];
 }
 
-- (void)layoutSubviews
+- (id) initWithFrame:(CGRect)frame
 {
-	
+	if (nil != (self = [super initWithFrame:frame])) {
+        _indentationWidth = 10;
+		_style = UITableViewCellStyleDefault;
+		
+		self.backgroundColor = [UIColor whiteColor];
+		self.accessoryType = UITableViewCellAccessoryNone;
+		self.editingAccessoryType = UITableViewCellAccessoryNone;
+		self.selectionStyle = UITableViewCellSelectionStyleBlue;
+	}
+	return self;
+}
+
+- (id) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)reuseIdentifier
+{
+	if (nil != (self = [self initWithFrame:CGRectMake(0,0,320,_UITableViewDefaultRowHeight)])) {
+		_style = style;
+		_reuseIdentifier = [reuseIdentifier copy];
+	}
+	return self;
+}
+
+
+#pragma mark Reusing Cells
+
+- (void) prepareForReuse
+{
+}
+
+
+#pragma mark Managing Text as Cell Content
+
+- (UILabel*) textLabel
+{
+    if (!_textLabel) {
+        _textLabel = [[UILabel alloc] init];
+        _textLabel.backgroundColor = [UIColor clearColor];
+        _textLabel.textColor = [UIColor blackColor];
+        _textLabel.highlightedTextColor = [UIColor whiteColor];
+        _textLabel.font = [UIFont boldSystemFontOfSize:17];
+        [self.contentView addSubview:_textLabel];
+    }
+    return _textLabel;
+}
+
+- (UILabel*) detailTextLabel
+{
+    if (!_detailTextLabel) {
+        _detailTextLabel = [[UILabel alloc] init];
+        _detailTextLabel.backgroundColor = [UIColor clearColor];
+        _detailTextLabel.textColor = [UIColor grayColor];
+        _detailTextLabel.highlightedTextColor = [UIColor whiteColor];
+        _detailTextLabel.font = [UIFont boldSystemFontOfSize:14];
+        [self.contentView addSubview:_detailTextLabel];
+    }
+    return _detailTextLabel;
+}
+
+
+#pragma mark Managing Images as Cell Content
+
+- (UIImageView*) imageView
+{
+    if (!_imageView) {
+        _imageView = [[UIImageView alloc] init];
+        _imageView.contentMode = UIViewContentModeCenter;
+        [self.contentView addSubview:_imageView];
+    }
+    return _imageView;
+}
+
+
+#pragma mark Managing Accessory Views
+
+- (void) setAccessoryView:(UIView*)accessoryView 
+{
+	if (_accessoryView != accessoryView) {
+		[_accessoryView removeFromSuperview];
+		[_accessoryView release], _accessoryView = [accessoryView retain];
+	}
+}
+
+
+#pragma mark Accessing Views of the Cell Object
+
+- (UIView*) contentView
+{
+    if (!_contentView) {
+        _contentView = [[UIView alloc] init];
+		_contentView.backgroundColor = [UIColor clearColor];
+		[self addSubview:_contentView];
+    }
+    return _contentView;
+}
+
+- (UIView*) backgroundView
+{
+    if (!_selectedBackgroundView && _tableCellFlags.tableViewStyleIsGrouped) {
+        _backgroundView = [[UITableViewCellBackgroundView alloc] init];
+    }
+    return _backgroundView;
+}
+
+- (void) setBackgroundView:(UIView*)backgroundView
+{
+	if (backgroundView != _backgroundView) {
+		[_backgroundView removeFromSuperview];
+		[_backgroundView release];
+		_backgroundView = [backgroundView retain];
+		[self addSubview:_backgroundView];
+	}
+}
+
+- (UIView*) selectedBackgroundView
+{
+    if (!_selectedBackgroundView && _tableCellFlags.tableViewStyleIsGrouped) {
+        _selectedBackgroundView = [[UITableViewCellSelectedBackgroundView alloc] init];
+    }
+    return _selectedBackgroundView;
+}
+
+- (void) setSelectedBackgroundView:(UIView*)selectedBackgroundView
+{
+	if (selectedBackgroundView != _selectedBackgroundView) {
+		[_selectedBackgroundView removeFromSuperview];
+		[_selectedBackgroundView release];
+		_selectedBackgroundView = [selectedBackgroundView retain];
+		_selectedBackgroundView.hidden = !_selected;
+		[self addSubview:_selectedBackgroundView];
+	}
+}
+
+
+#pragma mark Managing Accessory Views
+
+- (void) setSelected:(BOOL)selected
+{
+	[self setSelected:selected animated:NO];
+}
+
+- (void) setSelected:(BOOL)selected animated:(BOOL)animated
+{
+	if (selected != _selected) {
+		_selected = selected;
+		[self _updateSelectionState];
+	}
+}
+
+- (void) setHighlighted:(BOOL)highlighted
+{
+	[self setHighlighted:highlighted animated:NO];
+}
+
+- (void) setHighlighted:(BOOL)highlighted animated:(BOOL)animated
+{
+	if (_highlighted != highlighted) {
+		_highlighted = highlighted;
+		[self _updateSelectionState];
+	}
+}
+
+
+#pragma mark Overridden
+
+- (void) layoutSubviews
+{
 	[super layoutSubviews];
 	
+    [self textLabel];
+    [self imageView];
+    if (_style == UITableViewCellStyleSubtitle) {
+        [self detailTextLabel];
+    }
+    [self separatorView];
+    
 	CGRect bounds = self.bounds;
-	BOOL showingSeperator = !_seperatorView.hidden;
+	BOOL showingSeparator = !_separatorView.hidden;
 	
-	CGRect contentFrame = CGRectMake(0,0,bounds.size.width,bounds.size.height-(showingSeperator? 1 : 0));
+	CGRect contentFrame = CGRectMake(0,0,bounds.size.width,bounds.size.height-(showingSeparator? 1 : 0));
 	
 	CGRect accessoryRect = CGRectMake(bounds.size.width, 0, 0, 0);
 	if(_accessoryView) {
@@ -132,21 +274,19 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		accessoryRect.origin.x = bounds.size.width - accessoryRect.size.width;
 		accessoryRect.origin.y = round(0.5*(bounds.size.height - accessoryRect.size.height));
 		_accessoryView.frame = accessoryRect;
-		if(_accessoryView.superview != self)
+		if (_accessoryView.superview != self) {
 			[self addSubview: _accessoryView];
+        }
 		contentFrame.size.width = accessoryRect.origin.x - 1;
 	}
 		
-	if (_tableCellFlags.tableViewStyle == 1) {
+	if (_tableCellFlags.tableViewStyleIsGrouped) {
 		
-		if (self.isSelected == YES) {
+		if (self.isSelected) {
 			if (self.selectedBackgroundView == nil) {
 				self.backgroundColor = [UIColor clearColor];
 				self.contentView.backgroundColor = [UIColor clearColor];
 				self.contentView.opaque = NO;
-				self.selectedBackgroundView = [[UITableViewCellSelectedBackgroundView alloc] init];
-				self.selectedBackgroundView.backgroundColor = [UIColor clearColor];
-				self.selectedBackgroundView.opaque = NO;
 				[self bringSubviewToFront:_selectedBackgroundView];
 			}
 			else {
@@ -189,9 +329,9 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	[self bringSubviewToFront:_contentView];
 	
 	
-	if (showingSeperator) {
-		_seperatorView.frame = CGRectMake(0,bounds.size.height-1,bounds.size.width,1);
-		[self bringSubviewToFront:_seperatorView];
+	if (showingSeparator) {
+		_separatorView.frame = CGRectMake(0,bounds.size.height-1,bounds.size.width,1);
+		[self bringSubviewToFront:_separatorView];
 	}
 	
 	if (_style == UITableViewCellStyleDefault) {
@@ -229,20 +369,32 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	}
 }
 
-- (void)_setSeparatorStyle:(UITableViewCellSeparatorStyle)theStyle color:(UIColor *)theColor
+
+#pragma mark Internals
+
+- (UITableViewCellSeparator*) separatorView
 {
-	[_seperatorView setSeparatorStyle:theStyle color:theColor];
+    if (!_separatorView) {
+        _separatorView = [[UITableViewCellSeparator alloc] init];
+        [self addSubview:_separatorView];
+    }
+    return _separatorView;
 }
 
-- (void)_setTableViewStyle:(NSUInteger)tableViewStyle
+- (void) _setSeparatorStyle:(UITableViewCellSeparatorStyle)theStyle color:(UIColor *)theColor
 {
-    if (_tableCellFlags.tableViewStyle != tableViewStyle) {
-        _tableCellFlags.tableViewStyle = tableViewStyle;
+	[self.separatorView setSeparatorStyle:theStyle color:theColor];
+}
+
+- (void) _setTableViewStyle:(NSUInteger)tableViewStyle
+{
+    if (_tableCellFlags.tableViewStyleIsGrouped != tableViewStyle) {
+        _tableCellFlags.tableViewStyleIsGrouped = tableViewStyle;
         [self setNeedsLayout];
     }
 }
 
-- (void)_setHighlighted:(BOOL)highlighted forViews:(id)subviews
+- (void) _setHighlighted:(BOOL)highlighted forViews:(id)subviews
 {
 	for (id view in subviews) {
 		if ([view respondsToSelector:@selector(setHighlighted:)]) {
@@ -252,77 +404,13 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	}
 }
 
-- (void)_updateSelectionState
+- (void) _updateSelectionState
 {
 	BOOL shouldHighlight = (_highlighted || _selected);
 	
 	[self setNeedsLayout];
 	[self setNeedsDisplay];
 	[self _setHighlighted:shouldHighlight forViews:[self subviews]];
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-	if (selected != _selected) {
-		_selected = selected;
-		[self _updateSelectionState];
-	}
-}
-
-- (void)setSelected:(BOOL)selected
-{
-	[self setSelected:selected animated:NO];
-}
-
-- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
-{
-	if (_highlighted != highlighted) {
-		_highlighted = highlighted;
-		[self _updateSelectionState];
-	}
-}
-
-- (void)setHighlighted:(BOOL)highlighted
-{
-	[self setHighlighted:highlighted animated:NO];
-}
-
-
-- (void)setBackgroundView:(UIView *)theBackgroundView
-{
-	if (theBackgroundView != _backgroundView) {
-		[_backgroundView removeFromSuperview];
-		[_backgroundView release];
-		_backgroundView = [theBackgroundView retain];
-		[self addSubview:_backgroundView];
-	}
-}
-
-- (void)setSelectedBackgroundView:(UIView *)theSelectedBackgroundView
-{
-	if (theSelectedBackgroundView != _selectedBackgroundView) {
-		[_selectedBackgroundView removeFromSuperview];
-		[_selectedBackgroundView release];
-		_selectedBackgroundView = [theSelectedBackgroundView retain];
-		_selectedBackgroundView.hidden = !_selected;
-		[self addSubview:_selectedBackgroundView];
-	}
-}
-
-
-- (void)prepareForReuse
-{
-}
-
-- (void)setAccessoryView:(UIView *)newView {
-	if(newView != self.accessoryView) {
-		[_accessoryView removeFromSuperview];
-		
-		[newView retain];
-		
-		[_accessoryView release];
-		_accessoryView = newView;
-	}
 }
 
 @end

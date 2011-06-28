@@ -81,7 +81,7 @@ typedef NSUInteger UITableViewCellStateMask;
 @interface UITableViewCell : UIView {
 @private
     UITableViewCellStyle _style;
-    UITableViewCellSeparator *_seperatorView;
+    UITableViewCellSeparator *_separatorView;
     UIView *_contentView;
     UILabel *_textLabel;
     UILabel *_detailTextLabel; // not yet displayed!
@@ -101,7 +101,7 @@ typedef NSUInteger UITableViewCellStateMask;
     NSString *_reuseIdentifier;
     CGFloat _indentationWidth;
     struct {
-        unsigned int tableViewStyle : 1;
+        NSUInteger tableViewStyleIsGrouped : 1;
     } _tableCellFlags;
 }
 
