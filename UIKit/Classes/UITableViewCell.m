@@ -53,9 +53,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 @end
 
 
-@implementation UITableViewCell {
-    UITableViewCellLayoutManager* _layoutManager;
-}
+@implementation UITableViewCell
 @synthesize accessoryType=_accessoryType; 
 @synthesize accessoryView=_accessoryView;
 @synthesize backgroundView=_backgroundView;
@@ -110,7 +108,6 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	if (nil != (self = [self initWithFrame:CGRectMake(0,0,320,_UITableViewDefaultRowHeight)])) {
 		_style = style;
 		_reuseIdentifier = [reuseIdentifier copy];
-        _layoutManager = [[UITableViewCellLayoutManager layoutManagerForTableViewCellStyle:style] retain];
 	}
 	return self;
 }
@@ -203,8 +200,10 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	if (backgroundView != _backgroundView) {
 		[_backgroundView removeFromSuperview];
 		[_backgroundView release];
-		_backgroundView = [backgroundView retain];
-        [self insertSubview:_backgroundView atIndex:0];
+        if (backgroundView) {
+            _backgroundView = [backgroundView retain];
+            [self insertSubview:_backgroundView atIndex:0];
+        }
 	}
 }
 
@@ -237,6 +236,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 
 #pragma mark Managing Accessory Views
 
+// TODO: Implement me.
 
 
 #pragma mark Managing Cell Selection and Highlighting
@@ -295,6 +295,9 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	[super layoutSubviews];
 	CGRect bounds = self.bounds;
 	
+    // TODO: Push this code into a "layout manager" appropriate to the cell
+    //       style.
+    
 	CGRect contentFrame = {
         .origin = { 
             .x = 0.0,
@@ -370,7 +373,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 
 - (UITableViewCellLayoutManager*) layoutManager
 {
-    return nil;
+    return [UITableViewCellLayoutManager layoutManagerForTableViewCellStyle:_style];
 }
 
 - (void) _setSeparatorStyle:(UITableViewCellSeparatorStyle)style color:(UIColor*)color
