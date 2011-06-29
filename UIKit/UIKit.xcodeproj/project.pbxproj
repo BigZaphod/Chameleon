@@ -1358,8 +1358,6 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = UIKit;
-				SYMROOT = "$(PROJECT_DIR)/../../build";
-				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -1379,8 +1377,6 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = UIKit;
-				SYMROOT = "$(PROJECT_DIR)/../../build";
-				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
@@ -1388,7 +1384,7 @@
 		1DEB91B208733DA50010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_GC = supported;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1396,22 +1392,18 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = macosx10.6;
-				SYMROOT = "$(PROJECT_DIR)/../../build";
 			};
 			name = Debug;
 		};
 		1DEB91B308733DA50010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_GC = supported;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = macosx10.6;
-				SYMROOT = "$(PROJECT_DIR)/../../build";
 			};
 			name = Release;
 		};
