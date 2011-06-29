@@ -48,7 +48,8 @@ extern CGFloat _UITableViewDefaultRowHeight;
 - (void) _setSeparatorStyle:(UITableViewCellSeparatorStyle)theStyle color:(UIColor*)theColor;
 - (void) _setTableViewStyle:(NSUInteger)tableViewStyle;
 - (void) _setHighlighted:(BOOL)highlighted forViews:(id)subviews;
-- (void) _updateSelectionState;
+- (void) showSelectedBackgroundView:(BOOL)selected animated:(BOOL)animated;
+- (void) _setupDefaultSelectedBackgroundView;
 @end
 
 
@@ -95,11 +96,11 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	if (nil != (self = [super initWithFrame:frame])) {
         _indentationWidth = 10;
 		_style = UITableViewCellStyleDefault;
+		_accessoryType = UITableViewCellAccessoryNone;
+		_editingAccessoryType = UITableViewCellAccessoryNone;
+		_selectionStyle = UITableViewCellSelectionStyleBlue;
 		
 		super.backgroundColor = [UIColor whiteColor];
-		self.accessoryType = UITableViewCellAccessoryNone;
-		self.editingAccessoryType = UITableViewCellAccessoryNone;
-		self.selectionStyle = UITableViewCellSelectionStyleBlue;
 	}
 	return self;
 }
@@ -209,8 +210,12 @@ extern CGFloat _UITableViewDefaultRowHeight;
 
 - (UIView*) selectedBackgroundView
 {
-    if (!_selectedBackgroundView && _tableCellFlags.tableViewStyleIsGrouped) {
-        _selectedBackgroundView = [[UITableViewCellSelectedBackgroundView alloc] init];
+    if (!_selectedBackgroundView) {
+        if (_tableCellFlags.tableViewStyleIsGrouped) {
+            [self _setupDefaultSelectedBackgroundView];
+        }
+    } else if (_tableCellFlags.usingDefaultSelectedBackgroundView && !_tableCellFlags.tableViewStyleIsGrouped) {
+        return nil;
     }
     return _selectedBackgroundView;
 }
@@ -220,19 +225,31 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	if (selectedBackgroundView != _selectedBackgroundView) {
 		[_selectedBackgroundView removeFromSuperview];
 		[_selectedBackgroundView release];
-		_selectedBackgroundView = [selectedBackgroundView retain];
-        if (self.selected) {
-            if (_backgroundView) {
-                [self insertSubview:_selectedBackgroundView aboveSubview:_backgroundView];
-            } else {
-                [self insertSubview:_selectedBackgroundView atIndex:0];
-            }
+
+        _tableCellFlags.usingDefaultSelectedBackgroundView = NO;
+        if (selectedBackgroundView) {
+            _selectedBackgroundView = [selectedBackgroundView retain];
+            [self showSelectedBackgroundView:self.selected animated:NO];
         }
 	}
 }
 
 
 #pragma mark Managing Accessory Views
+
+
+
+#pragma mark Managing Cell Selection and Highlighting
+
+- (void) setSelectionStyle:(UITableViewCellSelectionStyle)selectionStyle
+{
+    if (_selectionStyle != selectionStyle) {
+        _selectionStyle = selectionStyle;
+        if (_selectedBackgroundView && _tableCellFlags.usingDefaultSelectedBackgroundView) {
+            [(UITableViewCellSelectedBackgroundView*)_selectedBackgroundView setSelectionStyle:selectionStyle];
+        }
+    }
+}
 
 - (void) setSelected:(BOOL)selected
 {
@@ -243,7 +260,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 {
 	if (selected != _selected) {
 		_selected = selected;
-		[self _updateSelectionState];
+        [self showSelectedBackgroundView:selected animated:animated];
 	}
 }
 
@@ -256,7 +273,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 {
 	if (_highlighted != highlighted) {
 		_highlighted = highlighted;
-		[self _updateSelectionState];
+        [self showSelectedBackgroundView:highlighted animated:animated];
 	}
 }
 
@@ -401,10 +418,36 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	}
 }
 
-- (void) _updateSelectionState
+- (void) showSelectedBackgroundView:(BOOL)selected animated:(BOOL)animated
 {
-	BOOL shouldHighlight = (_highlighted || _selected);
-	[self _setHighlighted:shouldHighlight forViews:[self.contentView subviews]];
+    if (_selectionStyle != UITableViewCellSelectionStyleNone) {
+        [UIView animateWithDuration:!animated ? 0 : 0.2 animations:^{
+            [self _setHighlighted:selected forViews:[self.contentView subviews]];
+            if (selected) {
+                if (!_selectedBackgroundView) {
+                    [self _setupDefaultSelectedBackgroundView];
+                }
+                if (_backgroundView) {
+                    [self insertSubview:_selectedBackgroundView aboveSubview:_backgroundView];
+                } else {
+                    [self insertSubview:_selectedBackgroundView atIndex:0];
+                }
+                [self setNeedsLayout];
+            } else {
+                [_selectedBackgroundView removeFromSuperview];
+            }
+        }];
+    }
+}
+
+- (void) _setupDefaultSelectedBackgroundView
+{
+    assert(!_selectedBackgroundView);
+    assert(!_tableCellFlags.usingDefaultSelectedBackgroundView);
+    _tableCellFlags.usingDefaultSelectedBackgroundView = YES;
+    UITableViewCellSelectedBackgroundView* selectedBackgroundView = [[UITableViewCellSelectedBackgroundView alloc] init];
+    selectedBackgroundView.selectionStyle = self.selectionStyle;
+    _selectedBackgroundView = selectedBackgroundView;
 }
 
 @end

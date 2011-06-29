@@ -102,6 +102,7 @@ typedef NSUInteger UITableViewCellStateMask;
     CGFloat _indentationWidth;
     struct {
         NSUInteger tableViewStyleIsGrouped : 1;
+        NSUInteger usingDefaultSelectedBackgroundView : 1;
     } _tableCellFlags;
 }
 
