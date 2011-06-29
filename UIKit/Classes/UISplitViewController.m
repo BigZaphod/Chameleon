@@ -51,8 +51,8 @@ static const CGFloat SplitterPadding = 3;
 - (id)initWithFrame:(CGRect)frame
 {
     if ((self=[super initWithFrame:frame])) {
-        leftPanel = [[UIView alloc] initWithFrame:CGRectMake(0,0,320,frame.size.height)];
-        rightPanel = [[UIView alloc] initWithFrame:CGRectMake(321,0,MAX(0,frame.size.width-321),frame.size.height)];
+        leftPanel = [(UIView *)[UIView alloc] initWithFrame:CGRectMake(0,0,320,frame.size.height)];
+        rightPanel = [(UIView *)[UIView alloc] initWithFrame:CGRectMake(321,0,MAX(0,frame.size.width-321),frame.size.height)];
         leftPanel.clipsToBounds = rightPanel.clipsToBounds = YES;
         leftPanel.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         rightPanel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -201,7 +201,7 @@ static const CGFloat SplitterPadding = 3;
 
 - (void)loadView
 {
-    self.view = [[[_UISplitViewControllerView alloc] initWithFrame:CGRectMake(0,0,1024,768)] autorelease];
+    self.view = [[(_UISplitViewControllerView *)[_UISplitViewControllerView alloc] initWithFrame:CGRectMake(0,0,1024,768)] autorelease];
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 

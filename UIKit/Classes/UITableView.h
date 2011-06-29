@@ -40,6 +40,7 @@ extern NSString *const UITableViewIndexSearch;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)tableView:(UITableView *)tableView didDoubleClickRowAtIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath;
 
@@ -62,8 +63,8 @@ extern NSString *const UITableViewIndexSearch;
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section;
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath;
 @end
 
 typedef enum {
@@ -116,19 +117,20 @@ typedef enum {
         BOOL viewForFooterInSection : 1;
         BOOL willSelectRowAtIndexPath : 1;
         BOOL didSelectRowAtIndexPath : 1;
+		BOOL didDoubleClickRowAtIndexPath: 1;
         BOOL willDeselectRowAtIndexPath : 1;
         BOOL didDeselectRowAtIndexPath : 1;
-        BOOL willBeginEditingRowAtIndexPath : 1;
-        BOOL didEndEditingRowAtIndexPath : 1;
-        BOOL titleForDeleteConfirmationButtonForRowAtIndexPath: 1;
+		BOOL willBeginEditingRowAtIndexPath : 1;
+		BOOL didEndEditingRowAtIndexPath : 1;
+		BOOL titleForDeleteConfirmationButtonForRowAtIndexPath : 1;
     } _delegateHas;
     
     struct {
         BOOL numberOfSectionsInTableView : 1;
         BOOL titleForHeaderInSection : 1;
         BOOL titleForFooterInSection : 1;
-        BOOL commitEditingStyle : 1;
-        BOOL canEditRowAtIndexPath : 1;
+		BOOL commitEditingStyle : 1;
+		BOOL canEditRowAtIndexPath : 1;
     } _dataSourceHas;
 }
 

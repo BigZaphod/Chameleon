@@ -39,11 +39,26 @@
 
 - (void)dealloc
 {
+	if(rowHeights != NULL) free(rowHeights);
     [headerView release];
     [footerView release];
-    [rowHeights release];
     [headerTitle release];
     [footerTitle release];
     [super dealloc];
 }
+
+- (void)finalize {
+	if(rowHeights != NULL) free(rowHeights);
+	[super finalize];
+}
+
+- (void)setRowHeights:(CGFloat *)newHeights {
+	if(rowHeights != NULL) {
+		free(rowHeights);
+		rowHeights = NULL;
+	}
+	
+	rowHeights = newHeights;
+}
+
 @end

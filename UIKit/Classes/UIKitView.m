@@ -90,6 +90,14 @@
     [_screen _setUIKitView:self.superview? self : nil];
 }
 
+- (void)viewDidMoveToWindow {
+	if(self.window != nil) {
+		[[self layer] insertSublayer:[_screen _layer] atIndex:0];
+		[_screen _layer].frame = [self layer].bounds;
+		[_screen _layer].autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
+	}
+}
+
 - (BOOL)acceptsFirstResponder
 {
     // only accept first responder status if something else within our view isn't already the first responder

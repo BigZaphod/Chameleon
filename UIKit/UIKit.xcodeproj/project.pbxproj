@@ -259,6 +259,12 @@
 		78CB48DA133AB922008636DA /* UISlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CB48D8133AB920008636DA /* UISlider.m */; };
 		78D533DD133A9434006F17CA /* UISearchDisplayController.h in Headers */ = {isa = PBXBuildFile; fileRef = 78D533DB133A9434006F17CA /* UISearchDisplayController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		78D533DE133A9434006F17CA /* UISearchDisplayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D533DC133A9434006F17CA /* UISearchDisplayController.m */; };
+		882B8EF6136636C8002E8F21 /* UISearchField.h in Headers */ = {isa = PBXBuildFile; fileRef = 882B8EF4136636C8002E8F21 /* UISearchField.h */; };
+		882B8EF7136636C8002E8F21 /* UISearchField.m in Sources */ = {isa = PBXBuildFile; fileRef = 882B8EF5136636C8002E8F21 /* UISearchField.m */; };
+		882C32C61368DD03007B6E4B /* <UISearchBar> search-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 882C32C51368DD03007B6E4B /* <UISearchBar> search-icon.png */; };
+		8842BC771387316400D148FF /* UIGradient.h in Headers */ = {isa = PBXBuildFile; fileRef = 8842BC751387316400D148FF /* UIGradient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8842BC781387316400D148FF /* UIGradient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8842BC761387316400D148FF /* UIGradient.m */; };
+		88D0B2A613674EF2008A073F /* <UITextField> roundedRectBackgroundImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 88D0B2A513674EF2008A073F /* <UITextField> roundedRectBackgroundImage.png */; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -519,6 +525,12 @@
 		78CB48D8133AB920008636DA /* UISlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISlider.m; sourceTree = "<group>"; };
 		78D533DB133A9434006F17CA /* UISearchDisplayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISearchDisplayController.h; sourceTree = "<group>"; };
 		78D533DC133A9434006F17CA /* UISearchDisplayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISearchDisplayController.m; sourceTree = "<group>"; };
+		882B8EF4136636C8002E8F21 /* UISearchField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISearchField.h; sourceTree = "<group>"; };
+		882B8EF5136636C8002E8F21 /* UISearchField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISearchField.m; sourceTree = "<group>"; };
+		882C32C51368DD03007B6E4B /* <UISearchBar> search-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UISearchBar> search-icon.png"; path = "Resources/<UISearchBar> search-icon.png"; sourceTree = "<group>"; };
+		8842BC751387316400D148FF /* UIGradient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIGradient.h; sourceTree = "<group>"; };
+		8842BC761387316400D148FF /* UIGradient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIGradient.m; sourceTree = "<group>"; };
+		88D0B2A513674EF2008A073F /* <UITextField> roundedRectBackgroundImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITextField> roundedRectBackgroundImage.png"; path = "Resources/<UITextField> roundedRectBackgroundImage.png"; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* UIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -592,6 +604,8 @@
 				14CC842D11EFA8BA005988CC /* <UIRoundedRectButton> highlighted.png */,
 				14CC842E11EFA8BA005988CC /* <UIRoundedRectButton> normal.png */,
 				14CC842F11EFA8BA005988CC /* <UIScreen> grabber.png */,
+				882C32C51368DD03007B6E4B /* <UISearchBar> search-icon.png */,
+				88D0B2A513674EF2008A073F /* <UITextField> roundedRectBackgroundImage.png */,
 				14DD1C341289B4D500DCF231 /* <UIToolbar> button-highlighted.png */,
 				14DD1C351289B4D500DCF231 /* <UIToolbar> button.png */,
 				8DC2EF5A0486A6940098B216 /* Info.plist */,
@@ -656,6 +670,8 @@
 				1489851112EE2CFE003D4751 /* UIGestureRecognizer.h */,
 				1489851212EE2CFE003D4751 /* UIGestureRecognizer.m */,
 				149148BA12EE45ED00F7C34E /* UIGestureRecognizerSubclass.h */,
+				8842BC751387316400D148FF /* UIGradient.h */,
+				8842BC761387316400D148FF /* UIGradient.m */,
 				1489851312EE2CFE003D4751 /* UIGraphics.h */,
 				1489851412EE2CFE003D4751 /* UIGraphics.m */,
 				1489851512EE2CFE003D4751 /* UIImage.h */,
@@ -722,6 +738,8 @@
 				78CB48AB133A9C51008636DA /* UISearchBar.m */,
 				78D533DB133A9434006F17CA /* UISearchDisplayController.h */,
 				78D533DC133A9434006F17CA /* UISearchDisplayController.m */,
+				882B8EF4136636C8002E8F21 /* UISearchField.h */,
+				882B8EF5136636C8002E8F21 /* UISearchField.m */,
 				78CB48B2133AA8AF008636DA /* UISegmentedControl.h */,
 				78CB48B3133AA8AF008636DA /* UISegmentedControl.m */,
 				78CB48D7133AB91E008636DA /* UISlider.h */,
@@ -1001,6 +1019,8 @@
 				537472D5133ADD4B00EBD5EA /* UIInterface.h in Headers */,
 				14D8D941135DE90A00FE639A /* UIInputController.h in Headers */,
 				14541DB21360D6F300C1006D /* UIPhotosAlbum.h in Headers */,
+				882B8EF6136636C8002E8F21 /* UISearchField.h in Headers */,
+				8842BC771387316400D148FF /* UIGradient.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1070,6 +1090,8 @@
 				14F0BC0E1288A67F00BA54F9 /* <UIBarButtonSystemItem> reply.png in Resources */,
 				14DD1C361289B4D500DCF231 /* <UIToolbar> button-highlighted.png in Resources */,
 				14DD1C371289B4D500DCF231 /* <UIToolbar> button.png in Resources */,
+				88D0B2A613674EF2008A073F /* <UITextField> roundedRectBackgroundImage.png in Resources */,
+				882C32C61368DD03007B6E4B /* <UISearchBar> search-icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1182,6 +1204,8 @@
 				537472D6133ADD4B00EBD5EA /* UIInterface.m in Sources */,
 				14D8D942135DE90A00FE639A /* UIInputController.m in Sources */,
 				14541DB31360D6F300C1006D /* UIPhotosAlbum.m in Sources */,
+				882B8EF7136636C8002E8F21 /* UISearchField.m in Sources */,
+				8842BC781387316400D148FF /* UIGradient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1202,10 +1226,11 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = UIKit_Prefix.pch;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = UIKit;
-				SYMROOT = ../build;
+				SYMROOT = "$(PROJECT_DIR)/../../build";
 				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = framework;
 			};
@@ -1222,10 +1247,11 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = UIKit_Prefix.pch;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = UIKit;
-				SYMROOT = ../build;
+				SYMROOT = "$(PROJECT_DIR)/../../build";
 				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = framework;
 			};
@@ -1236,12 +1262,14 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_GC = supported;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx10.6;
+				SYMROOT = "$(PROJECT_DIR)/../../build";
 			};
 			name = Debug;
 		};
@@ -1250,10 +1278,12 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_GC = supported;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx10.6;
+				SYMROOT = "$(PROJECT_DIR)/../../build";
 			};
 			name = Release;
 		};

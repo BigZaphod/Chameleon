@@ -57,6 +57,7 @@ typedef enum {
     NSMutableDictionary *_content;
     UIImage *_adjustedHighlightImage;
     UIImage *_adjustedDisabledImage;
+	CGSize originalShadowOffset;
 }
 
 + (id)buttonWithType:(UIButtonType)buttonType;

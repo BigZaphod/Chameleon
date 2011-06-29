@@ -31,12 +31,14 @@
 #import "UIColor.h"
 #import "UIFont.h"
 #import "UIGraphics.h"
+#import <AppKit/NSStringDrawing.h>
 
 @implementation UILabel
 @synthesize text=_text, font=_font, textColor=_textColor, textAlignment=_textAlignment, lineBreakMode=_lineBreakMode, enabled=_enabled;
 @synthesize numberOfLines=_numberOfLines, shadowColor=_shadowColor, shadowOffset=_shadowOffset;
 @synthesize baselineAdjustment=_baselineAdjustment, adjustsFontSizeToFitWidth=_adjustsFontSizeToFitWidth;
 @synthesize highlightedTextColor=_highlightedTextColor, minimumFontSize=_minimumFontSize, highlighted=_highlighted;
+@synthesize attributedText=_attributedText;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -199,7 +201,9 @@
         [self drawTextInRect:drawRect];
         
         CGContextRestoreGState(UIGraphicsGetCurrentContext());
-    }
+    } else if(self.attributedText.length > 0) {
+		[self.attributedText drawInRect:NSRectFromCGRect(self.bounds)];
+	}
 }
 
 - (void)setFrame:(CGRect)newFrame

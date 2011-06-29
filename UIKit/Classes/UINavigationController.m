@@ -111,7 +111,7 @@ static const CGFloat ToolbarHeight = 28;
 
 - (void)loadView
 {
-    self.view = [[[UIView alloc] initWithFrame:CGRectMake(0,0,320,480)] autorelease];
+    self.view = [[(UIView *)[UIView alloc] initWithFrame:CGRectMake(0,0,320,480)] autorelease];
     self.view.clipsToBounds = YES;
     
     UIViewController *topViewController = self.topViewController;

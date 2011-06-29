@@ -461,10 +461,7 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
     // need to scroll.
     if (self.scrollEnabled && ((delta.x && self._canScrollHorizontal) || (delta.y && self._canScrollVertical))) {
         [self _delegateDraggingDidBegin];
-        CGPoint offset = self.contentOffset;
-        offset.x += delta.x;
-        offset.y += delta.y;
-        self.contentOffset = offset;
+        [self _scrollContentOffsetBy:delta withAnimationDuration:0.1];
         [self _quickFlashScrollIndicators];
     } else {
         [super scrollWheelMoved:delta withEvent:event];

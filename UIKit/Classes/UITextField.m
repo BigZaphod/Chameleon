@@ -32,6 +32,9 @@
 #import "UIColor.h"
 #import "UIFont.h"
 #import "UIImage.h"
+#import "UIImage+UIPrivate.h"
+#import "UIBezierPath.h"
+#import "UIGraphics.h"
 
 NSString *const UITextFieldTextDidBeginEditingNotification = @"UITextFieldTextDidBeginEditingNotification";
 NSString *const UITextFieldTextDidChangeNotification = @"UITextFieldTextDidChangeNotification";
@@ -46,15 +49,19 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 @implementation UITextField
 @synthesize delegate=_delegate, background=_background, disabledBackground=_disabledBackground, editing=_editing, clearsOnBeginEditing=_clearsOnBeginEditing;
 @synthesize adjustsFontSizeToFitWidth=_adjustsFontSizeToFitWidth, clearButtonMode=_clearButtonMode, leftView=_leftView, rightView=_rightView;
-@synthesize leftViewMode=_leftViewMode, rightViewMode=_rightViewMode, placeholder=_placeholder, borderStyle=_borderStyle;
+@synthesize leftViewMode=_leftViewMode, rightViewMode=_rightViewMode, borderStyle=_borderStyle;
 @synthesize inputAccessoryView=_inputAccessoryView, inputView=_inputView;
 
 - (id)initWithFrame:(CGRect)frame
 {
     if ((self=[super initWithFrame:frame])) {
+		_placeholderTextLayer = [[UITextLayer alloc] initWithContainer:self isField:NO];
+		_placeholderTextLayer.textColor = [UIColor colorWithWhite:0.6f alpha:1.0f];
+        [self.layer addSublayer:_placeholderTextLayer];
+		
         _textLayer = [[UITextLayer alloc] initWithContainer:self isField:YES];
-        [self.layer insertSublayer:_textLayer atIndex:0];
-
+		[self.layer addSublayer:_textLayer];
+		
         self.textAlignment = UITextAlignmentLeft;
         self.font = [UIFont systemFontOfSize:17];
         self.borderStyle = UITextBorderStyleNone;
@@ -69,6 +76,8 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
 - (void)dealloc
 {
+	[_placeholderTextLayer removeFromSuperlayer];
+	[_placeholderTextLayer release];
     [_textLayer removeFromSuperlayer];
     [_textLayer release];
     [_leftView release];
@@ -100,6 +109,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     [super layoutSubviews];
     const CGRect bounds = self.bounds;
     _textLayer.frame = [self textRectForBounds:bounds];
+	_placeholderTextLayer.frame = [self textRectForBounds:bounds];
 
     if ([self _isLeftViewVisible]) {
         _leftView.hidden = NO;
@@ -124,19 +134,20 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
         _delegateHas.didBeginEditing = [_delegate respondsToSelector:@selector(textFieldDidBeginEditing:)];
         _delegateHas.shouldEndEditing = [_delegate respondsToSelector:@selector(textFieldShouldEndEditing:)];
         _delegateHas.didEndEditing = [_delegate respondsToSelector:@selector(textFieldDidEndEditing:)];
-        _delegateHas.shouldChangeCharacters = [_delegate respondsToSelector:@selector(textField:shouldChangeCharactersInRange:replacementText:)];
+        _delegateHas.shouldChangeCharacters = [_delegate respondsToSelector:@selector(textField:shouldChangeCharactersInRange:replacementString:)];
         _delegateHas.shouldClear = [_delegate respondsToSelector:@selector(textFieldShouldClear:)];
         _delegateHas.shouldReturn = [_delegate respondsToSelector:@selector(textFieldShouldReturn:)];
+		_delegateHas.doCommandBySelector = [_delegate respondsToSelector:@selector(textField:doCommandBySelector:)];
     }
 }
 
 - (void)setPlaceholder:(NSString *)thePlaceholder
 {
-    if (![thePlaceholder isEqualToString:_placeholder]) {
-        [_placeholder release];
-        _placeholder = [thePlaceholder copy];
-        [self setNeedsDisplay];
-    }
+    _placeholderTextLayer.text = thePlaceholder;
+}
+
+- (NSString *)placeholder {
+	return _placeholderTextLayer.text;
 }
 
 - (void)setBorderStyle:(UITextBorderStyle)style
@@ -196,7 +207,14 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
 - (CGRect)borderRectForBounds:(CGRect)bounds
 {
-    return bounds;
+	CGRect borderRect = bounds;
+	
+	if(self.borderStyle == UITextBorderStyleRoundedRect) {
+		UIImage *image = [UIImage _textFieldRoundedRectBackground];
+		borderRect = CGRectMake(4.0f, self.bounds.size.height/2 - image.size.height/2, self.bounds.size.width - 8.0f, image.size.height);
+	}
+	
+    return CGRectIntegral(borderRect);
 }
 
 - (CGRect)clearButtonRectForBounds:(CGRect)bounds
@@ -212,7 +230,13 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (CGRect)leftViewRectForBounds:(CGRect)bounds
 {
     const CGRect frame = _leftView.frame;
-    bounds.origin.x = 0;
+    bounds.origin.x = [self borderRectForBounds:bounds].origin.x;
+	
+	if(self.borderStyle == UITextBorderStyleRoundedRect) {
+		bounds.origin.x += 6.0f;
+		bounds.origin.y -= 3.0f;
+	}
+	
     bounds.origin.y = (bounds.size.height / 2.f) - (frame.size.height/2.f);
     bounds.size = frame.size;
     return CGRectIntegral(bounds);
@@ -250,8 +274,14 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     
     if (_borderStyle != UITextBorderStyleNone) {
         textRect = [self borderRectForBounds:bounds];
-        // TODO: inset the bounds based on border types...
-    }
+		if(self.borderStyle == UITextBorderStyleRoundedRect) {
+			textRect = CGRectOffset(CGRectInset(textRect, 2.0f, 2.0f), 4.0f, 1.0f);
+		} else if(self.borderStyle == UITextBorderStyleBezel) {
+			textRect = CGRectOffset(CGRectInset(textRect, 2.0f, 2.0f), 2.0f, 3.0f);
+		} else if(self.borderStyle == UITextBorderStyleLine) {
+//			textRect = CGRectOffset(CGRectInset(textRect, 2.0f, 2.0f), 2.0f, 3.0f);
+		}
+	}
     
     // Going to go ahead and assume that the left view is on the left, the right view is on the right, and there's space between..
     // I imagine this is a dangerous assumption...
@@ -271,7 +301,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
         }
     }
     
-    return CGRectIntegral(bounds);
+    return CGRectIntegral(textRect);
 }
 
 
@@ -286,8 +316,66 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
 - (void)drawRect:(CGRect)rect
 {
-    UIImage *background = self.enabled? _background : _disabledBackground;
-    [background drawInRect:self.bounds];
+    UIImage *currentBackgroundImage = nil;
+	if(self.borderStyle == UITextBorderStyleRoundedRect) {
+		currentBackgroundImage = [UIImage _textFieldRoundedRectBackground];
+	} else {
+		currentBackgroundImage = self.enabled? _background : _disabledBackground;
+	}
+	
+	CGRect borderFrame = [self borderRectForBounds:self.bounds];
+	if(currentBackgroundImage != nil) {
+		[currentBackgroundImage drawInRect:borderFrame];
+	} else {
+		CGContextRef context = UIGraphicsGetCurrentContext();
+		
+		// TODO: draw the appropriate background for the borderStyle
+		
+		if(self.borderStyle == UITextBorderStyleBezel) {
+			// bottom white highlight
+			CGRect hightlightFrame = CGRectMake(0.0, 10.0, borderFrame.size.width, borderFrame.size.height-10.0);
+			[[UIColor colorWithWhite:1.0 alpha:1.0] set];
+			[[UIBezierPath bezierPathWithRoundedRect:hightlightFrame cornerRadius:3.6] fill];
+			
+			// top white highlight
+			CGRect topHightlightFrame = CGRectMake(0.0, 0.0, borderFrame.size.width, borderFrame.size.height-10.0);
+			[[UIColor colorWithWhite:0.7f alpha:1.0] set];
+			[[UIBezierPath bezierPathWithRoundedRect:topHightlightFrame cornerRadius:3.6] fill];
+			
+			// black outline
+			CGRect blackOutlineFrame = CGRectMake(0.0, 1.0, borderFrame.size.width, borderFrame.size.height-2.0);
+			
+			CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+			CGFloat locations[] = { 1.0f, 0.0f };
+			CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef) [NSArray arrayWithObjects:(id) [UIColor colorWithWhite:0.5 alpha:1.0].CGColor, (id) [UIColor colorWithWhite:0.65 alpha:1.0].CGColor, nil], locations);
+			
+			CGContextSaveGState(context);
+			CGContextAddPath(context, [UIBezierPath bezierPathWithRoundedRect:blackOutlineFrame cornerRadius:3.6f].CGPath);
+			CGContextClip(context);
+			
+			CGContextDrawLinearGradient(context, gradient, CGPointMake(0.0f, CGRectGetMinY(blackOutlineFrame)), CGPointMake(0.0f, CGRectGetMaxY(blackOutlineFrame)), 0);
+			CFRelease(colorSpace);
+			CFRelease(gradient);
+			
+			CGContextRestoreGState(context);
+						
+			// top inner shadow
+			CGRect shadowFrame = CGRectMake(1, 2, borderFrame.size.width-2.0, 10.0);
+			[[UIColor colorWithWhite:0.88 alpha:1.0] set];
+			[[UIBezierPath bezierPathWithRoundedRect:shadowFrame cornerRadius:2.9] fill];	
+			
+			// main white area
+			CGRect whiteFrame = CGRectMake(1, 3, borderFrame.size.width-2.0, borderFrame.size.height-5.0);
+			[[UIColor whiteColor] set];
+			[[UIBezierPath bezierPathWithRoundedRect:whiteFrame cornerRadius:2.6] fill];
+		} else if(self.borderStyle == UITextBorderStyleLine) {
+			[[UIColor colorWithWhite:0.1f alpha:0.8f] set];
+			CGContextStrokeRect(context, borderFrame);
+			
+			[[UIColor colorWithWhite:1.0f alpha:1.0f] set];
+			CGContextFillRect(context, CGRectInset(borderFrame, 1.0f, 1.0f));
+		}
+	}
 }
 
 
@@ -364,6 +452,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (BOOL)becomeFirstResponder
 {
     if ([super becomeFirstResponder]) {
+		_placeholderTextLayer.hidden = YES;
         return [_textLayer becomeFirstResponder];
     } else {
         return NO;
@@ -387,6 +476,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (void)setFont:(UIFont *)newFont
 {
     _textLayer.font = newFont;
+	_placeholderTextLayer.font = newFont;
 }
 
 - (UIColor *)textColor
@@ -407,6 +497,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (void)setTextAlignment:(UITextAlignment)textAlignment
 {
     _textLayer.textAlignment = textAlignment;
+	_placeholderTextLayer.textAlignment = textAlignment;
 }
 
 - (NSString *)text
@@ -417,6 +508,9 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (void)setText:(NSString *)newText
 {
     _textLayer.text = newText;
+	
+	_placeholderTextLayer.hidden = _textLayer.text.length > 0 || _editing;
+	_textLayer.hidden = !_placeholderTextLayer.hidden;
 }
 
 - (BOOL)_textShouldBeginEditing
@@ -438,6 +532,8 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
         //self.text = @"";
         [self performSelector:@selector(setText:) withObject:@"" afterDelay:0];
     }
+	
+	_placeholderTextLayer.hidden = YES;
     
     _editing = YES;
     [self setNeedsDisplay];
@@ -456,10 +552,13 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
 - (void)_textDidEndEditing
 {
+	_placeholderTextLayer.hidden = _textLayer.text.length > 0;
+	_textLayer.hidden = !_placeholderTextLayer.hidden;
+	
     _editing = NO;
     [self setNeedsDisplay];
     [self setNeedsLayout];
-
+	
     if (_delegateHas.didEndEditing) {
         [_delegate textFieldDidEndEditing:self];
     }
@@ -481,6 +580,19 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     if (_delegateHas.shouldReturn) {
         [_delegate textFieldShouldReturn:self];
     }
+}
+
+- (BOOL)_textShouldDoCommandBySelector:(SEL)selector {
+	if(_delegateHas.doCommandBySelector) {
+		return [self.delegate textField:self doCommandBySelector:selector];
+	} else {
+		if(selector == @selector(insertNewline:) || selector == @selector(insertNewlineIgnoringFieldEditor:)) {
+			[self _textDidReceiveReturnKey];
+			return YES;
+		}
+	}
+	
+	return NO;
 }
 
 - (NSString *)description

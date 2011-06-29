@@ -83,8 +83,6 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
         [self setAutomaticDataDetectionEnabled:NO];
         [self setSecureTextEntry:isSecure];
         
-        [self setLayerContentsPlacement:NSViewLayerContentsPlacementTopLeft];
-        
         // this is for a spell checking hack.. see below
         [[self layoutManager] setDelegate:self];
     }
@@ -198,7 +196,10 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 
 - (BOOL)becomeFirstResponder
 {
-    return [[self delegate] textViewBecomeFirstResponder:self];
+	isBecomingFirstResponder = YES;
+    BOOL result = [[self delegate] textViewBecomeFirstResponder:self];
+	isBecomingFirstResponder = NO;
+	return result;
 }
 
 - (BOOL)reallyBecomeFirstResponder
@@ -208,6 +209,8 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 
 - (BOOL)resignFirstResponder
 {
+	if(isBecomingFirstResponder) return NO;
+	
     return [[self delegate] textViewResignFirstResponder:self];
 }
 
@@ -342,8 +345,8 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
     // and layered on top of other views. It therefore cannot properly do subpixel rendering and the smoothing ends up looking like crap. Turning
     // the smoothing off is not as nice as properly smoothed text, of course, but at least its sorta readable. Yet another case of crap layer
     // support making things difficult. Amazingly, iOS fonts look fine when rendered without subpixel smoothing. Why?!
-    CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
-    CGContextSetShouldSmoothFonts(ctx, NO);
+    CGContextRef c = [[NSGraphicsContext currentContext] graphicsPort];
+    CGContextSetShouldSmoothFonts(c, NO);
     
     [super drawRect:rect];
     [self drawFakeSpellingUnderlinesInRect:rect];

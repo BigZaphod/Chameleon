@@ -46,7 +46,7 @@
         [_webView setUIDelegate:self];
         [_webView setDrawsBackground:NO];
 
-        _webViewAdapter = [[UIViewAdapter alloc] initWithFrame:self.bounds];
+        _webViewAdapter = [(UIViewAdapter *)[UIViewAdapter alloc] initWithFrame:self.bounds];
         _webViewAdapter.NSView = _webView;
         _webViewAdapter.scrollEnabled = NO;		// WebView does its own scrolling :/
         

@@ -149,6 +149,14 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
     _titleLabel.text = [self titleForState:state];
     _titleLabel.textColor = [self titleColorForState:state] ?: [self _defaultTitleColor];
     _titleLabel.shadowColor = [self titleShadowColorForState:state] ?: [self _defaultTitleShadowColor];
+	
+	if(self.reversesTitleShadowWhenHighlighted) {
+		if(!self.highlighted && CGSizeEqualToSize(originalShadowOffset, CGSizeZero)) {
+			originalShadowOffset = self.titleLabel.shadowOffset;
+		}
+		
+		self.titleLabel.shadowOffset = CGSizeMake(self.titleLabel.shadowOffset.width, self.highlighted ? -originalShadowOffset.height : originalShadowOffset.height);
+	}
     
     UIImage *image = [self _contentForState:state type:UIButtonContentTypeImage];
     UIImage *backgroundImage = [self _contentForState:state type:UIButtonContentTypeBackgroundImage];
@@ -366,6 +374,14 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
     _backgroundImageView.frame = [self backgroundRectForBounds:bounds];
     _titleLabel.frame = [self titleRectForContentRect:contentRect];
     _imageView.frame = [self imageRectForContentRect:contentRect];
+}
+
+- (void)_stateWillChange {
+	[super _stateWillChange];
+	
+	if(!self.highlighted) {
+		originalShadowOffset = self.titleLabel.shadowOffset;
+	}
 }
 
 - (void)_stateDidChange

@@ -48,6 +48,7 @@ NSMutableArray *_allScreens = nil;
 
 @implementation UIScreen
 @synthesize currentMode=_currentMode;
+@synthesize UIKitView=_UIKitView;
 
 + (void)initialize
 {

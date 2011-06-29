@@ -53,5 +53,6 @@ extern NSString *const UIScreenModeDidChangeNotification;
 @property (nonatomic, readonly, copy) NSArray *availableModes;	// only ever returns the currentMode
 @property (nonatomic, retain) UIScreenMode *currentMode;		// ignores any attempt to set this (for now)
 @property (nonatomic, readonly) CGFloat scale;					// always returns 1 for now
+@property (nonatomic, readonly) __weak UIKitView *UIKitView;
 
 @end

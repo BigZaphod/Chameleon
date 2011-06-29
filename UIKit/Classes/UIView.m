@@ -37,6 +37,7 @@
 #import "UIViewController.h"
 #import "UIApplication+UIPrivate.h"
 #import "UIGestureRecognizer+UIPrivate.h"
+#import "UIScreen.h"
 #import <QuartzCore/CALayer.h>
 
 NSString *const UIViewFrameDidChangeNotification = @"UIViewFrameDidChangeNotification";
@@ -51,6 +52,7 @@ static BOOL _animationsEnabled = YES;
 @synthesize layer=_layer, superview=_superview, clearsContextBeforeDrawing=_clearsContextBeforeDrawing, autoresizesSubviews=_autoresizesSubviews;
 @synthesize tag=_tag, userInteractionEnabled=_userInteractionEnabled, contentMode=_contentMode, backgroundColor=_backgroundColor;
 @synthesize multipleTouchEnabled=_multipleTouchEnabled, exclusiveTouch=_exclusiveTouch, autoresizingMask=_autoresizingMask;
+@synthesize toolTip=_toolTip;
 
 + (void)initialize
 {
@@ -170,7 +172,7 @@ static BOOL _animationsEnabled = YES;
 {
     if (fromWindow != toWindow) {
         [self didMoveToWindow];
-
+		
         for (UIView *subview in self.subviews) {
             [subview _didMoveFromWindow:fromWindow toWindow:toWindow];
         }
@@ -200,7 +202,7 @@ static BOOL _animationsEnabled = YES;
         
         subview->_needsDidAppearOrDisappear = [self _subviewControllersNeedAppearAndDisappear];
         
-        if ([subview _viewController] && subview->_needsDidAppearOrDisappear) {
+        if ([subview _viewController] && subview->_needsDidAppearOrDisappear && !_suppressAppearanceEvents) {
             [[subview _viewController] viewWillAppear:NO];
         }
 
@@ -231,7 +233,7 @@ static BOOL _animationsEnabled = YES;
 
         [self didAddSubview:subview];
         
-        if ([subview _viewController] && subview->_needsDidAppearOrDisappear) {
+        if ([subview _viewController] && subview->_needsDidAppearOrDisappear && !_suppressAppearanceEvents) {
             [[subview _viewController] viewDidAppear:NO];
         }
     }
@@ -280,7 +282,7 @@ static BOOL _animationsEnabled = YES;
 {
     if (_superview) {
         [self retain];
-        
+				        
         [[UIApplication sharedApplication] _cancelTouchesInView:self];
         
         UIWindow *oldWindow = self.window;
@@ -534,21 +536,8 @@ static BOOL _animationsEnabled = YES;
      with straight ports but at this point I really can't come up with a much better solution so it'll have to do.
      */
     
-    /*
-     UPDATE AGAIN: So, subpixel with light text against a dark background looks kinda crap and we can't seem to figure out how
-     to make it not-crap right now. After messing with some fonts and things, we're currently turning subpixel off again instead.
-     I have a feeling this may go round and round forever because some people can't stand subpixel and others can't stand not
-     having it - even when its light-on-dark. We could turn it on here and selectively disable it in Twitterrific when using the
-     dark theme, but that seems weird, too. We'd all rather there be just one approach here and skipping smoothing at least means
-     that the whole app is consistent (views that aren't flattened won't look any different from the flattened views in terms of
-     text rendering, at least). Bah.
-     */
-
-    //const BOOL shouldSmoothFonts = (_backgroundColor && (CGColorGetAlpha(_backgroundColor.CGColor) == 1)) || self.opaque;
-    //CGContextSetShouldSmoothFonts(ctx, shouldSmoothFonts);
-
-    CGContextSetShouldSmoothFonts(ctx, NO);
-
+    const BOOL shouldSmoothFonts = (_backgroundColor && (CGColorGetAlpha(_backgroundColor.CGColor) == 1)) || self.opaque;
+    CGContextSetShouldSmoothFonts(ctx, shouldSmoothFonts);
     CGContextSetShouldSubpixelPositionFonts(ctx, YES);
     CGContextSetShouldSubpixelQuantizeFonts(ctx, YES);
     
@@ -902,6 +891,10 @@ static BOOL _animationsEnabled = YES;
     return [_gestureRecognizers allObjects];
 }
 
+- (void)_setSuppressAppearanceEvents:(BOOL)suppress {
+	_suppressAppearanceEvents = suppress;
+}
+
 + (void)animateWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
 {
     const BOOL ignoreInteractionEvents = !((options & UIViewAnimationOptionAllowUserInteraction) == UIViewAnimationOptionAllowUserInteraction);
@@ -986,7 +979,7 @@ static BOOL _animationsEnabled = YES;
 
 + (void)setAnimationCurve:(UIViewAnimationCurve)curve
 {
-    [[_animationGroups lastObject] setAnimationCurve:curve];
+    [(UIViewAnimationGroup *)[_animationGroups lastObject] setAnimationCurve:curve];
 }
 
 + (void)setAnimationDelay:(NSTimeInterval)delay

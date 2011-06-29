@@ -221,6 +221,11 @@
     _tracking = NO;
 }
 
+- (void)_stateWillChange
+{
+	
+}
+
 - (void)_stateDidChange
 {
     [self setNeedsDisplay];
@@ -230,6 +235,7 @@
 - (void)setEnabled:(BOOL)newEnabled
 {
     if (newEnabled != _enabled) {
+		[self _stateWillChange];
         _enabled = newEnabled;
         [self _stateDidChange];
         self.userInteractionEnabled = _enabled;
@@ -239,6 +245,7 @@
 - (void)setHighlighted:(BOOL)newHighlighted
 {
     if (newHighlighted != _highlighted) {
+		[self _stateWillChange];
         _highlighted = newHighlighted;
         [self _stateDidChange];
     }
@@ -247,6 +254,7 @@
 - (void)setSelected:(BOOL)newSelected
 {
     if (newSelected != _selected) {
+		[self _stateWillChange];
         _selected = newSelected;
         [self _stateDidChange];
     }
