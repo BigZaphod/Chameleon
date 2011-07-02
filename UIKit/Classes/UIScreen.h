@@ -40,9 +40,9 @@ extern NSString *const UIScreenModeDidChangeNotification;
 @private
     UIImageView *_grabber;
     CALayer *_layer;
-    __weak UIKitView *_UIKitView;
+    UIKitView *_UIKitView;
     UIScreenMode *_currentMode;
-    __weak UIPopoverController *_popoverController;
+    UIPopoverController *_popoverController;
 }
 
 + (UIScreen *)mainScreen;
@@ -53,6 +53,6 @@ extern NSString *const UIScreenModeDidChangeNotification;
 @property (nonatomic, readonly, copy) NSArray *availableModes;	// only ever returns the currentMode
 @property (nonatomic, retain) UIScreenMode *currentMode;		// ignores any attempt to set this (for now)
 @property (nonatomic, readonly) CGFloat scale;					// always returns 1 for now
-@property (nonatomic, readonly) __weak UIKitView *UIKitView;
+@property (nonatomic, readonly) UIKitView *UIKitView;
 
 @end

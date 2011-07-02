@@ -56,7 +56,7 @@ typedef enum {
     BOOL _cancelsTouchesInView;
     BOOL _enabled;
     UIGestureRecognizerState _state;
-    __weak UIView *_view;
+    UIView *_view;
     
     struct {
         BOOL shouldBegin : 1;
@@ -79,6 +79,6 @@ typedef enum {
 @property (nonatomic) BOOL cancelsTouchesInView;
 @property (nonatomic, getter=isEnabled) BOOL enabled;
 @property (nonatomic, readonly) UIGestureRecognizerState state;
-@property (nonatomic, readonly) __weak UIView *view;
+@property (nonatomic, readonly) UIView *view;
 
 @end

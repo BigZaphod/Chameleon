@@ -36,10 +36,10 @@
     UIImageView *_arrowView;
     UIView *_contentView;
     UIView *_contentContainerView;
-	__weak UIPopoverController *_popoverController;
+	UIPopoverController *_popoverController;
 }
 
-- (id)initWithContentView:(UIView *)aView size:(CGSize)aSize popoverController:(__weak UIPopoverController *)controller;
+- (id)initWithContentView:(UIView *)aView size:(CGSize)aSize popoverController:(UIPopoverController *)controller;
 
 - (void)pointTo:(CGPoint)point inView:(UIView *)view;
 - (void)setContentView:(UIView *)aView animated:(BOOL)animated;

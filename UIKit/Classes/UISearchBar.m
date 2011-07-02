@@ -109,7 +109,7 @@
 	_searchField.placeholder = placeholder;
 }
 
-- (void)setDelegate:(__weak id <UISearchBarDelegate>)newDelegate {
+- (void)setDelegate:(id <UISearchBarDelegate>)newDelegate {
 	_delegate = newDelegate;
 	
 	_delegateHas.shouldBeginEditing = [self.delegate respondsToSelector:@selector(searchBarShouldBeginEditing:)];

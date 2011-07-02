@@ -51,7 +51,7 @@ typedef enum {
 
 @interface UIActionSheet : UIView {
 @private
-    __weak id<UIActionSheetDelegate> _delegate;
+    id<UIActionSheetDelegate> _delegate;
     NSInteger _destructiveButtonIndex;
     NSInteger _cancelButtonIndex;
     NSInteger _firstOtherButtonIndex;
@@ -84,7 +84,7 @@ typedef enum {
 - (void)showFromBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated;
 
 @property (nonatomic, copy) NSString *title;
-@property (nonatomic, assign) __weak id<UIActionSheetDelegate> delegate;
+@property (nonatomic, assign) id<UIActionSheetDelegate> delegate;
 @property (nonatomic, assign) UIActionSheetStyle actionSheetStyle;
 @property (nonatomic, readonly, getter=isVisible) BOOL visible;
 @property (nonatomic) NSInteger destructiveButtonIndex;

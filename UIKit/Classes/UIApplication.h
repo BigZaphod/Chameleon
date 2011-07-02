@@ -98,7 +98,7 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
 @interface UIApplication : UIResponder {
 @private
     UIEvent *_currentEvent;
-    __weak UIWindow *_keyWindow;
+    UIWindow *_keyWindow;
     NSMutableSet *_visibleWindows;
     id<UIApplicationDelegate> _delegate;
     BOOL _idleTimerDisabled;
@@ -132,7 +132,7 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
 - (void)unregisterForRemoteNotifications;
 - (UIRemoteNotificationType)enabledRemoteNotificationTypes;
 
-@property (nonatomic, readonly) __weak UIWindow *keyWindow;
+@property (nonatomic, readonly) UIWindow *keyWindow;
 @property (nonatomic, readonly) NSArray *windows;
 @property (nonatomic, getter=isStatusBarHidden, readonly) BOOL statusBarHidden;
 @property (nonatomic, readonly) CGRect statusBarFrame;

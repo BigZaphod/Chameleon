@@ -101,7 +101,7 @@ typedef NSUInteger UIViewAnimationOptions;
 
 @interface UIView : UIResponder {
 @private
-    __weak UIView *_superview;
+    UIView *_superview;
     NSMutableSet *_subviews;
     BOOL _clearsContextBeforeDrawing;
     BOOL _autoresizesSubviews;
@@ -113,7 +113,7 @@ typedef NSUInteger UIViewAnimationOptions;
     BOOL _implementsDrawRect;
     BOOL _multipleTouchEnabled;
     BOOL _exclusiveTouch;
-    __weak UIViewController *_viewController;
+    UIViewController *_viewController;
     UIViewAutoresizing _autoresizingMask;
     BOOL _needsDidAppearOrDisappear;
     NSMutableSet *_gestureRecognizers;
@@ -185,7 +185,7 @@ typedef NSUInteger UIViewAnimationOptions;
 @property (nonatomic) CGRect bounds;
 @property (nonatomic) CGPoint center;
 @property (nonatomic) CGAffineTransform transform;
-@property (nonatomic, readonly) __weak UIView *superview;
+@property (nonatomic, readonly) UIView *superview;
 @property (nonatomic, readonly) UIWindow *window;
 @property (nonatomic, readonly) NSArray *subviews;
 @property (nonatomic) CGFloat alpha;

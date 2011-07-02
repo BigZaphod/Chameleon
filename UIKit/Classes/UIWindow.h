@@ -60,7 +60,7 @@ extern NSString *const UIKeyboardBoundsUserInfoKey;
 @interface UIWindow : UIView {
 @private
     UIScreen *_screen;
-    __weak UIResponder *_firstResponder;
+    UIResponder *_firstResponder;
     NSUndoManager *_undoManager;
 	UIView *_currentToolTipView;
 	UIView *_toolTipViewToShow;

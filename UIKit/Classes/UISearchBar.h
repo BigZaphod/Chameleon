@@ -42,7 +42,7 @@
 @interface UISearchBar : UIView {
     UISearchField *_searchField;
     BOOL _showsCancelButton;
-    __weak id<UISearchBarDelegate> _delegate;
+    id<UISearchBarDelegate> _delegate;
     NSString *_placeholder;
 	
 	struct {
@@ -61,7 +61,7 @@
 }
 
 @property (nonatomic, copy) NSString *text;
-@property (nonatomic,assign) __weak id<UISearchBarDelegate> delegate;
+@property (nonatomic,assign) id<UISearchBarDelegate> delegate;
 @property (nonatomic) BOOL showsCancelButton;
 @property (nonatomic,copy) NSString *placeholder;
 
