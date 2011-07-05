@@ -288,7 +288,7 @@ static BOOL TouchIsActive(UITouch *touch)
         // is the first UIResponder (including the UIControl itself) that responds to the action. It starts with the UIControl (sender) and not with
         // whatever UIResponder may have been set with becomeFirstResponder.
         
-        id responder = sender;
+        id responder = [_keyWindow _firstResponder] ?: sender;
         while (responder) {
             if ([responder respondsToSelector:action]) {
                 target = responder;
@@ -387,8 +387,7 @@ static BOOL TouchIsActive(UITouch *touch)
             UIEvent *event = [[[UIEvent alloc] initWithEventType:UIEventTypeKeyPress] autorelease];
             [event _setTimestamp:[theNSEvent timestamp]];
             
-            [firstResponder keyPressed:key withEvent:event];
-            return ![event _isUnhandledKeyPressEvent];
+            return [firstResponder keyPressed:key withEvent:event];
         }
     }
     

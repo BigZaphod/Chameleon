@@ -869,6 +869,10 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
     [self _endEditingRowAtIndexPath:indexPath];
 }
 
+- (BOOL)canBecomeFirstResponder {
+	return self.window != nil;
+}
+
 - (void)rightClick:(UITouch *)touch withEvent:(UIEvent *)event
 {
     CGPoint location = [touch locationInView:self];
@@ -880,54 +884,60 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
     }
 }
 
-- (void)keyPressed:(UIKey *)key withEvent:(UIEvent *)event {
+- (void) insertNewline:(id)sender
+{
 	NSIndexPath *indexPath = [self indexPathForSelectedRow];
-	
-	if(key.type == UIKeyTypeEnter || key.type == UIKeyTypeReturn) {
-		if(indexPath != nil) {
-			[self _selectRowAtIndexPath:indexPath sendDelegateMessages:YES animated:NO scrollPosition:UITableViewScrollPositionNone];
-		}
-	} else if(key.type == UIKeyTypeUpArrow) {
-		NSIndexPath *previousIndexPath = nil;
-		if(indexPath == nil) {
-			NSUInteger lastSection = [self numberOfSections] - 1;
-			previousIndexPath = [NSIndexPath indexPathForRow:[self numberOfRowsInSection:lastSection] - 1 inSection:lastSection];
-		} else if(indexPath.row > 0) {
-			previousIndexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
-		} else if(indexPath.section > 0) {
-			previousIndexPath = [NSIndexPath indexPathForRow:[self numberOfRowsInSection:indexPath.section - 1] inSection:indexPath.section - 1];
-		}
-		
-		if(previousIndexPath != nil) {
-			[self _selectRowAtIndexPath:previousIndexPath sendDelegateMessages:NO animated:NO scrollPosition:UITableViewScrollPositionNone];
-			[self scrollRectToVisible:[self rectForRowAtIndexPath:previousIndexPath] animated:YES];
-		}
-	} else if(key.type == UIKeyTypeDownArrow) {
-		NSUInteger numberOfRowsInSection = [self numberOfRowsInSection:indexPath.section];
-		NSIndexPath *nextIndexPath = nil;
-		if(indexPath == nil) {
-			nextIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-		} else if(indexPath.row < numberOfRowsInSection - 1) {
-			nextIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
-		} else if(indexPath.section < [self numberOfSections] - 1) {
-			nextIndexPath = [NSIndexPath indexPathForRow:0 inSection:indexPath.section + 1];
-		}
-		
-		if(nextIndexPath != nil) {
-			[self _selectRowAtIndexPath:nextIndexPath sendDelegateMessages:NO animated:NO scrollPosition:UITableViewScrollPositionNone];
-			[self scrollRectToVisible:[self rectForRowAtIndexPath:nextIndexPath] animated:YES];
-		}
-	} else if(key.type == UIKeyTypePageUp) {
-		[self scrollRectToVisible:CGRectMake(0.0f, MAX(self.contentOffset.y - self.bounds.size.height, 0), self.bounds.size.width, self.bounds.size.height) animated:YES];
-	} else if(key.type == UIKeyTypePageDown || [key.characters isEqualToString:@" "]) {
-		[self scrollRectToVisible:CGRectMake(0.0f, MIN(self.contentOffset.y + self.bounds.size.height, self.contentSize.height), self.bounds.size.width, self.bounds.size.height) animated:YES];
-	} else {
-		[super keyPressed:key withEvent:event];
-	}
+    if(indexPath != nil) {
+        [self _selectRowAtIndexPath:indexPath sendDelegateMessages:YES animated:NO scrollPosition:UITableViewScrollPositionNone];
+    }
 }
 
-- (BOOL)canBecomeFirstResponder {
-	return self.window != nil;
+- (void) moveUp:(id)sender
+{
+	NSIndexPath *indexPath = [self indexPathForSelectedRow];
+    NSIndexPath *previousIndexPath = nil;
+    if(indexPath == nil) {
+        NSUInteger lastSection = [self numberOfSections] - 1;
+        previousIndexPath = [NSIndexPath indexPathForRow:[self numberOfRowsInSection:lastSection] - 1 inSection:lastSection];
+    } else if(indexPath.row > 0) {
+        previousIndexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+    } else if(indexPath.section > 0) {
+        previousIndexPath = [NSIndexPath indexPathForRow:[self numberOfRowsInSection:indexPath.section - 1] inSection:indexPath.section - 1];
+    }
+    
+    if(previousIndexPath != nil) {
+        [self _selectRowAtIndexPath:previousIndexPath sendDelegateMessages:NO animated:NO scrollPosition:UITableViewScrollPositionNone];
+        [self scrollRectToVisible:[self rectForRowAtIndexPath:previousIndexPath] animated:YES];
+    }
+}
+
+- (void) moveDown:(id)sender
+{
+	NSIndexPath *indexPath = [self indexPathForSelectedRow];
+    NSUInteger numberOfRowsInSection = [self numberOfRowsInSection:indexPath.section];
+    NSIndexPath *nextIndexPath = nil;
+    if(indexPath == nil) {
+        nextIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    } else if(indexPath.row < numberOfRowsInSection - 1) {
+        nextIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
+    } else if(indexPath.section < [self numberOfSections] - 1) {
+        nextIndexPath = [NSIndexPath indexPathForRow:0 inSection:indexPath.section + 1];
+    }
+    
+    if(nextIndexPath != nil) {
+        [self _selectRowAtIndexPath:nextIndexPath sendDelegateMessages:NO animated:NO scrollPosition:UITableViewScrollPositionNone];
+        [self scrollRectToVisible:[self rectForRowAtIndexPath:nextIndexPath] animated:YES];
+    }
+}
+
+- (void) pageUp:(id)sender
+{
+    [self scrollRectToVisible:CGRectMake(0.0f, MAX(self.contentOffset.y - self.bounds.size.height, 0), self.bounds.size.width, self.bounds.size.height) animated:YES];
+}
+
+- (void) pageDown:(id)sender
+{
+    [self scrollRectToVisible:CGRectMake(0.0f, MIN(self.contentOffset.y + self.bounds.size.height, self.contentSize.height), self.bounds.size.width, self.bounds.size.height) animated:YES];
 }
 
 @end
