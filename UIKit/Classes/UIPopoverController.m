@@ -124,6 +124,7 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 @implementation UIPopoverController
 @synthesize delegate=_delegate, contentViewController=_contentViewController, passthroughViews=_passthroughViews;
 @synthesize popoverArrowDirection=_popoverArrowDirection;
+@synthesize popoverContentSize=_popoverContentSize;
 
 - (id)init
 {
@@ -352,6 +353,24 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
     frameSize.height = contentSize.height + 28 + (hasNavBar? 32 : 0) + insets.top + insets.bottom;
     
     return frameSize;
+}
+
+- (void)setPopoverContentSize:(CGSize)popoverContentSize
+{
+    assert(_contentViewController != nil);
+    if(CGSizeEqualToSize(_contentViewController.contentSizeForViewInPopover, popoverContentSize)) return;
+    
+    _contentViewController.contentSizeForViewInPopover = popoverContentSize;
+    
+    if ([self isPopoverVisible])
+    {
+        // if the popover is visible, show the animation
+        [_popoverView setContentSize:popoverContentSize animated:YES];
+    }
+    else
+    {
+        [_popoverView setContentSize:popoverContentSize animated:NO];
+    }
 }
 
 + (UIImage *)backgroundImage {

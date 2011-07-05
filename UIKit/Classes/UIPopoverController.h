@@ -59,6 +59,8 @@ typedef NSUInteger UIPopoverArrowDirection;
     id _popoverWindow;
     id _overlayWindow;
     
+    CGSize _popoverContentSize;
+    
     id _delegate;
     struct {
         BOOL popoverControllerDidDismissPopover : 1;
@@ -90,5 +92,6 @@ typedef NSUInteger UIPopoverArrowDirection;
 @property (nonatomic, readonly, getter=isPopoverVisible) BOOL popoverVisible;
 @property (nonatomic, copy) NSArray *passthroughViews;
 @property (nonatomic, readonly) UIPopoverArrowDirection popoverArrowDirection;
+@property (nonatomic, assign) CGSize popoverContentSize;
 
 @end
