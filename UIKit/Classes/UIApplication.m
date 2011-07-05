@@ -359,13 +359,14 @@ static BOOL TouchIsActive(UITouch *touch)
 
 - (BOOL)_sendGlobalKeyboardNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
 {
-    if (![self isIgnoringInteractionEvents]) {
-        UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
-        
-        if (key.type == UIKeyTypeEnter || (key.commandKeyPressed && key.type == UIKeyTypeReturn)) {
-            if ([self _firstResponderCanPerformAction:@selector(commit:) withSender:key fromScreen:theScreen]) {
-                return [self _sendActionToFirstResponder:@selector(commit:) withSender:key fromScreen:theScreen];
-            }
+    if ([self isIgnoringInteractionEvents]) {
+        return YES;
+    }
+    
+    UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
+    if (key.type == UIKeyTypeEnter || (key.commandKeyPressed && key.type == UIKeyTypeReturn)) {
+        if ([self _firstResponderCanPerformAction:@selector(commit:) withSender:key fromScreen:theScreen]) {
+            return [self _sendActionToFirstResponder:@selector(commit:) withSender:key fromScreen:theScreen];
         }
     }
     
@@ -374,18 +375,20 @@ static BOOL TouchIsActive(UITouch *touch)
 
 - (BOOL)_sendKeyboardNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
 {
-    if (![self isIgnoringInteractionEvents]) {
-        if (![self _sendGlobalKeyboardNSEvent:theNSEvent fromScreen:theScreen]) {
-            UIResponder *firstResponder = [self _firstResponderForScreen:theScreen];
+    if ([self isIgnoringInteractionEvents]) {
+        return YES;
+    }
+
+    if (![self _sendGlobalKeyboardNSEvent:theNSEvent fromScreen:theScreen]) {
+        UIResponder *firstResponder = [self _firstResponderForScreen:theScreen];
+        
+        if (firstResponder) {
+            UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
+            UIEvent *event = [[[UIEvent alloc] initWithEventType:UIEventTypeKeyPress] autorelease];
+            [event _setTimestamp:[theNSEvent timestamp]];
             
-            if (firstResponder) {
-                UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
-                UIEvent *event = [[[UIEvent alloc] initWithEventType:UIEventTypeKeyPress] autorelease];
-                [event _setTimestamp:[theNSEvent timestamp]];
-                
-                [firstResponder keyPressed:key withEvent:event];
-                return ![event _isUnhandledKeyPressEvent];
-            }
+            [firstResponder keyPressed:key withEvent:event];
+            return ![event _isUnhandledKeyPressEvent];
         }
     }
     
