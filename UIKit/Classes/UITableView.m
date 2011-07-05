@@ -894,39 +894,33 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void) moveUp:(id)sender
 {
-	NSIndexPath *indexPath = [self indexPathForSelectedRow];
-    NSIndexPath *previousIndexPath = nil;
-    if(indexPath == nil) {
-        NSUInteger lastSection = [self numberOfSections] - 1;
-        previousIndexPath = [NSIndexPath indexPathForRow:[self numberOfRowsInSection:lastSection] - 1 inSection:lastSection];
-    } else if(indexPath.row > 0) {
-        previousIndexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
-    } else if(indexPath.section > 0) {
-        previousIndexPath = [NSIndexPath indexPathForRow:[self numberOfRowsInSection:indexPath.section - 1] inSection:indexPath.section - 1];
+    NSIndexPath* indexPath = [self indexPathForSelectedRow];
+    NSIndexPath* newIndexPath = nil;
+    if (indexPath.row > 0) {
+        newIndexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+    } else if (indexPath.section > 0) {
+        newIndexPath = [NSIndexPath indexPathForRow:[self numberOfRowsInSection:indexPath.section - 1] - 1 inSection:indexPath.section - 1];
     }
-    
-    if(previousIndexPath != nil) {
-        [self _selectRowAtIndexPath:previousIndexPath sendDelegateMessages:NO animated:NO scrollPosition:UITableViewScrollPositionNone];
-        [self scrollRectToVisible:[self rectForRowAtIndexPath:previousIndexPath] animated:YES];
+    if (newIndexPath) {
+        [self _selectRowAtIndexPath:newIndexPath sendDelegateMessages:NO animated:NO scrollPosition:UITableViewScrollPositionNone];
     }
 }
 
 - (void) moveDown:(id)sender
 {
-	NSIndexPath *indexPath = [self indexPathForSelectedRow];
-    NSUInteger numberOfRowsInSection = [self numberOfRowsInSection:indexPath.section];
-    NSIndexPath *nextIndexPath = nil;
+    NSIndexPath* indexPath = [self indexPathForSelectedRow];
+    NSIndexPath* newIndexPath = nil;
     if(indexPath == nil) {
-        nextIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    } else if(indexPath.row < numberOfRowsInSection - 1) {
-        nextIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
-    } else if(indexPath.section < [self numberOfSections] - 1) {
-        nextIndexPath = [NSIndexPath indexPathForRow:0 inSection:indexPath.section + 1];
+        newIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    } else if (indexPath.section <= self.numberOfSections) {
+        if (indexPath.row < [self numberOfRowsInSection:indexPath.section] - 1) {
+            newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
+        } else if (indexPath.section < [self numberOfSections] - 1) {
+            newIndexPath = [NSIndexPath indexPathForRow:0 inSection:indexPath.section + 1];
+        }
     }
-    
-    if(nextIndexPath != nil) {
-        [self _selectRowAtIndexPath:nextIndexPath sendDelegateMessages:NO animated:NO scrollPosition:UITableViewScrollPositionNone];
-        [self scrollRectToVisible:[self rectForRowAtIndexPath:nextIndexPath] animated:YES];
+    if (newIndexPath) {
+        [self _selectRowAtIndexPath:newIndexPath sendDelegateMessages:NO animated:NO scrollPosition:UITableViewScrollPositionNone];
     }
 }
 
