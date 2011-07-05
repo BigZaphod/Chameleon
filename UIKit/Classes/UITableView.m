@@ -605,8 +605,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 {
     const CGRect oldFrame = self.frame;
     if (!CGRectEqualToRect(oldFrame,frame)) {
-        const BOOL selectedRowWasVisible = _selectedRow ? CGRectIntersectsRect(self.bounds,[self rectForRowAtIndexPath:_selectedRow]) : NO;
-
         [super setFrame:frame];
 
         if (oldFrame.size.width != frame.size.width) {
@@ -614,14 +612,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
         }
 
         [self _setContentSize];
-        
-        // this is not something the real UIKit does, but since this is a desktop environment, resizing a window with a table with a selection
-        // in it could be a common occurance and it's pretty confusing to have the selection disappear on you as things wrap and change size.
-        // this can prevent that from happening. this may not ultimately be desirable here as it is a very "magical" thing to be hiding inside
-        // the framework like this.
-        if (selectedRowWasVisible) {
-            [self scrollToNearestSelectedRowAtScrollPosition:UITableViewScrollPositionNone animated:NO];
-        }
     }
 }
 
@@ -672,22 +662,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 - (void)_scrollRectToVisible:(CGRect)aRect atScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated
 {
     if (!CGRectIsNull(aRect) && aRect.size.height > 0) {
-        if (UITableViewScrollPositionNone == scrollPosition) {
-            CGRect visibleRect = {
-                .origin = self.contentOffset,
-                .size = self.bounds.size
-            };
-            if (CGRectContainsRect(aRect, visibleRect)) {
-                // Fully contained... Do nothing.
-            } else if (!CGRectIntersectsRect(aRect, visibleRect)) {
-                if (aRect.origin.y > visibleRect.origin.y) {
-                    scrollPosition = UITableViewScrollPositionBottom;
-                } else {
-                    scrollPosition = UITableViewScrollPositionTop;
-                }
-            }
-        }
-
         // adjust the rect based on the desired scroll position setting
         switch (scrollPosition) {
             case UITableViewScrollPositionTop: {
@@ -708,7 +682,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
             }
                 
             case UITableViewScrollPositionNone: {
-                return;
+                break;
             }
         }
 
