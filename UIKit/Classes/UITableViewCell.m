@@ -424,22 +424,25 @@ extern CGFloat _UITableViewDefaultRowHeight;
 - (void) showSelectedBackgroundView:(BOOL)selected animated:(BOOL)animated
 {
     if (_selectionStyle != UITableViewCellSelectionStyleNone) {
-        [UIView animateWithDuration:!animated ? 0 : 0.2 animations:^{
-            [self _setHighlighted:selected forViews:[self.contentView subviews]];
-            if (selected) {
-                if (!_selectedBackgroundView) {
-                    [self _setupDefaultSelectedBackgroundView];
-                }
-                if (_backgroundView) {
-                    [self insertSubview:_selectedBackgroundView aboveSubview:_backgroundView];
+        [UIView animateWithDuration:!animated ? 0.0 : 0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionNone | UIViewAnimationOptionAllowUserInteraction
+            animations:^{
+                [self _setHighlighted:selected forViews:[self.contentView subviews]];
+                if (selected) {
+                    if (!_selectedBackgroundView) {
+                        [self _setupDefaultSelectedBackgroundView];
+                    }
+                    if (_backgroundView) {
+                        [self insertSubview:_selectedBackgroundView aboveSubview:_backgroundView];
+                    } else {
+                        [self insertSubview:_selectedBackgroundView atIndex:0];
+                    }
+                    [self setNeedsLayout];
                 } else {
-                    [self insertSubview:_selectedBackgroundView atIndex:0];
+                    [_selectedBackgroundView removeFromSuperview];
                 }
-                [self setNeedsLayout];
-            } else {
-                [_selectedBackgroundView removeFromSuperview];
             }
-        }];
+            completion:nil
+        ];
     }
 }
 
