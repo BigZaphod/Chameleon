@@ -257,20 +257,22 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
         [_popoverView pointTo:viewPointTo inView:view];
     }
     
-    _popoverView.transform = CGAffineTransformMakeScale(0.98f,0.98f);
-    _popoverView.alpha = 0.4f;
-    
-    [UIView animateWithDuration:!animated ? 0.0 : 0.08 
-        animations:^{
-            _popoverView.transform = CGAffineTransformIdentity;
-        }
-    ];
-
-    [UIView animateWithDuration:!animated ? 0.0 : 0.1
-        animations:^{
-            _popoverView.alpha = 1.f;
-        }
-    ];
+    if (animated) {
+        _popoverView.transform = CGAffineTransformMakeScale(0.98f,0.98f);
+        _popoverView.alpha = 0.4f;
+        
+        [UIView animateWithDuration:0.08 
+                         animations:^{
+                             _popoverView.transform = CGAffineTransformIdentity;
+                         }
+         ];
+        
+        [UIView animateWithDuration:0.1
+                         animations:^{
+                             _popoverView.alpha = 1.f;
+                         }
+         ];
+    }
 }
 
 - (void)presentPopoverFromBarButtonItem:(UIBarButtonItem *)item permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated
