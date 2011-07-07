@@ -224,8 +224,6 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
         [_popoverWindow setContentView:hostingView];
         [_overlayWindow addChildWindow:_popoverWindow ordered:NSWindowAbove];
         [_popoverWindow makeFirstResponder:hostingView];
-        
-        [_contentViewController viewDidAppear:animated];
 
         [hostingView release];
     }
@@ -246,6 +244,8 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
     [_popoverWindow setFrameOrigin:PopoverWindowOrigin(_overlayWindow, NSRectFromCGRect(desktopScreenRect), NSSizeFromCGSize(_popoverView.frame.size), arrowDirections, &pointTo, &_popoverArrowDirection)];
     _popoverView.hidden = NO;
     [_popoverWindow makeKeyWindow];
+    
+    [_contentViewController viewDidAppear:animated];
 
     // the window has to be visible before these coordinate conversions will work correctly (otherwise the UIScreen isn't attached to anything
     // and blah blah blah...)
