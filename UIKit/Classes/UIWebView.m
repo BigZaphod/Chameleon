@@ -212,4 +212,19 @@
     return [NSArray array];
 }
 
+- (BOOL)canBecomeFirstResponder
+{
+    return [_webViewAdapter canBecomeFirstResponder];
+}
+
+- (BOOL)becomeFirstResponder
+{
+    return [_webViewAdapter becomeFirstResponder];
+}
+
+- (BOOL)resignFirstResponder
+{
+    return [_webViewAdapter resignFirstResponder];
+}
+
 @end
