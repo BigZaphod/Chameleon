@@ -271,13 +271,13 @@ static const CGFloat ToolbarHeight = 28;
             completion:^(BOOL finished){
                 [oldViewController.view removeFromSuperview];
                 [oldViewController release];
+                
+                [viewController viewDidAppear:animated];
+                if (_delegateHas.didShowViewController) {
+                    [_delegate navigationController:self didShowViewController:viewController animated:animated];
+                }
             }
         ];
-        
-        [viewController viewDidAppear:animated];
-        if (_delegateHas.didShowViewController) {
-            [_delegate navigationController:self didShowViewController:viewController animated:animated];
-        }
     }
     
 	[_viewControllers addObject:viewController];
@@ -321,13 +321,13 @@ static const CGFloat ToolbarHeight = 28;
                 completion:^(BOOL finished){
                     [oldViewController.view removeFromSuperview];
                     [oldViewController release];
+                    
+                    [nextViewController viewDidAppear:animated];
+                    if (_delegateHas.didShowViewController) {
+                        [_delegate navigationController:self didShowViewController:nextViewController animated:animated];
+                    }
                 }
             ];
-            
-			[nextViewController viewDidAppear:animated];
-			if (_delegateHas.didShowViewController) {
-				[_delegate navigationController:self didShowViewController:nextViewController animated:animated];
-			}
 		}
 		
 		[self _updateToolbar:animated];
