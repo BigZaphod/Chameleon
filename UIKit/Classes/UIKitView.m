@@ -95,6 +95,7 @@
 		[[self layer] insertSublayer:[_screen _layer] atIndex:0];
 		[_screen _layer].frame = [self layer].bounds;
 		[_screen _layer].autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
+        self.window.delegate = self;
 	}
 }
 
@@ -290,6 +291,11 @@
     } else {
         [self _launchApplicationDelegate:appDelegate];
     }
+}
+
+- (void) windowDidBecomeKey:(NSNotification*)notification
+{
+    [_mainWindow makeKeyAndVisible];
 }
 
 @end

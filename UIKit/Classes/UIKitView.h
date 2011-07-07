@@ -32,7 +32,7 @@
 
 @class UIScreen, UIWindow;
 
-@interface UIKitView : NSView {
+@interface UIKitView : NSView <NSWindowDelegate> {
     UIScreen *_screen;
     UIWindow *_mainWindow;
     NSTrackingArea *_trackingArea;
