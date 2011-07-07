@@ -283,33 +283,31 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 - (void)dismissPopoverAnimated:(BOOL)animated
 {
     if ([self isPopoverVisible]) {
+        id overlayWindow = [_overlayWindow retain];
+        [_overlayWindow release], _overlayWindow = nil;
+        id popoverWindow = [_popoverWindow retain];
+        [_popoverWindow release], _popoverWindow = nil;
+        UIView *popoverView = [_popoverView retain];
+        [_popoverView release], _popoverView = nil;
+        _popoverArrowDirection = UIPopoverArrowDirectionUnknown;
         [UIView animateWithDuration:!animated ? 0.0 : 0.2 
             animations:^{
-                _popoverView.alpha = 0;
+                popoverView.alpha = 0;
             }
             completion:^(BOOL finished){
-                NSDisableScreenUpdates();
+                NSWindow *parentWindow = [overlayWindow parentWindow];
                 
-                [_overlayWindow orderOut:nil];
-                [_popoverWindow orderOut:nil];
-                
-                NSWindow *parentWindow = [_overlayWindow parentWindow];
-                [_overlayWindow removeChildWindow:_popoverWindow];
-                [parentWindow removeChildWindow:_overlayWindow];
+                [overlayWindow orderOut:nil];
+                [popoverWindow orderOut:nil];
+
+                [overlayWindow removeChildWindow:popoverWindow];
+                [parentWindow removeChildWindow:overlayWindow];
                 
                 [parentWindow makeKeyAndOrderFront:self];
                 
-                NSEnableScreenUpdates();
-                
-                [_popoverView release];
-                [_popoverWindow release];
-                [_overlayWindow release];
-                
-                _popoverView = nil;
-                _popoverWindow = nil;
-                _overlayWindow = nil;
-                
-                _popoverArrowDirection = UIPopoverArrowDirectionUnknown;
+                [popoverView release];
+                [popoverWindow release];
+                [overlayWindow release];
             }
         ];
     }
