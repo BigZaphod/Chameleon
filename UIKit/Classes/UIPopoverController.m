@@ -224,6 +224,8 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
         [_popoverWindow setContentView:hostingView];
         [_overlayWindow addChildWindow:_popoverWindow ordered:NSWindowAbove];
         [_popoverWindow makeFirstResponder:hostingView];
+        
+        [_contentViewController viewDidAppear:animated];
 
         [hostingView release];
     }
