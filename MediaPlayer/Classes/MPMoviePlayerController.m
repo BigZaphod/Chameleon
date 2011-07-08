@@ -136,6 +136,7 @@ NSString *const MPMoviePlayerLoadStateDidChangeNotification = @"MPMoviePlayerLoa
 //
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver: self];
     [_view release];
     [super dealloc];
 }
