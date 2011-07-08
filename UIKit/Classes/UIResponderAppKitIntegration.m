@@ -108,6 +108,10 @@
             command = @selector(deleteForward:);
             break;
         }
+        case UIKeyTypeEscape: {
+            command = @selector(cancelOperation:);
+            break;
+        }
         case UIKeyTypeCharacter: {
             if (key.keyCode == 48) {
                 if ([key isShiftKeyPressed]) {

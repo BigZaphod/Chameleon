@@ -47,6 +47,7 @@ typedef enum {
     UIKeyTypeEnd,
     UIKeyTypePageUp,
     UIKeyTypePageDown,
+    UIKeyTypeEscape,
 } UIKeyType;
 
 @interface UIKey : NSObject {
