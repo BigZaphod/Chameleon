@@ -34,6 +34,7 @@
 #import "UIImage.h"
 #import "UIImageView.h"
 #import "UIColor.h"
+#import "UIPopoverController.h"
 
 @implementation UIKitView {
     id _didBecomeKeyObserver;
@@ -60,6 +61,7 @@
 
 - (void)dealloc
 {
+    assert(!_didBecomeKeyObserver);
     [_screen release];
     [_mainWindow release];
     [super dealloc];
@@ -93,8 +95,11 @@
 }
 
 - (void)viewDidMoveToWindow {
-    [_didBecomeKeyObserver release];
-	if(self.window != nil) {
+    if (_didBecomeKeyObserver) {
+        [[NSNotificationCenter defaultCenter] removeObserver:_didBecomeKeyObserver], _didBecomeKeyObserver = nil;
+    }
+	
+    if(self.window != nil) {
 		[[self layer] insertSublayer:[_screen _layer] atIndex:0];
 		[_screen _layer].frame = [self layer].bounds;
 		[_screen _layer].autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
@@ -102,8 +107,6 @@
         _didBecomeKeyObserver = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidBecomeKeyNotification object:self.window queue:nil usingBlock:^(NSNotification* notification) {
             [_mainWindow makeKeyAndVisible];
         }];
-	} else {
-        _didBecomeKeyObserver = nil;
     }
 }
 
