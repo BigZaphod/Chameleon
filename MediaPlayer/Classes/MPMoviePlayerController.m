@@ -108,6 +108,8 @@ NSString *const MPMovieDurationAvailableNotification = @"MPMovieDurationAvailabl
 {
     if (notification.object != movie)
         return;
+
+    _playbackState = MPMoviePlaybackStateStopped;
     
     [[NSNotificationCenter defaultCenter] postNotificationName: MPMoviePlayerPlaybackDidFinishNotification
                                                         object: self];
@@ -180,6 +182,7 @@ NSString *const MPMovieDurationAvailableNotification = @"MPMovieDurationAvailabl
 - (void)play
 {
     [movie play];
+    _playbackState = MPMoviePlaybackStatePlaying;
 }
 
 
@@ -187,7 +190,8 @@ NSString *const MPMovieDurationAvailableNotification = @"MPMovieDurationAvailabl
 //
 - (void)pause
 {
-    //[movie pause];
+    [movie stop];
+    _playbackState = MPMoviePlaybackStatePaused;
 }
 
 
@@ -196,6 +200,7 @@ NSString *const MPMovieDurationAvailableNotification = @"MPMovieDurationAvailabl
 - (void)stop
 {
     [movie stop];
+    _playbackState = MPMoviePlaybackStateStopped;
 }
 
 @end
