@@ -202,8 +202,6 @@
 		14CC844511EFA91A005988CC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14CC844411EFA91A005988CC /* SystemConfiguration.framework */; };
 		14D0C43812DCEF910040035C /* UIScrollViewScrollAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 14D0C43612DCEF910040035C /* UIScrollViewScrollAnimation.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14D0C43912DCEF910040035C /* UIScrollViewScrollAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D0C43712DCEF910040035C /* UIScrollViewScrollAnimation.m */; };
-		14D8D941135DE90A00FE639A /* UIInputController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14D8D93F135DE90A00FE639A /* UIInputController.h */; };
-		14D8D942135DE90A00FE639A /* UIInputController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D8D940135DE90A00FE639A /* UIInputController.m */; };
 		14DD1C281289B3C900DCF231 /* UIImage+UIPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = 14DD1C271289B3C900DCF231 /* UIImage+UIPrivate.m */; };
 		14DD1C361289B4D500DCF231 /* <UIToolbar> button-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 14DD1C341289B4D500DCF231 /* <UIToolbar> button-highlighted.png */; };
 		14DD1C371289B4D500DCF231 /* <UIToolbar> button.png in Resources */ = {isa = PBXBuildFile; fileRef = 14DD1C351289B4D500DCF231 /* <UIToolbar> button.png */; };
@@ -499,8 +497,6 @@
 		14CC844411EFA91A005988CC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		14D0C43612DCEF910040035C /* UIScrollViewScrollAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewScrollAnimation.h; sourceTree = "<group>"; };
 		14D0C43712DCEF910040035C /* UIScrollViewScrollAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScrollViewScrollAnimation.m; sourceTree = "<group>"; };
-		14D8D93F135DE90A00FE639A /* UIInputController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIInputController.h; sourceTree = "<group>"; };
-		14D8D940135DE90A00FE639A /* UIInputController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIInputController.m; sourceTree = "<group>"; };
 		14DD1C271289B3C900DCF231 /* UIImage+UIPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+UIPrivate.m"; sourceTree = "<group>"; };
 		14DD1C341289B4D500DCF231 /* <UIToolbar> button-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIToolbar> button-highlighted.png"; path = "Resources/<UIToolbar> button-highlighted.png"; sourceTree = "<group>"; };
 		14DD1C351289B4D500DCF231 /* <UIToolbar> button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIToolbar> button.png"; path = "Resources/<UIToolbar> button.png"; sourceTree = "<group>"; };
@@ -890,8 +886,6 @@
 				145335841226F3490005644F /* UICustomNSClipView.m */,
 				1453356F1226F2720005644F /* UICustomNSTextView.h */,
 				145335701226F2720005644F /* UICustomNSTextView.m */,
-				14D8D93F135DE90A00FE639A /* UIInputController.h */,
-				14D8D940135DE90A00FE639A /* UIInputController.m */,
 				14FA8C47121DA4A000C4264B /* UINinePartImage.h */,
 				14FA8C48121DA4A000C4264B /* UINinePartImage.m */,
 				14805D3F12A6B0E80080C4BA /* UINSClipView.h */,
@@ -1114,7 +1108,6 @@
 				14C6C122133AFC94002F111E /* CALayer+UIKitCompatibility.h in Headers */,
 				7011107C133BE0F400C86512 /* UIDatePicker.h in Headers */,
 				537472D5133ADD4B00EBD5EA /* UIInterface.h in Headers */,
-				14D8D941135DE90A00FE639A /* UIInputController.h in Headers */,
 				14541DB21360D6F300C1006D /* UIPhotosAlbum.h in Headers */,
 				882B8EF6136636C8002E8F21 /* UISearchField.h in Headers */,
 				8842BC771387316400D148FF /* UIGradient.h in Headers */,
@@ -1327,7 +1320,6 @@
 				14C6C123133AFC94002F111E /* CALayer+UIKitCompatibility.m in Sources */,
 				7011107D133BE0F400C86512 /* UIDatePicker.m in Sources */,
 				537472D6133ADD4B00EBD5EA /* UIInterface.m in Sources */,
-				14D8D942135DE90A00FE639A /* UIInputController.m in Sources */,
 				14541DB31360D6F300C1006D /* UIPhotosAlbum.m in Sources */,
 				882B8EF7136636C8002E8F21 /* UISearchField.m in Sources */,
 				8842BC781387316400D148FF /* UIGradient.m in Sources */,
