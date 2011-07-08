@@ -31,6 +31,7 @@
 #import "UIEvent+UIPrivate.h"
 #import "UIKey.h"
 #import "UIApplication.h"
+#import <AppKit/NSGraphics.h>
 
 @implementation UIResponder (AppKitIntegration)
 
@@ -124,12 +125,34 @@
         }
     }
 
-    if (command && [self respondsToSelector:command]) {
-        [self performSelector:command withObject:nil];
+    if (command && [self tryToPerform:command with:self]) {
         return YES;
+    } else {
+        return [[self nextResponder] keyPressed:key withEvent:event];
     }
+}
 
-    return [[self nextResponder] keyPressed:key withEvent:event];
+- (void) doCommandBySelector:(SEL)selector
+{
+    UIResponder* responder = self;
+    do {
+        if ([responder respondsToSelector:selector]) {
+            [responder performSelector:selector withObject:nil];
+            return;
+        }
+        responder = responder.nextResponder;
+    } while (responder);
+    NSBeep();
+}
+
+- (BOOL) tryToPerform:(SEL)selector with:(id)object
+{
+    if ([self respondsToSelector:selector]) {
+        [self performSelector:selector withObject:nil];
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 @end

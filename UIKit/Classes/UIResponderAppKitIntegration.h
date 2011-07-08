@@ -59,6 +59,9 @@
 // Note, that the UIEvent here will be an empty non-touch one and has no real purpose in the present implementation :)
 - (BOOL)keyPressed:(UIKey *)key withEvent:(UIEvent *)event;
 
+- (void) doCommandBySelector:(SEL)selector;
+- (BOOL) tryToPerform:(SEL)selector with:(id)object;
+
 @end
 
 
@@ -70,7 +73,6 @@
 // This is mapped to CMD-Return and Enter and does not come from AppKit since it has no such convention as far as I've found. However it seemed like
 // a useful thing to define, really, so that's what I'm doing. :)
 - (void)commit:(id)sender;
-
 
 - (void) insertNewline:(id)sender;
 - (void) moveUp:(id)sender;
