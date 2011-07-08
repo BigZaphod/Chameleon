@@ -15,6 +15,7 @@ NSString *const MPMoviePlayerPlaybackDidFinishReasonUserInfoKey = @"MPMoviePlaye
 NSString *const MPMoviePlayerPlaybackStateDidChangeNotification = @"MPMoviePlayerPlaybackStateDidChangeNotification";
 NSString *const MPMoviePlayerPlaybackDidFinishNotification = @"MPMoviePlayerPlaybackDidFinishNotification";
 NSString *const MPMoviePlayerLoadStateDidChangeNotification = @"MPMoviePlayerLoadStateDidChangeNotification";
+NSString *const MPMovieDurationAvailableNotification = @"MPMovieDurationAvailableNotification";
 
 @implementation MPMoviePlayerController
 
@@ -26,6 +27,18 @@ NSString *const MPMoviePlayerLoadStateDidChangeNotification = @"MPMoviePlayerLoa
 @synthesize playbackState=_playbackState;
 @synthesize repeatMode=_repeatMode;
 
+///////////////////////////////////////////////////////////////////////////////
+//
+- (NSTimeInterval)duration
+{
+    QTTime time = [movie duration];
+    NSTimeInterval interval;
+    
+    if (QTGetTimeInterval(time, &interval))
+        return interval;
+    else
+        return 0.0;
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -46,7 +59,13 @@ NSString *const MPMoviePlayerLoadStateDidChangeNotification = @"MPMoviePlayerLoa
     switch ([loadState intValue]) {
         case QTMovieLoadStateError:            
         case QTMovieLoadStateLoading:              
+    
+        
         case QTMovieLoadStateLoaded:            
+            // we have the meta data, so post the duration available notification
+            [[NSNotificationCenter defaultCenter] postNotificationName: MPMovieDurationAvailableNotification
+                                                                object: self];
+            
             _loadState = MPMovieLoadStateUnknown;            
             break;
             
@@ -78,6 +97,9 @@ NSString *const MPMoviePlayerLoadStateDidChangeNotification = @"MPMoviePlayerLoa
 {
     if (notification.object != movie)
         return;
+    
+    if (self.repeatMode == MPMovieRepeatModeOne)
+        [self play];
     
     [[NSNotificationCenter defaultCenter] postNotificationName: MPMoviePlayerPlaybackDidFinishNotification
                                                         object: self];

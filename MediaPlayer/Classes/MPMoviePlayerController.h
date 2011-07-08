@@ -63,6 +63,7 @@ extern NSString *const MPMoviePlayerPlaybackDidFinishReasonUserInfoKey;
 extern NSString *const MPMoviePlayerPlaybackStateDidChangeNotification;
 extern NSString *const MPMoviePlayerPlaybackDidFinishNotification;
 extern NSString *const MPMoviePlayerLoadStateDidChangeNotification;
+extern NSString *const MPMovieDurationAvailableNotification;
 
 @class UIInternalMovieView;
 
@@ -80,6 +81,7 @@ extern NSString *const MPMoviePlayerLoadStateDidChangeNotification;
 @property (nonatomic) MPMovieSourceType movieSourceType;
 @property (nonatomic, readonly) MPMoviePlaybackState playbackState;
 @property (nonatomic) MPMovieRepeatMode repeatMode;
+@property (nonatomic, readonly) NSTimeInterval duration;
 
 - (id)initWithContentURL: (NSURL*)url;
 
