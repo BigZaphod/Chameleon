@@ -35,7 +35,9 @@
 #import "UIImageView.h"
 #import "UIColor.h"
 
-@implementation UIKitView
+@implementation UIKitView {
+    id _didBecomeKeyObserver;
+}
 @synthesize UIScreen=_screen;
 
 - (void)configureLayers
@@ -91,12 +93,18 @@
 }
 
 - (void)viewDidMoveToWindow {
+    [_didBecomeKeyObserver release];
 	if(self.window != nil) {
 		[[self layer] insertSublayer:[_screen _layer] atIndex:0];
 		[_screen _layer].frame = [self layer].bounds;
 		[_screen _layer].autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
-        self.window.delegate = self;
-	}
+
+        _didBecomeKeyObserver = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidBecomeKeyNotification object:self.window queue:nil usingBlock:^(NSNotification* notification) {
+            [_mainWindow makeKeyAndVisible];
+        }];
+	} else {
+        _didBecomeKeyObserver = nil;
+    }
 }
 
 - (BOOL)acceptsFirstResponder
@@ -291,11 +299,6 @@
     } else {
         [self _launchApplicationDelegate:appDelegate];
     }
-}
-
-- (void) windowDidBecomeKey:(NSNotification*)notification
-{
-    [_mainWindow makeKeyAndVisible];
 }
 
 @end
