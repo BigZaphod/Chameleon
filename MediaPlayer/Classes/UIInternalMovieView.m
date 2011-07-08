@@ -12,6 +12,36 @@
 @implementation UIInternalMovieView
 
 @synthesize movie=_movie;
+@synthesize scalingMode=_scalingMode;
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+- (void)setScalingMode:(MPMovieScalingMode)scalingMode
+{
+    _scalingMode = scalingMode;
+    
+    switch (scalingMode)
+    {
+        case MPMovieScalingModeNone:
+            movieLayer.contentsGravity = kCAGravityCenter;
+            break;
+            
+        case MPMovieScalingModeAspectFit:
+            movieLayer.contentsGravity = kCAGravityResizeAspect;
+            break;
+            
+        case MPMovieScalingModeAspectFill:
+            movieLayer.contentsGravity = kCAGravityResizeAspectFill;
+            break;
+            
+        case MPMovieScalingModeFill:
+            movieLayer.contentsGravity = kCAGravityResize;
+            break;
+            
+    }
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //

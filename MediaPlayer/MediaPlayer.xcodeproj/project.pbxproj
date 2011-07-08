@@ -18,6 +18,7 @@
 		4C16781B13C71E6200814195 /* UIInternalMovieView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C16781913C71E6200814195 /* UIInternalMovieView.m */; };
 		4C16787D13C71FB900814195 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C16787C13C71FB900814195 /* UIKit.framework */; };
 		4C16789F13C7206500814195 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C16789E13C7206500814195 /* QTKit.framework */; };
+		4C72FDF613C746E800D3E453 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C72FDF513C746E800D3E453 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		4C16787213C71F8A00814195 /* UIKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = UIKit.xcodeproj; path = ../UIKit/UIKit.xcodeproj; sourceTree = "<group>"; };
 		4C16787C13C71FB900814195 /* UIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UIKit.framework; sourceTree = SOURCE_ROOT; };
 		4C16789E13C7206500814195 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
+		4C72FDF513C746E800D3E453 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* MediaPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MediaPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -55,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C72FDF613C746E800D3E453 /* QuartzCore.framework in Frameworks */,
 				4C16789F13C7206500814195 /* QTKit.framework in Frameworks */,
 				4C16787D13C71FB900814195 /* UIKit.framework in Frameworks */,
 				14EFB1BB1211DB5300D19B0C /* Cocoa.framework in Frameworks */,
@@ -75,6 +78,7 @@
 		0867D691FE84028FC02AAC07 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				4C72FDF513C746E800D3E453 /* QuartzCore.framework */,
 				4C16789E13C7206500814195 /* QTKit.framework */,
 				4C16787C13C71FB900814195 /* UIKit.framework */,
 				08FB77AEFE84172EC02AAC07 /* Classes */,

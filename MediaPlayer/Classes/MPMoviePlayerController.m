@@ -26,6 +26,17 @@ NSString *const MPMovieDurationAvailableNotification = @"MPMovieDurationAvailabl
 @synthesize movieSourceType=_movieSourceType;
 @synthesize playbackState=_playbackState;
 @synthesize repeatMode=_repeatMode;
+@synthesize scalingMode=_scalingMode;
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+- (void)setScalingMode:(MPMovieScalingMode)scalingMode
+{
+    _scalingMode = scalingMode;
+    movieView.scalingMode = scalingMode;
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -148,6 +159,8 @@ NSString *const MPMovieDurationAvailableNotification = @"MPMovieDurationAvailabl
                                        error: &error];
         
         movieView = [[UIInternalMovieView alloc] initWithMovie: movie];
+        
+        self.scalingMode = MPMovieScalingModeAspectFit;
         
         [[NSNotificationCenter defaultCenter] addObserver: self
                                                  selector: @selector(loadStateChangeOccurred:)

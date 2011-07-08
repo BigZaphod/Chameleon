@@ -57,6 +57,13 @@ enum {
 };
 typedef NSInteger MPMoviePlaybackState;
 
+typedef enum {
+    MPMovieScalingModeNone,
+    MPMovieScalingModeAspectFit,
+    MPMovieScalingModeAspectFill,
+    MPMovieScalingModeFill
+} MPMovieScalingMode;
+
 extern NSString *const MPMoviePlayerPlaybackDidFinishReasonUserInfoKey;
 
 // notifications
@@ -82,6 +89,7 @@ extern NSString *const MPMovieDurationAvailableNotification;
 @property (nonatomic, readonly) MPMoviePlaybackState playbackState;
 @property (nonatomic) MPMovieRepeatMode repeatMode;
 @property (nonatomic, readonly) NSTimeInterval duration;
+@property (nonatomic) MPMovieScalingMode scalingMode;
 
 - (id)initWithContentURL: (NSURL*)url;
 
