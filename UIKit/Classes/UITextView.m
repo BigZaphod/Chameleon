@@ -43,6 +43,10 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 @interface UITextView () <UITextLayerTextDelegate>
 @end
 
+@interface NSObject (UITextViewDelegate)
+- (BOOL) textView:(UITextView*)textView doCommandBySelector:(SEL)selector;
+@end
+
 
 @implementation UITextView
 @synthesize dataDetectorTypes=_dataDetectorTypes, inputAccessoryView=_inputAccessoryView, inputView=_inputView;
@@ -255,6 +259,7 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
         _delegateHas.shouldChangeText = [theDelegate respondsToSelector:@selector(textView:shouldChangeTextInRange:replacementText:)];
         _delegateHas.didChange = [theDelegate respondsToSelector:@selector(textViewDidChange:)];
         _delegateHas.didChangeSelection = [theDelegate respondsToSelector:@selector(textViewDidChangeSelection:)];
+        _delegateHas.doCommandBySelector = [theDelegate respondsToSelector:@selector(textView:doCommandBySelector:)];
     }
 }
 
@@ -302,6 +307,15 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 {
     if (_delegateHas.didChangeSelection) {
         [self.delegate textViewDidChangeSelection:self];
+    }
+}
+
+- (BOOL)_textShouldDoCommandBySelector:(SEL)selector
+{
+    if (_delegateHas.doCommandBySelector) {
+        return [(id)self.delegate textView:self doCommandBySelector:selector];
+    } else {
+        return NO;
     }
 }
 

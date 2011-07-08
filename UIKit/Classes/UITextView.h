@@ -65,6 +65,7 @@ extern NSString *const UITextViewTextDidEndEditingNotification;
         BOOL shouldChangeText : 1;
         BOOL didChange : 1;
         BOOL didChangeSelection : 1;
+        BOOL doCommandBySelector : 1;
     } _delegateHas;
 }
 

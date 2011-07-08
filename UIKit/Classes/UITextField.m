@@ -46,6 +46,10 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 @interface UITextField () <UITextLayerTextDelegate>
 @end
 
+@interface NSObject (UITextFieldDelegate)
+- (BOOL)textField:(UITextField *)textField doCommandBySelector:(SEL)selector;
+@end
+
 @implementation UITextField
 @synthesize delegate=_delegate, background=_background, disabledBackground=_disabledBackground, editing=_editing, clearsOnBeginEditing=_clearsOnBeginEditing;
 @synthesize adjustsFontSizeToFitWidth=_adjustsFontSizeToFitWidth, clearButtonMode=_clearButtonMode, leftView=_leftView, rightView=_rightView;
@@ -584,7 +588,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
 - (BOOL)_textShouldDoCommandBySelector:(SEL)selector {
 	if(_delegateHas.doCommandBySelector) {
-		return [self.delegate textField:self doCommandBySelector:selector];
+		return [(id)self.delegate textField:self doCommandBySelector:selector];
 	} else {
 		if(selector == @selector(insertNewline:) || selector == @selector(insertNewlineIgnoringFieldEditor:)) {
 			[self _textDidReceiveReturnKey];

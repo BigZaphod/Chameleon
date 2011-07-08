@@ -78,7 +78,6 @@
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar;
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText;
 - (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
-- (BOOL)searchBar:(UISearchBar *)searchBar doCommandBySelector:(SEL)selector;
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar;
 - (void)searchBarBookmarkButtonClicked:(UISearchBar *)searchBar;

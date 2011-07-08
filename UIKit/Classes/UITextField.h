@@ -61,8 +61,6 @@ typedef enum {
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;
 - (BOOL)textFieldShouldClear:(UITextField *)textField;
 - (BOOL)textFieldShouldReturn:(UITextField *)textField;
-
-- (BOOL)textField:(UITextField *)textField doCommandBySelector:(SEL)selector;
 @end
 
 @interface UITextField : UIControl <UITextInputTraits> {

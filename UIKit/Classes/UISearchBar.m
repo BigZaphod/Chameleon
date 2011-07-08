@@ -45,6 +45,10 @@
 - (void)sendTextDidChange;
 @end
 
+@interface NSObject (UISearchBarDelegate)
+- (BOOL)searchBar:(UISearchBar *)searchBar doCommandBySelector:(SEL)selector;
+@end
+
 @implementation UISearchBar
 @synthesize delegate=_delegate, showsCancelButton = _showsCancelButton, placeholder=_placeholder;
 
@@ -148,7 +152,7 @@
 
 - (BOOL)textField:(UITextField *)textField doCommandBySelector:(SEL)selector {
 	if(_delegateHas.doCommandBySelector) {
-		return [self.delegate searchBar:self doCommandBySelector:selector];
+		return [(id)self.delegate searchBar:self doCommandBySelector:selector];
 	}
 	
 	return NO;
