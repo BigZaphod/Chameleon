@@ -27,6 +27,17 @@ NSString *const MPMovieDurationAvailableNotification = @"MPMovieDurationAvailabl
 @synthesize playbackState=_playbackState;
 @synthesize repeatMode=_repeatMode;
 
+
+///////////////////////////////////////////////////////////////////////////////
+//
+- (void)setRepeatMode:(MPMovieRepeatMode)repeatMode
+{
+    _repeatMode = repeatMode;
+    [movie setAttribute: [NSNumber numberWithBool: repeatMode == MPMovieRepeatModeOne]
+                 forKey: QTMovieLoopsAttribute];
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 - (NSTimeInterval)duration
@@ -97,9 +108,6 @@ NSString *const MPMovieDurationAvailableNotification = @"MPMovieDurationAvailabl
 {
     if (notification.object != movie)
         return;
-    
-    if (self.repeatMode == MPMovieRepeatModeOne)
-        [self play];
     
     [[NSNotificationCenter defaultCenter] postNotificationName: MPMoviePlayerPlaybackDidFinishNotification
                                                         object: self];
