@@ -57,6 +57,7 @@ enum {
 };
 typedef NSInteger MPMoviePlaybackState;
 
+
 typedef enum {
     MPMovieScalingModeNone,
     MPMovieScalingModeAspectFit,
