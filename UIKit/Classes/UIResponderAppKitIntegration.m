@@ -120,7 +120,8 @@
         }
     }
 
-    if (command && [self respondsToSelector:command] && [self performSelector:command withObject:nil]) {
+    if (command && [self respondsToSelector:command]) {
+        [self performSelector:command withObject:nil];
         return YES;
     }
 
