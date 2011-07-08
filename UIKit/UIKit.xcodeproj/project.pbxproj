@@ -281,6 +281,10 @@
 		8842BC781387316400D148FF /* UIGradient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8842BC761387316400D148FF /* UIGradient.m */; };
 		88D0B2A613674EF2008A073F /* <UITextField> roundedRectBackgroundImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 88D0B2A513674EF2008A073F /* <UITextField> roundedRectBackgroundImage.png */; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
+		A2E9946F13C78C1000B7D49F /* UIViewAppKitIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = A2E9946D13C78C1000B7D49F /* UIViewAppKitIntegration.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		A2E9947013C78C1000B7D49F /* UIViewAppKitIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E9946E13C78C1000B7D49F /* UIViewAppKitIntegration.m */; };
+		A2E9947713C79DBE00B7D49F /* UIWindowAppKitIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = A2E9947513C79DBE00B7D49F /* UIWindowAppKitIntegration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A2E9947813C79DBE00B7D49F /* UIWindowAppKitIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E9947613C79DBE00B7D49F /* UIWindowAppKitIntegration.m */; };
 		F9177F9613BA317200619E3D /* UITableViewCellLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F9177F9413BA317200619E3D /* UITableViewCellLayoutManager.h */; };
 		F9177F9713BA317200619E3D /* UITableViewCellLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F9177F9513BA317200619E3D /* UITableViewCellLayoutManager.m */; };
 		F9647ED013B90D560040B2D6 /* <UITableView> selection.png in Resources */ = {isa = PBXBuildFile; fileRef = F9647ECD13B90D560040B2D6 /* <UITableView> selection.png */; };
@@ -578,6 +582,10 @@
 		88D0B2A513674EF2008A073F /* <UITextField> roundedRectBackgroundImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITextField> roundedRectBackgroundImage.png"; path = "Resources/<UITextField> roundedRectBackgroundImage.png"; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* UIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A2E9946D13C78C1000B7D49F /* UIViewAppKitIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewAppKitIntegration.h; sourceTree = "<group>"; };
+		A2E9946E13C78C1000B7D49F /* UIViewAppKitIntegration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewAppKitIntegration.m; sourceTree = "<group>"; };
+		A2E9947513C79DBE00B7D49F /* UIWindowAppKitIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIWindowAppKitIntegration.h; sourceTree = "<group>"; };
+		A2E9947613C79DBE00B7D49F /* UIWindowAppKitIntegration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIWindowAppKitIntegration.m; sourceTree = "<group>"; };
 		F9177F9413BA317200619E3D /* UITableViewCellLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellLayoutManager.h; sourceTree = "<group>"; };
 		F9177F9513BA317200619E3D /* UITableViewCellLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellLayoutManager.m; sourceTree = "<group>"; };
 		F9647ECD13B90D560040B2D6 /* <UITableView> selection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITableView> selection.png"; path = "Resources/<UITableView> selection.png"; sourceTree = "<group>"; };
@@ -863,6 +871,8 @@
 				1489855F12EE2CFE003D4751 /* UITouch.m */,
 				1489856012EE2CFE003D4751 /* UIView.h */,
 				1489856112EE2CFE003D4751 /* UIView.m */,
+				A2E9946D13C78C1000B7D49F /* UIViewAppKitIntegration.h */,
+				A2E9946E13C78C1000B7D49F /* UIViewAppKitIntegration.m */,
 				1489856212EE2CFE003D4751 /* UIViewAdapter.h */,
 				1489856312EE2CFE003D4751 /* UIViewAdapter.m */,
 				1489856412EE2CFE003D4751 /* UIViewController.h */,
@@ -871,6 +881,8 @@
 				1489856712EE2CFE003D4751 /* UIWebView.m */,
 				1489856812EE2CFE003D4751 /* UIWindow.h */,
 				1489856912EE2CFE003D4751 /* UIWindow.m */,
+				A2E9947513C79DBE00B7D49F /* UIWindowAppKitIntegration.h */,
+				A2E9947613C79DBE00B7D49F /* UIWindowAppKitIntegration.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1108,12 +1120,14 @@
 				14C6C122133AFC94002F111E /* CALayer+UIKitCompatibility.h in Headers */,
 				7011107C133BE0F400C86512 /* UIDatePicker.h in Headers */,
 				537472D5133ADD4B00EBD5EA /* UIInterface.h in Headers */,
+				A2E9946F13C78C1000B7D49F /* UIViewAppKitIntegration.h in Headers */,
 				14541DB21360D6F300C1006D /* UIPhotosAlbum.h in Headers */,
 				882B8EF6136636C8002E8F21 /* UISearchField.h in Headers */,
 				8842BC771387316400D148FF /* UIGradient.h in Headers */,
 				F9647EE413B91BDC0040B2D6 /* UITableViewCellBackgroundView.h in Headers */,
 				F9647EE913B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.h in Headers */,
 				F9177F9613BA317200619E3D /* UITableViewCellLayoutManager.h in Headers */,
+				A2E9947713C79DBE00B7D49F /* UIWindowAppKitIntegration.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1326,6 +1340,8 @@
 				F9647EE513B91BDC0040B2D6 /* UITableViewCellBackgroundView.m in Sources */,
 				F9647EEA13B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.m in Sources */,
 				F9177F9713BA317200619E3D /* UITableViewCellLayoutManager.m in Sources */,
+				A2E9947013C78C1000B7D49F /* UIViewAppKitIntegration.m in Sources */,
+				A2E9947813C79DBE00B7D49F /* UIWindowAppKitIntegration.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

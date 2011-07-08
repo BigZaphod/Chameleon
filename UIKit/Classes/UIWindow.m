@@ -37,6 +37,7 @@
 #import "UITouch+UIPrivate.h"
 #import "UIScreenMode.h"
 #import "UIResponderAppKitIntegration.h"
+#import "UIViewAppKitIntegration.h"
 #import "UIKitView.h"
 #import <AppKit/NSCursor.h>
 #import <AppKit/NSHelpManager.h>

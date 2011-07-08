@@ -34,3 +34,5 @@
 #import "UIScreenAppKitIntegration.h"
 #import "UIActionSheetAppKitIntegration.h"
 #import "UIApplicationAppKitIntegration.h"
+#import "UIViewAppKitIntegration.h"
+#import "UIWindowAppKitIntegration.h"

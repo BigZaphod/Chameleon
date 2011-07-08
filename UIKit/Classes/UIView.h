@@ -119,6 +119,8 @@ typedef NSUInteger UIViewAnimationOptions;
     NSMutableSet *_gestureRecognizers;
 	NSString *_toolTip;
 	BOOL _suppressAppearanceEvents;
+    UIView *_nextKeyView; // NR
+    UIView *_previousKeyView; // NR
 }
 
 + (Class)layerClass;
