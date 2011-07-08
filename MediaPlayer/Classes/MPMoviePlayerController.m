@@ -78,8 +78,6 @@ NSString *const MPMovieDurationAvailableNotification = @"MPMovieDurationAvailabl
 {    
     NSNumber* loadState = [movie attributeForKey: QTMovieLoadStateAttribute];        
     
-    NSLog(@"load state: %@", loadState);
-    
     switch ([loadState intValue]) {
         case QTMovieLoadStateError:            
         {
@@ -162,8 +160,6 @@ NSString *const MPMovieDurationAvailableNotification = @"MPMovieDurationAvailabl
     if (notification.object != movie)
         return;
         
-    NSLog(@"nnnnnnnnn");
-    
     [[NSNotificationCenter defaultCenter] postNotificationName: MPMoviePlayerLoadStateDidChangeNotification
                                                         object: self];
 }
