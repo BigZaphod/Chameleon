@@ -35,8 +35,11 @@
 
 #import "UIPickerView.h"
 
-@implementation UIPickerView
-
+@implementation UIPickerView {
+    id<UIPickerViewDataSource> _dataSource;
+    id<UIPickerViewDelegate>   _delegate;
+    BOOL _showsSelectionIndicator;
+}
 @synthesize showsSelectionIndicator = _showsSelectionIndicator;
 @synthesize dataSource = _dataSource;
 @synthesize delegate = _delegate;

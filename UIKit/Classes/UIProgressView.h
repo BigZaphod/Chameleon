@@ -34,10 +34,7 @@ typedef enum {
     UIProgressViewStyleBar,
 } UIProgressViewStyle;
 
-@interface UIProgressView : UIView {
-    UIProgressViewStyle _progressViewStyle;
-    float _progress;
-}
+@interface UIProgressView : UIView 
 
 - (id)initWithProgressViewStyle:(UIProgressViewStyle)style;
 

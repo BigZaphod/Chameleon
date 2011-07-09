@@ -116,16 +116,16 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 {
     [super setDelegate:newDelegate];
 
-    _delegateHas.heightForRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)];
-    _delegateHas.heightForHeaderInSection = [_delegate respondsToSelector:@selector(tableView:heightForHeaderInSection:)];
-    _delegateHas.heightForFooterInSection = [_delegate respondsToSelector:@selector(tableView:heightForFooterInSection:)];
-    _delegateHas.viewForHeaderInSection = [_delegate respondsToSelector:@selector(tableView:viewForHeaderInSection:)];
-    _delegateHas.viewForFooterInSection = [_delegate respondsToSelector:@selector(tableView:viewForFooterInSection:)];
-    _delegateHas.willSelectRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)];
-    _delegateHas.didSelectRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)];
-	_delegateHas.didDoubleClickRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:didDoubleClickRowAtIndexPath:)];
-    _delegateHas.willDeselectRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:willDeselectRowAtIndexPath:)];
-    _delegateHas.didDeselectRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:didDeselectRowAtIndexPath:)];
+    _delegateHas.heightForRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)];
+    _delegateHas.heightForHeaderInSection = [newDelegate respondsToSelector:@selector(tableView:heightForHeaderInSection:)];
+    _delegateHas.heightForFooterInSection = [newDelegate respondsToSelector:@selector(tableView:heightForFooterInSection:)];
+    _delegateHas.viewForHeaderInSection = [newDelegate respondsToSelector:@selector(tableView:viewForHeaderInSection:)];
+    _delegateHas.viewForFooterInSection = [newDelegate respondsToSelector:@selector(tableView:viewForFooterInSection:)];
+    _delegateHas.willSelectRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)];
+    _delegateHas.didSelectRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)];
+	_delegateHas.didDoubleClickRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:didDoubleClickRowAtIndexPath:)];
+    _delegateHas.willDeselectRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:willDeselectRowAtIndexPath:)];
+    _delegateHas.didDeselectRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:didDeselectRowAtIndexPath:)];
 }
 
 - (void)setRowHeight:(CGFloat)newHeight
@@ -754,7 +754,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		NSIndexPath *rowToSelect = [self _selectRowAtIndexPath:touchedRow sendDelegateMessages:YES animated:NO scrollPosition:UITableViewScrollPositionNone];
 		
 		if([touch tapCount] == 2 && _delegateHas.didDoubleClickRowAtIndexPath) {
-			[_delegate tableView:self didDoubleClickRowAtIndexPath:rowToSelect];
+			[self.delegate tableView:self didDoubleClickRowAtIndexPath:rowToSelect];
 		}
     }
 }
@@ -766,26 +766,26 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		NSIndexPath *rowToDeselect = selectedRow;
 		
 		if (sendDelegateMessages && _delegateHas.willDeselectRowAtIndexPath) {
-			rowToDeselect = [_delegate tableView:self willDeselectRowAtIndexPath:rowToDeselect];
+			rowToDeselect = [self.delegate tableView:self willDeselectRowAtIndexPath:rowToDeselect];
 		}
 		
 		[self deselectRowAtIndexPath:rowToDeselect animated:animated];
 		
 		if (sendDelegateMessages && _delegateHas.didDeselectRowAtIndexPath) {
-			[_delegate tableView:self didDeselectRowAtIndexPath:rowToDeselect];
+			[self.delegate tableView:self didDeselectRowAtIndexPath:rowToDeselect];
 		}
 	}
 	
 	NSIndexPath *rowToSelect = indexPath;
 	
 	if (sendDelegateMessages && _delegateHas.willSelectRowAtIndexPath) {
-		rowToSelect = [_delegate tableView:self willSelectRowAtIndexPath:rowToSelect];
+		rowToSelect = [self.delegate tableView:self willSelectRowAtIndexPath:rowToSelect];
 	}
 	
 	[self selectRowAtIndexPath:rowToSelect animated:animated scrollPosition:scrollPosition];
 	
 	if (sendDelegateMessages && _delegateHas.didSelectRowAtIndexPath) {
-		[_delegate tableView:self didSelectRowAtIndexPath:rowToSelect];
+		[self.delegate tableView:self didSelectRowAtIndexPath:rowToSelect];
 	}
 	
 	return rowToSelect;
@@ -803,7 +803,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
         self.editing = YES;
         
         if (_delegateHas.willBeginEditingRowAtIndexPath) {
-            [_delegate tableView:self willBeginEditingRowAtIndexPath:indexPath];
+            [self.delegate tableView:self willBeginEditingRowAtIndexPath:indexPath];
         }
         
         // deferring this because it presents a modal menu and that's what we do everywhere else in Chameleon
@@ -817,7 +817,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
         self.editing = NO;
 
         if (_delegateHas.didEndEditingRowAtIndexPath) {
-            [_delegate tableView:self didEndEditingRowAtIndexPath:indexPath];
+            [self.delegate tableView:self didEndEditingRowAtIndexPath:indexPath];
         }
     }
 }
@@ -831,7 +831,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
         
         // fetch the title for the delete menu item
         if (_delegateHas.titleForDeleteConfirmationButtonForRowAtIndexPath) {
-            menuItemTitle = [_delegate tableView:self titleForDeleteConfirmationButtonForRowAtIndexPath:indexPath];
+            menuItemTitle = [self.delegate tableView:self titleForDeleteConfirmationButtonForRowAtIndexPath:indexPath];
         }
         if ([menuItemTitle length] == 0) {
             menuItemTitle = @"Delete";

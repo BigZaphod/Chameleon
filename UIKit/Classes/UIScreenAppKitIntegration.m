@@ -35,6 +35,7 @@
 extern NSMutableArray *_allScreens;
 
 @implementation UIScreen (AppKitIntegration)
+
 - (UIKitView *)UIKitView
 {
     return _UIKitView;
