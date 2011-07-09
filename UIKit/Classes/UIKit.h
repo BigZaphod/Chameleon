@@ -109,7 +109,6 @@
 #import "UITextInput.h"
 
 // non-standard imports
-#import "UIKey.h"
 #import "CALayer+UIKitCompatibility.h"
 #import "UIGradient.h"
 

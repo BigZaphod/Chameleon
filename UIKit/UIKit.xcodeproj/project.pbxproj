@@ -390,8 +390,8 @@
 		1489851912EE2CFE003D4751 /* UIImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImagePickerController.m; sourceTree = "<group>"; };
 		1489851A12EE2CFE003D4751 /* UIImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageView.h; sourceTree = "<group>"; };
 		1489851B12EE2CFE003D4751 /* UIImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageView.m; sourceTree = "<group>"; };
-		1489851C12EE2CFE003D4751 /* UIKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIKey.h; sourceTree = "<group>"; };
-		1489851D12EE2CFE003D4751 /* UIKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIKey.m; sourceTree = "<group>"; };
+		1489851C12EE2CFE003D4751 /* UIKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIKey.h; path = Classes/UIKey.h; sourceTree = "<group>"; };
+		1489851D12EE2CFE003D4751 /* UIKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIKey.m; path = Classes/UIKey.m; sourceTree = "<group>"; };
 		1489851E12EE2CFE003D4751 /* UIKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIKit.h; sourceTree = "<group>"; };
 		1489851F12EE2CFE003D4751 /* UIKitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIKitView.h; sourceTree = "<group>"; };
 		1489852012EE2CFE003D4751 /* UIKitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIKitView.m; sourceTree = "<group>"; };
@@ -776,8 +776,6 @@
 				1489851B12EE2CFE003D4751 /* UIImageView.m */,
 				537472D3133ADD4B00EBD5EA /* UIInterface.h */,
 				537472D4133ADD4B00EBD5EA /* UIInterface.m */,
-				1489851C12EE2CFE003D4751 /* UIKey.h */,
-				1489851D12EE2CFE003D4751 /* UIKey.m */,
 				1489851E12EE2CFE003D4751 /* UIKit.h */,
 				1489851F12EE2CFE003D4751 /* UIKitView.h */,
 				1489852012EE2CFE003D4751 /* UIKitView.m */,
@@ -980,6 +978,8 @@
 				1489850412EE2CFE003D4751 /* UIColorAppKitIntegration.h */,
 				1489850E12EE2CFE003D4751 /* UIFontAppKitIntegration.h */,
 				149148BA12EE45ED00F7C34E /* UIGestureRecognizerSubclass.h */,
+				1489851C12EE2CFE003D4751 /* UIKey.h */,
+				1489851D12EE2CFE003D4751 /* UIKey.m */,
 				1489851712EE2CFE003D4751 /* UIImageAppKitIntegration.h */,
 				38615C68133A54DF00841EEA /* UINSCellControl.h */,
 				38615C69133A54DF00841EEA /* UINSCellControl.m */,
