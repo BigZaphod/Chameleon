@@ -32,7 +32,7 @@
 typedef enum {
     UIEventTypeTouches,
     UIEventTypeMotion,
-    UIEventTypeKeyPress			// nonstandard
+    UIEventTypeKeyPress			// AppKitIntegration
 } UIEventType;
 
 typedef enum {
