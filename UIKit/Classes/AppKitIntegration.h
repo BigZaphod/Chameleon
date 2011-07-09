@@ -36,3 +36,5 @@
 #import "UIApplicationAppKitIntegration.h"
 #import "UIViewAppKitIntegration.h"
 #import "UIWindowAppKitIntegration.h"
+
+#import "UIViewAdapter.h"

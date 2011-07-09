@@ -98,7 +98,6 @@
 #import "UIAccelerometer.h"
 #import "UIMenuController.h"
 #import "UIMenuItem.h"
-#import "UIViewAdapter.h"
 #import "UIPageControl.h"
 #import "UIProgressView.h"
 #import "UIPickerView.h"
