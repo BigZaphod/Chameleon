@@ -14,7 +14,19 @@
 
 static NSString *kSSSegmentedControlEnabledKey = @"enabled";
 
-@interface UISegmentedControl (PrivateMethods)
+@interface UISegmentedControl ()
+@property (nonatomic, retain) UIImage *buttonImage;
+@property (nonatomic, retain) UIImage *highlightedButtonImage;
+@property (nonatomic, retain) UIImage *dividerImage;
+@property (nonatomic, retain) UIImage *highlightedDividerImage;
+
+@property (nonatomic, retain) UIFont *font;
+@property (nonatomic, retain) UIColor *textColor;
+@property (nonatomic, retain) UIColor *disabledTextColor;
+@property (nonatomic, retain) UIColor *textShadowColor;
+@property (nonatomic, assign) CGSize textShadowOffset;
+@property (nonatomic, assign) UIEdgeInsets textEdgeInsets;
+
 - (NSMutableDictionary *)_metaForSegmentIndex:(NSUInteger)index;
 - (id)_metaValueForKey:(NSString *)key segmentIndex:(NSUInteger)index;
 - (void)_setMetaValue:(id)value forKey:(NSString *)key segmentIndex:(NSUInteger)index;
