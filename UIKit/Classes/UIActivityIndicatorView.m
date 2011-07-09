@@ -82,7 +82,12 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
     return frameImage;
 }
 
-@implementation UIActivityIndicatorView
+@implementation UIActivityIndicatorView {
+@private
+    UIActivityIndicatorViewStyle _activityIndicatorViewStyle;
+    BOOL _hidesWhenStopped;
+    BOOL _animating;
+}
 
 - (id)initWithActivityIndicatorStyle:(UIActivityIndicatorViewStyle)style
 {

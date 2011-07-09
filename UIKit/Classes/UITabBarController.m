@@ -30,8 +30,12 @@
 #import "UITabBarController.h"
 #import "UITabBar.h"
 
-@implementation UITabBarController
-
+@implementation UITabBarController {
+    UITabBar *_tabBar;
+    UIViewController *_selectedViewController;
+    NSArray *_viewControllers;
+    NSUInteger _selectedIndex;
+}
 @synthesize selectedViewController = _selectedViewController;
 @synthesize viewControllers = _viewControllers;
 @synthesize selectedIndex = _selectedIndex;

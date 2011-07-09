@@ -39,8 +39,17 @@
 
 #import "NSIndexPath+UITableView.h"
 
-@implementation NSFetchedResultsController
-
+@implementation NSFetchedResultsController {
+    id <NSFetchedResultsControllerDelegate> _delegate;
+    NSFetchRequest *_fetchRequest;
+    NSManagedObjectContext *_managedObjectContext;
+    NSArray *_fetchedObjects; // we don't yet support sections!
+    
+    // stubs
+    NSString *_sectionNameKeyPath;
+    NSString *_sectionNameKey;
+    NSString *_cacheName;
+}
 @synthesize delegate = _delegate;
 @synthesize fetchRequest = _fetchRequest;
 @synthesize managedObjectContext = _managedObjectContext;

@@ -30,7 +30,22 @@
 #import "UIGestureRecognizer.h"
 #import "UIGestureRecognizerSubclass.h"
 
-@implementation UIGestureRecognizer
+@implementation UIGestureRecognizer {
+@private
+    id _delegate;
+    BOOL _delaysTouchesBegan;
+    BOOL _delaysTouchesEnded;
+    BOOL _cancelsTouchesInView;
+    BOOL _enabled;
+    UIGestureRecognizerState _state;
+    UIView *_view;
+    
+    struct {
+        BOOL shouldBegin : 1;
+        BOOL shouldReceiveTouch : 1;
+        BOOL shouldRecognizeSimultaneouslyWithGestureRecognizer : 1;
+    } _delegateHas;	
+}
 @synthesize delegate=_delegate, delaysTouchesBegan=_delaysTouchesBegan, delaysTouchesEnded=_delaysTouchesEnded, cancelsTouchesInView=_cancelsTouchesInView;
 @synthesize state=_state, enabled=_enabled, view=_view;
 

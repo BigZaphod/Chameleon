@@ -101,7 +101,18 @@ static BOOL TouchIsActive(UITouch *touch)
     return (touch.phase == UITouchPhaseBegan || touch.phase == UITouchPhaseMoved || touch.phase == UITouchPhaseStationary);
 }
 
-@implementation UIApplication
+@implementation UIApplication {
+@private
+    UIEvent *_currentEvent;
+    UIWindow *_keyWindow;
+    NSMutableSet *_visibleWindows;
+    id<UIApplicationDelegate> _delegate;
+    BOOL _idleTimerDisabled;
+    BOOL _networkActivityIndicatorVisible;
+    BOOL _applicationSupportsShakeToEdit;
+    NSUInteger _ignoringInteractionEvents;
+    NSInteger _applicationIconBadgeNumber;
+}
 @synthesize keyWindow=_keyWindow, delegate=_delegate, idleTimerDisabled=_idleTimerDisabled, applicationSupportsShakeToEdit=_applicationSupportsShakeToEdit;
 @synthesize applicationIconBadgeNumber = _applicationIconBadgeNumber;
 

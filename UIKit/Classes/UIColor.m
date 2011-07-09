@@ -90,7 +90,10 @@ static UIColor *PurpleColor = nil;
 static UIColor *BrownColor = nil;
 static UIColor *ClearColor = nil;
 
-@implementation UIColor
+@implementation UIColor {
+@private
+    CGColorRef _color;
+}
 
 - (id)initWithNSColor:(NSColor *)aColor
 {

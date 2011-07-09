@@ -78,34 +78,7 @@ typedef NSUInteger UITableViewCellStateMask;
 
 @class UITableViewCellSeparator, UILabel, UIImageView;
 
-@interface UITableViewCell : UIView {
-@private
-    UITableViewCellStyle _style;
-    UITableViewCellSeparator *_separatorView;
-    UIView *_contentView;
-    UILabel *_textLabel;
-    UILabel *_detailTextLabel; // not yet displayed!
-    UIImageView *_imageView;
-    UIView *_backgroundView;
-    UIView *_selectedBackgroundView;
-    UITableViewCellAccessoryType _accessoryType;
-    UIView *_accessoryView;
-    UITableViewCellAccessoryType _editingAccessoryType;
-    UITableViewCellSelectionStyle _selectionStyle;
-	UITableViewCellSectionLocation _sectionLocation;
-    NSInteger _indentationLevel;
-    BOOL _editing;
-    BOOL _selected;
-    BOOL _highlighted;
-    BOOL _showingDeleteConfirmation;
-    NSString *_reuseIdentifier;
-    CGFloat _indentationWidth;
-    struct {
-        BOOL tableViewStyleIsGrouped : 1;
-        BOOL usingDefaultSelectedBackgroundView : 1;
-        BOOL usingDefaultAccessoryView : 1;
-    } _tableCellFlags;
-}
+@interface UITableViewCell : UIView 
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated;

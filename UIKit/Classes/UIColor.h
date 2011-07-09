@@ -31,10 +31,7 @@
 
 @class UIImage, NSColor;
 
-@interface UIColor : NSObject {
-@private
-    CGColorRef _color;
-}
+@interface UIColor : NSObject 
 
 - (id)initWithNSColor:(NSColor *)c;
 

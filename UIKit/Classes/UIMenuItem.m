@@ -29,7 +29,11 @@
 
 #import "UIMenuItem.h"
 
-@implementation UIMenuItem
+@implementation UIMenuItem {
+@private
+    SEL _action;
+    NSString *_title;
+}
 @synthesize action=_action, title=_title;
 
 - (id)initWithTitle:(NSString *)title action:(SEL)action

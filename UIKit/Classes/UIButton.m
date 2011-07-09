@@ -28,6 +28,7 @@
  */
 
 #import "UIButton.h"
+#import "UIButton+UIPrivate.h"
 #import "UIControl+UIPrivate.h"
 #import "UILabel.h"
 #import "UIImage.h"
@@ -41,7 +42,23 @@ static NSString *UIButtonContentTypeTitleShadowColor = @"UIButtonContentTypeTitl
 static NSString *UIButtonContentTypeBackgroundImage = @"UIButtonContentTypeBackgroundImage";
 static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 
-@implementation UIButton
+@implementation UIButton {
+    UIButtonType _buttonType;
+    UILabel *_titleLabel;
+    UIImageView *_imageView;
+    UIImageView *_backgroundImageView;
+    BOOL _reversesTitleShadowWhenHighlighted;
+    BOOL _adjustsImageWhenHighlighted;
+    BOOL _adjustsImageWhenDisabled;
+    BOOL _showsTouchWhenHighlighted;
+    UIEdgeInsets _contentEdgeInsets;
+    UIEdgeInsets _titleEdgeInsets;
+    UIEdgeInsets _imageEdgeInsets;
+    NSMutableDictionary *_content;
+    UIImage *_adjustedHighlightImage;
+    UIImage *_adjustedDisabledImage;
+	CGSize originalShadowOffset;
+}
 @synthesize buttonType=_buttonType, titleLabel=_titleLabel, reversesTitleShadowWhenHighlighted=_reversesTitleShadowWhenHighlighted;
 @synthesize adjustsImageWhenHighlighted=_adjustsImageWhenHighlighted, adjustsImageWhenDisabled=_adjustsImageWhenDisabled;
 @synthesize showsTouchWhenHighlighted=_showsTouchWhenHighlighted, imageView=_imageView, contentEdgeInsets=_contentEdgeInsets;
@@ -96,6 +113,11 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
     [_adjustedHighlightImage release];
     [_adjustedDisabledImage release];
     [super dealloc];
+}
+
+- (void) _setButtonType:(UIButtonType)buttonType
+{
+    _buttonType = buttonType;
 }
 
 - (NSString *)currentTitle

@@ -49,24 +49,7 @@ typedef NSUInteger UIPopoverArrowDirection;
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController;
 @end
 
-@interface UIPopoverController : NSObject {
-@private
-    UIViewController *_contentViewController;
-    NSArray *_passthroughViews;
-    UIPopoverArrowDirection _popoverArrowDirection;
-
-    UIPopoverView *_popoverView;
-    id _popoverWindow;
-    id _overlayWindow;
-    
-    CGSize _popoverContentSize;
-    
-    id _delegate;
-    struct {
-        BOOL popoverControllerDidDismissPopover : 1;
-        BOOL popoverControllerShouldDismissPopover : 1;
-    } _delegateHas;	
-}
+@interface UIPopoverController : NSObject 
 
 - (id)initWithContentViewController:(UIViewController *)viewController;
 

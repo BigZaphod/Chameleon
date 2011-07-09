@@ -40,8 +40,11 @@
 
 #define TABBAR_HEIGHT 60.0
 
-@implementation UITabBar
-
+@implementation UITabBar {
+    id<UITabBarDelegate> _delegate;
+    NSArray *_items;
+    NSInteger _selectedItemIndex;
+}
 @synthesize items = _items, delegate = _delegate;
 
 - (id)initWithFrame:(CGRect)rect

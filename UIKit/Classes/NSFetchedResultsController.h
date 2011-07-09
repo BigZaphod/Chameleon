@@ -44,17 +44,7 @@
 @class NSManagedObjectContext;
 
 
-@interface NSFetchedResultsController : NSObject {
-  id <NSFetchedResultsControllerDelegate> _delegate;
-  NSFetchRequest *_fetchRequest;
-  NSManagedObjectContext *_managedObjectContext;
-  NSArray *_fetchedObjects; // we don't yet support sections!
-
-  // stubs
-  NSString *_sectionNameKeyPath;
-  NSString *_sectionNameKey;
-  NSString *_cacheName;
-}
+@interface NSFetchedResultsController : NSObject 
 
 - (id)initWithFetchRequest:(NSFetchRequest *)fetchRequest managedObjectContext: (NSManagedObjectContext *)context sectionNameKeyPath:(NSString *)sectionNameKeyPath cacheName:(NSString *)name;
 

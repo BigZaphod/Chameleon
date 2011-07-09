@@ -31,7 +31,21 @@
 #import "UIViewAdapter.h"
 #import <WebKit/WebKit.h>
 
-@implementation UIWebView
+@implementation UIWebView {
+@private
+    id _delegate;
+    NSURLRequest *_request;
+    UIDataDetectorTypes _dataDetectorTypes;
+    WebView *_webView;
+    UIViewAdapter *_webViewAdapter;
+    BOOL _scalesPageToFit;
+    
+    struct {
+        BOOL shouldStartLoadWithRequest : 1;
+        BOOL didFailLoadWithError : 1;
+        BOOL didFinishLoad : 1;
+    } _delegateHas;
+}
 @synthesize request=_request, delegate=_delegate, dataDetectorTypes=_dataDetectorTypes, scalesPageToFit=_scalesPageToFit;
 
 - (id)initWithFrame:(CGRect)frame

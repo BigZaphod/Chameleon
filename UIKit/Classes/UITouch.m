@@ -31,7 +31,18 @@
 #import "UIWindow.h"
 #import <Cocoa/Cocoa.h>
 
-@implementation UITouch
+@implementation UITouch {
+@private
+    NSTimeInterval _timestamp;
+    NSUInteger _tapCount;
+    UITouchPhase _phase;
+    CGPoint _delta;
+    CGPoint _location;
+    CGPoint _previousLocation;
+    UIView *_view;
+    UIWindow *_window;
+    NSArray *_gestureRecognizers;
+}
 @synthesize timestamp=_timestamp, tapCount=_tapCount, phase=_phase, view=_view, window=_window, gestureRecognizers=_gestureRecognizers;
 
 - (id)init

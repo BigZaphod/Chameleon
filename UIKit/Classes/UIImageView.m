@@ -42,7 +42,17 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
     return CGImages;
 }
 
-@implementation UIImageView
+@implementation UIImageView {
+@private
+    UIImage *_image;
+    NSArray *_animationImages;
+    NSArray *_highlightedAnimationImages;
+    NSTimeInterval _animationDuration;
+    NSInteger _animationRepeatCount;
+    UIImage *_highlightedImage;
+    BOOL _highlighted;
+    NSInteger _drawMode;
+}
 @synthesize image=_image, animationImages=_animationImages, animationDuration=_animationDuration, highlightedImage=_highlightedImage, highlighted=_highlighted;
 @synthesize animationRepeatCount=_animationRepeatCount, highlightedAnimationImages=_highlightedAnimationImages;
 

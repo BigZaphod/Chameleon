@@ -48,7 +48,25 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 @end
 
 
-@implementation UITextView
+@implementation UITextView {
+@private
+    UITextLayer *_textLayer;
+    UIDataDetectorTypes _dataDetectorTypes;
+    
+    UIView *_inputAccessoryView;
+    UIView *_inputView;
+    
+    struct {
+        BOOL shouldBeginEditing : 1;
+        BOOL didBeginEditing : 1;
+        BOOL shouldEndEditing : 1;
+        BOOL didEndEditing : 1;
+        BOOL shouldChangeText : 1;
+        BOOL didChange : 1;
+        BOOL didChangeSelection : 1;
+        BOOL doCommandBySelector : 1;
+    } _delegateHas;
+}
 @synthesize dataDetectorTypes=_dataDetectorTypes, inputAccessoryView=_inputAccessoryView, inputView=_inputView;
 @dynamic delegate;
 

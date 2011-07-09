@@ -33,7 +33,24 @@
 #import "UIGraphics.h"
 #import <AppKit/NSStringDrawing.h>
 
-@implementation UILabel
+@implementation UILabel {
+@private
+    NSString *_text;
+    UIFont *_font;
+    UIColor *_textColor;
+    UIColor *_highlightedTextColor;
+    UIColor *_shadowColor;
+    CGSize _shadowOffset;
+    UITextAlignment _textAlignment;
+    UILineBreakMode _lineBreakMode;
+    BOOL _enabled;
+    NSInteger _numberOfLines;
+    UIBaselineAdjustment _baselineAdjustment;
+    BOOL _adjustsFontSizeToFitWidth;
+    CGFloat _minimumFontSize;
+    BOOL _highlighted;
+	NSAttributedString *_attributedText;
+}
 @synthesize text=_text, font=_font, textColor=_textColor, textAlignment=_textAlignment, lineBreakMode=_lineBreakMode, enabled=_enabled;
 @synthesize numberOfLines=_numberOfLines, shadowColor=_shadowColor, shadowOffset=_shadowOffset;
 @synthesize baselineAdjustment=_baselineAdjustment, adjustsFontSizeToFitWidth=_adjustsFontSizeToFitWidth;

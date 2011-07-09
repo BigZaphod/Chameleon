@@ -29,7 +29,13 @@
 
 #import "UIAccessibilityElement.h"
 
-@implementation UIAccessibilityElement
+@implementation UIAccessibilityElement {
+    NSString *_accessibilityLabel;
+    NSString *_accessibilityHint;
+    NSString *_accessibilityValue;
+    CGRect _accessibilityFrame;
+    UIAccessibilityTraits _accessibilityTraits;
+}
 @synthesize accessibilityLabel=_accessibilityLabel, accessibilityHint=_accessibilityHint, accessibilityValue=_accessibilityValue;
 @synthesize accessibilityFrame=_accessibilityFrame, accessibilityTraits=_accessibilityTraits;
 

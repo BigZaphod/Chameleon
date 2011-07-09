@@ -99,28 +99,7 @@ typedef NSUInteger UIViewAnimationOptions;
 
 @class UIColor, CALayer, UIViewController, UIGestureRecognizer;
 
-@interface UIView : UIResponder {
-@private
-    UIView *_superview;
-    NSMutableSet *_subviews;
-    BOOL _clearsContextBeforeDrawing;
-    BOOL _autoresizesSubviews;
-    BOOL _userInteractionEnabled;
-    CALayer *_layer;
-    NSInteger _tag;
-    UIViewContentMode _contentMode;
-    UIColor *_backgroundColor;
-    BOOL _implementsDrawRect;
-    BOOL _multipleTouchEnabled;
-    BOOL _exclusiveTouch;
-    UIViewController *_viewController;
-    UIViewAutoresizing _autoresizingMask;
-    BOOL _needsDidAppearOrDisappear;
-    NSMutableSet *_gestureRecognizers;
-	BOOL _suppressAppearanceEvents;
-    UIView *_nextKeyView; // NR
-    UIView *_previousKeyView; // NR
-}
+@interface UIView : UIResponder 
 
 + (Class)layerClass;
 

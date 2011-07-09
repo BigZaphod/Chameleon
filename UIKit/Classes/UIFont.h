@@ -29,10 +29,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface UIFont : NSObject {
-@package
-    CTFontRef _font;
-}
+@interface UIFont : NSObject 
 
 + (UIFont *)fontWithName:(NSString *)fontName size:(CGFloat)fontSize;
 + (NSArray *)familyNames;

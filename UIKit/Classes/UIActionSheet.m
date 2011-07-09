@@ -37,7 +37,27 @@
 #import <AppKit/NSMenuItem.h>
 #import <AppKit/NSEvent.h>
 
-@implementation UIActionSheet
+@implementation UIActionSheet {
+@private
+    id<UIActionSheetDelegate> _delegate;
+    NSInteger _destructiveButtonIndex;
+    NSInteger _cancelButtonIndex;
+    NSInteger _firstOtherButtonIndex;
+    NSString *_title;
+    NSMutableArray *_menuTitles;
+    NSMutableArray *_separatorIndexes;
+    UIActionSheetStyle _actionSheetStyle;
+    id _menu;
+    
+    struct {
+        BOOL clickedButtonAtIndex : 1;
+        BOOL willPresentActionSheet : 1;
+        BOOL didPresentActionSheet : 1;
+        BOOL willDismissWithButtonIndex : 1;
+        BOOL didDismissWithButtonIndex : 1;
+        BOOL actionSheetCancel : 1;
+    } _delegateHas;
+}
 @synthesize delegate=_delegate, destructiveButtonIndex=_destructiveButtonIndex, cancelButtonIndex=_cancelButtonIndex, title=_title;
 @synthesize firstOtherButtonIndex=_firstOtherButtonIndex, actionSheetStyle = _actionSheetStyle;
 

@@ -1,5 +1,5 @@
 #import "UIViewAppKitIntegration.h"
-
+#import "UIView+UIPrivate.h"
 
 @implementation UIView (AppKitIntegration)
 
