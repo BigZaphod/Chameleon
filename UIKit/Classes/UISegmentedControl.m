@@ -32,8 +32,28 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
 - (void)_setMetaValue:(id)value forKey:(NSString *)key segmentIndex:(NSUInteger)index;
 @end
 
-@implementation UISegmentedControl
-
+@implementation UISegmentedControl {
+    NSMutableArray *_segments;
+    NSInteger _selectedSegmentIndex;
+    NSUInteger _numberOfSegments;
+    BOOL _momentary;
+    NSMutableDictionary *_segmentMeta;
+    
+    UIImage *_buttonImage;
+    UIImage *_highlightedButtonImage;
+    UIImage *_dividerImage;
+    UIImage *_highlightedDividerImage;
+    
+    UIFont *_font;
+    UIColor *_textColor;
+    UIColor *_disabledTextColor;
+    UIColor *_textShadowColor;
+    CGSize _textShadowOffset;
+    UIEdgeInsets _textEdgeInsets;
+    
+    UISegmentedControlStyle _segmentedControlStyle;
+    UIColor *_tintColor;
+}
 @synthesize numberOfSegments = _numberOfSegments;
 @synthesize selectedSegmentIndex = _selectedSegmentIndex;
 @synthesize momentary = _momentary;

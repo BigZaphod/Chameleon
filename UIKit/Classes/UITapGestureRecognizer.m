@@ -30,7 +30,10 @@
 #import "UITapGestureRecognizer.h"
 #import "UIGestureRecognizerSubclass.h"
 
-@implementation UITapGestureRecognizer
+@implementation UITapGestureRecognizer {
+    NSUInteger _numberOfTapsRequired;
+    NSUInteger _numberOfTouchesRequired;
+}
 @synthesize numberOfTapsRequired=_numberOfTapsRequired, numberOfTouchesRequired=_numberOfTouchesRequired;
 
 - (id)initWithTarget:(id)target action:(SEL)action

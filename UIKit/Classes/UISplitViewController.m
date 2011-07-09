@@ -175,7 +175,17 @@ static const CGFloat SplitterPadding = 3;
 
 
 
-@implementation UISplitViewController
+@implementation UISplitViewController {
+@private
+    id <UISplitViewControllerDelegate> _delegate;
+    NSArray *_viewControllers;
+    
+    struct {
+        BOOL willPresentViewController : 1;
+        BOOL willHideViewController : 1;
+        BOOL willShowViewController : 1;
+    } _delegateHas;
+}
 @synthesize delegate=_delegate, viewControllers=_viewControllers;
 
 - (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)nibBundle

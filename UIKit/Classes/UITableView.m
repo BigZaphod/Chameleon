@@ -53,7 +53,50 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 - (NSIndexPath *)_selectRowAtIndexPath:(NSIndexPath *)indexPath sendDelegateMessages:(BOOL)sendDelegateMessage animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition;
 @end
 
-@implementation UITableView
+@implementation UITableView {
+@private
+    UITableViewStyle _style;
+    id<UITableViewDataSource> _dataSource;
+    BOOL _needsReload;
+    CGFloat _rowHeight;
+    UIColor *_separatorColor;
+    UITableViewCellSeparatorStyle _separatorStyle;
+    UIView *_tableHeaderView;
+    UIView *_tableFooterView;
+    BOOL _allowsSelection;
+    BOOL _allowsSelectionDuringEditing;
+    BOOL _editing;
+    NSIndexPath *_selectedRow;
+    NSMutableDictionary *_cachedCells;
+    NSMutableSet *_reusableCells;
+    NSMutableArray *_sections;
+    CGFloat _sectionHeaderHeight;
+    CGFloat _sectionFooterHeight;
+    
+    struct {
+        BOOL heightForRowAtIndexPath : 1;
+        BOOL heightForHeaderInSection : 1;
+        BOOL heightForFooterInSection : 1;
+        BOOL viewForHeaderInSection : 1;
+        BOOL viewForFooterInSection : 1;
+        BOOL willSelectRowAtIndexPath : 1;
+        BOOL didSelectRowAtIndexPath : 1;
+		BOOL didDoubleClickRowAtIndexPath: 1;
+        BOOL willDeselectRowAtIndexPath : 1;
+        BOOL didDeselectRowAtIndexPath : 1;
+		BOOL willBeginEditingRowAtIndexPath : 1;
+		BOOL didEndEditingRowAtIndexPath : 1;
+		BOOL titleForDeleteConfirmationButtonForRowAtIndexPath : 1;
+    } _delegateHas;
+    
+    struct {
+        BOOL numberOfSectionsInTableView : 1;
+        BOOL titleForHeaderInSection : 1;
+        BOOL titleForFooterInSection : 1;
+		BOOL commitEditingStyle : 1;
+		BOOL canEditRowAtIndexPath : 1;
+    } _dataSourceHas;
+}
 @synthesize style=_style, dataSource=_dataSource, rowHeight=_rowHeight, separatorStyle=_separatorStyle, separatorColor=_separatorColor;
 @synthesize tableHeaderView=_tableHeaderView, tableFooterView=_tableFooterView, allowsSelection=_allowsSelection, editing=_editing;
 @synthesize sectionFooterHeight=_sectionFooterHeight, sectionHeaderHeight=_sectionHeaderHeight;

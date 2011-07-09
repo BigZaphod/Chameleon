@@ -54,7 +54,34 @@ extern CGFloat _UITableViewDefaultRowHeight;
 @end
 
 
-@implementation UITableViewCell
+@implementation UITableViewCell {
+@private
+    UITableViewCellStyle _style;
+    UITableViewCellSeparator *_separatorView;
+    UIView *_contentView;
+    UILabel *_textLabel;
+    UILabel *_detailTextLabel; // not yet displayed!
+    UIImageView *_imageView;
+    UIView *_backgroundView;
+    UIView *_selectedBackgroundView;
+    UITableViewCellAccessoryType _accessoryType;
+    UIView *_accessoryView;
+    UITableViewCellAccessoryType _editingAccessoryType;
+    UITableViewCellSelectionStyle _selectionStyle;
+	UITableViewCellSectionLocation _sectionLocation;
+    NSInteger _indentationLevel;
+    BOOL _editing;
+    BOOL _selected;
+    BOOL _highlighted;
+    BOOL _showingDeleteConfirmation;
+    NSString *_reuseIdentifier;
+    CGFloat _indentationWidth;
+    struct {
+        BOOL tableViewStyleIsGrouped : 1;
+        BOOL usingDefaultSelectedBackgroundView : 1;
+        BOOL usingDefaultAccessoryView : 1;
+    } _tableCellFlags;
+}
 @synthesize accessoryType=_accessoryType; 
 @synthesize accessoryView=_accessoryView;
 @synthesize backgroundView=_backgroundView;

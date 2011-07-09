@@ -36,7 +36,12 @@
 #import "UISlider.h"
 
 
-@implementation UISlider
+@implementation UISlider {
+    float _value;
+    float _minimumValue;
+    float _maximumValue;
+	BOOL _continuous;
+}
 
 @synthesize value = _value;
 @synthesize minimumValue = _minimumValue;

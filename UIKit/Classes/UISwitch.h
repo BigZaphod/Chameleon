@@ -29,8 +29,7 @@
 
 #import "UIControl.h"
 
-@interface UISwitch : UIControl {
-}
+@interface UISwitch : UIControl 
 
 - (id)initWithFrame:(CGRect)frame;
 - (void)setOn:(BOOL)on animated:(BOOL)animated;

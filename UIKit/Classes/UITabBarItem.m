@@ -36,7 +36,9 @@
 #import "UITabBarItem.h"
 #import "UIImage.h"
 
-@implementation UITabBarItem
+@implementation UITabBarItem {
+    NSString *_badgeValue;
+}
 @synthesize badgeValue=_badgeValue;
 
 - (id)initWithTitle:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag
