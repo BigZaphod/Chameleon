@@ -101,8 +101,9 @@ typedef NSUInteger UITableViewCellStateMask;
     NSString *_reuseIdentifier;
     CGFloat _indentationWidth;
     struct {
-        NSUInteger tableViewStyleIsGrouped : 1;
-        NSUInteger usingDefaultSelectedBackgroundView : 1;
+        BOOL tableViewStyleIsGrouped : 1;
+        BOOL usingDefaultSelectedBackgroundView : 1;
+        BOOL usingDefaultAccessoryView : 1;
     } _tableCellFlags;
 }
 

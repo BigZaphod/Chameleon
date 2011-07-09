@@ -50,6 +50,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 - (void) _setHighlighted:(BOOL)highlighted forViews:(id)subviews;
 - (void) showSelectedBackgroundView:(BOOL)selected animated:(BOOL)animated;
 - (void) _setupDefaultSelectedBackgroundView;
+- (void) _setupDefaultAccessoryView;
 @end
 
 
@@ -73,6 +74,19 @@ extern CGFloat _UITableViewDefaultRowHeight;
 @synthesize showingDeleteConfirmation = _showingDeleteConfirmation;
 @synthesize textLabel=_textLabel;
 
+static UIImage* chevronImage;
+static UIImage* chevronImageHighlighted;
+
++ (void) initialize
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSBundle* bundle = [NSBundle bundleForClass:[self class]];
+        chevronImage = [[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UITableViewCell> chevron"]] retain];
+        chevronImageHighlighted = [[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UITableViewCell> chevronHighlighted"]] retain];
+    });
+}
+
 - (void) dealloc
 {
 	[_separatorView release];
@@ -83,7 +97,6 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	[_imageView release];
 	[_backgroundView release];
 	[_selectedBackgroundView release];
-	[_accessoryView release];
 	[_reuseIdentifier release];
 	
 	[super dealloc];
@@ -164,12 +177,37 @@ extern CGFloat _UITableViewDefaultRowHeight;
 
 #pragma mark Managing Accessory Views
 
+- (void) setAccessoryType:(UITableViewCellAccessoryType)accessoryType
+{
+    if (_accessoryType != accessoryType) {
+        [_accessoryView removeFromSuperview];
+        [_accessoryView release], _accessoryView = nil;
+        _accessoryType = accessoryType;
+        [self _setupDefaultAccessoryView];
+    }
+}
+
+- (UIView*) accessoryView
+{
+    if (_tableCellFlags.usingDefaultAccessoryView) {
+        return nil;
+    }
+    return _accessoryView;
+}
+
 - (void) setAccessoryView:(UIView*)accessoryView 
 {
 	if (_accessoryView != accessoryView) {
-		[_accessoryView removeFromSuperview];
-		[_accessoryView release], _accessoryView = [accessoryView retain];
-        [self.contentView addSubview:_accessoryView];
+        [_accessoryView removeFromSuperview];
+        [_accessoryView release], _accessoryView = nil;
+        if (accessoryView) {
+            _tableCellFlags.usingDefaultAccessoryView = NO;
+            _accessoryView = [accessoryView retain];
+            [self.contentView addSubview:_accessoryView];
+        } else {
+            [self _setupDefaultAccessoryView];
+        }
+        [self setNeedsLayout];
 	}
 }
 
@@ -232,12 +270,6 @@ extern CGFloat _UITableViewDefaultRowHeight;
         }
 	}
 }
-
-
-#pragma mark Managing Accessory Views
-
-// TODO: Implement me.
-
 
 #pragma mark Managing Cell Selection and Highlighting
 
@@ -313,7 +345,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 		CGSize accessorySize = [_accessoryView sizeThatFits:bounds.size];
         CGRect accessoryFrame = {
             .origin = { 
-                .x = bounds.size.width - accessorySize.width,
+                .x = bounds.size.width - accessorySize.width - 10.0,
                 .y = round(0.5 * (bounds.size.height - accessorySize.height)),
             },
             .size = accessorySize
@@ -323,10 +355,10 @@ extern CGFloat _UITableViewDefaultRowHeight;
 	}
 		
 	if (_backgroundView) {
-        _backgroundView.frame = contentFrame;
+        _backgroundView.frame = bounds;
 	}
     if (_selectedBackgroundView) {
-        _selectedBackgroundView.frame = contentFrame;
+        _selectedBackgroundView.frame = bounds;
     }
     if (_contentView) {
         _contentView.frame = contentFrame;
@@ -454,6 +486,30 @@ extern CGFloat _UITableViewDefaultRowHeight;
     UITableViewCellSelectedBackgroundView* selectedBackgroundView = [[UITableViewCellSelectedBackgroundView alloc] init];
     selectedBackgroundView.selectionStyle = self.selectionStyle;
     _selectedBackgroundView = selectedBackgroundView;
+}
+
+- (void) _setupDefaultAccessoryView
+{
+    assert(!_accessoryView);
+    switch (_accessoryType) {
+        case UITableViewCellAccessoryNone:
+        case UITableViewCellAccessoryCheckmark:
+        case UITableViewCellAccessoryDetailDisclosureButton: {
+            break;
+        }
+            
+        case UITableViewCellAccessoryDisclosureIndicator: {
+            UIImageView* chevron = [[UIImageView alloc] initWithImage:chevronImage];
+            chevron.highlightedImage = chevronImageHighlighted;
+            _accessoryView = chevron;
+            break;
+        }
+    }
+    _tableCellFlags.usingDefaultAccessoryView = YES;
+    if (_accessoryView) {
+        [self.contentView addSubview:_accessoryView];
+        [self setNeedsLayout];
+    }
 }
 
 @end
