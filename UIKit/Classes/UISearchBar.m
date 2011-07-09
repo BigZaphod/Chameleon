@@ -55,7 +55,7 @@
 - (id)initWithFrame:(CGRect)frame
 {
     if ((self = [super initWithFrame:frame])) {
-        _searchField = [(UISearchField *)[UISearchField alloc] initWithFrame:frame];
+        _searchField = [[UISearchField alloc] initWithFrame:frame];
 		_searchField.delegate = self;
 		_searchField.borderStyle = UITextBorderStyleRoundedRect;
 		_searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;

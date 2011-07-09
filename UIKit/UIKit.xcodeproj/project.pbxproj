@@ -274,7 +274,7 @@
 		78CB48DA133AB922008636DA /* UISlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CB48D8133AB920008636DA /* UISlider.m */; };
 		78D533DD133A9434006F17CA /* UISearchDisplayController.h in Headers */ = {isa = PBXBuildFile; fileRef = 78D533DB133A9434006F17CA /* UISearchDisplayController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		78D533DE133A9434006F17CA /* UISearchDisplayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D533DC133A9434006F17CA /* UISearchDisplayController.m */; };
-		882B8EF6136636C8002E8F21 /* UISearchField.h in Headers */ = {isa = PBXBuildFile; fileRef = 882B8EF4136636C8002E8F21 /* UISearchField.h */; };
+		882B8EF6136636C8002E8F21 /* UISearchField.h in Headers */ = {isa = PBXBuildFile; fileRef = 882B8EF4136636C8002E8F21 /* UISearchField.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		882B8EF7136636C8002E8F21 /* UISearchField.m in Sources */ = {isa = PBXBuildFile; fileRef = 882B8EF5136636C8002E8F21 /* UISearchField.m */; };
 		882C32C61368DD03007B6E4B /* <UISearchBar> search-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 882C32C51368DD03007B6E4B /* <UISearchBar> search-icon.png */; };
 		8842BC771387316400D148FF /* UIGradient.h in Headers */ = {isa = PBXBuildFile; fileRef = 8842BC751387316400D148FF /* UIGradient.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -819,8 +819,6 @@
 				78CB48AB133A9C51008636DA /* UISearchBar.m */,
 				78D533DB133A9434006F17CA /* UISearchDisplayController.h */,
 				78D533DC133A9434006F17CA /* UISearchDisplayController.m */,
-				882B8EF4136636C8002E8F21 /* UISearchField.h */,
-				882B8EF5136636C8002E8F21 /* UISearchField.m */,
 				78CB48B2133AA8AF008636DA /* UISegmentedControl.h */,
 				78CB48B3133AA8AF008636DA /* UISegmentedControl.m */,
 				78CB48D7133AB91E008636DA /* UISlider.h */,
@@ -900,6 +898,8 @@
 				14FA8C50121DA4A000C4264B /* UIScroller.m */,
 				14D0C43612DCEF910040035C /* UIScrollViewScrollAnimation.h */,
 				14D0C43712DCEF910040035C /* UIScrollViewScrollAnimation.m */,
+				882B8EF4136636C8002E8F21 /* UISearchField.h */,
+				882B8EF5136636C8002E8F21 /* UISearchField.m */,
 				F9647EE213B91BDC0040B2D6 /* UITableViewCellBackgroundView.h */,
 				F9647EE313B91BDC0040B2D6 /* UITableViewCellBackgroundView.m */,
 				F9177F9413BA317200619E3D /* UITableViewCellLayoutManager.h */,
