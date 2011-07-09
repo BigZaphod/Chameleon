@@ -95,18 +95,7 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
 
 @class UIWindow, UIApplication, UILocalNotification;
 
-@interface UIApplication : UIResponder {
-@private
-    UIEvent *_currentEvent;
-    UIWindow *_keyWindow;
-    NSMutableSet *_visibleWindows;
-    id<UIApplicationDelegate> _delegate;
-    BOOL _idleTimerDisabled;
-    BOOL _networkActivityIndicatorVisible;
-    BOOL _applicationSupportsShakeToEdit;
-    NSUInteger _ignoringInteractionEvents;
-    NSInteger _applicationIconBadgeNumber;
-}
+@interface UIApplication : UIResponder 
 
 + (UIApplication *)sharedApplication;
 

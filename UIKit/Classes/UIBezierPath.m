@@ -30,7 +30,20 @@
 #import "UIBezierPath.h"
 #import "UIGraphics.h"
 
-@implementation UIBezierPath
+@implementation UIBezierPath {
+@private
+    CGPathRef _path;
+    CGFloat _lineWidth;
+    CGLineCap _lineCapStyle;
+    CGLineJoin _lineJoinStyle;
+    CGFloat _miterLimit;
+    CGFloat _flatness;
+    BOOL _usesEvenOddFillRule;
+    CGFloat *_lineDashPattern;
+    NSInteger _lineDashCount;
+    CGFloat _lineDashPhase;
+}
+
 @synthesize lineWidth=_lineWidth, lineCapStyle=_lineCapStyle, lineJoinStyle=_lineJoinStyle, miterLimit=_miterLimit;
 @synthesize flatness=_flatness, usesEvenOddFillRule=_usesEvenOddFillRule, CGPath=_path;
 

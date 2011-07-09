@@ -35,12 +35,7 @@ typedef enum {
     UIActivityIndicatorViewStyleGray,
 } UIActivityIndicatorViewStyle;
 
-@interface UIActivityIndicatorView : UIView {
-@private
-    UIActivityIndicatorViewStyle _activityIndicatorViewStyle;
-    BOOL _hidesWhenStopped;
-    BOOL _animating;
-}
+@interface UIActivityIndicatorView : UIView 
 
 - (id)initWithActivityIndicatorStyle:(UIActivityIndicatorViewStyle)style;
 - (void)startAnimating;

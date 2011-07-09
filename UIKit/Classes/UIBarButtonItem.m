@@ -28,9 +28,10 @@
  */
 
 #import "UIBarButtonItem.h"
+#import "UIBarButtonItem+UIPrivate.h"
 #import "UIImage+UIPrivate.h"
 
-@implementation UIBarButtonItem
+@implementation UIBarButtonItem 
 @synthesize width=_width, customView=_customView, action=_action, target=_target, style=_style;
 
 - (id)init
