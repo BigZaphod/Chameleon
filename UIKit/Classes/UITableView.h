@@ -40,7 +40,6 @@ extern NSString *const UITableViewIndexSearch;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
-- (void)tableView:(UITableView *)tableView didDoubleClickRowAtIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath;
 
@@ -52,6 +51,9 @@ extern NSString *const UITableViewIndexSearch;
 - (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath;
+
+@optional // AppKitIntegration
+- (void)tableView:(UITableView *)tableView didDoubleClickRowAtIndexPath:(NSIndexPath *)indexPath;
 @end
 
 @protocol UITableViewDataSource <NSObject>
