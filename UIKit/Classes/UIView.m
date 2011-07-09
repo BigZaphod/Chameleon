@@ -28,6 +28,7 @@
  */
 
 #import "UIView+UIPrivate.h"
+#import "UIViewAppKitIntegration.h"
 #import "UIWindow.h"
 #import "UIGraphics.h"
 #import "UIColor.h"
@@ -47,6 +48,7 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
 
 static NSMutableArray *_animationGroups;
 static BOOL _animationsEnabled = YES;
+
 
 @implementation UIView
 @synthesize layer=_layer, superview=_superview, clearsContextBeforeDrawing=_clearsContextBeforeDrawing, autoresizesSubviews=_autoresizesSubviews;
