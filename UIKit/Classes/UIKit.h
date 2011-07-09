@@ -98,7 +98,6 @@
 #import "UIAccelerometer.h"
 #import "UIMenuController.h"
 #import "UIMenuItem.h"
-#import "UIViewAdapter.h"
 #import "UIPageControl.h"
 #import "UIProgressView.h"
 #import "UIPickerView.h"
@@ -110,10 +109,7 @@
 #import "UITextInput.h"
 
 // non-standard imports
-#import "UIKey.h"
-#import "UINSCellControl.h"
 #import "CALayer+UIKitCompatibility.h"
-#import "UIGradient.h"
 
 // only add if core data is included
 #import "NSFetchedResultsController.h"
