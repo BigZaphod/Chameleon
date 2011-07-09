@@ -50,26 +50,7 @@ typedef enum {
 
 @class UINavigationItem, UINavigationController, UIBarButtonItem, UISplitViewController;
 
-@interface UIViewController : UIResponder {
-@private
-    UIView *_view;
-    BOOL _wantsFullScreenLayout;
-    NSString *_title;
-    CGSize _contentSizeForViewInPopover;
-    BOOL _modalInPopover;
-    UINavigationItem *_navigationItem;
-    NSArray *_toolbarItems;
-    UIModalPresentationStyle _modalPresentationStyle;
-    BOOL _editing;
-    BOOL _hidesBottomBarWhenPushed;
-    UIViewController *_parentViewController;
-    UIViewController *_modalViewController;
-    UISearchDisplayController *_searchDisplayController;
-    UIModalTransitionStyle _modalTransitionStyle;
-
-    UITabBarItem *_tabBarItem;
-    UITabBarController *_tabBarController;
-}
+@interface UIViewController : UIResponder 
 
 - (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)nibBundle;	// won't load a nib no matter what you do!
 

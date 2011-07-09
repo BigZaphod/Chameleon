@@ -50,7 +50,26 @@ static NSMutableArray *_animationGroups;
 static BOOL _animationsEnabled = YES;
 
 
-@implementation UIView
+@implementation UIView {
+@private
+    UIView *_superview;
+    NSMutableSet *_subviews;
+    BOOL _clearsContextBeforeDrawing;
+    BOOL _autoresizesSubviews;
+    BOOL _userInteractionEnabled;
+    CALayer *_layer;
+    NSInteger _tag;
+    UIViewContentMode _contentMode;
+    UIColor *_backgroundColor;
+    BOOL _implementsDrawRect;
+    BOOL _multipleTouchEnabled;
+    BOOL _exclusiveTouch;
+    UIViewController *_viewController;
+    UIViewAutoresizing _autoresizingMask;
+    BOOL _needsDidAppearOrDisappear;
+    NSMutableSet *_gestureRecognizers;
+	BOOL _suppressAppearanceEvents;
+}
 @synthesize layer=_layer, superview=_superview, clearsContextBeforeDrawing=_clearsContextBeforeDrawing, autoresizesSubviews=_autoresizesSubviews;
 @synthesize tag=_tag, userInteractionEnabled=_userInteractionEnabled, contentMode=_contentMode, backgroundColor=_backgroundColor;
 @synthesize multipleTouchEnabled=_multipleTouchEnabled, exclusiveTouch=_exclusiveTouch, autoresizingMask=_autoresizingMask;

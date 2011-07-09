@@ -50,7 +50,39 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (BOOL)textField:(UITextField *)textField doCommandBySelector:(SEL)selector;
 @end
 
-@implementation UITextField
+@implementation UITextField {
+@private
+    UITextLayer *_textLayer;
+	UITextLayer *_placeholderTextLayer;
+    
+    id _delegate;
+    UITextFieldViewMode _clearButtonMode;
+    UIView *_leftView;
+    UITextFieldViewMode _leftViewMode;
+    UIView *_rightView;
+    UITextFieldViewMode _rightViewMode;
+    UIImage *_background;
+    UIImage *_disabledBackground;
+    BOOL _editing;
+    BOOL _clearsOnBeginEditing;
+    BOOL _adjustsFontSizeToFitWidth;
+    NSString *_placeholder;
+    UITextBorderStyle _borderStyle;
+    
+    UIView *_inputAccessoryView;
+    UIView *_inputView;
+    
+    struct {
+        BOOL shouldBeginEditing : 1;
+        BOOL didBeginEditing : 1;
+        BOOL shouldEndEditing : 1;
+        BOOL didEndEditing : 1;
+        BOOL shouldChangeCharacters : 1;
+        BOOL shouldClear : 1;
+        BOOL shouldReturn : 1;
+		BOOL doCommandBySelector : 1;
+    } _delegateHas;	
+}
 @synthesize delegate=_delegate, background=_background, disabledBackground=_disabledBackground, editing=_editing, clearsOnBeginEditing=_clearsOnBeginEditing;
 @synthesize adjustsFontSizeToFitWidth=_adjustsFontSizeToFitWidth, clearButtonMode=_clearButtonMode, leftView=_leftView, rightView=_rightView;
 @synthesize leftViewMode=_leftViewMode, rightViewMode=_rightViewMode, borderStyle=_borderStyle;

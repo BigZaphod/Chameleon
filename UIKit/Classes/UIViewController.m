@@ -40,7 +40,26 @@
 #import "UIScreen.h"
 #import "UITabBarController.h"
 
-@implementation UIViewController
+@implementation UIViewController {
+@private
+    UIView *_view;
+    BOOL _wantsFullScreenLayout;
+    NSString *_title;
+    CGSize _contentSizeForViewInPopover;
+    BOOL _modalInPopover;
+    UINavigationItem *_navigationItem;
+    NSArray *_toolbarItems;
+    UIModalPresentationStyle _modalPresentationStyle;
+    BOOL _editing;
+    BOOL _hidesBottomBarWhenPushed;
+    UIViewController *_parentViewController;
+    UIViewController *_modalViewController;
+    UISearchDisplayController *_searchDisplayController;
+    UIModalTransitionStyle _modalTransitionStyle;
+    
+    UITabBarItem *_tabBarItem;
+    UITabBarController *_tabBarController;
+}
 @synthesize view=_view, wantsFullScreenLayout=_wantsFullScreenLayout, title=_title, contentSizeForViewInPopover=_contentSizeForViewInPopover;
 @synthesize modalInPopover=_modalInPopover, toolbarItems=_toolbarItems, modalPresentationStyle=_modalPresentationStyle, editing=_editing;
 @synthesize modalViewController=_modalViewController, parentViewController=_parentViewController;

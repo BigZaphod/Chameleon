@@ -63,39 +63,7 @@ typedef enum {
 - (BOOL)textFieldShouldReturn:(UITextField *)textField;
 @end
 
-@interface UITextField : UIControl <UITextInputTraits> {
-@private
-    UITextLayer *_textLayer;
-	UITextLayer *_placeholderTextLayer;
-
-    id _delegate;
-    UITextFieldViewMode _clearButtonMode;
-    UIView *_leftView;
-    UITextFieldViewMode _leftViewMode;
-    UIView *_rightView;
-    UITextFieldViewMode _rightViewMode;
-    UIImage *_background;
-    UIImage *_disabledBackground;
-    BOOL _editing;
-    BOOL _clearsOnBeginEditing;
-    BOOL _adjustsFontSizeToFitWidth;
-    NSString *_placeholder;
-    UITextBorderStyle _borderStyle;
-
-    UIView *_inputAccessoryView;
-    UIView *_inputView;
-
-    struct {
-        BOOL shouldBeginEditing : 1;
-        BOOL didBeginEditing : 1;
-        BOOL shouldEndEditing : 1;
-        BOOL didEndEditing : 1;
-        BOOL shouldChangeCharacters : 1;
-        BOOL shouldClear : 1;
-        BOOL shouldReturn : 1;
-		BOOL doCommandBySelector : 1;
-    } _delegateHas;	
-}
+@interface UITextField : UIControl <UITextInputTraits> 
 
 - (CGRect)borderRectForBounds:(CGRect)bounds;
 - (CGRect)clearButtonRectForBounds:(CGRect)bounds;
