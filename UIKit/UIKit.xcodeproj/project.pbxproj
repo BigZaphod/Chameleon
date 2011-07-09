@@ -532,8 +532,8 @@
 		14FA8C5B121DA4A000C4264B /* UIViewLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewLayoutManager.h; sourceTree = "<group>"; };
 		14FA8C5C121DA4A000C4264B /* UIViewLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewLayoutManager.m; sourceTree = "<group>"; };
 		32DBCF5E0370ADEE00C91783 /* UIKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIKit_Prefix.pch; sourceTree = "<group>"; };
-		38615C68133A54DF00841EEA /* UINSCellControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINSCellControl.h; sourceTree = "<group>"; };
-		38615C69133A54DF00841EEA /* UINSCellControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINSCellControl.m; sourceTree = "<group>"; };
+		38615C68133A54DF00841EEA /* UINSCellControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UINSCellControl.h; path = Classes/UINSCellControl.h; sourceTree = "<group>"; };
+		38615C69133A54DF00841EEA /* UINSCellControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UINSCellControl.m; path = Classes/UINSCellControl.m; sourceTree = "<group>"; };
 		38615C77133A81B900841EEA /* UIFont+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+UIPrivate.h"; sourceTree = "<group>"; };
 		38E523AF1339680400E041B3 /* UINavigationItem+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationItem+UIPrivate.h"; sourceTree = "<group>"; };
 		38E523B413396B5B00E041B3 /* UINavigationBar+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+UIPrivate.h"; sourceTree = "<group>"; };
@@ -797,8 +797,6 @@
 				1489852E12EE2CFE003D4751 /* UINavigationItem.m */,
 				1489852F12EE2CFE003D4751 /* UINibLoading.h */,
 				1489853012EE2CFE003D4751 /* UINibLoading.m */,
-				38615C68133A54DF00841EEA /* UINSCellControl.h */,
-				38615C69133A54DF00841EEA /* UINSCellControl.m */,
 				1489853112EE2CFE003D4751 /* UIPageControl.h */,
 				1489853212EE2CFE003D4751 /* UIPageControl.m */,
 				1489860812EE2DDC003D4751 /* UIPanGestureRecognizer.h */,
@@ -983,6 +981,8 @@
 				1489850E12EE2CFE003D4751 /* UIFontAppKitIntegration.h */,
 				149148BA12EE45ED00F7C34E /* UIGestureRecognizerSubclass.h */,
 				1489851712EE2CFE003D4751 /* UIImageAppKitIntegration.h */,
+				38615C68133A54DF00841EEA /* UINSCellControl.h */,
+				38615C69133A54DF00841EEA /* UINSCellControl.m */,
 				1489853D12EE2CFE003D4751 /* UIResponderAppKitIntegration.h */,
 				1489853E12EE2CFE003D4751 /* UIResponderAppKitIntegration.m */,
 				1489854112EE2CFE003D4751 /* UIScreenAppKitIntegration.h */,

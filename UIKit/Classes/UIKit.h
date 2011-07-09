@@ -110,7 +110,6 @@
 
 // non-standard imports
 #import "UIKey.h"
-#import "UINSCellControl.h"
 #import "CALayer+UIKitCompatibility.h"
 #import "UIGradient.h"
 

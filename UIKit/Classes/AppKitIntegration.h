@@ -38,3 +38,4 @@
 #import "UIWindowAppKitIntegration.h"
 
 #import "UIViewAdapter.h"
+#import "UINSCellControl.h"
