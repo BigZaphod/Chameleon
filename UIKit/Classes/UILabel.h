@@ -32,24 +32,7 @@
 
 @class UIFont, UIColor;
 
-@interface UILabel : UIView {
-@private
-    NSString *_text;
-    UIFont *_font;
-    UIColor *_textColor;
-    UIColor *_highlightedTextColor;
-    UIColor *_shadowColor;
-    CGSize _shadowOffset;
-    UITextAlignment _textAlignment;
-    UILineBreakMode _lineBreakMode;
-    BOOL _enabled;
-    NSInteger _numberOfLines;
-    UIBaselineAdjustment _baselineAdjustment;
-    BOOL _adjustsFontSizeToFitWidth;
-    CGFloat _minimumFontSize;
-    BOOL _highlighted;
-	NSAttributedString *_attributedText;
-}
+@interface UILabel : UIView 
 
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, retain) UIFont *font;

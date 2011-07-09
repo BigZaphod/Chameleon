@@ -37,7 +37,20 @@ static const NSTimeInterval kAnimationDuration = 0.33;
 static const CGFloat NavBarHeight = 44;
 static const CGFloat ToolbarHeight = 28;
 
-@implementation UINavigationController
+@implementation UINavigationController {
+@private
+    UINavigationBar *_navigationBar;
+    UIToolbar *_toolbar;
+    NSMutableArray *_viewControllers;
+    id _delegate;
+    BOOL _toolbarHidden;
+    BOOL _navigationBarHidden;
+    
+    struct {
+        BOOL didShowViewController : 1;
+        BOOL willShowViewController : 1;
+    } _delegateHas;
+}
 @synthesize viewControllers=_viewControllers, delegate=_delegate, navigationBar=_navigationBar;
 @synthesize toolbar=_toolbar, toolbarHidden=_toolbarHidden, navigationBarHidden=_navigationBarHidden;
 

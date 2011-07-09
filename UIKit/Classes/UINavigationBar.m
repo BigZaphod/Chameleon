@@ -52,7 +52,29 @@ typedef enum {
 	_UINavigationBarTransitionReload		// explicitly tag reloads from changed UINavigationItem data
 } _UINavigationBarTransition;
 
-@implementation UINavigationBar
+@implementation UINavigationBar {
+@private
+    NSMutableArray *_navStack;
+    UIColor *_tintColor;
+    id _delegate;
+    
+    UIView *_leftView;
+    UIView *_centerView;
+    UIView *_rightView;
+    
+    struct {
+        BOOL shouldPushItem : 1;
+        BOOL didPushItem : 1;
+        BOOL shouldPopItem : 1;
+        BOOL didPopItem : 1;
+    } _delegateHas;
+    
+    // ideally this should share the same memory as the above flags structure...
+    struct {
+        unsigned reloadItem : 1;
+        unsigned __RESERVED__ : 31;
+    } _navigationBarFlags;
+}
 @synthesize tintColor=_tintColor, delegate=_delegate, items=_navStack;
 
 + (void)_setBarButtonSize:(UIView *)view
