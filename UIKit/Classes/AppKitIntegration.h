@@ -40,3 +40,4 @@
 #import "UIViewAdapter.h"
 #import "UINSCellControl.h"
 #import "UIKey.h"
+#import "UIKitView.h"

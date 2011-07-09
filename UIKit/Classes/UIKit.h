@@ -110,7 +110,6 @@
 
 // non-standard imports
 #import "CALayer+UIKitCompatibility.h"
-#import "UIGradient.h"
 
 // only add if core data is included
 #import "NSFetchedResultsController.h"

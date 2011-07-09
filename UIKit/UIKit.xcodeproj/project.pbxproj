@@ -277,7 +277,7 @@
 		882B8EF6136636C8002E8F21 /* UISearchField.h in Headers */ = {isa = PBXBuildFile; fileRef = 882B8EF4136636C8002E8F21 /* UISearchField.h */; };
 		882B8EF7136636C8002E8F21 /* UISearchField.m in Sources */ = {isa = PBXBuildFile; fileRef = 882B8EF5136636C8002E8F21 /* UISearchField.m */; };
 		882C32C61368DD03007B6E4B /* <UISearchBar> search-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 882C32C51368DD03007B6E4B /* <UISearchBar> search-icon.png */; };
-		8842BC771387316400D148FF /* UIGradient.h in Headers */ = {isa = PBXBuildFile; fileRef = 8842BC751387316400D148FF /* UIGradient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8842BC771387316400D148FF /* UIGradient.h in Headers */ = {isa = PBXBuildFile; fileRef = 8842BC751387316400D148FF /* UIGradient.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		8842BC781387316400D148FF /* UIGradient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8842BC761387316400D148FF /* UIGradient.m */; };
 		88D0B2A613674EF2008A073F /* <UITextField> roundedRectBackgroundImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 88D0B2A513674EF2008A073F /* <UITextField> roundedRectBackgroundImage.png */; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
@@ -393,8 +393,8 @@
 		1489851C12EE2CFE003D4751 /* UIKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIKey.h; path = Classes/UIKey.h; sourceTree = "<group>"; };
 		1489851D12EE2CFE003D4751 /* UIKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIKey.m; path = Classes/UIKey.m; sourceTree = "<group>"; };
 		1489851E12EE2CFE003D4751 /* UIKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIKit.h; sourceTree = "<group>"; };
-		1489851F12EE2CFE003D4751 /* UIKitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIKitView.h; sourceTree = "<group>"; };
-		1489852012EE2CFE003D4751 /* UIKitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIKitView.m; sourceTree = "<group>"; };
+		1489851F12EE2CFE003D4751 /* UIKitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIKitView.h; path = Classes/UIKitView.h; sourceTree = "<group>"; };
+		1489852012EE2CFE003D4751 /* UIKitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIKitView.m; path = Classes/UIKitView.m; sourceTree = "<group>"; };
 		1489852112EE2CFE003D4751 /* UILabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILabel.h; sourceTree = "<group>"; };
 		1489852212EE2CFE003D4751 /* UILabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILabel.m; sourceTree = "<group>"; };
 		1489852312EE2CFE003D4751 /* UILongPressGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILongPressGestureRecognizer.h; sourceTree = "<group>"; };
@@ -775,8 +775,6 @@
 				537472D3133ADD4B00EBD5EA /* UIInterface.h */,
 				537472D4133ADD4B00EBD5EA /* UIInterface.m */,
 				1489851E12EE2CFE003D4751 /* UIKit.h */,
-				1489851F12EE2CFE003D4751 /* UIKitView.h */,
-				1489852012EE2CFE003D4751 /* UIKitView.m */,
 				1489852112EE2CFE003D4751 /* UILabel.h */,
 				1489852212EE2CFE003D4751 /* UILabel.m */,
 				1489852312EE2CFE003D4751 /* UILongPressGestureRecognizer.h */,
@@ -980,6 +978,8 @@
 				149148BA12EE45ED00F7C34E /* UIGestureRecognizerSubclass.h */,
 				1489851C12EE2CFE003D4751 /* UIKey.h */,
 				1489851D12EE2CFE003D4751 /* UIKey.m */,
+				1489851F12EE2CFE003D4751 /* UIKitView.h */,
+				1489852012EE2CFE003D4751 /* UIKitView.m */,
 				1489851712EE2CFE003D4751 /* UIImageAppKitIntegration.h */,
 				38615C68133A54DF00841EEA /* UINSCellControl.h */,
 				38615C69133A54DF00841EEA /* UINSCellControl.m */,
