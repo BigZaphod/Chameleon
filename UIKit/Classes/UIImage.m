@@ -34,7 +34,10 @@
 #import "UIPhotosAlbum.h"
 #import <AppKit/NSImage.h>
 
-@implementation UIImage
+@implementation UIImage {
+@private
+    CGImageRef _image;
+}
 
 - (id)initWithNSImage:(NSImage *)theImage
 {

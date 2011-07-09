@@ -78,9 +78,9 @@
         [_cell setAction:@selector(_cellAction:)];
         [_cell setTarget:self];
         
-        _enabled = [_cell isEnabled];
-        _selected = ([_cell isSelectable] && ([_cell state] == NSOnState || [_cell state] == NSMixedState));
-        _highlighted = [_cell isHighlighted];
+        super.enabled = [_cell isEnabled];
+        super.selected = ([_cell isSelectable] && ([_cell state] == NSOnState || [_cell state] == NSMixedState));
+        super.highlighted = [_cell isHighlighted];
         
         // this is closest to a standard NSCell-based control.
         self.backgroundColor = [UIColor clearColor];
@@ -98,25 +98,25 @@
 
 - (void)setEnabled:(BOOL)enabled
 {
-    if (_enabled == enabled)
+    if (super.enabled == enabled)
         return;
     
     [self willChangeValueForKey:@"enabled"];
     [_cell setEnabled:enabled];
-    _enabled = enabled;
+    super.enabled = enabled;
     [self didChangeValueForKey:@"enabled"];
     [self _stateDidChange];
 }
 
 - (void)setSelected:(BOOL)selected
 {
-    if (_selected == selected)
+    if (super.selected == selected)
         return;
     
     [self willChangeValueForKey:@"selected"];
     
-    _selected = selected;
-    if ( _selected )
+    super.selected = selected;
+    if (selected)
         [_cell setState:NSOnState];
     else
         [_cell setState:NSOffState];
@@ -127,12 +127,12 @@
 
 - (void)setHighlighted:(BOOL)highlighted
 {
-    if (_highlighted == highlighted)
+    if (super.highlighted == highlighted)
         return;
     
     [self willChangeValueForKey:@"highlighted"];
-    _highlighted = highlighted;
-    [_cell setHighlighted:_highlighted];
+    super.highlighted = highlighted;
+    [_cell setHighlighted:highlighted];
     [self didChangeValueForKey:@"highlighted"];
     [self _stateDidChange];
 }

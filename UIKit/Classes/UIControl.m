@@ -33,7 +33,18 @@
 #import "UIApplication.h"
 #import "UIControlAction.h"
 
-@implementation UIControl
+@implementation UIControl {
+@protected
+    NSMutableArray *_registeredActions;
+    BOOL _tracking;
+    BOOL _touchInside;
+    BOOL _enabled;
+    BOOL _selected;
+    BOOL _highlighted;
+    UIControlContentHorizontalAlignment _contentHorizontalAlignment;
+    UIControlContentVerticalAlignment _contentVerticalAlignment;
+}
+
 @synthesize tracking=_tracking, touchInside=_touchInside, selected=_selected, enabled=_enabled, highlighted=_highlighted;
 @synthesize contentHorizontalAlignment=_contentHorizontalAlignment, contentVerticalAlignment=_contentVerticalAlignment;
 

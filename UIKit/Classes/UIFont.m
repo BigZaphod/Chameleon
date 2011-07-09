@@ -33,7 +33,9 @@
 static NSString *UIFontSystemFontName = nil;
 static NSString *UIFontBoldSystemFontName = nil;
 
-@implementation UIFont
+@implementation UIFont {
+    CTFontRef _font;
+}
 
 + (void)setSystemFontName:(NSString *)aName
 {
@@ -207,6 +209,11 @@ NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFStringRef nam
 - (NSFont *)NSFont
 {
     return [NSFont fontWithName:self.fontName size:self.pointSize];
+}
+
+- (CTFontRef) _CTFont
+{
+    return _font;
 }
 
 @end

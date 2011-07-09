@@ -45,11 +45,7 @@ extern NSString *const UIImagePickerControllerMediaURL;
 @protocol UIImagePickerControllerDelegate <NSObject>
 @end
 
-@interface UIImagePickerController : UINavigationController {
-@private
-    UIImagePickerControllerSourceType _sourceType;
-    NSArray *_mediaTypes;
-}
+@interface UIImagePickerController : UINavigationController 
 
 + (NSArray *)availableMediaTypesForSourceType:(UIImagePickerControllerSourceType)sourceType;
 + (BOOL)isSourceTypeAvailable:(UIImagePickerControllerSourceType)sourceType;

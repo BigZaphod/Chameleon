@@ -29,6 +29,7 @@
 
 #import "UIStringDrawing.h"
 #import "UIFont.h"
+#import "UIFont+UIPrivate.h"
 #import <AppKit/AppKit.h>
 #import "UIGraphics.h"
 
@@ -135,7 +136,7 @@ static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToS
 	}
 	
 	CFMutableDictionaryRef attributes = CFDictionaryCreateMutable(NULL, 2, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-	CFDictionarySetValue(attributes, kCTFontAttributeName,font->_font);
+	CFDictionarySetValue(attributes, kCTFontAttributeName, [font _CTFont]);
 	CFDictionarySetValue(attributes, kCTForegroundColorFromContextAttributeName, kCFBooleanTrue);
 	
 	CFAttributedStringRef attributedString = CFAttributedStringCreate(NULL, (CFStringRef)string, attributes);

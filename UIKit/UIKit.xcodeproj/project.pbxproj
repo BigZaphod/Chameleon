@@ -290,6 +290,7 @@
 		F9177F9713BA317200619E3D /* UITableViewCellLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F9177F9513BA317200619E3D /* UITableViewCellLayoutManager.m */; };
 		F94CB9A413C7E5C4001DF656 /* <UITableViewCell> chevronHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = F94CB9A313C7E5C4001DF656 /* <UITableViewCell> chevronHighlighted.png */; };
 		F94CB9D613C8C0A9001DF656 /* UIBarButtonItem+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = F94CB9D513C8C0A9001DF656 /* UIBarButtonItem+UIPrivate.h */; };
+		F94CB9D913C8C242001DF656 /* UIButton+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = F94CB9D813C8C242001DF656 /* UIButton+UIPrivate.h */; };
 		F9647ED013B90D560040B2D6 /* <UITableView> selection.png in Resources */ = {isa = PBXBuildFile; fileRef = F9647ECD13B90D560040B2D6 /* <UITableView> selection.png */; };
 		F9647ED113B90D560040B2D6 /* <UITableView> selectionGray.png in Resources */ = {isa = PBXBuildFile; fileRef = F9647ECE13B90D560040B2D6 /* <UITableView> selectionGray.png */; };
 		F9647ED213B90D560040B2D6 /* <UITableView> selectionGrayBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = F9647ECF13B90D560040B2D6 /* <UITableView> selectionGrayBlue.png */; };
@@ -594,6 +595,7 @@
 		F9177F9513BA317200619E3D /* UITableViewCellLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellLayoutManager.m; sourceTree = "<group>"; };
 		F94CB9A313C7E5C4001DF656 /* <UITableViewCell> chevronHighlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITableViewCell> chevronHighlighted.png"; path = "Resources/<UITableViewCell> chevronHighlighted.png"; sourceTree = "<group>"; };
 		F94CB9D513C8C0A9001DF656 /* UIBarButtonItem+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+UIPrivate.h"; sourceTree = "<group>"; };
+		F94CB9D813C8C242001DF656 /* UIButton+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+UIPrivate.h"; sourceTree = "<group>"; };
 		F9647ECD13B90D560040B2D6 /* <UITableView> selection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITableView> selection.png"; path = "Resources/<UITableView> selection.png"; sourceTree = "<group>"; };
 		F9647ECE13B90D560040B2D6 /* <UITableView> selectionGray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITableView> selectionGray.png"; path = "Resources/<UITableView> selectionGray.png"; sourceTree = "<group>"; };
 		F9647ECF13B90D560040B2D6 /* <UITableView> selectionGrayBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITableView> selectionGrayBlue.png"; path = "Resources/<UITableView> selectionGrayBlue.png"; sourceTree = "<group>"; };
@@ -938,8 +940,10 @@
 			children = (
 				14A726AF1213303400648C9B /* UIApplication+UIPrivate.h */,
 				F94CB9D513C8C0A9001DF656 /* UIBarButtonItem+UIPrivate.h */,
+				F94CB9D813C8C242001DF656 /* UIButton+UIPrivate.h */,
 				14A726B11213303400648C9B /* UIControl+UIPrivate.h */,
 				14EEF76512DF67CF00EB7D95 /* UIEvent+UIPrivate.h */,
+				38615C77133A81B900841EEA /* UIFont+UIPrivate.h */,
 				148984A312EE278D003D4751 /* UIGestureRecognizer+UIPrivate.h */,
 				14A726B41213303400648C9B /* UIImage+UIPrivate.h */,
 				14DD1C271289B3C900DCF231 /* UIImage+UIPrivate.m */,
@@ -956,7 +960,6 @@
 				14A726BD1213303400648C9B /* UIWindow+UIPrivate.h */,
 				38E523AF1339680400E041B3 /* UINavigationItem+UIPrivate.h */,
 				38E523B413396B5B00E041B3 /* UINavigationBar+UIPrivate.h */,
-				38615C77133A81B900841EEA /* UIFont+UIPrivate.h */,
 			);
 			name = "Private Categories";
 			path = Classes;
@@ -1146,6 +1149,7 @@
 				F9177F9613BA317200619E3D /* UITableViewCellLayoutManager.h in Headers */,
 				A2E9947713C79DBE00B7D49F /* UIWindowAppKitIntegration.h in Headers */,
 				F94CB9D613C8C0A9001DF656 /* UIBarButtonItem+UIPrivate.h in Headers */,
+				F94CB9D913C8C242001DF656 /* UIButton+UIPrivate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -30,7 +30,20 @@
 #import "UIDatePicker.h"
 
 
-@implementation UIDatePicker
+@implementation UIDatePicker {
+@private
+    NSCalendar *_calendar;
+    NSDate *_date;
+    NSLocale *_locale;
+    NSTimeZone *_timeZone;
+    
+    UIDatePickerMode _datePickerMode;
+    
+    NSDate *_minimumDate;
+    NSDate *_maximumDate;
+    NSInteger _minuteInterval;
+    NSTimeInterval _countDownDuration;
+}
 
 @synthesize calendar = _calendar;
 @synthesize date = _date;
