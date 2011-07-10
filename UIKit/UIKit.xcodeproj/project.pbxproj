@@ -296,6 +296,7 @@
 		F95416E013C9137B000A9282 /* <UITableViewCell> accessoryCheckmark.png in Resources */ = {isa = PBXBuildFile; fileRef = F95416DF13C9137B000A9282 /* <UITableViewCell> accessoryCheckmark.png */; };
 		F95416E213C91592000A9282 /* <UIButton> detailDisclosureButtonPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = F95416E113C91592000A9282 /* <UIButton> detailDisclosureButtonPressed.png */; };
 		F95416E413C91D22000A9282 /* <UIButton> detailDisclosureButton.png in Resources */ = {isa = PBXBuildFile; fileRef = F95416E313C91D22000A9282 /* <UIButton> detailDisclosureButton.png */; };
+		F95416F013C9FC9D000A9282 /* UITableView+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = F95416EF13C9FC9D000A9282 /* UITableView+UIPrivate.h */; };
 		F9647ED013B90D560040B2D6 /* <UITableView> selection.png in Resources */ = {isa = PBXBuildFile; fileRef = F9647ECD13B90D560040B2D6 /* <UITableView> selection.png */; };
 		F9647ED113B90D560040B2D6 /* <UITableView> selectionGray.png in Resources */ = {isa = PBXBuildFile; fileRef = F9647ECE13B90D560040B2D6 /* <UITableView> selectionGray.png */; };
 		F9647ED213B90D560040B2D6 /* <UITableView> selectionGrayBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = F9647ECF13B90D560040B2D6 /* <UITableView> selectionGrayBlue.png */; };
@@ -606,6 +607,7 @@
 		F95416DF13C9137B000A9282 /* <UITableViewCell> accessoryCheckmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITableViewCell> accessoryCheckmark.png"; path = "Resources/<UITableViewCell> accessoryCheckmark.png"; sourceTree = "<group>"; };
 		F95416E113C91592000A9282 /* <UIButton> detailDisclosureButtonPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIButton> detailDisclosureButtonPressed.png"; path = "Resources/<UIButton> detailDisclosureButtonPressed.png"; sourceTree = "<group>"; };
 		F95416E313C91D22000A9282 /* <UIButton> detailDisclosureButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIButton> detailDisclosureButton.png"; path = "Resources/<UIButton> detailDisclosureButton.png"; sourceTree = "<group>"; };
+		F95416EF13C9FC9D000A9282 /* UITableView+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+UIPrivate.h"; sourceTree = "<group>"; };
 		F9647ECD13B90D560040B2D6 /* <UITableView> selection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITableView> selection.png"; path = "Resources/<UITableView> selection.png"; sourceTree = "<group>"; };
 		F9647ECE13B90D560040B2D6 /* <UITableView> selectionGray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITableView> selectionGray.png"; path = "Resources/<UITableView> selectionGray.png"; sourceTree = "<group>"; };
 		F9647ECF13B90D560040B2D6 /* <UITableView> selectionGrayBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITableView> selectionGrayBlue.png"; path = "Resources/<UITableView> selectionGrayBlue.png"; sourceTree = "<group>"; };
@@ -975,6 +977,7 @@
 				14A726BD1213303400648C9B /* UIWindow+UIPrivate.h */,
 				38E523AF1339680400E041B3 /* UINavigationItem+UIPrivate.h */,
 				38E523B413396B5B00E041B3 /* UINavigationBar+UIPrivate.h */,
+				F95416EF13C9FC9D000A9282 /* UITableView+UIPrivate.h */,
 			);
 			name = "Private Categories";
 			path = Classes;
@@ -1165,6 +1168,7 @@
 				A2E9947713C79DBE00B7D49F /* UIWindowAppKitIntegration.h in Headers */,
 				F94CB9D613C8C0A9001DF656 /* UIBarButtonItem+UIPrivate.h in Headers */,
 				F94CB9D913C8C242001DF656 /* UIButton+UIPrivate.h in Headers */,
+				F95416F013C9FC9D000A9282 /* UITableView+UIPrivate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

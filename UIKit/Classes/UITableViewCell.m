@@ -35,6 +35,7 @@
 #import "UIFont.h"
 #import "UIGraphics.h"
 #import "UITableView.h"
+#import "UITableView+UIPrivate.h"
 #import "UITableViewCellBackgroundView.h"
 #import "UITableViewCellSelectedBackgroundView.h"
 #import "UITableViewCellLayoutManager.h"
@@ -557,7 +558,7 @@ static UIImage* accessoryDisclosureIndicatorImageHighlighted;
 
 - (void) _detailDisclosurePressed:(id)sender
 {   
-    NSLog(@"clicked.");
+    [(UITableView*)[self superview] _accessoryButtonTappedForTableViewCell:self];
 }
 
 @end

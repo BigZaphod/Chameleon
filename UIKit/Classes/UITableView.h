@@ -52,6 +52,8 @@ extern NSString *const UITableViewIndexSearch;
 - (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath;
 
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath;
+
 @optional // AppKitIntegration
 - (void)tableView:(UITableView *)tableView didDoubleClickRowAtIndexPath:(NSIndexPath *)indexPath;
 @end
