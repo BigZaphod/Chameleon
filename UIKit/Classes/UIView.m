@@ -363,7 +363,6 @@ static BOOL _animationsEnabled = YES;
     // NOTE: this is a lot more complex than it needs to be - I just noticed the docs say this method requires fromView and self to
     // belong to the same UIWindow! arg! leaving this for now because, well, it's neat.. but also I'm too tired to really ponder
     // all the implications of a change to something so "low level".
-    
     if (fromView) {
         // If the screens are the same, then we know they share a common parent CALayer, so we can convert directly with the layer's
         // conversion method. If not, though, we need to do something a bit more complicated.
@@ -409,16 +408,20 @@ static BOOL _animationsEnabled = YES;
 
 - (CGRect)convertRect:(CGRect)toConvert fromView:(UIView *)fromView
 {
-    CGPoint origin = [self convertPoint:CGPointMake(CGRectGetMinX(toConvert),CGRectGetMinY(toConvert)) fromView:fromView];
-    CGPoint bottom = [self convertPoint:CGPointMake(CGRectGetMaxX(toConvert),CGRectGetMaxY(toConvert)) fromView:fromView];
-    return CGRectMake(origin.x, origin.y, bottom.x-origin.x, bottom.y-origin.y);
+    CGRect newRect = {
+        .origin = [self convertPoint:toConvert.origin fromView:fromView],
+        .size = toConvert.size
+    };
+    return newRect;
 }
 
 - (CGRect)convertRect:(CGRect)toConvert toView:(UIView *)toView
 {
-    CGPoint origin = [self convertPoint:CGPointMake(CGRectGetMinX(toConvert),CGRectGetMinY(toConvert)) toView:toView];
-    CGPoint bottom = [self convertPoint:CGPointMake(CGRectGetMaxX(toConvert),CGRectGetMaxY(toConvert)) toView:toView];
-    return CGRectMake(origin.x, origin.y, bottom.x-origin.x, bottom.y-origin.y);
+    CGRect newRect = {
+        .origin = [self convertPoint:toConvert.origin toView:toView],
+        .size = toConvert.size
+    };
+    return newRect;
 }
 
 - (void)sizeToFit
