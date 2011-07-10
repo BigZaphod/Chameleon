@@ -214,7 +214,7 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
         [_overlayWindow setOpaque:NO];
         [(NSWindow *)_overlayWindow setBackgroundColor:[NSColor clearColor]];
         [_overlayWindow setFrameOrigin:windowFrame.origin];
-        [_overlayWindow setContentView:[[(UIPopoverOverlayNSView *)[UIPopoverOverlayNSView alloc] initWithFrame:overlayContentRect popoverController:self] autorelease]];
+        [_overlayWindow setContentView:[[[UIPopoverOverlayNSView alloc] initWithFrame:overlayContentRect popoverController:self] autorelease]];
         [viewNSWindow addChildWindow:_overlayWindow ordered:NSWindowAbove];
 
 		[_contentViewController viewWillAppear:animated];
@@ -223,7 +223,7 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
         // as well to put it in our NSWindow...
         _popoverView = [[UIPopoverView alloc] initWithContentView:_contentViewController.view size:_contentViewController.contentSizeForViewInPopover popoverController:self];
 
-        UIKitView *hostingView = [(UIKitView *)[UIKitView alloc] initWithFrame:NSRectFromCGRect([_popoverView bounds])];
+        UIKitView *hostingView = [[UIKitView alloc] initWithFrame:NSRectFromCGRect([_popoverView bounds])];
         [[hostingView UIScreen] _setPopoverController:self];
         [[hostingView UIWindow] addSubview:_popoverView];
 
@@ -268,10 +268,10 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
     // and blah blah blah...)
     // finally, set the arrow position so it points to the right place and looks all purty.
     if (_popoverArrowDirection != UIPopoverArrowDirectionUnknown) {
-        CGPoint screenPointTo = [view.window.screen convertPoint:NSPointToCGPoint(pointTo) fromScreen:nil];
-        CGPoint windowPointTo = [view.window convertPoint:screenPointTo fromWindow:nil];
-        CGPoint viewPointTo = [view convertPoint:windowPointTo fromView:nil];
-        [_popoverView pointTo:viewPointTo inView:view];
+        CGPoint screenPointTo = [_popoverView.window.screen convertPoint:NSPointToCGPoint(pointTo) fromScreen:nil];
+        CGPoint windowPointTo = [_popoverView.window convertPoint:screenPointTo fromWindow:nil];
+        CGPoint viewPointTo = [_popoverView convertPoint:windowPointTo fromView:nil];
+        [_popoverView pointTo:viewPointTo inView:_popoverView];
     }
     
     if (animated) {
