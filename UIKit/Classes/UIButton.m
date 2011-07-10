@@ -35,6 +35,7 @@
 #import "UIImageView+UIPrivate.h"
 #import "UIRoundedRectButton.h"
 #import "UIColor.h"
+#import <AppKit/AppKit.h>
 
 static NSString *UIButtonContentTypeTitle = @"UIButtonContentTypeTitle";
 static NSString *UIButtonContentTypeTitleColor = @"UIButtonContentTypeTitleColor";
@@ -64,19 +65,42 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 @synthesize showsTouchWhenHighlighted=_showsTouchWhenHighlighted, imageView=_imageView, contentEdgeInsets=_contentEdgeInsets;
 @synthesize titleEdgeInsets=_titleEdgeInsets, imageEdgeInsets=_imageEdgeInsets;
 
+static UIImage* detailDisclosureButtonImage;
+static UIImage* detailDisclosureButtonImagePressed;
+
++ (void) initialize
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSBundle* bundle = [NSBundle bundleForClass:[self class]];
+        detailDisclosureButtonImage = [[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UIButton> detailDisclosureButton"]] retain];
+        detailDisclosureButtonImagePressed = [[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UIButton> detailDisclosureButtonPressed"]] retain];
+    });
+}
+
 + (id)buttonWithType:(UIButtonType)buttonType
 {
     switch (buttonType) {
+        case UIButtonTypeDetailDisclosure: {
+            CGRect frame = {
+                .size = detailDisclosureButtonImage.size
+            };
+            UIButton* button = [[UIButton alloc] initWithFrame:frame];
+            [button setImage:detailDisclosureButtonImage forState:UIControlStateNormal];
+            [button setImage:detailDisclosureButtonImagePressed forState:UIControlStateHighlighted];
+            return [button autorelease];
+        }
+
         case UIButtonTypeRoundedRect:
-        case UIButtonTypeDetailDisclosure:
         case UIButtonTypeInfoLight:
         case UIButtonTypeInfoDark:
         case UIButtonTypeContactAdd:
             return [[[UIRoundedRectButton alloc] init] autorelease];
             
         case UIButtonTypeCustom:
-        default:
-            return [[[self alloc] init] autorelease];
+        default: {
+            return [[[UIButton alloc] init] autorelease];
+        }
     }
 }
 

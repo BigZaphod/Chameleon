@@ -101,16 +101,20 @@ extern CGFloat _UITableViewDefaultRowHeight;
 @synthesize showingDeleteConfirmation = _showingDeleteConfirmation;
 @synthesize textLabel=_textLabel;
 
-static UIImage* chevronImage;
-static UIImage* chevronImageHighlighted;
+static UIImage* accessoryCheckmarkImage;
+static UIImage* accessoryCheckmarkImageHighlighted;
+static UIImage* accessoryDisclosureIndicatorImage;
+static UIImage* accessoryDisclosureIndicatorImageHighlighted;
 
 + (void) initialize
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSBundle* bundle = [NSBundle bundleForClass:[self class]];
-        chevronImage = [[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UITableViewCell> chevron"]] retain];
-        chevronImageHighlighted = [[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UITableViewCell> chevronHighlighted"]] retain];
+        accessoryCheckmarkImage = [[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UITableViewCell> accessoryCheckmark"]] retain];
+        accessoryCheckmarkImageHighlighted = [[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UITableViewCell> accessoryCheckmarkHighlighted"]] retain];
+        accessoryDisclosureIndicatorImage = [[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UITableViewCell> accessoryDisclosureIndicatorImage"]] retain];
+        accessoryDisclosureIndicatorImageHighlighted = [[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UITableViewCell> accessoryDisclosureIndicatorHighlighted"]] retain];
     });
 }
 
@@ -519,16 +523,28 @@ static UIImage* chevronImageHighlighted;
 {
     assert(!_accessoryView);
     switch (_accessoryType) {
-        case UITableViewCellAccessoryNone:
-        case UITableViewCellAccessoryCheckmark:
-        case UITableViewCellAccessoryDetailDisclosureButton: {
+        case UITableViewCellAccessoryNone: {
             break;
         }
             
+        case UITableViewCellAccessoryCheckmark: {
+            UIImageView* checkmark = [[UIImageView alloc] initWithImage:accessoryCheckmarkImage];
+            checkmark.highlightedImage = accessoryCheckmarkImageHighlighted;
+            _accessoryView = checkmark;
+            break;
+        }
+
+        case UITableViewCellAccessoryDetailDisclosureButton: {
+            UIButton* button = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+            [button addTarget:self action:@selector(_detailDisclosurePressed:) forControlEvents:UIControlEventTouchUpInside];
+            _accessoryView = button;
+            break;
+        }
+
         case UITableViewCellAccessoryDisclosureIndicator: {
-            UIImageView* chevron = [[UIImageView alloc] initWithImage:chevronImage];
-            chevron.highlightedImage = chevronImageHighlighted;
-            _accessoryView = chevron;
+            UIImageView* disclosureIndicator = [[UIImageView alloc] initWithImage:accessoryDisclosureIndicatorImage];
+            disclosureIndicator.highlightedImage = accessoryDisclosureIndicatorImageHighlighted;
+            _accessoryView = disclosureIndicator;
             break;
         }
     }
@@ -537,6 +553,11 @@ static UIImage* chevronImageHighlighted;
         [self.contentView addSubview:_accessoryView];
         [self setNeedsLayout];
     }
+}
+
+- (void) _detailDisclosurePressed:(id)sender
+{   
+    NSLog(@"clicked.");
 }
 
 @end
