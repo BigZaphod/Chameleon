@@ -537,7 +537,7 @@ static UIImage* accessoryDisclosureIndicatorImageHighlighted;
         case UITableViewCellAccessoryDetailDisclosureButton: {
             UIButton* button = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
             [button addTarget:self action:@selector(_detailDisclosurePressed:) forControlEvents:UIControlEventTouchUpInside];
-            _accessoryView = button;
+            _accessoryView = [button retain];
             break;
         }
 
