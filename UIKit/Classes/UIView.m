@@ -360,6 +360,7 @@ static BOOL _animationsEnabled = YES;
 
 - (CGPoint)convertPoint:(CGPoint)toConvert fromView:(UIView *)fromView
 {
+    assert(!fromView || fromView.window == self.window);
     // NOTE: this is a lot more complex than it needs to be - I just noticed the docs say this method requires fromView and self to
     // belong to the same UIWindow! arg! leaving this for now because, well, it's neat.. but also I'm too tired to really ponder
     // all the implications of a change to something so "low level".
@@ -383,6 +384,7 @@ static BOOL _animationsEnabled = YES;
 
 - (CGPoint)convertPoint:(CGPoint)toConvert toView:(UIView *)toView
 {
+    assert(!toView || toView.window == self.window);
     // NOTE: this is a lot more complex than it needs to be - I just noticed the docs say this method requires toView and self to
     // belong to the same UIWindow! arg! leaving this for now because, well, it's neat.. but also I'm too tired to really ponder
     // all the implications of a change to something so "low level".
