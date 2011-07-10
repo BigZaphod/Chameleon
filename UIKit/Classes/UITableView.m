@@ -28,6 +28,7 @@
  */
 
 #import "UITableView.h"
+#import "UITableView+UIPrivate.h"
 #import "UITableViewCell+UIPrivate.h"
 #import "UIColor.h"
 #import "UITouch.h"
@@ -87,6 +88,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		BOOL willBeginEditingRowAtIndexPath : 1;
 		BOOL didEndEditingRowAtIndexPath : 1;
 		BOOL titleForDeleteConfirmationButtonForRowAtIndexPath : 1;
+        BOOL accessoryButtonTappedForRowWithIndexPath : 1;
     } _delegateHas;
     
     struct {
@@ -158,17 +160,19 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 - (void)setDelegate:(id<UITableViewDelegate>)newDelegate
 {
     [super setDelegate:newDelegate];
-
-    _delegateHas.heightForRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)];
-    _delegateHas.heightForHeaderInSection = [newDelegate respondsToSelector:@selector(tableView:heightForHeaderInSection:)];
-    _delegateHas.heightForFooterInSection = [newDelegate respondsToSelector:@selector(tableView:heightForFooterInSection:)];
-    _delegateHas.viewForHeaderInSection = [newDelegate respondsToSelector:@selector(tableView:viewForHeaderInSection:)];
-    _delegateHas.viewForFooterInSection = [newDelegate respondsToSelector:@selector(tableView:viewForFooterInSection:)];
-    _delegateHas.willSelectRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)];
-    _delegateHas.didSelectRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)];
-	_delegateHas.didDoubleClickRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:didDoubleClickRowAtIndexPath:)];
-    _delegateHas.willDeselectRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:willDeselectRowAtIndexPath:)];
-    _delegateHas.didDeselectRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:didDeselectRowAtIndexPath:)];
+    if (newDelegate) {
+        _delegateHas.heightForRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)];
+        _delegateHas.heightForHeaderInSection = [newDelegate respondsToSelector:@selector(tableView:heightForHeaderInSection:)];
+        _delegateHas.heightForFooterInSection = [newDelegate respondsToSelector:@selector(tableView:heightForFooterInSection:)];
+        _delegateHas.viewForHeaderInSection = [newDelegate respondsToSelector:@selector(tableView:viewForHeaderInSection:)];
+        _delegateHas.viewForFooterInSection = [newDelegate respondsToSelector:@selector(tableView:viewForFooterInSection:)];
+        _delegateHas.willSelectRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)];
+        _delegateHas.didSelectRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)];
+        _delegateHas.didDoubleClickRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:didDoubleClickRowAtIndexPath:)];
+        _delegateHas.willDeselectRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:willDeselectRowAtIndexPath:)];
+        _delegateHas.didDeselectRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:didDeselectRowAtIndexPath:)];
+        _delegateHas.accessoryButtonTappedForRowWithIndexPath = [newDelegate respondsToSelector:@selector(tableView:accessoryButtonTappedForRowWithIndexPath:)];
+    }
 }
 
 - (void)setRowHeight:(CGFloat)newHeight
@@ -832,6 +836,13 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 	}
 	
 	return rowToSelect;
+}
+
+- (void) _accessoryButtonTappedForTableViewCell:(UITableViewCell*)cell
+{
+    if (_delegateHas.accessoryButtonTappedForRowWithIndexPath) {
+        [self.delegate tableView:self accessoryButtonTappedForRowWithIndexPath:[self indexPathForCell:cell]];
+    }
 }
 
 - (BOOL)_canEditRowAtIndexPath:(NSIndexPath *)indexPath
