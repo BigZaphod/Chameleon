@@ -123,8 +123,6 @@ static BOOL _animationsEnabled = YES;
 {
     [_subviews makeObjectsPerformSelector:@selector(_setNilSuperview)];
     [_subviews release];
-    _layer.layoutManager = nil;
-    _layer.delegate = nil;
     [_layer release];
     [_backgroundColor release];
     [_gestureRecognizers release];
