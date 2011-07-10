@@ -360,65 +360,40 @@ static BOOL _animationsEnabled = YES;
 
 - (CGPoint)convertPoint:(CGPoint)toConvert fromView:(UIView *)fromView
 {
-    // NOTE: this is a lot more complex than it needs to be - I just noticed the docs say this method requires fromView and self to
-    // belong to the same UIWindow! arg! leaving this for now because, well, it's neat.. but also I'm too tired to really ponder
-    // all the implications of a change to something so "low level".
-    
+    assert(!fromView || fromView.window == self.window);
     if (fromView) {
-        // If the screens are the same, then we know they share a common parent CALayer, so we can convert directly with the layer's
-        // conversion method. If not, though, we need to do something a bit more complicated.
-        if (fromView && (self.window.screen == fromView.window.screen)) {
-            return [fromView.layer convertPoint:toConvert toLayer:self.layer];
-        } else {
-            // Convert coordinate to fromView's window base coordinates.
-            toConvert = [fromView.layer convertPoint:toConvert toLayer:fromView.window.layer];
-            
-            // Now convert from fromView's window to our own window.
-            toConvert = [fromView.window convertPoint:toConvert toWindow:self.window];
-        }
+        return [fromView.layer convertPoint:toConvert toLayer:self.layer];
+    } else {
+        return [self.window.layer convertPoint:toConvert toLayer:self.layer];
     }
-
-    // Convert from our window coordinate space into our own coordinate space.
-    return [self.window.layer convertPoint:toConvert toLayer:self.layer];
 }
 
 - (CGPoint)convertPoint:(CGPoint)toConvert toView:(UIView *)toView
 {
-    // NOTE: this is a lot more complex than it needs to be - I just noticed the docs say this method requires toView and self to
-    // belong to the same UIWindow! arg! leaving this for now because, well, it's neat.. but also I'm too tired to really ponder
-    // all the implications of a change to something so "low level".
-    
-    // See note in convertPoint:fromView: for some explaination about why this is done... :/
-    if (toView && (self.window.screen == toView.window.screen)) {
+    assert(!toView || toView.window == self.window);
+    if (toView) {
         return [self.layer convertPoint:toConvert toLayer:toView.layer];
     } else {
-        // Convert to our window's coordinate space.
-        toConvert = [self.layer convertPoint:toConvert toLayer:self.window.layer];
-        
-        if (toView) {
-            // Convert from one window's coordinate space to another.
-            toConvert = [self.window convertPoint:toConvert toWindow:toView.window];
-            
-            // Convert from toView's window down to toView's coordinate space.
-            toConvert = [toView.window.layer convertPoint:toConvert toLayer:toView.layer];
-        }
-        
-        return toConvert;
+        return [self.layer convertPoint:toConvert toLayer:self.window.layer];
     }
 }
 
 - (CGRect)convertRect:(CGRect)toConvert fromView:(UIView *)fromView
 {
-    CGPoint origin = [self convertPoint:CGPointMake(CGRectGetMinX(toConvert),CGRectGetMinY(toConvert)) fromView:fromView];
-    CGPoint bottom = [self convertPoint:CGPointMake(CGRectGetMaxX(toConvert),CGRectGetMaxY(toConvert)) fromView:fromView];
-    return CGRectMake(origin.x, origin.y, bottom.x-origin.x, bottom.y-origin.y);
+    CGRect newRect = {
+        .origin = [self convertPoint:toConvert.origin fromView:fromView],
+        .size = toConvert.size
+    };
+    return newRect;
 }
 
 - (CGRect)convertRect:(CGRect)toConvert toView:(UIView *)toView
 {
-    CGPoint origin = [self convertPoint:CGPointMake(CGRectGetMinX(toConvert),CGRectGetMinY(toConvert)) toView:toView];
-    CGPoint bottom = [self convertPoint:CGPointMake(CGRectGetMaxX(toConvert),CGRectGetMaxY(toConvert)) toView:toView];
-    return CGRectMake(origin.x, origin.y, bottom.x-origin.x, bottom.y-origin.y);
+    CGRect newRect = {
+        .origin = [self convertPoint:toConvert.origin toView:toView],
+        .size = toConvert.size
+    };
+    return newRect;
 }
 
 - (void)sizeToFit
