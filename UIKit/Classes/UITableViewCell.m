@@ -234,7 +234,7 @@ static UIImage* accessoryDisclosureIndicatorImageHighlighted;
         if (accessoryView) {
             _tableCellFlags.usingDefaultAccessoryView = NO;
             _accessoryView = [accessoryView retain];
-            [self.contentView addSubview:_accessoryView];
+            [self addSubview:_accessoryView];
         } else {
             [self _setupDefaultAccessoryView];
         }
@@ -550,7 +550,7 @@ static UIImage* accessoryDisclosureIndicatorImageHighlighted;
     }
     _tableCellFlags.usingDefaultAccessoryView = YES;
     if (_accessoryView) {
-        [self.contentView addSubview:_accessoryView];
+        [self addSubview:_accessoryView];
         [self setNeedsLayout];
     }
 }
