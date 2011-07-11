@@ -55,7 +55,7 @@ static UIDevice *theDevice;
 
 - (NSString *)name
 {
-    return [NSMakeCollectable(SCDynamicStoreCopyComputerName(NULL,NULL)) autorelease];
+    return [(id)SCDynamicStoreCopyComputerName(NULL,NULL) autorelease];
 }
 
 - (UIDeviceOrientation)orientation

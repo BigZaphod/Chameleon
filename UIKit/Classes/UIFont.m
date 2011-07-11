@@ -152,7 +152,7 @@ NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFStringRef nam
 
 - (NSString *)fontName
 {
-	return [NSMakeCollectable(CTFontCopyFullName(_font)) autorelease];
+	return [(id)CTFontCopyFullName(_font) autorelease];
 }
 
 - (CGFloat)ascender
@@ -191,7 +191,7 @@ NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFStringRef nam
 
 - (NSString *)familyName
 {
-	return [NSMakeCollectable(CTFontCopyFamilyName(_font)) autorelease];
+	return [(id)CTFontCopyFamilyName(_font) autorelease];
 }
 
 - (UIFont *)fontWithSize:(CGFloat)fontSize
