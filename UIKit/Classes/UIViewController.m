@@ -315,6 +315,22 @@
 {
 }
 
+- (void)transitionFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
+{
+    [fromViewController beginAppearanceTransition:NO animated:duration > 0];
+    [toViewController beginAppearanceTransition:YES animated:duration > 0];
+    [UIView animateWithDuration:duration
+        animations:animations
+        completion:^(BOOL finished){
+            if (completion) {
+                completion(finished);
+            }
+            [fromViewController _endAppearanceTransition];
+            [toViewController _endAppearanceTransition];
+        }
+     ];
+}
+
 - (id)_nearestParentViewControllerThatIsKindOf:(Class)c
 {
     UIViewController *controller = _parentViewController;

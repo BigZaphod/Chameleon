@@ -77,6 +77,8 @@ typedef enum {
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration;
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation;
 
+- (void)transitionFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion;
+
 
 @property (nonatomic, readonly, copy) NSString *nibName;		// always returns nil
 @property (nonatomic, readonly, retain) NSBundle *nibBundle;	// always returns nil
