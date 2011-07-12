@@ -34,17 +34,15 @@
 #import "UINavigationBar+UIPrivate.h"
 
 @implementation UINavigationItem {
-    NSString *_title;
-    NSString *_prompt;
-    UIBarButtonItem *_backBarButtonItem;
-    UIBarButtonItem *_leftBarButtonItem;
-    UIBarButtonItem *_rightBarButtonItem;
-    UIView *_titleView;
-    BOOL _hidesBackButton;
     UINavigationBar *_navigationBar;
 }
-@synthesize title=_title, rightBarButtonItem=_rightBarButtonItem, titleView=_titleView, hidesBackButton=_hidesBackButton;
-@synthesize leftBarButtonItem=_leftBarButtonItem, backBarButtonItem=_backBarButtonItem, prompt=_prompt;
+@synthesize title = _title;
+@synthesize rightBarButtonItem = _rightBarButtonItem;
+@synthesize titleView = _titleView;
+@synthesize hidesBackButton = _hidesBackButton;
+@synthesize leftBarButtonItem = _leftBarButtonItem;
+@synthesize backBarButtonItem = _backBarButtonItem;
+@synthesize prompt = _prompt;
 
 + (NSSet *)_keyPathsTriggeringUIUpdates
 {

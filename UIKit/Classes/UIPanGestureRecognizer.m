@@ -30,11 +30,9 @@
 #import "UIPanGestureRecognizer.h"
 #import "UIGestureRecognizerSubclass.h"
 
-@implementation UIPanGestureRecognizer {
-    NSUInteger _maximumNumberOfTouches;
-    NSUInteger _minimumNumberOfTouches;
-}
-@synthesize maximumNumberOfTouches=_maximumNumberOfTouches, minimumNumberOfTouches=_minimumNumberOfTouches;
+@implementation UIPanGestureRecognizer
+@synthesize maximumNumberOfTouches = _maximumNumberOfTouches;
+@synthesize minimumNumberOfTouches = _minimumNumberOfTouches;
 
 - (id)initWithTarget:(id)target action:(SEL)action
 {

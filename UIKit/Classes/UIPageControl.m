@@ -29,11 +29,9 @@
 
 #import "UIPageControl.h"
 
-@implementation UIPageControl {
-    NSInteger _currentPage;
-    NSInteger _numberOfPages;
-}
-@synthesize currentPage=_currentPage, numberOfPages=_numberOfPages;
+@implementation UIPageControl
+@synthesize currentPage = _currentPage;
+@synthesize numberOfPages = _numberOfPages;
 
 - (void)setCurrentPage:(NSInteger)page
 {

@@ -54,8 +54,6 @@ typedef enum {
 
 @implementation UINavigationBar {
     NSMutableArray *_navStack;
-    UIColor *_tintColor;
-    id _delegate;
     
     UIView *_leftView;
     UIView *_centerView;
@@ -74,7 +72,9 @@ typedef enum {
         unsigned __RESERVED__ : 31;
     } _navigationBarFlags;
 }
-@synthesize tintColor=_tintColor, delegate=_delegate, items=_navStack;
+@synthesize tintColor = _tintColor;
+@synthesize delegate = _delegate;
+@synthesize items = _navStack;
 
 + (void)_setBarButtonSize:(UIView *)view
 {

@@ -29,11 +29,9 @@
 
 #import "UIProgressView.h"
 
-@implementation UIProgressView {
-    UIProgressViewStyle _progressViewStyle;
-    float _progress;
-}
-@synthesize progressViewStyle=_progressViewStyle, progress=_progress;
+@implementation UIProgressView
+@synthesize progressViewStyle = _progressViewStyle;
+@synthesize progress = _progress;
 
 - (id)initWithProgressViewStyle:(UIProgressViewStyle)style
 {
