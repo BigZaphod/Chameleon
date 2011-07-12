@@ -27,7 +27,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIViewController.h"
+#import "UIViewController+UIPrivate.h"
 #import "UIView+UIPrivate.h"
 #import "UIScreen.h"
 #import "UIWindow.h"
@@ -41,8 +41,15 @@
 #import "UITabBarController.h"
 
 @implementation UIViewController {
-    UIModalPresentationStyle _modalPresentationStyle;
-    BOOL _hidesBottomBarWhenPushed;
+    UIViewControllerAppearState _appearState;
+    
+    struct {
+        BOOL wantsFullScreenLayout : 1;
+        BOOL modalInPopover : 1;
+        BOOL editing : 1;
+        BOOL hidesBottomBarWhenPushed : 1;
+        BOOL isInAnimatedVCTransition : 1;
+    } _flags;
 }
 @synthesize navigationItem = _navigationItem;
 @synthesize view = _view;
@@ -70,7 +77,6 @@
 {
     if ((self=[super init])) {
         _contentSizeForViewInPopover = CGSizeMake(320,1100);
-        _hidesBottomBarWhenPushed = NO;
     }
     return self;
 }
@@ -98,6 +104,36 @@
 - (UIResponder *)nextResponder
 {
     return _view.superview;
+}
+
+- (BOOL) isModalInPopover
+{
+    return _flags.modalInPopover;
+}
+
+- (void) setModalInPopover:(BOOL)modalInPopover
+{
+    _flags.modalInPopover = modalInPopover;
+}
+
+- (BOOL) wantsFullScreenLayout
+{
+    return _flags.wantsFullScreenLayout;
+}
+
+- (void) setWantsFullScreenLayout:(BOOL)wantsFullScreenLayout
+{
+    _flags.wantsFullScreenLayout = wantsFullScreenLayout;
+}
+
+- (BOOL) hidesBottomBarWhenPushed
+{
+    return _flags.hidesBottomBarWhenPushed;
+}
+
+- (void) setHidesBottomBarWhenPushed:(BOOL)hidesBottomBarWhenPushed
+{
+    _flags.hidesBottomBarWhenPushed = hidesBottomBarWhenPushed;
 }
 
 - (BOOL)isViewLoaded
@@ -191,9 +227,14 @@
     [self setToolbarItems:theToolbarItems animated:NO];
 }
 
+- (BOOL) isEditing
+{
+    return _flags.editing;
+}
+
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
-    _editing = editing;
+    _flags.editing = editing;
 }
 
 - (void)setEditing:(BOOL)editing
@@ -218,7 +259,7 @@
         UIView *newView = _modalViewController.view;
 
         newView.autoresizingMask = selfView.autoresizingMask;
-        newView.frame = _wantsFullScreenLayout? window.screen.bounds : window.screen.applicationFrame;
+        newView.frame = _flags.wantsFullScreenLayout? window.screen.bounds : window.screen.applicationFrame;
 
         [window addSubview:newView];
         [_modalViewController viewWillAppear:animated];
@@ -293,6 +334,83 @@
 - (UISplitViewController *)splitViewController
 {
     return [self _nearestParentViewControllerThatIsKindOf:[UISplitViewController class]];
+}
+
+- (void)_setViewAppearState:(UIViewControllerAppearState)appearState isAnimating:(BOOL)animating
+{
+    if (_appearState != appearState) {
+        _appearState = appearState;
+        switch (_appearState) {
+            case UIViewControllerStateWillAppear: {
+                [self viewWillAppear:animating];
+                break;
+            }
+            case UIViewControllerStateDidAppear: {
+                [self viewDidAppear:animating];
+                break;
+            } 
+            case UIViewControllerStateWillDisappear: {
+                [self viewWillDisappear:animating];
+                break;
+            }  
+            case UIViewControllerStateDidDisappear: {
+                [self viewDidDisappear:animating];
+                break;
+            }
+        }
+    }
+}
+
+- (void)viewWillMoveToWindow:(UIWindow *)window
+{
+    if (!_flags.isInAnimatedVCTransition) {
+        if (window) {
+            [self _setViewAppearState:UIViewControllerStateWillAppear isAnimating:NO];
+        } else {
+            [self _setViewAppearState:UIViewControllerStateWillDisappear isAnimating:NO];
+        }
+    }
+}
+
+- (void)viewDidMoveToWindow:(UIWindow *)window
+{
+    if (!_flags.isInAnimatedVCTransition) {
+        if (window) {
+            [self _setViewAppearState:UIViewControllerStateDidAppear isAnimating:NO];
+        } else {
+            [self _setViewAppearState:UIViewControllerStateDidDisappear isAnimating:NO];
+        }
+    }
+}
+
+- (BOOL)beginAppearanceTransition:(BOOL)shouldAppear animated:(BOOL)animated
+{
+    _flags.isInAnimatedVCTransition = YES;
+    UIViewControllerAppearState appearState;
+    if (shouldAppear) {
+        appearState = UIViewControllerStateWillAppear;
+    } else {
+        appearState = UIViewControllerStateWillDisappear;
+    }
+    [self _setViewAppearState:appearState isAnimating:animated];
+    return YES;
+}
+
+- (BOOL)_endAppearanceTransition
+{
+    if (_flags.isInAnimatedVCTransition) {
+        UIViewControllerAppearState appearState;
+        if (_appearState == UIViewControllerStateWillAppear) {
+            appearState = UIViewControllerStateDidAppear;
+        } else if (_appearState == UIViewControllerStateWillDisappear) {
+            appearState = UIViewControllerStateDidDisappear;
+        } else {
+            return NO;
+        }
+        [self _setViewAppearState:appearState isAnimating:NO];
+        return YES;
+    }
+    return NO;
 }
 
 - (NSString *)description

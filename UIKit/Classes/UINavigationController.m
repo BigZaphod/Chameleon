@@ -266,7 +266,8 @@ static const CGFloat ToolbarHeight = 28;
 		viewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		[self.view insertSubview:viewController.view atIndex:0];
         
-		[viewController viewWillAppear:animated];
+        [oldViewController beginAppearanceTransition:NO animated:animated];
+		[viewController beginAppearanceTransition:YES animated:animated];
 		if (_delegateHas.willShowViewController) {
 			[_delegate navigationController:self willShowViewController:viewController animated:animated];
 		}
@@ -281,9 +282,10 @@ static const CGFloat ToolbarHeight = 28;
             }
             completion:^(BOOL finished){
                 [oldViewController.view removeFromSuperview];
+                [oldViewController _endAppearanceTransition];
                 [oldViewController release];
                 
-                [viewController viewDidAppear:animated];
+                [viewController _endAppearanceTransition];
                 if (_delegateHas.didShowViewController) {
                     [_delegate navigationController:self didShowViewController:viewController animated:animated];
                 }
@@ -316,7 +318,8 @@ static const CGFloat ToolbarHeight = 28;
 			nextViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 			[self.view insertSubview:nextViewController.view atIndex:0];
             
-			[nextViewController viewWillAppear:animated];
+            [oldViewController beginAppearanceTransition:NO animated:animated];
+            [nextViewController beginAppearanceTransition:YES animated:animated];
 			if (_delegateHas.willShowViewController) {
 				[_delegate navigationController:self willShowViewController:nextViewController animated:animated];
 			}
@@ -331,9 +334,10 @@ static const CGFloat ToolbarHeight = 28;
                 }
                 completion:^(BOOL finished){
                     [oldViewController.view removeFromSuperview];
+                    [oldViewController _endAppearanceTransition];
                     [oldViewController release];
                     
-                    [nextViewController viewDidAppear:animated];
+                    [nextViewController _endAppearanceTransition];
                     if (_delegateHas.didShowViewController) {
                         [_delegate navigationController:self didShowViewController:nextViewController animated:animated];
                     }
