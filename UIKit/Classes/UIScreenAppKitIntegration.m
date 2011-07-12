@@ -36,11 +36,6 @@ extern NSMutableArray *_allScreens;
 
 @implementation UIScreen (AppKitIntegration)
 
-- (UIKitView *)UIKitView
-{
-    return _UIKitView;
-}
-
 - (CGPoint)convertPoint:(CGPoint)toConvert toScreen:(UIScreen *)toScreen
 {
     if (toScreen == self) {
