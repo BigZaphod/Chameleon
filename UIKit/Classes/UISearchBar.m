@@ -51,9 +51,6 @@
 
 @implementation UISearchBar {
     UISearchField *_searchField;
-    BOOL _showsCancelButton;
-    id<UISearchBarDelegate> _delegate;
-    NSString *_placeholder;
 	
 	struct {
         BOOL shouldBeginEditing : 1;
@@ -69,7 +66,9 @@
 		BOOL doCommandBySelector : 1;
     } _delegateHas;
 }
-@synthesize delegate=_delegate, showsCancelButton = _showsCancelButton, placeholder=_placeholder;
+@synthesize delegate = _delegate;
+@synthesize showsCancelButton = _showsCancelButton;
+@synthesize placeholder = _placeholder;
 
 - (id)initWithFrame:(CGRect)frame
 {

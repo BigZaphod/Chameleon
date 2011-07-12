@@ -46,27 +46,10 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 @end
 
 @implementation UIScrollView {
-    id _delegate;
-    CGPoint _contentOffset;
-    CGSize _contentSize;
-    UIEdgeInsets _contentInset;
-    UIEdgeInsets _scrollIndicatorInsets;
     UIScroller *_verticalScroller;
     UIScroller *_horizontalScroller;
-    BOOL _scrollEnabled;
-    BOOL _showsVerticalScrollIndicator;
-    BOOL _showsHorizontalScrollIndicator;
-    float _maximumZoomScale;
-    float _minimumZoomScale;
-    BOOL _scrollsToTop;
-    UIScrollViewIndicatorStyle _indicatorStyle;
-    BOOL _delaysContentTouches;
-    BOOL _canCancelContentTouches;
-    BOOL _pagingEnabled;
     NSTimer *_dragDelegateTimer;
     BOOL _bouncesZoom;
-    BOOL _bounces;
-    BOOL _zooming;
     NSMutableArray *_scrollAnimations;
     NSTimer *_scrollTimer;
     NSTimeInterval _scrollAnimationTime;
@@ -85,12 +68,26 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
     BOOL _alwaysBounceHorizontal;
     BOOL _alwaysBounceVertical;
 }
-@synthesize contentOffset=_contentOffset, contentInset=_contentInset, scrollIndicatorInsets=_scrollIndicatorInsets, scrollEnabled=_scrollEnabled;
-@synthesize showsHorizontalScrollIndicator=_showsHorizontalScrollIndicator, showsVerticalScrollIndicator=_showsVerticalScrollIndicator, contentSize=_contentSize;
-@synthesize maximumZoomScale=_maximumZoomScale, minimumZoomScale=_minimumZoomScale, scrollsToTop=_scrollsToTop;
-@synthesize indicatorStyle=_indicatorStyle, delaysContentTouches=_delaysContentTouches, delegate=_delegate, pagingEnabled=_pagingEnabled;
-@synthesize canCancelContentTouches=_canCancelContentTouches, bouncesZoom=_bouncesZoom, zooming=_zooming;
-@synthesize alwaysBounceVertical=_alwaysBounceVertical, alwaysBounceHorizontal=_alwaysBounceHorizontal, bounces=_bounces;
+@synthesize contentOffset = _contentOffset;
+@synthesize contentInset = _contentInset;
+@synthesize scrollIndicatorInsets = _scrollIndicatorInsets;
+@synthesize scrollEnabled = _scrollEnabled;
+@synthesize showsHorizontalScrollIndicator = _showsHorizontalScrollIndicator;
+@synthesize showsVerticalScrollIndicator = _showsVerticalScrollIndicator;
+@synthesize contentSize = _contentSize;
+@synthesize maximumZoomScale = _maximumZoomScale;
+@synthesize minimumZoomScale = _minimumZoomScale;
+@synthesize scrollsToTop = _scrollsToTop;
+@synthesize indicatorStyle = _indicatorStyle;
+@synthesize delaysContentTouches = _delaysContentTouches;
+@synthesize delegate = _delegate;
+@synthesize pagingEnabled = _pagingEnabled;
+@synthesize canCancelContentTouches = _canCancelContentTouches;
+@synthesize bouncesZoom = _bouncesZoom;
+@synthesize zooming = _zooming;
+@synthesize alwaysBounceVertical = _alwaysBounceVertical;
+@synthesize alwaysBounceHorizontal = _alwaysBounceHorizontal;
+@synthesize bounces = _bounces;
 
 - (id)initWithFrame:(CGRect)frame
 {

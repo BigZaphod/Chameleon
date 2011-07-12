@@ -31,12 +31,11 @@
 #import "UITouch.h"
 
 @implementation UIEvent {
-    UIEventType _type;
     UITouch *_touch;
-    NSTimeInterval _timestamp;
     BOOL _unhandledKeyPressEvent;
 }
-@synthesize timestamp=_timestamp, type=_type;
+@synthesize timestamp = _timestamp;
+@synthesize type = _type;
 
 - (id)initWithEventType:(UIEventType)type
 {

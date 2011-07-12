@@ -53,23 +53,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 @implementation UITextField {
     UITextLayer *_textLayer;
 	UITextLayer *_placeholderTextLayer;
-    
-    id _delegate;
-    UITextFieldViewMode _clearButtonMode;
-    UIView *_leftView;
-    UITextFieldViewMode _leftViewMode;
-    UIView *_rightView;
-    UITextFieldViewMode _rightViewMode;
-    UIImage *_background;
-    UIImage *_disabledBackground;
-    BOOL _editing;
-    BOOL _clearsOnBeginEditing;
-    BOOL _adjustsFontSizeToFitWidth;
     NSString *_placeholder;
-    UITextBorderStyle _borderStyle;
-    
-    UIView *_inputAccessoryView;
-    UIView *_inputView;
     
     struct {
         BOOL shouldBeginEditing : 1;
@@ -82,10 +66,20 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 		BOOL doCommandBySelector : 1;
     } _delegateHas;	
 }
-@synthesize delegate=_delegate, background=_background, disabledBackground=_disabledBackground, editing=_editing, clearsOnBeginEditing=_clearsOnBeginEditing;
-@synthesize adjustsFontSizeToFitWidth=_adjustsFontSizeToFitWidth, clearButtonMode=_clearButtonMode, leftView=_leftView, rightView=_rightView;
-@synthesize leftViewMode=_leftViewMode, rightViewMode=_rightViewMode, borderStyle=_borderStyle;
-@synthesize inputAccessoryView=_inputAccessoryView, inputView=_inputView;
+@synthesize delegate = _delegate;
+@synthesize background = _background;
+@synthesize disabledBackground = _disabledBackground;
+@synthesize editing = _editing;
+@synthesize clearsOnBeginEditing = _clearsOnBeginEditing;
+@synthesize adjustsFontSizeToFitWidth = _adjustsFontSizeToFitWidth;
+@synthesize clearButtonMode = _clearButtonMode;
+@synthesize leftView = _leftView;
+@synthesize rightView = _rightView;
+@synthesize leftViewMode = _leftViewMode;
+@synthesize rightViewMode = _rightViewMode;
+@synthesize borderStyle = _borderStyle;
+@synthesize inputAccessoryView = _inputAccessoryView;
+@synthesize inputView = _inputView;
 
 - (id)initWithFrame:(CGRect)frame
 {

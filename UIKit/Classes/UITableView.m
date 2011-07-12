@@ -55,23 +55,12 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 @end
 
 @implementation UITableView {
-    UITableViewStyle _style;
-    id<UITableViewDataSource> _dataSource;
-    BOOL _needsReload;
-    CGFloat _rowHeight;
-    UIColor *_separatorColor;
-    UITableViewCellSeparatorStyle _separatorStyle;
-    UIView *_tableHeaderView;
-    UIView *_tableFooterView;
-    BOOL _allowsSelection;
-    BOOL _allowsSelectionDuringEditing;
-    BOOL _editing;
-    NSIndexPath *_selectedRow;
     NSMutableDictionary *_cachedCells;
     NSMutableSet *_reusableCells;
     NSMutableArray *_sections;
-    CGFloat _sectionHeaderHeight;
-    CGFloat _sectionFooterHeight;
+    NSIndexPath *_selectedRow;
+    UITableViewStyle _style;
+    BOOL _needsReload;
     
     struct {
         BOOL heightForRowAtIndexPath : 1;
@@ -98,10 +87,18 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 		BOOL canEditRowAtIndexPath : 1;
     } _dataSourceHas;
 }
-@synthesize style=_style, dataSource=_dataSource, rowHeight=_rowHeight, separatorStyle=_separatorStyle, separatorColor=_separatorColor;
-@synthesize tableHeaderView=_tableHeaderView, tableFooterView=_tableFooterView, allowsSelection=_allowsSelection, editing=_editing;
-@synthesize sectionFooterHeight=_sectionFooterHeight, sectionHeaderHeight=_sectionHeaderHeight;
-@synthesize allowsSelectionDuringEditing=_allowsSelectionDuringEditing;
+@synthesize style = _style;
+@synthesize dataSource = _dataSource;
+@synthesize rowHeight = _rowHeight;
+@synthesize separatorStyle = _separatorStyle;
+@synthesize separatorColor = _separatorColor;
+@synthesize tableHeaderView = _tableHeaderView;
+@synthesize tableFooterView = _tableFooterView;
+@synthesize allowsSelection = _allowsSelection;
+@synthesize editing = _editing;
+@synthesize sectionFooterHeight = _sectionFooterHeight;
+@synthesize sectionHeaderHeight = _sectionHeaderHeight;
+@synthesize allowsSelectionDuringEditing = _allowsSelectionDuringEditing;
 @dynamic delegate;
 
 - (id)initWithFrame:(CGRect)frame

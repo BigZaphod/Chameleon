@@ -36,14 +36,7 @@
 #import "UISearchDisplayController.h"
 
 
-@implementation UISearchDisplayController {
-    UIViewController* _viewController;
-    UISearchBar* _searchBar;
-    UITableView* _tableView;
-    id<UISearchDisplayDelegate> _delegate;
-    id<UITableViewDataSource> _tableViewDataSource;
-    id<UITableViewDelegate> _tableViewDelegate;
-}
+@implementation UISearchDisplayController 
 @synthesize searchContentsController = _viewController;
 @synthesize searchBar = _searchBar;
 @synthesize searchResultsTableView = _tableView;

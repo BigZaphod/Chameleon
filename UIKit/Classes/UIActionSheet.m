@@ -38,14 +38,8 @@
 #import <AppKit/NSEvent.h>
 
 @implementation UIActionSheet {
-    id<UIActionSheetDelegate> _delegate;
-    NSInteger _destructiveButtonIndex;
-    NSInteger _cancelButtonIndex;
-    NSInteger _firstOtherButtonIndex;
-    NSString *_title;
     NSMutableArray *_menuTitles;
     NSMutableArray *_separatorIndexes;
-    UIActionSheetStyle _actionSheetStyle;
     id _menu;
     
     struct {
@@ -57,8 +51,12 @@
         BOOL actionSheetCancel : 1;
     } _delegateHas;
 }
-@synthesize delegate=_delegate, destructiveButtonIndex=_destructiveButtonIndex, cancelButtonIndex=_cancelButtonIndex, title=_title;
-@synthesize firstOtherButtonIndex=_firstOtherButtonIndex, actionSheetStyle = _actionSheetStyle;
+@synthesize delegate = _delegate;
+@synthesize destructiveButtonIndex = _destructiveButtonIndex;
+@synthesize cancelButtonIndex = _cancelButtonIndex;
+@synthesize title = _title;
+@synthesize firstOtherButtonIndex = _firstOtherButtonIndex;
+@synthesize actionSheetStyle = _actionSheetStyle;
 
 - (id)initWithFrame:(CGRect)frame
 {

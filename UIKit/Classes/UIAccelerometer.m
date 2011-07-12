@@ -29,11 +29,9 @@
 
 #import "UIAccelerometer.h"
 
-@implementation UIAccelerometer {
-    NSTimeInterval _updateInterval;
-    id<UIAccelerometerDelegate> _delegate;
-}
-@synthesize updateInterval=_updateInterval, delegate=_delegate;
+@implementation UIAccelerometer
+@synthesize updateInterval = _updateInterval;
+@synthesize delegate = _delegate;
 
 + (UIAccelerometer *)sharedAccelerometer
 {

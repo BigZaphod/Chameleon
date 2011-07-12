@@ -31,11 +31,9 @@
 #import "UIGeometry.h"
 #import <AppKit/AppKit.h>
 
-@implementation UIScreenMode {
-    CGFloat _pixelAspectRatio;
-    CGSize _size;
-}
-@synthesize pixelAspectRatio=_pixelAspectRatio, size=_size;
+@implementation UIScreenMode
+@synthesize pixelAspectRatio = _pixelAspectRatio;
+@synthesize size = _size;
 
 + (id)screenModeWithNSView:(NSView *)theNSView
 {

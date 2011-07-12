@@ -83,17 +83,13 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 
 
 @implementation UIWindow {
-    UIScreen *_screen;
     UIResponder *_firstResponder;
     NSUndoManager *_undoManager;
-	UIView *_currentToolTipView;
-	UIView *_toolTipViewToShow;
-	UIViewController *_rootViewController;
 }
-@synthesize screen=_screen;
-@synthesize currentToolTipView=_currentToolTipView;
-@synthesize toolTipViewToShow=_toolTipViewToShow;
-@synthesize rootViewController=_rootViewController;
+@synthesize screen = _screen;
+@synthesize currentToolTipView = _currentToolTipView;
+@synthesize toolTipViewToShow = _toolTipViewToShow;
+@synthesize rootViewController = _rootViewController;
 
 - (id)initWithFrame:(CGRect)theFrame
 {

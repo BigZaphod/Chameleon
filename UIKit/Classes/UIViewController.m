@@ -41,29 +41,25 @@
 #import "UITabBarController.h"
 
 @implementation UIViewController {
-    UIView *_view;
-    BOOL _wantsFullScreenLayout;
-    NSString *_title;
-    CGSize _contentSizeForViewInPopover;
-    BOOL _modalInPopover;
-    UINavigationItem *_navigationItem;
-    NSArray *_toolbarItems;
     UIModalPresentationStyle _modalPresentationStyle;
-    BOOL _editing;
     BOOL _hidesBottomBarWhenPushed;
-    UIViewController *_parentViewController;
-    UIViewController *_modalViewController;
-    UISearchDisplayController *_searchDisplayController;
-    UIModalTransitionStyle _modalTransitionStyle;
-    
-    UITabBarItem *_tabBarItem;
-    UITabBarController *_tabBarController;
 }
-@synthesize view=_view, wantsFullScreenLayout=_wantsFullScreenLayout, title=_title, contentSizeForViewInPopover=_contentSizeForViewInPopover;
-@synthesize modalInPopover=_modalInPopover, toolbarItems=_toolbarItems, modalPresentationStyle=_modalPresentationStyle, editing=_editing;
-@synthesize modalViewController=_modalViewController, parentViewController=_parentViewController;
-@synthesize modalTransitionStyle=_modalTransitionStyle, hidesBottomBarWhenPushed=_hidesBottomBarWhenPushed;
-@synthesize searchDisplayController=_searchDisplayController, tabBarItem=_tabBarItem, tabBarController=_tabBarController;
+@synthesize navigationItem = _navigationItem;
+@synthesize view = _view;
+@synthesize wantsFullScreenLayout = _wantsFullScreenLayout;
+@synthesize title = _title;
+@synthesize contentSizeForViewInPopover = _contentSizeForViewInPopover;
+@synthesize modalInPopover = _modalInPopover;
+@synthesize toolbarItems = _toolbarItems;
+@synthesize modalPresentationStyle = _modalPresentationStyle;
+@synthesize editing = _editing;
+@synthesize modalViewController = _modalViewController;
+@synthesize parentViewController = _parentViewController;
+@synthesize modalTransitionStyle = _modalTransitionStyle;
+@synthesize hidesBottomBarWhenPushed = _hidesBottomBarWhenPushed;
+@synthesize searchDisplayController = _searchDisplayController;
+@synthesize tabBarItem = _tabBarItem;
+@synthesize tabBarController = _tabBarController;
 
 - (id)init
 {

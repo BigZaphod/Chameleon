@@ -29,11 +29,9 @@
 
 #import "UIAcceleration.h"
 
-@implementation UIAcceleration {
-    UIAccelerationValue _x;
-    UIAccelerationValue _y;
-    UIAccelerationValue _z;
-    NSTimeInterval _timestamp;
-}
-@synthesize x=_x, y=_y, z=_z, timestamp=_timestamp;
+@implementation UIAcceleration
+@synthesize x = _x;
+@synthesize y = _y;
+@synthesize z = _z;
+@synthesize timestamp = _timestamp;
 @end

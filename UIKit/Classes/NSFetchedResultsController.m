@@ -39,22 +39,13 @@
 
 #import "NSIndexPath+UITableView.h"
 
-@implementation NSFetchedResultsController {
-    id <NSFetchedResultsControllerDelegate> _delegate;
-    NSFetchRequest *_fetchRequest;
-    NSManagedObjectContext *_managedObjectContext;
-    NSArray *_fetchedObjects; // we don't yet support sections!
-    
-    // stubs
-    NSString *_sectionNameKeyPath;
-    NSString *_sectionNameKey;
-    NSString *_cacheName;
-}
+@implementation NSFetchedResultsController 
 @synthesize delegate = _delegate;
 @synthesize fetchRequest = _fetchRequest;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize fetchedObjects = _fetchedObjects;
-@synthesize cacheName = _cacheName, sectionNameKeyPath = _sectionNameKeyPath;
+@synthesize cacheName = _cacheName;
+@synthesize sectionNameKeyPath = _sectionNameKeyPath;
 
 - (id)initWithFetchRequest:(NSFetchRequest *)fetchRequest managedObjectContext: (NSManagedObjectContext *)context sectionNameKeyPath:(NSString *)sectionNameKeyPath cacheName:(NSString *)name {
   if ((self = [super init])) {

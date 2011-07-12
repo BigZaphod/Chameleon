@@ -32,7 +32,11 @@
 #import "UIImage+UIPrivate.h"
 
 @implementation UIBarButtonItem 
-@synthesize width=_width, customView=_customView, action=_action, target=_target, style=_style;
+@synthesize width = _width;
+@synthesize customView = _customView;
+@synthesize action = _action;
+@synthesize target = _target;
+@synthesize style = _style;
 
 - (id)init
 {
