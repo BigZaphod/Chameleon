@@ -51,7 +51,6 @@ static BOOL _animationsEnabled = YES;
 
 
 @implementation UIView {
-@private
     UIView *_superview;
     NSMutableSet *_subviews;
     BOOL _clearsContextBeforeDrawing;

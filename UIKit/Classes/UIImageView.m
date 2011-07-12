@@ -43,7 +43,6 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
 }
 
 @implementation UIImageView {
-@private
     UIImage *_image;
     NSArray *_animationImages;
     NSArray *_highlightedAnimationImages;

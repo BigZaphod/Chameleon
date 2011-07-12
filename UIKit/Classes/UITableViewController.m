@@ -30,7 +30,6 @@
 #import "UITableViewController.h"
 
 @implementation UITableViewController {
-@private
     UITableViewStyle _style;
     BOOL _clearsSelectionOnViewWillAppear;
     BOOL _hasReloaded;

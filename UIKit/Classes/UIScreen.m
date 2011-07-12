@@ -47,7 +47,6 @@ NSString *const UIScreenModeDidChangeNotification = @"UIScreenModeDidChangeNotif
 NSMutableArray *_allScreens = nil;
 
 @implementation UIScreen {
-@private
     UIImageView *_grabber;
     CALayer *_layer;
     UIScreenMode *_currentMode;

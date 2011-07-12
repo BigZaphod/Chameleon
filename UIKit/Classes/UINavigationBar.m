@@ -53,7 +53,6 @@ typedef enum {
 } _UINavigationBarTransition;
 
 @implementation UINavigationBar {
-@private
     NSMutableArray *_navStack;
     UIColor *_tintColor;
     id _delegate;

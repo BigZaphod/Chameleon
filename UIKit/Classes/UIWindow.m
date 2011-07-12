@@ -83,7 +83,6 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 
 
 @implementation UIWindow {
-@private
     UIScreen *_screen;
     UIResponder *_firstResponder;
     NSUndoManager *_undoManager;

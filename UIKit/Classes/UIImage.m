@@ -35,7 +35,6 @@
 #import <AppKit/NSImage.h>
 
 @implementation UIImage {
-@private
     CGImageRef _image;
 }
 

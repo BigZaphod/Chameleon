@@ -30,7 +30,6 @@
 #import "UIMenuItem.h"
 
 @implementation UIMenuItem {
-@private
     SEL _action;
     NSString *_title;
 }

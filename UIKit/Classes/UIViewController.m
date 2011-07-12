@@ -41,7 +41,6 @@
 #import "UITabBarController.h"
 
 @implementation UIViewController {
-@private
     UIView *_view;
     BOOL _wantsFullScreenLayout;
     NSString *_title;

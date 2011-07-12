@@ -38,7 +38,6 @@ static const CGFloat NavBarHeight = 44;
 static const CGFloat ToolbarHeight = 28;
 
 @implementation UINavigationController {
-@private
     UINavigationBar *_navigationBar;
     UIToolbar *_toolbar;
     NSMutableArray *_viewControllers;

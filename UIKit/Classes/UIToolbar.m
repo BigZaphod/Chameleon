@@ -51,7 +51,7 @@
 
 @end
 
-@implementation UIToolbarItem
+@implementation UIToolbarItem 
 @synthesize item, view;
 
 - (id)initWithBarButtonItem:(UIBarButtonItem *)anItem
@@ -95,7 +95,12 @@
 
 
 
-@implementation UIToolbar
+@implementation UIToolbar {
+    UIBarStyle _barStyle;
+    UIColor *_tintColor;
+    NSMutableArray *_toolbarItems;
+    BOOL _translucent;
+}
 @synthesize barStyle=_barStyle, tintColor=_tintColor, translucent=_translucent;
 
 - (id)init

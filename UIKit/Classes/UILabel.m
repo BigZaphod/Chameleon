@@ -34,7 +34,6 @@
 #import <AppKit/NSStringDrawing.h>
 
 @implementation UILabel {
-@private
     NSString *_text;
     UIFont *_font;
     UIColor *_textColor;

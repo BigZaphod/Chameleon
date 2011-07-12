@@ -49,7 +49,6 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 
 
 @implementation UITextView {
-@private
     UITextLayer *_textLayer;
     UIDataDetectorTypes _dataDetectorTypes;
     

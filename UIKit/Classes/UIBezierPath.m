@@ -31,7 +31,6 @@
 #import "UIGraphics.h"
 
 @implementation UIBezierPath {
-@private
     CGPathRef _path;
     CGFloat _lineWidth;
     CGLineCap _lineCapStyle;

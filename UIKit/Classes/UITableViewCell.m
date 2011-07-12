@@ -56,7 +56,6 @@ extern CGFloat _UITableViewDefaultRowHeight;
 
 
 @implementation UITableViewCell {
-@private
     UITableViewCellStyle _style;
     UITableViewCellSeparator *_separatorView;
     UIView *_contentView;

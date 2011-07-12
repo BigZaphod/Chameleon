@@ -122,7 +122,6 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 
 
 @implementation UIPopoverController {
-@private
     UIViewController *_contentViewController;
     NSArray *_passthroughViews;
     UIPopoverArrowDirection _popoverArrowDirection;

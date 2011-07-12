@@ -38,7 +38,6 @@
 #import <AppKit/NSEvent.h>
 
 @implementation UIActionSheet {
-@private
     id<UIActionSheetDelegate> _delegate;
     NSInteger _destructiveButtonIndex;
     NSInteger _cancelButtonIndex;

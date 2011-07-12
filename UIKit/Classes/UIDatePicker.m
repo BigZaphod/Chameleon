@@ -31,7 +31,6 @@
 
 
 @implementation UIDatePicker {
-@private
     NSCalendar *_calendar;
     NSDate *_date;
     NSLocale *_locale;

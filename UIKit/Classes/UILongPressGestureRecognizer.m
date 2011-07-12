@@ -31,7 +31,6 @@
 #import "UIGestureRecognizerSubclass.h"
 
 @implementation UILongPressGestureRecognizer {
-@private
     CFTimeInterval _minimumPressDuration;
     CGFloat _allowableMovement;
     NSUInteger _numberOfTapsRequired;

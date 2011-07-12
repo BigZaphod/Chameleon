@@ -30,7 +30,6 @@
 #import "UIImage+UIPrivate.h"
 
 @interface UINinePartImage : UIImage {
-@private
     id _topLeftCorner;
     id _topEdgeFill;
     id _topRightCorner;

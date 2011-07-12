@@ -47,7 +47,6 @@ NSString *const UIMenuControllerMenuFrameDidChangeNotification = @"UIMenuControl
 @end
 
 @implementation UIMenuController {
-@private
     NSArray *_menuItems;
     NSMutableArray *_enabledMenuItems;
     id _menu;

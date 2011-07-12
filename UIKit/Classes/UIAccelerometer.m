@@ -29,8 +29,7 @@
 
 #import "UIAccelerometer.h"
 
-@implementation UIAccelerometer{
-@private
+@implementation UIAccelerometer {
     NSTimeInterval _updateInterval;
     id<UIAccelerometerDelegate> _delegate;
 }

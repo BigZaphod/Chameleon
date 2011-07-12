@@ -176,7 +176,6 @@ static const CGFloat SplitterPadding = 3;
 
 
 @implementation UISplitViewController {
-@private
     id <UISplitViewControllerDelegate> _delegate;
     NSArray *_viewControllers;
     

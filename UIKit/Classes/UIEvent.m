@@ -31,7 +31,6 @@
 #import "UITouch.h"
 
 @implementation UIEvent {
-@private
     UIEventType _type;
     UITouch *_touch;
     NSTimeInterval _timestamp;

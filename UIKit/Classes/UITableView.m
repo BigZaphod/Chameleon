@@ -55,7 +55,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 @end
 
 @implementation UITableView {
-@private
     UITableViewStyle _style;
     id<UITableViewDataSource> _dataSource;
     BOOL _needsReload;

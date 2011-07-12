@@ -30,13 +30,7 @@
 #import "UIView.h"
 #import "UIInterface.h"
 
-@interface UIToolbar : UIView {
-@private
-    UIBarStyle _barStyle;
-    UIColor *_tintColor;
-    NSMutableArray *_toolbarItems;
-    BOOL _translucent;
-}
+@interface UIToolbar : UIView 
 
 - (void)setItems:(NSArray *)items animated:(BOOL)animated;
 

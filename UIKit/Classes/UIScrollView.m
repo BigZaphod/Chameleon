@@ -46,9 +46,7 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 @end
 
 @implementation UIScrollView {
-    @package
     id _delegate;
-@private
     CGPoint _contentOffset;
     CGSize _contentSize;
     UIEdgeInsets _contentInset;

@@ -51,7 +51,6 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 @end
 
 @implementation UITextField {
-@private
     UITextLayer *_textLayer;
 	UITextLayer *_placeholderTextLayer;
     

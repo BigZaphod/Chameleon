@@ -32,7 +32,6 @@
 #import <Cocoa/Cocoa.h>
 
 @implementation UITouch {
-@private
     NSTimeInterval _timestamp;
     NSUInteger _tapCount;
     UITouchPhase _phase;

@@ -39,7 +39,6 @@
 @end
 
 @implementation UIAlertView {
-@private
     NSString *_title;
     NSString *_message;
     id<UIAlertViewDelegate> _delegate;

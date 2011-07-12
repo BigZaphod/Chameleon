@@ -32,7 +32,6 @@
 #import <WebKit/WebKit.h>
 
 @implementation UIWebView {
-@private
     id _delegate;
     NSURLRequest *_request;
     UIDataDetectorTypes _dataDetectorTypes;

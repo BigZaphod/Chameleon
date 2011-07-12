@@ -31,7 +31,6 @@
 #import "UIGestureRecognizerSubclass.h"
 
 @implementation UIGestureRecognizer {
-@private
     id _delegate;
     BOOL _delaysTouchesBegan;
     BOOL _delaysTouchesEnded;

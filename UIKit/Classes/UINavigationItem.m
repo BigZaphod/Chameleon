@@ -34,7 +34,6 @@
 #import "UINavigationBar+UIPrivate.h"
 
 @implementation UINavigationItem {
-@private
     NSString *_title;
     NSString *_prompt;
     UIBarButtonItem *_backBarButtonItem;

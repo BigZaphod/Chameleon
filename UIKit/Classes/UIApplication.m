@@ -102,7 +102,6 @@ static BOOL TouchIsActive(UITouch *touch)
 }
 
 @implementation UIApplication {
-@private
     UIEvent *_currentEvent;
     UIWindow *_keyWindow;
     NSMutableSet *_visibleWindows;

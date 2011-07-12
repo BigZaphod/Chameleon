@@ -30,7 +30,6 @@
 #import "UIBarItem.h"
 
 @implementation UIBarItem {
-@private
     BOOL _enabled;
     UIImage *_image;
     UIEdgeInsets _imageInsets;
