@@ -96,12 +96,11 @@
 
 
 @implementation UIToolbar {
-    UIBarStyle _barStyle;
-    UIColor *_tintColor;
     NSMutableArray *_toolbarItems;
-    BOOL _translucent;
 }
-@synthesize barStyle=_barStyle, tintColor=_tintColor, translucent=_translucent;
+@synthesize barStyle = _barStyle;
+@synthesize tintColor = _tintColor;
+@synthesize translucent = _translucent;
 
 - (id)init
 {

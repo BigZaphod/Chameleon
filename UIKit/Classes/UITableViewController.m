@@ -31,10 +31,9 @@
 
 @implementation UITableViewController {
     UITableViewStyle _style;
-    BOOL _clearsSelectionOnViewWillAppear;
     BOOL _hasReloaded;
 }
-@synthesize clearsSelectionOnViewWillAppear=_clearsSelectionOnViewWillAppear;
+@synthesize clearsSelectionOnViewWillAppear = _clearsSelectionOnViewWillAppear;
 
 - (id)init
 {
