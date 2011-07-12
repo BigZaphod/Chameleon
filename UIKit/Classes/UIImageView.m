@@ -43,17 +43,15 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
 }
 
 @implementation UIImageView {
-    UIImage *_image;
-    NSArray *_animationImages;
-    NSArray *_highlightedAnimationImages;
-    NSTimeInterval _animationDuration;
-    NSInteger _animationRepeatCount;
-    UIImage *_highlightedImage;
-    BOOL _highlighted;
     NSInteger _drawMode;
 }
-@synthesize image=_image, animationImages=_animationImages, animationDuration=_animationDuration, highlightedImage=_highlightedImage, highlighted=_highlighted;
-@synthesize animationRepeatCount=_animationRepeatCount, highlightedAnimationImages=_highlightedAnimationImages;
+@synthesize image = _image;
+@synthesize animationImages = _animationImages;
+@synthesize animationDuration = _animationDuration;
+@synthesize highlightedImage = _highlightedImage;
+@synthesize highlighted = _highlighted;
+@synthesize animationRepeatCount = _animationRepeatCount;
+@synthesize highlightedAnimationImages = _highlightedAnimationImages;
 
 + (BOOL)_instanceImplementsDrawRect
 {

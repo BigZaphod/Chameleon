@@ -44,26 +44,22 @@ static NSString *UIButtonContentTypeBackgroundImage = @"UIButtonContentTypeBackg
 static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 
 @implementation UIButton {
-    UIButtonType _buttonType;
-    UILabel *_titleLabel;
-    UIImageView *_imageView;
     UIImageView *_backgroundImageView;
-    BOOL _reversesTitleShadowWhenHighlighted;
-    BOOL _adjustsImageWhenHighlighted;
-    BOOL _adjustsImageWhenDisabled;
-    BOOL _showsTouchWhenHighlighted;
-    UIEdgeInsets _contentEdgeInsets;
-    UIEdgeInsets _titleEdgeInsets;
-    UIEdgeInsets _imageEdgeInsets;
     NSMutableDictionary *_content;
     UIImage *_adjustedHighlightImage;
     UIImage *_adjustedDisabledImage;
 	CGSize originalShadowOffset;
 }
-@synthesize buttonType=_buttonType, titleLabel=_titleLabel, reversesTitleShadowWhenHighlighted=_reversesTitleShadowWhenHighlighted;
-@synthesize adjustsImageWhenHighlighted=_adjustsImageWhenHighlighted, adjustsImageWhenDisabled=_adjustsImageWhenDisabled;
-@synthesize showsTouchWhenHighlighted=_showsTouchWhenHighlighted, imageView=_imageView, contentEdgeInsets=_contentEdgeInsets;
-@synthesize titleEdgeInsets=_titleEdgeInsets, imageEdgeInsets=_imageEdgeInsets;
+@synthesize buttonType = _buttonType;
+@synthesize titleLabel = _titleLabel;
+@synthesize reversesTitleShadowWhenHighlighted = _reversesTitleShadowWhenHighlighted;
+@synthesize adjustsImageWhenHighlighted = _adjustsImageWhenHighlighted;
+@synthesize adjustsImageWhenDisabled = _adjustsImageWhenDisabled;
+@synthesize showsTouchWhenHighlighted = _showsTouchWhenHighlighted;
+@synthesize imageView = _imageView;
+@synthesize contentEdgeInsets = _contentEdgeInsets;
+@synthesize titleEdgeInsets = _titleEdgeInsets;
+@synthesize imageEdgeInsets = _imageEdgeInsets;
 
 static UIImage* detailDisclosureButtonImage;
 static UIImage* detailDisclosureButtonImagePressed;

@@ -33,28 +33,22 @@
 #import "UIGraphics.h"
 #import <AppKit/NSStringDrawing.h>
 
-@implementation UILabel {
-    NSString *_text;
-    UIFont *_font;
-    UIColor *_textColor;
-    UIColor *_highlightedTextColor;
-    UIColor *_shadowColor;
-    CGSize _shadowOffset;
-    UITextAlignment _textAlignment;
-    UILineBreakMode _lineBreakMode;
-    BOOL _enabled;
-    NSInteger _numberOfLines;
-    UIBaselineAdjustment _baselineAdjustment;
-    BOOL _adjustsFontSizeToFitWidth;
-    CGFloat _minimumFontSize;
-    BOOL _highlighted;
-	NSAttributedString *_attributedText;
-}
-@synthesize text=_text, font=_font, textColor=_textColor, textAlignment=_textAlignment, lineBreakMode=_lineBreakMode, enabled=_enabled;
-@synthesize numberOfLines=_numberOfLines, shadowColor=_shadowColor, shadowOffset=_shadowOffset;
-@synthesize baselineAdjustment=_baselineAdjustment, adjustsFontSizeToFitWidth=_adjustsFontSizeToFitWidth;
-@synthesize highlightedTextColor=_highlightedTextColor, minimumFontSize=_minimumFontSize, highlighted=_highlighted;
-@synthesize attributedText=_attributedText;
+@implementation UILabel 
+@synthesize text = _text;
+@synthesize font = _font;
+@synthesize textColor = _textColor;
+@synthesize textAlignment = _textAlignment;
+@synthesize lineBreakMode = _lineBreakMode;
+@synthesize enabled = _enabled;
+@synthesize numberOfLines = _numberOfLines;
+@synthesize shadowColor = _shadowColor;
+@synthesize shadowOffset = _shadowOffset;
+@synthesize baselineAdjustment = _baselineAdjustment;
+@synthesize adjustsFontSizeToFitWidth = _adjustsFontSizeToFitWidth;
+@synthesize highlightedTextColor = _highlightedTextColor;
+@synthesize minimumFontSize = _minimumFontSize;
+@synthesize highlighted = _highlighted;
+@synthesize attributedText = _attributedText;
 
 - (id)initWithFrame:(CGRect)frame
 {

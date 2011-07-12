@@ -103,16 +103,14 @@ static BOOL TouchIsActive(UITouch *touch)
 
 @implementation UIApplication {
     UIEvent *_currentEvent;
-    UIWindow *_keyWindow;
     NSMutableSet *_visibleWindows;
-    id<UIApplicationDelegate> _delegate;
-    BOOL _idleTimerDisabled;
     BOOL _networkActivityIndicatorVisible;
-    BOOL _applicationSupportsShakeToEdit;
     NSUInteger _ignoringInteractionEvents;
-    NSInteger _applicationIconBadgeNumber;
 }
-@synthesize keyWindow=_keyWindow, delegate=_delegate, idleTimerDisabled=_idleTimerDisabled, applicationSupportsShakeToEdit=_applicationSupportsShakeToEdit;
+@synthesize keyWindow = _keyWindow;
+@synthesize delegate = _delegate;
+@synthesize idleTimerDisabled = _idleTimerDisabled;
+@synthesize applicationSupportsShakeToEdit = _applicationSupportsShakeToEdit;
 @synthesize applicationIconBadgeNumber = _applicationIconBadgeNumber;
 
 + (void)initialize

@@ -29,15 +29,12 @@
 
 #import "UIBarItem.h"
 
-@implementation UIBarItem {
-    BOOL _enabled;
-    UIImage *_image;
-    UIEdgeInsets _imageInsets;
-    NSString *_title;
-    NSInteger _tag;
-}
-
-@synthesize enabled=_enabled, image=_image, imageInsets=_imageInsets, title=_title, tag=_tag;
+@implementation UIBarItem
+@synthesize enabled = _enabled;
+@synthesize image = _image;
+@synthesize imageInsets = _imageInsets;
+@synthesize title = _title;
+@synthesize tag = _tag;
 
 - (id)init
 {
