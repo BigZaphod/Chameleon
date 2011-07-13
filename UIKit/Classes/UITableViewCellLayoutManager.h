@@ -6,7 +6,14 @@
 
 + (id) layoutManagerForTableViewCellStyle:(UITableViewCellStyle)style;
 
-// TODO: Add methods for calculating various view-rects based on the given
-//       style.
+- (CGRect) contentRectForCell:(UITableViewCell*)cell;
+- (CGRect) accessoryRectForCell:(UITableViewCell*)cell;
+- (CGRect) backgroundRectForCell:(UITableViewCell*)cell;
+- (CGRect) seperatorRectForCell:(UITableViewCell*)cell;
+- (CGRect) textLabelRectForCell:(UITableViewCell*)cell;
 
+@end
+
+@interface UITableViewCellLayoutManagerDefault : UITableViewCellLayoutManager
+    
 @end
