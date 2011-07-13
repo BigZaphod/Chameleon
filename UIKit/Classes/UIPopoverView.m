@@ -114,16 +114,11 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
         _contentContainerView = [[UIView alloc] init];
         _contentContainerView.layer.cornerRadius = 3;
         _contentContainerView.clipsToBounds = YES;
-		
-		// Suppress view appearance because otherwise they'd fire here. We want them to fire once the view is actually visible. The popover controller will handle that for us.
-		[_contentContainerView _setSuppressAppearanceEvents:YES];
 
         [self addSubview:_backgroundView];
         [self addSubview:_arrowView];
         [self addSubview:_contentContainerView];
         [_contentContainerView addSubview:_contentView];
-		
-		[_contentContainerView _setSuppressAppearanceEvents:NO];
         
         self.contentSize = aSize;
     }
