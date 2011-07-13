@@ -147,30 +147,6 @@ static const CGFloat ToolbarHeight = 28;
 	[self.view addSubview:_toolbar];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
-	[self.topViewController viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-	[super viewDidAppear:animated];
-	[self.topViewController viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-	[super viewWillDisappear:animated];
-	[self.topViewController viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-	[super viewDidDisappear:animated];
-	[self.topViewController viewDidDisappear:animated];
-}
-
 - (void)_updateToolbar:(BOOL)animated
 {
 	UIViewController *topController = self.topViewController;
@@ -191,7 +167,8 @@ static const CGFloat ToolbarHeight = 28;
 		}
         
 		for (UIViewController *controller in _viewControllers) {
-			[controller _setParentViewController:nil];
+			[controller removeFromParentViewController];
+            [controller didMoveToParentViewController:nil];
 		}
 		
 		[_viewControllers release];
@@ -200,11 +177,15 @@ static const CGFloat ToolbarHeight = 28;
 		NSMutableArray *items = [NSMutableArray arrayWithCapacity:[_viewControllers count]];
 		
 		for (UIViewController *controller in _viewControllers) {
-			[controller _setParentViewController:self];
+            [self addChildViewController:controller];
 			[items addObject:controller.navigationItem];
 		}
         
-        [self transitionFromViewController:nil toViewController:self.topViewController duration:0 direction:1 animations:nil completion:nil];
+        [self transitionFromViewController:nil toViewController:self.topViewController duration:0 direction:1 animations:nil completion:^(BOOL finished){
+            for (UIViewController *controller in _viewControllers) {
+                [controller didMoveToParentViewController:self];
+            }
+        }];
         
 		[_navigationBar setItems:items animated:animated];
 		[self _updateToolbar:animated];
@@ -244,8 +225,6 @@ static const CGFloat ToolbarHeight = 28;
     newContainerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [newContainerView addSubview:toViewController.view];
     _containerView = newContainerView;
-
-    [self.view addSubview:newContainerView];
     
     [self transitionFromViewController:fromViewController
         toViewController:toViewController 
@@ -265,9 +244,6 @@ static const CGFloat ToolbarHeight = 28;
             if (fromViewController.view.superview == oldContainerView) {
                 [fromViewController.view removeFromSuperview];
             }
-            if (_delegateHas.didShowViewController) {
-                [_delegate navigationController:self didShowViewController:toViewController animated:duration > 0];
-            }
             [oldContainerView release];
         }
      ];
@@ -275,23 +251,35 @@ static const CGFloat ToolbarHeight = 28;
 
 - (void) transitionFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL))completion
 {
-    if (_delegateHas.willShowViewController) {
+    if (self.view.window) {
+        [fromViewController beginAppearanceTransition:NO animated:duration > 0];
+        [toViewController beginAppearanceTransition:YES animated:duration > 0];
+    }
+    
+    BOOL delegateHasWillShowViewController = _delegateHas.willShowViewController;
+    BOOL delegateHasDidShowViewController = _delegateHas.didShowViewController;
+    
+    if (delegateHasWillShowViewController) {
         [_delegate navigationController:self willShowViewController:toViewController animated:duration > 0];
     }
-    [super transitionFromViewController:fromViewController 
-        toViewController:toViewController 
-        duration:duration
-        options:options
-        animations:animations 
-        completion:^(BOOL finished){
-            if (completion) {
-                completion(finished);
-            }
-            if (_delegateHas.didShowViewController) {
-                [_delegate navigationController:self didShowViewController:toViewController animated:duration > 0];
-            }
-        }
-    ];
+    
+    [self.view addSubview:_containerView];
+    
+    [UIView animateWithDuration:duration
+                     animations:animations
+                     completion:^(BOOL finished){
+                         if (self.view.window) {
+                             [fromViewController _endAppearanceTransition];
+                             [toViewController _endAppearanceTransition];
+                         }
+                         if (completion) {
+                             completion(finished);
+                         }
+                         if (delegateHasDidShowViewController) {
+                             [_delegate navigationController:self didShowViewController:toViewController animated:duration > 0];
+                         }
+                     }
+     ];
 }
 
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
@@ -301,7 +289,7 @@ static const CGFloat ToolbarHeight = 28;
 
     UIViewController *oldViewController = self.topViewController;
 	[_viewControllers addObject:viewController];
-	[viewController _setParentViewController:self];
+    [self addChildViewController:viewController];
 
     [self transitionFromViewController:oldViewController 
         toViewController:viewController 
@@ -311,7 +299,9 @@ static const CGFloat ToolbarHeight = 28;
             [self _updateToolbar:animated];
             [_navigationBar pushNavigationItem:viewController.navigationItem animated:animated];
         }
-        completion:nil
+        completion:^(BOOL finished){
+            [viewController didMoveToParentViewController:self];
+        }
     ];
 }
 
@@ -323,7 +313,7 @@ static const CGFloat ToolbarHeight = 28;
 
     UIViewController* oldViewController = [self.topViewController retain];
     [_viewControllers removeLastObject];
-    [oldViewController _setParentViewController:nil];
+    [oldViewController removeFromParentViewController];
     UIViewController* viewController = self.topViewController;
     
     [self transitionFromViewController:oldViewController 
@@ -334,7 +324,9 @@ static const CGFloat ToolbarHeight = 28;
             [self _updateToolbar:animated];
             [_navigationBar popNavigationItemAnimated:animated];
         }
-        completion:nil
+        completion:^(BOOL finished){
+            [viewController didMoveToParentViewController:nil];
+        }
     ];
 
     return [oldViewController autorelease];

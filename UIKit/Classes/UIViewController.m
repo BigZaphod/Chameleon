@@ -315,6 +315,26 @@
 {
 }
 
+- (void)addChildViewController:(UIViewController *)childController
+{
+    [childController willMoveToParentViewController:self];
+    [childController _setParentViewController:self];
+}
+
+- (void)removeFromParentViewController
+{
+    [self willMoveToParentViewController:nil];
+    [self _setParentViewController:nil];
+}
+
+- (void)willMoveToParentViewController:(UIViewController *)parent
+{
+}
+
+- (void)didMoveToParentViewController:(UIViewController *)parent
+{
+}
+
 - (void)transitionFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
 {
     [fromViewController beginAppearanceTransition:NO animated:duration > 0];
