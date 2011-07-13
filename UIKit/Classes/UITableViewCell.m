@@ -124,8 +124,6 @@ static UIImage* accessoryDisclosureIndicatorImageHighlighted;
 		_accessoryType = UITableViewCellAccessoryNone;
 		_editingAccessoryType = UITableViewCellAccessoryNone;
 		_selectionStyle = UITableViewCellSelectionStyleBlue;
-		
-		super.backgroundColor = [UIColor whiteColor];
 	}
 	return self;
 }
