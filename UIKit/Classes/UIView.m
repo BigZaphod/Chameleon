@@ -28,6 +28,7 @@
  */
 
 #import "UIView+UIPrivate.h"
+#import "UIViewController+UIPrivate.h"
 #import "UIViewAppKitIntegration.h"
 #import "UIWindow.h"
 #import "UIGraphics.h"
@@ -56,9 +57,7 @@ static BOOL _animationsEnabled = YES;
     BOOL _multipleTouchEnabled;
     BOOL _exclusiveTouch;
     UIViewController *_viewController;
-    BOOL _needsDidAppearOrDisappear;
     NSMutableSet *_gestureRecognizers;
-	BOOL _suppressAppearanceEvents;
 }
 @synthesize layer = _layer;
 @synthesize superview = _superview;
@@ -113,6 +112,7 @@ static BOOL _animationsEnabled = YES;
         self.alpha = 1;
         self.opaque = YES;
         [self setNeedsDisplay];
+        [self.layer removeAllAnimations];
     }
     return self;
 }
@@ -173,10 +173,11 @@ static BOOL _animationsEnabled = YES;
         // need to manage the responder chain. apparently UIKit (at least by version 4.2) seems to make sure that if a view was first responder
         // and it or it's parent views are disconnected from their window, the first responder gets reset to nil. Honestly, I don't think this
         // was always true - but it's certainly a much better and less-crashy design. Hopefully this check here replicates the behavior properly.
-        if ([self isFirstResponder]) {
+        if (!toWindow && [self isFirstResponder]) {
             [self resignFirstResponder];
         }
         
+        [_viewController viewWillMoveToWindow:toWindow];
         [self willMoveToWindow:toWindow];
 
         for (UIView *subview in self.subviews) {
@@ -188,6 +189,7 @@ static BOOL _animationsEnabled = YES;
 - (void)_didMoveFromWindow:(UIWindow *)fromWindow toWindow:(UIWindow *)toWindow
 {
     if (fromWindow != toWindow) {
+        [_viewController viewDidMoveToWindow:toWindow];
         [self didMoveToWindow];
 		
         for (UIView *subview in self.subviews) {
@@ -196,39 +198,20 @@ static BOOL _animationsEnabled = YES;
     }
 }
 
-- (BOOL)_subviewControllersNeedAppearAndDisappear
-{
-    UIView *view = self;
-
-    while (view) {
-        if ([view _viewController] != nil) {
-            return NO;
-        } else {
-            view = [view superview];
-        }
-    }
-
-    return YES;
-}
-
 - (void)addSubview:(UIView *)subview
 {
     if (subview && subview.superview != self) {
         UIWindow *oldWindow = subview.window;
         UIWindow *newWindow = self.window;
-        
-        subview->_needsDidAppearOrDisappear = [self _subviewControllersNeedAppearAndDisappear];
-        
-        if ([subview _viewController] && subview->_needsDidAppearOrDisappear && !_suppressAppearanceEvents) {
-            [[subview _viewController] viewWillAppear:NO];
-        }
 
-        [subview _willMoveFromWindow:oldWindow toWindow:newWindow];
+        if (newWindow) {
+            [subview _willMoveFromWindow:oldWindow toWindow:newWindow];
+        }
         [subview willMoveToSuperview:self];
 
         {
             [subview retain];
-
+            
             if (subview.superview) {
                 [subview.layer removeFromSuperlayer];
                 [subview.superview->_subviews removeObject:subview];
@@ -239,20 +222,18 @@ static BOOL _animationsEnabled = YES;
             subview->_superview = self;
             [_layer addSublayer:subview.layer];
             [subview didChangeValueForKey:@"superview"];
-
+            
             [subview release];
         }
-
-        [subview _didMoveFromWindow:oldWindow toWindow:newWindow];
+        
+        if (newWindow) {
+            [subview _didMoveFromWindow:oldWindow toWindow:newWindow];
+        }
         [subview didMoveToSuperview];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:subview];
-
-        [self didAddSubview:subview];
         
-        if ([subview _viewController] && subview->_needsDidAppearOrDisappear && !_suppressAppearanceEvents) {
-            [[subview _viewController] viewDidAppear:NO];
-        }
+        [self didAddSubview:subview];
     }
 }
 
@@ -304,12 +285,10 @@ static BOOL _animationsEnabled = YES;
         
         UIWindow *oldWindow = self.window;
         
-        if (_needsDidAppearOrDisappear && [self _viewController]) {
-            [[self _viewController] viewWillDisappear:NO];
-        }
-        
         [_superview willRemoveSubview:self];
-        [self _willMoveFromWindow:oldWindow toWindow:nil];
+        if (oldWindow) {
+            [self _willMoveFromWindow:oldWindow toWindow:nil];
+        }
         [self willMoveToSuperview:nil];
         
         [self willChangeValueForKey:@"superview"];
@@ -318,13 +297,11 @@ static BOOL _animationsEnabled = YES;
         _superview = nil;
         [self didChangeValueForKey:@"superview"];
         
-        [self _didMoveFromWindow:oldWindow toWindow:nil];
+        if (oldWindow) {
+            [self _didMoveFromWindow:oldWindow toWindow:nil];
+        }
         [self didMoveToSuperview];
         [[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:self];
-        
-        if (_needsDidAppearOrDisappear && [self _viewController]) {
-            [[self _viewController] viewDidDisappear:NO];
-        }
         
         [self release];
     }
@@ -553,38 +530,72 @@ static BOOL _animationsEnabled = YES;
 {
     if (_autoresizingMask != UIViewAutoresizingNone) {
         CGRect frame = self.frame;
+        BOOL originChanged = NO;
+        BOOL sizeChanged = NO;
         
-        CGFloat widthChanges = 0;
-        CGFloat heightChanges = 0;
-
-        if (_autoresizingMask & UIViewAutoresizingFlexibleLeftMargin)	widthChanges++;
-        if (_autoresizingMask & UIViewAutoresizingFlexibleWidth)		widthChanges++;
-        if (_autoresizingMask & UIViewAutoresizingFlexibleRightMargin)	widthChanges++;
-
-        if (_autoresizingMask & UIViewAutoresizingFlexibleTopMargin)	heightChanges++;
-        if (_autoresizingMask & UIViewAutoresizingFlexibleHeight)		heightChanges++;
-        if (_autoresizingMask & UIViewAutoresizingFlexibleBottomMargin)	heightChanges++;
+        CGFloat xDelta = newSize.width - oldSize.width;
+        CGFloat yDelta = newSize.height - oldSize.height;
         
-        if (   _autoresizingMask & UIViewAutoresizingFlexibleLeftMargin
-            && _autoresizingMask & UIViewAutoresizingFlexibleRightMargin
-            && _autoresizingMask & UIViewAutoresizingFlexibleWidth
-            ) widthChanges -= 0.5f;
+        if (_autoresizingMask & UIViewAutoresizingFlexibleLeftMargin) {
+            if (_autoresizingMask & UIViewAutoresizingFlexibleWidth) {
+                if (_autoresizingMask & UIViewAutoresizingFlexibleRightMargin) {
+                    frame.origin.x += xDelta / 3;
+                    frame.size.width += xDelta / 3;
+                } else {
+                    frame.origin.x += xDelta / 2;
+                    frame.size.width += xDelta / 2;
+                }
+                originChanged = YES;
+                sizeChanged = YES;
+            } else if (_autoresizingMask & UIViewAutoresizingFlexibleRightMargin) {
+                frame.origin.x += xDelta / 2;
+                originChanged = YES;
+            } else {
+                frame.origin.x += xDelta;
+                originChanged = YES;
+            }
+        } else if (_autoresizingMask & UIViewAutoresizingFlexibleWidth) {
+            if (_autoresizingMask & UIViewAutoresizingFlexibleRightMargin) {
+                frame.size.width += xDelta / 2;
+            } else {
+                frame.size.width += xDelta;
+            }
+            sizeChanged = YES;
+        } else if (_autoresizingMask & UIViewAutoresizingFlexibleRightMargin) {
+            // don't move or resize
+        }
         
-        if (   _autoresizingMask & UIViewAutoresizingFlexibleTopMargin
-            && _autoresizingMask & UIViewAutoresizingFlexibleBottomMargin
-            && _autoresizingMask & UIViewAutoresizingFlexibleHeight
-            ) heightChanges -= 0.5f;
         
-        CGFloat widthDelta = (newSize.width-oldSize.width) / widthChanges;
-        CGFloat heightDelta = (newSize.height-oldSize.height) / heightChanges;
+        if (_autoresizingMask & UIViewAutoresizingFlexibleTopMargin) {
+            if (_autoresizingMask & UIViewAutoresizingFlexibleHeight) {
+                if (_autoresizingMask & UIViewAutoresizingFlexibleBottomMargin) {
+                    frame.origin.y += yDelta / 3;
+                    frame.size.height += yDelta / 3;
+                } else {
+                    frame.origin.y += yDelta / 2;
+                    frame.size.height += yDelta / 2;
+                }
+                originChanged = YES;
+                sizeChanged = YES;
+            } else if (_autoresizingMask & UIViewAutoresizingFlexibleBottomMargin) {
+                frame.origin.y += yDelta / 2;
+                originChanged = YES;
+            } else {
+                frame.origin.y += yDelta;
+                originChanged = YES;
+            }
+        } else if (_autoresizingMask & UIViewAutoresizingFlexibleHeight) {
+            if (_autoresizingMask & UIViewAutoresizingFlexibleBottomMargin) {
+                frame.size.height += yDelta / 2;
+            } else {
+                frame.size.height += yDelta;
+            }
+            sizeChanged = YES;
+        }
         
-        if (_autoresizingMask & UIViewAutoresizingFlexibleLeftMargin)	frame.origin.x += widthDelta;
-        if (_autoresizingMask & UIViewAutoresizingFlexibleWidth)		frame.size.width += widthDelta;
-
-        if (_autoresizingMask & UIViewAutoresizingFlexibleTopMargin)	frame.origin.y += heightDelta;
-        if (_autoresizingMask & UIViewAutoresizingFlexibleHeight)		frame.size.height += heightDelta;
-        
-        self.frame = frame;
+        if (originChanged || sizeChanged) {
+            self.frame = frame;
+        }
     }
 }
 
@@ -881,10 +892,6 @@ static BOOL _animationsEnabled = YES;
 - (NSArray *)gestureRecognizers
 {
     return [_gestureRecognizers allObjects];
-}
-
-- (void)_setSuppressAppearanceEvents:(BOOL)suppress {
-	_suppressAppearanceEvents = suppress;
 }
 
 + (void)animateWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion

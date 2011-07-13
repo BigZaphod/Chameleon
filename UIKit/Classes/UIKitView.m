@@ -35,16 +35,24 @@
 #import "UIImageView.h"
 #import "UIColor.h"
 #import "UIPopoverController.h"
+#import <QuartzCore/QuartzCore.h>
+
 
 @implementation UIKitView {
     id _didBecomeKeyObserver;
 }
 @synthesize UIScreen=_screen;
 
+- (id<CAAction>)actionForLayer:(CALayer *)layer forKey:(NSString *)event
+{
+    return (id)[NSNull null];
+}
+
 - (void)configureLayers
 {
     [self setWantsLayer:YES];
 
+    self.layer.delegate = self;
     [[self layer] insertSublayer:[_screen _layer] atIndex:0];
     [_screen _layer].frame = [self layer].bounds;
     [_screen _layer].autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;

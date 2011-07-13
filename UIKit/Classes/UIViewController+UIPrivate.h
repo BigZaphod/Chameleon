@@ -29,6 +29,18 @@
 
 #import "UIViewController.h"
 
+typedef enum {
+    UIViewControllerStateDidDisappear,
+    UIViewControllerStateWillAppear,
+    UIViewControllerStateDidAppear,
+    UIViewControllerStateWillDisappear
+} UIViewControllerAppearState;
+
 @interface UIViewController (UIPrivate)
 - (void)_setParentViewController:(UIViewController *)controller;
+- (void)_setViewAppearState:(UIViewControllerAppearState)state isAnimating:(BOOL)animating;
+- (void)viewWillMoveToWindow:(UIWindow *)window;
+- (void)viewDidMoveToWindow:(UIWindow *)window;
+- (BOOL)beginAppearanceTransition:(BOOL)shouldAppear animated:(BOOL)animated;
+- (BOOL)_endAppearanceTransition;
 @end

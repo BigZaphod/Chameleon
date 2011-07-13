@@ -367,10 +367,10 @@ static UIImage* accessoryDisclosureIndicatorImageHighlighted;
 	}
 		
 	if (_backgroundView) {
-        _backgroundView.frame = bounds;
+        _backgroundView.bounds = bounds;
 	}
     if (_selectedBackgroundView) {
-        _selectedBackgroundView.frame = bounds;
+        _selectedBackgroundView.bounds = bounds;
     }
     if (_contentView) {
         _contentView.frame = contentFrame;
@@ -468,13 +468,15 @@ static UIImage* accessoryDisclosureIndicatorImageHighlighted;
 - (void) showSelectedBackgroundView:(BOOL)selected animated:(BOOL)animated
 {
     if (_selectionStyle != UITableViewCellSelectionStyleNone) {
+        if (selected) {
+            if (!_selectedBackgroundView) {
+                [self _setupDefaultSelectedBackgroundView];
+            }
+        }
         [UIView animateWithDuration:!animated ? 0.0 : 0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionNone | UIViewAnimationOptionAllowUserInteraction
             animations:^{
                 [self _setHighlighted:selected forViews:[self.contentView subviews]];
                 if (selected) {
-                    if (!_selectedBackgroundView) {
-                        [self _setupDefaultSelectedBackgroundView];
-                    }
                     if (_backgroundView) {
                         [self insertSubview:_selectedBackgroundView aboveSubview:_backgroundView];
                     } else {
@@ -495,7 +497,7 @@ static UIImage* accessoryDisclosureIndicatorImageHighlighted;
     assert(!_selectedBackgroundView);
     assert(!_tableCellFlags.usingDefaultSelectedBackgroundView);
     _tableCellFlags.usingDefaultSelectedBackgroundView = YES;
-    UITableViewCellSelectedBackgroundView* selectedBackgroundView = [[UITableViewCellSelectedBackgroundView alloc] init];
+    UITableViewCellSelectedBackgroundView* selectedBackgroundView = [[UITableViewCellSelectedBackgroundView alloc] initWithFrame:self.bounds];
     selectedBackgroundView.selectionStyle = self.selectionStyle;
     _selectedBackgroundView = selectedBackgroundView;
 }
