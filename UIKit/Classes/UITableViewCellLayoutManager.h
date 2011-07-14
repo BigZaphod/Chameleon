@@ -12,6 +12,7 @@
 - (CGRect) seperatorViewRectForCell:(UITableViewCell*)cell;
 - (CGRect) imageViewRectForCell:(UITableViewCell*)cell;
 - (CGRect) textLabelRectForCell:(UITableViewCell*)cell;
+- (CGRect) detailTextLabelRectForCell:(UITableViewCell*)cell;
 
 @end
 

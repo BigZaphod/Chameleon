@@ -17,6 +17,7 @@
         case UITableViewCellStyleValue1:
         case UITableViewCellStyleValue2:
         case UITableViewCellStyleSubtitle:
+            NSLog(@"WARNING: There is currently no UITableViewCellLayoutManager for this UITableViewCellStyle");
             return nil;
     }
     return nil;
@@ -24,43 +25,36 @@
 
 - (CGRect) contentViewRectForCell:(UITableViewCell*)cell
 {
-    [NSException raise:@"NotImplementedException" 
-                format:@"This method has to be called from a subclass of UITableViewCellLayoutManager"];
     return CGRectEmpty;
 }
 
 - (CGRect) accessoryViewRectForCell:(UITableViewCell*)cell 
 {
-    [NSException raise:@"NotImplementedException" 
-                format:@"This method has to be called from a subclass of UITableViewCellLayoutManager"];
     return CGRectEmpty;
 }
 
 - (CGRect) backgroundViewRectForCell:(UITableViewCell*)cell
 {
-    [NSException raise:@"NotImplementedException" 
-                format:@"This method has to be called from a subclass of UITableViewCellLayoutManager"];
     return CGRectEmpty;
 }
 
 - (CGRect) seperatorViewRectForCell:(UITableViewCell*)cell
 {
-    [NSException raise:@"NotImplementedException" 
-                format:@"This method has to be called from a subclass of UITableViewCellLayoutManager"];
     return CGRectEmpty;
 }
 
 - (CGRect) imageViewRectForCell:(UITableViewCell*)cell
 {
-    [NSException raise:@"NotImplementedException" 
-                format:@"This method has to be called from a subclass of UITableViewCellLayoutManager"];
     return CGRectEmpty;
 }
 
 - (CGRect) textLabelRectForCell:(UITableViewCell*)cell
 {
-    [NSException raise:@"NotImplementedException" 
-                format:@"This method has to be called from a subclass of UITableViewCellLayoutManager"];
+    return CGRectEmpty; 
+}
+
+- (CGRect) detailTextLabelRectForCell:(UITableViewCell*)cell
+{
     return CGRectEmpty; 
 }
 
