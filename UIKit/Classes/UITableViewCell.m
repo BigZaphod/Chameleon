@@ -59,6 +59,8 @@ extern CGFloat _UITableViewDefaultRowHeight;
     UITableViewCellSeparator *_separatorView;
     UITableViewCellStyle _style;
     CFMutableDictionaryRef _unhighlightedStates;
+    UITableViewCellLayoutManager* _layoutManager;
+
     struct {
         BOOL tableViewStyleIsGrouped : 1;
         BOOL usingDefaultSelectedBackgroundView : 1;
@@ -118,7 +120,8 @@ static Class kUIButtonClass;
 	[_backgroundView release];
 	[_selectedBackgroundView release];
 	[_reuseIdentifier release];
-	
+	[_layoutManager release];
+    
 	[super dealloc];
 }
 
@@ -131,8 +134,12 @@ static Class kUIButtonClass;
 		_editingAccessoryType = UITableViewCellAccessoryNone;
 		_selectionStyle = UITableViewCellSelectionStyleBlue;
         
-        _contentView = [[UIView alloc] initWithFrame:CGRectZero];
+        _layoutManager = [[UITableViewCellLayoutManager layoutManagerForTableViewCellStyle:_style] retain];
+        CGRect contentViewRect = [_layoutManager contentViewRectForCell:self];
+        _contentView = [[UIView alloc] initWithFrame:contentViewRect];
         [self addSubview:_contentView];
+
+
 	}
 	return self;
 }
@@ -142,6 +149,7 @@ static Class kUIButtonClass;
 	if (nil != (self = [self initWithFrame:CGRectMake(0,0,320,_UITableViewDefaultRowHeight)])) {
 		_style = style;
 		_reuseIdentifier = [reuseIdentifier copy];
+        _layoutManager = [[UITableViewCellLayoutManager layoutManagerForTableViewCellStyle:_style] retain];
 	}
 	return self;
 }
@@ -224,6 +232,7 @@ static Class kUIButtonClass;
         if (accessoryView) {
             _tableCellFlags.usingDefaultAccessoryView = NO;
             _accessoryView = [accessoryView retain];
+            _accessoryView.frame = [_layoutManager accessoryViewRectForCell:self];
             [self addSubview:_accessoryView];
         } else {
             [self _setupDefaultAccessoryView];
@@ -234,6 +243,17 @@ static Class kUIButtonClass;
 
 
 #pragma mark Accessing Views of the Cell Object
+
+- (UIView*) contentView
+{
+    if (!_contentView) {
+        _contentView = [[UIView alloc] init];
+		_contentView.backgroundColor = [UIColor clearColor];
+        _contentView.frame = [_layoutManager contentViewRectForCell:self];
+        [self addSubview:_contentView];
+    }
+    return _contentView;
+}
 
 - (UIView*) backgroundView
 {
@@ -341,78 +361,30 @@ static Class kUIButtonClass;
 - (void) layoutSubviews
 {
 	[super layoutSubviews];
-	CGRect bounds = self.bounds;
-	
-    // TODO: Push this code into a "layout manager" appropriate to the cell
-    //       style.
-    
-	CGRect contentFrame = {
-        .origin = { 
-            .x = 0.0,
-            .y = 0.0,
-        },
-        .size = {
-            .width = bounds.size.width,
-            .height = bounds.size.height - (_separatorView ? 1.0 : 0.0)
-        }
-    };
-    
+
 	if (_accessoryView) {
-		CGSize accessorySize = [_accessoryView sizeThatFits:bounds.size];
-        CGRect accessoryFrame = {
-            .origin = { 
-                .x = bounds.size.width - accessorySize.width - 10.0,
-                .y = round(0.5 * (bounds.size.height - accessorySize.height)),
-            },
-            .size = accessorySize
-        };
-		_accessoryView.frame = accessoryFrame;
-		contentFrame.size.width = accessoryFrame.origin.x - 1.0;
+        _accessoryView.frame = [_layoutManager accessoryViewRectForCell:self];
 	}
-		
 	if (_backgroundView) {
-        _backgroundView.frame = bounds;
+        _backgroundView.frame = [_layoutManager backgroundViewRectForCell:self];
 	}
     if (_selectedBackgroundView) {
-        _selectedBackgroundView.frame = bounds;
+        _selectedBackgroundView.frame = [_layoutManager backgroundViewRectForCell:self];
     }
     if (_contentView) {
-        _contentView.frame = contentFrame;
+        _contentView.frame = [_layoutManager contentViewRectForCell:self];
 	}
 	if (_separatorView) {
-		_separatorView.frame = CGRectMake(0.0, bounds.size.height - 1.0, bounds.size.width, 1.0);
+		_separatorView.frame = [_layoutManager seperatorViewRectForCell:self];
 	}
-	
-	if (_style == UITableViewCellStyleDefault) {
-		const CGFloat padding = 5.0;
-		
-        if (_imageView) {
-            _imageView.frame = CGRectMake(padding, 0.0, 30.0, contentFrame.size.height);
-        }
-		
-		CGRect textRect;
-		textRect.origin = CGPointMake(padding+_imageView.frame.size.width+padding,0);
-		textRect.size = CGSizeMake(MAX(0,contentFrame.size.width-textRect.origin.x-padding),contentFrame.size.height);
-		_textLabel.frame = textRect;
-	} else if (_style == UITableViewCellStyleSubtitle) {
-		const CGFloat padding = 5;
-		
-		BOOL showImage = (_imageView.image != nil);
-		_imageView.frame = CGRectMake(padding,0,(showImage? 30:0),contentFrame.size.height);
-		
-		CGSize textSize = [_textLabel.text sizeWithFont:_textLabel.font];
-		
-		CGRect textRect;
-		textRect.origin = CGPointMake(padding+_imageView.frame.size.width+padding,round(-0.5*textSize.height));
-		textRect.size = CGSizeMake(MAX(0,contentFrame.size.width-textRect.origin.x-padding),contentFrame.size.height);
-		_textLabel.frame = textRect;
-		
-		CGSize detailTextSize = [_detailTextLabel.text sizeWithFont:_detailTextLabel.font];
-		
-		CGRect detailTextRect;
-		detailTextRect.origin = CGPointMake(padding+_imageView.frame.size.width+padding,round(0.5*detailTextSize.height));
-		detailTextRect.size = CGSizeMake(MAX(0,contentFrame.size.width-textRect.origin.x-padding),contentFrame.size.height);
-		_detailTextLabel.frame = detailTextRect;
+    if (_imageView) {
+        _imageView.frame = [_layoutManager imageViewRectForCell:self];
+    }
+    if (_textLabel) {
+        _textLabel.frame = [_layoutManager textLabelRectForCell:self];
+    }
+    if (_detailTextLabel) {
+        _detailTextLabel.frame = [_layoutManager detailTextLabelRectForCell:self];
 	}
 }
 
@@ -421,7 +393,7 @@ static Class kUIButtonClass;
 
 - (UITableViewCellLayoutManager*) layoutManager
 {
-    return [UITableViewCellLayoutManager layoutManagerForTableViewCellStyle:_style];
+    return _layoutManager;
 }
 
 - (void) _setSeparatorStyle:(UITableViewCellSeparatorStyle)style color:(UIColor*)color
@@ -477,7 +449,7 @@ static Class kUIButtonClass;
 - (void) _clearOpaqueViewState:(UIView*)view
 {
     UITableViewCellUnhighlightedState* state;
-    if (CFDictionaryGetValueIfPresent(_unhighlightedStates, view, &state)) {
+    if (CFDictionaryGetValueIfPresent(_unhighlightedStates, view, (const void**)&state)) {
         if ([view respondsToSelector:@selector(setHighlighted:)]) {
             [(id)view setHighlighted:state.highlighted];
         }

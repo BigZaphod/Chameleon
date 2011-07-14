@@ -1,12 +1,21 @@
-#import <Foundation/Foundation.h>
-#import "UITableView.h"
-
+//#import <Foundation/Foundation.h>
+//#import "UITableView.h"
+#import <UIKit/UIKit.h>
 
 @interface UITableViewCellLayoutManager : NSObject 
 
 + (id) layoutManagerForTableViewCellStyle:(UITableViewCellStyle)style;
 
-// TODO: Add methods for calculating various view-rects based on the given
-//       style.
+- (CGRect) contentViewRectForCell:(UITableViewCell*)cell;
+- (CGRect) accessoryViewRectForCell:(UITableViewCell*)cell;
+- (CGRect) backgroundViewRectForCell:(UITableViewCell*)cell;
+- (CGRect) seperatorViewRectForCell:(UITableViewCell*)cell;
+- (CGRect) imageViewRectForCell:(UITableViewCell*)cell;
+- (CGRect) textLabelRectForCell:(UITableViewCell*)cell;
+- (CGRect) detailTextLabelRectForCell:(UITableViewCell*)cell;
 
+@end
+
+@interface UITableViewCellLayoutManagerDefault : UITableViewCellLayoutManager
+    
 @end
