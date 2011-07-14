@@ -82,6 +82,3 @@
 - (UIImage *)_toolbarImage;		// returns a new image which is modified as required for toolbar buttons (turned into a solid color)
 + (UIImage *)_imageFromNSImage:(NSImage *)ns;
 @end
-
-// this is used by stretchable images to break the NSImage into multiple parts
-NSImage *_NSImageCreateSubimage(NSImage *theImage, CGRect rect);
