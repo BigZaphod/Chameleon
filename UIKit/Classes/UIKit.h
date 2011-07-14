@@ -113,6 +113,7 @@
 
 // only add if core data is included
 #import "NSFetchedResultsController.h"
+#import "NSIndexPath+UITableView.h"
 
 // AudioToolbox-Helper
 #define kSystemSoundID_Vibrate kSystemSoundID_UserPreferredAlert
