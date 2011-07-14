@@ -1,9 +1,11 @@
 #import "UITableViewCellLayoutManager.h"
-#import "UITableViewCell.h"
-#import "UIView.h"
-#import "UIImage.h"
-#import "UIImageView.h"
-#import "UILabel.h"
+//#import "UITableViewCell.h"
+//#import "UIView.h"
+//#import "UIImage.h"
+//#import "UIImageView.h"
+//#import "UILabel.h"
+
+#define CGRectEmpty CGRectMake(0.0, 0.0, 0.0, 0.0)
 
 @implementation UITableViewCellLayoutManager
 
@@ -20,59 +22,67 @@
     return nil;
 }
 
-- (CGRect) contentRectForCell:(UITableViewCell*)cell
+- (CGRect) contentViewRectForCell:(UITableViewCell*)cell
 {
     [NSException raise:@"NotImplementedException" 
                 format:@"This method has to be called from a subclass of UITableViewCellLayoutManager"];
-    return CGRectNull;
+    return CGRectEmpty;
 }
 
-- (CGRect) accessoryRectForCell:(UITableViewCell*)cell 
+- (CGRect) accessoryViewRectForCell:(UITableViewCell*)cell 
 {
     [NSException raise:@"NotImplementedException" 
                 format:@"This method has to be called from a subclass of UITableViewCellLayoutManager"];
-    return CGRectNull;
+    return CGRectEmpty;
 }
 
-- (CGRect) backgroundRectForCell:(UITableViewCell*)cell
+- (CGRect) backgroundViewRectForCell:(UITableViewCell*)cell
 {
     [NSException raise:@"NotImplementedException" 
                 format:@"This method has to be called from a subclass of UITableViewCellLayoutManager"];
-    return CGRectNull;
+    return CGRectEmpty;
 }
 
-- (CGRect) seperatorRectForCell:(UITableViewCell*)cell
+- (CGRect) seperatorViewRectForCell:(UITableViewCell*)cell
 {
     [NSException raise:@"NotImplementedException" 
                 format:@"This method has to be called from a subclass of UITableViewCellLayoutManager"];
-    return CGRectNull;
+    return CGRectEmpty;
 }
 
 - (CGRect) imageViewRectForCell:(UITableViewCell*)cell
 {
     [NSException raise:@"NotImplementedException" 
                 format:@"This method has to be called from a subclass of UITableViewCellLayoutManager"];
-    return CGRectNull;
+    return CGRectEmpty;
 }
 
 - (CGRect) textLabelRectForCell:(UITableViewCell*)cell
 {
     [NSException raise:@"NotImplementedException" 
                 format:@"This method has to be called from a subclass of UITableViewCellLayoutManager"];
-    return CGRectNull; 
+    return CGRectEmpty; 
 }
 
 @end
 
 
+
+@interface UITableViewCellLayoutManagerDefault (Private)
+
+- (CGFloat) _accessoryViewPaddingForCell:(UITableViewCell*)cell;
+
+@end
+
 @implementation UITableViewCellLayoutManagerDefault
 
 
-- (CGRect) contentRectForCell:(UITableViewCell*)cell
+- (CGRect) contentViewRectForCell:(UITableViewCell*)cell
 {
     // Collect pertinent information
-    CGRect accessoryRect = [self accessoryRectForCell:cell];
-    CGRect seperatorRect = [self seperatorRectForCell:cell];
+    CGRect accessoryRect = [self accessoryViewRectForCell:cell];
+    CGRect seperatorRect = [self seperatorViewRectForCell:cell];
+    CGFloat accessoryPadding = [self _accessoryViewPaddingForCell:cell];
     
     // Width will be 
     CGRect contentRect = {
@@ -81,7 +91,7 @@
             .y = 0
         },
         .size = {
-            .width = cell.bounds.size.width - accessoryRect.size.width,
+            .width = cell.bounds.size.width - accessoryRect.size.width - accessoryPadding,
             .height = cell.bounds.size.height - seperatorRect.size.height
         }
     };
@@ -89,13 +99,65 @@
     return contentRect;
 }
 
-- (CGRect) accessoryRectForCell:(UITableViewCell*)cell
+- (CGFloat) _accessoryViewPaddingForCell:(UITableViewCell*)cell
 {
+    UIView* accessoryView = cell.accessoryView;
+    if (nil == accessoryView) {
+        return 0.0;
+    }
+
+    // NOTE: We can do this only because the SIZE of the accessory view
+    // never changes, even though the origin might.
+    CGSize accessorySize = cell.accessoryView.bounds.size;
     CGRect cellBounds = cell.bounds;
+    CGRect seperatorRect = [self seperatorViewRectForCell:cell];
+    
+    // Padding is ALWAYS 10 px on the left, but is the LESSER 
+    // (including negative numbers) of 10.0 or the height difference,
+    // on the right, top, and bottom
+    CGFloat heightDifference = floor((cellBounds.size.height - seperatorRect.size.height - accessorySize.height) / 2.0);
+    
+    return heightDifference < 10.0 ? heightDifference : 10.0;
+}
+
+- (CGRect) accessoryViewRectForCell:(UITableViewCell*)cell
+{
+    UIView* accessoryView = cell.accessoryView;
+    CGRect seperatorRect = [self seperatorViewRectForCell:cell];
+    CGRect cellBounds = {
+        .origin = cell.bounds.origin,
+        .size = {
+            .width = cell.bounds.size.width,
+            .height = cell.bounds.size.height - seperatorRect.size.height
+        }
+    };
+    
+    // Custom accessory view always wins
+    if (nil != accessoryView) {
+        if (nil == accessoryView) {
+            return CGRectEmpty;
+        }
+        else {
+            CGSize accessorySize = [accessoryView sizeThatFits:cellBounds.size];
+            
+            // Provide a rect from the right-hand side of the cell,
+            // with the frame centered in the cell
+
+            CGFloat tbr_padding = [self _accessoryViewPaddingForCell:cell];
+            CGRect accessoryRect = {
+                .origin = {
+                    .x = cellBounds.size.width - accessorySize.width - tbr_padding,
+                    .y = round((cellBounds.size.height - accessorySize.height) / 2.0),
+                },
+                .size = accessorySize
+            };
+            return accessoryRect;
+        }
+    }
     
     switch (cell.accessoryType) {
         case UITableViewCellAccessoryNone: {
-            return CGRectNull;
+            return CGRectEmpty;
             break;
         }
         
@@ -126,41 +188,36 @@
         }
         
         default: {
-            UIView* accessoryView = cell.accessoryView;
-            if (nil == accessoryView) {
-                return CGRectNull;
-            }
-            else {
-                CGSize accessorySize = [accessoryView sizeThatFits:cellBounds.size];
-                
-                // Provide a rect from the right-hand side of the cell,
-                // with the frame centered in the cell
-                CGRect accessoryRect = {
-                    .origin = {
-                        .x = cellBounds.size.width - accessorySize.width,
-                        .y = floor((cellBounds.size.height - accessorySize.height) / 2.0),
-                    },
-                    .size = accessorySize
-                };
-                return accessoryRect;
-            }
+            return CGRectEmpty;
+            break;
         }
     }
     
-    return CGRectNull;
+    return CGRectEmpty;
 }
 
-- (CGRect) backgroundRectForCell:(UITableViewCell*)cell
+- (CGRect) backgroundViewRectForCell:(UITableViewCell*)cell
 {
     if (nil != cell.backgroundView) {
-        return cell.bounds;
+        CGRect seperatorRect = [self seperatorViewRectForCell:cell];
+        CGRect backgroundRect = {
+            .origin = {
+                .x = 0,
+                .y = 0
+            },
+            .size = {
+                .width = cell.bounds.size.width,
+                .height = cell.bounds.size.height - seperatorRect.size.height
+            }
+        };
+        return backgroundRect;
     }
     else {
-        return CGRectNull;
+        return CGRectEmpty;
     }
 }
 
-- (CGRect) seperatorRectForCell:(UITableViewCell*)cell
+- (CGRect) seperatorViewRectForCell:(UITableViewCell*)cell
 {
     CGRect seperatorRect = {
         .origin = {
@@ -178,24 +235,25 @@
 - (CGRect) imageViewRectForCell:(UITableViewCell*)cell
 {
     UIImageView* imageView = cell.imageView;
-    if (nil == imageView) {
-        return CGRectNull;
+    UIImage* image = imageView.image;
+    if (nil == imageView || nil == imageView.image) {
+        return CGRectEmpty;
     }
     
     // Allows a maximum height of (cell.bounds.height - 1) pixels. 
     // If the image size is less, apply a padding that + image height = cell.bounds.height px 
     // THE IMAGE HEIGHT IS NEVER CONSTRAINED (tested in iOS)
-    UIImage* image = imageView.image;
     CGSize imageSize = image.size;
     CGRect cellBounds = cell.bounds;
-    CGFloat maxHeight = cellBounds.size.height - 1.0;
+    CGRect seperatorRect = [self seperatorViewRectForCell:cell];
+    CGFloat maxHeight = cellBounds.size.height - seperatorRect.size.height;
     
     if (imageSize.height < maxHeight) {
         // Image is not as tall as the cell
-        CGFloat padding = round((maxHeight - cellBounds.size.height) / 2.0);
+        CGFloat padding = floor((maxHeight - imageSize.height) / 2.0);
         CGRect imageViewRect = {
             .origin = {
-                .x = padding,
+                .x = padding < 0 ? 0 : padding,
                 .y = padding
             },
             .size = imageSize
@@ -222,8 +280,8 @@
                 .y = 0
             },
             .size = {
-                .width = floor(imageSize.width * differencePercent),
-                .height = floor(imageSize.height * differencePercent),
+                .width = round(imageSize.width * differencePercent),
+                .height = round(imageSize.height * differencePercent),
             }
         };
         return imageViewRect;
@@ -234,35 +292,46 @@
 {
     UILabel* textLabel = cell.textLabel;
     if (nil == textLabel) {
-        return CGRectNull;
+        return CGRectEmpty;
     }
+        
+    // RULES
+    // =======
+    // 10 pixel padding from the image rect or if no image rect, 10 pixel in
+    // origin.x is at max 10 pixels less than the content frame right bound
+
+    // origin.y always == 0
+    // size.height always == contentRect.size.height
     
-    CGRect contentRect = [self contentRectForCell:cell];
+    // The allowable width is always from the right side of the content rect - 10 (padding)
+    // to the greater of the end of the content rect OR the final bounds of the image view - 10 (padding)
+
+    CGRect contentRect = [self contentViewRectForCell:cell];
     CGRect imageRect = [self imageViewRectForCell:cell];
     
-    // If the text label is larger height-wise than the cell, the frame
-    // is returned as origin.y = 0, height = contentView.bounds.height
-    CGSize originalSize = textLabel.bounds.size;
-    CGFloat calculatedHeight = 0.0;
-
-    if (originalSize.height > contentRect.size.height) {
-        calculatedHeight = contentRect.size.height;
+    CGFloat originX = 0.0;
+    CGFloat width = 0.0;
+    
+    CGFloat maxXOrigin = contentRect.size.width - 10.0;
+    CGFloat imageRectLastX = imageRect.origin.x + imageRect.size.width + 10.0;
+    
+    if (imageRectLastX > maxXOrigin) {
+        originX = maxXOrigin; 
+        width = imageRectLastX - maxXOrigin;
     }
     else {
-        calculatedHeight = originalSize.height;
+        originX = imageRectLastX;
+        width = contentRect.size.width - originX - 10.0;
     }
     
-    // 10 pixel padding from the image rect or if no image rect, 10 pixel in
-    CGPoint origin = {
-        .x = imageRect.origin.x + imageRect.size.width + 10.0,
-        .y = floor((contentRect.size.height - calculatedHeight) / 2.0)
-    };
-
     CGRect textLabelRect = {
-        .origin = origin,
+        .origin = {
+            .x = originX,
+            .y = 0
+        },
         .size = {
-            .width = contentRect.size.width - imageRect.size.width - 10.0,
-            .height = calculatedHeight
+            .width = width,
+            .height = contentRect.size.height
         }
     };
     

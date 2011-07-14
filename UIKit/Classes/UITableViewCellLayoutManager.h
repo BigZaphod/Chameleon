@@ -1,15 +1,16 @@
-#import <Foundation/Foundation.h>
-#import "UITableView.h"
-
+//#import <Foundation/Foundation.h>
+//#import "UITableView.h"
+#import <UIKit/UIKit.h>
 
 @interface UITableViewCellLayoutManager : NSObject 
 
 + (id) layoutManagerForTableViewCellStyle:(UITableViewCellStyle)style;
 
-- (CGRect) contentRectForCell:(UITableViewCell*)cell;
-- (CGRect) accessoryRectForCell:(UITableViewCell*)cell;
-- (CGRect) backgroundRectForCell:(UITableViewCell*)cell;
-- (CGRect) seperatorRectForCell:(UITableViewCell*)cell;
+- (CGRect) contentViewRectForCell:(UITableViewCell*)cell;
+- (CGRect) accessoryViewRectForCell:(UITableViewCell*)cell;
+- (CGRect) backgroundViewRectForCell:(UITableViewCell*)cell;
+- (CGRect) seperatorViewRectForCell:(UITableViewCell*)cell;
+- (CGRect) imageViewRectForCell:(UITableViewCell*)cell;
 - (CGRect) textLabelRectForCell:(UITableViewCell*)cell;
 
 @end
