@@ -491,8 +491,10 @@ static Class kUIButtonClass;
 
 - (void) _setOpaque:(BOOL)opaque forSubview:(UIView*)view
 {
-    view.opaque = opaque;
-    view.backgroundColor = opaque ? [UIColor whiteColor] : [UIColor clearColor];
+    if (view != _selectedBackgroundView) {
+        view.opaque = opaque;
+        view.backgroundColor = opaque ? [UIColor whiteColor] : [UIColor clearColor];
+    }
     for (UIView* subview in view.subviews) {
         [self _setOpaque:opaque forSubview:subview];
     }
@@ -500,7 +502,10 @@ static Class kUIButtonClass;
 
 - (void) _updateHighlightColorsForView:(UIView*)view highlighted:(BOOL)highlighted
 {
-    if ([view class] != kUIButtonClass && ![view isKindOfClass:[UITableViewCell class]] && ([view respondsToSelector:@selector(setHighlighted:)] && [view respondsToSelector:@selector(isHighlighted)])) {
+    if (([view class] != kUIButtonClass)
+     && (![view isKindOfClass:[UITableViewCell class]]) 
+     && ([view respondsToSelector:@selector(setHighlighted:)] && [view respondsToSelector:@selector(isHighlighted)])
+    ) {
         [(id)view setHighlighted:highlighted];
     }
     for (UIView* subview in view.subviews) {
