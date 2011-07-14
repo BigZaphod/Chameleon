@@ -47,7 +47,7 @@
 // http://stackoverflow.com/questions/235120/whats-the-uitableview-index-magnifying-glass-character
 NSString *const UITableViewIndexSearch = @"{search}";
 
-const CGFloat _UITableViewDefaultRowHeight = 43;
+const CGFloat _UITableViewDefaultRowHeight = 44;
 
 @interface UITableView ()
 - (void)_setNeedsReload;

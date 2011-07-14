@@ -291,6 +291,8 @@
 		F94CB9A413C7E5C4001DF656 /* <UITableViewCell> accessoryDisclosureIndicatorHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = F94CB9A313C7E5C4001DF656 /* <UITableViewCell> accessoryDisclosureIndicatorHighlighted.png */; };
 		F94CB9D613C8C0A9001DF656 /* UIBarButtonItem+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = F94CB9D513C8C0A9001DF656 /* UIBarButtonItem+UIPrivate.h */; };
 		F94CB9D913C8C242001DF656 /* UIButton+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = F94CB9D813C8C242001DF656 /* UIButton+UIPrivate.h */; };
+		F953D4FE13CD3BAC006B941C /* UITableViewCellUnhighlightedState.h in Headers */ = {isa = PBXBuildFile; fileRef = F953D4FC13CD3BAB006B941C /* UITableViewCellUnhighlightedState.h */; };
+		F953D4FF13CD3BAC006B941C /* UITableViewCellUnhighlightedState.m in Sources */ = {isa = PBXBuildFile; fileRef = F953D4FD13CD3BAB006B941C /* UITableViewCellUnhighlightedState.m */; };
 		F95416D913C90AD4000A9282 /* <UITableView> groupTableViewBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = F95416D813C90AD4000A9282 /* <UITableView> groupTableViewBackground.png */; };
 		F95416DE13C91025000A9282 /* <UITableViewCell> accessoryCheckmarkHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = F95416DC13C91025000A9282 /* <UITableViewCell> accessoryCheckmarkHighlighted.png */; };
 		F95416E013C9137B000A9282 /* <UITableViewCell> accessoryCheckmark.png in Resources */ = {isa = PBXBuildFile; fileRef = F95416DF13C9137B000A9282 /* <UITableViewCell> accessoryCheckmark.png */; };
@@ -602,6 +604,8 @@
 		F94CB9A313C7E5C4001DF656 /* <UITableViewCell> accessoryDisclosureIndicatorHighlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITableViewCell> accessoryDisclosureIndicatorHighlighted.png"; path = "Resources/<UITableViewCell> accessoryDisclosureIndicatorHighlighted.png"; sourceTree = "<group>"; };
 		F94CB9D513C8C0A9001DF656 /* UIBarButtonItem+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+UIPrivate.h"; sourceTree = "<group>"; };
 		F94CB9D813C8C242001DF656 /* UIButton+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+UIPrivate.h"; sourceTree = "<group>"; };
+		F953D4FC13CD3BAB006B941C /* UITableViewCellUnhighlightedState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellUnhighlightedState.h; sourceTree = "<group>"; };
+		F953D4FD13CD3BAB006B941C /* UITableViewCellUnhighlightedState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellUnhighlightedState.m; sourceTree = "<group>"; };
 		F95416D813C90AD4000A9282 /* <UITableView> groupTableViewBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITableView> groupTableViewBackground.png"; path = "Resources/<UITableView> groupTableViewBackground.png"; sourceTree = "<group>"; };
 		F95416DC13C91025000A9282 /* <UITableViewCell> accessoryCheckmarkHighlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITableViewCell> accessoryCheckmarkHighlighted.png"; path = "Resources/<UITableViewCell> accessoryCheckmarkHighlighted.png"; sourceTree = "<group>"; };
 		F95416DF13C9137B000A9282 /* <UITableViewCell> accessoryCheckmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITableViewCell> accessoryCheckmark.png"; path = "Resources/<UITableViewCell> accessoryCheckmark.png"; sourceTree = "<group>"; };
@@ -929,6 +933,8 @@
 				F9647EE813B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.m */,
 				14FA8C51121DA4A000C4264B /* UITableViewCellSeparator.h */,
 				14FA8C52121DA4A000C4264B /* UITableViewCellSeparator.m */,
+				F953D4FC13CD3BAB006B941C /* UITableViewCellUnhighlightedState.h */,
+				F953D4FD13CD3BAB006B941C /* UITableViewCellUnhighlightedState.m */,
 				14FA8C53121DA4A000C4264B /* UITableViewSection.h */,
 				14FA8C54121DA4A000C4264B /* UITableViewSection.m */,
 				14FA8C55121DA4A000C4264B /* UITableViewSectionLabel.h */,
@@ -1169,6 +1175,7 @@
 				F94CB9D613C8C0A9001DF656 /* UIBarButtonItem+UIPrivate.h in Headers */,
 				F94CB9D913C8C242001DF656 /* UIButton+UIPrivate.h in Headers */,
 				F95416F013C9FC9D000A9282 /* UITableView+UIPrivate.h in Headers */,
+				F953D4FE13CD3BAC006B941C /* UITableViewCellUnhighlightedState.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1393,6 +1400,7 @@
 				F9177F9713BA317200619E3D /* UITableViewCellLayoutManager.m in Sources */,
 				A2E9947013C78C1000B7D49F /* UIViewAppKitIntegration.m in Sources */,
 				A2E9947813C79DBE00B7D49F /* UIWindowAppKitIntegration.m in Sources */,
+				F953D4FF13CD3BAC006B941C /* UITableViewCellUnhighlightedState.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
