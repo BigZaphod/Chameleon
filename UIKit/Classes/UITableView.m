@@ -356,7 +356,12 @@ const CGFloat _UITableViewDefaultRowHeight = 44;
 						}
 						else {
 							cell.sectionLocation = UITableViewCellSectionLocationBottom;
-							[cell _setSeparatorStyle:UITableViewCellSeparatorStyleNone color:_separatorColor];
+							
+                            // This is not iOS convention
+                            //[cell _setSeparatorStyle:UITableViewCellSeparatorStyleNone color:_separatorColor];
+                            
+                            // This IS iOS convention, since true "grouped" isn't currently supported
+                            [cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
 						}
 						
                         [self addSubview:cell];

@@ -346,7 +346,7 @@
 
 /* =======================================
  *
- * UITableViewCellLayoutManagerDefault 
+ * UITableViewCellLayoutManagerSubtitle
  *
  * =======================================
  */
