@@ -539,7 +539,6 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     _textLayer.text = newText;
 	
 	_placeholderTextLayer.hidden = _textLayer.text.length > 0 || _editing;
-	_textLayer.hidden = !_placeholderTextLayer.hidden;
 }
 
 - (BOOL)_textShouldBeginEditing
@@ -582,7 +581,6 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (void)_textDidEndEditing
 {
 	_placeholderTextLayer.hidden = _textLayer.text.length > 0;
-	_textLayer.hidden = !_placeholderTextLayer.hidden;
 	
     _editing = NO;
     [self setNeedsDisplay];
