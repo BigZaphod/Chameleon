@@ -44,13 +44,26 @@
 @synthesize contentHorizontalAlignment = _contentHorizontalAlignment;
 @synthesize contentVerticalAlignment = _contentVerticalAlignment;
 
+- (void) _commonInit
+{
+    _registeredActions = [[NSMutableArray alloc] init];
+    self.enabled = YES;
+    self.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+    self.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+}
+
 - (id)initWithFrame:(CGRect)frame
 {
     if ((self=[super initWithFrame:frame])) {
-        _registeredActions = [[NSMutableArray alloc] init];
-        self.enabled = YES;
-        self.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-        self.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        [self _commonInit];
+    }
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder*)coder
+{
+    if ((self=[super initWithCoder:coder])) {
+        [self _commonInit];
     }
     return self;
 }
