@@ -294,6 +294,7 @@ inline static NSNumber* _keyForState(NSInteger state)
     if (!content) {
         content = [[UIButtonContent alloc] init];
         [_content setValue:content forKey:key];
+        [content release];
     }
     content.title = title;
     [self _updateContent];
@@ -306,6 +307,7 @@ inline static NSNumber* _keyForState(NSInteger state)
     if (!content) {
         content = [[UIButtonContent alloc] init];
         [_content setValue:content forKey:key];
+        [content release];
     }
     content.titleColor = titleColor;
     [self _updateContent];
@@ -318,6 +320,7 @@ inline static NSNumber* _keyForState(NSInteger state)
     if (!content) {
         content = [[UIButtonContent alloc] init];
         [_content setValue:content forKey:key];
+        [content release];
     }
     content.shadowColor = shadowColor;
     [self _updateContent];
@@ -330,6 +333,7 @@ inline static NSNumber* _keyForState(NSInteger state)
     if (!content) {
         content = [[UIButtonContent alloc] init];
         [_content setValue:content forKey:key];
+        [content release];
     }
     content.backgroundImage = backgroundImage;
     [self _updateContent];
@@ -345,6 +349,7 @@ inline static NSNumber* _keyForState(NSInteger state)
     if (!content) {
         content = [[UIButtonContent alloc] init];
         [_content setValue:content forKey:key];
+        [content release];
     }
     content.image = image;
     [self _updateContent];
