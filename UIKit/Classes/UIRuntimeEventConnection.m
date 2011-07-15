@@ -39,7 +39,7 @@ static NSString* const kUIEventMaskKey = @"UIEventMask";
 - (void) connect
 {
     if ([_target respondsToSelector:_action]) {
-        [_control addTarget:_target action:_action forControlEvents:_eventMask];
+        [_control addTarget:(_target == [NSNull null]) ? nil : _target action:_action forControlEvents:_eventMask];
     } else {
         // Warn?
     }
