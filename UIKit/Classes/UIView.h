@@ -99,7 +99,7 @@ typedef NSUInteger UIViewAnimationOptions;
 
 @class UIColor, CALayer, UIViewController, UIGestureRecognizer;
 
-@interface UIView : UIResponder 
+@interface UIView : UIResponder <NSCoding>
 
 + (Class)layerClass;
 

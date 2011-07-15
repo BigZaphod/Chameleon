@@ -56,6 +56,16 @@ NSString *NSStringFromUIEdgeInsets(UIEdgeInsets insets)
     return [NSString stringWithFormat:@"{%g, %g, %g, %g}", insets.top, insets.left, insets.bottom, insets.right];
 }
 
+CGRect CGRectFromString(NSString* string)
+{
+    return NSRectToCGRect(NSRectFromString(string));
+}
+
+CGPoint CGPointFromString(NSString* string)
+{
+    return NSPointToCGPoint(NSPointFromString(string));
+}
+
 @implementation NSValue (NSValueUIGeometryExtensions)
 + (NSValue *)valueWithCGPoint:(CGPoint)point
 {
@@ -113,6 +123,11 @@ NSString *NSStringFromUIEdgeInsets(UIEdgeInsets insets)
 - (CGPoint)decodeCGPointForKey:(NSString *)key
 {
     return NSPointToCGPoint([self decodePointForKey:key]);
+}
+
+- (CGRect) decodeCGRectForKey:(NSString*)key
+{
+    return NSRectToCGRect([self decodeRectForKey:key]);
 }
 @end
 

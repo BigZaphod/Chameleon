@@ -40,7 +40,7 @@ typedef enum {
 
 @class UILabel, UIImageView, UIImage;
 
-@interface UIButton : UIControl 
+@interface UIButton : UIControl <NSCoding>
 
 + (id)buttonWithType:(UIButtonType)buttonType;
 
