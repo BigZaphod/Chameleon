@@ -1,29 +1,33 @@
 #import "UIProxyObject.h"
 
+
+static NSString* const kUIProxiedObjectIdentifierKey = @"UIProxiedObjectIdentifier";
+
+
 @implementation UIProxyObject
 @synthesize proxiedObjectIdentifier;
 
-+ (void)removeMappingsForCoder:(id)arg1
++ (void) removeMappingsForCoder:(NSCoder*)coder
 {
     
 }
 
-+ (id)mappedObjectForCoder:(id)arg1 withIdentifier:(id)arg2
++ (id) mappedObjectForCoder:(NSCoder*)coder withIdentifier:(NSString*)identifier
 {
     return nil;
 }
 
-+ (void)addMappings:(id)arg1 forCoder:(id)arg2
++ (void) addMappings:(NSDictionary*)mappings forCoder:(NSCoder*)coder
 {
     
 }
 
-+ (void)addMappingFromIdentifier:(id)arg1 toObject:(id)arg2 forCoder:(id)arg3
++ (void) addMappingFromIdentifier:(NSString*)identifier toObject:(NSString*)object forCoder:(NSCoder*)coder
 {
     
 }
 
-+ (CFDictionaryRef)proxyDecodingMap
++ (CFDictionaryRef) proxyDecodingMap
 {
     return nil;
 }
@@ -31,9 +35,9 @@
 - (id) initWithCoder:(NSCoder*)coder
 {
     if (nil != (self = [super init])) {
-        self.proxiedObjectIdentifier = [coder decodeObjectForKey:@"UIProxiedObjectIdentifier"];
+        self.proxiedObjectIdentifier = [coder decodeObjectForKey:kUIProxiedObjectIdentifierKey];
     }
-    return nil;
+    return self;
 }
 
 - (void) encodeWithCoder:(NSCoder*)coder
