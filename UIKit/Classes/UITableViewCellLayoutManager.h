@@ -19,3 +19,7 @@
 @interface UITableViewCellLayoutManagerDefault : UITableViewCellLayoutManager
     
 @end
+
+@interface UITableViewCellLayoutManagerSubtitle : UITableViewCellLayoutManager
+
+@end
