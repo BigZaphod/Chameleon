@@ -106,7 +106,7 @@ static BOOL _animationsEnabled = YES;
     return [UIView instanceMethodForSelector:@selector(drawRect:)] != [self instanceMethodForSelector:@selector(drawRect:)];
 }
 
-- (void) _commonInit
+- (void) _commonInitForUIView
 {
     _implementsDrawRect = [[self class] _instanceImplementsDrawRect];
     _clearsContextBeforeDrawing = YES;
@@ -135,7 +135,7 @@ static BOOL _animationsEnabled = YES;
 - (id)initWithFrame:(CGRect)theFrame
 {
     if (nil != (self = [super init])) {
-        [self _commonInit];
+        [self _commonInitForUIView];
         self.frame = theFrame;
     }
     return self;
@@ -144,7 +144,7 @@ static BOOL _animationsEnabled = YES;
 - (id) initWithCoder:(NSCoder*)coder
 {
     if (nil != (self = [super init])) {
-        [self _commonInit];
+        [self _commonInitForUIView];
         if ([coder containsValueForKey:kUIAlphaKey]) {
             self.alpha = [coder decodeFloatForKey:kUIAlphaKey];
         }

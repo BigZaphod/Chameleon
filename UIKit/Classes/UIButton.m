@@ -129,7 +129,7 @@ inline static NSNumber* _keyForState(NSInteger state)
     }
 }
 
-- (void) _commonInit
+- (void) _commonInitForUIButton
 {
     _buttonFlags.buttonType = UIButtonTypeCustom;
     _content = [[NSMutableDictionary alloc] init];
@@ -153,7 +153,7 @@ inline static NSNumber* _keyForState(NSInteger state)
 - (id) initWithFrame:(CGRect)frame
 {
     if (nil != (self = [super initWithFrame:frame])) {
-        [self _commonInit];
+        [self _commonInitForUIButton];
     }
     return self;
 }
@@ -161,7 +161,7 @@ inline static NSNumber* _keyForState(NSInteger state)
 - (id) initWithCoder:(NSCoder*)coder
 {
     if (nil != (self = [super initWithCoder:coder])) {
-        [self _commonInit];
+        [self _commonInitForUIButton];
         if ([coder containsValueForKey:kUIAdjustsImageWhenDisabledKey]) {
             self.adjustsImageWhenDisabled = [coder decodeBoolForKey:kUIAdjustsImageWhenDisabledKey];
         }
