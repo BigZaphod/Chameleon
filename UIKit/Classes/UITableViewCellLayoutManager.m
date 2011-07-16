@@ -199,23 +199,18 @@
 
 - (CGRect) backgroundViewRectForCell:(UITableViewCell*)cell
 {
-    if (nil != cell.backgroundView) {
-        CGRect seperatorRect = [self seperatorViewRectForCell:cell];
-        CGRect backgroundRect = {
-            .origin = {
-                .x = 0,
-                .y = 0
-            },
-            .size = {
-                .width = cell.bounds.size.width,
-                .height = cell.bounds.size.height - seperatorRect.size.height
-            }
-        };
-        return backgroundRect;
-    }
-    else {
-        return CGRectZero;
-    }
+    CGRect seperatorRect = [self seperatorViewRectForCell:cell];
+    CGRect backgroundRect = {
+        .origin = {
+            .x = 0,
+            .y = 0
+        },
+        .size = {
+            .width = cell.bounds.size.width,
+            .height = cell.bounds.size.height - seperatorRect.size.height
+        }
+    };
+    return backgroundRect;
 }
 
 - (CGRect) seperatorViewRectForCell:(UITableViewCell*)cell
@@ -481,23 +476,18 @@
 
 - (CGRect) backgroundViewRectForCell:(UITableViewCell*)cell
 {
-    if (nil != cell.backgroundView) {
-        CGRect seperatorRect = [self seperatorViewRectForCell:cell];
-        CGRect backgroundRect = {
-            .origin = {
-                .x = 0,
-                .y = 0
-            },
-            .size = {
-                .width = cell.bounds.size.width,
-                .height = cell.bounds.size.height - seperatorRect.size.height
-            }
-        };
-        return backgroundRect;
-    }
-    else {
-        return CGRectZero;
-    }
+    CGRect seperatorRect = [self seperatorViewRectForCell:cell];
+    CGRect backgroundRect = {
+        .origin = {
+            .x = 0,
+            .y = 0
+        },
+        .size = {
+            .width = cell.bounds.size.width,
+            .height = cell.bounds.size.height - seperatorRect.size.height
+        }
+    };
+    return backgroundRect;
 }
 
 - (CGRect) seperatorViewRectForCell:(UITableViewCell*)cell
