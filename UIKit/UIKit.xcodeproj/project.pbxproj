@@ -306,6 +306,22 @@
 		F9647EE513B91BDC0040B2D6 /* UITableViewCellBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9647EE313B91BDC0040B2D6 /* UITableViewCellBackgroundView.m */; };
 		F9647EE913B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.h in Headers */ = {isa = PBXBuildFile; fileRef = F9647EE713B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.h */; };
 		F9647EEA13B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9647EE813B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.m */; };
+		F99E83AD13CF7E7F00107358 /* UICustomObject.h in Headers */ = {isa = PBXBuildFile; fileRef = F99E83AB13CF7E7F00107358 /* UICustomObject.h */; };
+		F99E83AE13CF7E7F00107358 /* UICustomObject.m in Sources */ = {isa = PBXBuildFile; fileRef = F99E83AC13CF7E7F00107358 /* UICustomObject.m */; };
+		F99E83B213CF7EEE00107358 /* UIProxyObject.h in Headers */ = {isa = PBXBuildFile; fileRef = F99E83B013CF7EEE00107358 /* UIProxyObject.h */; };
+		F99E83B313CF7EEE00107358 /* UIProxyObject.m in Sources */ = {isa = PBXBuildFile; fileRef = F99E83B113CF7EEE00107358 /* UIProxyObject.m */; };
+		F99E83B613CF836900107358 /* UINib.h in Headers */ = {isa = PBXBuildFile; fileRef = F99E83B413CF836900107358 /* UINib.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F99E83B713CF836900107358 /* UINib.m in Sources */ = {isa = PBXBuildFile; fileRef = F99E83B513CF836900107358 /* UINib.m */; };
+		F99E83F013CFCE9600107358 /* UIButtonContent.h in Headers */ = {isa = PBXBuildFile; fileRef = F99E83EE13CFCE9600107358 /* UIButtonContent.h */; };
+		F99E83F113CFCE9600107358 /* UIButtonContent.m in Sources */ = {isa = PBXBuildFile; fileRef = F99E83EF13CFCE9600107358 /* UIButtonContent.m */; };
+		F99E83F513CFD52E00107358 /* UIImageNibPlaceholder.h in Headers */ = {isa = PBXBuildFile; fileRef = F99E83F313CFD52D00107358 /* UIImageNibPlaceholder.h */; };
+		F99E83F613CFD52E00107358 /* UIImageNibPlaceholder.m in Sources */ = {isa = PBXBuildFile; fileRef = F99E83F413CFD52E00107358 /* UIImageNibPlaceholder.m */; };
+		F99E83F913D05A1E00107358 /* UIRuntimeEventConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = F99E83F713D05A1D00107358 /* UIRuntimeEventConnection.h */; };
+		F99E83FA13D05A1F00107358 /* UIRuntimeEventConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F99E83F813D05A1E00107358 /* UIRuntimeEventConnection.m */; };
+		F99E83FD13D05A3D00107358 /* UIRuntimeOutletConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = F99E83FB13D05A3C00107358 /* UIRuntimeOutletConnection.h */; };
+		F99E83FE13D05A3D00107358 /* UIRuntimeOutletConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F99E83FC13D05A3D00107358 /* UIRuntimeOutletConnection.m */; };
+		F99E840113D0675600107358 /* UINibInflationHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F99E83FF13D0675600107358 /* UINibInflationHelper.h */; };
+		F99E840213D0675600107358 /* UINibInflationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F99E840013D0675600107358 /* UINibInflationHelper.m */; };
 		F9D9773013B794710086F226 /* UITextInput.h in Headers */ = {isa = PBXBuildFile; fileRef = F9D9772F13B794700086F226 /* UITextInput.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F9D9774113B7958E0086F226 /* <UINavigationBarBackground> blackOpaque.png in Resources */ = {isa = PBXBuildFile; fileRef = F9D9773E13B7958E0086F226 /* <UINavigationBarBackground> blackOpaque.png */; };
 		F9D9774213B7958E0086F226 /* <UINavigationBarBackground> blackTranslucent.png in Resources */ = {isa = PBXBuildFile; fileRef = F9D9773F13B7958E0086F226 /* <UINavigationBarBackground> blackTranslucent.png */; };
@@ -619,6 +635,22 @@
 		F9647EE313B91BDC0040B2D6 /* UITableViewCellBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellBackgroundView.m; sourceTree = "<group>"; };
 		F9647EE713B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellSelectedBackgroundView.h; sourceTree = "<group>"; };
 		F9647EE813B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellSelectedBackgroundView.m; sourceTree = "<group>"; };
+		F99E83AB13CF7E7F00107358 /* UICustomObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICustomObject.h; sourceTree = "<group>"; };
+		F99E83AC13CF7E7F00107358 /* UICustomObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICustomObject.m; sourceTree = "<group>"; };
+		F99E83B013CF7EEE00107358 /* UIProxyObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIProxyObject.h; sourceTree = "<group>"; };
+		F99E83B113CF7EEE00107358 /* UIProxyObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIProxyObject.m; sourceTree = "<group>"; };
+		F99E83B413CF836900107358 /* UINib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINib.h; sourceTree = "<group>"; };
+		F99E83B513CF836900107358 /* UINib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINib.m; sourceTree = "<group>"; };
+		F99E83EE13CFCE9600107358 /* UIButtonContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIButtonContent.h; sourceTree = "<group>"; };
+		F99E83EF13CFCE9600107358 /* UIButtonContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIButtonContent.m; sourceTree = "<group>"; };
+		F99E83F313CFD52D00107358 /* UIImageNibPlaceholder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageNibPlaceholder.h; sourceTree = "<group>"; };
+		F99E83F413CFD52E00107358 /* UIImageNibPlaceholder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageNibPlaceholder.m; sourceTree = "<group>"; };
+		F99E83F713D05A1D00107358 /* UIRuntimeEventConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIRuntimeEventConnection.h; sourceTree = "<group>"; };
+		F99E83F813D05A1E00107358 /* UIRuntimeEventConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIRuntimeEventConnection.m; sourceTree = "<group>"; };
+		F99E83FB13D05A3C00107358 /* UIRuntimeOutletConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIRuntimeOutletConnection.h; sourceTree = "<group>"; };
+		F99E83FC13D05A3D00107358 /* UIRuntimeOutletConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIRuntimeOutletConnection.m; sourceTree = "<group>"; };
+		F99E83FF13D0675600107358 /* UINibInflationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINibInflationHelper.h; sourceTree = "<group>"; };
+		F99E840013D0675600107358 /* UINibInflationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINibInflationHelper.m; sourceTree = "<group>"; };
 		F9D9772F13B794700086F226 /* UITextInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITextInput.h; sourceTree = "<group>"; };
 		F9D9773E13B7958E0086F226 /* <UINavigationBarBackground> blackOpaque.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBarBackground> blackOpaque.png"; path = "Resources/<UINavigationBarBackground> blackOpaque.png"; sourceTree = "<group>"; };
 		F9D9773F13B7958E0086F226 /* <UINavigationBarBackground> blackTranslucent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBarBackground> blackTranslucent.png"; path = "Resources/<UINavigationBarBackground> blackTranslucent.png"; sourceTree = "<group>"; };
@@ -814,6 +846,8 @@
 				1489852C12EE2CFE003D4751 /* UINavigationController.m */,
 				1489852D12EE2CFE003D4751 /* UINavigationItem.h */,
 				1489852E12EE2CFE003D4751 /* UINavigationItem.m */,
+				F99E83B413CF836900107358 /* UINib.h */,
+				F99E83B513CF836900107358 /* UINib.m */,
 				1489852F12EE2CFE003D4751 /* UINibLoading.h */,
 				1489853012EE2CFE003D4751 /* UINibLoading.m */,
 				1489853112EE2CFE003D4751 /* UIPageControl.h */,
@@ -897,14 +931,22 @@
 			children = (
 				145335671226F1F90005644F /* UIBulletGlyphGenerator.h */,
 				145335681226F1F90005644F /* UIBulletGlyphGenerator.m */,
+				F99E83EE13CFCE9600107358 /* UIButtonContent.h */,
+				F99E83EF13CFCE9600107358 /* UIButtonContent.m */,
 				1426FFDB129ADEA300BD31E5 /* UIControlAction.h */,
 				1426FFDC129ADEA300BD31E5 /* UIControlAction.m */,
+				F99E83AB13CF7E7F00107358 /* UICustomObject.h */,
+				F99E83AC13CF7E7F00107358 /* UICustomObject.m */,
 				145335831226F3490005644F /* UICustomNSClipView.h */,
 				145335841226F3490005644F /* UICustomNSClipView.m */,
 				1453356F1226F2720005644F /* UICustomNSTextView.h */,
 				145335701226F2720005644F /* UICustomNSTextView.m */,
 				8842BC751387316400D148FF /* UIGradient.h */,
 				8842BC761387316400D148FF /* UIGradient.m */,
+				F99E83F313CFD52D00107358 /* UIImageNibPlaceholder.h */,
+				F99E83F413CFD52E00107358 /* UIImageNibPlaceholder.m */,
+				F99E83FF13D0675600107358 /* UINibInflationHelper.h */,
+				F99E840013D0675600107358 /* UINibInflationHelper.m */,
 				14FA8C47121DA4A000C4264B /* UINinePartImage.h */,
 				14FA8C48121DA4A000C4264B /* UINinePartImage.m */,
 				14805D3F12A6B0E80080C4BA /* UINSClipView.h */,
@@ -917,8 +959,14 @@
 				14CB384812689949003334AD /* UIPopoverOverlayNSView.m */,
 				14F56F4212664D430045EC82 /* UIPopoverView.h */,
 				14F56F4312664D430045EC82 /* UIPopoverView.m */,
+				F99E83B013CF7EEE00107358 /* UIProxyObject.h */,
+				F99E83B113CF7EEE00107358 /* UIProxyObject.m */,
 				14CC839011EFA8AF005988CC /* UIRoundedRectButton.h */,
 				14CC839111EFA8AF005988CC /* UIRoundedRectButton.m */,
+				F99E83F713D05A1D00107358 /* UIRuntimeEventConnection.h */,
+				F99E83F813D05A1E00107358 /* UIRuntimeEventConnection.m */,
+				F99E83FB13D05A3C00107358 /* UIRuntimeOutletConnection.h */,
+				F99E83FC13D05A3D00107358 /* UIRuntimeOutletConnection.m */,
 				14FA8C4F121DA4A000C4264B /* UIScroller.h */,
 				14FA8C50121DA4A000C4264B /* UIScroller.m */,
 				14D0C43612DCEF910040035C /* UIScrollViewScrollAnimation.h */,
@@ -1176,6 +1224,14 @@
 				F94CB9D913C8C242001DF656 /* UIButton+UIPrivate.h in Headers */,
 				F95416F013C9FC9D000A9282 /* UITableView+UIPrivate.h in Headers */,
 				F953D4FE13CD3BAC006B941C /* UITableViewCellUnhighlightedState.h in Headers */,
+				F99E83AD13CF7E7F00107358 /* UICustomObject.h in Headers */,
+				F99E83B213CF7EEE00107358 /* UIProxyObject.h in Headers */,
+				F99E83B613CF836900107358 /* UINib.h in Headers */,
+				F99E83F013CFCE9600107358 /* UIButtonContent.h in Headers */,
+				F99E83F513CFD52E00107358 /* UIImageNibPlaceholder.h in Headers */,
+				F99E83F913D05A1E00107358 /* UIRuntimeEventConnection.h in Headers */,
+				F99E83FD13D05A3D00107358 /* UIRuntimeOutletConnection.h in Headers */,
+				F99E840113D0675600107358 /* UINibInflationHelper.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1401,6 +1457,14 @@
 				A2E9947013C78C1000B7D49F /* UIViewAppKitIntegration.m in Sources */,
 				A2E9947813C79DBE00B7D49F /* UIWindowAppKitIntegration.m in Sources */,
 				F953D4FF13CD3BAC006B941C /* UITableViewCellUnhighlightedState.m in Sources */,
+				F99E83AE13CF7E7F00107358 /* UICustomObject.m in Sources */,
+				F99E83B313CF7EEE00107358 /* UIProxyObject.m in Sources */,
+				F99E83B713CF836900107358 /* UINib.m in Sources */,
+				F99E83F113CFCE9600107358 /* UIButtonContent.m in Sources */,
+				F99E83F613CFD52E00107358 /* UIImageNibPlaceholder.m in Sources */,
+				F99E83FA13D05A1F00107358 /* UIRuntimeEventConnection.m in Sources */,
+				F99E83FE13D05A3D00107358 /* UIRuntimeOutletConnection.m in Sources */,
+				F99E840213D0675600107358 /* UINibInflationHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

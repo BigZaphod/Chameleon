@@ -107,6 +107,7 @@
 #import "UISwipeGestureRecognizer.h"
 #import "UIDatePicker.h"
 #import "UITextInput.h"
+#import <UIKit/UINib.h>
 
 // non-standard imports
 #import "CALayer+UIKitCompatibility.h"

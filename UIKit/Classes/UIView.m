@@ -40,12 +40,29 @@
 #import "UIApplication+UIPrivate.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 #import "UIScreen.h"
+#import "UIGeometry.h"
 #import <QuartzCore/CALayer.h>
 
 NSString *const UIViewFrameDidChangeNotification = @"UIViewFrameDidChangeNotification";
 NSString *const UIViewBoundsDidChangeNotification = @"UIViewBoundsDidChangeNotification";
 NSString *const UIViewDidMoveToSuperviewNotification = @"UIViewDidMoveToSuperviewNotification";
 NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotification";
+
+static NSString* const kUIAlphaKey = @"UIAlpha";
+static NSString* const kUIAutoresizeSubviewsKey = @"UIAutoresizeSubviews";
+static NSString* const kUIAutoresizingMaskKey = @"UIAutoresizingMask";
+static NSString* const kUIBackgroundColorKey = @"UIBackgroundColor";
+static NSString* const kUIBoundsKey = @"UIBounds";
+static NSString* const kUICenterKey = @"UICenter";
+static NSString* const kUIClearsContextBeforeDrawingKey = @"UIClearsContextBeforeDrawing";
+static NSString* const kUIClipsToBoundsKey = @"UIClipsToBounds";
+static NSString* const kUIContentModeKey = @"UIContentMode";
+static NSString* const kUIContentStretchKey = @"UIContentStretch";
+static NSString* const kUIMultipleTouchEnabledKey = @"UIMultipleTouchEnabled";
+static NSString* const kUIOpaqueKey = @"UIOpaque";
+static NSString* const kUITagKey = @"UITag";
+static NSString* const kUIUserInteractionDisabledKey = @"UIUserInteractionDisabled";
+static NSString* const kUISubviewsKey = @"UISubviews";
 
 static NSMutableArray *_animationGroups;
 static BOOL _animationsEnabled = YES;
@@ -89,32 +106,97 @@ static BOOL _animationsEnabled = YES;
     return [UIView instanceMethodForSelector:@selector(drawRect:)] != [self instanceMethodForSelector:@selector(drawRect:)];
 }
 
+- (void) _commonInitForUIView
+{
+    _implementsDrawRect = [[self class] _instanceImplementsDrawRect];
+    _clearsContextBeforeDrawing = YES;
+    _autoresizesSubviews = YES;
+    _userInteractionEnabled = YES;
+    _subviews = [[NSMutableSet alloc] init];
+    _gestureRecognizers = [[NSMutableSet alloc] init];
+    
+    _layer = [[[[self class] layerClass] alloc] init];
+    _layer.delegate = self;
+    _layer.layoutManager = [UIViewLayoutManager layoutManager];
+
+    self.alpha = 1;
+    self.opaque = YES;
+    [self setNeedsDisplay];
+}
+
 - (id)init
 {
-    return [self initWithFrame:CGRectZero];
+    if (nil != (self = [self initWithFrame:CGRectZero])) {
+        /**/
+    }
+    return self;
 }
 
 - (id)initWithFrame:(CGRect)theFrame
 {
-    if ((self=[super init])) {
-        _implementsDrawRect = [[self class] _instanceImplementsDrawRect];
-        _clearsContextBeforeDrawing = YES;
-        _autoresizesSubviews = YES;
-        _userInteractionEnabled = YES;
-        _subviews = [[NSMutableSet alloc] init];
-        _gestureRecognizers = [[NSMutableSet alloc] init];
-
-        _layer = [[[[self class] layerClass] alloc] init];
-        _layer.delegate = self;
-        _layer.layoutManager = [UIViewLayoutManager layoutManager];
-
+    if (nil != (self = [super init])) {
+        [self _commonInitForUIView];
         self.frame = theFrame;
-        self.alpha = 1;
-        self.opaque = YES;
-        [self setNeedsDisplay];
-        [self.layer removeAllAnimations];
     }
     return self;
+}
+
+- (id) initWithCoder:(NSCoder*)coder
+{
+    if (nil != (self = [super init])) {
+        [self _commonInitForUIView];
+        if ([coder containsValueForKey:kUIAlphaKey]) {
+            self.alpha = [coder decodeFloatForKey:kUIAlphaKey];
+        }
+        if ([coder containsValueForKey:kUIAutoresizeSubviewsKey]) {
+            self.autoresizesSubviews = [coder decodeBoolForKey:kUIAutoresizeSubviewsKey];
+        }
+        if ([coder containsValueForKey:kUIAutoresizingMaskKey]) {
+            self.autoresizingMask = [coder decodeIntegerForKey:kUIAutoresizingMaskKey];
+        }
+        if ([coder containsValueForKey:kUIBackgroundColorKey]) {
+            self.backgroundColor = [coder decodeObjectForKey:kUIBackgroundColorKey];
+        }
+        if ([coder containsValueForKey:kUIBoundsKey]) {
+            self.bounds = [coder decodeCGRectForKey:kUIBoundsKey];
+        }
+        if ([coder containsValueForKey:kUICenterKey]) {
+            self.center = [coder decodeCGPointForKey:kUICenterKey];
+        }
+        if ([coder containsValueForKey:kUIClearsContextBeforeDrawingKey]) {
+            self.clearsContextBeforeDrawing = [coder decodeBoolForKey:kUIClearsContextBeforeDrawingKey];
+        }
+        if ([coder containsValueForKey:kUIClipsToBoundsKey]) {
+            self.clipsToBounds = [coder decodeBoolForKey:kUIClipsToBoundsKey];
+        }
+        if ([coder containsValueForKey:kUIContentModeKey]) {
+            self.contentMode = [coder decodeIntegerForKey:kUIContentModeKey];
+        }
+        if ([coder containsValueForKey:kUIContentStretchKey]) {
+            self.contentStretch = [coder decodeCGRectForKey:kUIContentStretchKey];
+        }
+        if ([coder containsValueForKey:kUIMultipleTouchEnabledKey]) {
+            self.multipleTouchEnabled = [coder decodeBoolForKey:kUIMultipleTouchEnabledKey];
+        }
+        if ([coder containsValueForKey:kUIOpaqueKey]) {
+            self.opaque = [coder decodeBoolForKey:kUIOpaqueKey];
+        }
+        if ([coder containsValueForKey:kUITagKey]) {
+            self.tag = [coder decodeIntegerForKey:kUITagKey];
+        }
+        if ([coder containsValueForKey:kUIUserInteractionDisabledKey]) {
+            self.userInteractionEnabled = [coder decodeBoolForKey:kUIUserInteractionDisabledKey];
+        }
+        for (UIView* subview in [coder decodeObjectForKey:kUISubviewsKey]) {
+            [self addSubview:subview];
+        }
+    }
+    return self;
+}
+
+- (void) encodeWithCoder:(NSCoder*)coder
+{
+    [self doesNotRecognizeSelector:_cmd];
 }
 
 - (void)dealloc
@@ -644,7 +726,7 @@ static BOOL _animationsEnabled = YES;
 
 - (void)setBounds:(CGRect)newBounds
 {
-    if (!CGRectEqualToRect(newBounds,_layer.bounds)) {
+    if (!CGRectEqualToRect(newBounds, _layer.bounds)) {
         CGRect oldBounds = _layer.bounds;
         _layer.bounds = newBounds;
         [self _boundsDidChangeFrom:oldBounds to:newBounds];

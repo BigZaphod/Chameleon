@@ -33,6 +33,12 @@
 static NSString *UIFontSystemFontName = nil;
 static NSString *UIFontBoldSystemFontName = nil;
 
+static NSString* const kUIFontNameKey = @"UIFontName";
+static NSString* const kUIFontPointSizeKey = @"UIFontPointSize";
+static NSString* const kUIFontTraitsKey = @"UIFontTraits";
+static NSString* const kUISystemFontKey = @"UISystemFont";
+
+
 @implementation UIFont {
     CTFontRef _font;
 }
@@ -72,6 +78,27 @@ static NSString *UIFontBoldSystemFontName = nil;
 + (UIFont *)fontWithName:(NSString *)fontName size:(CGFloat)fontSize
 {
     return [self fontWithNSFont:[NSFont fontWithName:fontName size:fontSize]];
+}
+
+- (id) initWithCoder:(NSCoder*)coder
+{
+    if (nil != (self = [super init])) {
+        NSString* fontName = [coder decodeObjectForKey:kUIFontNameKey];
+        CGFloat fontPointSize = [coder decodeFloatForKey:kUIFontPointSizeKey];
+        BOOL isSystemFont = [coder decodeBoolForKey:kUISystemFontKey];
+        NSInteger fontTraits = [coder decodeIntegerForKey:kUIFontTraitsKey];
+        
+        _font = CTFontCreateWithName((CFStringRef)fontName, fontPointSize, NULL);
+        if (!_font) {
+            return nil;
+        }
+    }
+    return self;
+}
+
+- (void) encodeWithCoder:(NSCoder*)coder
+{
+    [self doesNotRecognizeSelector:_cmd];
 }
 
 NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFStringRef nameAttr)

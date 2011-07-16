@@ -105,6 +105,23 @@ static UIColor *ClearColor = nil;
     return self;
 }
 
+- (id) initWithCoder:(NSCoder*)coder
+{
+    CGFloat r = [coder decodeFloatForKey:@"UIRed"];
+    CGFloat g = [coder decodeFloatForKey:@"UIGreen"];
+    CGFloat b = [coder decodeFloatForKey:@"UIBlue"];
+    CGFloat a = [coder decodeFloatForKey:@"UIAlpha"];
+    if (nil != (self = [self initWithNSColor:[NSColor colorWithCalibratedRed:r green:g blue:b alpha:a]])) {
+        //
+    }
+    return self;
+}
+
+- (void) encodeWithCoder:(NSCoder*)coder
+{
+    [self doesNotRecognizeSelector:_cmd];
+}
+
 - (void)dealloc
 {
     CGColorRelease(_color);
