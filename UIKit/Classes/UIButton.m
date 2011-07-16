@@ -352,6 +352,11 @@ inline static NSNumber* _keyForState(NSInteger state)
         [content release];
     }
     content.image = image;
+    if (state == UIControlStateNormal) {
+        [_imageView setImage:image];
+    } else if (state == UIControlStateHighlighted) {
+        [_imageView setHighlightedImage:image];
+    }
     [self _updateContent];
 }
 
