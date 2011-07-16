@@ -100,7 +100,7 @@ static Class kUIButtonClass;
         NSBundle* bundle = [NSBundle bundleForClass:[self class]];
         accessoryCheckmarkImage = [[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UITableViewCell> accessoryCheckmark"]] retain];
         accessoryCheckmarkImageHighlighted = [[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UITableViewCell> accessoryCheckmarkHighlighted"]] retain];
-        accessoryDisclosureIndicatorImage = [[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UITableViewCell> accessoryDisclosureIndicatorImage"]] retain];
+        accessoryDisclosureIndicatorImage = [[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UITableViewCell> accessoryDisclosureIndicator"]] retain];
         accessoryDisclosureIndicatorImageHighlighted = [[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UITableViewCell> accessoryDisclosureIndicatorHighlighted"]] retain];
         kUIButtonClass = [UIButton class];
     });
@@ -551,9 +551,11 @@ static Class kUIButtonClass;
         }
             
         case UITableViewCellAccessoryCheckmark: {
-            UIImageView* checkmark = [[UIImageView alloc] initWithImage:accessoryCheckmarkImage];
-            checkmark.highlightedImage = accessoryCheckmarkImageHighlighted;
-            _accessoryView = checkmark;
+            UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.userInteractionEnabled = NO;
+            [button setImage:accessoryCheckmarkImage forState:UIControlStateNormal];
+            [button setImage:accessoryCheckmarkImageHighlighted forState:UIControlStateHighlighted];
+            _accessoryView = [button retain];
             break;
         }
 
@@ -565,9 +567,11 @@ static Class kUIButtonClass;
         }
 
         case UITableViewCellAccessoryDisclosureIndicator: {
-            UIImageView* disclosureIndicator = [[UIImageView alloc] initWithImage:accessoryDisclosureIndicatorImage];
-            disclosureIndicator.highlightedImage = accessoryDisclosureIndicatorImageHighlighted;
-            _accessoryView = disclosureIndicator;
+            UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.userInteractionEnabled = NO;
+            [button setImage:accessoryDisclosureIndicatorImage forState:UIControlStateNormal];
+            [button setImage:accessoryDisclosureIndicatorImageHighlighted forState:UIControlStateHighlighted];
+            _accessoryView = [button retain];
             break;
         }
     }
