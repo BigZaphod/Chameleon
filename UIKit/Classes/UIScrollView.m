@@ -89,51 +89,64 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 @synthesize alwaysBounceHorizontal = _alwaysBounceHorizontal;
 @synthesize bounces = _bounces;
 
-- (id)initWithFrame:(CGRect)frame
-{
-    if ((self=[super initWithFrame:frame])) {
-        _contentOffset = CGPointZero;
-        _contentSize = CGSizeZero;
-        _contentInset = UIEdgeInsetsZero;
-        _scrollIndicatorInsets = UIEdgeInsetsZero;
-        _scrollEnabled = YES;
-        _showsVerticalScrollIndicator = YES;
-        _showsHorizontalScrollIndicator = YES;
-        _maximumZoomScale = 1;
-        _minimumZoomScale = 1;
-        _scrollsToTop = YES;
-        _indicatorStyle = UIScrollViewIndicatorStyleDefault;
-        _delaysContentTouches = YES;
-        _canCancelContentTouches = YES;
-        _pagingEnabled = NO;
-        _bouncesZoom = NO;
-        _zooming = NO;
-        _alwaysBounceVertical = NO;
-        _alwaysBounceHorizontal = NO;
-        _bounces = YES;
-        
-        _scrollAnimationTime = 0;
-        _scrollAnimations = [[NSMutableArray alloc] init];
-
-        _verticalScroller = [[UIScroller alloc] init];
-        _verticalScroller.delegate = self;
-        [self addSubview:_verticalScroller];
-
-        _horizontalScroller = [[UIScroller alloc] init];
-        _horizontalScroller.delegate = self;
-        [self addSubview:_horizontalScroller];
-        
-        self.clipsToBounds = YES;
-    }
-    return self;
-}
-
 - (void)dealloc
 {
     [_scrollAnimations release];
     [_verticalScroller release];
     [_horizontalScroller release];
     [super dealloc];
+}
+
+- (void) _commonInitForUIScrollView
+{
+    _contentOffset = CGPointZero;
+    _contentSize = CGSizeZero;
+    _contentInset = UIEdgeInsetsZero;
+    _scrollIndicatorInsets = UIEdgeInsetsZero;
+    _scrollEnabled = YES;
+    _showsVerticalScrollIndicator = YES;
+    _showsHorizontalScrollIndicator = YES;
+    _maximumZoomScale = 1;
+    _minimumZoomScale = 1;
+    _scrollsToTop = YES;
+    _indicatorStyle = UIScrollViewIndicatorStyleDefault;
+    _delaysContentTouches = YES;
+    _canCancelContentTouches = YES;
+    _pagingEnabled = NO;
+    _bouncesZoom = NO;
+    _zooming = NO;
+    _alwaysBounceVertical = NO;
+    _alwaysBounceHorizontal = NO;
+    _bounces = YES;
+    
+    _scrollAnimationTime = 0;
+    _scrollAnimations = [[NSMutableArray alloc] init];
+    
+    _verticalScroller = [[UIScroller alloc] init];
+    _verticalScroller.delegate = self;
+    [self addSubview:_verticalScroller];
+    
+    _horizontalScroller = [[UIScroller alloc] init];
+    _horizontalScroller.delegate = self;
+    [self addSubview:_horizontalScroller];
+    
+    self.clipsToBounds = YES;
+}
+
+- (id)initWithFrame:(CGRect)frame
+{
+    if (nil != (self = [super initWithFrame:frame])) {
+        [self _commonInitForUIScrollView];
+    }
+    return self;
+}
+
+- (id) initWithCoder:(NSCoder*)coder
+{
+    if (nil != (self = [super initWithCoder:coder])) {
+        [self _commonInitForUIScrollView];
+    }
+    return self;
 }
 
 - (void)setDelegate:(id)newDelegate

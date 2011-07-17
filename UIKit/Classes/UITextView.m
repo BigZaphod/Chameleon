@@ -67,29 +67,42 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 @synthesize inputView = _inputView;
 @dynamic delegate;
 
-- (id)initWithFrame:(CGRect)frame
-{
-    if ((self=[super initWithFrame:frame])) {
-        _textLayer = [[UITextLayer alloc] initWithContainer:self isField:NO];
-        [self.layer insertSublayer:_textLayer atIndex:0];
-
-        self.textColor = [UIColor blackColor];
-        self.font = [UIFont systemFontOfSize:17];
-        self.dataDetectorTypes = UIDataDetectorTypeAll;
-        self.editable = YES;
-        self.contentMode = UIViewContentModeScaleToFill;
-        self.clipsToBounds = YES;
-    }
-    return self;
-}
-
-- (void)dealloc
+- (void) dealloc
 {
     [_textLayer removeFromSuperlayer];
     [_textLayer release];
     [_inputAccessoryView release];
     [_inputView release];
     [super dealloc];
+}
+
+- (void) _commonInitForUITextView
+{
+    _textLayer = [[UITextLayer alloc] initWithContainer:self isField:NO];
+    [self.layer insertSublayer:_textLayer atIndex:0];
+    
+    self.textColor = [UIColor blackColor];
+    self.font = [UIFont systemFontOfSize:17];
+    self.dataDetectorTypes = UIDataDetectorTypeAll;
+    self.editable = YES;
+    self.contentMode = UIViewContentModeScaleToFill;
+    self.clipsToBounds = YES;
+}
+
+- (id) initWithFrame:(CGRect)frame
+{
+    if (nil != (self = [super initWithFrame:frame])) {
+        [self _commonInitForUITextView];
+    }
+    return self;
+}
+
+- (id) initWithCoder:(NSCoder*)coder
+{
+    if (nil != (self = [super initWithCoder:coder])) {
+        [self _commonInitForUITextView];
+    }
+    return self;
 }
 
 - (void)layoutSubviews

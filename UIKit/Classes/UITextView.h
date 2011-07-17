@@ -49,7 +49,7 @@ extern NSString *const UITextViewTextDidEndEditingNotification;
 - (void)textViewDidChangeSelection:(UITextView *)textView;
 @end
 
-@interface UITextView : UIScrollView <UITextInputTraits> 
+@interface UITextView : UIScrollView <NSCoding, UITextInputTraits> 
 
 - (void)scrollRangeToVisible:(NSRange)range;
 

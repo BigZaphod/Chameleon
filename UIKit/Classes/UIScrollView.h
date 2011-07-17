@@ -49,7 +49,7 @@ typedef enum {
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView;
 @end
 
-@interface UIScrollView : UIView 
+@interface UIScrollView : UIView <NSCoding>
 
 - (void)scrollRectToVisible:(CGRect)rect animated:(BOOL)animated;
 

@@ -93,7 +93,7 @@ typedef enum {
     UITableViewRowAnimationMiddle
 } UITableViewRowAnimation;
 
-@interface UITableView : UIScrollView 
+@interface UITableView : UIScrollView <NSCoding>
 
 - (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style;
 - (void)reloadData;
