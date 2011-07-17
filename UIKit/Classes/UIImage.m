@@ -137,6 +137,7 @@
                     return nil; 
                 }
                 CGImageRef image = (CGImageRef)[(id)CGImageSourceCreateImageAtIndex(imageSource, 0, (CFDictionaryRef)options) autorelease];
+                CFRelease(imageSource);
                 cachedImage = [[[self alloc] initWithCGImage:image] autorelease];
                 [self _cacheImage:cachedImage forName:name];
             }
