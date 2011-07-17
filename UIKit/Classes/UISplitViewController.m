@@ -33,6 +33,7 @@
 #import "UITouch.h"
 #import "UIColor.h"
 #import "UIResponderAppKitIntegration.h"
+#import <AppKit/AppKit.h>
 
 
 static const CGFloat SplitterPadding = 3;
