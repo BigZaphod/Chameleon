@@ -101,36 +101,7 @@ const CGFloat _UITableViewDefaultRowHeight = 44;
 @synthesize allowsSelectionDuringEditing = _allowsSelectionDuringEditing;
 @dynamic delegate;
 
-- (id)initWithFrame:(CGRect)frame
-{
-    return [self initWithFrame:frame style:UITableViewStylePlain];
-}
-
-- (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)theStyle
-{
-    if ((self=[super initWithFrame:frame])) {
-        _style = theStyle;
-        _cachedCells = [[NSMutableDictionary alloc] init];
-        _sections = [[NSMutableArray alloc] init];
-        _reusableCells = [[NSMutableSet alloc] init];
-
-        self.separatorColor = [UIColor colorWithRed:.67f green:.67f blue:.67f alpha:1];
-        self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        self.showsHorizontalScrollIndicator = NO;
-        self.allowsSelection = YES;
-        self.allowsSelectionDuringEditing = NO;
-        self.sectionHeaderHeight = self.sectionFooterHeight = 22;
-
-        if (_style == UITableViewStylePlain) {
-            self.backgroundColor = [UIColor whiteColor];
-        }
-        
-        [self _setNeedsReload];
-    }
-    return self;
-}
-
-- (void)dealloc
+- (void) dealloc
 {
     [_selectedRow release];
     [_tableFooterView release];
@@ -140,6 +111,48 @@ const CGFloat _UITableViewDefaultRowHeight = 44;
     [_reusableCells release];
     [_separatorColor release];
     [super dealloc];
+}
+
+- (void) _commonInitForUITableView
+{
+    _cachedCells = [[NSMutableDictionary alloc] init];
+    _sections = [[NSMutableArray alloc] init];
+    _reusableCells = [[NSMutableSet alloc] init];
+    
+    self.separatorColor = [UIColor colorWithRed:.67f green:.67f blue:.67f alpha:1];
+    self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.showsHorizontalScrollIndicator = NO;
+    self.allowsSelection = YES;
+    self.allowsSelectionDuringEditing = NO;
+    self.sectionHeaderHeight = self.sectionFooterHeight = 22;
+    
+    if (_style == UITableViewStylePlain) {
+        self.backgroundColor = [UIColor whiteColor];
+    }
+    
+    [self _setNeedsReload];
+}
+
+- (id) initWithFrame:(CGRect)frame
+{
+    return [self initWithFrame:frame style:UITableViewStylePlain];
+}
+
+- (id) initWithFrame:(CGRect)frame style:(UITableViewStyle)theStyle
+{
+    if (nil != (self = [super initWithFrame:frame])) {
+        _style = theStyle;
+        [self _commonInitForUITableView];
+    }
+    return self;
+}
+
+- (id) initWithCoder:(NSCoder*)coder
+{
+    if (nil != (self = [super initWithCoder:coder])) {
+        [self _commonInitForUITableView];
+    }
+    return self;
 }
 
 - (void)setDataSource:(id<UITableViewDataSource>)newSource
