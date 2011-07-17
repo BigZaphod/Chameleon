@@ -30,109 +30,197 @@
 #import "UINinePartImage.h"
 #import "UIGraphics.h"
 
-@implementation UINinePartImage
+@implementation UINinePartImage {
+    CGFloat _tch;
+    CGFloat _lcw;
+    CGFloat _bch;
+    CGFloat _rcw;
 
-- (id)initWithCGImage:(CGImageRef)theImage leftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight
-{
-    if ((self=[super initWithCGImage:theImage])) {
-        const CGSize size = self.size;
-        const CGFloat stretchyWidth = (leftCapWidth < size.width)? 1 : 0;
-        const CGFloat stretchyHeight = (topCapHeight < size.height)? 1 : 0;
-        const CGFloat bottomCapHeight = size.height - topCapHeight - stretchyHeight;
-        
-        CGFloat topOrigin = size.height - topCapHeight;
-        CGFloat rightWidth = size.width-leftCapWidth-stretchyWidth;
-        CGFloat rightOrigin = leftCapWidth + stretchyWidth;
-        _topLeftCorner = CGImageCreateWithImageInRect(theImage, CGRectMake(0,topOrigin,leftCapWidth,topCapHeight));
-        _topEdgeFill = CGImageCreateWithImageInRect(theImage, CGRectMake(leftCapWidth,topOrigin,stretchyWidth,topCapHeight));
-        _topRightCorner = CGImageCreateWithImageInRect(theImage, CGRectMake(rightOrigin,topOrigin,rightWidth,topCapHeight));
-        
-        _bottomLeftCorner = CGImageCreateWithImageInRect(theImage, CGRectMake(0,0,leftCapWidth,bottomCapHeight));
-        _bottomEdgeFill = CGImageCreateWithImageInRect(theImage, CGRectMake(leftCapWidth,0,stretchyWidth,bottomCapHeight));
-        _bottomRightCorner = CGImageCreateWithImageInRect(theImage, CGRectMake(rightOrigin,0,rightWidth,bottomCapHeight));
-        
-        _leftEdgeFill = CGImageCreateWithImageInRect(theImage, CGRectMake(0,bottomCapHeight,leftCapWidth,stretchyHeight));
-        _centerFill = CGImageCreateWithImageInRect(theImage, CGRectMake(leftCapWidth,bottomCapHeight,stretchyWidth,stretchyHeight));
-        _rightEdgeFill = CGImageCreateWithImageInRect(theImage, CGRectMake(rightOrigin,bottomCapHeight,rightWidth,stretchyHeight));
-    }
-    return self;
+    CGImageRef _topLeftCorner;
+    CGImageRef _topEdgeFill;
+    CGImageRef _topRightCorner;
+    CGImageRef _leftEdgeFill;
+    CGColorRef _centerFill;
+    CGImageRef _rightEdgeFill;
+    CGImageRef _bottomLeftCorner;
+    CGImageRef _bottomEdgeFill;
+    CGImageRef _bottomRightCorner;
 }
-- (void)dealloc
+
+- (void) dealloc
 {
-    if (_topLeftCorner)
+    if (_topLeftCorner) {
         CGImageRelease(_topLeftCorner);
-    if (_topEdgeFill) 
+    }
+    if (_topEdgeFill) {
         CGImageRelease(_topEdgeFill);
-    if (_topRightCorner)
+    }
+    if (_topRightCorner) {
         CGImageRelease(_topRightCorner);
-    if (_leftEdgeFill)
+    }
+    if (_leftEdgeFill) {
         CGImageRelease(_leftEdgeFill);
-    if (_centerFill) 
-        CGImageRelease(_centerFill);
-    if (_rightEdgeFill)
+    }
+    if (_centerFill) {
+        CGColorRelease(_centerFill);
+    }
+    if (_rightEdgeFill) {
         CGImageRelease(_rightEdgeFill);
-    if (_bottomLeftCorner) 
+    }
+    if (_bottomLeftCorner) {
         CGImageRelease(_bottomLeftCorner);
-    if (_bottomEdgeFill)
+    }
+    if (_bottomEdgeFill) {
         CGImageRelease(_bottomEdgeFill);
-    if (_bottomRightCorner) 
+    }
+    if (_bottomRightCorner) {
         CGImageRelease(_bottomRightCorner);
+    }
     [super dealloc];
 }
 
-- (NSInteger)leftCapWidth
+- (id)initWithCGImage:(CGImageRef)image leftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight
 {
-    return CGImageGetWidth(_topLeftCorner);
+    assert(image);
+    assert(leftCapWidth > 0);
+    assert(topCapHeight > 0);
+    if (nil != (self = [super initWithCGImage:image])) {
+        CGFloat w = CGImageGetWidth(image);
+        CGFloat h = CGImageGetHeight(image);
+        
+        _tch = MIN(topCapHeight, h);
+        _lcw = MIN(leftCapWidth, w);
+        
+        NSInteger x;
+        if (w > leftCapWidth + 1.0) {
+            x = 2;
+            _rcw = w - 1.0 - leftCapWidth;
+        } else if (w == leftCapWidth + 1.0) {
+            x = 1;
+        } else {
+            x = 0;
+        }
+        
+        NSInteger y;
+        if (h >= topCapHeight + 1.0) {
+            y = 2;
+            _bch = h - 1.0 - topCapHeight;
+        } else if (h == topCapHeight + 1.0) {
+            y = 1;
+        } else {
+            y = 0;
+        }
+        
+        static NSUInteger const TABLE[3][3] = {
+            { 0001, 0011, 0111 },
+            { 0003, 0033, 0333 },
+            { 0007, 0077, 0777 },
+        };
+        NSUInteger const bits = TABLE[x][y];
+
+        if (bits & 0001) {
+            _topLeftCorner = CGImageCreateWithImageInRect(image, CGRectMake(0.0, 0.0, _lcw, _tch));
+        }
+        if (bits & 0010) {
+            _topEdgeFill = CGImageCreateWithImageInRect(image, CGRectMake(_lcw, 0.0, 1.0, _tch));
+        }
+        if (bits & 0100) {
+            _topRightCorner = CGImageCreateWithImageInRect(image, CGRectMake(_lcw + 1.0, 0.0, _rcw, _tch));
+        }
+        
+        if (bits & 0002) {
+            _leftEdgeFill = CGImageCreateWithImageInRect(image, CGRectMake(0, _tch, _lcw, 1.0));
+        }
+        if (bits & 0020) {
+            uint8_t pixel[4] = { 0 };
+            CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
+            CGContextRef context = CGBitmapContextCreate(pixel, 1, 1, 8, 4, colorspace, kCGImageAlphaPremultipliedLast);
+            CFRelease(colorspace);
+            CGContextDrawImage(context, CGRectMake(-_rcw, -_bch, w, h), image);
+            CGContextRelease(context);
+            CGFloat a = pixel[3] / 255.0;
+            CGFloat r = pixel[0] / 255.0 / a;
+            CGFloat g = pixel[1] / 255.0 / a;
+            CGFloat b = pixel[2] / 255.0 / a;
+            _centerFill = CGColorCreateGenericRGB(r, g, b, a);
+        }
+        if (bits & 0200) {
+            _rightEdgeFill = CGImageCreateWithImageInRect(image, CGRectMake(w - _rcw, _tch, _rcw, 1.0));
+        }
+        
+        if (bits & 0004) {
+            _bottomLeftCorner = CGImageCreateWithImageInRect(image, CGRectMake(0.0, h - _bch, _lcw, _bch));
+        }
+        if (bits & 0040) {
+            _bottomEdgeFill = CGImageCreateWithImageInRect(image, CGRectMake(_lcw, h - _bch, 1.0, _bch));
+        }
+        if (bits & 0400) {
+            _bottomRightCorner = CGImageCreateWithImageInRect(image, CGRectMake(_lcw + 1.0, h - _bch, _rcw, _bch));
+        }
+    }
+    return self;
 }
 
-- (NSInteger)topCapHeight
+- (NSInteger) leftCapWidth
 {
-    return CGImageGetHeight(_topLeftCorner);
+    return _lcw;
 }
 
-- (void)drawInRect:(CGRect)rect
+- (NSInteger) topCapHeight
 {
-    CGFloat topRightWidth = CGImageGetWidth(_topRightCorner);
-    CGFloat bottomRightWidth = CGImageGetWidth(_bottomRightCorner);
-    CGFloat bottomLeftHeight = CGImageGetWidth(_bottomLeftCorner);
-    CGRect topLeftRect = CGRectMake(rect.origin.x, rect.origin.y, CGImageGetWidth(_topLeftCorner), CGImageGetHeight(_topLeftCorner));
-    CGRect topRightRect = CGRectMake(CGRectGetMaxX(rect) - topRightWidth, rect.origin.y, topRightWidth, topLeftRect.size.height);
-    CGRect bottomLeftRect = CGRectMake(rect.origin.x, CGRectGetMaxY(rect) - bottomLeftHeight, topLeftRect.size.width, bottomLeftHeight);
-    CGRect bottomRightRect = CGRectMake(topRightRect.origin.x, bottomLeftRect.origin.y, bottomRightWidth, bottomLeftRect.size.height);
-    CGRect topEdgeRect = CGRectMake(CGRectGetMaxX(topLeftRect), rect.origin.y, rect.size.width - (topLeftRect.size.width + topRightRect.size.width), topLeftRect.size.height);
-    CGRect leftEdgeRect = CGRectMake(rect.origin.x, CGRectGetMaxY(topLeftRect), topLeftRect.size.width, rect.size.height - (topLeftRect.size.height + bottomLeftRect.size.height));
-    CGRect bottomEdgeRect = CGRectMake(topEdgeRect.origin.x, bottomLeftRect.origin.y, topEdgeRect.size.width, bottomLeftRect.size.height);
-    CGRect rightEdgeRect = CGRectMake(CGRectGetMaxX(rect) - topRightRect.size.width, leftEdgeRect.origin.y, topRightRect.size.width, rect.size.height - (topRightRect.size.height + bottomRightRect.size.height));
-    CGRect centerFillRect = CGRectMake(topEdgeRect.origin.x, leftEdgeRect.origin.y, topEdgeRect.size.width, leftEdgeRect.size.height);
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextSaveGState(ctx);
-	CGContextScaleCTM(ctx, 1, -1);
-	CGContextTranslateCTM(ctx, 0, -rect.size.height);
-    CGContextDrawImage(ctx, topLeftRect, _topLeftCorner);
-    CGContextDrawImage(ctx, topRightRect, _topRightCorner);
-    CGContextDrawImage(ctx, bottomRightRect, _bottomRightCorner);
-    CGContextDrawImage(ctx, bottomLeftRect, _bottomLeftCorner);
-    CGContextSaveGState(ctx);
-    CGContextClipToRect(ctx, topEdgeRect);
-    CGContextDrawTiledImage(ctx, topEdgeRect, _topEdgeFill);
-    CGContextRestoreGState(ctx);
-    CGContextSaveGState(ctx);
-    CGContextClipToRect(ctx, leftEdgeRect);
-    CGContextDrawTiledImage(ctx, leftEdgeRect, _leftEdgeFill);
-    CGContextRestoreGState(ctx);
-    CGContextSaveGState(ctx);
-    CGContextClipToRect(ctx, bottomEdgeRect);
-    CGContextDrawTiledImage(ctx, bottomEdgeRect, _bottomEdgeFill);
-    CGContextRestoreGState(ctx);
-    CGContextSaveGState(ctx);
-    CGContextClipToRect(ctx, rightEdgeRect);
-    CGContextDrawTiledImage(ctx, rightEdgeRect, _rightEdgeFill);
-    CGContextRestoreGState(ctx);
-    CGContextSaveGState(ctx);
-    CGContextClipToRect(ctx, centerFillRect);
-    CGContextDrawTiledImage(ctx, centerFillRect, _centerFill);
-    CGContextRestoreGState(ctx);
-    CGContextRestoreGState(ctx);
+    return _tch;
+}
+
+- (void) drawInRect:(CGRect)rect
+{
+    CGContextRef c = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(c);
+    CGContextTranslateCTM(c, rect.origin.x, rect.origin.y + rect.size.height);
+    CGContextScaleCTM(c, 1.0, -1.0);
+
+    CGFloat const cw = rect.size.width - (_lcw + _rcw);
+    CGFloat const ch = rect.size.height - (_tch + _bch);
+    
+    CGFloat const ty = rect.origin.y + rect.size.height - _tch;
+    CGFloat const cy = rect.origin.y + _bch;
+    CGFloat const by = rect.origin.y;
+
+    CGFloat const lx = rect.origin.x;
+    CGFloat const cx = rect.origin.x + _lcw;
+    CGFloat const rx = rect.origin.x + rect.size.width - _rcw;
+    
+    if (_topLeftCorner) {
+        CGContextDrawImage(c, CGRectMake(lx, ty, _lcw, _tch), _topLeftCorner);
+    }
+    if (_topEdgeFill) {
+        CGContextDrawImage(c, CGRectMake(cx, ty, cw, _tch), _topEdgeFill);
+    }
+    if (_topRightCorner) {
+        CGContextDrawImage(c, CGRectMake(rx, ty, _rcw, _tch), _topRightCorner);
+    }
+
+    if (_leftEdgeFill) {
+        CGContextDrawImage(c, CGRectMake(lx, cy, _lcw, ch), _leftEdgeFill);
+    }
+    if (_centerFill) {
+        CGContextSetFillColorWithColor(c, _centerFill);
+        CGContextFillRect(c, CGRectMake(cx, cy, cw, ch));
+    }
+    if (_rightEdgeFill) {
+        CGContextDrawImage(c, CGRectMake(rx, cy, _rcw, ch), _rightEdgeFill);
+    }
+    
+    if (_bottomLeftCorner) {
+        CGContextDrawImage(c, CGRectMake(lx, by, _lcw, _bch), _bottomLeftCorner);
+    }
+    if (_bottomEdgeFill) {
+        CGContextDrawImage(c, CGRectMake(cx, by, cw, _bch), _bottomEdgeFill);
+    }
+    if (_bottomRightCorner) {
+        CGContextDrawImage(c, CGRectMake(rx, by, _rcw, _bch), _bottomRightCorner);
+    }
+    
+    CGContextRestoreGState(c);
 }
 
 @end
