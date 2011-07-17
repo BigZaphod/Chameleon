@@ -39,6 +39,7 @@
 #import "UIToolbar.h"
 #import "UIScreen.h"
 #import "UITabBarController.h"
+#import "UINib.h"
 
 @implementation UIViewController {
     UIViewControllerAppearState _appearState;
@@ -67,6 +68,8 @@
 @synthesize searchDisplayController = _searchDisplayController;
 @synthesize tabBarItem = _tabBarItem;
 @synthesize tabBarController = _tabBarController;
+@synthesize nibBundle = _nibBundle;
+@synthesize nibName = _nibName;
 
 - (id)init
 {
@@ -75,7 +78,9 @@
 
 - (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)nibBundle
 {
-    if ((self=[super init])) {
+    if (nil != (self = [super init])) {
+        _nibName = [nibName copy];
+        _nibBundle = [nibBundle retain];
         _contentSizeForViewInPopover = CGSizeMake(320,1100);
     }
     return self;
@@ -88,17 +93,9 @@
     [_navigationItem release];
     [_title release];
     [_view release];
+    [_nibName release];
+    [_nibBundle release];
     [super dealloc];
-}
-
-- (NSString *)nibName
-{
-    return nil;
-}
-
-- (NSBundle *)nibBundle
-{
-    return nil;
 }
 
 - (UIResponder *)nextResponder
@@ -143,13 +140,11 @@
 
 - (UIView *)view
 {
-    if ([self isViewLoaded]) {
-        return _view;
-    } else {
+    if (![self isViewLoaded]) {
         [self loadView];
         [self viewDidLoad];
-        return _view;
     }
+    return _view;
 }
 
 - (void)setView:(UIView *)aView
@@ -164,7 +159,12 @@
 
 - (void)loadView
 {
-    self.view = [[(UIView *)[UIView alloc] initWithFrame:CGRectMake(0,0,320,480)] autorelease];
+    if (self.nibName) {
+        [[UINib nibWithNibName:self.nibName bundle:self.nibBundle] instantiateWithOwner:self options:nil];
+    }
+    if (!self.view) {
+        self.view = [[[UIView alloc] initWithFrame:CGRectMake(0,0,320,480)] autorelease];
+    }
 }
 
 - (void)viewDidLoad

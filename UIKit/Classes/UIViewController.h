@@ -84,8 +84,8 @@ typedef enum {
 - (void)transitionFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion;
 
 
-@property (nonatomic, readonly, copy) NSString *nibName;		// always returns nil
-@property (nonatomic, readonly, retain) NSBundle *nibBundle;	// always returns nil
+@property (nonatomic, readonly, copy) NSString *nibName;
+@property (nonatomic, readonly, retain) NSBundle *nibBundle;
 @property (nonatomic, retain) UIView *view;
 @property (nonatomic, assign) BOOL wantsFullScreenLayout;		// doesn't do anything right now
 @property (nonatomic, copy) NSString *title;
