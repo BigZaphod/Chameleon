@@ -150,6 +150,7 @@ const CGFloat _UITableViewDefaultRowHeight = 44;
 - (id) initWithCoder:(NSCoder*)coder
 {
     if (nil != (self = [super initWithCoder:coder])) {
+        _style = UITableViewStylePlain;
         [self _commonInitForUITableView];
     }
     return self;
