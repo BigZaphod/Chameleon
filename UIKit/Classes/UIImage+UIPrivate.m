@@ -346,16 +346,3 @@ NSMutableDictionary *imageCache = nil;
 
 
 @end
-
-
-NSImage *_NSImageCreateSubimage(NSImage *theImage, CGRect rect)
-{
-    // flip coordinates around...
-    rect.origin.y = (theImage.size.height) - rect.size.height - rect.origin.y;
-    NSImage *destinationImage = [[NSImage alloc] initWithSize:NSSizeFromCGSize(rect.size)];
-    [destinationImage lockFocus];
-    [theImage drawAtPoint:NSZeroPoint fromRect:NSRectFromCGRect(rect) operation:NSCompositeCopy fraction:1];
-    [destinationImage unlockFocus];
-    return destinationImage;
-}
-

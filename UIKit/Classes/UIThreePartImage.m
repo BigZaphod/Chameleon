@@ -28,15 +28,13 @@
  */
 
 #import "UIThreePartImage.h"
-#import "AppKitIntegration.h"
 #import "UIGraphics.h"
-#import <AppKit/AppKit.h>
 
 @implementation UIThreePartImage
 
-- (id)initWithNSImage:(id)theImage capSize:(NSInteger)capSize vertical:(BOOL)isVertical
+- (id)initWithCGImage:(CGImageRef)theImage capSize:(NSInteger)capSize vertical:(BOOL)isVertical
 {
-    if ((self=[super initWithNSImage:theImage])) {
+    if ((self=[super initWithCGImage:theImage])) {
         const CGSize size = self.size;
 
         _vertical = isVertical;
@@ -45,16 +43,16 @@
             const CGFloat stretchyHeight = (capSize < size.height)? 1 : 0;
             const CGFloat bottomCapHeight = size.height - capSize - stretchyHeight;
             
-            _startCap = _NSImageCreateSubimage(theImage, CGRectMake(0,0,size.width,capSize));
-            _centerFill = _NSImageCreateSubimage(theImage, CGRectMake(0,capSize,size.width,stretchyHeight));
-            _endCap = _NSImageCreateSubimage(theImage, CGRectMake(0,size.height-bottomCapHeight,size.width,bottomCapHeight));
+            _startCap = CGImageCreateWithImageInRect(theImage, CGRectMake(0,0,size.width,capSize));
+            _centerFill = CGImageCreateWithImageInRect(theImage, CGRectMake(0,capSize,size.width,stretchyHeight));
+            _endCap = CGImageCreateWithImageInRect(theImage, CGRectMake(0,size.height-bottomCapHeight,size.width,bottomCapHeight));
         } else {
             const CGFloat stretchyWidth = (capSize < size.width)? 1 : 0;
             const CGFloat rightCapWidth = size.width - capSize - stretchyWidth;
 
-            _startCap = _NSImageCreateSubimage(theImage, CGRectMake(0,0,capSize,size.height));
-            _centerFill = _NSImageCreateSubimage(theImage, CGRectMake(capSize,0,stretchyWidth,size.height));
-            _endCap = _NSImageCreateSubimage(theImage, CGRectMake(size.width-rightCapWidth,0,rightCapWidth,size.height));
+            _startCap = CGImageCreateWithImageInRect(theImage, CGRectMake(0,0,capSize,size.height));
+            _centerFill = CGImageCreateWithImageInRect(theImage, CGRectMake(capSize,0,stretchyWidth,size.height));
+            _endCap = CGImageCreateWithImageInRect(theImage, CGRectMake(size.width-rightCapWidth,0,rightCapWidth,size.height));
         }
     }
     return self;
@@ -62,34 +60,40 @@
 
 - (void)dealloc
 {
-    [_startCap release];
-    [_centerFill release];
-    [_endCap release];
+    if (_startCap)
+        CGImageRelease(_startCap);
+    if (_centerFill)
+        CGImageRelease(_centerFill);
+    if (_endCap)
+        CGImageRelease(_endCap);
     [super dealloc];
 }
 
 - (NSInteger)leftCapWidth
 {
-    return _vertical? 0 : [_startCap size].width;
+    return _vertical? 0 : CGImageGetWidth(_startCap);
 }
 
 - (NSInteger)topCapHeight
 {
-    return _vertical? [_startCap size].height : 0;
+    return _vertical ? CGImageGetHeight(_startCap) : 0;
 }
 
 - (void)drawInRect:(CGRect)rect
 {
-    // There aren't enough NSCompositingOperations to map all possible CGBlendModes, so rather than have gaps in the support,
-    // I am drawing the multipart image into a new image context which is then drawn in the usual way which results in the draw
-    // obeying the currently active CGBlendMode and doing the expected thing. This is no doubt more expensive than it could be,
-    // but I suspect it's pretty irrelevant in the grand scheme of things.
-    UIGraphicsBeginImageContext(rect.size);
-    NSDrawThreePartImage(NSMakeRect(0,0,rect.size.width,rect.size.height), _startCap, _centerFill, _endCap, _vertical, NSCompositeCopy, 1, YES);
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-
-    [img drawInRect:rect];
+    CGRect startCapRect = CGRectMake(rect.origin.x, rect.origin.y, _vertical ? rect.size.width : CGImageGetWidth(_startCap), _vertical ? CGImageGetHeight(_startCap) : rect.size.height);
+    CGSize endCapSize = CGSizeMake(CGImageGetWidth(_endCap), CGImageGetHeight(_endCap));
+    CGRect endCapRect = _vertical ? CGRectMake(rect.origin.x, CGRectGetMaxY(rect) - endCapSize.height, rect.size.width, endCapSize.height) : CGRectMake(CGRectGetMaxX(rect) - endCapSize.width, rect.origin.y, endCapSize.width, rect.size.height);
+    CGRect centerFillRect = _vertical ? CGRectMake(rect.origin.x, CGRectGetMaxY(startCapRect), rect.size.width, rect.size.height - (startCapRect.size.height + endCapRect.size.height)) : CGRectMake(CGRectGetMaxX(startCapRect), rect.origin.y, rect.size.width - (startCapRect.size.width + endCapRect.size.width), rect.size.height);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(ctx);
+	CGContextScaleCTM(ctx, 1, -1);
+	CGContextTranslateCTM(ctx, 0, -rect.size.height);
+    CGContextDrawImage(ctx, startCapRect, _startCap);
+    CGContextDrawImage(ctx, endCapRect, _endCap);
+    CGContextClipToRect(ctx, centerFillRect); // bug in CGContextDrawTiledImage, has to be clipped before drawing
+    CGContextDrawTiledImage(ctx, centerFillRect, _centerFill);
+    CGContextRestoreGState(ctx);
 }
 
 @end

@@ -29,18 +29,8 @@
 
 #import "UIImage+UIPrivate.h"
 
-@interface UINinePartImage : UIImage {
-    id _topLeftCorner;
-    id _topEdgeFill;
-    id _topRightCorner;
-    id _leftEdgeFill;
-    id _centerFill;
-    id _rightEdgeFill;
-    id _bottomLeftCorner;
-    id _bottomEdgeFill;
-    id _bottomRightCorner;
-}
+@interface UINinePartImage : UIImage 
 
-- (id)initWithNSImage:(id)theImage leftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight;
+- (id)initWithCGImage:(CGImageRef)theImage leftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight;
 
 @end
