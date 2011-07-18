@@ -33,6 +33,14 @@
 #import "UIGraphics.h"
 #import <AppKit/NSStringDrawing.h>
 
+
+static NSString* const kUIFontKey = @"UIFont";
+static NSString* const kUIHighlightedColorKey = @"UIHighlightedColor";
+static NSString* const kUIShadowColorKey = @"UIShadowColor";
+static NSString* const kUIShadowOffsetKey = @"UIShadowOffset";
+static NSString* const kUITextColorKey = @"UITextColor";
+
+
 @implementation UILabel 
 @synthesize text = _text;
 @synthesize font = _font;
@@ -50,25 +58,6 @@
 @synthesize highlighted = _highlighted;
 @synthesize attributedText = _attributedText;
 
-- (id)initWithFrame:(CGRect)frame
-{
-    if ((self = [super initWithFrame:frame])) {
-        self.userInteractionEnabled = NO;
-        self.textAlignment = UITextAlignmentLeft;
-        self.lineBreakMode = UILineBreakModeTailTruncation;
-        self.textColor = [UIColor blackColor];
-        self.backgroundColor = [UIColor whiteColor];
-        self.enabled = YES;
-        self.font = [UIFont systemFontOfSize:17];
-        self.numberOfLines = 1;
-        self.contentMode = UIViewContentModeLeft;
-        self.clipsToBounds = YES;
-        self.shadowOffset = CGSizeMake(0,-1);
-        self.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
-    }
-    return self;
-}
-
 - (void)dealloc
 {
     [_text release];
@@ -77,6 +66,53 @@
     [_shadowColor release];
     [_highlightedTextColor release];
     [super dealloc];
+}
+
+- (void) _commonInitForUILabel
+{
+    self.userInteractionEnabled = NO;
+    self.textAlignment = UITextAlignmentLeft;
+    self.lineBreakMode = UILineBreakModeTailTruncation;
+    self.textColor = [UIColor blackColor];
+    self.backgroundColor = [UIColor whiteColor];
+    self.enabled = YES;
+    self.font = [UIFont systemFontOfSize:17];
+    self.numberOfLines = 1;
+    self.contentMode = UIViewContentModeLeft;
+    self.clipsToBounds = YES;
+    self.shadowOffset = CGSizeMake(0,-1);
+    self.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
+}
+
+- (id) initWithFrame:(CGRect)frame
+{
+    if (nil != (self = [super initWithFrame:frame])) {
+        [self _commonInitForUILabel];
+    }
+    return self;
+}
+
+- (id) initWithCoder:(NSCoder*)coder
+{
+    if (nil != (self = [super initWithCoder:coder])) {
+        [self _commonInitForUILabel];
+        if ([coder containsValueForKey:kUIFontKey]) {
+            self.font = [coder decodeObjectForKey:kUIFontKey];
+        }
+        if ([coder containsValueForKey:kUIHighlightedColorKey]) {
+            self.highlightedTextColor = [coder decodeObjectForKey:kUIHighlightedColorKey];
+        }
+        if ([coder containsValueForKey:kUIShadowColorKey]) {
+            self.shadowColor = [coder decodeObjectForKey:kUIShadowColorKey];
+        }
+        if ([coder containsValueForKey:kUIShadowOffsetKey]) {
+            self.shadowOffset = [coder decodeSizeForKey:kUIShadowOffsetKey];
+        }
+        if ([coder containsValueForKey:kUITextColorKey]) {
+            self.textColor = [coder decodeObjectForKey:kUITextColorKey];
+        }
+    }
+    return self;
 }
 
 - (void)setText:(NSString *)newText

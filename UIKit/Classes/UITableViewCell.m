@@ -42,6 +42,12 @@
 #import "UITableViewCellLayoutManager.h"
 
 
+static NSString* const kUIContentViewKey = @"UIContentView";
+static NSString* const kUIDetailTextLabelKey = @"UIDetailTextLabel";
+static NSString* const kUIImageViewKey = @"UIImageView";
+static NSString* const kUIReuseIdentifierKey = @"UIReuseIdentifier";
+
+
 extern CGFloat _UITableViewDefaultRowHeight;
 
 
@@ -125,35 +131,56 @@ static Class kUIButtonClass;
 	[super dealloc];
 }
 
-- (id) initWithFrame:(CGRect)frame
+- (void) _commonInitForUITableViewCell
 {
-	if (nil != (self = [super initWithFrame:frame])) {
-        _indentationWidth = 10;
-		_style = UITableViewCellStyleDefault;
-		_accessoryType = UITableViewCellAccessoryNone;
-		_editingAccessoryType = UITableViewCellAccessoryNone;
-		_selectionStyle = UITableViewCellSelectionStyleBlue;
-        
-        _layoutManager = [[UITableViewCellLayoutManager layoutManagerForTableViewCellStyle:_style] retain];
-        CGRect contentViewRect = [_layoutManager contentViewRectForCell:self];
-        _contentView = [[UIView alloc] initWithFrame:contentViewRect];
-        [self addSubview:_contentView];
+    _indentationWidth = 10;
+    _style = UITableViewCellStyleDefault;
+    _accessoryType = UITableViewCellAccessoryNone;
+    _editingAccessoryType = UITableViewCellAccessoryNone;
+    _selectionStyle = UITableViewCellSelectionStyleBlue;
+}
 
-
-	}
-	return self;
+- (void) _configureContentViewAndLayoutManager
+{
+    _layoutManager = [[UITableViewCellLayoutManager layoutManagerForTableViewCellStyle:_style] retain];
+    if (!_contentView) {
+        _contentView = [[UIView alloc] initWithFrame:[_layoutManager contentViewRectForCell:self]];
+    }
+    [self addSubview:_contentView];
 }
 
 - (id) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)reuseIdentifier
 {
-	if (nil != (self = [self initWithFrame:CGRectMake(0,0,320,_UITableViewDefaultRowHeight)])) {
+	if (nil != (self = [super initWithFrame:CGRectMake(0,0,320,_UITableViewDefaultRowHeight)])) {
+        [self _commonInitForUITableViewCell];
 		_style = style;
 		_reuseIdentifier = [reuseIdentifier copy];
-        _layoutManager = [[UITableViewCellLayoutManager layoutManagerForTableViewCellStyle:_style] retain];
+        [self _configureContentViewAndLayoutManager];
 	}
 	return self;
 }
 
+- (id) initWithFrame:(CGRect)frame
+{
+	if (nil != (self = [super initWithFrame:frame])) {
+        [self _commonInitForUITableViewCell];
+        [self _configureContentViewAndLayoutManager];
+	}
+	return self;
+}
+
+- (id) initWithCoder:(NSCoder*)coder
+{
+    if (nil != (self = [super initWithCoder:coder])) {
+        [self _commonInitForUITableViewCell];
+        _reuseIdentifier = [[coder decodeObjectForKey:kUIReuseIdentifierKey] retain];
+        _contentView = [[coder decodeObjectForKey:kUIContentViewKey] retain];
+        _detailTextLabel = [[coder decodeObjectForKey:kUIDetailTextLabelKey] retain];
+        _imageView = [[coder decodeObjectForKey:kUIImageViewKey] retain];
+        [self _configureContentViewAndLayoutManager];
+    }
+    return self;
+}
 
 #pragma mark Reusing Cells
 
