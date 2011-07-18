@@ -185,7 +185,7 @@ static BOOL _animationsEnabled = YES;
             self.tag = [coder decodeIntegerForKey:kUITagKey];
         }
         if ([coder containsValueForKey:kUIUserInteractionDisabledKey]) {
-            self.userInteractionEnabled = [coder decodeBoolForKey:kUIUserInteractionDisabledKey];
+            self.userInteractionEnabled = ![coder decodeBoolForKey:kUIUserInteractionDisabledKey];
         }
         for (UIView* subview in [coder decodeObjectForKey:kUISubviewsKey]) {
             [self addSubview:subview];
