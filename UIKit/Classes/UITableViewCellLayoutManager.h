@@ -1,5 +1,3 @@
-//#import <Foundation/Foundation.h>
-//#import "UITableView.h"
 #import <UIKit/UIKit.h>
 
 @interface UITableViewCellLayoutManager : NSObject 
@@ -13,13 +11,5 @@
 - (CGRect) imageViewRectForCell:(UITableViewCell*)cell;
 - (CGRect) textLabelRectForCell:(UITableViewCell*)cell;
 - (CGRect) detailTextLabelRectForCell:(UITableViewCell*)cell;
-
-@end
-
-@interface UITableViewCellLayoutManagerDefault : UITableViewCellLayoutManager
-    
-@end
-
-@interface UITableViewCellLayoutManagerSubtitle : UITableViewCellLayoutManager
 
 @end

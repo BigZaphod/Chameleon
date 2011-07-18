@@ -1,21 +1,36 @@
 #import "UITableViewCellLayoutManager.h"
-//#import "UITableViewCell.h"
-//#import "UIView.h"
-//#import "UIImage.h"
-//#import "UIImageView.h"
-//#import "UILabel.h"
+
+
+@interface UITableViewCellLayoutManagerDefault : UITableViewCellLayoutManager
+@end
+
+@interface UITableViewCellLayoutManagerSubtitle : UITableViewCellLayoutManager
+@end
+
 
 @implementation UITableViewCellLayoutManager
 
+static UITableViewCellLayoutManager* kDefault;
+static UITableViewCellLayoutManager* kSubtitle;
 
++ (void) initialize
+{
+    if (self == [UITableViewCellLayoutManager class]) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            kDefault = [[UITableViewCellLayoutManagerDefault alloc] init];
+            kSubtitle = [[UITableViewCellLayoutManagerSubtitle alloc] init];
+        });
+    }
+}
 
 + (id) layoutManagerForTableViewCellStyle:(UITableViewCellStyle)style
 {
     switch (style) {
         case UITableViewCellStyleDefault:
-            return [[UITableViewCellLayoutManagerDefault alloc] init];
+            return kDefault;
         case UITableViewCellStyleSubtitle:
-            return [[UITableViewCellLayoutManagerSubtitle alloc] init];
+            return kSubtitle;
         case UITableViewCellStyleValue1:
         case UITableViewCellStyleValue2:
             NSLog(@"WARNING: There is currently no UITableViewCellLayoutManager for this UITableViewCellStyle");
