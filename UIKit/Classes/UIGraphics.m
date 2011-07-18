@@ -32,40 +32,36 @@
 #import "UIScreen.h"
 #import <AppKit/NSGraphicsContext.h>
 
-typedef struct UISavedGraphicsContext_ {
-	NSGraphicsContext *context;
-	struct UISavedGraphicsContext_ *previous;
-} UISavedGraphicsContext;
 
-static UISavedGraphicsContext *contextStack = NULL;
+static NSString* const kUIGraphicsContextStackKey = @"kUIGraphicsContextStackKey";
+
 
 void UIGraphicsPushContext(CGContextRef ctx)
 {
-	NSGraphicsContext *currentContext = [NSGraphicsContext currentContext];
-	if(currentContext != nil) {
-		UISavedGraphicsContext *savedContext = (UISavedGraphicsContext *) malloc(sizeof(UISavedGraphicsContext));
-		savedContext->context = CFRetain(currentContext);
-		savedContext->previous = contextStack;
-		contextStack = savedContext;
-	}
-    
-    [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:(void *)ctx flipped:YES]];
+    NSMutableDictionary* threadDictionary = [[NSThread currentThread] threadDictionary];
+    NSMutableArray* stack = [threadDictionary objectForKey:kUIGraphicsContextStackKey];
+    if (!stack) {
+        stack = [[NSMutableArray alloc] initWithCapacity:10];
+        [threadDictionary setObject:stack forKey:kUIGraphicsContextStackKey];
+        [stack release];
+    }
+    [stack addObject:(id)ctx];
 }
 
 void UIGraphicsPopContext()
 {
-    UISavedGraphicsContext *popContext = contextStack;
-    if (popContext) {
-        contextStack = popContext->previous;
-        [NSGraphicsContext setCurrentContext:popContext->context];
-        CFRelease(popContext->context);
-		free(popContext), popContext = NULL;
-	}
+    NSMutableDictionary* threadDictionary = [[NSThread currentThread] threadDictionary];
+    NSMutableArray* stack = [threadDictionary objectForKey:kUIGraphicsContextStackKey];
+    assert(stack.count); // Someone didn't call *push* first.
+    [stack removeLastObject];
 }
 
 CGContextRef UIGraphicsGetCurrentContext()
 {
-    return [[NSGraphicsContext currentContext] graphicsPort];
+    NSMutableDictionary* threadDictionary = [[NSThread currentThread] threadDictionary];
+    NSMutableArray* stack = [threadDictionary objectForKey:kUIGraphicsContextStackKey];
+    assert(stack.count); // Someone didn't call *push* first.
+    return (CGContextRef)[stack lastObject];
 }
 
 void UIGraphicsBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloat scale)
