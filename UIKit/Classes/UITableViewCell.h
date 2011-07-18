@@ -27,7 +27,6 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <Quartz/Quartz.h>
 #import "UIView.h"
 
 typedef enum {
@@ -78,7 +77,7 @@ typedef NSUInteger UITableViewCellStateMask;
 
 @class UITableViewCellSeparator, UILabel, UIImageView;
 
-@interface UITableViewCell : UIView 
+@interface UITableViewCell : UIView <NSCoding>
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated;

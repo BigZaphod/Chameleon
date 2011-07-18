@@ -292,6 +292,8 @@
 		F922DB5C13D32D6C00469869 /* UIClassSwapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F922DB5A13D32D6B00469869 /* UIClassSwapper.m */; };
 		F922DB6113D3310000469869 /* UITextSelectionView.h in Headers */ = {isa = PBXBuildFile; fileRef = F922DB5F13D3310000469869 /* UITextSelectionView.h */; };
 		F922DB6213D3310000469869 /* UITextSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = F922DB6013D3310000469869 /* UITextSelectionView.m */; };
+		F922DB6A13D3506300469869 /* UITableViewCellContentView.h in Headers */ = {isa = PBXBuildFile; fileRef = F922DB6813D3506300469869 /* UITableViewCellContentView.h */; };
+		F922DB6B13D3506300469869 /* UITableViewCellContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = F922DB6913D3506300469869 /* UITableViewCellContentView.m */; };
 		F94CB9A413C7E5C4001DF656 /* <UITableViewCell> accessoryDisclosureIndicatorHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = F94CB9A313C7E5C4001DF656 /* <UITableViewCell> accessoryDisclosureIndicatorHighlighted.png */; };
 		F94CB9D613C8C0A9001DF656 /* UIBarButtonItem+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = F94CB9D513C8C0A9001DF656 /* UIBarButtonItem+UIPrivate.h */; };
 		F94CB9D913C8C242001DF656 /* UIButton+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = F94CB9D813C8C242001DF656 /* UIButton+UIPrivate.h */; };
@@ -625,6 +627,8 @@
 		F922DB5A13D32D6B00469869 /* UIClassSwapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIClassSwapper.m; sourceTree = "<group>"; };
 		F922DB5F13D3310000469869 /* UITextSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITextSelectionView.h; sourceTree = "<group>"; };
 		F922DB6013D3310000469869 /* UITextSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITextSelectionView.m; sourceTree = "<group>"; };
+		F922DB6813D3506300469869 /* UITableViewCellContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellContentView.h; sourceTree = "<group>"; };
+		F922DB6913D3506300469869 /* UITableViewCellContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellContentView.m; sourceTree = "<group>"; };
 		F94CB9A313C7E5C4001DF656 /* <UITableViewCell> accessoryDisclosureIndicatorHighlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITableViewCell> accessoryDisclosureIndicatorHighlighted.png"; path = "Resources/<UITableViewCell> accessoryDisclosureIndicatorHighlighted.png"; sourceTree = "<group>"; };
 		F94CB9D513C8C0A9001DF656 /* UIBarButtonItem+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+UIPrivate.h"; sourceTree = "<group>"; };
 		F94CB9D813C8C242001DF656 /* UIButton+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+UIPrivate.h"; sourceTree = "<group>"; };
@@ -976,6 +980,8 @@
 				882B8EF5136636C8002E8F21 /* UISearchField.m */,
 				F9647EE213B91BDC0040B2D6 /* UITableViewCellBackgroundView.h */,
 				F9647EE313B91BDC0040B2D6 /* UITableViewCellBackgroundView.m */,
+				F922DB6813D3506300469869 /* UITableViewCellContentView.h */,
+				F922DB6913D3506300469869 /* UITableViewCellContentView.m */,
 				F9177F9413BA317200619E3D /* UITableViewCellLayoutManager.h */,
 				F9177F9513BA317200619E3D /* UITableViewCellLayoutManager.m */,
 				F9647EE713B91D120040B2D6 /* UITableViewCellSelectedBackgroundView.h */,
@@ -1254,6 +1260,7 @@
 				F99E840113D0675600107358 /* UINibInflationHelper.h in Headers */,
 				F922DB5B13D32D6C00469869 /* UIClassSwapper.h in Headers */,
 				F922DB6113D3310000469869 /* UITextSelectionView.h in Headers */,
+				F922DB6A13D3506300469869 /* UITableViewCellContentView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1489,6 +1496,7 @@
 				F99E840213D0675600107358 /* UINibInflationHelper.m in Sources */,
 				F922DB5C13D32D6C00469869 /* UIClassSwapper.m in Sources */,
 				F922DB6213D3310000469869 /* UITextSelectionView.m in Sources */,
+				F922DB6B13D3506300469869 /* UITableViewCellContentView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

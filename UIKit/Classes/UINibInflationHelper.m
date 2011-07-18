@@ -35,11 +35,11 @@ static NSString* const kIBFirstResponderKey = @"IBFirstResponder";
     if ([object isKindOfClass:[UIProxyObject class]]) {
         NSString* proxiedObjectIdentifier = [object proxiedObjectIdentifier];
         if ([proxiedObjectIdentifier isEqualToString:kIBFilesOwnerKey]) {
-            return _owner;
+            return [_owner retain]; 
         } else if ([proxiedObjectIdentifier isEqualToString:kIBFirstResponderKey]) {
-            return [NSNull null];
+            return [[NSNull null] retain];
         } else {
-            return [_externalObjects objectForKey:proxiedObjectIdentifier];
+            return [[_externalObjects objectForKey:proxiedObjectIdentifier] retain];
         }
     }
     return nil;

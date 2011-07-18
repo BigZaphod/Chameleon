@@ -32,7 +32,7 @@
 
 @class UIFont, UIColor;
 
-@interface UILabel : UIView 
+@interface UILabel : UIView <NSCoding>
 
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, retain) UIFont *font;
