@@ -49,18 +49,18 @@
     const CGSize size = self.bounds.size;
     
     [[UIColor colorWithRed:166/255.f green:177/255.f blue:187/255.f alpha:1] setFill];
-    UIRectFill(CGRectMake(0,0,size.width,1));
+    UIRectFill(CGRectMake(0.f, 0.f, size.width, 1.f));
     
     UIColor *startColor = [UIColor colorWithRed:145/255.f green:158/255.f blue:171/255.f alpha:1];
     UIColor *endColor = [UIColor colorWithRed:185/255.f green:193/255.f blue:201/255.f alpha:1];
-    
-    NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:[startColor NSColor] endingColor:[endColor NSColor]];
-    [gradient drawFromPoint:NSMakePoint(0,1) toPoint:NSMakePoint(0,size.height-1) options:0];
-    [gradient release];
-    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGFloat locations[2] = {0.f, 1.f};
+    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)[NSArray arrayWithObjects:(id)startColor.CGColor, (id)endColor.CGColor, nil], locations);
+    CGColorSpaceRelease(colorSpace);
+    CGContextDrawLinearGradient(UIGraphicsGetCurrentContext(), gradient, CGPointMake(0.f, 1.f), CGPointMake(0.f, size.height - 1.f), 0);
+    CGGradientRelease(gradient);
     [[UIColor colorWithRed:153/255.f green:158/255.f blue:165/255.f alpha:1] setFill];
-    UIRectFill(CGRectMake(0,size.height-1,size.width,1));
-    
+    UIRectFill(CGRectMake(0.f, size.height - 1.f, size.width, 1.f));
     [super drawRect:rect];
 }
 
