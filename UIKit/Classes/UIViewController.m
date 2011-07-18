@@ -50,6 +50,7 @@
         BOOL editing : 1;
         BOOL hidesBottomBarWhenPushed : 1;
         BOOL isInAnimatedVCTransition : 1;
+        BOOL viewLoadedFromControllerNib : 1;
     } _flags;
 }
 @synthesize navigationItem = _navigationItem;
@@ -140,7 +141,8 @@
 
 - (UIView *)view
 {
-    if (![self isViewLoaded]) {
+    if (!_flags.viewLoadedFromControllerNib) {
+        _flags.viewLoadedFromControllerNib = YES;
         [self loadView];
         [self viewDidLoad];
     }
@@ -161,8 +163,7 @@
 {
     if (self.nibName) {
         [[UINib nibWithNibName:self.nibName bundle:self.nibBundle] instantiateWithOwner:self options:nil];
-    }
-    if (!self.view) {
+    } else {
         self.view = [[[UIView alloc] initWithFrame:CGRectMake(0,0,320,480)] autorelease];
     }
 }
