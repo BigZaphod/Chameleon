@@ -40,7 +40,7 @@ typedef enum {
     UIEventSubtypeMotionShake = 1,
 } UIEventSubtype;
 
-@class UITouch, UIWindow, UIView;
+@class UITouch, UIWindow, UIView, UIGestureRecognizer;
 
 @interface UIEvent : NSObject {
 @private
@@ -55,6 +55,7 @@ typedef enum {
 - (NSSet *)allTouches;
 - (NSSet *)touchesForView:(UIView *)view;
 - (NSSet *)touchesForWindow:(UIWindow *)window;
+- (NSSet *)touchesForGestureRecognizer:(UIGestureRecognizer *)gesture;
 
 @property (nonatomic, readonly) UIEventType type;
 @property (nonatomic, readonly) UIEventSubtype subtype;

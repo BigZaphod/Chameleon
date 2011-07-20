@@ -98,7 +98,7 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
 @interface UIApplication : UIResponder {
 @private
     UIEvent *_currentEvent;
-    __weak UIWindow *_keyWindow;
+    UIWindow *_keyWindow;
     NSMutableSet *_visibleWindows;
     id<UIApplicationDelegate> _delegate;
     BOOL _idleTimerDisabled;
@@ -125,6 +125,9 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
 - (void)presentLocalNotificationNow:(UILocalNotification *)notification;
 - (void)cancelLocalNotification:(UILocalNotification *)notification;
 - (void)cancelAllLocalNotifications;
+
+- (UIBackgroundTaskIdentifier)beginBackgroundTaskWithExpirationHandler:(void(^)(void))handler;
+- (void)endBackgroundTask:(UIBackgroundTaskIdentifier)identifier;
 
 @property (nonatomic, readonly) UIWindow *keyWindow;
 @property (nonatomic, readonly) NSArray *windows;

@@ -105,9 +105,19 @@ static CGPoint ScrollDeltaFromNSEvent(NSEvent *theNSEvent)
     return CGPointMake(-dx, -dy);
 }
 
-static BOOL TouchIsActive(UITouch *touch)
+static BOOL TouchIsActiveGesture(UITouch *touch)
+{
+    return (touch.phase == _UITouchPhaseGestureBegan || touch.phase == _UITouchPhaseGestureChanged);
+}
+
+static BOOL TouchIsActiveNonGesture(UITouch *touch)
 {
     return (touch.phase == UITouchPhaseBegan || touch.phase == UITouchPhaseMoved || touch.phase == UITouchPhaseStationary);
+}
+
+static BOOL TouchIsActive(UITouch *touch)
+{
+    return TouchIsActiveGesture(touch) || TouchIsActiveNonGesture(touch);
 }
 
 @implementation UIApplication
@@ -241,6 +251,15 @@ static BOOL TouchIsActive(UITouch *touch)
 }
 
 - (void)setScheduledLocalNotifications:(NSArray *)scheduledLocalNotifications
+{
+}
+
+- (UIBackgroundTaskIdentifier)beginBackgroundTaskWithExpirationHandler:(void(^)(void))handler
+{
+    return UIBackgroundTaskInvalid;
+}
+
+- (void)endBackgroundTask:(UIBackgroundTaskIdentifier)identifier
 {
 }
 
@@ -401,74 +420,109 @@ static BOOL TouchIsActive(UITouch *touch)
     return NO;
 }
 
+- (void)_setCurrentEventTouchedViewWithNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
+{
+    UITouch *touch = [[_currentEvent allTouches] anyObject];
+    const CGPoint screenLocation = ScreenLocationFromNSEvent(theScreen, theNSEvent);
+
+    UIView *previousView = [touch.view retain];
+    [touch _setView:[theScreen _hitTest:screenLocation event:_currentEvent]];
+    
+    if (touch.view != previousView) {
+        [previousView mouseExitedView:previousView enteredView:touch.view withEvent:_currentEvent];
+        [touch.view mouseExitedView:previousView enteredView:touch.view withEvent:_currentEvent];
+    }
+    
+    [previousView release];
+}
+
 - (void)_sendMouseNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
 {
     UITouch *touch = [[_currentEvent allTouches] anyObject];
-    BOOL isSupportedEvent = NO;
     
     [_currentEvent _setTimestamp:[theNSEvent timestamp]];
-    
+
     const NSTimeInterval timestamp = [theNSEvent timestamp];
     const CGPoint screenLocation = ScreenLocationFromNSEvent(theScreen, theNSEvent);
-    const CGPoint delta = ScrollDeltaFromNSEvent(theNSEvent);
 
-    if (TouchIsActive(touch)) {
-        isSupportedEvent = YES;
-        
+    if (TouchIsActiveNonGesture(touch)) {
         switch ([theNSEvent type]) {
             case NSLeftMouseUp:
-                [touch _setPhase:UITouchPhaseEnded screenLocation:screenLocation tapCount:touch.tapCount delta:delta timestamp:timestamp];
+                [touch _updatePhase:UITouchPhaseEnded screenLocation:screenLocation timestamp:timestamp];
+                [self sendEvent:_currentEvent];
                 break;
                 
             case NSLeftMouseDragged:
-                [touch _setPhase:UITouchPhaseMoved screenLocation:screenLocation tapCount:touch.tapCount delta:delta timestamp:timestamp];
+                [touch _updatePhase:UITouchPhaseMoved screenLocation:screenLocation timestamp:timestamp];
+                [self sendEvent:_currentEvent];
+                break;
+        }
+    } else if (TouchIsActiveGesture(touch)) {
+        switch ([theNSEvent type]) {
+            case NSEventTypeEndGesture:
+                [touch _updatePhase:_UITouchPhaseGestureEnded screenLocation:screenLocation timestamp:timestamp];
+                [self sendEvent:_currentEvent];
+                break;
+
+                // when captured here, the scroll wheel event had to have been part of a gesture - in other words it is a
+                // touch device scroll event and is therefore mapped to UIPanGestureRecognizer.
+            case NSScrollWheel:
+                [touch _updateGesture:_UITouchGesturePan screenLocation:screenLocation delta:ScrollDeltaFromNSEvent(theNSEvent) rotation:0 magnification:0 timestamp:timestamp];
+                [self sendEvent:_currentEvent];
                 break;
                 
-            default:
-                [touch _setPhase:UITouchPhaseStationary screenLocation:screenLocation tapCount:touch.tapCount delta:delta timestamp:timestamp];
+            case NSEventTypeMagnify:
+                [touch _updateGesture:_UITouchGesturePinch screenLocation:screenLocation delta:CGPointZero rotation:0 magnification:[theNSEvent magnification] timestamp:timestamp];
+                [self sendEvent:_currentEvent];
+                break;
+                
+            case NSEventTypeRotate:
+                [touch _updateGesture:_UITouchGestureRotation screenLocation:screenLocation delta:CGPointZero rotation:[theNSEvent rotation] magnification:0 timestamp:timestamp];
+                [self sendEvent:_currentEvent];
+                break;
+                
+            case NSEventTypeSwipe:
+                [touch _updateGesture:_UITouchGestureSwipe screenLocation:screenLocation delta:ScrollDeltaFromNSEvent(theNSEvent) rotation:0 magnification:0 timestamp:timestamp];
+                [self sendEvent:_currentEvent];
                 break;
         }
     } else if (![self isIgnoringInteractionEvents]) {
         switch ([theNSEvent type]) {
             case NSLeftMouseDown:
-                isSupportedEvent = YES;
-                [touch _setPhase:UITouchPhaseBegan screenLocation:screenLocation tapCount:[theNSEvent clickCount] delta:delta timestamp:timestamp];
+                [touch _setPhase:UITouchPhaseBegan screenLocation:screenLocation tapCount:[theNSEvent clickCount] timestamp:timestamp];
+                [self _setCurrentEventTouchedViewWithNSEvent:theNSEvent fromScreen:theScreen];
+                [self sendEvent:_currentEvent];
                 break;
-                
+
+            case NSEventTypeBeginGesture:
+                [touch _setPhase:_UITouchPhaseGestureBegan screenLocation:screenLocation tapCount:0 timestamp:timestamp];
+                [self _setCurrentEventTouchedViewWithNSEvent:theNSEvent fromScreen:theScreen];
+                [self sendEvent:_currentEvent];
+                break;
+
+                // we should only get a scroll wheel event down here if it was done on a non-touch device or was the result of a momentum
+                // scroll, so they are treated differently so we can tell them apart later in UIPanGestureRecognizer and UIScrollWheelGestureRecognizer
+                // which are both used by UIScrollView.
             case NSScrollWheel:
-                isSupportedEvent = YES;
-                [touch _setPhase:UITouchPhaseScrolled screenLocation:screenLocation tapCount:0 delta:delta timestamp:timestamp];
+                [touch _setDiscreteGesture:_UITouchDiscreteGestureScrollWheel screenLocation:screenLocation tapCount:0 delta:ScrollDeltaFromNSEvent(theNSEvent) timestamp:timestamp];
+                [self _setCurrentEventTouchedViewWithNSEvent:theNSEvent fromScreen:theScreen];
+                [self sendEvent:_currentEvent];
                 break;
-                
+
+            case NSRightMouseDown:
+                [touch _setDiscreteGesture:_UITouchDiscreteGestureRightClick screenLocation:screenLocation tapCount:[theNSEvent clickCount] delta:CGPointZero timestamp:timestamp];
+                [self _setCurrentEventTouchedViewWithNSEvent:theNSEvent fromScreen:theScreen];
+                [self sendEvent:_currentEvent];
+                break;
+
             case NSMouseMoved:
             case NSMouseEntered:
             case NSMouseExited:
-                isSupportedEvent = YES;
-                [touch _setPhase:UITouchPhaseHovered screenLocation:screenLocation tapCount:0 delta:delta timestamp:timestamp];
-                break;
-                
-            case NSRightMouseDown:
-                isSupportedEvent = YES;
-                [touch _setPhase:UITouchPhaseRightClicked screenLocation:screenLocation tapCount:1 delta:delta timestamp:timestamp];
+                [touch _setDiscreteGesture:_UITouchDiscreteGestureMouseMove screenLocation:screenLocation tapCount:0 delta:ScrollDeltaFromNSEvent(theNSEvent) timestamp:timestamp];
+                [self _setCurrentEventTouchedViewWithNSEvent:theNSEvent fromScreen:theScreen];
+                [self sendEvent:_currentEvent];
                 break;
         }
-        
-        // handle mouse enter/exit view changes as well as setting the new view for the touch
-        if (isSupportedEvent) {
-            UIView *previousView = [touch.view retain];
-            [touch _setView:[theScreen _hitTest:screenLocation event:_currentEvent]];
-            
-            if (touch.view != previousView) {
-                [previousView mouseExitedView:previousView enteredView:touch.view withEvent:_currentEvent];
-                [touch.view mouseExitedView:previousView enteredView:touch.view withEvent:_currentEvent];
-            }
-            
-            [previousView release];
-        }
-    }
-    
-    if (isSupportedEvent) {
-        [self sendEvent:_currentEvent];
     }
 }
 

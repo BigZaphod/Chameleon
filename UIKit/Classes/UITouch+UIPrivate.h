@@ -32,9 +32,16 @@
 @class UIView;
 
 @interface UITouch (UIPrivate)
-- (void)_setPhase:(UITouchPhase)phase screenLocation:(CGPoint)screenLocation tapCount:(NSUInteger)tapCount delta:(CGPoint)delta timestamp:(NSTimeInterval)timestamp;
+- (void)_setPhase:(UITouchPhase)phase screenLocation:(CGPoint)screenLocation tapCount:(NSUInteger)tapCount timestamp:(NSTimeInterval)timestamp;
+- (void)_updatePhase:(UITouchPhase)phase screenLocation:(CGPoint)screenLocation timestamp:(NSTimeInterval)timestamp;
+- (void)_updateGesture:(_UITouchGesture)gesture screenLocation:(CGPoint)screenLocation delta:(CGPoint)delta rotation:(CGFloat)rotation magnification:(CGFloat)magnification timestamp:(NSTimeInterval)timestamp;
+- (void)_setDiscreteGesture:(_UITouchGesture)gesture screenLocation:(CGPoint)screenLocation tapCount:(NSUInteger)tapCount delta:(CGPoint)delta timestamp:(NSTimeInterval)timestamp;
+- (void)_setGestureRecognizers:(NSArray *)recognizers;
 - (void)_setView:(UIView *)view;
 - (void)_setTouchPhaseCancelled;
 - (CGPoint)_delta;
+- (CGFloat)_rotation;
+- (CGFloat)_magnification;
 - (UIView *)_previousView;
+- (_UITouchGesture)_gesture;
 @end

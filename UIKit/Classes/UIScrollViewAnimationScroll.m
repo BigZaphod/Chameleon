@@ -27,13 +27,33 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIAction.h"
-#import "UIControl.h"
+#import "UIScrollViewAnimationScroll.h"
 
-@interface UIControlAction : UIAction {
-    UIControlEvents _controlEvents;
+@implementation UIScrollViewAnimationScroll
+
+- (id)initWithScrollView:(UIScrollView *)sv fromContentOffset:(CGPoint)from toContentOffset:(CGPoint)to duration:(NSTimeInterval)d curve:(UIScrollViewAnimationScrollCurve)c
+{
+    if ((self=[super initWithScrollView:sv])) {
+        beginContentOffset = from;
+        endContentOffset = to;
+        duration = d;
+        curve = c;
+    }
+    return self;
 }
+    
+- (BOOL)animate
+{
+    const NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
+    const NSTimeInterval elapsedTime = currentTime - beginTime;
+    const CGFloat animationPosition = MIN(1, (elapsedTime / duration));
 
-@property (nonatomic, assign) UIControlEvents controlEvents;
+    CGFloat (*curveFunction)(CGFloat t, CGFloat start, CGFloat end) = (curve == UIScrollViewAnimationScrollCurveLinear)? &UILinearInterpolation : &UIQuadraticEaseOut;
+    
+    scrollView.contentOffset = CGPointMake(curveFunction(animationPosition, beginContentOffset.x, endContentOffset.x),
+                                           curveFunction(animationPosition, beginContentOffset.y, endContentOffset.y));
+
+    return (animationPosition == 1);
+}
 
 @end

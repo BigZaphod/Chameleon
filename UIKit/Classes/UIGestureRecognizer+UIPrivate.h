@@ -31,4 +31,5 @@
 
 @interface UIGestureRecognizer (UIPrivate)
 - (void)_setView:(UIView *)v;
+- (void)_recognizeTouches:(NSSet *)touches withEvent:(UIEvent *)event;
 @end

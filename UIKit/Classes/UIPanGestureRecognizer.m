@@ -29,6 +29,18 @@
 
 #import "UIPanGestureRecognizer.h"
 #import "UIGestureRecognizerSubclass.h"
+#import "UITouch+UIPrivate.h"
+#import "UIEvent.h"
+
+static UITouch *PanTouch(NSSet *touches)
+{
+    for (UITouch *touch in touches) {
+        if ([touch _gesture] == _UITouchGesturePan) {
+            return touch;
+        }
+    }
+    return nil;
+}
 
 @implementation UIPanGestureRecognizer
 @synthesize maximumNumberOfTouches=_maximumNumberOfTouches, minimumNumberOfTouches=_minimumNumberOfTouches;
@@ -38,22 +50,91 @@
     if ((self=[super initWithTarget:target action:action])) {
         _minimumNumberOfTouches = 1;
         _maximumNumberOfTouches = NSUIntegerMax;
+        _translation = CGPointZero;
+        _velocity = CGPointZero;
     }
     return self;
 }
 
 - (CGPoint)translationInView:(UIView *)view
 {
-    return CGPointZero;
+    return _translation;
 }
 
 - (void)setTranslation:(CGPoint)translation inView:(UIView *)view
 {
+    _velocity = CGPointZero;
+    _translation = translation;
+}
+
+- (BOOL)_translate:(CGPoint)delta withEvent:(UIEvent *)event
+{
+    const NSTimeInterval timeDiff = event.timestamp - _lastMovementTime;
+
+    if (!CGPointEqualToPoint(delta, CGPointZero) && timeDiff > 0) {
+        _translation.x += delta.x;
+        _translation.y += delta.y;
+        _velocity.x = delta.x / timeDiff;
+        _velocity.y = delta.y / timeDiff;
+        _lastMovementTime = event.timestamp;
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+- (void)reset
+{
+    [super reset];
+    _translation = CGPointZero;
+    _velocity = CGPointZero;
 }
 
 - (CGPoint)velocityInView:(UIView *)view
 {
-    return CGPointZero;
+    return _velocity;
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = PanTouch([event touchesForGestureRecognizer:self]);
+
+    if (self.state == UIGestureRecognizerStatePossible && touch) {
+        [self setTranslation:[touch _delta] inView:touch.view];
+        _lastMovementTime = event.timestamp;
+        self.state = UIGestureRecognizerStateBegan;
+    } else if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
+        if (touch) {
+            if ([self _translate:[touch _delta] withEvent:event]) {
+                self.state = UIGestureRecognizerStateChanged;
+            }
+        } else {
+            self.state = UIGestureRecognizerStateCancelled;
+        }
+    } else {
+        self.state = UIGestureRecognizerStateFailed;
+    }
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
+        UITouch *touch = PanTouch([event touchesForGestureRecognizer:self]);
+
+        if (touch) {
+            [self _translate:[touch _delta] withEvent:event];
+            self.state = UIGestureRecognizerStateEnded;
+        } else {
+            self.state = UIGestureRecognizerStateCancelled;
+        }
+    } else {
+        self.state = UIGestureRecognizerStateFailed;
+    }
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    self.state = UIGestureRecognizerStateFailed;
 }
 
 @end

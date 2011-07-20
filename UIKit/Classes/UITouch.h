@@ -35,10 +35,22 @@ typedef enum {
     UITouchPhaseStationary,
     UITouchPhaseEnded,
     UITouchPhaseCancelled,
-    UITouchPhaseHovered,
-    UITouchPhaseScrolled,
-    UITouchPhaseRightClicked
+    _UITouchPhaseGestureBegan,
+    _UITouchPhaseGestureChanged,
+    _UITouchPhaseGestureEnded,
+    _UITouchPhaseDiscreteGesture
 } UITouchPhase;
+
+typedef enum {
+    _UITouchGestureUnknown = 0,
+    _UITouchGesturePan,                 // maps only to touch-enabled scrolling devices like magic trackpad, etc. for older wheels, use _UITouchGestureScrollWheel
+    _UITouchGestureRotation,            // only works for touch-enabled input devices
+    _UITouchGesturePinch,               // only works for touch-enabled input devices
+    _UITouchGestureSwipe,               // only works for touch-enabled input devices (this is actually discrete, but OSX sends gesture begin/end events around it)
+    _UITouchDiscreteGestureRightClick,  // should be pretty obvious
+    _UITouchDiscreteGestureScrollWheel, // this is used by old fashioned wheel mice or when the OS sends its automatic momentum scroll events
+    _UITouchDiscreteGestureMouseMove    // the mouse moved but wasn't in a gesture or the button was not being held down
+} _UITouchGesture;
 
 @class UIView, UIWindow;
 
@@ -47,7 +59,10 @@ typedef enum {
     NSTimeInterval _timestamp;
     NSUInteger _tapCount;
     UITouchPhase _phase;
+    _UITouchGesture _gesture;
     CGPoint _delta;
+    CGFloat _rotation;
+    CGFloat _magnification;
     CGPoint _location;
     CGPoint _previousLocation;
     UIView *_view;
