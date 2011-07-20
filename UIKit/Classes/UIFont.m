@@ -72,7 +72,7 @@ static NSString *UIFontBoldSystemFontName = nil;
     return [self fontWithNSFont:[NSFont fontWithName:fontName size:fontSize]];
 }
 
-NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFStringRef nameAttr)
+static NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFStringRef nameAttr)
 {
     NSMutableSet *names = [NSMutableSet set];
     if (collection) {

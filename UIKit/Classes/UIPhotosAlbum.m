@@ -35,7 +35,7 @@
 
 + (UIPhotosAlbum *)sharedPhotosAlbum
 {
-    UIPhotosAlbum *album = nil;
+    static UIPhotosAlbum *album = nil;
 
     if (!album) {
         album = [[self alloc] init];

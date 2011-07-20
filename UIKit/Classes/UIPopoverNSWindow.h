@@ -32,7 +32,7 @@
 @class UIPopoverController;
 
 @interface UIPopoverNSWindow : NSWindow {
-    __weak UIPopoverController *_popoverController;
+    UIPopoverController *_popoverController;
 }
 
 - (void)setPopoverController:(UIPopoverController *)controller;

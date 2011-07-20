@@ -144,13 +144,13 @@ typedef enum {
 - (void)_removeAnimatedViews:(NSArray *)views
 {
     [views makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [views release];
 }
 
 - (void)_setViewsWithTransition:(_UINavigationBarTransition)transition animated:(BOOL)animated
 {
     {
         NSMutableArray *previousViews = [[NSMutableArray alloc] init];
+
         if (_leftView) [previousViews addObject:_leftView];
         if (_centerView) [previousViews addObject:_centerView];
         if (_rightView) [previousViews addObject:_rightView];
@@ -182,6 +182,8 @@ typedef enum {
         } else {
             [self _removeAnimatedViews:previousViews];
         }
+        
+        [previousViews release];
     }
     
     UINavigationItem *topItem = self.topItem;
