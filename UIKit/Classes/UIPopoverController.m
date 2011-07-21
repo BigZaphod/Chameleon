@@ -125,6 +125,7 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
     UIPopoverView *_popoverView;
     id _popoverWindow;
     id _overlayWindow;
+    UIWindow* _windowToReactivate;
     
     struct {
         BOOL popoverControllerDidDismissPopover : 1;
@@ -191,6 +192,8 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
     assert(arrowDirections != UIPopoverArrowDirectionUnknown);
     assert(!CGRectIsNull(rect));
     assert(!CGRectEqualToRect(rect,CGRectZero));
+
+    [_windowToReactivate release], _windowToReactivate = [view.window retain];
     
     NSWindow *viewNSWindow = [[view.window.screen UIKitView] window];
 
@@ -298,13 +301,17 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 - (void)dismissPopoverAnimated:(BOOL)animated
 {
     if ([self isPopoverVisible]) {
-        id overlayWindow = [_overlayWindow retain];
-        [_overlayWindow release], _overlayWindow = nil;
-        id popoverWindow = [_popoverWindow retain];
-        [_popoverWindow release], _popoverWindow = nil;
-        UIView *popoverView = [_popoverView retain];
-        [_popoverView release], _popoverView = nil;
+        id overlayWindow = _overlayWindow;
+        id popoverWindow = _popoverWindow;
+        UIView* popoverView = _popoverView;
+        UIWindow* windowToReactivate = _windowToReactivate; 
+        
+        _overlayWindow = nil;
+        _popoverWindow = nil;
+        _popoverView = nil;
+        _windowToReactivate = nil;
         _popoverArrowDirection = UIPopoverArrowDirectionUnknown;
+        
         [UIView animateWithDuration:!animated ? 0.0 : 0.2 
             animations:^{
                 popoverView.alpha = 0;
@@ -318,9 +325,13 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
                 [overlayWindow removeChildWindow:popoverWindow];
                 [parentWindow removeChildWindow:overlayWindow];
                 
+                [parentWindow makeKeyWindow];
+                [windowToReactivate makeKeyAndVisible];
+
                 [popoverView release];
                 [popoverWindow release];
                 [overlayWindow release];
+                [windowToReactivate release];
             }
         ];
     }

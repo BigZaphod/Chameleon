@@ -38,9 +38,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 
-@implementation UIKitView {
-    id _didBecomeKeyObserver;
-}
+@implementation UIKitView 
 @synthesize UIScreen=_screen;
 
 - (id<CAAction>)actionForLayer:(CALayer *)layer forKey:(NSString *)event
@@ -69,7 +67,6 @@
 
 - (void)dealloc
 {
-    assert(!_didBecomeKeyObserver);
     [_screen release];
     [_mainWindow release];
     [super dealloc];
@@ -102,19 +99,12 @@
     [_screen _setUIKitView:self.superview? self : nil];
 }
 
-- (void)viewDidMoveToWindow {
-    if (_didBecomeKeyObserver) {
-        [[NSNotificationCenter defaultCenter] removeObserver:_didBecomeKeyObserver], _didBecomeKeyObserver = nil;
-    }
-	
+- (void)viewDidMoveToWindow 
+{
     if(self.window != nil) {
 		[[self layer] insertSublayer:[_screen _layer] atIndex:0];
 		[_screen _layer].frame = [self layer].bounds;
 		[_screen _layer].autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
-
-        _didBecomeKeyObserver = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidBecomeKeyNotification object:self.window queue:nil usingBlock:^(NSNotification* notification) {
-            [_mainWindow makeKeyAndVisible];
-        }];
     }
 }
 
