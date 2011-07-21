@@ -393,7 +393,7 @@ static const CGFloat ToolbarHeight = 28;
                 CGRect newUserViewFrame = {
                     .origin = {
                         .x = oldUserViewFrame.origin.x,
-                        .y = oldUserViewFrame.origin.y + yDelta,
+                        .y = MAX(0, oldUserViewFrame.origin.y + yDelta),
                     },
                     .size = {
                         .width = oldUserViewFrame.size.width,
