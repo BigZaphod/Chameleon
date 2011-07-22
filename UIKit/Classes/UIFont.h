@@ -35,8 +35,10 @@
 + (NSArray *)familyNames;
 + (NSArray *)fontNamesForFamilyName:(NSString *)familyName;
 
+// Some convenience methods to create system fonts
 + (UIFont *)systemFontOfSize:(CGFloat)fontSize;
 + (UIFont *)boldSystemFontOfSize:(CGFloat)fontSize;
++ (UIFont *)italicSystemFontOfSize:(CGFloat)fontSize;
 
 - (UIFont *)fontWithSize:(CGFloat)fontSize;
 
