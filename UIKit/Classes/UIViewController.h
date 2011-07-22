@@ -83,6 +83,8 @@ typedef enum {
 - (void)didMoveToParentViewController:(UIViewController *)parent;
 - (void)transitionFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion;
 
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration;
+
 - (UIView *)rotatingHeaderView;     
 - (UIView *)rotatingFooterView; 
 
