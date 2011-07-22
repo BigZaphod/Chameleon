@@ -281,7 +281,7 @@ static BOOL _animationsEnabled = YES;
     if (_superview) {
         [self retain];
         
-        [[UIApplication sharedApplication] _cancelTouchesInView:self];
+        [[UIApplication sharedApplication] _removeViewFromTouches:self];
         
         UIWindow *oldWindow = self.window;
         

@@ -29,6 +29,7 @@
 
 #import "UITouch+UIPrivate.h"
 #import "UIWindow.h"
+#import "UIGestureRecognizerSubclass.h"
 #import <Cocoa/Cocoa.h>
 
 static NSArray *GestureRecognizersForView(UIView *view)
@@ -121,25 +122,48 @@ static NSArray *GestureRecognizersForView(UIView *view)
     return _gesture;
 }
 
-- (void)_setGestureRecognizers:(NSArray *)recognizers
-{
-    [_gestureRecognizers release];
-    _gestureRecognizers = [recognizers copy];
-}
-
-- (void)_setView:(UIView *)view
+- (void)_setTouchedView:(UIView *)view
 {
     if (_view != view) {
         [_view release];
         _view = [view retain];
     }
-    
+
     if (_window != view.window) {
         [_window release];
         _window = [view.window retain];
     }
 
-    [self _setGestureRecognizers:GestureRecognizersForView(_view)];
+    [_gestureRecognizers release];
+    _gestureRecognizers = [GestureRecognizersForView(_view) copy];
+}
+
+- (void)_removeFromView
+{
+    NSMutableArray *remainingRecognizers = [_gestureRecognizers mutableCopy];
+
+    // if the view is being removed from this touch, we need to remove/cancel any gesture recognizers that belong to the view
+    // being removed. this kinda feels like the wrong place for this, but the touch itself has a list of potential gesture
+    // recognizers attached to it so an active touch only considers the recongizers that were present at the point the touch
+    // first touched the screen. it could easily have recognizers attached to it from superviews of the view being removed so
+    // we can't just cancel them all. the view itself could cancel its own recognizers, but then it needs a way to remove them
+    // from an active touch so in a sense we're right back where we started. so I figured we might as well just take care of it
+    // here and see what happens.
+    for (UIGestureRecognizer *recognizer in _gestureRecognizers) {
+        if (recognizer.view == _view) {
+            if (recognizer.state == UIGestureRecognizerStateBegan || recognizer.state == UIGestureRecognizerStateChanged) {
+                recognizer.state = UIGestureRecognizerStateCancelled;
+            }
+            [remainingRecognizers removeObject:recognizer];
+        }
+    }
+    
+    [_gestureRecognizers release];
+    _gestureRecognizers = [remainingRecognizers copy];
+    [remainingRecognizers release];
+    
+    [_view release];
+    _view = nil;
 }
 
 - (void)_setTouchPhaseCancelled

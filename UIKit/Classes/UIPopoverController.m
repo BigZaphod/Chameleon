@@ -228,7 +228,7 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
     // button and a timer triggered the appearance of this popover. the window would possibly then not receive the mouseUp depending on how
     // all this works out... I first ran into this problem with NSMenus. A NSWindow is a bit different, but I think this makes sense here
     // too so premptively doing it to avoid potential problems.)
-    [[UIApplication sharedApplication] _cancelTouchesInView:nil];
+    [[UIApplication sharedApplication] _cancelTouches];
     
     // now position the popover window according to the passed in parameters.
     CGRect windowRect = [view convertRect:rect toView:nil];

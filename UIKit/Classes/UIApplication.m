@@ -422,11 +422,11 @@ static BOOL TouchIsActive(UITouch *touch)
 
 - (void)_setCurrentEventTouchedViewWithNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
 {
-    UITouch *touch = [[_currentEvent allTouches] anyObject];
     const CGPoint screenLocation = ScreenLocationFromNSEvent(theScreen, theNSEvent);
-
+    UITouch *touch = [[_currentEvent allTouches] anyObject];
     UIView *previousView = [touch.view retain];
-    [touch _setView:[theScreen _hitTest:screenLocation event:_currentEvent]];
+
+    [touch _setTouchedView:[theScreen _hitTest:screenLocation event:_currentEvent]];
     
     if (touch.view != previousView) {
         [previousView mouseExitedView:previousView enteredView:touch.view withEvent:_currentEvent];
@@ -526,30 +526,43 @@ static BOOL TouchIsActive(UITouch *touch)
     }
 }
 
-// this is used to cause an interruption/cancel of the current touch.
-// (1) if aView is nil, it sends a mouse exit event to the last touched view, and sends a touch cancelled event if there was an "active" touch.
-// (2) if aView is NOT nil, no event is sent, but if the last touched view is a decendant of aView, the touch is marked cancelled.
-// Use (1) is for when a modal UI element appears (such as a native popup menu), or when a UIPopoverController appears. It seems to make the most sense
-// to call _cancelTouchesInView: *after* the modal menu has been dismissed, as this causes UI elements to remain in their "pushed" state while the menu
+// this is used to cause an interruption/cancel of the current touches.
+// Use this when a modal UI element appears (such as a native popup menu), or when a UIPopoverController appears. It seems to make the most sense
+// to call _cancelTouches *after* the modal menu has been dismissed, as this causes UI elements to remain in their "pushed" state while the menu
 // is being displayed. If that behavior isn't desired, the simple solution is to present the menu from touchesEnded: instead of touchesBegan:.
-// Use (2) is specifically for when a UIView is removed from its superview. This case aborts touch handling if the view being removed is a part of
-// the currently active touch. The real UIKit also aborts an active touch in this situation and no cancel events are ever sent as far as I can tell - it
-// just seems to abort the whole thing immediately. If the removed view has nothing to do with the current touch event, nothing happens.
-- (void)_cancelTouchesInView:(UIView *)aView
+- (void)_cancelTouches
 {
     UITouch *touch = [[_currentEvent allTouches] anyObject];
-    UIView *touchedView = touch.view;
-    const BOOL shouldCancelTouch = (!aView || [touchedView isDescendantOfView:aView]);
-    
-    if (shouldCancelTouch) {
-        const BOOL wasActiveTouch = TouchIsActive(touch);
+    const BOOL wasActiveTouch = TouchIsActive(touch);
         
-        [touch _setTouchPhaseCancelled];
+    [touch _setTouchPhaseCancelled];
         
-        if (!aView && wasActiveTouch) {
-            [self sendEvent:_currentEvent];
-        }
+    if (wasActiveTouch) {
+        [self sendEvent:_currentEvent];
     }
+}
+
+// this sets the touches view property to nil (while retaining the window property setting)
+// this is used when a view is removed from its superview while it may have been the origin
+// of an active touch. after a view is removed, we don't want to deliver any more touch events
+// to it, but we still may need to route the touch itself for the sake of gesture recognizers
+// so we need to retain the touch's original window setting so that events can still be routed.
+//
+// note that the touch itself is not being cancelled here so its phase remains unchanged.
+// I'm not entirely certain if that's the correct thing to do, but I think it makes sense. The
+// touch itself has not gone anywhere - just the view that it first touched. That breaks the
+// delivery of the touch events themselves as far as the usual responder chain delivery is
+// concerned, but that appears to be what happens in the real UIKit when you remove a view out
+// from under an active touch.
+//
+// this whole thing is necessary because otherwise a gesture which may have been initiated over
+// some specific view would end up getting cancelled/failing if the view under it happens to be
+// removed. this is more common than you might expect. a UITableView that is not reusing rows
+// does exactly this as it scrolls - which coincidentally is how I found this bug in the first
+// place. :P
+- (void)_removeViewFromTouches:(UIView *)aView
+{
+    [[[_currentEvent allTouches] anyObject] _removeFromView];
 }
 
 - (void)_applicationWillTerminate:(NSNotification *)note

@@ -76,6 +76,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
         self.allowsSelection = YES;
         self.allowsSelectionDuringEditing = NO;
         self.sectionHeaderHeight = self.sectionFooterHeight = 22;
+        self.alwaysBounceVertical = YES;
 
         if (_style == UITableViewStylePlain) {
             self.backgroundColor = [UIColor whiteColor];
@@ -811,7 +812,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
         [menu release];
         [theItem release];
         
-        [[UIApplication sharedApplication] _cancelTouchesInView:nil];
+        [[UIApplication sharedApplication] _cancelTouches];
 
         if (didSelectItem) {
             [_dataSource tableView:self commitEditingStyle:UITableViewCellEditingStyleDelete forRowAtIndexPath:indexPath];

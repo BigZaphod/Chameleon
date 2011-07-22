@@ -36,8 +36,8 @@
 - (void)_updatePhase:(UITouchPhase)phase screenLocation:(CGPoint)screenLocation timestamp:(NSTimeInterval)timestamp;
 - (void)_updateGesture:(_UITouchGesture)gesture screenLocation:(CGPoint)screenLocation delta:(CGPoint)delta rotation:(CGFloat)rotation magnification:(CGFloat)magnification timestamp:(NSTimeInterval)timestamp;
 - (void)_setDiscreteGesture:(_UITouchGesture)gesture screenLocation:(CGPoint)screenLocation tapCount:(NSUInteger)tapCount delta:(CGPoint)delta timestamp:(NSTimeInterval)timestamp;
-- (void)_setGestureRecognizers:(NSArray *)recognizers;
-- (void)_setView:(UIView *)view;
+- (void)_setTouchedView:(UIView *)view; // sets up the window and gesture recognizers as well
+- (void)_removeFromView;                // sets the initial view to nil, but leaves window and gesture recognizers alone - used when a view is removed while touch is active
 - (void)_setTouchPhaseCancelled;
 - (CGPoint)_delta;
 - (CGFloat)_rotation;
