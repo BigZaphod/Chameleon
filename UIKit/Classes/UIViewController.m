@@ -455,4 +455,13 @@
     return [NSString stringWithFormat:@"<%@: %p; title = %@; view = %@>", [self className], self, self.title, self.view];
 }
 
+- (UIView *)rotatingHeaderView {
+    return nil;
+}
+
+- (UIView *)rotatingFooterView {
+    return nil;
+}
+
+
 @end
