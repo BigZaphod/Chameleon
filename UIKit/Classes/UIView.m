@@ -67,32 +67,43 @@ static NSString* const kUISubviewsKey = @"UISubviews";
 static NSMutableArray *_animationGroups;
 static BOOL _animationsEnabled = YES;
 
-
 @implementation UIView {
     NSMutableSet *_subviews;
-    BOOL _implementsDrawRect;
-    BOOL _multipleTouchEnabled;
-    BOOL _exclusiveTouch;
     UIViewController *_viewController;
     NSMutableSet *_gestureRecognizers;
+    IMP ourDrawRect_;
+    
+    struct {
+        BOOL overridesDisplayLayer : 1;
+        BOOL clearsContextBeforeDrawing : 1;
+        BOOL multipleTouchEnabled : 1;
+        BOOL exclusiveTouch : 1;
+        BOOL userInteractionEnabled : 1;
+        BOOL autoresizesSubviews : 1;
+    } _flags;
 }
 @synthesize layer = _layer;
 @synthesize superview = _superview;
-@synthesize clearsContextBeforeDrawing = _clearsContextBeforeDrawing;
-@synthesize autoresizesSubviews = _autoresizesSubviews;
 @synthesize tag = _tag;
-@synthesize userInteractionEnabled = _userInteractionEnabled;
 @synthesize contentMode = _contentMode;
 @synthesize backgroundColor = _backgroundColor;
-@synthesize multipleTouchEnabled = _multipleTouchEnabled;
 @synthesize exclusiveTouch = _exclusiveTouch;
 @synthesize autoresizingMask = _autoresizingMask;
 @synthesize toolTip = _toolTip;
+
+static SEL drawRectSelector;
+static SEL displayLayerSelector;
+static IMP defaultImplementationOfDrawRect;
+static IMP defaultImplementationOfDisplayLayer;
 
 + (void)initialize
 {
     if (self == [UIView class]) {
         _animationGroups = [[NSMutableArray alloc] init];
+        drawRectSelector = @selector(drawRect:);
+        displayLayerSelector = @selector(displayLayer:);
+        defaultImplementationOfDrawRect = [UIView instanceMethodForSelector:drawRectSelector];
+        defaultImplementationOfDisplayLayer = [UIView instanceMethodForSelector:displayLayerSelector];
     }
 }
 
@@ -101,17 +112,19 @@ static BOOL _animationsEnabled = YES;
     return [CALayer class];
 }
 
-+ (BOOL)_instanceImplementsDrawRect
-{
-    return [UIView instanceMethodForSelector:@selector(drawRect:)] != [self instanceMethodForSelector:@selector(drawRect:)];
-}
-
 - (void) _commonInitForUIView
 {
-    _implementsDrawRect = [[self class] _instanceImplementsDrawRect];
-    _clearsContextBeforeDrawing = YES;
-    _autoresizesSubviews = YES;
-    _userInteractionEnabled = YES;
+    _flags.overridesDisplayLayer = defaultImplementationOfDisplayLayer != [[self class] instanceMethodForSelector:displayLayerSelector];
+
+    IMP ourDrawRect = [[self class] instanceMethodForSelector:drawRectSelector];
+    if (ourDrawRect != defaultImplementationOfDrawRect) {
+        ourDrawRect_ = ourDrawRect;
+    }
+    
+    _flags.clearsContextBeforeDrawing = YES;
+    _flags.autoresizesSubviews = YES;
+    _flags.userInteractionEnabled = YES;
+    
     _subviews = [[NSMutableSet alloc] init];
     _gestureRecognizers = [[NSMutableSet alloc] init];
     
@@ -511,6 +524,10 @@ static BOOL _animationsEnabled = YES;
 
 - (void)displayLayer:(CALayer *)theLayer
 {
+}
+
+- (BOOL)respondsToSelector:(SEL)aSelector
+{
     // Okay, this is some crazy stuff right here. Basically, the real UIKit avoids creating any contents for its layer if there's no drawRect:
     // specified in the UIView's subview. This nicely prevents a ton of useless memory usage and likley improves performance a lot on iPhone.
     // It took great pains to discover this trick and I think I'm doing this right. By having this method empty here, it means that it overrides
@@ -536,13 +553,10 @@ static BOOL _animationsEnabled = YES;
     // a bunch of unnecessary memory in those cases - but you can still use background colors because CALayer manages that effeciently.
     
     // Clever, huh?
-}
-
-- (BOOL)respondsToSelector:(SEL)aSelector
-{
-    // For notes about why this is done, see displayLayer: above.
-    if (aSelector == @selector(displayLayer:)) {
-        return !_implementsDrawRect;
+    if (aSelector == @selector(drawLayer:inContext:)) {
+        return nil != ourDrawRect_;
+    } else if (aSelector == @selector(displayLayer:)) { 
+        return _flags.overridesDisplayLayer || nil == ourDrawRect_;
     } else {
         return [super respondsToSelector:aSelector];
     }
@@ -552,19 +566,18 @@ static BOOL _animationsEnabled = YES;
 {
     // We only get here if the UIView subclass implements drawRect:. To do this without a drawRect: is a huge waste of memory.
     // See the discussion in drawLayer: above.
+    assert(ourDrawRect_);
 
     const CGRect bounds = CGContextGetClipBoundingBox(ctx);
 
     UIGraphicsPushContext(ctx);
     CGContextSaveGState(ctx);
     
-    if (_clearsContextBeforeDrawing) {
-        CGContextClearRect(ctx, bounds);
-    }
-
     if (_backgroundColor) {
         [_backgroundColor setFill];
         CGContextFillRect(ctx,bounds);
+    } else if (_flags.clearsContextBeforeDrawing) {
+        CGContextClearRect(ctx, bounds);
     }
 
     /*
@@ -593,7 +606,7 @@ static BOOL _animationsEnabled = YES;
     CGContextSetShouldSubpixelQuantizeFonts(ctx, YES);
     
     [[UIColor blackColor] set];
-    [self drawRect:bounds];
+    ourDrawRect_(self, drawRectSelector, bounds);
 
     CGContextRestoreGState(ctx);
     UIGraphicsPopContext();
@@ -690,13 +703,53 @@ static BOOL _animationsEnabled = YES;
         [self setNeedsLayout];
 
         if (!CGSizeEqualToSize(oldBounds.size, newBounds.size)) {
-            if (_autoresizesSubviews) {
+            if (_flags.autoresizesSubviews) {
                 for (UIView *subview in _subviews) {
                     [subview _superviewSizeDidChangeFrom:oldBounds.size to:newBounds.size];
                 }
             }
         }
     }
+}
+
+- (BOOL) clearsContextBeforeDrawing
+{
+    return _flags.clearsContextBeforeDrawing;
+}
+
+- (void) setClearsContextBeforeDrawing:(BOOL)clearsContextBeforeDrawing
+{
+    _flags.clearsContextBeforeDrawing = clearsContextBeforeDrawing;
+}
+
+- (BOOL) autoresizesSubviews
+{
+    return _flags.autoresizesSubviews;
+}
+
+- (void) setAutoresizesSubviews:(BOOL)autoresizesSubviews
+{
+    _flags.autoresizesSubviews = autoresizesSubviews;
+}
+
+- (BOOL) isUserInteractionEnabled
+{
+    return _flags.userInteractionEnabled;
+}
+
+- (void) setUserInteractionEnabled:(BOOL)userInteractionEnabled
+{
+    _flags.userInteractionEnabled = userInteractionEnabled;
+}
+
+- (BOOL) isMultipleTouchEnabled
+{
+    return _flags.multipleTouchEnabled;
+}
+
+- (void) setMultipleTouchEnabled:(BOOL)multipleTouchEnabled
+{
+    _flags.multipleTouchEnabled = multipleTouchEnabled;
 }
 
 + (NSSet *)keyPathsForValuesAffectingFrame
@@ -794,7 +847,7 @@ static BOOL _animationsEnabled = YES;
             self.opaque = (CGColorGetAlpha(color) == 1);
         }
         
-        if (!_implementsDrawRect) {
+        if (!ourDrawRect_) {
             _layer.backgroundColor = color;
         }
     }
