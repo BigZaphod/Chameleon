@@ -594,14 +594,17 @@ const float UIScrollViewDecelerationRateFast = 0.99;
                     [_scrollAnimation momentumScrollBy:delta];
                 }
             } else {
-                [self _beginDragging];
-
                 CGPoint offset = self.contentOffset;
                 offset.x += delta.x;
                 offset.y += delta.y;
-                self.contentOffset = [self _confinedContentOffset:offset];
+                offset = [self _confinedContentOffset:offset];
                 
-                [self _endDraggingWithDecelerationVelocity:CGPointZero];
+                if (!CGPointEqualToPoint(offset, _contentOffset)) {
+                    [self _beginDragging];
+                    self.contentOffset = offset;
+                    [self _endDraggingWithDecelerationVelocity:CGPointZero];
+                }
+                    
                 [self _quickFlashScrollIndicators];
             }
         }
