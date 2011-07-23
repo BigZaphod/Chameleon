@@ -27,13 +27,20 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIAction.h"
-#import "UIControl.h"
+#import "UIScrollViewAnimation.h"
 
-@interface UIControlAction : UIAction {
-    UIControlEvents _controlEvents;
+typedef enum {
+    UIScrollViewAnimationScrollCurveLinear,
+    UIScrollViewAnimationScrollCurveQuadraticEaseOut
+} UIScrollViewAnimationScrollCurve;
+
+@interface UIScrollViewAnimationScroll : UIScrollViewAnimation {
+    CGPoint beginContentOffset;
+    CGPoint endContentOffset;
+    NSTimeInterval duration;
+    UIScrollViewAnimationScrollCurve curve;
 }
 
-@property (nonatomic, assign) UIControlEvents controlEvents;
+- (id)initWithScrollView:(UIScrollView *)sv fromContentOffset:(CGPoint)from toContentOffset:(CGPoint)to duration:(NSTimeInterval)d curve:(UIScrollViewAnimationScrollCurve)c;
 
 @end

@@ -36,11 +36,18 @@
 #import "UIImageView.h"
 #import "UIImage+UIPrivate.h"
 #import "UIResponderAppKitIntegration.h"
-#import "UIScrollViewScrollAnimation.h"
+#import "UIScrollViewAnimationScroll.h"
+#import "UIScrollViewAnimationDeceleration.h"
+#import "UIPanGestureRecognizer.h"
+#import "UIScrollWheelGestureRecognizer.h"
 #import <QuartzCore/QuartzCore.h>
 
-const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
-const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
+static const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
+static const NSTimeInterval UIScrollViewQuickAnimationDuration = 0.22;
+static const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
+
+const float UIScrollViewDecelerationRateNormal = 0.998;
+const float UIScrollViewDecelerationRateFast = 0.99;
 
 @interface UIScrollView () <_UIScrollerDelegate>
 @end
@@ -48,11 +55,16 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 @implementation UIScrollView {
     UIScroller *_verticalScroller;
     UIScroller *_horizontalScroller;
+    UIPanGestureRecognizer *_panGestureRecognizer;
+    UIScrollWheelGestureRecognizer *_scrollWheelGestureRecognizer;
     NSTimer *_dragDelegateTimer;
     BOOL _bouncesZoom;
-    NSMutableArray *_scrollAnimations;
+    id _scrollAnimation;
     NSTimer *_scrollTimer;
     NSTimeInterval _scrollAnimationTime;
+    
+    BOOL _dragging;
+    BOOL _decelerating;
     
     struct {
         BOOL scrollViewDidScroll : 1;
@@ -62,6 +74,9 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
         BOOL scrollViewWillBeginZooming : 1;
         BOOL scrollViewDidEndZooming : 1;
         BOOL scrollViewDidZoom : 1;
+        BOOL scrollViewDidEndScrollingAnimation : 1;
+        BOOL scrollViewWillBeginDecelerating : 1;
+        BOOL scrollViewDidEndDecelerating : 1;
     } _delegateCan;
     
     // should be flag struct
@@ -88,12 +103,17 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 @synthesize alwaysBounceVertical = _alwaysBounceVertical;
 @synthesize alwaysBounceHorizontal = _alwaysBounceHorizontal;
 @synthesize bounces = _bounces;
+@synthesize decelerationRate = _decelerationRate;
+@synthesize scrollWheelGestureRecognizer = _scrollWheelGestureRecognizer;
+@synthesize panGestureRecognizer = _panGestureRecognizer;
 
 - (void)dealloc
 {
-    [_scrollAnimations release];
+    [_scrollAnimation release];
     [_verticalScroller release];
     [_horizontalScroller release];
+    [_panGestureRecognizer release];
+    [_scrollWheelGestureRecognizer release];
     [super dealloc];
 }
 
@@ -118,19 +138,13 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
     _alwaysBounceVertical = NO;
     _alwaysBounceHorizontal = NO;
     _bounces = YES;
+    _decelerationRate = UIScrollViewDecelerationRateNormal;
     
-    _scrollAnimationTime = 0;
-    _scrollAnimations = [[NSMutableArray alloc] init];
+    _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(_gestureDidChange:)];
+    [self addGestureRecognizer:_panGestureRecognizer];
     
-    _verticalScroller = [[UIScroller alloc] init];
-    _verticalScroller.delegate = self;
-    [self addSubview:_verticalScroller];
-    
-    _horizontalScroller = [[UIScroller alloc] init];
-    _horizontalScroller.delegate = self;
-    [self addSubview:_horizontalScroller];
-    
-    self.clipsToBounds = YES;
+    _scrollWheelGestureRecognizer = [[UIScrollWheelGestureRecognizer alloc] initWithTarget:self action:@selector(_gestureDidChange:)];
+    [self addGestureRecognizer:_scrollWheelGestureRecognizer];
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -159,6 +173,9 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
     _delegateCan.scrollViewWillBeginZooming = [_delegate respondsToSelector:@selector(scrollViewWillBeginZooming:withView:)];
     _delegateCan.scrollViewDidEndZooming = [_delegate respondsToSelector:@selector(scrollViewDidEndZooming:withView:atScale:)];
     _delegateCan.scrollViewDidZoom = [_delegate respondsToSelector:@selector(scrollViewDidZoom:)];
+    _delegateCan.scrollViewDidEndScrollingAnimation = [_delegate respondsToSelector:@selector(scrollViewDidEndScrollingAnimation:)];
+    _delegateCan.scrollViewWillBeginDecelerating = [_delegate respondsToSelector:@selector(scrollViewWillBeginDecelerating:)];
+    _delegateCan.scrollViewDidEndDecelerating = [_delegate respondsToSelector:@selector(scrollViewDidEndDecelerating:)];
 }
 
 - (UIView *)_zoomingView
@@ -201,41 +218,8 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
     return self.scrollEnabled && (_contentSize.height > self.bounds.size.height);
 }
 
-- (void)_constrainContent
+- (void)_updateContentLayout
 {
-    const CGRect scrollerBounds = UIEdgeInsetsInsetRect(self.bounds, _contentInset);
-    
-    if ((_contentSize.width-_contentOffset.x) < scrollerBounds.size.width) {
-        _contentOffset.x = (_contentSize.width - scrollerBounds.size.width);
-    }
-    
-    if ((_contentSize.height-_contentOffset.y) < scrollerBounds.size.height) {
-        _contentOffset.y = (_contentSize.height - scrollerBounds.size.height);
-    }
-    
-    // Note that rounding of the coordinates only occurs if we're NOT in the middle of a smooth scrolling animation.
-    // This results in far smoother animations because it'll use sub-pixel coordinates as it goes. However normal behavior
-    // is to  snap to whole pixels otherwise the subviews look terrible due to partial pixel alignment problems (blur, etc).
-    // This is sort of a clever hack here, but it works pretty well in the end because the _scrollTimer is invalidated and set to nil
-    // on the final animation frame *before* setContentOffset: is ultimately called. That means that the final frame of scrolling
-    // animation will end up being snapped to the boundary as it should be. Any calls made to setContentOffset: in the midst of an
-    // animation won't have their values rounded, but it shouldn't matter much in the end because when the in-progress animation finishes
-    // the final values will again get rounded out. Hopefully this makes sense.
-    if (!_scrollTimer) {
-        _contentOffset.x = roundf(_contentOffset.x);
-        _contentOffset.y = roundf(_contentOffset.y);
-    }	
-    _contentOffset.x = MAX(_contentOffset.x,0);
-    _contentOffset.y = MAX(_contentOffset.y,0);
-    
-    if (_contentSize.width <= scrollerBounds.size.width) {
-        _contentOffset.x = 0;
-    }
-    
-    if (_contentSize.height <= scrollerBounds.size.height) {
-        _contentOffset.y = 0;
-    }
-    
     _verticalScroller.contentSize = _contentSize.height;
     _verticalScroller.contentOffset = _contentOffset.y;
     _horizontalScroller.contentSize = _contentSize.width;
@@ -245,10 +229,98 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
     _horizontalScroller.hidden = !self._canScrollHorizontal;
     
     CGRect bounds = self.bounds;
-    bounds.origin = CGPointMake(_contentOffset.x+_contentInset.left, _contentOffset.y+_contentInset.top);
+    bounds.origin.x = _contentOffset.x+_contentInset.left;
+    bounds.origin.y = _contentOffset.y+_contentInset.top;
     self.bounds = bounds;
     
     [self setNeedsLayout];
+}
+
+- (void)_cancelScrollAnimation
+{
+    [_scrollTimer invalidate];
+    _scrollTimer = nil;
+    
+    [_scrollAnimation release];
+    _scrollAnimation = nil;
+    
+    if (_delegateCan.scrollViewDidEndScrollingAnimation) {
+        [_delegate scrollViewDidEndScrollingAnimation:self];
+    }
+
+    if (_decelerating) {
+        _horizontalScroller.alwaysVisible = NO;
+        _verticalScroller.alwaysVisible = NO;
+        _decelerating = NO;
+        
+        if (_delegateCan.scrollViewDidEndDecelerating) {
+            [_delegate scrollViewDidEndDecelerating:self];
+        }
+    }
+}
+
+- (void)_updateScrollAnimation
+{
+    if ([_scrollAnimation animate]) {
+        [self _cancelScrollAnimation];
+    }
+}
+
+- (void)_setScrollAnimation:(UIScrollViewAnimation *)animation
+{
+    [self _cancelScrollAnimation];
+    _scrollAnimation = [animation retain];
+
+    if (!_scrollTimer) {
+        _scrollTimer = [NSTimer scheduledTimerWithTimeInterval:1/(NSTimeInterval)UIScrollViewScrollAnimationFramesPerSecond target:self selector:@selector(_updateScrollAnimation) userInfo:nil repeats:YES];
+    }
+}
+
+- (CGPoint)_confinedContentOffset:(CGPoint)contentOffset
+{
+    const CGRect scrollerBounds = UIEdgeInsetsInsetRect(self.bounds, _contentInset);
+    
+    if ((_contentSize.width-contentOffset.x) < scrollerBounds.size.width) {
+        contentOffset.x = (_contentSize.width - scrollerBounds.size.width);
+    }
+    
+    if ((_contentSize.height-contentOffset.y) < scrollerBounds.size.height) {
+        contentOffset.y = (_contentSize.height - scrollerBounds.size.height);
+    }
+    
+    contentOffset.x = MAX(contentOffset.x,0);
+    contentOffset.y = MAX(contentOffset.y,0);
+    
+    if (_contentSize.width <= scrollerBounds.size.width) {
+        contentOffset.x = 0;
+    }
+    
+    if (_contentSize.height <= scrollerBounds.size.height) {
+        contentOffset.y = 0;
+    }
+    
+    return contentOffset;
+}
+
+- (void)_setRestrainedContentOffset:(CGPoint)offset
+{
+    const CGPoint confinedOffset = [self _confinedContentOffset:offset];
+    const CGRect scrollerBounds = UIEdgeInsetsInsetRect(self.bounds, _contentInset);
+    
+    if (!self.alwaysBounceHorizontal && _contentSize.width <= scrollerBounds.size.width) {
+        offset.x = confinedOffset.x;
+    }
+    
+    if (!self.alwaysBounceVertical && _contentSize.height <= scrollerBounds.size.height) {
+        offset.y = confinedOffset.y;
+    }
+    
+    self.contentOffset = offset;
+}
+
+- (void)_confineContent
+{
+    self.contentOffset = [self _confinedContentOffset:_contentOffset];
 }
 
 - (void)layoutSubviews
@@ -265,7 +337,7 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 - (void)setFrame:(CGRect)frame
 {
     [super setFrame:frame];
-    [self _constrainContent];
+    [self _confineContent];
 }
 
 - (void)_bringScrollersToFront
@@ -292,85 +364,21 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
     [self _bringScrollersToFront];
 }
 
-- (void)_updateScrollAnimation
-{
-    const NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
-    const NSTimeInterval timePerFrame = 1. / (NSTimeInterval)UIScrollViewScrollAnimationFramesPerSecond;
-
-    CGPoint contentOffset = self.contentOffset;
-
-    while (_scrollAnimationTime <= currentTime) {
-        // update the simulation's time by one perfect frame-worth of time
-        _scrollAnimationTime += timePerFrame;
-
-        // making a copy here so that expired animations can be removed
-        NSArray *animations = [_scrollAnimations copy];
-
-        // now we process all currently running animations
-        for (UIScrollViewScrollAnimation *animation in animations) {
-            if (_scrollAnimationTime > animation.stopTime) {
-                // if we're beyond the time where this animation should have stopped, it is time to kill it.
-                [_scrollAnimations removeObject:animation];
-            } else {
-                // otherwise apply the animation's velocity to the offset
-                const CGPoint velocity = animation.contentOffsetVelocity;
-                contentOffset.x += velocity.x;
-                contentOffset.y += velocity.y;
-            }
-        }
-
-        [animations release];
-    }
-
-    // note that invalidation of the timer must happen before setContentOffset: is called due to a clever hack having to do with rounding
-    // the content offset. Basically, I'm avoiding rounding the offset values (and thus snapping to whole number boundaries to avoid subpixel blur)
-    // while a scroll animation is occuring because that results in visually smoother animations. this is important especially near the end of a
-    // momentum scroll because the scroll gets slower and slower so little jitters are easier to see. The trick here is that when the offset values
-    // are later constrained in _constrainContent, they are only rounded if there's no scroll animations in progress. This enhances the percieved
-    // smoothness of the animation by a noticable amount.
-    if ([_scrollAnimations count] == 0) {
-        [_scrollTimer invalidate];
-        _scrollTimer = nil;
-    }
-
-    // yay! we can finally update the offset!
-    self.contentOffset = contentOffset;
-}
-
-- (void)_scrollContentOffsetBy:(CGPoint)delta withAnimationDuration:(NSTimeInterval)animationDuration
-{
-    const NSTimeInterval startTime = [NSDate timeIntervalSinceReferenceDate];
-    const NSInteger numberOfFrames = animationDuration * UIScrollViewScrollAnimationFramesPerSecond;
-    const CGPoint frameDelta = CGPointMake(delta.x/(float)numberOfFrames, delta.y/(float)numberOfFrames);
-    
-    // an animation here is really just a velocity to apply over time. the frames per second is assumed to be constant, etc.
-    // it's not too fancy.
-    UIScrollViewScrollAnimation *animation = [[UIScrollViewScrollAnimation alloc] init];
-    animation.contentOffsetVelocity = frameDelta;
-    animation.stopTime = animationDuration + startTime;
-    [_scrollAnimations addObject:animation];
-    [animation release];
-    
-    // if there's no current scrolling animation running, we need to start one here - it will repeat until there are no more 
-    // animations in _scrollAnimations.
-    if (!_scrollTimer) {
-        _scrollAnimationTime = startTime;
-        _scrollTimer = [NSTimer scheduledTimerWithTimeInterval:1/(NSTimeInterval)UIScrollViewScrollAnimationFramesPerSecond target:self selector:@selector(_updateScrollAnimation) userInfo:nil repeats:YES];
-    }
-}
-
-- (void)_setContentOffset:(CGPoint)theOffset withAnimationDuration:(NSTimeInterval)animationDuration
-{
-    [self _scrollContentOffsetBy:CGPointMake(theOffset.x-_contentOffset.x, theOffset.y-_contentOffset.y) withAnimationDuration:animationDuration];
-}
-
 - (void)setContentOffset:(CGPoint)theOffset animated:(BOOL)animated
 {
     if (animated) {
-        [self _setContentOffset:theOffset withAnimationDuration:UIScrollViewAnimationDuration];
+        UIScrollViewAnimationScroll *animation = [[UIScrollViewAnimationScroll alloc] initWithScrollView:self
+                                                                                       fromContentOffset:self.contentOffset
+                                                                                         toContentOffset:theOffset
+                                                                                                duration:UIScrollViewAnimationDuration
+                                                                                                   curve:UIScrollViewAnimationScrollCurveLinear];
+        [self _setScrollAnimation:animation];
+        [animation release];
     } else {
-        _contentOffset = theOffset;
-        [self _constrainContent];
+        _contentOffset.x = roundf(theOffset.x);
+        _contentOffset.y = roundf(theOffset.y);
+
+        [self _updateContentLayout];
 
         if (_delegateCan.scrollViewDidScroll) {
             [_delegate scrollViewDidScroll:self];
@@ -387,7 +395,7 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 {
     if (!CGSizeEqualToSize(newSize, _contentSize)) {
         _contentSize = newSize;
-        [self _constrainContent];
+        [self _confineContent];
     }
 }
 
@@ -403,82 +411,9 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
     [_verticalScroller quickFlash];
 }
 
-- (void)_delegateDraggingDidBegin
-{
-    if (!_dragDelegateTimer) {
-        if (_delegateCan.scrollViewWillBeginDragging) {
-            [_delegate scrollViewWillBeginDragging:self];
-        }
-    }
-    
-    [_dragDelegateTimer invalidate];
-    _dragDelegateTimer = [NSTimer scheduledTimerWithTimeInterval:0.33 target:self selector:@selector(_delegateDraggingDidEnd) userInfo:nil repeats:NO];
-}
-
-- (void)removeFromSuperview
-{
-    // there's a rare case where the deferment of the draggingDidEnd message can cause a crash indirectly because it ends up that the scroll view's delegate
-    // was destroyed and the only thing keeping the scrollview itself alive is the NSTimer holding on to it for this. That means that when the timer fires,
-    // it tries to send a message to the now-deceased delegate object and BOOM goes the app. This seems like a hacky work around to this. Technically,
-    // anything that wants to be a delegate of the scroll view should be making sure it's living at least as long as the scroll view itself, or set the
-    // scroll view's delegate to nil before it pops off and dies. So in some respects, this isn't *exactly* a bug in UIKit but it is happening often enough
-    // and the fact that this is a deferred thing which is not how the real UIKit works makes me think we have to try to work around it here in this case. :/
-    // The reasoning for invalidating the timer here is similar to the reasoning in UIView's removeFromSuperview which cancels any active touches on the view
-    // just before it's removed. This sort of falls into the same category in that this is kind of like a fake touch. If it weren't implemented via a timer
-    // then the touching canceling that happens in UIView's removeFromSuperview would ultimately have the same effect here - it'd never get a touchesEnded:
-    // message and thus I'd assume there'd be no sending of draggingDidEnd, either.
-    [_dragDelegateTimer invalidate];
-    _dragDelegateTimer = nil;
-
-    [super removeFromSuperview];
-}
-
-- (BOOL)isDragging
-{
-    return (_dragDelegateTimer != nil);
-}
-
 - (BOOL)isTracking
 {
     return NO;
-}
-
-- (void)_delegateDraggingDidEnd
-{
-    _dragDelegateTimer = nil;
-
-    if (_delegateCan.scrollViewDidEndDragging) {
-        [_delegate scrollViewDidEndDragging:self willDecelerate:NO];
-    }
-    
-    if (_pagingEnabled) {
-        const CGSize pageSize = self.bounds.size;
-        const CGSize numberOfWholePages = CGSizeMake(floorf(_contentSize.width/pageSize.width), floorf(_contentSize.height/pageSize.height));
-        const CGSize currentRawPage = CGSizeMake(_contentOffset.x/pageSize.width, _contentOffset.y/pageSize.height);
-        const CGSize currentPage = CGSizeMake(floorf(currentRawPage.width), floorf(currentRawPage.height));
-        const CGSize currentPagePercentage = CGSizeMake(1-(currentRawPage.width-currentPage.width), 1-(currentRawPage.height-currentPage.height));
-        
-        CGPoint finalContentOffset = CGPointZero;
-        
-        // if currentPagePercentage is less than 50%, then go to the next page (if any), otherwise snap to the current page
-        
-        if (currentPagePercentage.width < 0.5 && (currentPage.width+1) < numberOfWholePages.width) {
-            finalContentOffset.x = pageSize.width * (currentPage.width + 1);
-        } else {
-            finalContentOffset.x = pageSize.width * currentPage.width;
-        }
-
-        if (currentPagePercentage.height < 0.5 && (currentPage.height+1) < numberOfWholePages.height) {
-            finalContentOffset.y = pageSize.height * (currentPage.height + 1);
-        } else {
-            finalContentOffset.y = pageSize.height * currentPage.height;
-        }
-        
-        // quickly animate the snap (if necessary)
-        if (!CGPointEqualToPoint(finalContentOffset, _contentOffset)) {
-            [self _setContentOffset:finalContentOffset withAnimationDuration:UIScrollViewAnimationDuration/3.];
-        }
-    }
 }
 
 - (void)mouseMoved:(CGPoint)delta withEvent:(UIEvent *)event
@@ -486,47 +421,256 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
     UITouch *touch = [[event allTouches] anyObject];
     const CGPoint point = [touch locationInView:self];
     const CGFloat scrollerSize = UIScrollerWidthForBoundsSize(self.bounds.size);
+    const BOOL shouldShowHorizontal = CGRectContainsPoint(CGRectInset(_horizontalScroller.frame, -scrollerSize, -scrollerSize), point);
+    const BOOL shouldShowVertical = CGRectContainsPoint(CGRectInset(_verticalScroller.frame, -scrollerSize, -scrollerSize), point);
+    const BOOL shouldShowScrollers = (shouldShowVertical || shouldShowHorizontal || _decelerating);
     
-    _horizontalScroller.alwaysVisible = CGRectContainsPoint(CGRectInset(_horizontalScroller.frame, -scrollerSize, -scrollerSize), point);
-    _verticalScroller.alwaysVisible = CGRectContainsPoint(CGRectInset(_verticalScroller.frame, -scrollerSize, -scrollerSize), point);
+    _horizontalScroller.alwaysVisible = shouldShowScrollers;
+    _verticalScroller.alwaysVisible = shouldShowScrollers;
     
     [super mouseMoved:delta withEvent:event];
 }
 
 - (void)mouseExitedView:(UIView *)exited enteredView:(UIView *)entered withEvent:(UIEvent *)event
 {
-    if ([exited isDescendantOfView:self] && ![entered isDescendantOfView:self]) {
-        _horizontalScroller.alwaysVisible = NO;
-        _verticalScroller.alwaysVisible = NO;
+    if (!_decelerating) {
+        if ([exited isDescendantOfView:self] && ![entered isDescendantOfView:self]) {
+            _horizontalScroller.alwaysVisible = NO;
+            _verticalScroller.alwaysVisible = NO;
+        }
     }
     
     [super mouseExitedView:exited enteredView:entered withEvent:event];
 }
 
-- (void)scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event
+- (UIScrollViewAnimation *)_pageSnapAnimation
 {
-    // If this UIScrollView cannot scroll vertically and we get a vertical scroll wheel event we should pass it on to our parent.
-    // Otherwise this will totally stop wheel scrolling in its tracks if it suddenly hits an embedded UIScrollView that doesn't
-    // need to scroll.
-    if (self.scrollEnabled && ((delta.x && self._canScrollHorizontal) || (delta.y && self._canScrollVertical))) {
-        [self _delegateDraggingDidBegin];
-        [self _scrollContentOffsetBy:delta withAnimationDuration:0.1];
-        [self _quickFlashScrollIndicators];
+    const CGSize pageSize = self.bounds.size;
+    const CGSize numberOfWholePages = CGSizeMake(floorf(_contentSize.width/pageSize.width), floorf(_contentSize.height/pageSize.height));
+    const CGSize currentRawPage = CGSizeMake(_contentOffset.x/pageSize.width, _contentOffset.y/pageSize.height);
+    const CGSize currentPage = CGSizeMake(floorf(currentRawPage.width), floorf(currentRawPage.height));
+    const CGSize currentPagePercentage = CGSizeMake(1-(currentRawPage.width-currentPage.width), 1-(currentRawPage.height-currentPage.height));
+    
+    CGPoint finalContentOffset = CGPointZero;
+    
+    // if currentPagePercentage is less than 50%, then go to the next page (if any), otherwise snap to the current page
+    
+    if (currentPagePercentage.width < 0.5 && (currentPage.width+1) < numberOfWholePages.width) {
+        finalContentOffset.x = pageSize.width * (currentPage.width + 1);
     } else {
-        [super scrollWheelMoved:delta withEvent:event];
+        finalContentOffset.x = pageSize.width * currentPage.width;
     }
+    
+    if (currentPagePercentage.height < 0.5 && (currentPage.height+1) < numberOfWholePages.height) {
+        finalContentOffset.y = pageSize.height * (currentPage.height + 1);
+    } else {
+        finalContentOffset.y = pageSize.height * currentPage.height;
+    }
+    
+    // quickly animate the snap (if necessary)
+    if (!CGPointEqualToPoint(finalContentOffset, _contentOffset)) {
+        return [[[UIScrollViewAnimationScroll alloc] initWithScrollView:self
+                                                      fromContentOffset:_contentOffset
+                                                        toContentOffset:finalContentOffset
+                                                               duration:UIScrollViewQuickAnimationDuration
+                                                                  curve:UIScrollViewAnimationScrollCurveQuadraticEaseOut] autorelease];
+    } else {
+        return nil;
+    }
+}
+
+- (UIScrollViewAnimation *)_decelerationAnimationWithVelocity:(CGPoint)velocity
+{
+    const CGPoint confinedOffset = [self _confinedContentOffset:_contentOffset];
+    
+    // if we've pulled up the content outside it's bounds, we don't want to register any flick momentum there and instead just
+    // have the animation pull the content back into place immediately.
+    if (confinedOffset.x != _contentOffset.x) {
+        velocity.x = 0;
+    }
+    if (confinedOffset.y != _contentOffset.y) {
+        velocity.y = 0;
+    }
+    
+    if (!CGPointEqualToPoint(velocity, CGPointZero) || !CGPointEqualToPoint(confinedOffset, _contentOffset)) {
+        return [[[UIScrollViewAnimationDeceleration alloc] initWithScrollView:self
+                                                                     velocity:velocity] autorelease];
+    } else {
+        return nil;
+    }
+}
+
+- (void)_beginDragging
+{
+    if (!_dragging) {
+        _dragging = YES;
+
+        _horizontalScroller.alwaysVisible = YES;
+        _verticalScroller.alwaysVisible = YES;
+        
+        [self _cancelScrollAnimation];
+
+        if (_delegateCan.scrollViewWillBeginDragging) {
+            [_delegate scrollViewWillBeginDragging:self];
+        }
+    }
+}
+
+- (BOOL)isDragging
+{
+    return _dragging;
+}
+
+- (void)_endDraggingWithDecelerationVelocity:(CGPoint)velocity
+{
+    if (_dragging) {
+        _dragging = NO;
+        
+        UIScrollViewAnimation *decelerationAnimation = _pagingEnabled? [self _pageSnapAnimation] : [self _decelerationAnimationWithVelocity:velocity];
+
+        if (_delegateCan.scrollViewDidEndDragging) {
+            [_delegate scrollViewDidEndDragging:self willDecelerate:(decelerationAnimation != nil)];
+        }
+
+        if (decelerationAnimation) {
+            [self _setScrollAnimation:decelerationAnimation];
+
+            _horizontalScroller.alwaysVisible = YES;
+            _verticalScroller.alwaysVisible = YES;
+            _decelerating = YES;
+
+            if (_delegateCan.scrollViewWillBeginDecelerating) {
+                [_delegate scrollViewWillBeginDecelerating:self];
+            }
+        } else {
+            _horizontalScroller.alwaysVisible = NO;
+            _verticalScroller.alwaysVisible = NO;
+            [self _confineContent];
+        }
+    }
+}
+
+- (void)_dragBy:(CGPoint)delta
+{
+    if (_dragging) {
+        _horizontalScroller.alwaysVisible = YES;
+        _verticalScroller.alwaysVisible = YES;
+
+        const CGPoint originalOffset = self.contentOffset;
+        
+        CGPoint proposedOffset = originalOffset;
+        proposedOffset.x += delta.x;
+        proposedOffset.y += delta.y;
+        
+        const CGPoint confinedOffset = [self _confinedContentOffset:proposedOffset];
+        
+        if (self.bounces) {
+            BOOL shouldHorizontalBounce = (fabs(proposedOffset.x - confinedOffset.x) > 0);
+            BOOL shouldVerticalBounce = (fabs(proposedOffset.y - confinedOffset.y) > 0);
+            
+            if (shouldHorizontalBounce) {
+                proposedOffset.x = originalOffset.x + (0.055 * delta.x);
+            }
+            
+            if (shouldVerticalBounce) {
+                proposedOffset.y = originalOffset.y + (0.055 * delta.y);
+            }
+            
+            [self _setRestrainedContentOffset:proposedOffset];
+        } else {
+            [self setContentOffset:confinedOffset];
+        }
+    }
+}
+
+- (void)_gestureDidChange:(UIGestureRecognizer *)gesture
+{
+    // the scrolling gestures are broken into two components due to the somewhat fundamental differences
+    // in how they are handled by the system. The UIPanGestureRecognizer will only track scrolling gestures
+    // that come from actual touch scroller devices. This does *not* include old fashioned mouse wheels.
+    // the non-standard UIScrollWheelGestureRecognizer is a discrete recognizer which only responds to
+    // non-gesture scroll events such as those from non-touch devices. HOWEVER the system sends momentum
+    // scroll events *after* the touch gesture has ended which allows for us to distinguish the difference
+    // here between actual touch gestures and the momentum gestures and thus feed them into the playing
+    // deceleration animation as we receive them so that we can preserve the system's proper feel for that.
+
+    // Also important to note is that with a legacy scroll device, each movement of the wheel is going to
+    // trigger a beginDrag, dragged, endDragged sequence. I believe that's an acceptable compromise however
+    // it might cause some potentially strange behavior in client code that is not expecting such rapid
+    // state changes along these lines.
+    
+    // Another note is that only touch-based panning gestures will trigger calls to _dragBy: which means
+    // that only touch devices can possibly pull the content outside of the scroll view's bounds while
+    // active. An old fashioned wheel will not be able to do that and its scroll events are confined to
+    // the bounds of the scroll view.
+    
+    // There are some semi-legacy devices like the magic mouse which 10.6 doesn't seem to consider a true
+    // touch device, so it doesn't send the gestureBegin/ended stuff that's used to recognize such things
+    // but it *will* send momentum events. This means that those devices on 10.6 won't give you the feeling
+    // of being able to grab and pull your content away from the bounds like a proper touch trackpad will.
+    // As of 10.7 it appears Apple fixed this and they do actually send the proper gesture events, so on
+    // 10.7 the magic mouse should end up acting like any other touch input device as far as we're concerned.
+    
+    // Momentum scrolling doesn't work terribly well with how the paging stuff is now handled. Something
+    // could be improved there. I'm not sure if the paging animation should just pretend it's longer to
+    // kind of "mask" the OS' momentum events, or if a flag should be set, or if it should work so that
+    // even in paging mode the deceleration and stuff happens like usual and it only snaps to the correct
+    // page *after* the usual deceleration is done. I can't decide what might be best, but since we
+    // don't use paging mode in Twitterrific at the moment, I'm not suffeciently motivated to worry about it. :)
+    
+    if (gesture == _panGestureRecognizer) {
+        if (_panGestureRecognizer.state == UIGestureRecognizerStateBegan) {
+            [self _beginDragging];
+        } else if (_panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
+            [self _dragBy:[_panGestureRecognizer translationInView:self]];
+            [_panGestureRecognizer setTranslation:CGPointZero inView:self];
+        } else if (_panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+            [self _endDraggingWithDecelerationVelocity:[_panGestureRecognizer velocityInView:self]];
+        }
+    } else if (gesture == _scrollWheelGestureRecognizer) {
+        if (_scrollWheelGestureRecognizer.state == UIGestureRecognizerStateRecognized) {
+            const CGPoint delta = [_scrollWheelGestureRecognizer translationInView:self];
+
+            if (_decelerating) {
+                // note that we might be "decelerating" but actually just snapping to a page boundary in paging mode,
+                // so we need to verify if we can actually send this message to the current animation or not.
+                // if we can't, then we'll just eat the scroll event and let the animation finish instead.
+                // additional note: the reason this is done this way at all is so that the system's momentum
+                // messages can be preserved perfectly rather than trying to emulate them myself. this results
+                // in a better feeling end product even if the bouncing at the edges isn't quite entirely right.
+                // see notes in UIScrollViewAnimationDeceleration.m for more.
+                if ([_scrollAnimation respondsToSelector:@selector(momentumScrollBy:)]) {
+                    [_scrollAnimation momentumScrollBy:delta];
+                }
+            } else {
+                CGPoint offset = self.contentOffset;
+                offset.x += delta.x;
+                offset.y += delta.y;
+                offset = [self _confinedContentOffset:offset];
+                
+                if (!CGPointEqualToPoint(offset, _contentOffset)) {
+                    [self _beginDragging];
+                    self.contentOffset = offset;
+                    [self _endDraggingWithDecelerationVelocity:CGPointZero];
+                }
+                    
+                [self _quickFlashScrollIndicators];
+            }
+        }
+    }
+}
+
+- (void)_UIScrollerDidBeginDragging:(UIScroller *)scroller withEvent:(UIEvent *)event
+{
+    [self _beginDragging];
 }
 
 - (void)_UIScroller:(UIScroller *)scroller contentOffsetDidChange:(CGFloat)newOffset
 {
-    if (self.scrollEnabled) {
-        [self _delegateDraggingDidBegin];
-
-        if (scroller == _verticalScroller) {
-            [self setContentOffset:CGPointMake(self.contentOffset.x,newOffset) animated:NO];
-        } else if (scroller == _horizontalScroller) {
-            [self setContentOffset:CGPointMake(newOffset,self.contentOffset.y) animated:NO];
-        }
+    if (scroller == _verticalScroller) {
+        [self setContentOffset:CGPointMake(self.contentOffset.x,newOffset) animated:NO];
+    } else if (scroller == _horizontalScroller) {
+        [self setContentOffset:CGPointMake(newOffset,self.contentOffset.y) animated:NO];
     }
 }
 
@@ -538,6 +682,8 @@ const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
     if (!CGRectContainsPoint(scroller.frame,point)) {
         scroller.alwaysVisible = NO;
     }
+    
+    [self _endDraggingWithDecelerationVelocity:CGPointZero];
 }
 
 - (BOOL)isDecelerating

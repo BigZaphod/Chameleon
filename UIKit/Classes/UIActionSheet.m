@@ -39,7 +39,7 @@
 
 @implementation UIActionSheet {
     NSMutableArray *_menuTitles;
-    NSMutableArray *_separatorIndexes;
+    NSMutableSet *_separatorIndexes;
     id _menu;
     
     struct {
@@ -62,7 +62,7 @@
 {
     if ((self=[super initWithFrame:frame])) {
         _menuTitles = [[NSMutableArray alloc] init];
-        _separatorIndexes = [[NSMutableArray alloc] init];
+        _separatorIndexes = [[NSMutableSet alloc] init];
         _destructiveButtonIndex = -1;
         _cancelButtonIndex = -1;
         _firstOtherButtonIndex = -1;
@@ -265,7 +265,7 @@
     // takes over the event stream and so a mouseUp is never delivered to the UIKitView. This means it never gets to the app and it leaves
     // the "touch" tracking system in an inconsistent state. This triggers the touchesCancelled UIResponder stuff to allow UIKit code to clean
     // itself up after the menu is done.
-    [[UIApplication sharedApplication] _cancelTouchesInView:nil];
+    [[UIApplication sharedApplication] _cancelTouches];
     
     if (!itemSelected) {
         [self _clickedButtonAtIndex:_cancelButtonIndex];

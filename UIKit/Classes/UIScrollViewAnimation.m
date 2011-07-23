@@ -27,13 +27,44 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIAction.h"
-#import "UIControl.h"
+#import "UIScrollViewAnimation.h"
 
-@interface UIControlAction : UIAction {
-    UIControlEvents _controlEvents;
+CGFloat UILinearInterpolation(CGFloat t, CGFloat start, CGFloat end)
+{
+    if (t <= 0) {
+        return start;
+    } else if (t >= 1) {
+        return end;
+    } else {
+        return t * end + (1 - t) * start;
+    }
 }
 
-@property (nonatomic, assign) UIControlEvents controlEvents;
+CGFloat UIQuadraticEaseOut(CGFloat t, CGFloat start, CGFloat end)
+{
+    if (t <= 0) {
+        return start;
+    } else if (t >= 1) {
+        return end;
+    } else {
+        return UILinearInterpolation(2 * t - t * t, start, end);
+    }
+}
+
+@implementation UIScrollViewAnimation
+
+- (id)initWithScrollView:(UIScrollView *)sv
+{
+    if ((self=[super init])) {
+        scrollView = sv;
+        beginTime = [NSDate timeIntervalSinceReferenceDate];
+    }
+    return self;
+}
+    
+- (BOOL)animate
+{
+    return YES;
+}
 
 @end

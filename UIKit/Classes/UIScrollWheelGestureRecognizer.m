@@ -27,13 +27,47 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIAction.h"
-#import "UIControl.h"
+#import "UIScrollWheelGestureRecognizer.h"
+#import "UIGestureRecognizerSubclass.h"
+#import "UITouch+UIPrivate.h"
+#import "UIEvent.h"
 
-@interface UIControlAction : UIAction {
-    UIControlEvents _controlEvents;
+@implementation UIScrollWheelGestureRecognizer
+
+- (CGPoint)translationInView:(UIView *)view
+{
+    return _translation;
 }
 
-@property (nonatomic, assign) UIControlEvents controlEvents;
+- (void)setTranslation:(CGPoint)translation inView:(UIView *)view
+{
+    _translation = translation;
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [[event touchesForGestureRecognizer:self] anyObject];
+    if ([touch _gesture] == _UITouchDiscreteGestureScrollWheel) {
+        [self setTranslation:[touch _delta] inView:touch.view];
+        self.state = UIGestureRecognizerStateRecognized;
+    } else {
+        self.state = UIGestureRecognizerStateFailed;
+    }
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    self.state = UIGestureRecognizerStateFailed;
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    self.state = UIGestureRecognizerStateFailed;
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    self.state = UIGestureRecognizerStateFailed;
+}
 
 @end

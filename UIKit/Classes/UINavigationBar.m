@@ -174,6 +174,7 @@ typedef enum {
 {
     {
         NSMutableArray *previousViews = [[NSMutableArray alloc] init];
+
         if (_leftView) [previousViews addObject:_leftView];
         if (_centerView) [previousViews addObject:_centerView];
         if (_rightView) [previousViews addObject:_rightView];
@@ -211,7 +212,7 @@ typedef enum {
     UINavigationItem *topItem = self.topItem;
     
     if (topItem) {
-        UINavigationItem *backItem = self.backItem;
+        UINavigationItem *backItem = [self.backItem retain];
         
         // update weak references
         [backItem _setNavigationBar: nil];
@@ -226,6 +227,8 @@ typedef enum {
             _leftView = [isa _viewWithBarButtonItem:topItem.leftBarButtonItem];
         }
 
+        [backItem release];
+        
         if (_leftView) {
             leftFrame = _leftView.frame;
             leftFrame.origin = CGPointMake(kButtonEdgeInsets.left, kButtonEdgeInsets.top);

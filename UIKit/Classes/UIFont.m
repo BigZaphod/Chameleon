@@ -101,7 +101,7 @@ static NSString* const kUISystemFontKey = @"UISystemFont";
     [self doesNotRecognizeSelector:_cmd];
 }
 
-NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFStringRef nameAttr)
+static NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFStringRef nameAttr)
 {
     NSMutableSet *names = [NSMutableSet set];
     if (collection) {

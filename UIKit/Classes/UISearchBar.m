@@ -50,7 +50,7 @@
 @end
 
 @implementation UISearchBar {
-    UISearchField *_searchField;
+    UITextField *_searchField;
 	
 	struct {
         BOOL shouldBeginEditing : 1;

@@ -27,13 +27,31 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIAction.h"
-#import "UIControl.h"
+#import "UIScrollViewAnimation.h"
 
-@interface UIControlAction : UIAction {
-    UIControlEvents _controlEvents;
+typedef struct {
+    NSTimeInterval decelerateTime;
+    CGFloat position;
+    CGFloat velocity;
+    NSTimeInterval returnTime;
+    CGFloat returnFrom;
+    BOOL bounced;
+} UIScrollViewAnimationDecelerationComponent;
+
+@interface UIScrollViewAnimationDeceleration : UIScrollViewAnimation {
+    UIScrollViewAnimationDecelerationComponent x;
+    UIScrollViewAnimationDecelerationComponent y;
+    NSTimeInterval lastMomentumTime;
 }
 
-@property (nonatomic, assign) UIControlEvents controlEvents;
+- (id)initWithScrollView:(UIScrollView *)sv velocity:(CGPoint)v;
+- (void)momentumScrollBy:(CGPoint)delta;
 
 @end
+
+
+
+
+
+
+

@@ -27,13 +27,14 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIAction.h"
-#import "UIControl.h"
+#import <Foundation/Foundation.h>
 
-@interface UIControlAction : UIAction {
-    UIControlEvents _controlEvents;
+@interface UIAction : NSObject {
+    id _target;
+    SEL _action;
 }
 
-@property (nonatomic, assign) UIControlEvents controlEvents;
+@property (nonatomic, assign) id target;
+@property (nonatomic, assign) SEL action;
 
 @end

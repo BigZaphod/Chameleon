@@ -46,7 +46,7 @@ static void releasePatternImage(void *info)
     CGImageRelease((CGImageRef)info);
 }
 
-CGPatternRef CreateImagePattern(CGImageRef image)
+static CGPatternRef CreateImagePattern(CGImageRef image)
 {
     NSCParameterAssert(image);
     CGImageRetain(image);
@@ -63,7 +63,7 @@ CGPatternRef CreateImagePattern(CGImageRef image)
                             &callbacks);
 }
 
-CGColorRef CreatePatternColor(CGImageRef image)
+static CGColorRef CreatePatternColor(CGImageRef image)
 {
     CGPatternRef pattern = CreateImagePattern(image);
     CGColorSpaceRef space = CGColorSpaceCreatePattern(NULL);
