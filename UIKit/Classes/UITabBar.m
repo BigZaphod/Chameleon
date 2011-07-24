@@ -181,12 +181,19 @@
     if (!_items || [_items count] == 0)
         return;
 
-    CGFloat width = ceilf(CGRectGetWidth(self.bounds) / (CGFloat)[_items count]);
+    CGFloat width = floorf(CGRectGetWidth(self.bounds) / (CGFloat)[_items count]);
     CGRect frame = CGRectMake(0.0f, 0.0f, width, CGRectGetHeight(self.bounds));
-    for (UITabBarItem *item in _items)
+    UITabBarItem *lastItem = [_items lastObject];
+
+    for (NSUInteger i = 0; i < [_items count]; i++)
     {
-        assert(item->_view);
+        UITabBarItem *item = [_items objectAtIndex:i];
         UIView *view = item->_view;
+        assert(view);
+
+        if (item == lastItem)
+            frame.size.width = self.bounds.size.width - frame.origin.x;
+
         [view setFrame:frame];
         frame.origin.x = CGRectGetMaxX(frame);
     }
