@@ -80,4 +80,4 @@ extern UIAccessibilityNotifications UIAccessibilityPageScrolledNotification;
 */
 
 extern void UIAccessibilityPostNotification(UIAccessibilityNotifications notification, id argument);
-extern BOOL UIAccessibilityIsVoiceOverRunning();
+extern BOOL UIAccessibilityIsVoiceOverRunning(void);

@@ -102,6 +102,11 @@ void UIGraphicsEndImageContext()
     UIGraphicsPopContext();
 }
 
+void UIRectClip(CGRect rect)
+{
+    CGContextClipToRect(UIGraphicsGetCurrentContext(), rect);
+}
+
 void UIRectFill(CGRect rect)
 {
     UIRectFillUsingBlendMode(rect, kCGBlendModeCopy);

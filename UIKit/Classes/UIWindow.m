@@ -39,6 +39,9 @@
 #import "UIResponderAppKitIntegration.h"
 #import "UIViewAppKitIntegration.h"
 #import "UIKitView.h"
+#import "UIViewController.h"
+#import "UIGestureRecognizerSubclass.h"
+#import "UIGestureRecognizer+UIPrivate.h"
 #import <AppKit/NSCursor.h>
 #import <AppKit/NSHelpManager.h>
 #import <AppKit/NSEvent.h>
@@ -110,6 +113,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
     [self _makeHidden];	// I don't really like this here, but the real UIKit seems to do something like this on window destruction as it sends a notification and we also need to remove it from the app's list of windows
     [_screen release];
     [_undoManager release];
+    [_rootViewController release];
     [super dealloc];
 }
 
@@ -122,11 +126,11 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 - (void)setRootViewController:(UIViewController *)rootViewController
 {
 	if (rootViewController != _rootViewController) {
-		rootViewController.view.frame = self.bounds;
-		[self addSubview:rootViewController.view];
-		
-		[_rootViewController release];
-		_rootViewController = [rootViewController retain];
+        [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        [_rootViewController release];
+        _rootViewController = [rootViewController retain];
+        _rootViewController.view.frame = self.bounds;    // unsure about this
+        [self addSubview:_rootViewController.view];
 	}
 }
 
@@ -333,44 +337,38 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 {
     if (event.type == UIEventTypeTouches) {
         NSSet *touches = [event touchesForWindow:self];
+        NSMutableSet *gestureRecognizers = [NSMutableSet setWithCapacity:0];
 
         for (UITouch *touch in touches) {
-            switch (touch.phase) {
-                case UITouchPhaseBegan:
-                    [touch.view touchesBegan:touches withEvent:event];
-                    break;
+            [gestureRecognizers addObjectsFromArray:touch.gestureRecognizers];
+        }
 
-                case UITouchPhaseMoved:
-                    [touch.view touchesMoved:touches withEvent:event];
-                    break;
+        for (UIGestureRecognizer *recognizer in gestureRecognizers) {
+            [recognizer _recognizeTouches:touches withEvent:event];
+        }
 
-                case UITouchPhaseEnded:
-                    [touch.view touchesEnded:touches withEvent:event];
-                    break;
-
-                case UITouchPhaseCancelled:
-                    [touch.view touchesCancelled:touches withEvent:event];
-                    break;
-                    
-                case UITouchPhaseHovered:
-                    if ([touch.view hitTest:[touch locationInView:touch.view] withEvent:event]) {
-                        [touch.view mouseMoved:[touch _delta] withEvent:event];
-                    }
-                    break;
-
-                case UITouchPhaseScrolled:
-                    [touch.view scrollWheelMoved:[touch _delta] withEvent:event];
-                    break;
-
-                case UITouchPhaseRightClicked:
-                    [touch.view rightClick:touch withEvent:event];
-                    break;
-                    
-                case UITouchPhaseStationary:
-                    break;
+        for (UITouch *touch in touches) {
+            if (touch.phase == UITouchPhaseBegan) {
+                [touch.view touchesBegan:touches withEvent:event];
+            } else if (touch.phase == UITouchPhaseMoved) {
+                [touch.view touchesMoved:touches withEvent:event];
+            } else if (touch.phase == UITouchPhaseEnded) {
+                [touch.view touchesEnded:touches withEvent:event];
+            } else if (touch.phase == UITouchPhaseCancelled) {
+                [touch.view touchesCancelled:touches withEvent:event];
+            } else if (touch.phase == _UITouchPhaseDiscreteGesture && [touch _gesture] == _UITouchDiscreteGestureMouseMove) {
+                if ([touch.view hitTest:[touch locationInView:touch.view] withEvent:event]) {
+                    [touch.view mouseMoved:[touch _delta] withEvent:event];
+                }
+            } else if (touch.phase == _UITouchPhaseDiscreteGesture && [touch _gesture] == _UITouchDiscreteGestureRightClick) {
+                [touch.view rightClick:touch withEvent:event];
+            } else if ((touch.phase == _UITouchPhaseDiscreteGesture && [touch _gesture] == _UITouchDiscreteGestureScrollWheel) ||
+                       (touch.phase == _UITouchPhaseGestureChanged && [touch _gesture] == _UITouchGesturePan)) {
+                [touch.view scrollWheelMoved:[touch _delta] withEvent:event];
             }
-
+            
             NSCursor *newCursor = [touch.view mouseCursorForEvent:event] ?: [NSCursor arrowCursor];
+
             if ([NSCursor currentCursor] != newCursor) {
                 [newCursor set];
             }

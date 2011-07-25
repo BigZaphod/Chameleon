@@ -27,13 +27,18 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIAction.h"
-#import "UIControl.h"
+#import "UIScrollView+UIPrivate.h"
 
-@interface UIControlAction : UIAction {
-    UIControlEvents _controlEvents;
+@interface UIScrollViewAnimation : NSObject {
+@package
+    UIScrollView *scrollView;
+    NSTimeInterval beginTime;
 }
 
-@property (nonatomic, assign) UIControlEvents controlEvents;
+- (id)initWithScrollView:(UIScrollView *)sv;
+- (BOOL)animate;
 
 @end
+
+extern CGFloat UILinearInterpolation(CGFloat t, CGFloat start, CGFloat end);
+extern CGFloat UIQuadraticEaseOut(CGFloat t, CGFloat start, CGFloat end);

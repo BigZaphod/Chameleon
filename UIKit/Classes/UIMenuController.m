@@ -220,7 +220,7 @@ NSString *const UIMenuControllerMenuFrameDidChangeNotification = @"UIMenuControl
         NSView *theNSView = [_window.screen UIKitView];
         if (theNSView) {
             [_menu popUpMenuPositioningItem:nil atLocation:NSPointFromCGPoint(_menuFrame.origin) inView:theNSView];
-            [[UIApplication sharedApplication] _cancelTouchesInView:nil];
+            [[UIApplication sharedApplication] _cancelTouches];
         }
     }
 }

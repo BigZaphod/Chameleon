@@ -28,12 +28,19 @@
  */
 
 #import "UIAction.h"
-#import "UIControl.h"
 
-@interface UIControlAction : UIAction {
-    UIControlEvents _controlEvents;
+@implementation UIAction
+@synthesize target=_target, action=_action;
+
+- (BOOL)isEqual:(id)object
+{
+    if (object == self) {
+        return YES;
+    } else if ([object isKindOfClass:[isa class]]) {
+        return ([object target] == self.target && [object action] == self.action);
+    } else {
+        return NO;
+    }
 }
-
-@property (nonatomic, assign) UIControlEvents controlEvents;
 
 @end

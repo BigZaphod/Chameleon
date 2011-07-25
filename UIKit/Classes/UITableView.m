@@ -119,12 +119,13 @@ const CGFloat _UITableViewDefaultRowHeight = 44;
     _sections = [[NSMutableArray alloc] init];
     _reusableCells = [[NSMutableSet alloc] init];
     
-    self.separatorColor = [UIColor colorWithRed:.67f green:.67f blue:.67f alpha:1];
+    self.separatorColor = [UIColor colorWithRed:.88f green:.88f blue:.88f alpha:1];
     self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.showsHorizontalScrollIndicator = NO;
     self.allowsSelection = YES;
     self.allowsSelectionDuringEditing = NO;
     self.sectionHeaderHeight = self.sectionFooterHeight = 22;
+    self.alwaysBounceVertical = YES;
     
     if (_style == UITableViewStylePlain) {
         self.backgroundColor = [UIColor whiteColor];
@@ -925,7 +926,7 @@ const CGFloat _UITableViewDefaultRowHeight = 44;
         [menu release];
         [theItem release];
         
-        [[UIApplication sharedApplication] _cancelTouchesInView:nil];
+        [[UIApplication sharedApplication] _cancelTouches];
 
         if (didSelectItem) {
             [_dataSource tableView:self commitEditingStyle:UITableViewCellEditingStyleDelete forRowAtIndexPath:indexPath];

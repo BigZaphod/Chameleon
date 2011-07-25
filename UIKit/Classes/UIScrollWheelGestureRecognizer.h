@@ -27,13 +27,17 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIAction.h"
-#import "UIControl.h"
+#import "UIGestureRecognizer.h"
 
-@interface UIControlAction : UIAction {
-    UIControlEvents _controlEvents;
+// This will only trigger on old-school scroll wheels and momentum scroll events.
+// Unlike UIPanGestureRecognizer, this is a discrete recognizer. It is also,
+// obviously, entirely non-standard. :)
+
+@interface UIScrollWheelGestureRecognizer : UIGestureRecognizer {
+    CGPoint _translation;
 }
 
-@property (nonatomic, assign) UIControlEvents controlEvents;
+- (CGPoint)translationInView:(UIView *)view;
+- (void)setTranslation:(CGPoint)translation inView:(UIView *)view;
 
 @end
