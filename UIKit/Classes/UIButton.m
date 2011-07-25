@@ -79,6 +79,7 @@ inline static NSNumber* _keyForState(NSInteger state)
         case UIControlStateHighlighted: return kUIControlStateHighlightedKey;
         case UIControlStateDisabled:    return kUIControlStateDisabledKey;
         case UIControlStateSelected:    return kUIControlStateSelectedKey;
+        default:                        return [NSNumber numberWithInt:state];
     }
     return nil;
 }
