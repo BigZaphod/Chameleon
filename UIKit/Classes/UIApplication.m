@@ -563,7 +563,11 @@ static BOOL TouchIsActive(UITouch *touch)
 // place. :P
 - (void)_removeViewFromTouches:(UIView *)aView
 {
-    [[[_currentEvent allTouches] anyObject] _removeFromView];
+    for (UITouch *touch in [_currentEvent allTouches]) {
+        if (touch.view == aView) {
+            [touch _removeFromView];
+        }
+    }
 }
 
 - (void)_applicationWillTerminate:(NSNotification *)note
