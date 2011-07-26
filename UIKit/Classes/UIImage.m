@@ -103,11 +103,6 @@
     [super dealloc];
 }
 
-- (void)finalize {
-	if (_image) CGImageRelease(_image);
-	[super finalize];
-}
-
 + (UIImage *)_loadImageNamed:(NSString *)name
 {
     if ([name length] > 0) {

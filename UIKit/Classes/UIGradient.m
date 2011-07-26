@@ -21,12 +21,6 @@
 	[super dealloc];
 }
 
-- (void)finalize {
-	CGGradientRelease(_gradient);
-	
-	[super finalize];
-}
-
 - (id)initWithStartingColor:(UIColor *)starting endingColor:(UIColor *)ending {
 	self = [super init];
 	if(self == nil) {

@@ -117,12 +117,6 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
     [super dealloc];
 }
 
-- (void)finalize {
-	[self _stopTrackingPotentiallyNewToolTip];
-	[self _hideCurrentToolTip];
-	[super finalize];
-}
-
 - (void)setRootViewController:(UIViewController *)rootViewController
 {
 	if (rootViewController != _rootViewController) {

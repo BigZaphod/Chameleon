@@ -47,11 +47,6 @@
     [super dealloc];
 }
 
-- (void)finalize {
-	if(rowHeights != NULL) free(rowHeights);
-	[super finalize];
-}
-
 - (void)setRowHeights:(CGFloat *)newHeights {
 	if(rowHeights != NULL) {
 		free(rowHeights);

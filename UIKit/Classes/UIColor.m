@@ -128,11 +128,6 @@ static UIColor *ClearColor = nil;
     [super dealloc];
 }
 
-- (void)finalize {
-	CGColorRelease(_color);
-	[super finalize];
-}
-
 + (id)colorWithNSColor:(NSColor *)c
 {
     return [[[self alloc] initWithNSColor:c] autorelease];

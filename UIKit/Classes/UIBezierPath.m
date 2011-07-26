@@ -61,11 +61,6 @@
     [super dealloc];
 }
 
-- (void)finalize {
-	if (_path) CGPathRelease(_path);
-	[super finalize];
-}
-
 + (UIBezierPath *)bezierPathWithCGPath:(CGPathRef)CGPath
 {
     NSAssert(CGPath != NULL, @"CGPath must not be NULL");

@@ -172,11 +172,6 @@ static NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFString
     [super dealloc];
 }
 
-- (void)finalize {
-	CFRelease(_font);
-	[super finalize];
-}
-
 - (NSString *)fontName
 {
 	return [(id)CTFontCopyFullName(_font) autorelease];
