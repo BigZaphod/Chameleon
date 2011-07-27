@@ -29,6 +29,7 @@
 
 #import "UIScreenAppKitIntegration.h"
 #import "UIScreen+UIPrivate.h"
+#import "UIKitView.h"
 #import <AppKit/AppKit.h>
 
 extern NSMutableArray *_allScreens;
