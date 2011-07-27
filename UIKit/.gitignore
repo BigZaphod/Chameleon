@@ -6,3 +6,4 @@
 *.xcodeproj/*.svn
 *.xcodeproj/*/*.svn
 *.xcodeproj/*/*/*.svn
+*/.svn
