@@ -1,0 +1,9 @@
+K 10
+svn:ignore
+V 47
+*.pbxuser
+*.perspectivev3
+*.mode1v3
+xcuserdata
+
+END

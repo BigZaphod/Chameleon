@@ -1,0 +1,212 @@
+/*
+ * Copyright (c) 2011, The Iconfactory. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of The Iconfactory nor the names of its contributors may
+ *    be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE ICONFACTORY BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#import "UIScrollViewScrollAnimation.h"
+#import "UIGeometry.h"
+#import "UIScrollView.h"
+
+
+@interface UIScrollView ()
+- (CGPoint)_confinedContentOffset:(CGPoint)p;
+- (CGPoint)_restrainedContentOffset:(CGPoint)offset;
+- (void)_dragBy:(CGPoint)delta;
+@end
+
+
+static inline CGFloat LinearInterpolation(CGFloat t, CGFloat start, CGFloat end)
+{
+    if (t <= 0) {
+        return start;
+    } else if (t >= 1) {
+        return end;
+    } else {
+        return t * end + (1 - t) * start;
+    }
+}
+
+static inline CGFloat QuadraticEaseOut(CGFloat t, CGFloat start, CGFloat end)
+{
+    if (t <= 0) {
+        return start;
+    } else if (t >= 1) {
+        return end;
+    } else {
+        return LinearInterpolation(2 * t - t * t, start, end);
+    }
+}
+
+static CGFloat Clamp(CGFloat v, CGFloat min, CGFloat max)
+{
+    return (v < min)? min : (v > max)? max : v;
+}
+
+static CGFloat Spring(CGFloat velocity, CGFloat position, CGFloat restPosition, CGFloat tightness, CGFloat dampening)
+{
+    const CGFloat o = restPosition - position;
+    
+    CGFloat d = o * tightness;
+    d -= velocity * dampening;
+    velocity += d;
+    
+    return velocity;
+}
+
+static const NSTimeInterval maxReturnDuration = 0.4;
+static const NSTimeInterval physicsTimeStep = 1/60.;
+static const CGFloat springTightness = 7;
+static const CGFloat springDampening = 0.4f;
+<<<<<<< .mine
+=======
+static const CGFloat maximumVelocity = 4000;
+>>>>>>> .r5938
+
+static BOOL BounceComponent(NSTimeInterval t, UIScrollViewDecelerationScrollAnimationComponent *c, CGFloat to)
+{
+    if (c->bounced && c->returnTime != 0) {
+        const NSTimeInterval returnBounceTime = MIN(1, ((t - c->returnTime) / maxReturnDuration));
+        c->position = QuadraticEaseOut(returnBounceTime, c->returnFrom, to);
+        return (returnBounceTime == 1);
+    } else if (fabs(to - c->position) > 0) {
+        const BOOL sign = signbit(c->velocity);
+        
+        c->velocity = Spring(c->velocity, c->position, to, springTightness, springDampening);
+        c->position += c->velocity * physicsTimeStep;
+
+        c->bounced = YES;
+
+        if ((BOOL)signbit(c->velocity) != sign) {
+            c->returnFrom = c->position;
+            c->returnTime = t;
+        }
+        
+        return NO;
+    } else {
+        return YES;
+    }
+}
+
+
+@implementation UIScrollViewScrollAnimation
+@synthesize animationCurve, beginContentOffset, endContentOffset, beginTime, duration;
+
+- (CGPoint)contentOffsetForTime:(NSTimeInterval)currentTime finished:(BOOL *)finished
+{
+    *finished = NO;
+
+    if (currentTime <= beginTime) {
+        return beginContentOffset;
+    } else if (currentTime >= (beginTime + duration)) {
+        *finished = YES;
+        return endContentOffset;
+    } else {
+        const NSTimeInterval elapsedTime = currentTime - beginTime;
+        const CGFloat animationPosition = elapsedTime / duration;
+
+        CGFloat (* const timingFunction)(CGFloat, CGFloat, CGFloat) = (animationCurve == UIScrollViewScrollAnimationCurveLinear)? &LinearInterpolation : &QuadraticEaseOut;
+
+        return CGPointMake(timingFunction(animationPosition, beginContentOffset.x, endContentOffset.x),
+                           timingFunction(animationPosition, beginContentOffset.y, endContentOffset.y));
+    }
+}
+
+@end
+
+
+
+
+@implementation UIScrollViewDecelerationScrollAnimation
+
+- (id)initWithScrollView:(UIScrollView *)sv velocity:(CGPoint)v;
+{
+    if ((self=[super init])) {
+        const NSTimeInterval now = [NSDate timeIntervalSinceReferenceDate];
+
+        scrollView = sv;
+        physicsTime = now;
+        lastMomentumTime = now;
+
+        x.decelerateTime = now;
+        x.velocity = v.x;
+        x.position = scrollView.contentOffset.x;
+        x.returnFrom = 0;
+        x.returnTime = 0;
+        x.bounced = (x.velocity == 0);  // if the velocity is 0, we're going to assume we just need to return it back to position immediately
+                                        // this works around the case where the content was already at an edge and the user just flicked in
+                                        // such a way that it should bounce a bit and return to the proper offset. not doing something like this
+                                        // (along with the associated code in UIScrollView) results in crazy forces being applied in those cases.
+
+        y.decelerateTime = now;
+        y.velocity = v.y;
+        y.position = scrollView.contentOffset.y;
+        y.returnFrom = 0;
+        y.returnTime = 0;
+        y.bounced = (y.velocity == 0);  // see note above
+    }
+    return self;
+}
+
+- (CGPoint)contentOffsetForTime:(NSTimeInterval)currentTime finished:(BOOL *)finished
+{
+    *finished = NO;
+
+    const BOOL isFinishedWaitingForMomentumScroll = ((currentTime - lastMomentumTime) > 0.15f);
+    
+    while (!*finished && currentTime >= physicsTime) {
+        CGPoint confinedOffset = [scrollView _confinedContentOffset:CGPointMake(x.position, y.position)];
+        
+        const BOOL verticalIsFinished   = BounceComponent(physicsTime, &y, confinedOffset.y);
+        const BOOL horizontalIsFinished = BounceComponent(physicsTime, &x, confinedOffset.x);
+        
+        *finished = (verticalIsFinished && horizontalIsFinished && isFinishedWaitingForMomentumScroll);
+
+        physicsTime += physicsTimeStep;
+    }
+
+    return [scrollView _restrainedContentOffset:CGPointMake(x.position, y.position)];
+}
+
+- (void)momentumScrollBy:(CGPoint)delta
+{
+    lastMomentumTime = [NSDate timeIntervalSinceReferenceDate];
+    
+    if (!x.bounced) {
+        x.position += delta.x;
+        x.velocity = (delta.x / (lastMomentumTime - x.decelerateTime));
+        x.decelerateTime = lastMomentumTime;
+    }
+
+    if (!y.bounced) {
+        y.position += delta.y;
+        y.velocity = (delta.y / (lastMomentumTime - y.decelerateTime));
+        y.decelerateTime = lastMomentumTime;
+    }
+}
+
+
+@end
