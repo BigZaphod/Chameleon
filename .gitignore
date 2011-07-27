@@ -1,5 +1,8 @@
-.DS_Store
 build
-.xcuserstate
-.xcsettings
 xcuserdata
+*.perspectivev3
+*.pbxuser
+*.DS_Store
+.svn
+*.xcuserstate
+*.xcsettings
