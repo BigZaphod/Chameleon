@@ -30,7 +30,6 @@
 #import "UIResponder.h"
 #import "UIDevice.h"
 #import "UIApplicationDelegate.h"
-#import "UIApplicationAppKitIntegration.h"
 
 extern NSString *const UIApplicationWillChangeStatusBarOrientationNotification;
 extern NSString *const UIApplicationDidChangeStatusBarOrientationNotification;
@@ -95,7 +94,7 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
 
 @class UIWindow, UIApplication, UILocalNotification;
 
-@interface UIApplication : UIResponder 
+@interface UIApplication : UIResponder
 
 + (UIApplication *)sharedApplication;
 

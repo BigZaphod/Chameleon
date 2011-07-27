@@ -36,7 +36,9 @@
 #import "UIWindow+UIPrivate.h"
 #import "UIPopoverController+UIPrivate.h"
 #import "UIResponderAppKitIntegration.h"
+#import "UIApplicationAppKitIntegration.h"
 #import "UIKey+UIPrivate.h"
+#import "UIBackgroundTask.h"
 #import <Cocoa/Cocoa.h>
 
 NSString *const UIApplicationWillChangeStatusBarOrientationNotification = @"UIApplicationWillChangeStatusBarOrientationNotification";
@@ -47,6 +49,7 @@ NSString *const UIApplicationWillResignActiveNotification = @"UIApplicationWillR
 NSString *const UIApplicationDidEnterBackgroundNotification = @"UIApplicationDidEnterBackgroundNotification";
 NSString *const UIApplicationDidBecomeActiveNotification = @"UIApplicationDidBecomeActiveNotification";
 NSString *const UIApplicationDidFinishLaunchingNotification = @"UIApplicationDidFinishLaunchingNotification";
+
 NSString *const UIApplicationNetworkActivityIndicatorChangedNotification = @"UIApplicationNetworkActivityIndicatorChangedNotification";
 
 NSString *const UIApplicationLaunchOptionsURLKey = @"UIApplicationLaunchOptionsURLKey";
@@ -60,8 +63,8 @@ NSString *const UIApplicationDidReceiveMemoryWarningNotification = @"UIApplicati
 
 NSString *const UITrackingRunLoopMode = @"UITrackingRunLoopMode";
 
-UIBackgroundTaskIdentifier const UIBackgroundTaskInvalid = NSUIntegerMax; // correct?
-NSTimeInterval const UIMinimumKeepAliveTimeout = 0;
+const UIBackgroundTaskIdentifier UIBackgroundTaskInvalid = NSUIntegerMax; // correct?
+const NSTimeInterval UIMinimumKeepAliveTimeout = 0;
 
 static UIApplication *_theApplication = nil;
 
@@ -111,6 +114,8 @@ static BOOL TouchIsActiveNonGesture(UITouch *touch)
     NSMutableSet *_visibleWindows;
     BOOL _networkActivityIndicatorVisible;
     NSUInteger _ignoringInteractionEvents;
+    NSDate *_backgroundTasksExpirationDate;
+    NSMutableArray *_backgroundTasks;
 }
 @synthesize keyWindow = _keyWindow;
 @synthesize delegate = _delegate;
@@ -141,6 +146,7 @@ static BOOL TouchIsActive(UITouch *touch)
         _currentEvent = [[UIEvent alloc] initWithEventType:UIEventTypeTouches];
         [_currentEvent _setTouch:[[[UITouch alloc] init] autorelease]];
         _visibleWindows = [[NSMutableSet alloc] init];
+        _backgroundTasks = [[NSMutableArray alloc] init];
         _applicationSupportsShakeToEdit = YES;		// yeah... not *really* true, but UIKit defaults to YES :)
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillResignActive:) name:NSApplicationWillResignActiveNotification object:nil];
@@ -154,6 +160,8 @@ static BOOL TouchIsActive(UITouch *touch)
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_currentEvent release];
     [_visibleWindows release];
+    [_backgroundTasks release];
+    [_backgroundTasksExpirationDate release];
     [super dealloc];
 }
 
@@ -179,7 +187,7 @@ static BOOL TouchIsActive(UITouch *touch)
 
 - (NSTimeInterval)backgroundTimeRemaining
 {
-    return 0;
+    return [_backgroundTasksExpirationDate timeIntervalSinceNow];
 }
 
 - (BOOL)isNetworkActivityIndicatorVisible
@@ -255,11 +263,98 @@ static BOOL TouchIsActive(UITouch *touch)
 
 - (UIBackgroundTaskIdentifier)beginBackgroundTaskWithExpirationHandler:(void(^)(void))handler
 {
-    return UIBackgroundTaskInvalid;
+    UIBackgroundTask *task = [[[UIBackgroundTask alloc] initWithExpirationHandler:handler] autorelease];
+    [_backgroundTasks addObject:task];
+    return task.taskIdentifier;
 }
 
 - (void)endBackgroundTask:(UIBackgroundTaskIdentifier)identifier
 {
+    for (UIBackgroundTask *task in _backgroundTasks) {
+        if (task.taskIdentifier == identifier) {
+            [_backgroundTasks removeObject:task];
+            break;
+        }
+    }
+}
+
+- (void)_runBackgroundTasks:(void (^)(void))run_tasks
+{
+    run_tasks();
+}
+
+- (void)runBackgroundTasksBeforeDate:(NSDate *)timeoutDate
+                               title:(NSString *)title
+                             message:(NSString *)message
+                         buttonTitle:(NSString *)buttonTitle
+                   completionHandler:(void (^)(BOOL allTasksEnded))completionHandler
+{
+    NSAssert(_backgroundTasksExpirationDate == nil, @"already running background tasks");
+    
+    [_backgroundTasksExpirationDate release];
+    _backgroundTasksExpirationDate = [timeoutDate retain];
+    
+    void (^taskFinisher)(void) = ^{
+        if ([_backgroundTasks count] > 0) {
+            NSAlert *alert = [[NSAlert alloc] init];
+            [alert setAlertStyle:NSInformationalAlertStyle];
+            [alert setShowsSuppressionButton:NO];
+            [alert setMessageText:title];
+            [alert setInformativeText:message];
+            [alert addButtonWithTitle:buttonTitle];
+            [alert layout];
+            
+            NSModalSession session = [NSApp beginModalSessionForWindow:alert.window];
+            
+            while ([NSApp runModalSession:session] == NSRunContinuesResponse) {
+                
+                // run the runloop in the default mode so things like connections and timers still work for processing our
+                // background tasks. we'll make sure not to run this any longer than 1 second at a time, otherwise the alert
+                // might hang around for a lot longer than is necessary since we might not have anything to run in the default
+                // mode for awhile or something which would keep this method from returning.
+                [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+                
+                // check if all tasks were done, and if so, break
+                if ([_backgroundTasks count] == 0) {
+                    break;
+                }
+                
+                // otherwise check if we've timed out and if we are, break
+                if ([[NSDate date] timeIntervalSinceReferenceDate] >= [_backgroundTasksExpirationDate timeIntervalSinceReferenceDate]) {
+                    break;
+                }
+            }
+            
+            [NSApp endModalSession:session];
+            
+            [alert release];
+        }
+
+        // if there's any remaining tasks, run their expiration handlers
+        for (UIBackgroundTask *task in _backgroundTasks) {
+            if (task.expirationHandler) {
+                task.expirationHandler();
+            }
+        }
+
+        // tell our caller we're all done here and if we've completed everything or not
+        completionHandler(([_backgroundTasks count] == 0));
+
+        // remove any lingering tasks so we're back to being empty
+        [_backgroundTasks removeAllObjects];
+        
+        // and reset our timer since we're done
+        [_backgroundTasksExpirationDate release];
+        _backgroundTasksExpirationDate = nil;
+    };
+    
+    // I need to delay this but run it on the main thread and also be able to run it in the panel run loop mode
+    // because we're probably in that run loop mode due to how -applicationShouldTerminate: does things. I don't
+    // know if I could do this same thing with a couple of simple GCD calls, but whatever, this works too. :)
+    [self performSelectorOnMainThread:@selector(_runBackgroundTasks:)
+                           withObject:[[taskFinisher copy] autorelease]
+                        waitUntilDone:NO
+                                modes:[NSArray arrayWithObjects:NSModalPanelRunLoopMode, NSRunLoopCommonModes, nil]];
 }
 
 - (void)_setKeyWindow:(UIWindow *)newKeyWindow
