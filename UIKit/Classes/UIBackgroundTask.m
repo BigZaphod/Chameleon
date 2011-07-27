@@ -35,7 +35,7 @@
 - (id)initWithExpirationHandler:(void(^)(void))handler
 {
     if ((self = [super init])) {
-        _expirationHandler = [handler retain];
+        _expirationHandler = [handler copy];
         _taskIdentifier = (UIBackgroundTaskIdentifier)&self;
     }
 
