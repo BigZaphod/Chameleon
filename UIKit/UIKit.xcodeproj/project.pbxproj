@@ -17,6 +17,8 @@
 		1426FFDE129ADEA300BD31E5 /* UIControlAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 1426FFDC129ADEA300BD31E5 /* UIControlAction.m */; };
 		144156DB1284A22200532FE2 /* UIToolbarButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 144156D91284A22200532FE2 /* UIToolbarButton.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		144156DC1284A22200532FE2 /* UIToolbarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 144156DA1284A22200532FE2 /* UIToolbarButton.m */; };
+		1443B06C13E06081001D7EC1 /* UIBackgroundTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 1443B06A13E06081001D7EC1 /* UIBackgroundTask.h */; };
+		1443B06D13E06081001D7EC1 /* UIBackgroundTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 1443B06B13E06081001D7EC1 /* UIBackgroundTask.m */; };
 		1443DF24121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1443DF23121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		1444318E137D7FEE00B81304 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1444318D137D7FEE00B81304 /* IOKit.framework */; };
 		145335651226F03E0005644F /* UITextLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 145335631226F03E0005644F /* UITextLayer.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -284,6 +286,8 @@
 		1426FFDC129ADEA300BD31E5 /* UIControlAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIControlAction.m; sourceTree = "<group>"; };
 		144156D91284A22200532FE2 /* UIToolbarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIToolbarButton.h; sourceTree = "<group>"; };
 		144156DA1284A22200532FE2 /* UIToolbarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIToolbarButton.m; sourceTree = "<group>"; };
+		1443B06A13E06081001D7EC1 /* UIBackgroundTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBackgroundTask.h; sourceTree = "<group>"; };
+		1443B06B13E06081001D7EC1 /* UIBackgroundTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBackgroundTask.m; sourceTree = "<group>"; };
 		1443DF23121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScreenMode+UIPrivate.h"; sourceTree = "<group>"; };
 		1444318D137D7FEE00B81304 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		145335631226F03E0005644F /* UITextLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITextLayer.h; sourceTree = "<group>"; };
@@ -794,6 +798,8 @@
 			children = (
 				14C0715C13CF5A2300B76E35 /* UIAction.h */,
 				14C0715D13CF5A2300B76E35 /* UIAction.m */,
+				1443B06A13E06081001D7EC1 /* UIBackgroundTask.h */,
+				1443B06B13E06081001D7EC1 /* UIBackgroundTask.m */,
 				145335671226F1F90005644F /* UIBulletGlyphGenerator.h */,
 				145335681226F1F90005644F /* UIBulletGlyphGenerator.m */,
 				1426FFDB129ADEA300BD31E5 /* UIControlAction.h */,
@@ -1029,6 +1035,7 @@
 				1413D21213D72A06004D77E9 /* UIScrollViewAnimation.h in Headers */,
 				1413D21413D72A06004D77E9 /* UIScrollViewAnimationDeceleration.h in Headers */,
 				1413D21613D72A06004D77E9 /* UIScrollViewAnimationScroll.h in Headers */,
+				1443B06C13E06081001D7EC1 /* UIBackgroundTask.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1217,6 +1224,7 @@
 				1413D21313D72A06004D77E9 /* UIScrollViewAnimation.m in Sources */,
 				1413D21513D72A06004D77E9 /* UIScrollViewAnimationDeceleration.m in Sources */,
 				1413D21713D72A06004D77E9 /* UIScrollViewAnimationScroll.m in Sources */,
+				1443B06D13E06081001D7EC1 /* UIBackgroundTask.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

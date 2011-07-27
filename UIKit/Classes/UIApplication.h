@@ -30,7 +30,6 @@
 #import "UIResponder.h"
 #import "UIDevice.h"
 #import "UIApplicationDelegate.h"
-#import "UIApplicationAppKitIntegration.h"
 
 extern NSString *const UIApplicationWillChangeStatusBarOrientationNotification;
 extern NSString *const UIApplicationDidChangeStatusBarOrientationNotification;
@@ -106,6 +105,8 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
     BOOL _applicationSupportsShakeToEdit;
     NSUInteger _ignoringInteractionEvents;
     NSInteger _applicationIconBadgeNumber;
+    NSDate *_backgroundTasksExpirationDate;
+    NSMutableArray *_backgroundTasks;
 }
 
 + (UIApplication *)sharedApplication;
