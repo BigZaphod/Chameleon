@@ -99,7 +99,7 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
     UIEvent *_currentEvent;
     UIWindow *_keyWindow;
     NSMutableSet *_visibleWindows;
-    id<UIApplicationDelegate> _delegate;
+    __unsafe_unretained id<UIApplicationDelegate> _delegate;
     BOOL _idleTimerDisabled;
     BOOL _networkActivityIndicatorVisible;
     BOOL _applicationSupportsShakeToEdit;

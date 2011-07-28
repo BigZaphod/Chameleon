@@ -41,7 +41,7 @@
 @interface UISearchBar : UIView {
     UITextField *_searchField;
     BOOL _showsCancelButton;
-    id<UISearchBarDelegate> _delegate;
+    __unsafe_unretained id<UISearchBarDelegate> _delegate;
     NSString *_placeholder;
 }
 

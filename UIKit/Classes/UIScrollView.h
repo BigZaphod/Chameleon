@@ -56,7 +56,7 @@ extern const float UIScrollViewDecelerationRateFast;
 
 @interface UIScrollView : UIView {
 @package
-    id _delegate;
+    __unsafe_unretained id _delegate;
 @private
     CGPoint _contentOffset;
     CGSize _contentSize;

@@ -38,8 +38,8 @@
 @protocol UIPickerViewDataSource, UIPickerViewDelegate;
 
 @interface UIPickerView : UIView {
-    id<UIPickerViewDataSource> _dataSource;
-    id<UIPickerViewDelegate>   _delegate;
+    __unsafe_unretained id<UIPickerViewDataSource> _dataSource;
+    __unsafe_unretained id<UIPickerViewDelegate>   _delegate;
     BOOL _showsSelectionIndicator;
 }
 

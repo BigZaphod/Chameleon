@@ -67,7 +67,7 @@ typedef enum {
 @private
     UITextLayer *_textLayer;
 
-    id _delegate;
+    __unsafe_unretained id _delegate;
     UITextFieldViewMode _clearButtonMode;
     UIView *_leftView;
     UITextFieldViewMode _leftViewMode;

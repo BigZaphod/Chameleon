@@ -42,7 +42,7 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize);
 
 @interface UIScroller : UIView {
 @private
-    id _delegate;
+    __unsafe_unretained id<_UIScrollerDelegate> _delegate;
     CGFloat _contentOffset;
     CGFloat _contentSize;
     CGFloat _dragOffset;

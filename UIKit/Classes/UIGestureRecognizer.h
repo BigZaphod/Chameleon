@@ -50,7 +50,7 @@ typedef enum {
 
 @interface UIGestureRecognizer : NSObject {
 @private
-    id _delegate;
+    __unsafe_unretained id _delegate;
     BOOL _delaysTouchesBegan;
     BOOL _delaysTouchesEnded;
     BOOL _cancelsTouchesInView;
