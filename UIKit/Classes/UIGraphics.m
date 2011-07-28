@@ -32,38 +32,27 @@
 #import "UIScreen.h"
 #import <AppKit/AppKit.h>
 
-typedef struct UISavedGraphicsContext_ {
-    NSGraphicsContext *context;
-    struct UISavedGraphicsContext_ *previous;
-} UISavedGraphicsContext;
-
-static UISavedGraphicsContext *contextStack = NULL;
+static NSMutableArray *contextStack = nil;
 
 void UIGraphicsPushContext(CGContextRef ctx)
 {
-    UISavedGraphicsContext *savedContext = malloc(sizeof(UISavedGraphicsContext));
-    savedContext->context = [[NSGraphicsContext currentContext] retain];
-    savedContext->previous = contextStack;
-    contextStack = savedContext;
-    CGContextRetain(ctx);
+    if (!contextStack) {
+        contextStack = [[NSMutableArray alloc] initWithCapacity:2];
+    }
+    
     [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:(void *)ctx flipped:YES]];
+    [contextStack addObject:[NSGraphicsContext currentContext]];
 }
 
 void UIGraphicsPopContext()
 {
-    UISavedGraphicsContext *popContext = contextStack;
-    if (popContext) {
-        CGContextRelease([[NSGraphicsContext currentContext] graphicsPort]);
-        contextStack = popContext->previous;
-        [NSGraphicsContext setCurrentContext:popContext->context];
-        [popContext->context release];
-        free(popContext);
-    }
+    [contextStack removeLastObject];
+    [NSGraphicsContext setCurrentContext:[contextStack lastObject]];
 }
 
 CGContextRef UIGraphicsGetCurrentContext()
 {
-    return [[NSGraphicsContext currentContext] graphicsPort];
+    return [[contextStack lastObject] graphicsPort];
 }
 
 void UIGraphicsBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloat scale)
