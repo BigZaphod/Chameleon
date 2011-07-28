@@ -34,6 +34,8 @@
  */
 
 #import "UISearchDisplayController.h"
+#import "UISearchBar.h"
+#import "UIViewController.h"
 
 
 @implementation UISearchDisplayController

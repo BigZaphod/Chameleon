@@ -54,10 +54,13 @@
     UIColor *endColor = [UIColor colorWithRed:185/255.f green:193/255.f blue:201/255.f alpha:1];
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGFloat locations[2] = {0.f, 1.f};
-    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)[NSArray arrayWithObjects:(id)startColor.CGColor, (id)endColor.CGColor, nil], locations);
+    const void *colors[2] = {startColor.CGColor, endColor.CGColor};
+    CFArrayRef gradientColors = CFArrayCreate(NULL, colors, 2, NULL);
+    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, gradientColors, locations);
     CGColorSpaceRelease(colorSpace);
     CGContextDrawLinearGradient(UIGraphicsGetCurrentContext(), gradient, CGPointMake(0.f, 1.f), CGPointMake(0.f, size.height - 1.f), 0);
     CGGradientRelease(gradient);
+    CFRelease(gradientColors);
     [[UIColor colorWithRed:153/255.f green:158/255.f blue:165/255.f alpha:1] setFill];
     UIRectFill(CGRectMake(0.f, size.height - 1.f, size.width, 1.f));
     [super drawRect:rect];
