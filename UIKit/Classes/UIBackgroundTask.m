@@ -36,7 +36,7 @@
 {
     if ((self = [super init])) {
         _expirationHandler = [handler copy];
-        _taskIdentifier = (UIBackgroundTaskIdentifier)&self;
+        _taskIdentifier = [self hash];  // may not be the best idea in the world
     }
 
     return self;

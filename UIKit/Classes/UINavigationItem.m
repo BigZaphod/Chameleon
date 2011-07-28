@@ -33,6 +33,8 @@
 #import "UINavigationBar.h"
 #import "UINavigationBar+UIPrivate.h"
 
+static void * const UINavigationItemContext = "UINavigationItemContext";
+
 @implementation UINavigationItem
 @synthesize title=_title, rightBarButtonItem=_rightBarButtonItem, titleView=_titleView, hidesBackButton=_hidesBackButton;
 @synthesize leftBarButtonItem=_leftBarButtonItem, backBarButtonItem=_backBarButtonItem, prompt=_prompt;
@@ -71,7 +73,7 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if (context != [self class]) {
+    if (context != UINavigationItemContext) {
         if ([[self superclass] instancesRespondToSelector:_cmd])
             [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
         return;
@@ -95,7 +97,7 @@
     else if (navigationBar != nil) {
         // observe property changes to notify UI element
         for (NSString * keyPath in [isa _keyPathsTriggeringUIUpdates]) {
-            [self addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionNew context:[self class]];
+            [self addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionNew context:UINavigationItemContext];
         }
     }
     

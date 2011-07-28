@@ -180,7 +180,7 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
         NSMutableArray *images = [[NSMutableArray alloc] initWithCapacity:numberOfFrames];
         
         for (NSInteger frameNumber=0; frameNumber<numberOfFrames; frameNumber++) {
-            [images addObject:(id)UIActivityIndicatorViewFrameImage(_activityIndicatorViewStyle, frameNumber, numberOfFrames).CGImage];
+            [images addObject:(__bridge id)UIActivityIndicatorViewFrameImage(_activityIndicatorViewStyle, frameNumber, numberOfFrames).CGImage];
         }
         
         CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"contents"];
