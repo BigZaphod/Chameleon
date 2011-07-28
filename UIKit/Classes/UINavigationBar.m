@@ -164,19 +164,21 @@ typedef enum {
                 moveLeftBy *= -1.f;
             }
             
-            [UIView beginAnimations:@"move out" context:NULL];
-            [UIView setAnimationDuration:kAnimationDuration];
-            _leftView.frame = CGRectOffset(_leftView.frame, moveLeftBy, 0);
-            _centerView.frame = CGRectOffset(_centerView.frame, moveCenterBy, 0);
-            [UIView commitAnimations];
-
-            [UIView beginAnimations:@"fade out" context:NULL];
-            [UIView setAnimationDuration:kAnimationDuration * .8];
-            [UIView setAnimationDelay:kAnimationDuration * .2];
-            _leftView.alpha = 0;
-            _rightView.alpha = 0;
-            _centerView.alpha = 0;
-            [UIView commitAnimations];
+            [UIView animateWithDuration:kAnimationDuration
+                             animations:^(void) {
+                                 _leftView.frame = CGRectOffset(_leftView.frame, moveLeftBy, 0);
+                                 _centerView.frame = CGRectOffset(_centerView.frame, moveCenterBy, 0);
+                             }];
+            
+            [UIView animateWithDuration:kAnimationDuration * 0.8
+                                  delay:kAnimationDuration * 0.2
+                                options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionNone
+                             animations:^(void) {
+                                 _leftView.alpha = 0;
+                                 _rightView.alpha = 0;
+                                 _centerView.alpha = 0;
+                             }
+                             completion:NULL];
             
             [self performSelector:@selector(_removeAnimatedViews:) withObject:previousViews afterDelay:kAnimationDuration];
         } else {
@@ -257,19 +259,21 @@ typedef enum {
             _rightView.alpha = 0;
             _centerView.alpha = 0;
             
-            [UIView beginAnimations:@"move in" context:NULL];
-            [UIView setAnimationDuration:kAnimationDuration];
-            _leftView.frame = destinationLeftFrame;
-            _centerView.frame = destinationCenterFrame;
-            [UIView commitAnimations];
-            
-            [UIView beginAnimations:@"fade in" context:NULL];
-            [UIView setAnimationDuration:kAnimationDuration * .8];
-            [UIView setAnimationDelay:kAnimationDuration * .2];
-            _leftView.alpha = 1;
-            _rightView.alpha = 1;
-            _centerView.alpha = 1;
-            [UIView commitAnimations];
+            [UIView animateWithDuration:kAnimationDuration
+                             animations:^(void) {
+                                 _leftView.frame = destinationLeftFrame;
+                                 _centerView.frame = destinationCenterFrame;
+                             }];
+
+            [UIView animateWithDuration:kAnimationDuration * 0.8
+                                  delay:kAnimationDuration * 0.2
+                                options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionNone
+                             animations:^(void) {
+                                 _leftView.alpha = 1;
+                                 _rightView.alpha = 1;
+                                 _centerView.alpha = 1;
+                             }
+                             completion:NULL];
         }
     } else {
         _leftView = _centerView = _rightView = nil;

@@ -74,12 +74,14 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 {
     [_fadeTimer invalidate];
     _fadeTimer = nil;
-        
-    [UIView beginAnimations:@"fade" context:NULL];
-    [UIView setAnimationDuration:0.33];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-    self.alpha = _UIScrollerMinimumAlpha;
-    [UIView commitAnimations];
+
+    [UIView animateWithDuration:0.33
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionTransitionNone | UIViewAnimationOptionAllowUserInteraction
+                     animations:^(void) {
+                         self.alpha = _UIScrollerMinimumAlpha;
+                     }
+                     completion:NULL];
 }
 
 - (void)_fadeOutAfterDelay:(NSTimeInterval)time
@@ -93,11 +95,13 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
     [_fadeTimer invalidate];
     _fadeTimer = nil;
 
-    [UIView beginAnimations:@"fade" context:NULL];
-    [UIView setAnimationDuration:0.33];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-    self.alpha = 1;
-    [UIView commitAnimations];
+    [UIView animateWithDuration:0.33
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionTransitionNone | UIViewAnimationOptionAllowUserInteraction
+                     animations:^(void) {
+                         self.alpha = 1;
+                     }
+                     completion:NULL];
 }
 
 - (void)flash

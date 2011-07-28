@@ -224,15 +224,13 @@
         for (UIToolbarItem *toolbarItem in _toolbarItems) {
             UIView *view = toolbarItem.view;
             if (view) {
-                if (animated) {
-                    [UIView beginAnimations:@"fadeOut" context:NULL];
-                    [UIView setAnimationDidStopSelector:@selector(removeFromSuperview)];
-                    [UIView setAnimationDelegate:view];
-                    view.alpha = 0;
-                    [UIView commitAnimations];
-                } else {
-                    [view removeFromSuperview];
-                }
+                [UIView animateWithDuration:animated? 0.2 : 0
+                                 animations:^(void) {
+                                     view.alpha = 0;
+                                 }
+                                 completion:^(BOOL finished) {
+                                     [view removeFromSuperview];
+                                 }];
             }
         }
         
@@ -251,9 +249,11 @@
                 UIView *view = toolbarItem.view;
                 if (view) {
                     view.alpha = 0;
-                    [UIView beginAnimations:@"fadeIn" context:NULL];
-                    view.alpha = 1;
-                    [UIView commitAnimations];
+                    
+                    [UIView animateWithDuration:0.2
+                                     animations:^(void) {
+                                         view.alpha = 1;
+                                     }];
                 }
             }
         }

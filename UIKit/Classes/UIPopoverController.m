@@ -255,15 +255,13 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
         _popoverView.transform = CGAffineTransformMakeScale(0.98f,0.98f);
         _popoverView.alpha = 0.4f;
         
-        [UIView beginAnimations:@"Ploop" context:NULL];
-        [UIView setAnimationDuration:0.08];
-        _popoverView.transform = CGAffineTransformIdentity;
-        [UIView commitAnimations];
-
-        [UIView beginAnimations:@"Fade" context:NULL];
-        [UIView setAnimationDuration:0.1];
-        _popoverView.alpha = 1.f;
-        [UIView commitAnimations];
+        [UIView animateWithDuration:0.08 animations:^(void) {
+            _popoverView.transform = CGAffineTransformIdentity;
+        }];
+        
+        [UIView animateWithDuration:0.1 animations:^(void) {
+            _popoverView.alpha = 1.f;
+        }];
     }
 }
 
@@ -301,15 +299,13 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 - (void)dismissPopoverAnimated:(BOOL)animated
 {
     if ([self isPopoverVisible]) {
-        if (animated) {
-            [UIView beginAnimations:@"dismissPopoverAnimated" context:NULL];
-            [UIView setAnimationDelegate:self];
-            [UIView setAnimationDidStopSelector:@selector(_destroyPopover)];
-            _popoverView.alpha = 0;
-            [UIView commitAnimations];
-        } else {
-            [self _destroyPopover];
-        }
+        [UIView animateWithDuration:animated? 0.2 : 0
+                         animations:^(void) {
+                             _popoverView.alpha = 0;
+                         }
+                         completion:^(BOOL finished) {
+                             [self _destroyPopover];
+                         }];
     }
 }
 
