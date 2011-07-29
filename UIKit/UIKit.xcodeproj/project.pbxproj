@@ -305,6 +305,12 @@
 		F922DB6213D3310000469869 /* UITextSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = F922DB6013D3310000469869 /* UITextSelectionView.m */; };
 		F922DB6A13D3506300469869 /* UITableViewCellContentView.h in Headers */ = {isa = PBXBuildFile; fileRef = F922DB6813D3506300469869 /* UITableViewCellContentView.h */; };
 		F922DB6B13D3506300469869 /* UITableViewCellContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = F922DB6913D3506300469869 /* UITableViewCellContentView.m */; };
+		F92CB50F13E0672E00A50B9F /* UINibDecoderForNibArchiveV1.h in Headers */ = {isa = PBXBuildFile; fileRef = F92CB50D13E0672E00A50B9F /* UINibDecoderForNibArchiveV1.h */; };
+		F92CB51113E067F900A50B9F /* UINibDecoderForNibArchiveV1.m in Sources */ = {isa = PBXBuildFile; fileRef = F92CB50E13E0672E00A50B9F /* UINibDecoderForNibArchiveV1.m */; };
+		F92CB51413E06D9500A50B9F /* UINibDecoderForKeyedArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = F92CB51213E06D9500A50B9F /* UINibDecoderForKeyedArchive.h */; };
+		F92CB51513E06D9500A50B9F /* UINibDecoderForKeyedArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = F92CB51313E06D9500A50B9F /* UINibDecoderForKeyedArchive.m */; };
+		F935331D13DF0733003C7D3A /* UINibDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = F935331B13DF0733003C7D3A /* UINibDecoder.h */; };
+		F935331E13DF0733003C7D3A /* UINibDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = F935331C13DF0733003C7D3A /* UINibDecoder.m */; };
 		F94CB9A413C7E5C4001DF656 /* <UITableViewCell> accessoryDisclosureIndicatorHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = F94CB9A313C7E5C4001DF656 /* <UITableViewCell> accessoryDisclosureIndicatorHighlighted.png */; };
 		F94CB9D613C8C0A9001DF656 /* UIBarButtonItem+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = F94CB9D513C8C0A9001DF656 /* UIBarButtonItem+UIPrivate.h */; };
 		F94CB9D913C8C242001DF656 /* UIButton+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = F94CB9D813C8C242001DF656 /* UIButton+UIPrivate.h */; };
@@ -337,8 +343,6 @@
 		F99E83FA13D05A1F00107358 /* UIRuntimeEventConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F99E83F813D05A1E00107358 /* UIRuntimeEventConnection.m */; };
 		F99E83FD13D05A3D00107358 /* UIRuntimeOutletConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = F99E83FB13D05A3C00107358 /* UIRuntimeOutletConnection.h */; };
 		F99E83FE13D05A3D00107358 /* UIRuntimeOutletConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F99E83FC13D05A3D00107358 /* UIRuntimeOutletConnection.m */; };
-		F99E840113D0675600107358 /* UINibInflationHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F99E83FF13D0675600107358 /* UINibInflationHelper.h */; };
-		F99E840213D0675600107358 /* UINibInflationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F99E840013D0675600107358 /* UINibInflationHelper.m */; };
 		F9D9773013B794710086F226 /* UITextInput.h in Headers */ = {isa = PBXBuildFile; fileRef = F9D9772F13B794700086F226 /* UITextInput.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F9D9774113B7958E0086F226 /* <UINavigationBarBackground> blackOpaque.png in Resources */ = {isa = PBXBuildFile; fileRef = F9D9773E13B7958E0086F226 /* <UINavigationBarBackground> blackOpaque.png */; };
 		F9D9774213B7958E0086F226 /* <UINavigationBarBackground> blackTranslucent.png in Resources */ = {isa = PBXBuildFile; fileRef = F9D9773F13B7958E0086F226 /* <UINavigationBarBackground> blackTranslucent.png */; };
@@ -651,6 +655,12 @@
 		F922DB6013D3310000469869 /* UITextSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITextSelectionView.m; sourceTree = "<group>"; };
 		F922DB6813D3506300469869 /* UITableViewCellContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellContentView.h; sourceTree = "<group>"; };
 		F922DB6913D3506300469869 /* UITableViewCellContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellContentView.m; sourceTree = "<group>"; };
+		F92CB50D13E0672E00A50B9F /* UINibDecoderForNibArchiveV1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINibDecoderForNibArchiveV1.h; sourceTree = "<group>"; };
+		F92CB50E13E0672E00A50B9F /* UINibDecoderForNibArchiveV1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINibDecoderForNibArchiveV1.m; sourceTree = "<group>"; };
+		F92CB51213E06D9500A50B9F /* UINibDecoderForKeyedArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINibDecoderForKeyedArchive.h; sourceTree = "<group>"; };
+		F92CB51313E06D9500A50B9F /* UINibDecoderForKeyedArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINibDecoderForKeyedArchive.m; sourceTree = "<group>"; };
+		F935331B13DF0733003C7D3A /* UINibDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINibDecoder.h; sourceTree = "<group>"; };
+		F935331C13DF0733003C7D3A /* UINibDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINibDecoder.m; sourceTree = "<group>"; };
 		F94CB9A313C7E5C4001DF656 /* <UITableViewCell> accessoryDisclosureIndicatorHighlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UITableViewCell> accessoryDisclosureIndicatorHighlighted.png"; path = "Resources/<UITableViewCell> accessoryDisclosureIndicatorHighlighted.png"; sourceTree = "<group>"; };
 		F94CB9D513C8C0A9001DF656 /* UIBarButtonItem+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+UIPrivate.h"; sourceTree = "<group>"; };
 		F94CB9D813C8C242001DF656 /* UIButton+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+UIPrivate.h"; sourceTree = "<group>"; };
@@ -683,8 +693,6 @@
 		F99E83F813D05A1E00107358 /* UIRuntimeEventConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIRuntimeEventConnection.m; sourceTree = "<group>"; };
 		F99E83FB13D05A3C00107358 /* UIRuntimeOutletConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIRuntimeOutletConnection.h; sourceTree = "<group>"; };
 		F99E83FC13D05A3D00107358 /* UIRuntimeOutletConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIRuntimeOutletConnection.m; sourceTree = "<group>"; };
-		F99E83FF13D0675600107358 /* UINibInflationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINibInflationHelper.h; sourceTree = "<group>"; };
-		F99E840013D0675600107358 /* UINibInflationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINibInflationHelper.m; sourceTree = "<group>"; };
 		F9D9772F13B794700086F226 /* UITextInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITextInput.h; sourceTree = "<group>"; };
 		F9D9773E13B7958E0086F226 /* <UINavigationBarBackground> blackOpaque.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBarBackground> blackOpaque.png"; path = "Resources/<UINavigationBarBackground> blackOpaque.png"; sourceTree = "<group>"; };
 		F9D9773F13B7958E0086F226 /* <UINavigationBarBackground> blackTranslucent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBarBackground> blackTranslucent.png"; path = "Resources/<UINavigationBarBackground> blackTranslucent.png"; sourceTree = "<group>"; };
@@ -994,10 +1002,6 @@
 				14F56F4312664D430045EC82 /* UIPopoverView.m */,
 				14CC839011EFA8AF005988CC /* UIRoundedRectButton.h */,
 				14CC839111EFA8AF005988CC /* UIRoundedRectButton.m */,
-				F99E83F713D05A1D00107358 /* UIRuntimeEventConnection.h */,
-				F99E83F813D05A1E00107358 /* UIRuntimeEventConnection.m */,
-				F99E83FB13D05A3C00107358 /* UIRuntimeOutletConnection.h */,
-				F99E83FC13D05A3D00107358 /* UIRuntimeOutletConnection.m */,
 				14FA8C4F121DA4A000C4264B /* UIScroller.h */,
 				14FA8C50121DA4A000C4264B /* UIScroller.m */,
 				F91D412C13DA4228006ED0DA /* UIScrollViewAnimation.h */,
@@ -1095,10 +1099,18 @@
 				F99E83AC13CF7E7F00107358 /* UICustomObject.m */,
 				F99E83F313CFD52D00107358 /* UIImageNibPlaceholder.h */,
 				F99E83F413CFD52E00107358 /* UIImageNibPlaceholder.m */,
-				F99E83FF13D0675600107358 /* UINibInflationHelper.h */,
-				F99E840013D0675600107358 /* UINibInflationHelper.m */,
+				F935331B13DF0733003C7D3A /* UINibDecoder.h */,
+				F935331C13DF0733003C7D3A /* UINibDecoder.m */,
+				F92CB51213E06D9500A50B9F /* UINibDecoderForKeyedArchive.h */,
+				F92CB51313E06D9500A50B9F /* UINibDecoderForKeyedArchive.m */,
+				F92CB50D13E0672E00A50B9F /* UINibDecoderForNibArchiveV1.h */,
+				F92CB50E13E0672E00A50B9F /* UINibDecoderForNibArchiveV1.m */,
 				F99E83B013CF7EEE00107358 /* UIProxyObject.h */,
 				F99E83B113CF7EEE00107358 /* UIProxyObject.m */,
+				F99E83F713D05A1D00107358 /* UIRuntimeEventConnection.h */,
+				F99E83F813D05A1E00107358 /* UIRuntimeEventConnection.m */,
+				F99E83FB13D05A3C00107358 /* UIRuntimeOutletConnection.h */,
+				F99E83FC13D05A3D00107358 /* UIRuntimeOutletConnection.m */,
 			);
 			name = "Nib Support";
 			sourceTree = "<group>";
@@ -1289,7 +1301,6 @@
 				F99E83F513CFD52E00107358 /* UIImageNibPlaceholder.h in Headers */,
 				F99E83F913D05A1E00107358 /* UIRuntimeEventConnection.h in Headers */,
 				F99E83FD13D05A3D00107358 /* UIRuntimeOutletConnection.h in Headers */,
-				F99E840113D0675600107358 /* UINibInflationHelper.h in Headers */,
 				F922DB5B13D32D6C00469869 /* UIClassSwapper.h in Headers */,
 				F922DB6113D3310000469869 /* UITextSelectionView.h in Headers */,
 				F922DB6A13D3506300469869 /* UITableViewCellContentView.h in Headers */,
@@ -1299,6 +1310,9 @@
 				1413D21613D72A06004D77E9 /* UIScrollViewAnimationScroll.h in Headers */,
 				F91D413013DA4228006ED0DA /* UIScrollViewAnimation.h in Headers */,
 				F91D413213DA4228006ED0DA /* UIScrollViewScrollAnimation.h in Headers */,
+				F935331D13DF0733003C7D3A /* UINibDecoder.h in Headers */,
+				F92CB50F13E0672E00A50B9F /* UINibDecoderForNibArchiveV1.h in Headers */,
+				F92CB51413E06D9500A50B9F /* UINibDecoderForKeyedArchive.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1530,7 +1544,6 @@
 				F99E83F613CFD52E00107358 /* UIImageNibPlaceholder.m in Sources */,
 				F99E83FA13D05A1F00107358 /* UIRuntimeEventConnection.m in Sources */,
 				F99E83FE13D05A3D00107358 /* UIRuntimeOutletConnection.m in Sources */,
-				F99E840213D0675600107358 /* UINibInflationHelper.m in Sources */,
 				F922DB5C13D32D6C00469869 /* UIClassSwapper.m in Sources */,
 				F922DB6213D3310000469869 /* UITextSelectionView.m in Sources */,
 				F922DB6B13D3506300469869 /* UITableViewCellContentView.m in Sources */,
@@ -1540,6 +1553,9 @@
 				1413D21713D72A06004D77E9 /* UIScrollViewAnimationScroll.m in Sources */,
 				F91D413113DA4228006ED0DA /* UIScrollViewAnimation.m in Sources */,
 				F91D413313DA4228006ED0DA /* UIScrollViewScrollAnimation.m in Sources */,
+				F935331E13DF0733003C7D3A /* UINibDecoder.m in Sources */,
+				F92CB51113E067F900A50B9F /* UINibDecoderForNibArchiveV1.m in Sources */,
+				F92CB51513E06D9500A50B9F /* UINibDecoderForKeyedArchive.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

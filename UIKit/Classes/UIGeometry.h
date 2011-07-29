@@ -80,4 +80,5 @@ extern CGPoint CGPointFromString(NSString* string);
 - (void) encodeCGPoint:(CGPoint)point forKey:(NSString*)key;
 - (CGPoint) decodeCGPointForKey:(NSString*)key;
 - (CGRect) decodeCGRectForKey:(NSString*)key;
+- (CGSize) decodeCGSizeForKey:(NSString*)key;
 @end
