@@ -343,8 +343,6 @@
 		F99E83FA13D05A1F00107358 /* UIRuntimeEventConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F99E83F813D05A1E00107358 /* UIRuntimeEventConnection.m */; };
 		F99E83FD13D05A3D00107358 /* UIRuntimeOutletConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = F99E83FB13D05A3C00107358 /* UIRuntimeOutletConnection.h */; };
 		F99E83FE13D05A3D00107358 /* UIRuntimeOutletConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F99E83FC13D05A3D00107358 /* UIRuntimeOutletConnection.m */; };
-		F99E840113D0675600107358 /* UINibInflationHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F99E83FF13D0675600107358 /* UINibInflationHelper.h */; };
-		F99E840213D0675600107358 /* UINibInflationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F99E840013D0675600107358 /* UINibInflationHelper.m */; };
 		F9D9773013B794710086F226 /* UITextInput.h in Headers */ = {isa = PBXBuildFile; fileRef = F9D9772F13B794700086F226 /* UITextInput.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F9D9774113B7958E0086F226 /* <UINavigationBarBackground> blackOpaque.png in Resources */ = {isa = PBXBuildFile; fileRef = F9D9773E13B7958E0086F226 /* <UINavigationBarBackground> blackOpaque.png */; };
 		F9D9774213B7958E0086F226 /* <UINavigationBarBackground> blackTranslucent.png in Resources */ = {isa = PBXBuildFile; fileRef = F9D9773F13B7958E0086F226 /* <UINavigationBarBackground> blackTranslucent.png */; };
@@ -695,8 +693,6 @@
 		F99E83F813D05A1E00107358 /* UIRuntimeEventConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIRuntimeEventConnection.m; sourceTree = "<group>"; };
 		F99E83FB13D05A3C00107358 /* UIRuntimeOutletConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIRuntimeOutletConnection.h; sourceTree = "<group>"; };
 		F99E83FC13D05A3D00107358 /* UIRuntimeOutletConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIRuntimeOutletConnection.m; sourceTree = "<group>"; };
-		F99E83FF13D0675600107358 /* UINibInflationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINibInflationHelper.h; sourceTree = "<group>"; };
-		F99E840013D0675600107358 /* UINibInflationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINibInflationHelper.m; sourceTree = "<group>"; };
 		F9D9772F13B794700086F226 /* UITextInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITextInput.h; sourceTree = "<group>"; };
 		F9D9773E13B7958E0086F226 /* <UINavigationBarBackground> blackOpaque.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBarBackground> blackOpaque.png"; path = "Resources/<UINavigationBarBackground> blackOpaque.png"; sourceTree = "<group>"; };
 		F9D9773F13B7958E0086F226 /* <UINavigationBarBackground> blackTranslucent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBarBackground> blackTranslucent.png"; path = "Resources/<UINavigationBarBackground> blackTranslucent.png"; sourceTree = "<group>"; };
@@ -1006,10 +1002,6 @@
 				14F56F4312664D430045EC82 /* UIPopoverView.m */,
 				14CC839011EFA8AF005988CC /* UIRoundedRectButton.h */,
 				14CC839111EFA8AF005988CC /* UIRoundedRectButton.m */,
-				F99E83F713D05A1D00107358 /* UIRuntimeEventConnection.h */,
-				F99E83F813D05A1E00107358 /* UIRuntimeEventConnection.m */,
-				F99E83FB13D05A3C00107358 /* UIRuntimeOutletConnection.h */,
-				F99E83FC13D05A3D00107358 /* UIRuntimeOutletConnection.m */,
 				14FA8C4F121DA4A000C4264B /* UIScroller.h */,
 				14FA8C50121DA4A000C4264B /* UIScroller.m */,
 				F91D412C13DA4228006ED0DA /* UIScrollViewAnimation.h */,
@@ -1113,10 +1105,12 @@
 				F92CB51313E06D9500A50B9F /* UINibDecoderForKeyedArchive.m */,
 				F92CB50D13E0672E00A50B9F /* UINibDecoderForNibArchiveV1.h */,
 				F92CB50E13E0672E00A50B9F /* UINibDecoderForNibArchiveV1.m */,
-				F99E83FF13D0675600107358 /* UINibInflationHelper.h */,
-				F99E840013D0675600107358 /* UINibInflationHelper.m */,
 				F99E83B013CF7EEE00107358 /* UIProxyObject.h */,
 				F99E83B113CF7EEE00107358 /* UIProxyObject.m */,
+				F99E83F713D05A1D00107358 /* UIRuntimeEventConnection.h */,
+				F99E83F813D05A1E00107358 /* UIRuntimeEventConnection.m */,
+				F99E83FB13D05A3C00107358 /* UIRuntimeOutletConnection.h */,
+				F99E83FC13D05A3D00107358 /* UIRuntimeOutletConnection.m */,
 			);
 			name = "Nib Support";
 			sourceTree = "<group>";
@@ -1307,7 +1301,6 @@
 				F99E83F513CFD52E00107358 /* UIImageNibPlaceholder.h in Headers */,
 				F99E83F913D05A1E00107358 /* UIRuntimeEventConnection.h in Headers */,
 				F99E83FD13D05A3D00107358 /* UIRuntimeOutletConnection.h in Headers */,
-				F99E840113D0675600107358 /* UINibInflationHelper.h in Headers */,
 				F922DB5B13D32D6C00469869 /* UIClassSwapper.h in Headers */,
 				F922DB6113D3310000469869 /* UITextSelectionView.h in Headers */,
 				F922DB6A13D3506300469869 /* UITableViewCellContentView.h in Headers */,
@@ -1551,7 +1544,6 @@
 				F99E83F613CFD52E00107358 /* UIImageNibPlaceholder.m in Sources */,
 				F99E83FA13D05A1F00107358 /* UIRuntimeEventConnection.m in Sources */,
 				F99E83FE13D05A3D00107358 /* UIRuntimeOutletConnection.m in Sources */,
-				F99E840213D0675600107358 /* UINibInflationHelper.m in Sources */,
 				F922DB5C13D32D6C00469869 /* UIClassSwapper.m in Sources */,
 				F922DB6213D3310000469869 /* UITextSelectionView.m in Sources */,
 				F922DB6B13D3506300469869 /* UITableViewCellContentView.m in Sources */,

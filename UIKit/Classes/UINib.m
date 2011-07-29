@@ -1,7 +1,6 @@
 #import "UINib.h"
 #import "UINibLoading.h"
 #import "UINibDecoder.h"
-#import "UINibInflationHelper.h"
 #import "UIRuntimeOutletConnection.h"
 #import "UIRuntimeEventConnection.h"
 
