@@ -943,6 +943,7 @@ static BOOL _animationsEnabled = YES;
         animationCurve = UIViewAnimationCurveLinear;
     }
     
+    // NOTE: As of iOS 5 this is only supposed to block interaction events for the views being animated, not the whole app.
     if (ignoreInteractionEvents) {
         [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
     }
