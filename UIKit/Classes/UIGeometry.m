@@ -115,12 +115,13 @@ CGPoint CGPointFromString(NSString* string)
 @end
 
 @implementation NSCoder (NSCoderUIGeometryExtensions)
-- (void)encodeCGPoint:(CGPoint)point forKey:(NSString *)key
+
+- (void) encodeCGPoint:(CGPoint)point forKey:(NSString *)key
 {
     [self encodePoint:NSPointFromCGPoint(point) forKey:key];
 }
 
-- (CGPoint)decodeCGPointForKey:(NSString *)key
+- (CGPoint) decodeCGPointForKey:(NSString *)key
 {
     return NSPointToCGPoint([self decodePointForKey:key]);
 }
@@ -129,6 +130,12 @@ CGPoint CGPointFromString(NSString* string)
 {
     return NSRectToCGRect([self decodeRectForKey:key]);
 }
+
+- (CGSize) decodeCGSizeForKey:(NSString*)key
+{
+    return NSSizeToCGSize([self decodeSizeForKey:key]);
+}
+
 @end
 
 

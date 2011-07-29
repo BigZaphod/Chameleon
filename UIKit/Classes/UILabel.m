@@ -109,7 +109,7 @@ static NSString* const kUIAdjustsFontSizeToFitKey = @"UIAdjustsFontSizeToFit";
             self.shadowColor = [coder decodeObjectForKey:kUIShadowColorKey];
         }
         if ([coder containsValueForKey:kUIShadowOffsetKey]) {
-            self.shadowOffset = [coder decodeSizeForKey:kUIShadowOffsetKey];
+            self.shadowOffset = [coder decodeCGSizeForKey:kUIShadowOffsetKey];
         }
         if ([coder containsValueForKey:kUITextColorKey]) {
             self.textColor = [coder decodeObjectForKey:kUITextColorKey];
