@@ -54,6 +54,8 @@
         offset.x = floor(offset.x);
         offset.y = floor(offset.y);
         [self scrollToPoint:[self constrainScrollPoint:offset]];
+    } else {
+        [[self nextResponder] scrollWheel:event];
     }
 }
 
