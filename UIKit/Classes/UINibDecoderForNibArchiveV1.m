@@ -541,6 +541,24 @@ static Class kClassforUIProxyObject;
     return [self _extractCGSizeFromValue:value];
 }
 
+- (NSString*) description
+{
+    NSMutableString* s = [[NSMutableString alloc] init];
+    [s appendFormat:@"<%@:%p class=%@, %d values:{", NSStringFromClass([self class]), self, NSStringFromClass(archiveData_->classes[objectEntry_->indexOfClass]), objectEntry_->numberOfValues];
+    UINibDecoderValueEntry* value = archiveData_->values + objectEntry_->indexOfFirstValue;
+    UINibDecoderValueEntry* lastValue = value + (objectEntry_->numberOfValues - 1);
+    while (value <= lastValue) {
+        [s appendFormat:@"\n  %@ == %@", [archiveData_->keys objectAtIndex:value->indexOfKey], [self _extractObjectFromValue:value]];
+        value++;
+    }
+    if (objectEntry_->numberOfValues) {
+        [s appendString:@"\n"];
+    }
+    [s appendString:@"}>"];
+    return [s autorelease];
+}
+
+
 #pragma mark
 
 - (UINibDecoderValueEntry*) _nextGenericValue
@@ -746,6 +764,10 @@ static Class kClassforUIProxyObject;
         case kValueTypeByte: {
             uint8_t v = decodeByte(&vp);
             return [[NSNumber alloc] initWithInt:v];
+        }
+            
+        case kValueTypeConstantEqualsOne: {
+            return [[NSNumber alloc] initWithInt:1];
         }
 
         case kValueTypeFloat32: {
