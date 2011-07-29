@@ -33,29 +33,12 @@ static NSString* const kIBFirstResponderKey = @"IBFirstResponder";
 
 static inline uint32_t decodeVariableLengthInteger(void const** pp);
 static inline uint8_t decodeByte(void const** pp);
+static inline uint32_t decodeInt32(void const** pp);
 static inline float decodeFloat32(void const** p);
 static inline double decodeFloat64(void const** pp);
 
 
-@interface UINibArchiveDataV1 : NSObject {
-@public
-    NSData* data_;
-    
-    uint32_t numberOfObjects;
-    UINibDecoderObjectEntry* objects;
-    
-    uint32_t numberOfKeys;
-    NSMutableArray* keys;
-    uint32_t keyForInlinedValue;
-    uint32_t keyForEmpty;
-    uint32_t keyForNSIntVal;
-    
-    uint32_t numberOfValues;
-    UINibDecoderValueEntry* values;
-    
-    uint32_t numberOfClasses;
-    Class* classes;
-}
+@interface UINibArchiveDataV1 : NSObject 
 - (id) initWithData:(NSData*)data;
 @end
 
@@ -68,12 +51,13 @@ static inline double decodeFloat64(void const** pp);
 - (UINibDecoderValueEntry*) _valueEntryForKey:(NSString*)key;
 
 - (uint32_t) _extractInt32FromValue:(UINibDecoderValueEntry*)value;
+- (uint64_t) _extractInt64FromValue:(UINibDecoderValueEntry*)value;
 - (float) _extractFloat32FromValue:(UINibDecoderValueEntry*)value;
+- (double) _extractFloat64FromValue:(UINibDecoderValueEntry*)value;
 - (id) _extractObjectFromValue:(UINibDecoderValueEntry*)value;
 - (CGRect) _extractCGRectFromValue:(UINibDecoderValueEntry*)value;
 - (CGPoint) _extractCGPointFromValue:(UINibDecoderValueEntry*)value;
 - (CGSize) _extractCGSizeFromValue:(UINibDecoderValueEntry*)value;
-- (NSString*) _extractStringFromValue:(UINibDecoderValueEntry*)value;
 
 - (void) _cannotDecodeObjCType:(const char *)objcType;
 - (void) _cannotDecodeType:(NSInteger)type asObjCType:(char const*)objcType;
@@ -112,7 +96,24 @@ static inline double decodeFloat64(void const** pp);
 @end
 
 
-@implementation UINibArchiveDataV1 
+@implementation UINibArchiveDataV1 {
+@public
+    NSData* data_;
+    
+    uint32_t numberOfObjects;
+    UINibDecoderObjectEntry* objects;
+    
+    uint32_t numberOfKeys;
+    NSMutableArray* keys;
+    uint32_t keyForInlinedValue;
+    uint32_t keyForEmpty;
+    
+    uint32_t numberOfValues;
+    UINibDecoderValueEntry* values;
+    
+    uint32_t numberOfClasses;
+    Class* classes;
+}
 
 - (void) dealloc
 {
@@ -215,7 +216,6 @@ static inline double decodeFloat64(void const** pp);
         void const* kp = base + offsetOfKeys;
         static char kNSInlinedValueKey[] = "NSInlinedValue";
         static char kUINibEncoderEmptyKey[] = "UINibEncoderEmptyKey";
-        static char kNSIntValKey[] = "NS.intval";
         for (NSUInteger i = 0, iMax = numberOfKeys; i < iMax; i++) {
             NSUInteger length = decodeVariableLengthInteger(&kp);
             NSString* key = [[NSString alloc] initWithBytes:kp length:length encoding:NSUTF8StringEncoding];
@@ -227,8 +227,6 @@ static inline double decodeFloat64(void const** pp);
                 keyForInlinedValue = i;
             } else if (length == (sizeof(kUINibEncoderEmptyKey)-1) && 0 == memcmp(kUINibEncoderEmptyKey, kp, length)) {
                 keyForEmpty = i;
-            } else if (length == (sizeof(kNSIntValKey)-1) && 0 == memcmp(kNSIntValKey, kp, length)) {
-                keyForNSIntVal = i;
             }
             [keys addObject:key];
             kp += length;
@@ -271,24 +269,23 @@ static inline double decodeFloat64(void const** pp);
                     
                 case kValueTypeFloat32: {
                     data = vp;
-                    vp += 4;
+                    decodeFloat32(&vp);
                     break;
                 }
                     
                 case kValueTypeFloat64: {
                     data = vp;
-                    vp += 8;
+                    decodeFloat64(&vp);
                     break;
                 }
                     
                 case kValueTypeObject: {
                     data = vp;
-                    uint32_t indexOfObject = OSReadLittleInt32(vp, 0);
+                    uint32_t indexOfObject = decodeInt32(&vp);
                     if (indexOfObject > numberOfObjects) {
                         [self release];
                         return nil;
                     }
-                    vp += 4;
                     break;
                 }
                     
@@ -450,7 +447,7 @@ static Class kClassforUIProxyObject;
     return [self _extractInt32FromValue:value];
 }
 
-- (NSInteger) decodeIntegerForKey:(NSString*)key
+- (int) decodeIntForKey:(NSString*)key
 {
     assert(key);
     UINibDecoderValueEntry* value = [self _valueEntryForKey:key];
@@ -458,6 +455,40 @@ static Class kClassforUIProxyObject;
         return NO;
     }
     return [self _extractInt32FromValue:value];
+}
+
+- (NSInteger) decodeIntegerForKey:(NSString*)key
+{
+    assert(key);
+    UINibDecoderValueEntry* value = [self _valueEntryForKey:key];
+    if (!value) {
+        return NO;
+    }
+#if __LP64__ || (TARGET_OS_EMBEDDED && !TARGET_OS_IPHONE)
+    return [self _extractInt64FromValue:value];
+#else
+    return [self _extractInt32FromValue:value];
+#endif
+}
+
+- (int32_t) decodeInt32ForKey:(NSString*)key
+{
+    assert(key);
+    UINibDecoderValueEntry* value = [self _valueEntryForKey:key];
+    if (!value) {
+        return NO;
+    }
+    return [self _extractInt32FromValue:value];
+}
+
+- (int64_t) decodeInt64ForKey:(NSString*)key
+{
+    assert(key);
+    UINibDecoderValueEntry* value = [self _valueEntryForKey:key];
+    if (!value) {
+        return NO;
+    }
+    return [self _extractInt64FromValue:value];
 }
 
 - (float) decodeFloatForKey:(NSString*)key
@@ -468,6 +499,16 @@ static Class kClassforUIProxyObject;
         return NO;
     }
     return [self _extractFloat32FromValue:value];
+}
+
+- (double) decodeDoubleForKey:(NSString*)key
+{
+    assert(key);
+    UINibDecoderValueEntry* value = [self _valueEntryForKey:key];
+    if (!value) {
+        return NO;
+    }
+    return [self _extractFloat64FromValue:value];
 }
 
 - (CGRect) decodeCGRectForKey:(NSString*)key
@@ -500,41 +541,6 @@ static Class kClassforUIProxyObject;
     return [self _extractCGSizeFromValue:value];
 }
 
-- (void) decodeValueOfObjCType:(char const*)type at:(void*)at
-{
-    UINibDecoderValueEntry* value = [self _nextGenericValue];
-    if (value) {
-        enum {
-            kInt,
-            kObject,
-            kString,
-        };
-        static char* type_map = "i@*"; 
-        char* matched = strchr(type_map, *type);
-        if (matched) {
-            switch (matched - type_map) {
-                case kInt: {
-                    *((int*)at) = [self _extractInt32FromValue:value];
-                    return;
-                }
-                    
-                case kObject: {
-                    *((id*)at) = [self _extractObjectFromValue:value];
-                    return;
-                }
-                    
-                case kString: {
-                    *((id*)at) = [self _extractStringFromValue:value];
-                    return;
-                }
-            }
-        }
-    }
-    
-    [self _cannotDecodeObjCType:type];
-}
-
-
 #pragma mark
 
 - (UINibDecoderValueEntry*) _nextGenericValue
@@ -542,7 +548,7 @@ static Class kClassforUIProxyObject;
     UINibDecoderValueEntry* value = NULL;
     while (nextGenericValue_ <= lastValue_) {
         uint32_t indexOfKey = nextGenericValue_->indexOfKey;
-        if (indexOfKey == archiveData_->keyForInlinedValue || indexOfKey == archiveData_->keyForEmpty || indexOfKey == archiveData_->keyForNSIntVal) {
+        if (indexOfKey == archiveData_->keyForInlinedValue || indexOfKey == archiveData_->keyForEmpty) {
             value = nextGenericValue_;
             nextGenericValue_++;
             break;
@@ -582,6 +588,22 @@ static Class kClassforUIProxyObject;
     return 0;
 }
 
+- (uint64_t) _extractInt64FromValue:(UINibDecoderValueEntry*)value
+{
+    switch (value->type) {
+        case kValueTypeConstantEqualsOne: {
+            return 1;
+        }
+            
+        case kValueTypeByte: {
+            return *((uint8_t*)value->data);
+        }
+    }
+    
+    [self _cannotDecodeType:value->type asObjCType:"i"];
+    return 0;
+}
+
 - (float) _extractFloat32FromValue:(UINibDecoderValueEntry*)value
 {
     void const* vp = value->data;
@@ -603,7 +625,32 @@ static Class kClassforUIProxyObject;
         }
     }
     
-    [self _cannotDecodeType:value->type asObjCType:"i"];
+    [self _cannotDecodeType:value->type asObjCType:"f"];
+    return 0;
+}
+
+- (double) _extractFloat64FromValue:(UINibDecoderValueEntry*)value
+{
+    void const* vp = value->data;
+    switch (value->type) {
+        case kValueTypeConstantEqualsOne: {
+            return 1.0;
+        }
+            
+        case kValueTypeByte: {
+            return *((uint8_t*)vp);
+        }
+            
+        case kValueTypeFloat32: {
+            return decodeFloat32(&vp);
+        }
+            
+        case kValueTypeFloat64: {
+            return decodeFloat64(&vp);
+        }
+    }
+    
+    [self _cannotDecodeType:value->type asObjCType:"d"];
     return 0;
 }
 
@@ -612,7 +659,7 @@ static Class kClassforUIProxyObject;
     void const* vp = value->data;
     switch (value->type) {
         case kValueTypeObject: {
-            uint32_t indexOfObject = OSReadLittleInt32(vp, 0);
+            uint32_t indexOfObject = decodeInt32(&vp);
             id object = [objects_ pointerAtIndex:indexOfObject];
             if (!object) {
                 UINibDecoderObjectEntry* objectEntry = archiveData_->objects + indexOfObject;
@@ -731,16 +778,23 @@ static Class kClassforUIProxyObject;
                 break;
             }
             
-            uint8_t six = decodeByte(&vp);
-            #pragma unused (six)
-            assert(six == 6);
-            
-            CGFloat x = decodeFloat32(&vp);
-            CGFloat y = decodeFloat32(&vp);
-            CGFloat w = decodeFloat32(&vp);
-            CGFloat h = decodeFloat32(&vp);
-            
-            return CGRectMake(x, y, w, h);
+            switch (decodeByte(&vp)) {
+                case kValueTypeFloat32: {
+                    CGFloat x = decodeFloat32(&vp);
+                    CGFloat y = decodeFloat32(&vp);
+                    CGFloat w = decodeFloat32(&vp);
+                    CGFloat h = decodeFloat32(&vp);
+                    return CGRectMake(x, y, w, h);
+                }
+                    
+                case kValueTypeFloat64: {
+                    CGFloat x = decodeFloat64(&vp);
+                    CGFloat y = decodeFloat64(&vp);
+                    CGFloat w = decodeFloat64(&vp);
+                    CGFloat h = decodeFloat64(&vp);
+                    return CGRectMake(x, y, w, h);
+                }
+            }
         }
     }
     
@@ -758,14 +812,19 @@ static Class kClassforUIProxyObject;
                 break;
             }
             
-            uint8_t six = decodeByte(&vp);
-            #pragma unused (six)
-            assert(six == 6);
-            
-            CGFloat x = decodeFloat32(&vp);
-            CGFloat y = decodeFloat32(&vp);
-            
-            return CGPointMake(x, y);
+            switch (decodeByte(&vp)) {
+                case kValueTypeFloat32: {
+                    CGFloat x = decodeFloat32(&vp);
+                    CGFloat y = decodeFloat32(&vp);
+                    return CGPointMake(x, y);
+                }
+                    
+                case kValueTypeFloat64: {
+                    CGFloat x = decodeFloat64(&vp);
+                    CGFloat y = decodeFloat64(&vp);
+                    return CGPointMake(x, y);
+                }
+            }
         }
     }
     
@@ -783,38 +842,24 @@ static Class kClassforUIProxyObject;
                 break;
             }
             
-            uint8_t six = decodeByte(&vp);
-            #pragma unused (six)
-            assert(six == 6);
-            
-            CGFloat w = decodeFloat32(&vp);
-            CGFloat h = decodeFloat32(&vp);
-            
-            return CGSizeMake(w, h);
+            switch (decodeByte(&vp)) {
+                case kValueTypeFloat32: {
+                    CGFloat w = decodeFloat32(&vp);
+                    CGFloat h = decodeFloat32(&vp);
+                    return CGSizeMake(w, h);
+                }
+                    
+                case kValueTypeFloat64: {
+                    CGFloat w = decodeFloat64(&vp);
+                    CGFloat h = decodeFloat64(&vp);
+                    return CGSizeMake(w, h);
+                }
+            }
         }
     }
     
     [self _cannotDecodeType:value->type asObjCType:"CGSize"];
     return CGSizeZero;
-}
-
-- (NSString*) _extractStringFromValue:(UINibDecoderValueEntry*)value
-{
-    void const* vp = value->data;
-    switch (value->type) {
-        case kValueTypeByte: {
-            uint8_t v = decodeByte(&vp);
-            return [[NSString alloc] initWithFormat:@"%d", v];
-        }
-            
-        case kValueTypeData: {
-            uint32_t lengthOfData = decodeVariableLengthInteger(&vp);
-            return [[NSString alloc] initWithBytes:vp length:lengthOfData encoding:NSUTF8StringEncoding];
-        }
-    }
-    
-    [self _cannotDecodeType:value->type asObjCType:"*"];
-    return nil;
 }
 
 - (void) _cannotDecodeObjCType:(const char *)objcType 
@@ -853,6 +898,13 @@ uint8_t decodeByte(void const** pp)
     uint8_t const* p = *pp;
     uint8_t v = *p++;
     *pp = p;
+    return v;
+}
+
+uint32_t decodeInt32(void const** pp) 
+{
+    uint32_t v = OSReadLittleInt32(*pp, 0);
+    *pp += 4;
     return v;
 }
 
