@@ -40,7 +40,7 @@
     CGImageRef _topEdgeFill;
     CGImageRef _topRightCorner;
     CGImageRef _leftEdgeFill;
-    CGColorRef _centerFill;
+    CGImageRef _centerFill;
     CGImageRef _rightEdgeFill;
     CGImageRef _bottomLeftCorner;
     CGImageRef _bottomEdgeFill;
@@ -62,7 +62,7 @@
         CGImageRelease(_leftEdgeFill);
     }
     if (_centerFill) {
-        CGColorRelease(_centerFill);
+        CGImageRelease(_centerFill);
     }
     if (_rightEdgeFill) {
         CGImageRelease(_rightEdgeFill);
@@ -132,17 +132,7 @@
             _leftEdgeFill = CGImageCreateWithImageInRect(image, CGRectMake(0, _tch, _lcw, 1.0));
         }
         if (bits & 0020) {
-            uint8_t pixel[4] = { 0 };
-            CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
-            CGContextRef context = CGBitmapContextCreate(pixel, 1, 1, 8, 4, colorspace, kCGImageAlphaPremultipliedLast);
-            CFRelease(colorspace);
-            CGContextDrawImage(context, CGRectMake(-_rcw, -_bch, w, h), image);
-            CGContextRelease(context);
-            CGFloat a = pixel[3] / 255.0;
-            CGFloat r = pixel[0] / 255.0 / a;
-            CGFloat g = pixel[1] / 255.0 / a;
-            CGFloat b = pixel[2] / 255.0 / a;
-            _centerFill = CGColorCreateGenericRGB(r, g, b, a);
+            _centerFill = CGImageCreateWithImageInRect(image, CGRectMake(_tch, _lcw, 1.0, 1.0));
         }
         if (bits & 0200) {
             _rightEdgeFill = CGImageCreateWithImageInRect(image, CGRectMake(w - _rcw, _tch, _rcw, 1.0));
@@ -203,8 +193,7 @@
         CGContextDrawImage(c, CGRectMake(lx, cy, _lcw, ch), _leftEdgeFill);
     }
     if (_centerFill) {
-        CGContextSetFillColorWithColor(c, _centerFill);
-        CGContextFillRect(c, CGRectMake(cx, cy, cw, ch));
+        CGContextDrawImage(c, CGRectMake(cx, cy, cw, ch), _centerFill);
     }
     if (_rightEdgeFill) {
         CGContextDrawImage(c, CGRectMake(rx, cy, _rcw, ch), _rightEdgeFill);
