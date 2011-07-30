@@ -797,6 +797,10 @@ const CGFloat _UITableViewDefaultRowHeight = 44;
     [self reloadData];
 }
 
+- (void)reloadSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation {
+    [self reloadData];
+}
+
 - (void)insertRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation
 {
     [self reloadData];
@@ -804,6 +808,10 @@ const CGFloat _UITableViewDefaultRowHeight = 44;
 
 - (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation
 {
+    [self reloadData];
+}
+
+- (void)reloadRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation {
     [self reloadData];
 }
 

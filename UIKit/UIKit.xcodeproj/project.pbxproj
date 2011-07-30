@@ -299,8 +299,6 @@
 		F9177F9713BA317200619E3D /* UITableViewCellLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F9177F9513BA317200619E3D /* UITableViewCellLayoutManager.m */; };
 		F91D413013DA4228006ED0DA /* UIScrollViewAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = F91D412C13DA4228006ED0DA /* UIScrollViewAnimation.h */; };
 		F91D413113DA4228006ED0DA /* UIScrollViewAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = F91D412D13DA4228006ED0DA /* UIScrollViewAnimation.m */; };
-		F91D413213DA4228006ED0DA /* UIScrollViewScrollAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = F91D412E13DA4228006ED0DA /* UIScrollViewScrollAnimation.h */; };
-		F91D413313DA4228006ED0DA /* UIScrollViewScrollAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = F91D412F13DA4228006ED0DA /* UIScrollViewScrollAnimation.m */; };
 		F922DB5B13D32D6C00469869 /* UIClassSwapper.h in Headers */ = {isa = PBXBuildFile; fileRef = F922DB5913D32D6B00469869 /* UIClassSwapper.h */; };
 		F922DB5C13D32D6C00469869 /* UIClassSwapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F922DB5A13D32D6B00469869 /* UIClassSwapper.m */; };
 		F922DB6113D3310000469869 /* UITextSelectionView.h in Headers */ = {isa = PBXBuildFile; fileRef = F922DB5F13D3310000469869 /* UITextSelectionView.h */; };
@@ -651,8 +649,6 @@
 		F9177F9513BA317200619E3D /* UITableViewCellLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellLayoutManager.m; sourceTree = "<group>"; };
 		F91D412C13DA4228006ED0DA /* UIScrollViewAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewAnimation.h; sourceTree = "<group>"; };
 		F91D412D13DA4228006ED0DA /* UIScrollViewAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScrollViewAnimation.m; sourceTree = "<group>"; };
-		F91D412E13DA4228006ED0DA /* UIScrollViewScrollAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewScrollAnimation.h; sourceTree = "<group>"; };
-		F91D412F13DA4228006ED0DA /* UIScrollViewScrollAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScrollViewScrollAnimation.m; sourceTree = "<group>"; };
 		F922DB5913D32D6B00469869 /* UIClassSwapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIClassSwapper.h; sourceTree = "<group>"; };
 		F922DB5A13D32D6B00469869 /* UIClassSwapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIClassSwapper.m; sourceTree = "<group>"; };
 		F922DB5F13D3310000469869 /* UITextSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITextSelectionView.h; sourceTree = "<group>"; };
@@ -1012,8 +1008,6 @@
 				14FA8C50121DA4A000C4264B /* UIScroller.m */,
 				F91D412C13DA4228006ED0DA /* UIScrollViewAnimation.h */,
 				F91D412D13DA4228006ED0DA /* UIScrollViewAnimation.m */,
-				F91D412E13DA4228006ED0DA /* UIScrollViewScrollAnimation.h */,
-				F91D412F13DA4228006ED0DA /* UIScrollViewScrollAnimation.m */,
 				882B8EF4136636C8002E8F21 /* UISearchField.h */,
 				882B8EF5136636C8002E8F21 /* UISearchField.m */,
 				F9647EE213B91BDC0040B2D6 /* UITableViewCellBackgroundView.h */,
@@ -1315,7 +1309,6 @@
 				1413D21413D72A06004D77E9 /* UIScrollViewAnimationDeceleration.h in Headers */,
 				1413D21613D72A06004D77E9 /* UIScrollViewAnimationScroll.h in Headers */,
 				F91D413013DA4228006ED0DA /* UIScrollViewAnimation.h in Headers */,
-				F91D413213DA4228006ED0DA /* UIScrollViewScrollAnimation.h in Headers */,
 				F935331D13DF0733003C7D3A /* UINibDecoder.h in Headers */,
 				F92CB50F13E0672E00A50B9F /* UINibDecoderForNibArchiveV1.h in Headers */,
 				F92CB51413E06D9500A50B9F /* UINibDecoderForKeyedArchive.h in Headers */,
@@ -1559,7 +1552,6 @@
 				1413D21513D72A06004D77E9 /* UIScrollViewAnimationDeceleration.m in Sources */,
 				1413D21713D72A06004D77E9 /* UIScrollViewAnimationScroll.m in Sources */,
 				F91D413113DA4228006ED0DA /* UIScrollViewAnimation.m in Sources */,
-				F91D413313DA4228006ED0DA /* UIScrollViewScrollAnimation.m in Sources */,
 				F935331E13DF0733003C7D3A /* UINibDecoder.m in Sources */,
 				F92CB51113E067F900A50B9F /* UINibDecoderForNibArchiveV1.m in Sources */,
 				F92CB51513E06D9500A50B9F /* UINibDecoderForKeyedArchive.m in Sources */,
