@@ -28,6 +28,7 @@
  */
 
 #import "UITableViewSection.h"
+#import "UIView.h"
 
 @implementation UITableViewSection
 @synthesize rowsHeight, headerHeight, footerHeight, rowHeights, numberOfRows, headerView, footerView, headerTitle, footerTitle;

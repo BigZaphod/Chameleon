@@ -33,7 +33,7 @@
 
 @property (nonatomic,readwrite) UIGestureRecognizerState state;
 
-- (void)ignoreTouch:(UITouch*)touch forEvent:(UIEvent*)event;		// don't override
+- (void)ignoreTouch:(UITouch *)touch forEvent:(UIEvent*)event;		// don't override
 
 // override, but be sure to call super
 - (void)reset;

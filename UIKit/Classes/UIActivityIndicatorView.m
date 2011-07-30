@@ -51,7 +51,7 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
     const CGFloat radius = frameSize.width / 2.f;
     const CGFloat TWOPI = M_PI * 2.f;
     const CGFloat numberOfTeeth = 12;
-    const CGFloat toothWidth = (style == UIActivityIndicatorViewStyleWhiteLarge)? 3 : 2;
+    const CGFloat toothWidth = (style == UIActivityIndicatorViewStyleWhiteLarge)? 3.5 : 2;
 
     UIColor *toothColor = (style == UIActivityIndicatorViewStyleGray)? [UIColor grayColor] : [UIColor whiteColor];
     
@@ -180,7 +180,7 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
         NSMutableArray *images = [[NSMutableArray alloc] initWithCapacity:numberOfFrames];
         
         for (NSInteger frameNumber=0; frameNumber<numberOfFrames; frameNumber++) {
-            [images addObject:(id)UIActivityIndicatorViewFrameImage(_activityIndicatorViewStyle, frameNumber, numberOfFrames).CGImage];
+            [images addObject:(__bridge id)UIActivityIndicatorViewFrameImage(_activityIndicatorViewStyle, frameNumber, numberOfFrames).CGImage];
         }
         
         CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"contents"];

@@ -56,8 +56,7 @@ static UIDevice *theDevice;
 
 - (NSString *)name
 {
-    CFStringRef name = SCDynamicStoreCopyComputerName(NULL,NULL);
-    return [(NSString *)name autorelease];
+    return [(__bridge NSString *)SCDynamicStoreCopyComputerName(NULL,NULL) autorelease];
 }
 
 - (UIDeviceOrientation)orientation
@@ -104,7 +103,7 @@ static UIDevice *theDevice;
             CFTypeID typeID = CFGetTypeID(platformUUIDTypeRef);
             if (typeID == CFStringGetTypeID())
             {
-                aUniqueIdentifier = [NSString stringWithString:(NSString *)platformUUIDTypeRef];
+                aUniqueIdentifier = [NSString stringWithString:(__bridge NSString *)platformUUIDTypeRef];
             }
             CFRelease(platformUUIDTypeRef);
         }

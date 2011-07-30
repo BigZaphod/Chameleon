@@ -211,4 +211,9 @@ static id FirstObjectOrNil(NSArray *items)
     return [items autorelease];
 }
 
+- (void)setValue:(id)value forPasteboardType:(NSString *)pasteboardType
+{
+	self.items = value;
+}
+
 @end

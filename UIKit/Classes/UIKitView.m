@@ -237,33 +237,57 @@
     [[UIApplication sharedApplication] _sendMouseNSEvent:theEvent fromScreen:_screen];
 }
 
-- (void)_launchApplicationDelegate:(id<UIApplicationDelegate>)appDelegate
+- (void)beginGestureWithEvent:(NSEvent *)theEvent
+{
+    [[UIApplication sharedApplication] _sendMouseNSEvent:theEvent fromScreen:_screen];
+}
+
+- (void)endGestureWithEvent:(NSEvent *)theEvent
+{
+    [[UIApplication sharedApplication] _sendMouseNSEvent:theEvent fromScreen:_screen];
+}
+
+- (void)rotateWithEvent:(NSEvent *)theEvent
+{
+    [[UIApplication sharedApplication] _sendMouseNSEvent:theEvent fromScreen:_screen];
+}
+
+- (void)magnifyWithEvent:(NSEvent *)theEvent
+{
+    [[UIApplication sharedApplication] _sendMouseNSEvent:theEvent fromScreen:_screen];
+}
+
+- (void)swipeWithEvent:(NSEvent *)theEvent
+{
+    [[UIApplication sharedApplication] _sendMouseNSEvent:theEvent fromScreen:_screen];
+}
+
+- (void)_launchApplicationWithDefaultWindow:(UIWindow *)defaultWindow
 {
     UIApplication *app = [UIApplication sharedApplication];
-    [app setDelegate:appDelegate];
-
+    id<UIApplicationDelegate> appDelegate = app.delegate;
+    
     if ([appDelegate respondsToSelector:@selector(application:didFinishLaunchingWithOptions:)]) {
         [appDelegate application:app didFinishLaunchingWithOptions:nil];
     } else if ([appDelegate respondsToSelector:@selector(applicationDidFinishLaunching:)]) {
         [appDelegate applicationDidFinishLaunching:app];
     }
-
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidFinishLaunchingNotification object:app];
-
+    
     if ([appDelegate respondsToSelector:@selector(applicationDidBecomeActive:)]) {
         [appDelegate applicationDidBecomeActive:app];
     }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidBecomeActiveNotification object:app];
-}
-
-- (void)_releaseDefaultWindow:(UIWindow *)defaultWindow
-{
-    [defaultWindow release];
+    
+    defaultWindow.hidden = YES;
 }
 
 - (void)launchApplicationWithDelegate:(id<UIApplicationDelegate>)appDelegate afterDelay:(NSTimeInterval)delay
 {
+    [[UIApplication sharedApplication] setDelegate:appDelegate];
+
     if (delay) {
         UIImage *defaultImage = [UIImage imageNamed:@"Default-Landscape.png"];
         UIImageView *defaultImageView = [[[UIImageView alloc] initWithImage:defaultImage] autorelease];
@@ -276,11 +300,10 @@
         defaultWindow.opaque = YES;
         [defaultWindow addSubview:defaultImageView];
         [defaultWindow makeKeyAndVisible];
-        
-        [self performSelector:@selector(_launchApplicationDelegate:) withObject:appDelegate afterDelay:delay];
-        [self performSelector:@selector(_releaseDefaultWindow:) withObject:defaultWindow afterDelay:delay];
+        [self performSelector:@selector(_launchApplicationWithDefaultWindow:) withObject:defaultWindow afterDelay:delay];
+        [defaultWindow release];
     } else {
-        [self _launchApplicationDelegate:appDelegate];
+        [self _launchApplicationWithDefaultWindow:nil];
     }
 }
 

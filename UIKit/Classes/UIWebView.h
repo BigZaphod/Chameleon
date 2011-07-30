@@ -51,7 +51,7 @@ typedef NSUInteger UIWebViewNavigationType;
 
 @interface UIWebView : UIView {
 @private
-    id _delegate;
+    __unsafe_unretained id _delegate;
     NSURLRequest *_request;
     UIDataDetectorTypes _dataDetectorTypes;
     WebView *_webView;

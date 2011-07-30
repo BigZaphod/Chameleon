@@ -35,7 +35,7 @@
 @private
     NSString *_title;
     NSString *_message;
-    id<UIAlertViewDelegate> _delegate;
+    __unsafe_unretained id<UIAlertViewDelegate> _delegate;
     NSInteger _cancelButtonIndex;
     NSMutableArray *_buttonTitles;
     

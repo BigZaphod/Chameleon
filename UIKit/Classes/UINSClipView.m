@@ -32,6 +32,7 @@
 #import "UIWindow.h"
 #import "UIScreen+UIPrivate.h"
 #import "UIScreenAppKitIntegration.h"
+#import "UIKitView.h"
 #import <AppKit/NSEvent.h>
 
 

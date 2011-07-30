@@ -47,4 +47,6 @@
 @property (nonatomic, copy) NSArray *colors;
 @property (nonatomic, copy) NSArray *items;
 
+- (void)setValue:(id)value forPasteboardType:(NSString *)pasteboardType;
+
 @end

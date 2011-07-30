@@ -42,7 +42,7 @@ static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToS
         CFDictionarySetValue(attributes, kCTFontAttributeName,font->_font);
         CFDictionarySetValue(attributes, kCTForegroundColorFromContextAttributeName, kCFBooleanTrue);
         
-        CFAttributedStringRef attributedString = CFAttributedStringCreate(NULL, (CFStringRef)string, attributes);
+        CFAttributedStringRef attributedString = CFAttributedStringCreate(NULL, (__bridge CFStringRef)string, attributes);
         
         CTTypesetterRef typesetter = CTTypesetterCreateWithAttributedString(attributedString);
         

@@ -42,9 +42,9 @@
   UIViewController           *_viewController;
   UISearchBar                *_searchBar;
   UITableView                *_tableView;
-  id<UISearchDisplayDelegate> _delegate;
-  id<UITableViewDataSource>   _tableViewDataSource;
-  id<UITableViewDelegate>     _tableViewDelegate;
+  __unsafe_unretained id<UISearchDisplayDelegate> _delegate;
+  __unsafe_unretained id<UITableViewDataSource>   _tableViewDataSource;
+  __unsafe_unretained id<UITableViewDelegate>     _tableViewDelegate;
 }
 
 - (id)initWithSearchBar:(UISearchBar *)searchBar contentsController:(UIViewController *)viewController;

@@ -58,7 +58,7 @@
 
 + (UIBezierPath *)bezierPathWithCGPath:(CGPathRef)CGPath
 {
-    NSAssert(CGPath != NULL, nil);
+    NSAssert(CGPath != NULL, @"CGPath must not be NULL");
     UIBezierPath *bezierPath = [[self alloc] init];
     bezierPath->_path = CGPath;
     return [bezierPath autorelease];
@@ -223,7 +223,7 @@
 
 - (void)setCGPath:(CGPathRef)path
 {
-    NSAssert(path != NULL, nil);
+    NSAssert(path != NULL, @"path must not be NULL");
     if (path != _path) {
         if (_path) CGPathRelease(_path);
         _path = CGPathCreateCopy(path);

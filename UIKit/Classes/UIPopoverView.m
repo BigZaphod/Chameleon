@@ -314,9 +314,10 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
     CGRect frame = self.frame;
     frame.size = [isa frameSizeForContentSize:aSize withNavigationBar:NO];
 
-    if (animated) [UIView beginAnimations:@"setContentSize" context:NULL];
-    self.frame = frame;
-    if (animated) [UIView commitAnimations];
+    [UIView animateWithDuration:animated? 0.2 : 0
+                     animations:^(void) {
+                         self.frame = frame;
+                     }];
 }
 
 - (CGSize)contentSize

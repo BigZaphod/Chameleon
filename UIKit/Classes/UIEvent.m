@@ -100,6 +100,17 @@
     return touches;
 }
 
+- (NSSet *)touchesForGestureRecognizer:(UIGestureRecognizer *)gesture
+{
+    NSMutableSet *touches = [NSMutableSet setWithCapacity:1];
+    for (UITouch *touch in [self allTouches]) {
+        if ([touch.gestureRecognizers containsObject:gesture]) {
+            [touches addObject:touch];
+        }
+    }
+    return touches;
+}
+
 - (UIEventSubtype)subtype
 {
     return UIEventSubtypeNone;

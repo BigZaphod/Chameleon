@@ -37,8 +37,8 @@
 extern CGFloat _UITableViewDefaultRowHeight;
 
 @implementation UITableViewCell
-@synthesize contentView=_contentView, accessoryType=_accessoryType, textLabel=_textLabel, selectionStyle=_selectionStyle, indentationLevel=_indentationLevel;
-@synthesize imageView=_imageView, editingAccessoryType=_editingAccessoryType, selected=_selected, backgroundView=_backgroundView;
+@synthesize accessoryType=_accessoryType, selectionStyle=_selectionStyle, indentationLevel=_indentationLevel;
+@synthesize editingAccessoryType=_editingAccessoryType, selected=_selected, backgroundView=_backgroundView;
 @synthesize selectedBackgroundView=_selectedBackgroundView, highlighted=_highlighted, reuseIdentifier=_reuseIdentifier;
 @synthesize editing = _editing, detailTextLabel = _detailTextLabel, showingDeleteConfirmation = _showingDeleteConfirmation;
 @synthesize indentationWidth=_indentationWidth, accessoryView=_accessoryView;
@@ -52,20 +52,6 @@ extern CGFloat _UITableViewDefaultRowHeight;
 
         _seperatorView = [[UITableViewCellSeparator alloc] init];
         [self addSubview:_seperatorView];
-        
-        _contentView = [[UIView alloc] init];
-        [self addSubview:_contentView];
-        
-        _imageView = [[UIImageView alloc] init];
-        _imageView.contentMode = UIViewContentModeCenter;
-        [_contentView addSubview:_imageView];
-
-        _textLabel = [[UILabel alloc] init];
-        _textLabel.backgroundColor = [UIColor clearColor];
-        _textLabel.textColor = [UIColor blackColor];
-        _textLabel.highlightedTextColor = [UIColor whiteColor];
-        _textLabel.font = [UIFont boldSystemFontOfSize:17];
-        [_contentView addSubview:_textLabel];
         
         self.accessoryType = UITableViewCellAccessoryNone;
         self.editingAccessoryType = UITableViewCellAccessoryNone;
@@ -100,18 +86,18 @@ extern CGFloat _UITableViewDefaultRowHeight;
 {
     [super layoutSubviews];
 
-    CGRect bounds = self.bounds;
+    const CGRect bounds = self.bounds;
     BOOL showingSeperator = !_seperatorView.hidden;
     
     CGRect contentFrame = CGRectMake(0,0,bounds.size.width,bounds.size.height-(showingSeperator? 1 : 0));
-    CGRect accessoryRect = CGRectMake(bounds.size.width, 0, 0, 0);
+    CGRect accessoryRect = CGRectMake(bounds.size.width,0,0,0);
+
     if(_accessoryView) {
         accessoryRect.size = [_accessoryView sizeThatFits: bounds.size];
         accessoryRect.origin.x = bounds.size.width - accessoryRect.size.width;
         accessoryRect.origin.y = round(0.5*(bounds.size.height - accessoryRect.size.height));
         _accessoryView.frame = accessoryRect;
-        if(_accessoryView.superview != self)
-            [self addSubview: _accessoryView];
+        [self addSubview: _accessoryView];
         contentFrame.size.width = accessoryRect.origin.x - 1;
     }
     
@@ -119,9 +105,10 @@ extern CGFloat _UITableViewDefaultRowHeight;
     _selectedBackgroundView.frame = contentFrame;
     _contentView.frame = contentFrame;
     
-    [self bringSubviewToFront:_backgroundView];
-    [self bringSubviewToFront:_selectedBackgroundView];
+    [self sendSubviewToBack:_selectedBackgroundView];
+    [self sendSubviewToBack:_backgroundView];
     [self bringSubviewToFront:_contentView];
+    [self bringSubviewToFront:_accessoryView];
     
     if (showingSeperator) {
         _seperatorView.frame = CGRectMake(0,bounds.size.height-1,bounds.size.width,1);
@@ -139,6 +126,44 @@ extern CGFloat _UITableViewDefaultRowHeight;
         textRect.size = CGSizeMake(MAX(0,contentFrame.size.width-textRect.origin.x-padding),contentFrame.size.height);
         _textLabel.frame = textRect;
     }
+}
+
+- (UIView *)contentView
+{
+    if (!_contentView) {
+        _contentView = [[UIView alloc] init];
+        [self addSubview:_contentView];
+        [self layoutIfNeeded];
+    }
+    
+    return _contentView;
+}
+
+- (UIImageView *)imageView
+{
+    if (!_imageView) {
+        _imageView = [[UIImageView alloc] init];
+        _imageView.contentMode = UIViewContentModeCenter;
+        [self.contentView addSubview:_imageView];
+        [self layoutIfNeeded];
+    }
+    
+    return _imageView;
+}
+
+- (UILabel *)textLabel
+{
+    if (!_textLabel) {
+        _textLabel = [[UILabel alloc] init];
+        _textLabel.backgroundColor = [UIColor clearColor];
+        _textLabel.textColor = [UIColor blackColor];
+        _textLabel.highlightedTextColor = [UIColor whiteColor];
+        _textLabel.font = [UIFont boldSystemFontOfSize:17];
+        [self.contentView addSubview:_textLabel];
+        [self layoutIfNeeded];
+    }
+    
+    return _textLabel;
 }
 
 - (void)_setSeparatorStyle:(UITableViewCellSeparatorStyle)theStyle color:(UIColor *)theColor

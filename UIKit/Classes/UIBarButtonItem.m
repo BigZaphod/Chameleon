@@ -28,6 +28,7 @@
  */
 
 #import "UIBarButtonItem.h"
+#import "UIView.h"
 
 @implementation UIBarButtonItem
 @synthesize width=_width, customView=_customView, action=_action, target=_target, style=_style;

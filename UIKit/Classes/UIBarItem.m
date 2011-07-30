@@ -28,9 +28,19 @@
  */
 
 #import "UIBarItem.h"
+#import "UIImage.h"
 
 @implementation UIBarItem
-@synthesize enabled=_enabled, image=_image, title=_title, tag=_tag;
+@synthesize enabled=_enabled, image=_image, imageInsets=_imageInsets, title=_title, tag=_tag;
+
+- (id)init
+{
+    if ((self = [super init])) {
+        self.enabled = YES;
+        self.imageInsets = UIEdgeInsetsZero;
+    }
+    return self;
+}
 
 - (void)dealloc
 {

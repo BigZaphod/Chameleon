@@ -94,7 +94,7 @@ typedef enum {
 @interface UITableView : UIScrollView {
 @private
     UITableViewStyle _style;
-    id<UITableViewDataSource> _dataSource;
+    __unsafe_unretained id<UITableViewDataSource> _dataSource;
     BOOL _needsReload;
     CGFloat _rowHeight;
     UIColor *_separatorColor;

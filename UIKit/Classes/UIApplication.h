@@ -30,7 +30,6 @@
 #import "UIResponder.h"
 #import "UIDevice.h"
 #import "UIApplicationDelegate.h"
-#import "UIApplicationAppKitIntegration.h"
 
 extern NSString *const UIApplicationWillChangeStatusBarOrientationNotification;
 extern NSString *const UIApplicationDidChangeStatusBarOrientationNotification;
@@ -98,16 +97,17 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
 @interface UIApplication : UIResponder {
 @private
     UIEvent *_currentEvent;
-    __weak UIWindow *_keyWindow;
+    UIWindow *_keyWindow;
     NSMutableSet *_visibleWindows;
-    id<UIApplicationDelegate> _delegate;
+    __unsafe_unretained id<UIApplicationDelegate> _delegate;
     BOOL _idleTimerDisabled;
     BOOL _networkActivityIndicatorVisible;
     BOOL _applicationSupportsShakeToEdit;
     NSUInteger _ignoringInteractionEvents;
     NSInteger _applicationIconBadgeNumber;
-	
 	NSTimer * _idleTimer;
+    NSDate *_backgroundTasksExpirationDate;
+    NSMutableArray *_backgroundTasks;
 }
 
 + (UIApplication *)sharedApplication;
@@ -127,6 +127,9 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
 - (void)presentLocalNotificationNow:(UILocalNotification *)notification;
 - (void)cancelLocalNotification:(UILocalNotification *)notification;
 - (void)cancelAllLocalNotifications;
+
+- (UIBackgroundTaskIdentifier)beginBackgroundTaskWithExpirationHandler:(void(^)(void))handler;
+- (void)endBackgroundTask:(UIBackgroundTaskIdentifier)identifier;
 
 @property (nonatomic, readonly) UIWindow *keyWindow;
 @property (nonatomic, readonly) NSArray *windows;

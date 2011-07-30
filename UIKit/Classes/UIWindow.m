@@ -36,6 +36,9 @@
 #import "UITouch+UIPrivate.h"
 #import "UIScreenMode.h"
 #import "UIResponderAppKitIntegration.h"
+#import "UIViewController.h"
+#import "UIGestureRecognizerSubclass.h"
+#import "UIGestureRecognizer+UIPrivate.h"
 #import <AppKit/NSCursor.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -65,7 +68,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 
 
 @implementation UIWindow
-@synthesize screen=_screen;
+@synthesize screen=_screen, rootViewController=_rootViewController;
 
 - (id)initWithFrame:(CGRect)theFrame
 {
@@ -84,6 +87,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
     [self _makeHidden];	// I don't really like this here, but the real UIKit seems to do something like this on window destruction as it sends a notification and we also need to remove it from the app's list of windows
     [_screen release];
     [_undoManager release];
+    [_rootViewController release];
     [super dealloc];
 }
 
@@ -120,6 +124,17 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 - (UIResponder *)nextResponder
 {
     return [UIApplication sharedApplication];
+}
+
+- (void)setRootViewController:(UIViewController *)rootViewController
+{
+    if (rootViewController != _rootViewController) {
+        [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        [_rootViewController release];
+        _rootViewController = [rootViewController retain];
+        _rootViewController.view.frame = self.bounds;    // unsure about this
+        [self addSubview:_rootViewController.view];
+    }
 }
 
 - (void)setScreen:(UIScreen *)theScreen
@@ -290,47 +305,67 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 {
     if (event.type == UIEventTypeTouches) {
         NSSet *touches = [event touchesForWindow:self];
+        NSMutableSet *gestureRecognizers = [NSMutableSet setWithCapacity:0];
 
         for (UITouch *touch in touches) {
-            switch (touch.phase) {
-                case UITouchPhaseBegan:
-                    [touch.view touchesBegan:touches withEvent:event];
-                    break;
+            [gestureRecognizers addObjectsFromArray:touch.gestureRecognizers];
+        }
 
-                case UITouchPhaseMoved:
-                    [touch.view touchesMoved:touches withEvent:event];
-                    break;
+        for (UIGestureRecognizer *recognizer in gestureRecognizers) {
+            [recognizer _recognizeTouches:touches withEvent:event];
+        }
 
-                case UITouchPhaseEnded:
-                    [touch.view touchesEnded:touches withEvent:event];
-                    break;
+        for (UITouch *touch in touches) {
+            // normally there'd be no need to retain the view here, but this works around a strange problem I ran into.
+            // what can happen is, now that UIView's -removeFromSuperview will remove the view from the active touch
+            // instead of just cancel the touch (which is how I had implemented it previously - which was wrong), the
+            // situation can arise where, in response to a touch event of some kind, the view may remove itself from its
+            // superview in some fashion, which means that the handling of the touchesEnded:withEvent: (or whatever)
+            // methods could somehow result in the view itself being destroyed before the method is even finished running!
+            // I ran into this in particular with a load more button in Twitterrific which would crash in UIControl's
+            // touchesEnded: implemention after sending actions to the registered targets (because one of those targets
+            // ended up removing the button from view and thus reducing its retain count to 0). For some reason, even
+            // though I attempted to rearrange stuff in UIControl so that actions were always the last thing done, it'd
+            // still end up crashing when one of the internal methods returned to touchesEnded:, which didn't make sense
+            // to me because there was no code after that (at the time) and therefore it should just have been unwinding
+            // the stack to eventually get back here and all should have been okay. I never figured out exactly why that
+            // crashed in that way, but by putting a retain here it works around this problem and perhaps others that have
+            // gone so-far unnoticed. Converting to ARC should also work with this solution because there will be a local
+            // strong reference to the view retainined throughout the rest of this logic and thus the same protection
+            // against mid-method view destrustion should be provided under ARC. If someone can figure out some other,
+            // better way to fix this without it having to have this hacky-feeling retain here, that'd be cool, but be
+            // aware that this is here for a reason and that the problem it prevents is very rare and somewhat contrived.
+            UIView *view = [touch.view retain];
 
-                case UITouchPhaseCancelled:
-                    [touch.view touchesCancelled:touches withEvent:event];
-                    break;
-                    
-                case UITouchPhaseHovered:
-                    if ([touch.view hitTest:[touch locationInView:touch.view] withEvent:event]) {
-                        [touch.view mouseMoved:[touch _delta] withEvent:event];
-                    }
-                    break;
-
-                case UITouchPhaseScrolled:
-                    [touch.view scrollWheelMoved:[touch _delta] withEvent:event];
-                    break;
-
-                case UITouchPhaseRightClicked:
-                    [touch.view rightClick:touch withEvent:event];
-                    break;
-                    
-                case UITouchPhaseStationary:
-                    break;
+            const UITouchPhase phase = touch.phase;
+            const _UITouchGesture gesture = [touch _gesture];
+            
+            if (phase == UITouchPhaseBegan) {
+                [view touchesBegan:touches withEvent:event];
+            } else if (phase == UITouchPhaseMoved) {
+                [view touchesMoved:touches withEvent:event];
+            } else if (phase == UITouchPhaseEnded) {
+                [view touchesEnded:touches withEvent:event];
+            } else if (phase == UITouchPhaseCancelled) {
+                [view touchesCancelled:touches withEvent:event];
+            } else if (phase == _UITouchPhaseDiscreteGesture && gesture == _UITouchDiscreteGestureMouseMove) {
+                if ([view hitTest:[touch locationInView:view] withEvent:event]) {
+                    [view mouseMoved:[touch _delta] withEvent:event];
+                }
+            } else if (phase == _UITouchPhaseDiscreteGesture && gesture == _UITouchDiscreteGestureRightClick) {
+                [view rightClick:touch withEvent:event];
+            } else if ((phase == _UITouchPhaseDiscreteGesture && gesture == _UITouchDiscreteGestureScrollWheel) ||
+                       (phase == _UITouchPhaseGestureChanged && gesture == _UITouchGesturePan)) {
+                [view scrollWheelMoved:[touch _delta] withEvent:event];
             }
+            
+            NSCursor *newCursor = [view mouseCursorForEvent:event] ?: [NSCursor arrowCursor];
 
-            NSCursor *newCursor = [touch.view mouseCursorForEvent:event] ?: [NSCursor arrowCursor];
             if ([NSCursor currentCursor] != newCursor) {
                 [newCursor set];
-            }			
+            }
+            
+            [view release];
         }
     }
 }

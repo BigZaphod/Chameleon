@@ -30,6 +30,6 @@
 #import "UIControlAction.h"
 
 @implementation UIControlAction
-@synthesize target, action, controlEvents;
+@synthesize controlEvents=_controlEvents;
 
 @end

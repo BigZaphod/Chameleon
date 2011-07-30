@@ -53,7 +53,7 @@ typedef enum {
 @interface UITransitionView : UIView {
     UITransition _transition;
     UIView *_view;
-    id<UITransitionViewDelegate> _delegate;
+    __unsafe_unretained id<UITransitionViewDelegate> _delegate;
 }
 
 - (id)initWithFrame:(CGRect)frame view:(UIView *)aView;

@@ -50,13 +50,15 @@ typedef enum {
 
 @interface UIGestureRecognizer : NSObject {
 @private
-    id _delegate;
+    __unsafe_unretained id _delegate;
     BOOL _delaysTouchesBegan;
     BOOL _delaysTouchesEnded;
     BOOL _cancelsTouchesInView;
     BOOL _enabled;
     UIGestureRecognizerState _state;
-    __weak UIView *_view;
+    UIView *_view;
+    NSMutableArray *_registeredActions;
+    NSMutableArray *_trackingTouches;
     
     struct {
         BOOL shouldBegin : 1;
@@ -72,6 +74,8 @@ typedef enum {
 
 - (void)requireGestureRecognizerToFail:(UIGestureRecognizer *)otherGestureRecognizer;
 - (CGPoint)locationInView:(UIView *)view;
+
+- (NSUInteger)numberOfTouches;
 
 @property (nonatomic, assign) id<UIGestureRecognizerDelegate> delegate;
 @property (nonatomic) BOOL delaysTouchesBegan;

@@ -35,13 +35,14 @@
 CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize);
 
 @protocol _UIScrollerDelegate
+- (void)_UIScrollerDidBeginDragging:(UIScroller *)scroller withEvent:(UIEvent *)event;
 - (void)_UIScroller:(UIScroller *)scroller contentOffsetDidChange:(CGFloat)newOffset;
 - (void)_UIScrollerDidEndDragging:(UIScroller *)scroller withEvent:(UIEvent *)event;
 @end
 
 @interface UIScroller : UIView {
 @private
-    id _delegate;
+    __unsafe_unretained id<_UIScrollerDelegate> _delegate;
     CGFloat _contentOffset;
     CGFloat _contentSize;
     CGFloat _dragOffset;

@@ -89,12 +89,6 @@
     [_delegate transitionView:self didTransitionFromView:fromView toView:toView withTransition:transition];
 }
 
-- (void)_animation:(NSString *)name didFinish:(NSNumber *)finished info:(NSDictionary *)info
-{
-    [self _finishTransition:info];
-    [info release];
-}
-
 - (void)setView:(UIView *)aView
 {
     if (aView != _view) {
@@ -116,23 +110,22 @@
                 aView.alpha = 0;
             }
             
-            [UIView beginAnimations:@"UITransitionView" context:(void *)[info retain]];
-            [UIView setAnimationDidStopSelector:@selector(_animation:didFinish:info:)];
-            [UIView setAnimationDelegate:self];
-            [UIView setAnimationDuration:0.33];
-            
-            _view.frame = [self _rectForOutgoingView];
-            aView.frame = self.bounds;
-            
-            if (_transition == UITransitionFadeOut || _transition == UITransitionCrossFade) {
-                _view.alpha = 0;
-            }
-            
-            if (_transition == UITransitionFadeIn || _transition == UITransitionCrossFade) {
-                aView.alpha = 1;
-            }
-            
-            [UIView commitAnimations];
+            [UIView animateWithDuration:0.33
+                             animations:^(void) {
+                                 _view.frame = [self _rectForOutgoingView];
+                                 aView.frame = self.bounds;
+                                 
+                                 if (_transition == UITransitionFadeOut || _transition == UITransitionCrossFade) {
+                                     _view.alpha = 0;
+                                 }
+                                 
+                                 if (_transition == UITransitionFadeIn || _transition == UITransitionCrossFade) {
+                                     aView.alpha = 1;
+                                 }
+                             }
+                             completion:^(BOOL finished) {
+                                 [self _finishTransition:info];
+                             }];
         }
         
         [_view release];

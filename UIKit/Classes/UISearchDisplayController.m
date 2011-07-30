@@ -34,6 +34,8 @@
  */
 
 #import "UISearchDisplayController.h"
+#import "UISearchBar.h"
+#import "UIViewController.h"
 
 
 @implementation UISearchDisplayController
@@ -64,7 +66,7 @@
     [super dealloc];
 }
 
-- (BOOL)active
+- (BOOL)isActive
 {
     return NO;
 }

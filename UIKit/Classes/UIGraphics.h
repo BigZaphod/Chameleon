@@ -36,14 +36,16 @@ extern "C" {
 #endif
 
 void UIGraphicsPushContext(CGContextRef ctx);
-void UIGraphicsPopContext();
-CGContextRef UIGraphicsGetCurrentContext();
+void UIGraphicsPopContext(void);
+CGContextRef UIGraphicsGetCurrentContext(void);
 
 void UIGraphicsBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloat scale);
 void UIGraphicsBeginImageContext(CGSize size);
-UIImage *UIGraphicsGetImageFromCurrentImageContext();
-void UIGraphicsEndImageContext();
+UIImage *UIGraphicsGetImageFromCurrentImageContext(void);
+void UIGraphicsEndImageContext(void);
 
+void UIRectClip(CGRect rect);
+    
 void UIRectFill(CGRect rect);
 void UIRectFillUsingBlendMode(CGRect rect, CGBlendMode blendMode);
 

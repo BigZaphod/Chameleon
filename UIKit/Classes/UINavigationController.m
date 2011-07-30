@@ -41,6 +41,11 @@ static const CGFloat ToolbarHeight = 28;
 @synthesize viewControllers=_viewControllers, delegate=_delegate, navigationBar=_navigationBar;
 @synthesize toolbar=_toolbar, toolbarHidden=_toolbarHidden, navigationBarHidden=_navigationBarHidden;
 
+- (UIViewController *)visibleViewController
+{
+	return [self.viewControllers lastObject];
+}
+
 - (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)bundle
 {
     if ((self=[super initWithNibName:nibName bundle:bundle])) {
@@ -249,13 +254,15 @@ static const CGFloat ToolbarHeight = 28;
             
             [oldViewController retain];
             
-            [UIView beginAnimations:@"PushViewController" context:(void *)oldViewController];
-            [UIView setAnimationDuration:kAnimationDuration];
-            [UIView setAnimationDelegate:self];
-            [UIView setAnimationDidStopSelector:@selector(_pushAnimationDidStop:finished:removeOldViewController:)];
-            viewController.view.frame = nextFrameEnd;
-            oldViewController.view.frame = oldFrameEnd;
-            [UIView commitAnimations];
+            [UIView animateWithDuration:kAnimationDuration
+                             animations:^(void) {
+                                 viewController.view.frame = nextFrameEnd;
+                                 oldViewController.view.frame = oldFrameEnd;
+                             }
+                             completion:^(BOOL finished) {
+                                 [oldViewController.view removeFromSuperview];
+                                 [oldViewController release];
+                             }];
         } else {
             viewController.view.frame = nextFrameEnd;
             [oldViewController.view removeFromSuperview];
@@ -270,12 +277,6 @@ static const CGFloat ToolbarHeight = 28;
     [_viewControllers addObject:viewController];
     [_navigationBar pushNavigationItem:viewController.navigationItem animated:animated];
     [self _updateToolbar:animated];
-}
-
-- (void)_pushAnimationDidStop:(NSString *)name finished:(NSNumber *)finished removeOldViewController:(UIViewController *)controller
-{
-    [controller.view removeFromSuperview];
-    [controller release];
 }
 
 - (UIViewController *)_popViewControllerWithoutPoppingNavigationBarAnimated:(BOOL)animated
@@ -309,13 +310,15 @@ static const CGFloat ToolbarHeight = 28;
                 
                 [oldViewController retain];
                 
-                [UIView beginAnimations:@"PopViewController" context:(void *)oldViewController];
-                [UIView setAnimationDuration:kAnimationDuration];
-                [UIView setAnimationDelegate:self];
-                [UIView setAnimationDidStopSelector:@selector(_popAnimationDidStop:finished:removeOldViewController:)];
-                nextViewController.view.frame = nextFrameEnd;
-                oldViewController.view.frame = oldFrameEnd;
-                [UIView commitAnimations];
+                [UIView animateWithDuration:kAnimationDuration
+                                 animations:^(void) {
+                                     nextViewController.view.frame = nextFrameEnd;
+                                     oldViewController.view.frame = oldFrameEnd;
+                                 }
+                                 completion:^(BOOL finished) {
+                                     [oldViewController.view removeFromSuperview];
+                                     [oldViewController release];
+                                 }];
             } else {
                 nextViewController.view.frame = nextFrameEnd;
                 [oldViewController.view removeFromSuperview];
@@ -332,12 +335,6 @@ static const CGFloat ToolbarHeight = 28;
     } else {
         return nil;
     }
-}
-
-- (void)_popAnimationDidStop:(NSString *)name finished:(NSNumber *)finished removeOldViewController:(UIViewController *)controller
-{
-    [controller.view removeFromSuperview];
-    [controller release];
 }
 
 - (UIViewController *)popViewControllerAnimated:(BOOL)animate

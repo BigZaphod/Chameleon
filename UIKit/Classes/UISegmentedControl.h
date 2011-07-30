@@ -58,18 +58,6 @@ enum {
 @property (nonatomic, assign) NSInteger selectedSegmentIndex;
 @property (nonatomic, getter=isMomentary) BOOL momentary;
 
-@property (nonatomic, retain) UIImage *buttonImage;
-@property (nonatomic, retain) UIImage *highlightedButtonImage;
-@property (nonatomic, retain) UIImage *dividerImage;
-@property (nonatomic, retain) UIImage *highlightedDividerImage;
-
-@property (nonatomic, retain) UIFont *font;
-@property (nonatomic, retain) UIColor *textColor;
-@property (nonatomic, retain) UIColor *disabledTextColor;
-@property (nonatomic, retain) UIColor *textShadowColor;
-@property (nonatomic, assign) CGSize textShadowOffset;
-@property (nonatomic, assign) UIEdgeInsets textEdgeInsets;
-
 - (id)initWithItems:(NSArray *)items;
 
 //- (void)insertSegmentWithTitle:(NSString *)title atIndex:(NSUInteger)segment animated:(BOOL)animated;

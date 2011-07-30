@@ -69,10 +69,10 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
     const BOOL allowTopOrBottom = (pointTo->x >= NSMinX(screenRect)+minimumPadding && pointTo->x <= NSMaxX(screenRect)-minimumPadding);
     const BOOL allowLeftOrRight = (pointTo->y >= NSMinY(screenRect)+minimumPadding && pointTo->y <= NSMaxY(screenRect)-minimumPadding);
     
-    const BOOL allowTopQuad = (arrowDirections | UIPopoverArrowDirectionDown) && topQuad.size.width > 0 && topQuad.size.height > 0 && allowTopOrBottom;
-    const BOOL allowBottomQuad = (arrowDirections | UIPopoverArrowDirectionUp) && bottomQuad.size.width > 0 && bottomQuad.size.height > 0 && allowTopOrBottom;
-    const BOOL allowLeftQuad = (arrowDirections | UIPopoverArrowDirectionRight) && leftQuad.size.width > 0 && leftQuad.size.height > 0 && allowLeftOrRight;
-    const BOOL allowRightQuad = (arrowDirections | UIPopoverArrowDirectionLeft) && rightQuad.size.width > 0 && rightQuad.size.height > 0 && allowLeftOrRight;
+    const BOOL allowTopQuad = ((arrowDirections & UIPopoverArrowDirectionDown) != 0) && topQuad.size.width > 0 && topQuad.size.height > 0 && allowTopOrBottom;
+    const BOOL allowBottomQuad = ((arrowDirections & UIPopoverArrowDirectionUp) != 0) && bottomQuad.size.width > 0 && bottomQuad.size.height > 0 && allowTopOrBottom;
+    const BOOL allowLeftQuad = ((arrowDirections & UIPopoverArrowDirectionRight) != 0) && leftQuad.size.width > 0 && leftQuad.size.height > 0 && allowLeftOrRight;
+    const BOOL allowRightQuad = ((arrowDirections & UIPopoverArrowDirectionLeft) != 0) && rightQuad.size.width > 0 && rightQuad.size.height > 0 && allowLeftOrRight;
     
     const CGFloat arrowPadding = 8;		// the arrow images are slightly larger to account for shadows, but the arrow point needs to be up against the rect exactly so this helps with that
         
@@ -228,7 +228,7 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
     // button and a timer triggered the appearance of this popover. the window would possibly then not receive the mouseUp depending on how
     // all this works out... I first ran into this problem with NSMenus. A NSWindow is a bit different, but I think this makes sense here
     // too so premptively doing it to avoid potential problems.)
-    [[UIApplication sharedApplication] _cancelTouchesInView:nil];
+    [[UIApplication sharedApplication] _cancelTouches];
     
     // now position the popover window according to the passed in parameters.
     CGRect windowRect = [view convertRect:rect toView:nil];
@@ -255,15 +255,13 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
         _popoverView.transform = CGAffineTransformMakeScale(0.98f,0.98f);
         _popoverView.alpha = 0.4f;
         
-        [UIView beginAnimations:@"Ploop" context:NULL];
-        [UIView setAnimationDuration:0.08];
-        _popoverView.transform = CGAffineTransformIdentity;
-        [UIView commitAnimations];
-
-        [UIView beginAnimations:@"Fade" context:NULL];
-        [UIView setAnimationDuration:0.1];
-        _popoverView.alpha = 1.f;
-        [UIView commitAnimations];
+        [UIView animateWithDuration:0.08 animations:^(void) {
+            _popoverView.transform = CGAffineTransformIdentity;
+        }];
+        
+        [UIView animateWithDuration:0.1 animations:^(void) {
+            _popoverView.alpha = 1.f;
+        }];
     }
 }
 
@@ -278,10 +276,14 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 
 - (void)_destroyPopover
 {
-    [[_overlayWindow parentWindow] makeKeyAndOrderFront:self];
-    
+	[_overlayWindow orderOut:nil];
+	[_popoverWindow orderOut:nil];
+	
+	NSWindow *parentWindow = [_overlayWindow parentWindow];
     [_overlayWindow removeChildWindow:_popoverWindow];
-    [[_overlayWindow parentWindow] removeChildWindow:_overlayWindow];
+    [parentWindow removeChildWindow:_overlayWindow];
+	
+	[parentWindow makeKeyAndOrderFront:self];
     
     [_popoverView release];
     [_popoverWindow release];
@@ -297,15 +299,13 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 - (void)dismissPopoverAnimated:(BOOL)animated
 {
     if ([self isPopoverVisible]) {
-        if (animated) {
-            [UIView beginAnimations:@"dismissPopoverAnimated" context:NULL];
-            [UIView setAnimationDelegate:self];
-            [UIView setAnimationDidStopSelector:@selector(_destroyPopover)];
-            _popoverView.alpha = 0;
-            [UIView commitAnimations];
-        } else {
-            [self _destroyPopover];
-        }
+        [UIView animateWithDuration:animated? 0.2 : 0
+                         animations:^(void) {
+                             _popoverView.alpha = 0;
+                         }
+                         completion:^(BOOL finished) {
+                             [self _destroyPopover];
+                         }];
     }
 }
 

@@ -74,12 +74,14 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 {
     [_fadeTimer invalidate];
     _fadeTimer = nil;
-        
-    [UIView beginAnimations:@"fadeOut" context:NULL];
-    [UIView setAnimationDuration:0.33];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-    self.alpha = _UIScrollerMinimumAlpha;
-    [UIView commitAnimations];
+
+    [UIView animateWithDuration:0.33
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionTransitionNone | UIViewAnimationOptionAllowUserInteraction
+                     animations:^(void) {
+                         self.alpha = _UIScrollerMinimumAlpha;
+                     }
+                     completion:NULL];
 }
 
 - (void)_fadeOutAfterDelay:(NSTimeInterval)time
@@ -93,25 +95,29 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
     [_fadeTimer invalidate];
     _fadeTimer = nil;
 
-    [UIView beginAnimations:@"fadeIn" context:NULL];
-    [UIView setAnimationDuration:0.33];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-    self.alpha = 1;
-    [UIView commitAnimations];
+    [UIView animateWithDuration:0.33
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionTransitionNone | UIViewAnimationOptionAllowUserInteraction
+                     animations:^(void) {
+                         self.alpha = 1;
+                     }
+                     completion:NULL];
 }
 
 - (void)flash
 {
+    [self _fadeIn];
+
     if (!_alwaysVisible) {
-        [self _fadeIn];
         [self _fadeOutAfterDelay:1.5];
     }
 }
 
 - (void)quickFlash
 {
+    self.alpha = 1;
+
     if (!_alwaysVisible) {
-        self.alpha = 1;
         [self _fadeOutAfterDelay:0.5];
     }
 }
@@ -122,7 +128,7 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 
     if (_alwaysVisible) {
         [self _fadeIn];
-    } else if (self.alpha > _UIScrollerMinimumAlpha) {
+    } else if (self.alpha > _UIScrollerMinimumAlpha && !_fadeTimer) {
         [self _fadeOut];
     }
 }
@@ -247,8 +253,8 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
         [[[UIColor whiteColor] colorWithAlphaComponent:0.5] setFill];
     } else {
         [[[UIColor blackColor] colorWithAlphaComponent:0.5] setFill];
-        [[[UIColor whiteColor] colorWithAlphaComponent:0.2] setStroke];
-        [path setLineWidth:1.5];
+        [[[UIColor whiteColor] colorWithAlphaComponent:0.25] setStroke];
+        [path setLineWidth:1.75];
         [path stroke];
     }
     
@@ -267,7 +273,10 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
             _dragOffset = _lastTouchLocation.x - knobRect.origin.x;
         }
         _draggingKnob = YES;
+        [_delegate _UIScrollerDidBeginDragging:self withEvent:event];
     } else if (_UIScrollerGutterEnabled) {
+        [_delegate _UIScrollerDidBeginDragging:self withEvent:event];
+
         if (_UIScrollerJumpToSpotThatIsClicked) {
             _dragOffset = [self knobSize] / 2.f;
             _draggingKnob = YES;
@@ -295,7 +304,8 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
     if (_draggingKnob) {
         _draggingKnob = NO;
         [_delegate _UIScrollerDidEndDragging:self withEvent:event];
-    } else {
+    } else if (_holdTimer) {
+        [_delegate _UIScrollerDidEndDragging:self withEvent:event];
         [_holdTimer invalidate];
         _holdTimer = nil;
     }

@@ -42,7 +42,7 @@
     UINavigationBar *_navigationBar;
     UIToolbar *_toolbar;
     NSMutableArray *_viewControllers;
-    id _delegate;
+    __unsafe_unretained id _delegate;
     BOOL _toolbarHidden;
     BOOL _navigationBarHidden;
     
@@ -67,6 +67,7 @@
 - (void)setNavigationBarHidden:(BOOL)navigationBarHidden animated:(BOOL)animated; // doesn't yet animate
 
 @property (nonatomic, copy) NSArray *viewControllers;
+@property (nonatomic, readonly, retain) UIViewController *visibleViewController;
 @property (nonatomic, readonly) UINavigationBar *navigationBar;
 @property (nonatomic, readonly) UIToolbar *toolbar;
 @property (nonatomic, assign) id<UINavigationControllerDelegate> delegate;
