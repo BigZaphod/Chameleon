@@ -40,6 +40,26 @@ NSString *const UITextFieldTextDidBeginEditingNotification = @"UITextFieldTextDi
 NSString *const UITextFieldTextDidChangeNotification = @"UITextFieldTextDidChangeNotification";
 NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidEndEditingNotification";
 
+
+static NSString* const kUIPlaceHolderKey = @"UIPlaceHolder";
+static NSString* const kUITextAlignmentKey = @"UITextAlignment";
+static NSString* const kUITextKey = @"UIText";
+static NSString* const kUITextFieldBackgroundKey = @"UITextFieldBackground";
+static NSString* const kUITextFieldDisabledBackgroundKey = @"UITextFieldDisabledBackground";
+static NSString* const kUIBorderStyleKey = @"UIBorderStyle";
+static NSString* const kUIClearsOnBeginEditingKey = @"UIClearsOnBeginEditing";
+static NSString* const kUIMinimumFontSizeKey = @"UIMinimumFontSize";
+static NSString* const kUIClearButtonModeKey = @"UIClearButtonMode";
+static NSString* const kUIClearButtonOffsetKey = @"UIClearButtonOffset";
+static NSString* const kUIAutocorrectionTypeKey = @"UIAutocorrectionType";
+static NSString* const kUISpellCheckingTypeKey = @"UISpellCheckingType";
+static NSString* const kUIKeyboardAppearanceKey = @"UIKeyboardAppearance";
+static NSString* const kUIKeyboardTypeKey = @"UIKeyboardType";
+static NSString* const kUIReturnKeyTypeKey = @"UIReturnKeyType";
+static NSString* const kUIEnablesReturnKeyAutomaticallyKey = @"UIEnablesReturnKeyAutomatically";
+static NSString* const kUISecureTextEntryKey = @"UISecureTextEntry";
+
+
 @interface UIControl () <UITextLayerContainerViewProtocol>
 @end
 
@@ -80,28 +100,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 @synthesize borderStyle = _borderStyle;
 @synthesize inputAccessoryView = _inputAccessoryView;
 @synthesize inputView = _inputView;
-
-- (id)initWithFrame:(CGRect)frame
-{
-    if ((self=[super initWithFrame:frame])) {
-		_placeholderTextLayer = [[UITextLayer alloc] initWithContainer:self isField:NO];
-		_placeholderTextLayer.textColor = [UIColor colorWithWhite:0.6f alpha:1.0f];
-        [self.layer addSublayer:_placeholderTextLayer];
-		
-        _textLayer = [[UITextLayer alloc] initWithContainer:self isField:YES];
-		[self.layer addSublayer:_textLayer];
-		
-        self.textAlignment = UITextAlignmentLeft;
-        self.font = [UIFont systemFontOfSize:17];
-        self.borderStyle = UITextBorderStyleNone;
-        self.textColor = [UIColor blackColor];
-        self.clearButtonMode = UITextFieldViewModeNever;
-        self.leftViewMode = UITextFieldViewModeNever;
-        self.rightViewMode = UITextFieldViewModeNever;
-        self.opaque = NO;
-    }
-    return self;
-}
+@synthesize minimumFontSize = _minimumFontSize;
 
 - (void)dealloc
 {
@@ -117,6 +116,97 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     [_inputAccessoryView release];
     [_inputView release];
     [super dealloc];
+}
+
+- (void) _commonInitForUITextField
+{
+    _placeholderTextLayer = [[UITextLayer alloc] initWithContainer:self isField:NO];
+    _placeholderTextLayer.textColor = [UIColor colorWithWhite:0.6f alpha:1.0f];
+    [self.layer addSublayer:_placeholderTextLayer];
+    
+    _textLayer = [[UITextLayer alloc] initWithContainer:self isField:YES];
+    [self.layer addSublayer:_textLayer];
+    
+    self.textAlignment = UITextAlignmentLeft;
+    self.font = [UIFont systemFontOfSize:17];
+    self.borderStyle = UITextBorderStyleNone;
+    self.textColor = [UIColor blackColor];
+    self.clearButtonMode = UITextFieldViewModeNever;
+    self.leftViewMode = UITextFieldViewModeNever;
+    self.rightViewMode = UITextFieldViewModeNever;
+    self.opaque = NO;
+}
+
+- (id)initWithFrame:(CGRect)frame
+{
+    if (nil != (self = [super initWithFrame:frame])) {
+        [self _commonInitForUITextField];
+    }
+    return self;
+}
+
+- (id) initWithCoder:(NSCoder*)coder
+{
+    if (nil != (self = [super initWithCoder:coder])) {
+        [self _commonInitForUITextField];
+        if ([coder containsValueForKey:kUIPlaceHolderKey]) {
+            self.placeholder = [coder decodeObjectForKey:kUIPlaceHolderKey];
+        }
+        if ([coder containsValueForKey:kUITextAlignmentKey]) {
+            self.textAlignment = [coder decodeIntegerForKey:kUITextAlignmentKey];
+        }
+        if ([coder containsValueForKey:kUITextKey]) {
+            self.text = [coder decodeObjectForKey:kUITextKey];
+        }
+        if ([coder containsValueForKey:kUITextFieldBackgroundKey]) {
+            self.background = [coder decodeObjectForKey:kUITextFieldBackgroundKey];
+        }
+        if ([coder containsValueForKey:kUITextFieldDisabledBackgroundKey]) {
+            self.disabledBackground = [coder decodeObjectForKey:kUITextFieldDisabledBackgroundKey];
+        }
+        if ([coder containsValueForKey:kUIBorderStyleKey]) {
+            self.borderStyle = [coder decodeIntegerForKey:kUIBorderStyleKey];
+        }
+        if ([coder containsValueForKey:kUIClearsOnBeginEditingKey]) {
+            self.clearsOnBeginEditing = [coder decodeBoolForKey:kUIClearsOnBeginEditingKey];
+        }
+        if ([coder containsValueForKey:kUIMinimumFontSizeKey]) {
+            self.minimumFontSize = [coder decodeFloatForKey:kUIMinimumFontSizeKey];
+        }
+        if ([coder containsValueForKey:kUIClearButtonModeKey]) {
+            self.clearButtonMode = [coder decodeIntegerForKey:kUIClearButtonModeKey];
+        }
+        if ([coder containsValueForKey:kUIAutocorrectionTypeKey]) {
+            self.autocorrectionType = [coder decodeIntegerForKey:kUIAutocorrectionTypeKey];
+        }
+        if ([coder containsValueForKey:kUIClearButtonOffsetKey]) {
+            /* XXX: Implement Me */
+        }
+        if ([coder containsValueForKey:kUISpellCheckingTypeKey]) {
+            /* XXX: Implement Me */
+        }
+        if ([coder containsValueForKey:kUIKeyboardAppearanceKey]) {
+            /* XXX: Implement Me */
+        }
+        if ([coder containsValueForKey:kUIKeyboardTypeKey]) {
+            /* XXX: Implement Me */
+        }
+        if ([coder containsValueForKey:kUIReturnKeyTypeKey]) {
+            /* XXX: Implement Me */
+        }
+        if ([coder containsValueForKey:kUIEnablesReturnKeyAutomaticallyKey]) {
+            /* XXX: Implement Me */
+        }
+        if ([coder containsValueForKey:kUISecureTextEntryKey]) {
+            /* XXX: Implement Me */
+        }
+    }
+    return self;
+}
+
+- (void) encodeWithCoder:(NSCoder*)coder
+{
+    [self doesNotRecognizeSelector:_cmd];
 }
 
 - (BOOL)_isLeftViewVisible
