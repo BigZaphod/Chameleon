@@ -14,6 +14,11 @@
 #import "UIGraphics.h"
 
 static NSString *kSSSegmentedControlEnabledKey = @"enabled";
+static NSString* const kUISegmentsKey = @"UISegments";
+static NSString* const kUISegmentedControlStyleKey = @"UISegmentedControlStyle";
+static NSString* const kUISegmentedControlTintColorKey = @"UISegmentedControlTintColor";
+static NSString* const kUISelectedSegmentIndexKey = @"UISelectedSegmentIndex";
+static NSString* const kUIMomentaryKey = @"UIMomentary";
 
 @interface UISegmentedControl ()
 @property (nonatomic, retain) UIImage *buttonImage;
@@ -27,7 +32,7 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
 @property (nonatomic, retain) UIColor *textShadowColor;
 @property (nonatomic, assign) CGSize textShadowOffset;
 @property (nonatomic, assign) UIEdgeInsets textEdgeInsets;
-
+- (void)_commonInitForUISegmentedControl;
 - (NSMutableDictionary *)_metaForSegmentIndex:(NSUInteger)index;
 - (id)_metaValueForKey:(NSString *)key segmentIndex:(NSUInteger)index;
 - (void)_setMetaValue:(id)value forKey:(NSString *)key segmentIndex:(NSUInteger)index;
@@ -74,7 +79,30 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
 - (id) initWithCoder:(NSCoder*)coder
 {
     if (nil != (self = [super initWithCoder:coder])) {
-        /* XXX: Implement Me */
+        [self _commonInitForUISegmentedControl];
+        if ([coder containsValueForKey:kUISegmentsKey]) {
+            NSArray *segments = [coder decodeObjectForKey:kUISegmentsKey];
+            for (UISegment *segment in segments) {
+                if (segment.image) {
+                    [self setImage:segment.image forSegmentAtIndex:segment.position];
+                }
+                if (segment.title) {
+                    [self setTitle:segment.title forSegmentAtIndex:segment.position];
+                }
+            }
+        }
+        if ([coder containsValueForKey:kUISegmentedControlStyleKey]) {
+            self.segmentedControlStyle = [coder decodeIntegerForKey:kUISegmentedControlStyleKey];
+        }
+        if ([coder containsValueForKey:kUISegmentedControlTintColorKey]) {
+            self.tintColor = [coder decodeObjectForKey:kUISegmentedControlTintColorKey];
+        }
+        if ([coder containsValueForKey:kUISelectedSegmentIndexKey]) {
+            self.selectedSegmentIndex = [coder decodeIntegerForKey:kUISelectedSegmentIndexKey];
+        }
+        if ([coder containsValueForKey:kUIMomentaryKey]) {
+            self.momentary = [coder decodeBoolForKey:kUIMomentaryKey];
+        }
     }
     return self;
 }
@@ -119,28 +147,32 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
 - (id)initWithFrame:(CGRect)frame
 {
     if ((self = [super initWithFrame:frame])) {
-        self.backgroundColor = [UIColor clearColor];
-        
-        _segments = [[NSMutableArray alloc] init];
-        _momentary = NO;
-        
-        // TODO: add images
-        self.buttonImage = [[UIImage imageNamed:@"UISegmentBarButton.png"] stretchableImageWithLeftCapWidth:6 topCapHeight:0];
-        self.highlightedButtonImage = [[UIImage imageNamed:@"UISegmentBarButtonHighlighted.png"] stretchableImageWithLeftCapWidth:6 topCapHeight:0];
-        self.dividerImage = [UIImage imageNamed:@"UISegmentBarDivider.png"];
-        self.highlightedDividerImage = [UIImage imageNamed:@"UISegmentBarDividerHighlighted.png"];
-        self.selectedSegmentIndex = UISegmentedControlNoSegment;
-        
-        _font = [[UIFont boldSystemFontOfSize:12.0f] retain];
-        _textColor = [[UIColor whiteColor] retain];
-        _disabledTextColor = [[UIColor colorWithWhite:0.561f alpha:1.0f] retain];
-        _textShadowColor = [[UIColor colorWithWhite:0.0f alpha:0.5f] retain];
-        _textShadowOffset = CGSizeMake(0.0f, -1.0f);
-        _textEdgeInsets = UIEdgeInsetsMake(-1.0f, 0.0f, 0.0f, 0.0f);
+        [self _commonInitForUISegmentedControl];
     }
     return self;
 }
 
+- (void)_commonInitForUISegmentedControl
+{
+    self.backgroundColor = [UIColor clearColor];
+    
+    _segments = [[NSMutableArray alloc] init];
+    _momentary = NO;
+    
+    // TODO: add images
+    self.buttonImage = [[UIImage imageNamed:@"UISegmentBarButton.png"] stretchableImageWithLeftCapWidth:6 topCapHeight:0];
+    self.highlightedButtonImage = [[UIImage imageNamed:@"UISegmentBarButtonHighlighted.png"] stretchableImageWithLeftCapWidth:6 topCapHeight:0];
+    self.dividerImage = [UIImage imageNamed:@"UISegmentBarDivider.png"];
+    self.highlightedDividerImage = [UIImage imageNamed:@"UISegmentBarDividerHighlighted.png"];
+    self.selectedSegmentIndex = UISegmentedControlNoSegment;
+    
+    _font = [[UIFont boldSystemFontOfSize:12.0f] retain];
+    _textColor = [[UIColor whiteColor] retain];
+    _disabledTextColor = [[UIColor colorWithWhite:0.561f alpha:1.0f] retain];
+    _textShadowColor = [[UIColor colorWithWhite:0.0f alpha:0.5f] retain];
+    _textShadowOffset = CGSizeMake(0.0f, -1.0f);
+    _textEdgeInsets = UIEdgeInsetsMake(-1.0f, 0.0f, 0.0f, 0.0f);
+}
 
 - (void)drawRect:(CGRect)frame
 {
