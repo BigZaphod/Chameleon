@@ -49,6 +49,7 @@ static NSString* const kUITextFieldDisabledBackgroundKey = @"UITextFieldDisabled
 static NSString* const kUIBorderStyleKey = @"UIBorderStyle";
 static NSString* const kUIClearsOnBeginEditingKey = @"UIClearsOnBeginEditing";
 static NSString* const kUIMinimumFontSizeKey = @"UIMinimumFontSize";
+static NSString* const kUIFontKey = @"UIFont";
 static NSString* const kUIClearButtonModeKey = @"UIClearButtonMode";
 static NSString* const kUIClearButtonOffsetKey = @"UIClearButtonOffset";
 static NSString* const kUIAutocorrectionTypeKey = @"UIAutocorrectionType";
@@ -172,6 +173,9 @@ static NSString* const kUISecureTextEntryKey = @"UISecureTextEntry";
         }
         if ([coder containsValueForKey:kUIMinimumFontSizeKey]) {
             self.minimumFontSize = [coder decodeFloatForKey:kUIMinimumFontSizeKey];
+        }
+        if ([coder containsValueForKey:kUIFontKey]) {
+            self.font = [coder decodeObjectForKey:kUIFontKey];
         }
         if ([coder containsValueForKey:kUIClearButtonModeKey]) {
             self.clearButtonMode = [coder decodeIntegerForKey:kUIClearButtonModeKey];
