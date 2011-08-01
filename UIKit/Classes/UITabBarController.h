@@ -43,7 +43,7 @@
 @class UITabBar;
 @interface UITabBarController : UIViewController {
     UITabBar *_tabBar;
-    __unsafe_unretained UIViewController *_selectedViewController;
+	UIViewController *_selectedViewController;
     NSArray *_viewControllers;
     NSUInteger _selectedIndex;
 }

@@ -37,7 +37,7 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
 {
     NSMutableArray *CGImages = [NSMutableArray arrayWithCapacity:[images count]];
     for (UIImage *img in images) {
-        [CGImages addObject:(__bridge id)[img CGImage]];
+        [CGImages addObject:(id)[img CGImage]];
     }
     return CGImages;
 }
@@ -170,7 +170,7 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
         UIGraphicsEndImageContext();
     }
 
-    theLayer.contents = (__bridge id)[displayImage CGImage];
+    theLayer.contents = (id)[displayImage CGImage];
 }
 
 - (void)_displayIfNeededChangingFromOldSize:(CGSize)oldSize toNewSize:(CGSize)newSize

@@ -44,7 +44,7 @@
 @private
     NSMutableArray *_navStack;
     UIColor *_tintColor;
-    __unsafe_unretained id _delegate;
+	id _delegate;
     
     UIView *_leftView;
     UIView *_centerView;

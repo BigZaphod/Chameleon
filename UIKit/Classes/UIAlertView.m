@@ -60,7 +60,7 @@
             va_list argumentList;
             va_start(argumentList, otherButtonTitles);
 
-            while ((buttonTitle=(__bridge NSString *)va_arg(argumentList, void *))) {
+            while ((buttonTitle=(NSString *)va_arg(argumentList, void *))) {
                 [self addButtonWithTitle:buttonTitle];
             }
             

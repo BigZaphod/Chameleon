@@ -51,7 +51,7 @@ typedef enum {
 
 @interface UIActionSheet : UIView {
 @private
-    __unsafe_unretained id<UIActionSheetDelegate> _delegate;
+	id<UIActionSheetDelegate> _delegate;
     NSInteger _destructiveButtonIndex;
     NSInteger _cancelButtonIndex;
     NSInteger _firstOtherButtonIndex;

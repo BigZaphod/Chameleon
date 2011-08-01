@@ -45,7 +45,7 @@
 
 
 @interface NSFetchedResultsController : NSObject {
-  __unsafe_unretained id <NSFetchedResultsControllerDelegate> _delegate;
+	id <NSFetchedResultsControllerDelegate> _delegate;
   NSFetchRequest *_fetchRequest;
   NSManagedObjectContext *_managedObjectContext;
   NSArray *_fetchedObjects; // we don't yet support sections!

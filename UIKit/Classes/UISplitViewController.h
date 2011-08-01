@@ -33,7 +33,7 @@
 
 @interface UISplitViewController : UIViewController {
 @private
-    __unsafe_unretained id <UISplitViewControllerDelegate> _delegate;
+	id <UISplitViewControllerDelegate> _delegate;
     NSArray *_viewControllers;
     
     struct {

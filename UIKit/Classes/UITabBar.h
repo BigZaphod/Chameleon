@@ -52,7 +52,7 @@
 
 
 @interface UITabBar : UIView {
-    __unsafe_unretained id<UITabBarDelegate> _delegate;
+	id<UITabBarDelegate> _delegate;
     NSArray *_items;
     NSInteger _selectedItemIndex;
 }
