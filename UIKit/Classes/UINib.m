@@ -63,7 +63,7 @@
 {    
     id owner = ownerOrNil ?: [[[NSObject alloc] init] autorelease];
     NSDictionary* externalObjects = [optionsOrNil objectForKey:UINibExternalObjects];
-    return [_decoder instantiateWithOwner:owner externalObjects:externalObjects];
+    return [_decoder instantiateWithBundle:_bundle owner:owner externalObjects:externalObjects];
 }
 
 @end

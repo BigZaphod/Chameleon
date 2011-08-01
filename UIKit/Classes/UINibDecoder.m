@@ -39,15 +39,15 @@ static NSString* const kUINibVisibleWindowsKey = @"UINibVisibleWindowsKey";
     }
 }
 
-- (NSCoder*) instantiateCoderWithOwner:(id)owner externalObjects:(NSDictionary*)externalObjects
+- (NSCoder*) instantiateCoderWithBundle:(NSBundle*)bundle owner:(id)owner externalObjects:(NSDictionary*)externalObjects
 {
     return nil;
 }
 
-- (NSArray*) instantiateWithOwner:(id)owner externalObjects:(NSDictionary*)externalObjects
+- (NSArray*) instantiateWithBundle:(NSBundle*)bundle owner:(id)owner externalObjects:(NSDictionary*)externalObjects
 {
     NSArray* topLevelObjects = nil;
-    NSCoder* coder = [self instantiateCoderWithOwner:owner externalObjects:externalObjects];
+    NSCoder* coder = [self instantiateCoderWithBundle:bundle owner:owner externalObjects:externalObjects];
     if (coder) {
         BOOL referencedOwner = NO;
         for (id connection in [coder decodeObjectForKey:kUINibConnectionsKey]) {

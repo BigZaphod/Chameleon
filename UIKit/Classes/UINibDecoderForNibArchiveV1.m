@@ -1,5 +1,7 @@
 #import "UINibDecoderForNibArchiveV1.h"
 #import "UIProxyObject.h"
+#import "UIImageNibPlaceholder.h"
+
 
 typedef struct {
     NSUInteger indexOfClass;
@@ -45,7 +47,7 @@ static inline double decodeFloat64(void const** pp);
 
 @interface UINibArchiveDecoderV1 : NSCoder
 
-- (id) initWithNibArchiveData:(UINibArchiveDataV1*)archiveData owner:(id)owner externalObjects:(NSDictionary*)externalObjects;
+- (id) initWithNibArchiveData:(UINibArchiveDataV1*)archiveData bundle:(NSBundle*)bundle owner:(id)owner externalObjects:(NSDictionary*)externalObjects;
 
 - (UINibDecoderValueEntry*) _nextGenericValue;
 - (UINibDecoderValueEntry*) _valueEntryForKey:(NSString*)key;
@@ -88,9 +90,9 @@ static inline double decodeFloat64(void const** pp);
     return self;
 }
 
-- (NSCoder*) instantiateCoderWithOwner:(id)owner externalObjects:(NSDictionary*)externalObjects
+- (NSCoder*) instantiateCoderWithBundle:(NSBundle*)bundle owner:(id)owner externalObjects:(NSDictionary*)externalObjects
 {
-    return [[[UINibArchiveDecoderV1 alloc] initWithNibArchiveData:archiveData_ owner:owner externalObjects:externalObjects] autorelease];
+    return [[[UINibArchiveDecoderV1 alloc] initWithNibArchiveData:archiveData_ bundle:bundle owner:owner externalObjects:externalObjects] autorelease];
 }
 
 @end
@@ -334,6 +336,7 @@ static inline double decodeFloat64(void const** pp);
     UINibArchiveDataV1* archiveData_;
     NSPointerArray* objects_;
     /**/
+    NSBundle* bundle_;
     id owner_;
     NSDictionary* externalObjects_;
     /**/
@@ -349,7 +352,8 @@ static Class kClassForNSMutableSet;
 static Class kClassForNSDictionary;
 static Class kClassForNSDMutableDictionary;
 static Class kClassForNSNumber;
-static Class kClassforUIProxyObject;
+static Class kClassForUIProxyObject;
+static Class kClassForUIImageNibPlaceholder;
 
 + (void) initialize
 {
@@ -363,7 +367,8 @@ static Class kClassforUIProxyObject;
             kClassForNSDictionary = NSClassFromString(@"NSDictionary");
             kClassForNSDMutableDictionary = NSClassFromString(@"NSMutableDictionary");
             kClassForNSNumber = NSClassFromString(@"NSNumber");
-            kClassforUIProxyObject = NSClassFromString(@"UIProxyObject");
+            kClassForUIProxyObject = NSClassFromString(@"UIProxyObject");
+            kClassForUIImageNibPlaceholder = NSClassFromString(@"UIImageNibPlaceholder");
         });
     }
     assert(kClassForNSArray);
@@ -373,24 +378,27 @@ static Class kClassforUIProxyObject;
     assert(kClassForNSDictionary);
     assert(kClassForNSDMutableDictionary);
     assert(kClassForNSNumber);
-    assert(kClassforUIProxyObject);
+    assert(kClassForUIProxyObject);
+    assert(kClassForUIImageNibPlaceholder);
 }
 
 - (void) dealloc
 {
     [archiveData_ release];
+    [bundle_ release];
     [owner_ release];
     [externalObjects_ release];
     [objects_ release];
     [super dealloc];
 }
 
-- (id) initWithNibArchiveData:(UINibArchiveDataV1*)archiveData owner:(id)owner externalObjects:(NSDictionary*)externalObjects;
+- (id) initWithNibArchiveData:(UINibArchiveDataV1*)archiveData bundle:(NSBundle*)bundle owner:(id)owner externalObjects:(NSDictionary*)externalObjects;
 {
     assert(archiveData);
     assert(owner);
     if (nil != (self = [super init])) {
         archiveData_ = [archiveData retain];
+        bundle_ = [bundle retain];
         owner_ = [owner retain];
         externalObjects_ = [externalObjects retain];
         
@@ -744,7 +752,7 @@ static Class kClassforUIProxyObject;
                 assert(object);
                 [object awakeAfterUsingCoder:self];
                 
-                if ([object isKindOfClass:[UIProxyObject class]]) {
+                if (class == kClassForUIProxyObject) {
                     NSString* proxiedObjectIdentifier = [object proxiedObjectIdentifier];
                     [object release];
                     if ([proxiedObjectIdentifier isEqualToString:kIBFilesOwnerKey]) {
@@ -754,6 +762,10 @@ static Class kClassforUIProxyObject;
                     } else {
                         object = [[externalObjects_ objectForKey:proxiedObjectIdentifier] retain];
                     }
+                } else if (class == kClassForUIImageNibPlaceholder) {
+                    NSString* resourceName = [object resourceName];
+                    [object release];
+                    object = [[UIImage imageWithContentsOfFile:[bundle_ pathForResource:resourceName ofType:nil]] retain];
                 }
 
                 [objects_ replacePointerAtIndex:indexOfObject withPointer:object];

@@ -5,6 +5,6 @@
 
 + (UINibDecoder*) nibDecoderForData:(NSData*)data;
 
-- (NSArray*) instantiateWithOwner:(id)owner externalObjects:(NSDictionary*)externalObjects;
+- (NSArray*) instantiateWithBundle:(NSBundle*)bundle owner:(id)owner externalObjects:(NSDictionary*)externalObjects;
 
 @end
