@@ -41,7 +41,7 @@ NSString *const UITextFieldTextDidChangeNotification = @"UITextFieldTextDidChang
 NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidEndEditingNotification";
 
 
-static NSString* const kUIPlaceHolderKey = @"UIPlaceHolder";
+static NSString* const kUIPlaceholderKey = @"UIPlaceholder";
 static NSString* const kUITextAlignmentKey = @"UITextAlignment";
 static NSString* const kUITextKey = @"UIText";
 static NSString* const kUITextFieldBackgroundKey = @"UITextFieldBackground";
@@ -150,8 +150,8 @@ static NSString* const kUISecureTextEntryKey = @"UISecureTextEntry";
 {
     if (nil != (self = [super initWithCoder:coder])) {
         [self _commonInitForUITextField];
-        if ([coder containsValueForKey:kUIPlaceHolderKey]) {
-            self.placeholder = [coder decodeObjectForKey:kUIPlaceHolderKey];
+        if ([coder containsValueForKey:kUIPlaceholderKey]) {
+            self.placeholder = [coder decodeObjectForKey:kUIPlaceholderKey];
         }
         if ([coder containsValueForKey:kUITextAlignmentKey]) {
             self.textAlignment = [coder decodeIntegerForKey:kUITextAlignmentKey];
