@@ -31,7 +31,7 @@
 
 @class UIImage, CAKeyframeAnimation;
 
-@interface UIImageView : UIView 
+@interface UIImageView : UIView <NSCoding>
 
 - (id)initWithImage:(UIImage *)theImage;
 - (void)startAnimating;

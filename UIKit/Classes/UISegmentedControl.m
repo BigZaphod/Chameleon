@@ -7,6 +7,7 @@
 //
 
 #import "UISegmentedControl.h"
+#import "UISegment.h"
 #import "UITouch.h"
 #import "UIColor.h"
 #import "UIStringDrawing.h"
@@ -70,6 +71,18 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
     [super dealloc];
 }
 
+- (id) initWithCoder:(NSCoder*)coder
+{
+    if (nil != (self = [super initWithCoder:coder])) {
+        /* XXX: Implement Me */
+    }
+    return self;
+}
+
+- (void) encodeWithCoder:(NSCoder*)coder
+{
+    [self doesNotRecognizeSelector:_cmd];
+}
 
 #pragma mark UIResponder
 

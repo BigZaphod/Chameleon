@@ -41,7 +41,7 @@ typedef enum {
     UIImageOrientationRightMirrored, // vertical flip
 } UIImageOrientation;
 
-@interface UIImage : NSObject 
+@interface UIImage : NSObject <NSCoding>
 
 + (UIImage *)imageNamed:(NSString *)name;			// Note, this caches the images somewhat like iPhone OS 2ish in that it never releases them. :)
 + (UIImage *)imageWithData:(NSData *)data;

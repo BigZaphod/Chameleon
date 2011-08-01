@@ -97,6 +97,20 @@
     return self;
 }
 
+- (id) initWithCoder:(NSCoder*)coder
+{
+    if (nil != (self = [super init])) {
+        /* XXX: Implement Me */
+    }
+    return self;
+}
+
+- (void) encodeWithCoder:(NSCoder*)coder
+{
+    [self doesNotRecognizeSelector:_cmd];
+}
+
+
 - (void)dealloc
 {
     if (_image) CGImageRelease(_image);
