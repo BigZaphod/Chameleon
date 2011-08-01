@@ -55,7 +55,7 @@ static CGPatternRef CreateImagePattern(CGImageRef image)
     static const CGPatternCallbacks callbacks = {0, &drawPatternImage, &releasePatternImage};
     return CGPatternCreate (image,
                             CGRectMake (0, 0, width, height),
-                            CGAffineTransformMake (1, 0, 0, -1, 0, height),
+                            CGAffineTransformMake (1, 0, 0, 1, 0, height),
                             width,
                             height,
                             kCGPatternTilingConstantSpacing,
