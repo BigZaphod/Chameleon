@@ -58,9 +58,12 @@ NSString *NSStringFromUIEdgeInsets(UIEdgeInsets insets)
 
 UIEdgeInsets UIEdgeInsetsFromString(NSString* string)
 {
-    UIEdgeInsets insets;
-    if (4 == sscanf([string UTF8String], "{%g, %g, %g, %g}", &insets.top, &insets.left, &insets.bottom, &insets.right)) {
-        return insets;
+    double top;
+    double left;
+    double bottom;
+    double right;
+    if (4 == sscanf([string UTF8String], "{%g, %g, %g, %g}", &top, &left, &bottom, &right)) {
+        return UIEdgeInsetsMake(top, left, bottom, right);
     } else {
         return UIEdgeInsetsZero;
     }
