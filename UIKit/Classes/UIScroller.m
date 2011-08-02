@@ -238,11 +238,17 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 - (void)drawRect:(CGRect)rect
 {
     CGRect knobRect = [self knobRect];
-
+    
     if (_isVertical) {
-        knobRect = CGRectInset(knobRect, 1, 8);
+        knobRect.origin.y += 2;
+        knobRect.size.height -= 4;
+        knobRect.origin.x += 1;
+        knobRect.size.width -= 3;
     } else {
-        knobRect = CGRectInset(knobRect, 8, 1);
+        knobRect.origin.y += 1;
+        knobRect.size.height -= 3;
+        knobRect.origin.x += 2;
+        knobRect.size.width -= 4;
     }
 
     UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:knobRect cornerRadius:4];
@@ -253,8 +259,8 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
         [[[UIColor whiteColor] colorWithAlphaComponent:0.5] setFill];
     } else {
         [[[UIColor blackColor] colorWithAlphaComponent:0.5] setFill];
-        [[[UIColor whiteColor] colorWithAlphaComponent:0.25] setStroke];
-        [path setLineWidth:1.75];
+        [[[UIColor whiteColor] colorWithAlphaComponent:0.3] setStroke];
+        [path setLineWidth:1.8];
         [path stroke];
     }
     
