@@ -28,6 +28,9 @@
  */
 
 #import "UIProgressView.h"
+#import "UIColor.h"
+#import "UIGraphics.h"
+#import "UIBezierPath.h"
 
 @implementation UIProgressView
 @synthesize progressViewStyle = _progressViewStyle;
@@ -55,6 +58,35 @@
         _progress = MIN(1,MAX(0,p));
         [self setNeedsDisplay];
     }
+}
+
+- (void)drawRect:(CGRect)rect
+{
+    CGContextRef context = UIGraphicsGetCurrentContext() ;
+	CGContextSaveGState(context);
+    
+    CGFloat width = self.bounds.size.width - 4.0;
+	CGFloat filledWidth = width * _progress;
+	
+	CGRect outer = CGRectInset(self.bounds, 1.0, 1.0);
+	CGRect inner = CGRectInset(self.bounds, 2.0, 2.0);
+	inner.size.width = filledWidth;
+	
+	UIBezierPath* emptyPath = [UIBezierPath bezierPathWithRoundedRect:outer cornerRadius:4];
+	UIBezierPath* fillPath = [UIBezierPath bezierPathWithRoundedRect:inner cornerRadius:4];
+	
+	emptyPath.lineWidth = 1.0;
+	[[UIColor blackColor] set];
+	
+	[emptyPath stroke];
+	[emptyPath fill];
+	
+	fillPath.lineWidth = 0.0;
+	
+	[[UIColor whiteColor] setFill];
+	[fillPath fill];
+    
+    CGContextRestoreGState(context);
 }
 
 @end
