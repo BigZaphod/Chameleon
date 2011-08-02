@@ -1054,7 +1054,7 @@ static NSString* const kUIStyleKey = @"UIStyle";
         newIndexPath = [NSIndexPath indexPathForRow:[self numberOfRowsInSection:indexPath.section - 1] - 1 inSection:indexPath.section - 1];
     }
     if (newIndexPath) {
-        [self _selectRowAtIndexPath:newIndexPath exclusively:YES sendDelegateMessages:YES animated:NO scrollPosition:UITableViewScrollPositionNone];
+        [self _selectRowAtIndexPath:newIndexPath exclusively:YES sendDelegateMessages:NO animated:NO scrollPosition:UITableViewScrollPositionNone];
     }
     [self flashScrollIndicators];
     if (newIndexPath.row == 0 && newIndexPath.section == 0) {
@@ -1078,7 +1078,7 @@ static NSString* const kUIStyleKey = @"UIStyle";
         }
     }
     if (newIndexPath) {
-        [self _selectRowAtIndexPath:newIndexPath exclusively:YES sendDelegateMessages:YES animated:NO scrollPosition:UITableViewScrollPositionNone];
+        [self _selectRowAtIndexPath:newIndexPath exclusively:YES sendDelegateMessages:NO animated:NO scrollPosition:UITableViewScrollPositionNone];
     }
     [self flashScrollIndicators];
     [self scrollToRowAtIndexPath:newIndexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
