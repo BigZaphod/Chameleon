@@ -61,6 +61,7 @@ extern NSString *NSStringFromCGSize(CGSize s);
 extern NSString *NSStringFromCGAffineTransform(CGAffineTransform transform);
 
 extern NSString *NSStringFromUIEdgeInsets(UIEdgeInsets insets);
+extern UIEdgeInsets UIEdgeInsetsFromString(NSString* string);
 
 extern CGRect CGRectFromString(NSString* string);
 extern CGPoint CGPointFromString(NSString* string);

@@ -56,6 +56,16 @@ NSString *NSStringFromUIEdgeInsets(UIEdgeInsets insets)
     return [NSString stringWithFormat:@"{%g, %g, %g, %g}", insets.top, insets.left, insets.bottom, insets.right];
 }
 
+UIEdgeInsets UIEdgeInsetsFromString(NSString* string)
+{
+    UIEdgeInsets insets;
+    if (4 == sscanf([string UTF8String], "{%g, %g, %g, %g}", &insets.top, &insets.left, &insets.bottom, &insets.right)) {
+        return insets;
+    } else {
+        return UIEdgeInsetsZero;
+    }
+}
+
 CGRect CGRectFromString(NSString* string)
 {
     return NSRectToCGRect(NSRectFromString(string));
@@ -104,14 +114,14 @@ CGPoint CGPointFromString(NSString* string)
 
 - (UIEdgeInsets)UIEdgeInsetsValue
 {
-    if(strcmp([self objCType], @encode(UIEdgeInsets)) == 0)
-    {
+    if (strcmp([self objCType], @encode(UIEdgeInsets)) == 0) {
         UIEdgeInsets insets;
         [self getValue: &insets];
         return insets;
     }
-    return (UIEdgeInsets){0,0,0,0};
+    return UIEdgeInsetsZero;
 }
+
 @end
 
 @implementation NSCoder (NSCoderUIGeometryExtensions)
@@ -136,6 +146,9 @@ CGPoint CGPointFromString(NSString* string)
     return NSSizeToCGSize([self decodeSizeForKey:key]);
 }
 
+- (UIEdgeInsets) decodeUIEdgeInsetsForKey:(NSString*)key;
+{
+    return UIEdgeInsetsFromString([self decodeObjectForKey:key]);
+}
+
 @end
-
-
