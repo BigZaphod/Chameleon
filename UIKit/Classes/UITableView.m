@@ -49,6 +49,14 @@ NSString *const UITableViewIndexSearch = @"{search}";
 
 const CGFloat _UITableViewDefaultRowHeight = 44;
 
+static NSString* const kUIAllowsSelectionDuringEditingKey = @"UIAllowsSelectionDuringEditing";
+static NSString* const kUIRowHeightKey = @"UIRowHeight";
+static NSString* const kUISectionFooterHeightKey = @"UISectionFooterHeight";
+static NSString* const kUISectionHeaderHeightKey = @"UISectionHeaderHeight";
+static NSString* const kUISeparatorColorKey = @"UISeparatorColor";
+static NSString* const kUISeparatorStyleKey = @"UISeparatorStyle";
+static NSString* const kUIStyleKey = @"UIStyle";
+
 @interface UITableView ()
 - (void)_setNeedsReload;
 - (NSIndexPath *)_selectRowAtIndexPath:(NSIndexPath *)indexPath sendDelegateMessages:(BOOL)sendDelegateMessage animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition;
@@ -151,8 +159,33 @@ const CGFloat _UITableViewDefaultRowHeight = 44;
 - (id) initWithCoder:(NSCoder*)coder
 {
     if (nil != (self = [super initWithCoder:coder])) {
-        _style = UITableViewStylePlain;
+        if ([coder containsValueForKey:kUIStyleKey]) {
+            _style = [coder decodeIntegerForKey:kUIStyleKey];
+        } else {
+            _style = UITableViewStylePlain;
+        }
         [self _commonInitForUITableView];
+        if ([coder containsValueForKey:kUIAllowsSelectionDuringEditingKey]) {
+            self.allowsSelectionDuringEditing = [coder decodeBoolForKey:kUIAllowsSelectionDuringEditingKey];
+        }
+        if ([coder containsValueForKey:kUIRowHeightKey]) {
+            self.rowHeight = [coder decodeDoubleForKey:kUIRowHeightKey];
+        }
+        if ([coder containsValueForKey:kUISectionFooterHeightKey]) {
+            self.sectionFooterHeight = [coder decodeDoubleForKey:kUISectionFooterHeightKey];
+        }
+        if ([coder containsValueForKey:kUISectionHeaderHeightKey]) {
+            self.sectionHeaderHeight = [coder decodeDoubleForKey:kUISectionHeaderHeightKey];
+        }
+        if ([coder containsValueForKey:kUISeparatorColorKey]) {
+            self.separatorColor = [coder decodeObjectForKey:kUISeparatorColorKey];
+        }
+        if ([coder containsValueForKey:kUISeparatorStyleKey]) {
+            self.separatorStyle = [coder decodeIntegerForKey:kUISeparatorStyleKey];
+        } else {
+            // This means that the separator style has been set to None
+            self.separatorStyle = UITableViewCellSeparatorStyleNone;
+        }
     }
     return self;
 }
