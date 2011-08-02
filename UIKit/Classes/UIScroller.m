@@ -77,7 +77,7 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
         
     [UIView animateWithDuration:0.33 
         delay:0
-        options:UIViewAnimationOptionCurveEaseOut
+        options:UIViewAnimationOptionCurveEaseOut|UIViewAnimationOptionAllowUserInteraction
         animations:^{
             self.alpha = _UIScrollerMinimumAlpha;
         }
@@ -98,7 +98,7 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 
     [UIView animateWithDuration:0.33 
         delay:0
-        options:UIViewAnimationOptionCurveEaseOut
+        options:UIViewAnimationOptionCurveEaseOut|UIViewAnimationOptionAllowUserInteraction
         animations:^{
             self.alpha = 1.0;
         }
