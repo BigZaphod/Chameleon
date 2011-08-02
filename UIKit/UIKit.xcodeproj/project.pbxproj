@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03E591AA13E863E100C6D194 /* UITableViewAppKitIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E591A913E863E100C6D194 /* UITableViewAppKitIntegration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1413D21213D72A06004D77E9 /* UIScrollViewAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 1413D20C13D72A06004D77E9 /* UIScrollViewAnimation.h */; };
 		1413D21413D72A06004D77E9 /* UIScrollViewAnimationDeceleration.h in Headers */ = {isa = PBXBuildFile; fileRef = 1413D20E13D72A06004D77E9 /* UIScrollViewAnimationDeceleration.h */; };
 		1413D21513D72A06004D77E9 /* UIScrollViewAnimationDeceleration.m in Sources */ = {isa = PBXBuildFile; fileRef = 1413D20F13D72A06004D77E9 /* UIScrollViewAnimationDeceleration.m */; };
@@ -295,6 +296,8 @@
 		A2E9947013C78C1000B7D49F /* UIViewAppKitIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E9946E13C78C1000B7D49F /* UIViewAppKitIntegration.m */; };
 		A2E9947713C79DBE00B7D49F /* UIWindowAppKitIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = A2E9947513C79DBE00B7D49F /* UIWindowAppKitIntegration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A2E9947813C79DBE00B7D49F /* UIWindowAppKitIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E9947613C79DBE00B7D49F /* UIWindowAppKitIntegration.m */; };
+		F900793013E7405600DFAF19 /* UISegment.h in Headers */ = {isa = PBXBuildFile; fileRef = F900792E13E7405600DFAF19 /* UISegment.h */; };
+		F900793113E7405600DFAF19 /* UISegment.m in Sources */ = {isa = PBXBuildFile; fileRef = F900792F13E7405600DFAF19 /* UISegment.m */; };
 		F9177F9613BA317200619E3D /* UITableViewCellLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F9177F9413BA317200619E3D /* UITableViewCellLayoutManager.h */; };
 		F9177F9713BA317200619E3D /* UITableViewCellLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F9177F9513BA317200619E3D /* UITableViewCellLayoutManager.m */; };
 		F91D413013DA4228006ED0DA /* UIScrollViewAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = F91D412C13DA4228006ED0DA /* UIScrollViewAnimation.h */; };
@@ -352,6 +355,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		03E591A913E863E100C6D194 /* UITableViewAppKitIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UITableViewAppKitIntegration.h; path = Classes/UITableViewAppKitIntegration.h; sourceTree = "<group>"; };
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -645,6 +649,8 @@
 		A2E9946E13C78C1000B7D49F /* UIViewAppKitIntegration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIViewAppKitIntegration.m; path = Classes/UIViewAppKitIntegration.m; sourceTree = "<group>"; };
 		A2E9947513C79DBE00B7D49F /* UIWindowAppKitIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIWindowAppKitIntegration.h; path = Classes/UIWindowAppKitIntegration.h; sourceTree = "<group>"; };
 		A2E9947613C79DBE00B7D49F /* UIWindowAppKitIntegration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIWindowAppKitIntegration.m; path = Classes/UIWindowAppKitIntegration.m; sourceTree = "<group>"; };
+		F900792E13E7405600DFAF19 /* UISegment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISegment.h; sourceTree = "<group>"; };
+		F900792F13E7405600DFAF19 /* UISegment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISegment.m; sourceTree = "<group>"; };
 		F9177F9413BA317200619E3D /* UITableViewCellLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellLayoutManager.h; sourceTree = "<group>"; };
 		F9177F9513BA317200619E3D /* UITableViewCellLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellLayoutManager.m; sourceTree = "<group>"; };
 		F91D412C13DA4228006ED0DA /* UIScrollViewAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewAnimation.h; sourceTree = "<group>"; };
@@ -1010,6 +1016,8 @@
 				F91D412D13DA4228006ED0DA /* UIScrollViewAnimation.m */,
 				882B8EF4136636C8002E8F21 /* UISearchField.h */,
 				882B8EF5136636C8002E8F21 /* UISearchField.m */,
+				F900792E13E7405600DFAF19 /* UISegment.h */,
+				F900792F13E7405600DFAF19 /* UISegment.m */,
 				F9647EE213B91BDC0040B2D6 /* UITableViewCellBackgroundView.h */,
 				F9647EE313B91BDC0040B2D6 /* UITableViewCellBackgroundView.m */,
 				F922DB6813D3506300469869 /* UITableViewCellContentView.h */,
@@ -1124,6 +1132,7 @@
 				1489850412EE2CFE003D4751 /* UIColorAppKitIntegration.h */,
 				1489850E12EE2CFE003D4751 /* UIFontAppKitIntegration.h */,
 				149148BA12EE45ED00F7C34E /* UIGestureRecognizerSubclass.h */,
+				03E591A913E863E100C6D194 /* UITableViewAppKitIntegration.h */,
 				1489851C12EE2CFE003D4751 /* UIKey.h */,
 				1489851D12EE2CFE003D4751 /* UIKey.m */,
 				1489851F12EE2CFE003D4751 /* UIKitView.h */,
@@ -1206,6 +1215,7 @@
 				148985A012EE2CFF003D4751 /* UIImageView.h in Headers */,
 				148985A212EE2CFF003D4751 /* UIKey.h in Headers */,
 				148985A412EE2CFF003D4751 /* UIKit.h in Headers */,
+				03E591AA13E863E100C6D194 /* UITableViewAppKitIntegration.h in Headers */,
 				148985A512EE2CFF003D4751 /* UIKitView.h in Headers */,
 				148985A712EE2CFF003D4751 /* UILabel.h in Headers */,
 				148985A912EE2CFF003D4751 /* UILongPressGestureRecognizer.h in Headers */,
@@ -1313,6 +1323,7 @@
 				F92CB50F13E0672E00A50B9F /* UINibDecoderForNibArchiveV1.h in Headers */,
 				F92CB51413E06D9500A50B9F /* UINibDecoderForKeyedArchive.h in Headers */,
 				1443B06C13E06081001D7EC1 /* UIBackgroundTask.h in Headers */,
+				F900793013E7405600DFAF19 /* UISegment.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1556,6 +1567,7 @@
 				F92CB51113E067F900A50B9F /* UINibDecoderForNibArchiveV1.m in Sources */,
 				F92CB51513E06D9500A50B9F /* UINibDecoderForKeyedArchive.m in Sources */,
 				1443B06D13E06081001D7EC1 /* UIBackgroundTask.m in Sources */,
+				F900793113E7405600DFAF19 /* UISegment.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

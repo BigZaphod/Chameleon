@@ -33,6 +33,8 @@
 #import "UIColor.h"
 #import <QuartzCore/QuartzCore.h>
 
+static NSString* const kUIImageKey = @"UIImage";
+
 static NSArray *CGImagesWithUIImages(NSArray *images)
 {
     NSMutableArray *CGImages = [NSMutableArray arrayWithCapacity:[images count]];
@@ -66,6 +68,21 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
         self.opaque = NO;
     }
     return self;
+}
+
+- (id) initWithCoder:(NSCoder*)coder
+{
+    if (nil != (self = [super initWithCoder:coder])) {
+        if ([coder containsValueForKey:kUIImageKey]) {
+            self.image = [coder decodeObjectForKey:kUIImageKey];
+        }
+    }
+    return self;
+}
+
+- (void) encodeWithCoder:(NSCoder*)coder
+{
+    [self doesNotRecognizeSelector:_cmd];
 }
 
 - (id)initWithImage:(UIImage *)theImage

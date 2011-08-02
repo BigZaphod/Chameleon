@@ -40,6 +40,7 @@
 #import "UIScrollViewAnimationDeceleration.h"
 #import "UIPanGestureRecognizer.h"
 #import "UIScrollWheelGestureRecognizer.h"
+#import "UIGeometry.h"
 #import <QuartzCore/QuartzCore.h>
 
 static const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
@@ -48,6 +49,25 @@ static const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 
 const float UIScrollViewDecelerationRateNormal = 0.998;
 const float UIScrollViewDecelerationRateFast = 0.99;
+
+static NSString* const kUIAlwaysBounceHorizontalKey = @"UIAlwaysBounceHorizontal";
+static NSString* const kUIAlwaysBounceVerticalKey = @"UIAlwaysBounceVertical";
+static NSString* const kUIBounceEnabledKey = @"UIBounceEnabled";
+static NSString* const kUIBouncesZoomKey = @"UIBouncesZoom";
+static NSString* const kUICanCancelContentTouchesKey = @"UICanCancelContentTouches";
+static NSString* const kUIDelaysContentTouchesKey = @"UIDelaysContentTouches";
+static NSString* const kUIIndicatorStyleKey = @"UIIndicatorStyle";
+static NSString* const kUIMaximumZoomScaleKey = @"UIMaximumZoomScale";
+static NSString* const kUIMinimumZoomScaleKey = @"UIMinimumZoomScale";
+static NSString* const kUIPagingEnabledKey = @"UIPagingEnabled";
+static NSString* const kUIScrollDisabledKey = @"UIScrollDisabled";
+static NSString* const kUIShowsHorizontalScrollIndicatorKey = @"UIShowsHorizontalScrollIndicator";
+static NSString* const kUIShowsVerticalScrollIndicatorKey = @"UIShowsVerticalScrollIndicatorKey";
+static NSString* const kUIContentInsetKey = @"UIContentInset";
+static NSString* const kUIContentSizeKey = @"UIContentSize";
+static NSString* const kUIScrollIndicatorInsetsKey = @"UIScrollIndicatorInsets";
+
+// TODO: directionalLockEnabled property (can't find the key for this one) 
 
 @interface UIScrollView () <_UIScrollerDelegate>
 @end
@@ -167,6 +187,55 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 {
     if (nil != (self = [super initWithCoder:coder])) {
         [self _commonInitForUIScrollView];
+        if ([coder containsValueForKey:kUIAlwaysBounceHorizontalKey]) {
+            self.alwaysBounceHorizontal = [coder decodeBoolForKey:kUIAlwaysBounceHorizontalKey];
+        }
+        if ([coder containsValueForKey:kUIAlwaysBounceVerticalKey]) {
+            self.alwaysBounceVertical = [coder decodeBoolForKey:kUIAlwaysBounceVerticalKey];
+        }
+        if ([coder containsValueForKey:kUIBounceEnabledKey]) {
+            self.bounces = [coder decodeBoolForKey:kUIBounceEnabledKey];
+        }
+        if ([coder containsValueForKey:kUIBouncesZoomKey]) {
+            self.bouncesZoom = [coder decodeBoolForKey:kUIBouncesZoomKey];
+        }
+        if ([coder containsValueForKey:kUICanCancelContentTouchesKey]) {
+            self.canCancelContentTouches = [coder decodeBoolForKey:kUICanCancelContentTouchesKey];
+        }
+        if ([coder containsValueForKey:kUIDelaysContentTouchesKey]) {
+            self.delaysContentTouches = [coder decodeBoolForKey:kUIDelaysContentTouchesKey];
+        }
+        if ([coder containsValueForKey:kUIIndicatorStyleKey]) {
+            self.indicatorStyle = [coder decodeIntegerForKey:kUIIndicatorStyleKey];
+        }
+        if ([coder containsValueForKey:kUIMaximumZoomScaleKey]) {
+            self.maximumZoomScale = [coder decodeIntegerForKey:kUIMaximumZoomScaleKey];
+        }
+        if ([coder containsValueForKey:kUIMinimumZoomScaleKey]) {
+            self.minimumZoomScale = [coder decodeIntegerForKey:kUIMinimumZoomScaleKey];
+        }
+        if ([coder containsValueForKey:kUIPagingEnabledKey]) {
+            self.pagingEnabled = [coder decodeBoolForKey:kUIPagingEnabledKey];
+        }
+        if ([coder containsValueForKey:kUIScrollDisabledKey]) {
+            self.scrollEnabled = ![coder decodeBoolForKey:kUIScrollDisabledKey];
+        }
+        if ([coder containsValueForKey:kUIShowsHorizontalScrollIndicatorKey]) {
+            self.showsHorizontalScrollIndicator = [coder decodeBoolForKey:kUIShowsHorizontalScrollIndicatorKey];
+        }
+        if ([coder containsValueForKey:kUIShowsVerticalScrollIndicatorKey]) {
+            self.showsVerticalScrollIndicator = [coder decodeBoolForKey:kUIShowsVerticalScrollIndicatorKey];
+        }
+        if ([coder containsValueForKey:kUIContentSizeKey]) {
+            self.contentSize = [coder decodeSizeForKey:kUIContentSizeKey];
+        }
+        if ([coder containsValueForKey:kUIContentInsetKey]) {
+            self.contentInset = [coder decodeUIEdgeInsetsForKey:kUIContentInsetKey];
+            NSLog(@"%@", NSStringFromUIEdgeInsets(self.contentInset));
+        }
+        if ([coder containsValueForKey:kUIScrollIndicatorInsetsKey]) {
+            self.scrollIndicatorInsets = [coder decodeUIEdgeInsetsForKey:kUIScrollIndicatorInsetsKey];
+        }
     }
     return self;
 }
