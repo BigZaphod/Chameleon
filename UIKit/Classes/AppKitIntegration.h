@@ -36,6 +36,7 @@
 #import "UIApplicationAppKitIntegration.h"
 #import "UIViewAppKitIntegration.h"
 #import "UIWindowAppKitIntegration.h"
+#import "UITableViewAppKitIntegration.h"
 
 #import "UIViewAdapter.h"
 #import "UINSCellControl.h"

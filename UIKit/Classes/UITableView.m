@@ -40,6 +40,7 @@
 #import "UIApplication+UIPrivate.h"
 #import "UIKey.h"
 #import "UIResponderAppKitIntegration.h"
+#import "UITableViewAppKitIntegration.h"
 #import <AppKit/NSMenu.h>
 #import <AppKit/NSMenuItem.h>
 #import <AppKit/NSEvent.h>
@@ -59,14 +60,14 @@ static NSString* const kUIStyleKey = @"UIStyle";
 
 @interface UITableView ()
 - (void)_setNeedsReload;
-- (NSIndexPath *)_selectRowAtIndexPath:(NSIndexPath *)indexPath sendDelegateMessages:(BOOL)sendDelegateMessage animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition;
+- (NSIndexPath *)_selectRowAtIndexPath:(NSIndexPath *)indexPath exclusively:(BOOL)exclusively sendDelegateMessages:(BOOL)sendDelegateMessage animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition;
 @end
 
 @implementation UITableView {
     NSMutableDictionary *_cachedCells;
     NSMutableSet *_reusableCells;
     NSMutableArray *_sections;
-    NSIndexPath *_selectedRow;
+    NSMutableArray *_selectedRows;
     UITableViewStyle _style;
     BOOL _needsReload;
     
@@ -107,11 +108,14 @@ static NSString* const kUIStyleKey = @"UIStyle";
 @synthesize sectionFooterHeight = _sectionFooterHeight;
 @synthesize sectionHeaderHeight = _sectionHeaderHeight;
 @synthesize allowsSelectionDuringEditing = _allowsSelectionDuringEditing;
+@synthesize allowsMultipleSelection = _allowsMultipleSelection;
+@synthesize selectedRows = _selectedRows;
+
 @dynamic delegate;
 
 - (void) dealloc
 {
-    [_selectedRow release];
+    [_selectedRows release];
     [_tableFooterView release];
     [_tableHeaderView release];
     [_cachedCells release];
@@ -126,6 +130,7 @@ static NSString* const kUIStyleKey = @"UIStyle";
     _cachedCells = [[NSMutableDictionary alloc] init];
     _sections = [[NSMutableArray alloc] init];
     _reusableCells = [[NSMutableSet alloc] init];
+    _selectedRows = [[NSMutableArray alloc] init];
     
     self.separatorColor = [UIColor colorWithRed:.88f green:.88f blue:.88f alpha:1];
     self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
@@ -385,7 +390,7 @@ static NSString* const kUIStyleKey = @"UIStyle";
                     if (cell) {
                         [_cachedCells setObject:cell forKey:indexPath];
                         [availableCells removeObjectForKey:indexPath];
-                        cell.selected = [_selectedRow isEqual:indexPath];
+                        cell.selected = [_selectedRows containsObject:indexPath];
                         cell.frame = rowRect;
 						
                         [cell _setTableViewStyle:UITableViewStylePlain != self.style];
@@ -667,8 +672,7 @@ static NSString* const kUIStyleKey = @"UIStyle";
     [_cachedCells removeAllObjects];
 
     // clear prior selection
-    [_selectedRow release];
-    _selectedRow = nil;
+    [_selectedRows removeAllObjects];
     
     // trigger the section cache to be repopulated
     [self _updateSectionsCache];
@@ -713,7 +717,8 @@ static NSString* const kUIStyleKey = @"UIStyle";
 
 - (NSIndexPath *)indexPathForSelectedRow
 {
-    return [[_selectedRow retain] autorelease];
+    if (![_selectedRows count]) { return nil; }
+    return [[[_selectedRows objectAtIndex:0] retain] autorelease];
 }
 
 - (NSIndexPath *)indexPathForCell:(UITableViewCell *)cell
@@ -729,30 +734,46 @@ static NSString* const kUIStyleKey = @"UIStyle";
 
 - (void)deselectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated
 {
-    if (indexPath && [indexPath isEqual:_selectedRow]) {
-        [self cellForRowAtIndexPath:_selectedRow].selected = NO;
-        [_selectedRow release];
-        _selectedRow = nil;
+    NSUInteger index = [_selectedRows indexOfObject:indexPath];
+    if (indexPath && index != NSNotFound) {
+        [self cellForRowAtIndexPath:indexPath].selected = NO;
+        [_selectedRows removeObjectAtIndex:index];
     }
 }
 
-- (void)selectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition
+- (void)deselectAllRowsAnimated:(BOOL)animated
+{
+    for (NSIndexPath *indexPath in [NSArray arrayWithArray:_selectedRows]) {
+        [self deselectRowAtIndexPath:indexPath animated:animated];
+    }
+}
+
+- (void)selectRowAtIndexPath:(NSIndexPath *)indexPath exclusively:(BOOL)exclusively animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition
 {
     // unlike the other methods that I've tested, the real UIKit appears to call reload during selection if the table hasn't been reloaded
     // yet. other methods all appear to rebuild the section cache "on-demand" but don't do a "proper" reload. for the sake of attempting
     // to maintain a similar delegate and dataSource access pattern to the real thing, I'll do it this way here. :)
     [self _reloadDataIfNeeded];
     
-    if (![_selectedRow isEqual:indexPath]) {
-        [self deselectRowAtIndexPath:_selectedRow animated:animated];
-        [_selectedRow release];
-        _selectedRow = [indexPath retain];
-        [self cellForRowAtIndexPath:_selectedRow].selected = YES;
+    if (!self.allowsMultipleSelection) {
+        exclusively = YES;
+    }
+    if (exclusively) {
+        [self deselectAllRowsAnimated:animated];
+    }
+    if (![_selectedRows containsObject:indexPath]) {
+        [_selectedRows addObject:indexPath];
+        [self cellForRowAtIndexPath:indexPath].selected = YES;
     }
     
     // I did not verify if the real UIKit will still scroll the selection into view even if the selection itself doesn't change.
     // this behavior was useful for Ostrich and seems harmless enough, so leaving it like this for now.
-    [self scrollToRowAtIndexPath:_selectedRow atScrollPosition:scrollPosition animated:animated];
+    [self scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:animated];
+}
+
+- (void)selectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition
+{
+    [self selectRowAtIndexPath:indexPath exclusively:YES animated:animated scrollPosition:scrollPosition];
 }
 
 - (void)_scrollRectToVisible:(CGRect)aRect atScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated
@@ -850,49 +871,69 @@ static NSString* const kUIStyleKey = @"UIStyle";
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    [self becomeFirstResponder];
     UITouch *touch = [touches anyObject];
     CGPoint location = [touch locationInView:self];
     NSIndexPath *touchedRow = [self indexPathForRowAtPoint:location];
 
     if (touchedRow) {
-		NSIndexPath *rowToSelect = [self _selectRowAtIndexPath:touchedRow sendDelegateMessages:YES animated:NO scrollPosition:UITableViewScrollPositionNone];
-		
-		if([touch tapCount] == 2 && _delegateHas.didDoubleClickRowAtIndexPath) {
-			[self.delegate tableView:self didDoubleClickRowAtIndexPath:rowToSelect];
-		}
+        BOOL commandKeyDown = ([NSEvent modifierFlags] & NSCommandKeyMask) == NSCommandKeyMask;
+        BOOL exclusively = !commandKeyDown;
+        if (([NSEvent modifierFlags] & NSShiftKeyMask) == NSShiftKeyMask && [_selectedRows count]) {
+            NSIndexPath *firstIndexPath = [self indexPathForSelectedRow];
+            NSComparisonResult result = [firstIndexPath compare:touchedRow];
+            if (result != NSOrderedSame && firstIndexPath.section == touchedRow.section) {
+                [self deselectAllRowsAnimated:NO];
+                BOOL descending = result == NSOrderedDescending;
+                NSIndexPath *startIndexPath = descending ? touchedRow : firstIndexPath;
+                NSIndexPath *endIndexPath = descending ? firstIndexPath : touchedRow;
+                for (NSUInteger i = startIndexPath.row; i <= endIndexPath.row; i++) {
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:startIndexPath.section];
+                    [self _selectRowAtIndexPath:indexPath exclusively:NO sendDelegateMessages:NO animated:NO scrollPosition:UITableViewScrollPositionNone];
+                }
+                exclusively = NO;
+            }
+        }
+        if (commandKeyDown && [_selectedRows containsObject:touchedRow]) {
+            [self deselectRowAtIndexPath:touchedRow animated:NO];
+        } else {
+            NSIndexPath *rowToSelect = [self _selectRowAtIndexPath:touchedRow exclusively:exclusively sendDelegateMessages:YES animated:NO scrollPosition:UITableViewScrollPositionNone];
+            
+            if([touch tapCount] == 2 && _delegateHas.didDoubleClickRowAtIndexPath) {
+                [self.delegate tableView:self didDoubleClickRowAtIndexPath:rowToSelect];
+            }
+        }
     }
 }
 
-- (NSIndexPath *)_selectRowAtIndexPath:(NSIndexPath *)indexPath sendDelegateMessages:(BOOL)sendDelegateMessages animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition {
-	NSIndexPath *selectedRow = [self indexPathForSelectedRow];
-	
-	if (selectedRow) {
-		NSIndexPath *rowToDeselect = selectedRow;
-		
-		if (sendDelegateMessages && _delegateHas.willDeselectRowAtIndexPath) {
-			rowToDeselect = [self.delegate tableView:self willDeselectRowAtIndexPath:rowToDeselect];
-		}
-		
-		[self deselectRowAtIndexPath:rowToDeselect animated:animated];
-		
-		if (sendDelegateMessages && _delegateHas.didDeselectRowAtIndexPath) {
-			[self.delegate tableView:self didDeselectRowAtIndexPath:rowToDeselect];
-		}
-	}
-	
-	NSIndexPath *rowToSelect = indexPath;
-	
+- (NSIndexPath *)_selectRowAtIndexPath:(NSIndexPath *)indexPath exclusively:(BOOL)exclusively sendDelegateMessages:(BOOL)sendDelegateMessages animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition {	
+    if (!self.allowsMultipleSelection) {
+        exclusively = YES;
+    }
+    if (exclusively) {
+        for (NSIndexPath *rowToDeselect in [NSArray arrayWithArray:_selectedRows]) {
+            if (sendDelegateMessages && _delegateHas.willDeselectRowAtIndexPath) {
+                rowToDeselect = [self.delegate tableView:self willDeselectRowAtIndexPath:rowToDeselect];
+            }
+            
+            [self deselectRowAtIndexPath:rowToDeselect animated:animated];
+            
+            if (sendDelegateMessages && _delegateHas.didDeselectRowAtIndexPath) {
+                [self.delegate tableView:self didDeselectRowAtIndexPath:rowToDeselect];
+            }
+        }
+    }
+    NSIndexPath *rowToSelect = indexPath;
 	if (sendDelegateMessages && _delegateHas.willSelectRowAtIndexPath) {
-		rowToSelect = [self.delegate tableView:self willSelectRowAtIndexPath:rowToSelect];
-	}
-	
-	[self selectRowAtIndexPath:rowToSelect animated:animated scrollPosition:scrollPosition];
-	
-	if (sendDelegateMessages && _delegateHas.didSelectRowAtIndexPath) {
-		[self.delegate tableView:self didSelectRowAtIndexPath:rowToSelect];
-	}
-	
-	return rowToSelect;
+        rowToSelect = [self.delegate tableView:self willSelectRowAtIndexPath:rowToSelect];
+    }
+    
+    [self selectRowAtIndexPath:rowToSelect exclusively:NO animated:animated scrollPosition:scrollPosition];
+    
+    if (sendDelegateMessages && _delegateHas.didSelectRowAtIndexPath) {
+        [self.delegate tableView:self didSelectRowAtIndexPath:rowToSelect];
+    }
+    return rowToSelect;
 }
 
 - (void) _accessoryButtonTappedForTableViewCell:(UITableViewCell*)cell
@@ -999,7 +1040,7 @@ static NSString* const kUIStyleKey = @"UIStyle";
 {
 	NSIndexPath *indexPath = [self indexPathForSelectedRow];
     if(indexPath != nil) {
-        [self _selectRowAtIndexPath:indexPath sendDelegateMessages:YES animated:NO scrollPosition:UITableViewScrollPositionNone];
+        [self _selectRowAtIndexPath:indexPath exclusively:YES sendDelegateMessages:YES animated:NO scrollPosition:UITableViewScrollPositionNone];
     }
 }
 
@@ -1013,7 +1054,7 @@ static NSString* const kUIStyleKey = @"UIStyle";
         newIndexPath = [NSIndexPath indexPathForRow:[self numberOfRowsInSection:indexPath.section - 1] - 1 inSection:indexPath.section - 1];
     }
     if (newIndexPath) {
-        [self _selectRowAtIndexPath:newIndexPath sendDelegateMessages:NO animated:NO scrollPosition:UITableViewScrollPositionNone];
+        [self _selectRowAtIndexPath:newIndexPath exclusively:YES sendDelegateMessages:YES animated:NO scrollPosition:UITableViewScrollPositionNone];
     }
     [self flashScrollIndicators];
     if (newIndexPath.row == 0 && newIndexPath.section == 0) {
@@ -1037,7 +1078,7 @@ static NSString* const kUIStyleKey = @"UIStyle";
         }
     }
     if (newIndexPath) {
-        [self _selectRowAtIndexPath:newIndexPath sendDelegateMessages:NO animated:NO scrollPosition:UITableViewScrollPositionNone];
+        [self _selectRowAtIndexPath:newIndexPath exclusively:YES sendDelegateMessages:YES animated:NO scrollPosition:UITableViewScrollPositionNone];
     }
     [self flashScrollIndicators];
     [self scrollToRowAtIndexPath:newIndexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
