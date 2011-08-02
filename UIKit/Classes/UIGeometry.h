@@ -82,4 +82,5 @@ extern CGPoint CGPointFromString(NSString* string);
 - (CGPoint) decodeCGPointForKey:(NSString*)key;
 - (CGRect) decodeCGRectForKey:(NSString*)key;
 - (CGSize) decodeCGSizeForKey:(NSString*)key;
+- (UIEdgeInsets) decodeUIEdgeInsetsForKey:(NSString*)key;
 @end
