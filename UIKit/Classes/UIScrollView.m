@@ -227,7 +227,7 @@ static NSString* const kUIScrollIndicatorInsetsKey = @"UIScrollIndicatorInsets";
             self.showsVerticalScrollIndicator = [coder decodeBoolForKey:kUIShowsVerticalScrollIndicatorKey];
         }
         if ([coder containsValueForKey:kUIContentSizeKey]) {
-            self.contentSize = [coder decodeSizeForKey:kUIContentSizeKey];
+            self.contentSize = [coder decodeCGSizeForKey:kUIContentSizeKey];
         }
         if ([coder containsValueForKey:kUIContentInsetKey]) {
             self.contentInset = [coder decodeUIEdgeInsetsForKey:kUIContentInsetKey];
