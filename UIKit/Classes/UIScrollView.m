@@ -40,6 +40,7 @@
 #import "UIScrollViewAnimationDeceleration.h"
 #import "UIPanGestureRecognizer.h"
 #import "UIScrollWheelGestureRecognizer.h"
+#import "UIGeometry.h"
 #import <QuartzCore/QuartzCore.h>
 
 static const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
@@ -220,7 +221,13 @@ static NSString* const kUIScrollIndicatorInsetsKey = @"UIScrollIndicatorInsets";
         if ([coder containsValueForKey:kUIContentSizeKey]) {
             self.contentSize = [coder decodeSizeForKey:kUIContentSizeKey];
         }
-        // Still need to do the insets
+        if ([coder containsValueForKey:kUIContentInsetKey]) {
+            self.contentInset = [coder decodeUIEdgeInsetsForKey:kUIContentInsetKey];
+            NSLog(@"%@", NSStringFromUIEdgeInsets(self.contentInset));
+        }
+        if ([coder containsValueForKey:kUIScrollIndicatorInsetsKey]) {
+            self.scrollIndicatorInsets = [coder decodeUIEdgeInsetsForKey:kUIScrollIndicatorInsetsKey];
+        }
     }
     return self;
 }
