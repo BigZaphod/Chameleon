@@ -114,6 +114,7 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
 - (BOOL)canOpenURL:(NSURL *)URL;
 
 - (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle animated:(BOOL)animated;  // no effect
+- (void)setStatusBarHidden:(BOOL)hidden withAnimation:(UIStatusBarAnimation)animation;
 
 - (void)beginIgnoringInteractionEvents;
 - (void)endIgnoringInteractionEvents;
@@ -146,17 +147,6 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
 @property (nonatomic, readonly) NSTimeInterval backgroundTimeRemaining;     // always 0
 @property (nonatomic) NSInteger applicationIconBadgeNumber;                 // no effect, but does set/get the number correctly
 @property (nonatomic, copy) NSArray *scheduledLocalNotifications;           // no effect, returns nil
-
-
-/**
- * Hides or shows the status bar, optionally animating the transition.
- @param hidden YES to hide the status bar, NO to show the status bar.
- @param animation A constant that indicates whether there should be an animation and, 
- if one is requested, whether it should fade the status bar in or out or whether 
- it should slide the status bar in or out.
- See the descriptions of the constants of the UIStatusBarAnimation type for more information.
- */
-- (void)setStatusBarHidden:(BOOL)hidden withAnimation:(UIStatusBarAnimation)animation;
 
 @end
 
