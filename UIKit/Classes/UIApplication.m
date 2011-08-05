@@ -240,6 +240,10 @@ static BOOL TouchIsActive(UITouch *touch)
 {
 }
 
+- (void)setStatusBarHidden:(BOOL)hidden withAnimation:(UIStatusBarAnimation)animation
+{
+}
+
 - (void)presentLocalNotificationNow:(UILocalNotification *)notification
 {
 }
