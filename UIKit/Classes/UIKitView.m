@@ -78,7 +78,6 @@
         _mainWindow = [(UIWindow *)[UIWindow alloc] initWithFrame:_screen.bounds];
         _mainWindow.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _mainWindow.screen = _screen;
-        [_mainWindow makeKeyAndVisible];
     }
     
     return _mainWindow;
