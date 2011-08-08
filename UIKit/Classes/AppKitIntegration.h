@@ -37,6 +37,7 @@
 #import "UIViewAppKitIntegration.h"
 #import "UIWindowAppKitIntegration.h"
 #import "UITableViewAppKitIntegration.h"
+#import "UIPopoverControllerAppKitIntegration.h"
 
 #import "UIViewAdapter.h"
 #import "UINSCellControl.h"

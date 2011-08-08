@@ -28,6 +28,7 @@
  */
 
 #import "UIPopoverController+UIPrivate.h"
+#import "UIPopoverControllerAppKitIntegration.h"
 #import "UIViewController.h"
 #import "UIWindow.h"
 #import "UIScreen+UIPrivate.h"
@@ -188,6 +189,11 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 
 - (void)presentPopoverFromRect:(CGRect)rect inView:(UIView *)view permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated
 {
+    [self presentPopoverFromRect:rect inView:view permittedArrowDirections:arrowDirections animated:animated makeKey:YES];
+}
+
+- (void)presentPopoverFromRect:(CGRect)rect inView:(UIView *)view permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated makeKey:(BOOL)shouldMakeKey
+{
     assert(view != nil);
     assert(arrowDirections != UIPopoverArrowDirectionUnknown);
     assert(!CGRectIsNull(rect));
@@ -223,6 +229,10 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
         UIKitView *hostingView = [[UIKitView alloc] initWithFrame:NSRectFromCGRect([_popoverView bounds])];
         [[hostingView UIScreen] _setPopoverController:self];
         [[hostingView UIWindow] addSubview:_popoverView];
+        [[hostingView UIWindow] setHidden:NO];
+        if (shouldMakeKey) {
+            [[hostingView UIWindow] makeKeyAndVisible];
+        }
 
         // this prevents a visible flash from sometimes occuring due to the fact that the window is created and added as a child before it has the
         // proper origin set. this means it it ends up flashing at the bottom left corner of the screen sometimes before it
@@ -257,7 +267,9 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
     // finally, let's show it!
     [_popoverWindow setFrameOrigin:PopoverWindowOrigin(_overlayWindow, NSRectFromCGRect(desktopScreenRect), NSSizeFromCGSize(_popoverView.frame.size), arrowDirections, &pointTo, &_popoverArrowDirection)];
     _popoverView.hidden = NO;
-    [_popoverWindow makeKeyWindow];
+    if (shouldMakeKey) {
+        [_popoverWindow makeKeyWindow];
+    }
     
     [_contentViewController viewDidAppear:animated];
 
