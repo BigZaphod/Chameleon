@@ -275,7 +275,8 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
         [_contentView removeFromSuperview];
         [_contentView release];
         _contentView = [aView retain];
-        [self addSubview:_contentView];
+        [_contentContainerView addSubview:_contentView];
+        [self setNeedsLayout];
     }
 }
 
