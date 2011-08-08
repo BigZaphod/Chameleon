@@ -17,6 +17,7 @@ typedef struct {
 
 enum {
     kValueTypeByte                  = 0x00,
+    kValueTypeConstantEqualsZero    = 0x04,
     kValueTypeConstantEqualsOne     = 0x05,
     kValueTypeFloat32               = 0x06,
     kValueTypeFloat64               = 0x07,
@@ -257,6 +258,7 @@ static inline double decodeFloat64(void const** pp);
                     break;
                 }
                     
+                case kValueTypeConstantEqualsZero:
                 case kValueTypeConstantEqualsOne: {
                     /*  No additional storage  */
                     break;
@@ -601,6 +603,10 @@ static Class kClassForUIImageNibPlaceholder;
 - (uint32_t) _extractInt32FromValue:(UINibDecoderValueEntry*)value
 {
     switch (value->type) {
+        case kValueTypeConstantEqualsZero: {
+            return 0;
+        }
+            
         case kValueTypeConstantEqualsOne: {
             return 1;
         }
@@ -617,6 +623,10 @@ static Class kClassForUIImageNibPlaceholder;
 - (uint64_t) _extractInt64FromValue:(UINibDecoderValueEntry*)value
 {
     switch (value->type) {
+        case kValueTypeConstantEqualsZero: {
+            return 0;
+        }
+            
         case kValueTypeConstantEqualsOne: {
             return 1;
         }
@@ -634,6 +644,10 @@ static Class kClassForUIImageNibPlaceholder;
 {
     void const* vp = value->data;
     switch (value->type) {
+        case kValueTypeConstantEqualsZero: {
+            return 0.0f;
+        }
+            
         case kValueTypeConstantEqualsOne: {
             return 1.0f;
         }
@@ -659,6 +673,10 @@ static Class kClassForUIImageNibPlaceholder;
 {
     void const* vp = value->data;
     switch (value->type) {
+        case kValueTypeConstantEqualsZero: {
+            return 0.0;
+        }
+            
         case kValueTypeConstantEqualsOne: {
             return 1.0;
         }
@@ -776,6 +794,10 @@ static Class kClassForUIImageNibPlaceholder;
         case kValueTypeByte: {
             uint8_t v = decodeByte(&vp);
             return [[NSNumber alloc] initWithInt:v];
+        }
+            
+        case kValueTypeConstantEqualsZero: {
+            return [[NSNumber alloc] initWithInt:0];
         }
             
         case kValueTypeConstantEqualsOne: {
