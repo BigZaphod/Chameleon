@@ -750,10 +750,9 @@ static NSString* const kUIStyleKey = @"UIStyle";
 
 - (void)selectRowAtIndexPath:(NSIndexPath *)indexPath exclusively:(BOOL)exclusively animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition
 {
-    // unlike the other methods that I've tested, the real UIKit appears to call reload during selection if the table hasn't been reloaded
-    // yet. other methods all appear to rebuild the section cache "on-demand" but don't do a "proper" reload. for the sake of attempting
-    // to maintain a similar delegate and dataSource access pattern to the real thing, I'll do it this way here. :)
     [self _reloadDataIfNeeded];
+
+    [self scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:animated];
     
     if (!self.allowsMultipleSelection) {
         exclusively = YES;
@@ -765,10 +764,6 @@ static NSString* const kUIStyleKey = @"UIStyle";
         [_selectedRows addObject:indexPath];
         [self cellForRowAtIndexPath:indexPath].selected = YES;
     }
-    
-    // I did not verify if the real UIKit will still scroll the selection into view even if the selection itself doesn't change.
-    // this behavior was useful for Ostrich and seems harmless enough, so leaving it like this for now.
-    [self scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:animated];
 }
 
 - (void)selectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition
@@ -814,7 +809,13 @@ static NSString* const kUIStyleKey = @"UIStyle";
 
 - (void)scrollToRowAtIndexPath:(NSIndexPath *)indexPath atScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated
 {
-    [self _scrollRectToVisible:[self rectForRowAtIndexPath:indexPath] atScrollPosition:scrollPosition animated:animated];
+    CGRect rect;
+    if (indexPath.row == 0 && indexPath.section == 0) {
+        rect = CGRectMake(0.0f, 0.0f, self.bounds.size.width, self.bounds.size.height);
+    } else {
+        rect = [self rectForRowAtIndexPath:indexPath];
+    }
+    [self _scrollRectToVisible:rect atScrollPosition:scrollPosition animated:animated];
 }
 
 - (UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier
@@ -1046,14 +1047,9 @@ static NSString* const kUIStyleKey = @"UIStyle";
         newIndexPath = [NSIndexPath indexPathForRow:[self numberOfRowsInSection:indexPath.section - 1] - 1 inSection:indexPath.section - 1];
     }
     if (newIndexPath) {
-        [self _selectRowAtIndexPath:newIndexPath exclusively:YES sendDelegateMessages:YES animated:NO scrollPosition:UITableViewScrollPositionNone];
+        [self _selectRowAtIndexPath:newIndexPath exclusively:YES sendDelegateMessages:YES animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
     [self flashScrollIndicators];
-    if (newIndexPath.row == 0 && newIndexPath.section == 0) {
-        [self scrollRectToVisible:CGRectMake(0.0f, 0.0f, self.bounds.size.width, self.bounds.size.height) animated:YES];
-    } else {
-        [self scrollToRowAtIndexPath:newIndexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
-    }
 }
 
 - (void) moveDown:(id)sender
@@ -1070,10 +1066,9 @@ static NSString* const kUIStyleKey = @"UIStyle";
         }
     }
     if (newIndexPath) {
-        [self _selectRowAtIndexPath:newIndexPath exclusively:YES sendDelegateMessages:YES animated:NO scrollPosition:UITableViewScrollPositionNone];
+        [self _selectRowAtIndexPath:newIndexPath exclusively:YES sendDelegateMessages:YES animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
     [self flashScrollIndicators];
-    [self scrollToRowAtIndexPath:newIndexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
 }
 
 - (void) pageUp:(id)sender
