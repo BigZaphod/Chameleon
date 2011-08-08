@@ -336,6 +336,47 @@ static NSString* const kUIStyleKey = @"UIStyle";
     self.contentSize = CGSizeMake(0,height);	
 }
 
+- (UITableViewCell*) _ensureCellExistsAtIndexPath:(NSIndexPath*)indexPath
+{
+    UITableViewCell* cell = [_cachedCells objectForKey:indexPath];
+    if (!cell) {
+        cell = [self.dataSource tableView:self cellForRowAtIndexPath:indexPath];
+        [_cachedCells setObject:cell forKey:indexPath];
+        cell.selected = [_selectedRows containsObject:indexPath];
+        cell.frame = [self rectForRowAtIndexPath:indexPath];
+        
+        [cell _setTableViewStyle:UITableViewStylePlain != self.style];
+        
+        NSUInteger numberOfRows = [[_sections objectAtIndex:indexPath.section] numberOfRows];
+        if (indexPath.row == 0 && numberOfRows == 1) {
+            cell.sectionLocation = UITableViewCellSectionLocationUnique;
+            [cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
+        }
+        else if (indexPath.row == 0) {
+            cell.sectionLocation = UITableViewCellSectionLocationTop;
+            [cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
+        }
+        else if (indexPath.row != numberOfRows - 1) {
+            cell.sectionLocation = UITableViewCellSectionLocationMiddle;
+            [cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
+        }
+        else {
+            cell.sectionLocation = UITableViewCellSectionLocationBottom;
+            
+            // This is not iOS convention
+            //[cell _setSeparatorStyle:UITableViewCellSeparatorStyleNone color:_separatorColor];
+            
+            // This IS iOS convention, since true "grouped" isn't currently supported
+            [cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
+        }
+        
+        [self addSubview:cell];
+        [cell setNeedsDisplay];
+    }
+    
+    return cell;
+}
+
 - (void)_layoutTableView
 {
     // lays out headers and rows that are visible at the time. this should also do cell
@@ -358,9 +399,8 @@ static NSString* const kUIStyleKey = @"UIStyle";
     }
     
     // layout sections and rows
-    NSMutableDictionary *availableCells = [_cachedCells mutableCopy];
+    NSMutableDictionary* usedCells = [[NSMutableDictionary alloc] init];
     const NSInteger numberOfSections = [_sections count];
-    [_cachedCells removeAllObjects];
     
     for (NSInteger section=0; section<numberOfSections; section++) {
         NSAutoreleasePool *sectionPool = [[NSAutoreleasePool alloc] init];
@@ -386,40 +426,8 @@ static NSString* const kUIStyleKey = @"UIStyle";
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
                 CGRect rowRect = [self rectForRowAtIndexPath:indexPath];
                 if (CGRectIntersectsRect(rowRect,visibleBounds) && rowRect.size.height > 0) {
-                    UITableViewCell *cell = [availableCells objectForKey:indexPath] ?: [self.dataSource tableView:self cellForRowAtIndexPath:indexPath];
-                    if (cell) {
-                        [_cachedCells setObject:cell forKey:indexPath];
-                        [availableCells removeObjectForKey:indexPath];
-                        cell.selected = [_selectedRows containsObject:indexPath];
-                        cell.frame = rowRect;
-						
-                        [cell _setTableViewStyle:UITableViewStylePlain != self.style];
-                        
-						if (indexPath.row == 0 && numberOfRows == 1) {
-							cell.sectionLocation = UITableViewCellSectionLocationUnique;
-							[cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
-						}
-						else if (indexPath.row == 0) {
-							cell.sectionLocation = UITableViewCellSectionLocationTop;
-							[cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
-						}
-						else if (indexPath.row != numberOfRows - 1) {
-							cell.sectionLocation = UITableViewCellSectionLocationMiddle;
-							[cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
-						}
-						else {
-							cell.sectionLocation = UITableViewCellSectionLocationBottom;
-							
-                            // This is not iOS convention
-                            //[cell _setSeparatorStyle:UITableViewCellSeparatorStyleNone color:_separatorColor];
-                            
-                            // This IS iOS convention, since true "grouped" isn't currently supported
-                            [cell _setSeparatorStyle:_separatorStyle color:_separatorColor];
-						}
-						
-                        [self addSubview:cell];
-						[cell setNeedsDisplay];
-                    }
+                    UITableViewCell* cell = [self _ensureCellExistsAtIndexPath:indexPath];
+                    [usedCells setObject:cell forKey:indexPath];
                 }
                 [rowPool drain];
             }
@@ -429,16 +437,20 @@ static NSString* const kUIStyleKey = @"UIStyle";
     }
     
     // remove old cells, but save off any that might be reusable
-    for (UITableViewCell *cell in [availableCells allValues]) {
-        if (cell.reuseIdentifier) {
-            [_reusableCells addObject:cell];
-        } else {
-            [cell removeFromSuperview];
+    for (NSIndexPath* indexPath in [_cachedCells allKeys]) {
+        if (![usedCells objectForKey:indexPath]) {
+            UITableViewCell* cell = [_cachedCells objectForKey:indexPath];
+            if (cell.reuseIdentifier) {
+                [_reusableCells addObject:cell];
+            } else {
+                [cell removeFromSuperview];
+            }
+            [_cachedCells removeObjectForKey:indexPath];
         }
     }
     
     // non-reusable cells should end up dealloced after at this point, but reusable ones live on in _reusableCells.
-    [availableCells release];
+    [usedCells release];
     
     // now make sure that all available (but unused) reusable cells aren't on screen in the visible area.
     // this is done becaue when resizing a table view by shrinking it's height in an animation, it looks better. The reason is that
@@ -924,7 +936,11 @@ static NSString* const kUIStyleKey = @"UIStyle";
             }
         }
     }
+    
     NSIndexPath *rowToSelect = indexPath;
+    
+    [self _ensureCellExistsAtIndexPath:indexPath];
+    
 	if (sendDelegateMessages && _delegateHas.willSelectRowAtIndexPath) {
         rowToSelect = [self.delegate tableView:self willSelectRowAtIndexPath:rowToSelect];
     }
