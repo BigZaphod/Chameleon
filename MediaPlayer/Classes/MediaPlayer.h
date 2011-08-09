@@ -28,3 +28,4 @@
  */
 
 #import "MPMusicPlayerController.h"
+#import "MPMoviePlayerController.h"
