@@ -89,7 +89,27 @@ typedef enum {
   UIRemoteNotificationTypeAlert   = 1 << 2
 } UIRemoteNotificationType;
 
-// will always be UIApplicationStateActive (for now)
+// whenever the NSApplication is no longer "active" from OSX's point of view, your UIApplication instance
+// will switch to UIApplicationStateInactive. This happens when the app is no longer in the foreground, for instance.
+// chameleon will also switch to the inactive state when the screen is put to sleep due to power saving mode.
+// when the screen wakes up or the app is brought to the foreground, it is switched back to UIApplicationStateActive.
+// 
+// UIApplicationStateBackground is now supported and your app will transition to this state in two possible ways.
+// one is when the AppKitIntegration method -terminateApplicationBeforeDate: is called. that method is intended to be
+// used when your NSApplicationDelegate is being asked to terminate. the application is also switched to
+// UIApplicationStateBackground when the machine is put to sleep. when the machine is reawakened, it will transition
+// back to UIApplicationStateInactive (as per the UIKit docs). The OS tends to reactive the app in the usual way if
+// it happened to be the foreground app when the machine was put to sleep, so it should ultimately work out as expected.
+//
+// any registered background tasks are allowed to complete whenever the app switches into UIApplicationStateBackground
+// mode, so that means that when -terminateApplicationBeforeDate: is called directly, we will wait on background tasks
+// and also show an alert to the user letting them know what's happening. it also means we attempt to delay machine
+// sleep whenever sleep is initiated for as long as we can until any pending background tasks are completed. (there is no
+// alert in that case) this should allow your app time to do any of the usual things like sync with network services or
+// save state. just as on iOS, there's no guarentee you'll have time to complete you background task and there's no
+// guarentee that your expiration handler will even be called. additionally, the reliability of your network is certainly
+// going to be suspect when entering sleep as well. so be aware - but basically these same constraints exist on iOS so
+// in many respects it shouldn't affect your code much or at all.
 typedef enum {
   UIApplicationStateActive,
   UIApplicationStateInactive,
@@ -143,7 +163,7 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
 @property (nonatomic, getter=isIdleTimerDisabled) BOOL idleTimerDisabled;	// has no actual affect
 @property (nonatomic) BOOL applicationSupportsShakeToEdit;					// no effect
 @property (nonatomic) UIStatusBarStyle statusBarStyle;                      // always returns UIStatusBarStyleDefault
-@property (nonatomic, readonly) UIApplicationState applicationState;        // always returns UIApplicationStateActive
+@property (nonatomic, readonly) UIApplicationState applicationState;        // see notes near UIApplicationState struct for details!
 @property (nonatomic, readonly) NSTimeInterval backgroundTimeRemaining;     // always 0
 @property (nonatomic) NSInteger applicationIconBadgeNumber;                 // no effect, but does set/get the number correctly
 @property (nonatomic, copy) NSArray *scheduledLocalNotifications;           // no effect, returns nil

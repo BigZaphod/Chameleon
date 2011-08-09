@@ -39,4 +39,6 @@
 - (void)applicationWillResignActive:(UIApplication *)application;
 - (void)applicationWillTerminate:(UIApplication *)application;
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation;
+- (void)applicationDidEnterBackground:(UIApplication *)application;
+- (void)applicationWillEnterForeground:(UIApplication *)application;
 @end

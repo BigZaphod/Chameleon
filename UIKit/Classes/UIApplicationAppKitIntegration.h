@@ -28,40 +28,29 @@
  */
 
 #import "UIApplication.h"
+#import <AppKit/NSApplication.h>
 
 extern NSString *const UIApplicationNetworkActivityIndicatorChangedNotification;
 
 @interface UIApplication (AppKitIntegration)
 
-// the -runBackgroundTasksBeforeDate:title:message:buttonTitle:completionHandler: method will
-// put the app into a modal state and present an alert using the titles/messages given.
+// the -terminateApplicationBeforeDate: method will switch the UIApplication to the background state
+// and put the NSApplication into a modal state and present an alert to the user with a "Quit Now" button.
 // then it will allow any background tasks registered with UIApplcation (if any) to finish.
-// if time expires before they finish, their expiration handlers will be called.
-// once this is finished waiting/expiring stuff, it will run the completionHandler block.
-// this is intended to be run from NSApplicationDelegate's -applicationShouldTerminate: method.
-// with code that looks something like this:
+// if time expires before they finish, their expiration handlers will be called instead.
+// once this is finished waiting/expiring stuff, it will run [NSApp replyToApplicationShouldTerminate:YES];
+// if there's no background tasks to run after transitioning UIApplication to the background state, it will
+// return NSTerminateNow and there will be no modal alerts presented to the user. otherwise it returns NSTerminateLater.
+// this is intended to be run from NSApplicationDelegate's -applicationShouldTerminate: method like this:
 /*
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
-    [[UIApplication sharedApplication] runBackgroundTasksBeforeDate:[NSDate dateWithTimeIntervalSinceNow:10]
-                                                              title:@"Finishing"
-                                                            message:@"Got some last minute things to finish up here..."
-                                                        buttonTitle:@"Quit Now"
-                                                  completionHandler:^(BOOL allTasksEnded) {
-                                                      // tell the app we're done now and allow it to quit
-                                                      [NSApp replyToApplicationShouldTerminate:YES];
-                                                  }
-     ];
-    
-    // tell the OS that we'll quit when we are good and ready!
-    return NSTerminateLater;
+    return [[UIApplication sharedApplication] terminateApplicationBeforeDate:[NSDate dateWithTimeIntervalSinceNow:30]];
 }
 
  */
-- (void)runBackgroundTasksBeforeDate:(NSDate *)timeoutDate
-                               title:(NSString *)title
-                             message:(NSString *)message
-                         buttonTitle:(NSString *)buttonTitle
-                   completionHandler:(void (^)(BOOL allTasksEnded))completionHandler;
+
+- (NSApplicationTerminateReply)terminateApplicationBeforeDate:(NSDate *)timeoutDate;
+
 @end

@@ -122,6 +122,7 @@ static BOOL TouchIsActiveNonGesture(UITouch *touch)
 @synthesize idleTimerDisabled = _idleTimerDisabled;
 @synthesize applicationSupportsShakeToEdit = _applicationSupportsShakeToEdit;
 @synthesize applicationIconBadgeNumber = _applicationIconBadgeNumber;
+@synthesize applicationState = _applicationState;
 
 static BOOL TouchIsActive(UITouch *touch)
 {
@@ -147,10 +148,18 @@ static BOOL TouchIsActive(UITouch *touch)
         [_currentEvent _setTouch:[[[UITouch alloc] init] autorelease]];
         _visibleWindows = [[NSMutableSet alloc] init];
         _backgroundTasks = [[NSMutableArray alloc] init];
+        _applicationState = UIApplicationStateActive;
         _applicationSupportsShakeToEdit = YES;		// yeah... not *really* true, but UIKit defaults to YES :)
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
+
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillResignActive:) name:NSApplicationWillResignActiveNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationDidBecomeActive:) name:NSApplicationDidBecomeActiveNotification object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillResignActive:) name:NSWorkspaceScreensDidSleepNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationDidBecomeActive:) name:NSWorkspaceScreensDidWakeNotification object:nil];
+
+        [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver:self selector:@selector(_computerWillSleep:) name:NSWorkspaceWillSleepNotification object:nil];
+        [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver:self selector:@selector(_computerDidWakeUp:) name:NSWorkspaceDidWakeNotification object:nil];
     }
     return self;
 }
@@ -158,6 +167,7 @@ static BOOL TouchIsActive(UITouch *touch)
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[[NSWorkspace sharedWorkspace] notificationCenter] removeObserver:self];
     [_currentEvent release];
     [_visibleWindows release];
     [_backgroundTasks release];
@@ -178,11 +188,6 @@ static BOOL TouchIsActive(UITouch *touch)
 - (CGRect)statusBarFrame
 {
     return CGRectZero;
-}
-
-- (UIApplicationState)applicationState
-{
-    return UIApplicationStateActive;
 }
 
 - (NSTimeInterval)backgroundTimeRemaining
@@ -282,18 +287,82 @@ static BOOL TouchIsActive(UITouch *touch)
     }
 }
 
+- (BOOL)_enterBackground
+{
+    if (self.applicationState != UIApplicationStateBackground) {
+        _applicationState = UIApplicationStateBackground;
+        
+        if ([_delegate respondsToSelector:@selector(applicationDidEnterBackground:)]) {
+            [_delegate applicationDidEnterBackground:self];
+        }
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidEnterBackgroundNotification object:self];
+        
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+- (void)_enterForeground
+{
+    if (self.applicationState == UIApplicationStateBackground) {
+        if ([_delegate respondsToSelector:@selector(applicationWillEnterForeground:)]) {
+            [_delegate applicationWillEnterForeground:self];
+        }
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationWillEnterForegroundNotification object:self];
+        
+        _applicationState = UIApplicationStateInactive;
+    }
+}
+
+- (BOOL)_runRunLoopForBackgroundTasksBeforeDate:(NSDate *)date
+{
+    // check if all tasks were done, and if so, break
+    if ([_backgroundTasks count] == 0) {
+        return NO;
+    }
+
+    // run the runloop in the default mode so things like connections and timers still work for processing our
+    // background tasks. we'll make sure not to run this any longer than 1 second at a time, otherwise the alert
+    // might hang around for a lot longer than is necessary since we might not have anything to run in the default
+    // mode for awhile or something which would keep this method from returning.
+    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:date];
+    
+    // otherwise check if we've timed out and if we are, break
+    if ([[NSDate date] timeIntervalSinceReferenceDate] >= [_backgroundTasksExpirationDate timeIntervalSinceReferenceDate]) {
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (void)_cancelBackgroundTasks
+{
+    // if there's any remaining tasks, run their expiration handlers
+    for (UIBackgroundTask *task in _backgroundTasks) {
+        if (task.expirationHandler) {
+            task.expirationHandler();
+        }
+    }
+    
+    // remove any lingering tasks so we're back to being empty
+    [_backgroundTasks removeAllObjects];
+}
+
 - (void)_runBackgroundTasks:(void (^)(void))run_tasks
 {
     run_tasks();
 }
 
-- (void)runBackgroundTasksBeforeDate:(NSDate *)timeoutDate
-                               title:(NSString *)title
-                             message:(NSString *)message
-                         buttonTitle:(NSString *)buttonTitle
-                   completionHandler:(void (^)(BOOL allTasksEnded))completionHandler
+- (NSApplicationTerminateReply)terminateApplicationBeforeDate:(NSDate *)timeoutDate
 {
-    NSAssert(_backgroundTasksExpirationDate == nil, @"already running background tasks");
+    [self _enterBackground];
+    
+    if ([_backgroundTasks count] == 0) {
+        return NSTerminateNow;
+    }
     
     [_backgroundTasksExpirationDate release];
     _backgroundTasksExpirationDate = [timeoutDate retain];
@@ -303,28 +372,15 @@ static BOOL TouchIsActive(UITouch *touch)
             NSAlert *alert = [[NSAlert alloc] init];
             [alert setAlertStyle:NSInformationalAlertStyle];
             [alert setShowsSuppressionButton:NO];
-            [alert setMessageText:title];
-            [alert setInformativeText:message];
-            [alert addButtonWithTitle:buttonTitle];
+            [alert setMessageText:@"Quitting"];
+            [alert setInformativeText:@"Finishing some tasks..."];
+            [alert addButtonWithTitle:@"Quit Now"];
             [alert layout];
             
             NSModalSession session = [NSApp beginModalSessionForWindow:alert.window];
             
             while ([NSApp runModalSession:session] == NSRunContinuesResponse) {
-                
-                // run the runloop in the default mode so things like connections and timers still work for processing our
-                // background tasks. we'll make sure not to run this any longer than 1 second at a time, otherwise the alert
-                // might hang around for a lot longer than is necessary since we might not have anything to run in the default
-                // mode for awhile or something which would keep this method from returning.
-                [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-                
-                // check if all tasks were done, and if so, break
-                if ([_backgroundTasks count] == 0) {
-                    break;
-                }
-                
-                // otherwise check if we've timed out and if we are, break
-                if ([[NSDate date] timeIntervalSinceReferenceDate] >= [_backgroundTasksExpirationDate timeIntervalSinceReferenceDate]) {
+                if (![self _runRunLoopForBackgroundTasksBeforeDate:[NSDate dateWithTimeIntervalSinceNow:1]]) {
                     break;
                 }
             }
@@ -333,23 +389,16 @@ static BOOL TouchIsActive(UITouch *touch)
             
             [alert release];
         }
-
+        
         // if there's any remaining tasks, run their expiration handlers
-        for (UIBackgroundTask *task in _backgroundTasks) {
-            if (task.expirationHandler) {
-                task.expirationHandler();
-            }
-        }
-
-        // tell our caller we're all done here and if we've completed everything or not
-        completionHandler(([_backgroundTasks count] == 0));
-
-        // remove any lingering tasks so we're back to being empty
-        [_backgroundTasks removeAllObjects];
+        [self _cancelBackgroundTasks];
         
         // and reset our timer since we're done
         [_backgroundTasksExpirationDate release];
         _backgroundTasksExpirationDate = nil;
+
+        // tell the real NSApp we're all done here
+        [NSApp replyToApplicationShouldTerminate:YES];
     };
     
     // I need to delay this but run it on the main thread and also be able to run it in the panel run loop mode
@@ -359,6 +408,40 @@ static BOOL TouchIsActive(UITouch *touch)
                            withObject:[[taskFinisher copy] autorelease]
                         waitUntilDone:NO
                                 modes:[NSArray arrayWithObjects:NSModalPanelRunLoopMode, NSRunLoopCommonModes, nil]];
+    
+    return NSTerminateLater;
+}
+
+- (void)_computerWillSleep:(NSNotification *)note
+{
+    if ([self _enterBackground]) {
+        // docs say we have 30 seconds to return from our handler for the sleep notification, so we'll let background tasks
+        // take up to 29 of them with the idea that hopefully this means that any cancelation handlers that might need to run
+        // have a full second or so to finish up before we're forced to sleep.
+        // since we can just block here we don't need to put the app into a modal state or popup a window or anything because
+        // the machine is about to go to sleep.. so we'll just do things in a blocking way in this case while still handling
+        // any pending background tasks.
+
+        [_backgroundTasksExpirationDate release];
+        _backgroundTasksExpirationDate = [[NSDate alloc] initWithTimeIntervalSinceNow:29];
+
+        for (;;) {
+            if (![self _runRunLoopForBackgroundTasksBeforeDate:_backgroundTasksExpirationDate]) {
+                break;
+            }
+        }
+        
+        [self _cancelBackgroundTasks];
+
+        // and reset our timer since we're done
+        [_backgroundTasksExpirationDate release];
+        _backgroundTasksExpirationDate = nil;
+    }
+}
+
+- (void)_computerDidWakeUp:(NSNotification *)note
+{
+    [self _enterForeground];
 }
 
 - (void)_setKeyWindow:(UIWindow *)newKeyWindow
@@ -680,20 +763,28 @@ static BOOL TouchIsActive(UITouch *touch)
 
 - (void)_applicationWillResignActive:(NSNotification *)note
 {
-    if ([_delegate respondsToSelector:@selector(applicationWillResignActive:)]) {
-        [_delegate applicationWillResignActive:self];
+    if (self.applicationState == UIApplicationStateActive) {
+        if ([_delegate respondsToSelector:@selector(applicationWillResignActive:)]) {
+            [_delegate applicationWillResignActive:self];
+        }
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationWillResignActiveNotification object:self];
+        
+        _applicationState = UIApplicationStateInactive;
     }
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationWillResignActiveNotification object:self];
 }
 
 - (void)_applicationDidBecomeActive:(NSNotification *)note
 {
-    if ([_delegate respondsToSelector:@selector(applicationDidBecomeActive:)]) {
-        [_delegate applicationDidBecomeActive:self];
+    if (self.applicationState == UIApplicationStateInactive) {
+        _applicationState = UIApplicationStateActive;
+
+        if ([_delegate respondsToSelector:@selector(applicationDidBecomeActive:)]) {
+            [_delegate applicationDidBecomeActive:self];
+        }
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidBecomeActiveNotification object:self];
     }
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidBecomeActiveNotification object:self];
 }
 
 - (void)registerForRemoteNotificationTypes:(UIRemoteNotificationType)types
