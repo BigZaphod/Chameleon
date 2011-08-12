@@ -354,43 +354,80 @@ static BOOL TouchIsActive(UITouch *touch)
 {
     [self _enterBackground];
     
-    if ([_backgroundTasks count] == 0) {
-        return NSTerminateNow;
-    }
-    
     [_backgroundTasksExpirationDate release];
     _backgroundTasksExpirationDate = [timeoutDate retain];
     
+    // we will briefly block here for a short time and run the runloop in an attempt to let the background tasks finish up before
+    // actually prompting the user with an annoying alert. users are much more used to an app hanging for a brief moment while
+    // quitting than they are with an alert appearing/disappearing suddenly that they might have had trouble reading and processing
+    // before it's gone. that sort of thing creates anxiety.
+    NSDate *blockingBackgroundExpiration = [NSDate dateWithTimeIntervalSinceNow:1.33];
+
+    for (;;) {
+        if (![self _runRunLoopForBackgroundTasksBeforeDate:blockingBackgroundExpiration] || [NSDate timeIntervalSinceReferenceDate] >= [blockingBackgroundExpiration timeIntervalSinceReferenceDate]) {
+            break;
+        }
+    }
+
+    // if it turns out we're all done with tasks (or maybe had none to begin with), we'll clean up the structures
+    // and tell our app we can terminate immediately now.
+    if ([_backgroundTasks count] == 0) {
+        [self _cancelBackgroundTasks];
+    
+        // and reset our timer since we're done
+        [_backgroundTasksExpirationDate release];
+        _backgroundTasksExpirationDate = nil;
+        
+        // and return
+        return NSTerminateNow;
+    }
+    
+    // otherwise... we have to do a deferred thing so we can show an alert while we wait for background tasks to finish...
+    
     void (^taskFinisher)(void) = ^{
-        if ([_backgroundTasks count] > 0) {
-            NSAlert *alert = [[NSAlert alloc] init];
-            [alert setAlertStyle:NSInformationalAlertStyle];
-            [alert setShowsSuppressionButton:NO];
-            [alert setMessageText:@"Quitting"];
-            [alert setInformativeText:@"Finishing some tasks..."];
-            [alert addButtonWithTitle:@"Quit Now"];
-            [alert layout];
-            
-            NSModalSession session = [NSApp beginModalSessionForWindow:alert.window];
-            
-            while ([NSApp runModalSession:session] == NSRunContinuesResponse) {
-                if (![self _runRunLoopForBackgroundTasksBeforeDate:[NSDate dateWithTimeIntervalSinceNow:1]]) {
-                    break;
-                }
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setAlertStyle:NSInformationalAlertStyle];
+        [alert setShowsSuppressionButton:NO];
+        [alert setMessageText:@"Quitting"];
+        [alert setInformativeText:@"Finishing some tasks..."];
+        [alert addButtonWithTitle:@"Quit Now"];
+        [alert layout];
+
+        // to avoid upsetting the user with an alert that flashes too quickly to read, we'll later artifically ensure that
+        // the alert has been visible for at least some small amount of time to give them a chance to see and understand it.
+        NSDate *minimumDisplayTime = [NSDate dateWithTimeIntervalSinceNow:2.33];
+
+        NSModalSession session = [NSApp beginModalSessionForWindow:alert.window];
+        
+        // run the runloop and wait for tasks to finish
+        while ([NSApp runModalSession:session] == NSRunContinuesResponse) {
+            if (![self _runRunLoopForBackgroundTasksBeforeDate:[NSDate dateWithTimeIntervalSinceNow:0.1]]) {
+                break;
             }
-            
-            [NSApp endModalSession:session];
-            
-            [alert release];
         }
         
-        // if there's any remaining tasks, run their expiration handlers
+        // when we exit the runloop loop, then we're done with the tasks. either they are all finished or the time has run out
+        // so we need to clean things up here as if we're all finished. if there's any remaining tasks, run their expiration handlers
         [self _cancelBackgroundTasks];
         
         // and reset our timer since we're done
         [_backgroundTasksExpirationDate release];
         _backgroundTasksExpirationDate = nil;
 
+        // now just in case all of this happened too quickly and the user might not have had time to read and understand the alert,
+        // we will kill some time for a bit as long as the alert is still visible. runModalSession: will not return NSRunContinuesResponse
+        // if the user closed the alert, so in that case then this delay won't happen at all. however if the tasks finished too quickly
+        // then what this does is kill time until the user clicks the quit button or the timer expires.
+        while ([NSApp runModalSession:session] == NSRunContinuesResponse) {
+            if ([NSDate timeIntervalSinceReferenceDate] >= [minimumDisplayTime timeIntervalSinceReferenceDate]) {
+                break;
+            }
+        }
+
+        [alert release];
+
+        [NSApp endModalSession:session];
+        
         // tell the real NSApp we're all done here
         [NSApp replyToApplicationShouldTerminate:YES];
     };
