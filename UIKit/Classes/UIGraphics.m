@@ -40,6 +40,10 @@ void UIGraphicsPushContext(CGContextRef ctx)
         contextStack = [[NSMutableArray alloc] initWithCapacity:2];
     }
     
+    // If the context stack is empty push it to the stack, once we clear out our stack we will restore the existing context
+    if ([contextStack count] == 0 && [NSGraphicsContext currentContext] != nil)
+        [contextStack addObject:([NSGraphicsContext currentContext] ?: [NSNull null])]; // If the current context is nil, push a null object
+
     [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:(void *)ctx flipped:YES]];
     [contextStack addObject:[NSGraphicsContext currentContext]];
 }
@@ -47,12 +51,17 @@ void UIGraphicsPushContext(CGContextRef ctx)
 void UIGraphicsPopContext()
 {
     [contextStack removeLastObject];
-    [NSGraphicsContext setCurrentContext:[contextStack lastObject]];
+    [NSGraphicsContext setCurrentContext:([contextStack lastObject] == [NSNull null] ? nil : [contextStack lastObject])];
+
+    // If we are down to the last object on the stack, remove it.  It was the context that we started with before pushing our own onto the stack
+    if ([contextStack count] == 1)
+        [contextStack removeLastObject];
 }
 
 CGContextRef UIGraphicsGetCurrentContext()
 {
-    return [[contextStack lastObject] graphicsPort];
+    // Return the last entry on the context stack (if one is available), otherwise show the current graphics context
+    return ([[contextStack lastObject] graphicsPort] ?: [[NSGraphicsContext currentContext] graphicsPort]);
 }
 
 void UIGraphicsBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloat scale)
