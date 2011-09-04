@@ -42,8 +42,8 @@
         
         _capInsets=edge;
         
-        const CGFloat middleWidth = innerRect.size.width;
-        const CGFloat middleHeight = innerRect.size.height;
+        const CGFloat middleWidth = innerRect.size.width>0?innerRect.size.width:1;
+        const CGFloat middleHeight = innerRect.size.height>0?innerRect.size.height:1;
         
         _topLeftCorner = _NSImageCreateSubimage(theImage, CGRectMake(0,0,edge.left,edge.top));
         _topEdgeFill = _NSImageCreateSubimage(theImage, CGRectMake(edge.left,0,middleWidth,edge.top));
@@ -54,7 +54,7 @@
         _bottomRightCorner = _NSImageCreateSubimage(theImage, CGRectMake(size.width-edge.right,size.height-edge.bottom,edge.right,edge.bottom));
         
         _leftEdgeFill = _NSImageCreateSubimage(theImage, CGRectMake(0,edge.top,edge.left,middleHeight));
-        _centerFill = _NSImageCreateSubimage(theImage, innerRect);
+        _centerFill = _NSImageCreateSubimage(theImage, CGRectMake(edge.left,edge.top,middleWidth,middleHeight));
         _rightEdgeFill = _NSImageCreateSubimage(theImage, CGRectMake(size.width-edge.right,edge.top,edge.right,middleHeight));
     }
     return self;

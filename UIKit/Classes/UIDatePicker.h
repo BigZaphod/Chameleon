@@ -66,4 +66,6 @@ typedef enum {
 @property (nonatomic, assign) NSInteger minuteInterval;
 @property (nonatomic, assign) NSTimeInterval countDownDuration;
 
+- (void)setDate:(NSDate *)date animated:(BOOL)animated;
+
 @end

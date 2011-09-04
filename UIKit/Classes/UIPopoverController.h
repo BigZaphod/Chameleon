@@ -73,6 +73,9 @@ typedef NSUInteger UIPopoverArrowDirection;
 - (void)presentPopoverFromBarButtonItem:(UIBarButtonItem *)item permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated;
 - (void)dismissPopoverAnimated:(BOOL)animated;
 
+@property (nonatomic) CGSize popoverContentSize;
+- (void)setPopoverContentSize:(CGSize)size animated:(BOOL)animated;
+
 @property (nonatomic, assign) id <UIPopoverControllerDelegate> delegate;
 @property (nonatomic, retain) UIViewController *contentViewController;
 @property (nonatomic, readonly, getter=isPopoverVisible) BOOL popoverVisible;

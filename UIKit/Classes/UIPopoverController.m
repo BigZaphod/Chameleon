@@ -123,11 +123,13 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 @implementation UIPopoverController
 @synthesize delegate=_delegate, contentViewController=_contentViewController, passthroughViews=_passthroughViews;
 @synthesize popoverArrowDirection=_popoverArrowDirection;
+@synthesize popoverContentSize=_popoverContentSize;
 
 - (id)init
 {
     if ((self=[super init])) {
         _popoverArrowDirection = UIPopoverArrowDirectionUnknown;
+        _popoverContentSize = CGSizeZero;
     }
     return self;
 }
@@ -201,7 +203,7 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
         // now build the actual popover view which represents the popover's chrome, and since it's a UIView, we need to build a UIKitView 
         // as well to put it in our NSWindow...
         _popoverView = [[UIPopoverView alloc] initWithContentView:_contentViewController.view size:_contentViewController.contentSizeForViewInPopover];
-
+        
         UIKitView *hostingView = [(UIKitView *)[UIKitView alloc] initWithFrame:NSRectFromCGRect([_popoverView bounds])];
         [[hostingView UIScreen] _setPopoverController:self];
         [[hostingView UIWindow] addSubview:_popoverView];
@@ -265,8 +267,14 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
     }
 }
 
+- (void)setPopoverContentSize:(CGSize)size animated:(BOOL)animated {
+    _popoverContentSize = size;
+}
+
+
 - (void)presentPopoverFromBarButtonItem:(UIBarButtonItem *)item permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated
 {
+    
 }
 
 - (BOOL)isPopoverVisible

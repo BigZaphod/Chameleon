@@ -42,6 +42,10 @@
 @synthesize minuteInterval = _minuteInterval;
 @synthesize countDownDuration = _countDownDuration;
 
+- (void)setDate:(NSDate *)date animated:(BOOL)animated {
+    self.date = date;
+}
+
 - (void) dealloc
 {
     [_calendar release];

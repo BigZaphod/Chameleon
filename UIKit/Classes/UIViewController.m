@@ -47,6 +47,8 @@
 @synthesize modalTransitionStyle=_modalTransitionStyle, hidesBottomBarWhenPushed=_hidesBottomBarWhenPushed;
 @synthesize searchDisplayController=_searchDisplayController, tabBarItem=_tabBarItem, tabBarController=_tabBarController;
 
+@dynamic childViewControllers;
+
 - (id)init
 {
     return [self initWithNibName:nil bundle:nil];
@@ -292,6 +294,7 @@
 
 - (void)addChildViewController:(UIViewController *)childController 
 {
+    [_childViewControllers addObject:childController];
     
 }
 
@@ -304,6 +307,7 @@
 {
     
 }
+
 - (void)removeFromParentViewController 
 {
     
@@ -336,22 +340,31 @@
 
 - (BOOL)isMovingToParentViewController
 {
-    
+    //TODO
+    return FALSE;
 }
 
 - (BOOL)isMovingFromParentViewController
 {
-    
+    //TODO
+    return FALSE;
 }
 
 - (BOOL)isBeingDismissed 
 {
-    
+    //TODO
+    return FALSE;
 }
 
 - (BOOL)isBeingPresented
 {
-    
+    //TODO
+    return FALSE;
+}
+
+- (BOOL)disablesAutomaticKeyboardDismissal 
+{
+    return FALSE;
 }
 
 - (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion
@@ -364,6 +377,16 @@
     
 }
 
+- (NSArray *)childViewControllers
+{
+    return [[_childViewControllers retain] autorelease];
+}
+
+- (void)setChildViewControllers:(NSArray *)childViewControllers 
+{
+    [_childViewControllers autorelease];
+    _childViewControllers = [NSMutableArray arrayWithArray:childViewControllers];
+}
 
 
 - (NSString *)description

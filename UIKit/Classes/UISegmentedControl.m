@@ -287,12 +287,71 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
 }
 
 
+- (void)insertSegmentWithImage:(UIImage *)image atIndex:(NSUInteger)segment animated:(BOOL)animated {
+    if (animated)
+    {
+        [UIView beginAnimations:@"insertSegmentWithImage" context:NULL];
+        [UIView setAnimationDuration:0.3];
+    }
+    if ((NSInteger)([self numberOfSegments] - 1) < (NSInteger)segment) {
+        [_segments addObject:image];
+    } else {
+        [_segments insertObject:image atIndex:segment];
+    }
+    [self setNeedsDisplay];
+    if (animated)
+        [UIView commitAnimations];
+}
+
+- (void)insertSegmentWithTitle:(NSString *)title atIndex:(NSUInteger)segment animated:(BOOL)animated {
+    if (animated)
+    {
+        [UIView beginAnimations:@"insertSegmentWithTitle" context:NULL];
+        [UIView setAnimationDuration:0.3];
+    }
+    
+    if ((NSInteger)([self numberOfSegments] - 1) < (NSInteger)segment) {
+        [_segments addObject:[[title copy]autorelease]];
+    } else {
+        [_segments insertObject:[[title copy]autorelease] atIndex:segment];
+    }
+    
+    [self setNeedsDisplay];
+    if (animated)
+        [UIView commitAnimations];
+}
+
+- (void)removeSegmentAtIndex:(NSUInteger)segment animated:(BOOL)animated {
+    if (animated)
+    {
+        [UIView beginAnimations:@"removeSegmentAtIndex" context:NULL];
+        [UIView setAnimationDuration:0.3];
+    }
+    
+    [_segments removeObjectAtIndex:segment];
+    [self setNeedsDisplay];
+    
+    if (animated)
+        [UIView commitAnimations];
+
+}
+
+- (void)removeAllSegments 
+{
+    [_segments autorelease];
+    _segments = [[NSMutableArray alloc] init];
+    _selectedSegmentIndex = UISegmentedControlNoSegment;
+    
+    [self setNeedsDisplay];
+}
+
+
 - (void)setTitle:(NSString *)title forSegmentAtIndex:(NSUInteger)segment
 {
     if ((NSInteger)([self numberOfSegments] - 1) < (NSInteger)segment) {
-        [_segments addObject:title];
+        [_segments addObject:[[title copy] autorelease]];
     } else {
-        [_segments replaceObjectAtIndex:segment withObject:title];
+        [_segments replaceObjectAtIndex:segment withObject:[[title copy] autorelease]];
     }
     
     [self setNeedsDisplay];
@@ -307,7 +366,7 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
     
     id item = [_segments objectAtIndex:segment];
     if ([item isKindOfClass:[NSString class]]) {
-        return item;
+        return [[item retain] autorelease];
     }
     
     return nil;

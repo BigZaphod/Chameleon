@@ -89,7 +89,7 @@
         
         _vertical = YES;
         
-        const CGFloat stretchyHeight = size.width - capTop - capBottom;
+        const CGFloat stretchyHeight = size.height - capTop - capBottom;
         
         _capInsets = UIEdgeInsetsMake(capTop,0, capBottom, 0);
         
