@@ -125,6 +125,10 @@
 {
 }
 
+- (void)viewWillUnload
+{
+}
+
 - (void)didReceiveMemoryWarning
 {
 }
@@ -247,6 +251,10 @@
     }
 }
 
++ (void)attemptRotationToDeviceOrientation
+{
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
@@ -280,6 +288,83 @@
 {
     return [self _nearestParentViewControllerThatIsKindOf:[UISplitViewController class]];
 }
+
+
+- (void)addChildViewController:(UIViewController *)childController 
+{
+    
+}
+
+- (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers 
+{
+    return YES;
+}
+
+- (void)didMoveToParentViewController:(UIViewController *)parent 
+{
+    
+}
+- (void)removeFromParentViewController 
+{
+    
+}
+
+- (void)transitionFromViewController:(UIViewController *)fromViewController 
+                    toViewController:(UIViewController *)toViewController 
+                            duration:(NSTimeInterval)duration 
+                             options:(UIViewAnimationOptions)options 
+                          animations:(void (^)(void))animations 
+                          completion:(void (^)(BOOL finished))completion 
+{
+    
+}
+
+- (void)willMoveToParentViewController:(UIViewController *)parent 
+{
+    
+}
+
+- (void)viewWillLayoutSubviews 
+{
+    
+}
+
+- (void)viewDidLayoutSubviews 
+{
+    
+}
+
+- (BOOL)isMovingToParentViewController
+{
+    
+}
+
+- (BOOL)isMovingFromParentViewController
+{
+    
+}
+
+- (BOOL)isBeingDismissed 
+{
+    
+}
+
+- (BOOL)isBeingPresented
+{
+    
+}
+
+- (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion
+{
+    
+}
+
+- (void)presentViewController:(UIViewController *)viewControllerToPresent animated:(BOOL)flag completion:(void (^)(void))completion
+{
+    
+}
+
+
 
 - (NSString *)description
 {

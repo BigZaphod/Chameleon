@@ -177,32 +177,12 @@ static BOOL _animationsEnabled = YES;
     }
 }
 
-- (BOOL)_subviewControllersNeedAppearAndDisappear
-{
-    UIView *view = self;
-
-    while (view) {
-        if ([view _viewController] != nil) {
-            return NO;
-        } else {
-            view = [view superview];
-        }
-    }
-
-    return YES;
-}
-
 - (void)addSubview:(UIView *)subview
 {
     if (subview && subview.superview != self) {
         UIWindow *oldWindow = subview.window;
         UIWindow *newWindow = self.window;
-        
-        subview->_needsDidAppearOrDisappear = [self _subviewControllersNeedAppearAndDisappear];
-        
-        if ([subview _viewController] && subview->_needsDidAppearOrDisappear) {
-            [[subview _viewController] viewWillAppear:NO];
-        }
+    
 
         [subview _willMoveFromWindow:oldWindow toWindow:newWindow];
         [subview willMoveToSuperview:self];
@@ -230,10 +210,6 @@ static BOOL _animationsEnabled = YES;
         [[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:subview];
 
         [self didAddSubview:subview];
-        
-        if ([subview _viewController] && subview->_needsDidAppearOrDisappear) {
-            [[subview _viewController] viewDidAppear:NO];
-        }
     }
 }
 
@@ -285,10 +261,6 @@ static BOOL _animationsEnabled = YES;
         
         UIWindow *oldWindow = self.window;
         
-        if (_needsDidAppearOrDisappear && [self _viewController]) {
-            [[self _viewController] viewWillDisappear:NO];
-        }
-        
         [_superview willRemoveSubview:self];
         [self _willMoveFromWindow:oldWindow toWindow:nil];
         [self willMoveToSuperview:nil];
@@ -302,10 +274,6 @@ static BOOL _animationsEnabled = YES;
         [self _didMoveFromWindow:oldWindow toWindow:nil];
         [self didMoveToSuperview];
         [[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:self];
-        
-        if (_needsDidAppearOrDisappear && [self _viewController]) {
-            [[self _viewController] viewDidDisappear:NO];
-        }
         
         [self release];
     }

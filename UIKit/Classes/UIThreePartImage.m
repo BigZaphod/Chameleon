@@ -45,6 +45,8 @@
             const CGFloat stretchyHeight = (capSize < size.height)? 1 : 0;
             const CGFloat bottomCapHeight = size.height - capSize - stretchyHeight;
             
+            _capInsets = UIEdgeInsetsMake(0, capSize, 0, capSize);
+            
             _startCap = _NSImageCreateSubimage(theImage, CGRectMake(0,0,size.width,capSize));
             _centerFill = _NSImageCreateSubimage(theImage, CGRectMake(0,capSize,size.width,stretchyHeight));
             _endCap = _NSImageCreateSubimage(theImage, CGRectMake(0,size.height-bottomCapHeight,size.width,bottomCapHeight));
@@ -52,6 +54,8 @@
             const CGFloat stretchyWidth = (capSize < size.width)? 1 : 0;
             const CGFloat rightCapWidth = size.width - capSize - stretchyWidth;
 
+            _capInsets = UIEdgeInsetsMake(capSize, 0, capSize, 0);
+            
             _startCap = _NSImageCreateSubimage(theImage, CGRectMake(0,0,capSize,size.height));
             _centerFill = _NSImageCreateSubimage(theImage, CGRectMake(capSize,0,stretchyWidth,size.height));
             _endCap = _NSImageCreateSubimage(theImage, CGRectMake(size.width-rightCapWidth,0,rightCapWidth,size.height));
@@ -59,6 +63,43 @@
     }
     return self;
 }
+
+- (id)initWithNSImage:(id)theImage capLeft:(CGFloat)capLeft capRight:(CGFloat)capRight 
+{
+    if ((self=[super initWithNSImage:theImage])) {
+        const CGSize size = self.size;
+        
+        _vertical = NO;
+        
+        const CGFloat stretchyWidth = size.width - capRight - capLeft;
+        
+        _capInsets = UIEdgeInsetsMake(0, capLeft, 0, capRight);
+        
+        _startCap = _NSImageCreateSubimage(theImage, CGRectMake(0,0,capLeft,size.height));
+        _centerFill = _NSImageCreateSubimage(theImage, CGRectMake(capLeft,0,stretchyWidth,size.height));
+        _endCap = _NSImageCreateSubimage(theImage, CGRectMake(size.width-capRight,0,capRight,size.height));
+    }
+    return self;
+}
+
+- (id)initWithNSImage:(id)theImage capTop:(CGFloat)capTop capBottom:(CGFloat)capBottom 
+{
+    if ((self=[super initWithNSImage:theImage])) {
+        const CGSize size = self.size;
+        
+        _vertical = YES;
+        
+        const CGFloat stretchyHeight = size.width - capTop - capBottom;
+        
+        _capInsets = UIEdgeInsetsMake(capTop,0, capBottom, 0);
+        
+        _startCap = _NSImageCreateSubimage(theImage, CGRectMake(0,0,size.width,capTop));
+        _centerFill = _NSImageCreateSubimage(theImage, CGRectMake(0,capTop,size.width,stretchyHeight));
+        _endCap = _NSImageCreateSubimage(theImage, CGRectMake(0,size.height-capBottom,size.width,capBottom));
+    }
+    return self;
+}
+
 
 - (void)dealloc
 {
@@ -76,6 +117,11 @@
 - (NSInteger)topCapHeight
 {
     return _vertical? [_startCap size].height : 0;
+}
+
+- (UIEdgeInsets)capInsets 
+{
+    return _capInsets;
 }
 
 - (void)drawInRect:(CGRect)rect

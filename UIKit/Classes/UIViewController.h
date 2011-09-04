@@ -66,7 +66,8 @@ typedef enum {
     UIViewController *_modalViewController;
     UISearchDisplayController *_searchDisplayController;
     UIModalTransitionStyle _modalTransitionStyle;
-
+    NSMutableArray *_childViewControllers;
+    
     UITabBarItem *_tabBarItem;
     UITabBarController *_tabBarController;
 }
@@ -77,6 +78,7 @@ typedef enum {
 - (void)loadView;
 - (void)viewDidLoad;
 - (void)viewDidUnload;
+- (void)viewWillUnload;
 
 - (void)viewWillAppear:(BOOL)animated;
 - (void)viewDidAppear:(BOOL)animated;
@@ -91,11 +93,36 @@ typedef enum {
 - (void)setToolbarItems:(NSArray *)toolbarItems animated:(BOOL)animated;
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated;
 - (UIBarButtonItem *)editButtonItem;	// not implemented
+- (BOOL)disablesAutomaticKeyboardDismissal;
 
++ (void)attemptRotationToDeviceOrientation;
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration;
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation;
 
+- (void)addChildViewController:(UIViewController *)childController;
+- (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers;
+- (void)didMoveToParentViewController:(UIViewController *)parent;
+- (void)removeFromParentViewController;
+- (void)transitionFromViewController:(UIViewController *)fromViewController 
+                    toViewController:(UIViewController *)toViewController 
+                            duration:(NSTimeInterval)duration 
+                             options:(UIViewAnimationOptions)options 
+                          animations:(void (^)(void))animations 
+                          completion:(void (^)(BOOL finished))completion;
+
+- (void)willMoveToParentViewController:(UIViewController *)parent;
+
+- (void)viewWillLayoutSubviews;
+- (void)viewDidLayoutSubviews;
+
+- (BOOL)isMovingToParentViewController;
+- (BOOL)isMovingFromParentViewController;
+- (BOOL)isBeingDismissed;
+- (BOOL)isBeingPresented;
+
+- (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion;
+- (void)presentViewController:(UIViewController *)viewControllerToPresent animated:(BOOL)flag completion:(void (^)(void))completion;
 
 @property (nonatomic, readonly, copy) NSString *nibName;		// always returns nil
 @property (nonatomic, readonly, retain) NSBundle *nibBundle;	// always returns nil
@@ -119,6 +146,10 @@ typedef enum {
 @property (nonatomic, readonly, retain) UINavigationController *navigationController;
 @property (nonatomic, readonly, retain) UISplitViewController *splitViewController;
 @property (nonatomic, readonly, retain) UISearchDisplayController *searchDisplayController; // stub
+
+@property(nonatomic, readonly) NSArray *childViewControllers;
+
+
 
 // stubs
 @property (nonatomic, retain) UITabBarItem *tabBarItem;

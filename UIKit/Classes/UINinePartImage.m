@@ -34,6 +34,33 @@
 
 @implementation UINinePartImage
 
+- (id)initWithNSImage:(id)theImage edge:(UIEdgeInsets)edge
+{
+    if ((self=[super initWithNSImage:theImage])) {
+        const CGSize size = self.size;
+        const CGRect innerRect = UIEdgeInsetsInsetRect(CGRectMake(0, 0, size.width, size.height),edge);
+        
+        _capInsets=edge;
+        
+        const CGFloat middleWidth = innerRect.size.width;
+        const CGFloat middleHeight = innerRect.size.height;
+        
+        _topLeftCorner = _NSImageCreateSubimage(theImage, CGRectMake(0,0,edge.left,edge.top));
+        _topEdgeFill = _NSImageCreateSubimage(theImage, CGRectMake(edge.left,0,middleWidth,edge.top));
+        _topRightCorner = _NSImageCreateSubimage(theImage, CGRectMake(size.width-edge.right,0,edge.right,edge.top));
+        
+        _bottomLeftCorner = _NSImageCreateSubimage(theImage, CGRectMake(0,size.height-edge.bottom,edge.left,edge.bottom));
+        _bottomEdgeFill = _NSImageCreateSubimage(theImage, CGRectMake(edge.left,size.height-edge.bottom,middleWidth,edge.bottom));
+        _bottomRightCorner = _NSImageCreateSubimage(theImage, CGRectMake(size.width-edge.right,size.height-edge.bottom,edge.right,edge.bottom));
+        
+        _leftEdgeFill = _NSImageCreateSubimage(theImage, CGRectMake(0,edge.top,edge.left,middleHeight));
+        _centerFill = _NSImageCreateSubimage(theImage, innerRect);
+        _rightEdgeFill = _NSImageCreateSubimage(theImage, CGRectMake(size.width-edge.right,edge.top,edge.right,middleHeight));
+    }
+    return self;
+}
+
+
 - (id)initWithNSImage:(id)theImage leftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight
 {
     if ((self=[super initWithNSImage:theImage])) {
@@ -41,6 +68,8 @@
         const CGFloat stretchyWidth = (leftCapWidth < size.width)? 1 : 0;
         const CGFloat stretchyHeight = (topCapHeight < size.height)? 1 : 0;
         const CGFloat bottomCapHeight = size.height - topCapHeight - stretchyHeight;
+        
+        _capInsets = UIEdgeInsetsMake(topCapHeight, leftCapWidth, bottomCapHeight, leftCapWidth);
         
         _topLeftCorner = _NSImageCreateSubimage(theImage, CGRectMake(0,0,leftCapWidth,topCapHeight));
         _topEdgeFill = _NSImageCreateSubimage(theImage, CGRectMake(leftCapWidth,0,stretchyWidth,topCapHeight));
@@ -56,6 +85,8 @@
     }
     return self;
 }
+
+
 
 - (void)dealloc
 {
@@ -79,6 +110,11 @@
 - (NSInteger)topCapHeight
 {
     return [_topLeftCorner size].height;
+}
+
+- (UIEdgeInsets)capInsets 
+{
+    return _capInsets;
 }
 
 - (void)drawInRect:(CGRect)rect

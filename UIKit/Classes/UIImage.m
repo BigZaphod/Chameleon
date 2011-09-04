@@ -143,15 +143,20 @@
 
 - (UIImage *)stretchableImageWithLeftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight
 {
+    return [self resizableImageWithCapInsets:UIEdgeInsetsMake(topCapHeight,leftCapWidth,topCapHeight,leftCapWidth)];
+}
+
+- (UIImage *)resizableImageWithCapInsets:(UIEdgeInsets)capInsets 
+{
     const CGSize size = self.size;
-    if ((leftCapWidth == 0 && topCapHeight == 0) || (leftCapWidth >= size.width && topCapHeight >= size.height)) {
+    if (UIEdgeInsetsEqualToEdgeInsets(UIEdgeInsetsZero, capInsets)) {
         return self;
-    } else if (leftCapWidth <= 0 || leftCapWidth >= size.width) {
-        return [[[UIThreePartImage alloc] initWithNSImage:[[[NSImage alloc] initWithCGImage:_image size:NSZeroSize] autorelease] capSize:MIN(topCapHeight,size.height) vertical:YES] autorelease];
-    } else if (topCapHeight <= 0 || topCapHeight >= size.height) {
-        return [[[UIThreePartImage alloc] initWithNSImage:[[[NSImage alloc] initWithCGImage:_image size:NSZeroSize] autorelease] capSize:MIN(leftCapWidth,size.width) vertical:NO] autorelease];
+    } else if ((capInsets.left <= 0 || capInsets.left >= size.width) && (capInsets.right <= 0 || capInsets.right >= size.width)){
+        return [[[UIThreePartImage alloc] initWithNSImage:[[[NSImage alloc] initWithCGImage:_image size:NSZeroSize] autorelease] capTop:MIN(capInsets.top,size.height) capBottom:MIN(capInsets.bottom,size.height)] autorelease];
+    } else if ((capInsets.top <= 0 || capInsets.top >= size.height) && (capInsets.bottom <= 0 || capInsets.bottom >= size.height)) {
+        return [[[UIThreePartImage alloc] initWithNSImage:[[[NSImage alloc] initWithCGImage:_image size:NSZeroSize] autorelease] capLeft:MIN(capInsets.left,size.width) capRight:MIN(capInsets.right,size.width)] autorelease];
     } else {
-        return [[[UINinePartImage alloc] initWithNSImage:[[[NSImage alloc] initWithCGImage:_image size:NSZeroSize] autorelease] leftCapWidth:leftCapWidth topCapHeight:topCapHeight] autorelease];
+        return [[[UINinePartImage alloc] initWithNSImage:[[[NSImage alloc] initWithCGImage:_image size:NSZeroSize] autorelease] edge:capInsets] autorelease];
     }
 }
 
@@ -200,6 +205,11 @@
 - (NSInteger)topCapHeight
 {
     return 0;
+}
+
+- (UIEdgeInsets)capInsets 
+{
+    return UIEdgeInsetsZero;
 }
 
 - (CGImageRef)CGImage

@@ -31,6 +31,7 @@
 
 @interface UINinePartImage : UIImage {
 @private
+    UIEdgeInsets _capInsets;
     id _topLeftCorner;
     id _topEdgeFill;
     id _topRightCorner;
@@ -42,6 +43,7 @@
     id _bottomRightCorner;
 }
 
+- (id)initWithNSImage:(id)theImage edge:(UIEdgeInsets)edge;
 - (id)initWithNSImage:(id)theImage leftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight;
 
 @end

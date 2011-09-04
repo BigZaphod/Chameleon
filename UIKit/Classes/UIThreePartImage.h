@@ -35,8 +35,11 @@
     id _centerFill;
     id _endCap;
     BOOL _vertical;
+    UIEdgeInsets _capInsets;
 }
 
 - (id)initWithNSImage:(id)theImage capSize:(NSInteger)capSize vertical:(BOOL)isVertical;
+- (id)initWithNSImage:(id)theImage capTop:(CGFloat)capTop capBottom:(CGFloat)capBottom;
+- (id)initWithNSImage:(id)theImage capLeft:(CGFloat)capLeft capRight:(CGFloat)capRight;
 
 @end

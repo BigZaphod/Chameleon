@@ -28,6 +28,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "UIGeometry.h"
 
 typedef enum {
     UIImageOrientationUp,
@@ -56,6 +57,7 @@ typedef enum {
 - (id)initWithCGImage:(CGImageRef)imageRef;
 
 - (UIImage *)stretchableImageWithLeftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight;
+- (UIImage *)resizableImageWithCapInsets:(UIEdgeInsets)capInsets;
 
 - (void)drawAtPoint:(CGPoint)point blendMode:(CGBlendMode)blendMode alpha:(CGFloat)alpha;
 - (void)drawInRect:(CGRect)rect blendMode:(CGBlendMode)blendMode alpha:(CGFloat)alpha;
@@ -68,6 +70,7 @@ typedef enum {
 @property (nonatomic, readonly) CGImageRef CGImage;
 @property (nonatomic, readonly) UIImageOrientation imageOrientation;	// not implemented
 @property (nonatomic, readonly) CGFloat scale;
+@property (nonatomic, readonly) UIEdgeInsets capInsets;
 
 @end
 
