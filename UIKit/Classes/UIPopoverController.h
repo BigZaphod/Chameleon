@@ -58,6 +58,8 @@ typedef NSUInteger UIPopoverArrowDirection;
     id _popoverWindow;
     id _overlayWindow;
     
+    CGSize _popoverContentSize;
+    
     __unsafe_unretained id _delegate;
     struct {
         BOOL popoverControllerDidDismissPopover : 1;
@@ -73,7 +75,7 @@ typedef NSUInteger UIPopoverArrowDirection;
 - (void)presentPopoverFromBarButtonItem:(UIBarButtonItem *)item permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated;
 - (void)dismissPopoverAnimated:(BOOL)animated;
 
-@property (nonatomic) CGSize popoverContentSize;
+@property (nonatomic, assign) CGSize popoverContentSize;
 - (void)setPopoverContentSize:(CGSize)size animated:(BOOL)animated;
 
 @property (nonatomic, assign) id <UIPopoverControllerDelegate> delegate;
