@@ -1,4 +1,4 @@
-<h1> This fork is contains iOS 5 features. It has divereged a little but should remain compatible. 
+<h1> This fork contains iOS 5 features. It has divereged a little but should remain compatible. 
 It only supports the fragile ABI so it only works with 64bit builds os OS X and only compiles with Clang. </h1>
 
 
