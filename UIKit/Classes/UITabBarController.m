@@ -30,8 +30,7 @@
 #import "UITabBarController.h"
 #import "UITabBar.h"
 
-@implementation UITabBarController
-
+@implementation UITabBarController 
 @synthesize selectedViewController = _selectedViewController;
 @synthesize viewControllers = _viewControllers;
 @synthesize selectedIndex = _selectedIndex;
@@ -40,7 +39,7 @@
 - (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)nibBundle
 {
     if ((self = [super initWithNibName:nibName bundle:nibBundle])) {
-        _tabBar = [[UITabBar alloc] initWithFrame:CGRectZero];
+        _tabBar = [(UITabBar *)[UITabBar alloc] initWithFrame:CGRectZero];
     }
     return self;
 }

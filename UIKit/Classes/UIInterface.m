@@ -28,14 +28,27 @@
  */
 
 #import "UIInterface.h"
-#import <AppKit/NSFont.h>
+#import "UIImage.h"
+#import <AppKit/AppKit.h>
 
 
 @implementation UIColor (UIColorSystemColors)
 
+static UIColor* groupTableViewBackgroundColor;
+
+
++ (void) initialize
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSBundle* bundle = [NSBundle bundleForClass:[self class]];
+        groupTableViewBackgroundColor = [[UIColor colorWithPatternImage:[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UITableView> groupTableViewBackground"]]] retain];
+    });
+}
+
 + (UIColor *)groupTableViewBackgroundColor
 {
-    return [UIColor lightGrayColor];    // this is currently not likely to be correct, please fix!
+    return groupTableViewBackgroundColor;
 }
 
 @end

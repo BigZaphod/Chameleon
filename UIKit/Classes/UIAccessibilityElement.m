@@ -30,8 +30,11 @@
 #import "UIAccessibilityElement.h"
 
 @implementation UIAccessibilityElement
-@synthesize accessibilityLabel=_accessibilityLabel, accessibilityHint=_accessibilityHint, accessibilityValue=_accessibilityValue;
-@synthesize accessibilityFrame=_accessibilityFrame, accessibilityTraits=_accessibilityTraits;
+@synthesize accessibilityLabel = _accessibilityLabel;
+@synthesize accessibilityHint = _accessibilityHint;
+@synthesize accessibilityValue = _accessibilityValue;
+@synthesize accessibilityFrame = _accessibilityFrame;
+@synthesize accessibilityTraits = _accessibilityTraits;
 
 - (id)initWithAccessibilityContainer:(id)container
 {

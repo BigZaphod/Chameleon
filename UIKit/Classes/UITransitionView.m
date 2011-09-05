@@ -78,58 +78,41 @@
     }
 }
 
-- (void)_finishTransition:(NSDictionary *)info
+- (void)setView:(UIView *)view
 {
-    UIView *fromView = [info objectForKey:@"fromView"];
-    UIView *toView = [info objectForKey:@"toView"];
-    UITransition transition = [[info objectForKey:@"transition"] intValue];
-    
-    [fromView removeFromSuperview];
+    if (view != _view) {
+        view.frame = [self _rectForIncomingView];
+        [self addSubview:view];
 
-    [_delegate transitionView:self didTransitionFromView:fromView toView:toView withTransition:transition];
-}
-
-- (void)setView:(UIView *)aView
-{
-    if (aView != _view) {
-        aView.frame = [self _rectForIncomingView];
-        [self addSubview:aView];
-        
-        NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
-                              _view, @"fromView",
-                              aView, @"toView",
-                              [NSNumber numberWithInt:_transition], @"transition",
-                              nil];
-        
-        if (_transition == UITransitionNone) {
-            [self _finishTransition:info];
-        } else {
-            if (_transition == UITransitionFadeOut) {
-                [self sendSubviewToBack:aView];
-            } else if (_transition == UITransitionFadeIn) {
-                aView.alpha = 0;
-            }
-            
-            [UIView animateWithDuration:0.33
-                             animations:^(void) {
-                                 _view.frame = [self _rectForOutgoingView];
-                                 aView.frame = self.bounds;
-                                 
-                                 if (_transition == UITransitionFadeOut || _transition == UITransitionCrossFade) {
-                                     _view.alpha = 0;
-                                 }
-                                 
-                                 if (_transition == UITransitionFadeIn || _transition == UITransitionCrossFade) {
-                                     aView.alpha = 1;
-                                 }
-                             }
-                             completion:^(BOOL finished) {
-                                 [self _finishTransition:info];
-                             }];
+        if (_transition == UITransitionFadeOut) {
+            [self sendSubviewToBack:view];
+        } else if (_transition == UITransitionFadeIn) {
+            view.alpha = 0;
         }
         
-        [_view release];
-        _view = [aView retain];
+        [UIView animateWithDuration:0.33 
+            animations:^{
+                if (_transition != UITransitionNone) {
+                    _view.frame = [self _rectForOutgoingView];
+                    view.frame = self.bounds;
+                    
+                    if (_transition == UITransitionFadeOut || _transition == UITransitionCrossFade) {
+                        _view.alpha = 0;
+                    }
+                    
+                    if (_transition == UITransitionFadeIn || _transition == UITransitionCrossFade) {
+                        view.alpha = 1;
+                    }
+                }
+            }
+
+            completion:^(BOOL finished){
+                [_view removeFromSuperview];
+                [_delegate transitionView:self didTransitionFromView:_view toView:view withTransition:_transition];
+            }
+        ];
+        
+        [_view release], _view = [view retain];
     }
 }
 

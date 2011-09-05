@@ -42,8 +42,13 @@ static UITouch *PanTouch(NSSet *touches)
     return nil;
 }
 
-@implementation UIPanGestureRecognizer
-@synthesize maximumNumberOfTouches=_maximumNumberOfTouches, minimumNumberOfTouches=_minimumNumberOfTouches;
+@implementation UIPanGestureRecognizer {
+    CGPoint _translation;
+    CGPoint _velocity;
+    NSTimeInterval _lastMovementTime;
+}
+@synthesize maximumNumberOfTouches = _maximumNumberOfTouches;
+@synthesize minimumNumberOfTouches = _minimumNumberOfTouches;
 
 - (id)initWithTarget:(id)target action:(SEL)action
 {

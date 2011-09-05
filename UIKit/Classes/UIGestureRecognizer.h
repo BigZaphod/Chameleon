@@ -48,24 +48,7 @@ typedef enum {
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer;
 @end
 
-@interface UIGestureRecognizer : NSObject {
-@private
-    __unsafe_unretained id _delegate;
-    BOOL _delaysTouchesBegan;
-    BOOL _delaysTouchesEnded;
-    BOOL _cancelsTouchesInView;
-    BOOL _enabled;
-    UIGestureRecognizerState _state;
-    UIView *_view;
-    NSMutableArray *_registeredActions;
-    NSMutableArray *_trackingTouches;
-    
-    struct {
-        BOOL shouldBegin : 1;
-        BOOL shouldReceiveTouch : 1;
-        BOOL shouldRecognizeSimultaneouslyWithGestureRecognizer : 1;
-    } _delegateHas;	
-}
+@interface UIGestureRecognizer : NSObject 
 
 - (id)initWithTarget:(id)target action:(SEL)action;
 

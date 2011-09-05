@@ -1,3 +1,9 @@
+//
+//  UISearchField.h
+//  UIKit
+//
+//  Created by Josh Abernathy on 4/25/11.
+//
 /*
  * Copyright (c) 2011, The Iconfactory. All rights reserved.
  *
@@ -27,23 +33,11 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <Foundation/Foundation.h>
+#import "UITextField.h"
 
-@class UIView, UIWindow;
 
-@interface UIInputController : NSObject {
-    UIWindow *_inputWindow;
-    UIView *_inputAccessoryView;
-    UIView *_inputView;
+@interface UISearchField : UITextField {
+
 }
-
-+ (UIInputController *)sharedInputController;
-
-- (void)setInputVisible:(BOOL)visible animated:(BOOL)animated;
-
-@property (nonatomic, retain) UIView *inputAccessoryView;
-@property (nonatomic, retain) UIView *inputView;
-@property (nonatomic, assign) BOOL inputVisible;
-
 
 @end

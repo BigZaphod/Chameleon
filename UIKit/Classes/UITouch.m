@@ -32,6 +32,7 @@
 #import "UIGestureRecognizerSubclass.h"
 #import <Cocoa/Cocoa.h>
 
+
 static NSArray *GestureRecognizersForView(UIView *view)
 {
     NSMutableArray *recognizers = [[NSMutableArray alloc] initWithCapacity:0];
@@ -44,8 +45,20 @@ static NSArray *GestureRecognizersForView(UIView *view)
     return [recognizers autorelease];
 }
 
-@implementation UITouch
-@synthesize timestamp=_timestamp, tapCount=_tapCount, phase=_phase, view=_view, window=_window, gestureRecognizers=_gestureRecognizers;
+@implementation UITouch {
+    _UITouchGesture _gesture;
+    CGPoint _delta;
+    CGFloat _rotation;
+    CGFloat _magnification;
+    CGPoint _location;
+    CGPoint _previousLocation;
+}
+@synthesize timestamp = _timestamp;
+@synthesize tapCount = _tapCount;
+@synthesize phase = _phase;
+@synthesize view = _view;
+@synthesize window = _window;
+@synthesize gestureRecognizers = _gestureRecognizers;
 
 - (id)init
 {
@@ -63,9 +76,6 @@ static NSArray *GestureRecognizersForView(UIView *view)
     [_gestureRecognizers release];
     [super dealloc];
 }
-
-
-
 
 - (void)_setPhase:(UITouchPhase)phase screenLocation:(CGPoint)screenLocation tapCount:(NSUInteger)tapCount timestamp:(NSTimeInterval)timestamp;
 {

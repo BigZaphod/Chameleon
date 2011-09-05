@@ -27,6 +27,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import "UIViewController.h"
 #import "UIWindow+UIPrivate.h"
 #import "UIView+UIPrivate.h"
 #import "UIScreen+UIPrivate.h"
@@ -36,10 +37,17 @@
 #import "UITouch+UIPrivate.h"
 #import "UIScreenMode.h"
 #import "UIResponderAppKitIntegration.h"
+#import "UIViewAppKitIntegration.h"
+#import "UIKitView.h"
 #import "UIViewController.h"
 #import "UIGestureRecognizerSubclass.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 #import <AppKit/NSCursor.h>
+#import <AppKit/NSHelpManager.h>
+#import <AppKit/NSEvent.h>
+#import <AppKit/NSWindow.h>
+#import <AppKit/NSFont.h>
+#import <AppKit/NSAttributedString.h>
 #import <QuartzCore/QuartzCore.h>
 
 const UIWindowLevel UIWindowLevelNormal = 0;
@@ -66,9 +74,25 @@ NSString *const UIKeyboardCenterBeginUserInfoKey = @"UIKeyboardCenterBeginUserIn
 NSString *const UIKeyboardCenterEndUserInfoKey = @"UIKeyboardCenterEndUserInfoKey";
 NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 
+@interface UIWindow ()
+- (void)_showToolTipForView:(UIView *)view;
+- (void)_hideCurrentToolTip;
+- (void)_stopTrackingPotentiallyNewToolTip;
+- (void)_toolTipViewDidChangeSuperview:(NSNotification *)notification;
 
-@implementation UIWindow
-@synthesize screen=_screen, rootViewController=_rootViewController;
+@property (nonatomic, retain) UIView *currentToolTipView;
+@property (nonatomic, retain) UIView *toolTipViewToShow;
+@end
+
+
+@implementation UIWindow {
+    UIResponder *_firstResponder;
+    NSUndoManager *_undoManager;
+}
+@synthesize screen = _screen;
+@synthesize currentToolTipView = _currentToolTipView;
+@synthesize toolTipViewToShow = _toolTipViewToShow;
+@synthesize rootViewController = _rootViewController;
 
 - (id)initWithFrame:(CGRect)theFrame
 {
@@ -84,11 +108,24 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+	[self _stopTrackingPotentiallyNewToolTip];
+	[self _hideCurrentToolTip];
     [self _makeHidden];	// I don't really like this here, but the real UIKit seems to do something like this on window destruction as it sends a notification and we also need to remove it from the app's list of windows
     [_screen release];
     [_undoManager release];
     [_rootViewController release];
     [super dealloc];
+}
+
+- (void)setRootViewController:(UIViewController *)rootViewController
+{
+	if (rootViewController != _rootViewController) {
+        [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        [_rootViewController release];
+        _rootViewController = [rootViewController retain];
+        _rootViewController.view.frame = self.bounds;    // unsure about this
+        [self addSubview:_rootViewController.view];
+	}
 }
 
 - (UIResponder *)_firstResponder
@@ -124,17 +161,6 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 - (UIResponder *)nextResponder
 {
     return [UIApplication sharedApplication];
-}
-
-- (void)setRootViewController:(UIViewController *)rootViewController
-{
-    if (rootViewController != _rootViewController) {
-        [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-        [_rootViewController release];
-        _rootViewController = [rootViewController retain];
-        _rootViewController.view.frame = self.bounds;    // unsure about this
-        [self addSubview:_rootViewController.view];
-    }
 }
 
 - (void)setScreen:(UIScreen *)theScreen
@@ -365,9 +391,94 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
                 [newCursor set];
             }
             
+            if(touch.view != self.toolTipViewToShow) {
+				[self _stopTrackingPotentiallyNewToolTip];
+			}
+			
+			if(touch.view != _currentToolTipView) {
+				if(touch.view.toolTip.length > 0) {
+					// when your mouse moves from one view showing a tooltip to another, the new tooltip shows instantly instead of doing the normal delay
+					if(_currentToolTipView != nil) {
+						[self _hideCurrentToolTip];
+						[self _showToolTipForView:touch.view];
+					} else {
+						self.toolTipViewToShow = touch.view;
+						[self performSelector:@selector(_showToolTipForView:) withObject:_toolTipViewToShow afterDelay:3];
+					}
+				} else {
+					[self _hideCurrentToolTip];
+				}
+			}
+            
             [view release];
         }
-    }
+		
+		if(touches.count < 1) {
+			[self _stopTrackingPotentiallyNewToolTip];
+			[self _hideCurrentToolTip];
+		}
+    } else {
+		[self _stopTrackingPotentiallyNewToolTip];
+		[self _hideCurrentToolTip];
+	}
+}
+
+- (void)mouseExitedView:(UIView *)exited enteredView:(UIView *)entered withEvent:(UIEvent *)event {	
+	if(exited == nil || entered == nil) {
+		[self _stopTrackingPotentiallyNewToolTip];
+		[self _hideCurrentToolTip];
+	}
+	
+	[super mouseExitedView:exited enteredView:entered withEvent:event];
+}
+
+- (void)_showToolTipForView:(UIView *)view {
+	if(view == nil) return;
+	
+	NSMutableAttributedString *attributedToolTip = [[[NSMutableAttributedString alloc] initWithString:view.toolTip] autorelease];
+	NSRange wholeStringRange = NSMakeRange(0, view.toolTip.length);
+	[attributedToolTip addAttribute:NSFontAttributeName value:[NSFont systemFontOfSize:11.0f] range:wholeStringRange];
+	
+	NSMutableParagraphStyle *paragraphStyle = [[[NSMutableParagraphStyle alloc] init] autorelease];
+	[paragraphStyle setAlignment:NSLeftTextAlignment];
+	
+	[attributedToolTip addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:wholeStringRange];
+	
+	[[NSHelpManager sharedHelpManager] setContextHelp:attributedToolTip forObject:view];
+	[[NSHelpManager sharedHelpManager] showContextHelpForObject:view locationHint:[NSEvent mouseLocation]];
+	self.currentToolTipView = view;
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_toolTipViewDidChangeSuperview:) name:UIViewDidMoveToSuperviewNotification object:self.currentToolTipView];
+	
+	self.toolTipViewToShow = nil;
+}
+
+- (void)_hideCurrentToolTip {	
+	if(self.currentToolTipView == nil) return;
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewDidMoveToSuperviewNotification object:self.currentToolTipView];
+	
+	[[NSHelpManager sharedHelpManager] removeContextHelpForObject:self.currentToolTipView];
+	
+	// Post fake events to force the tooltip to hide. It doesn't fade away like standard tooltips do, but it's the only way I've found.
+	NSEvent	*newEvent = [NSEvent mouseEventWithType:NSLeftMouseDown location:[NSEvent mouseLocation] modifierFlags:0 timestamp:0 windowNumber:[[self.screen.UIKitView window] windowNumber] context:[[self.screen.UIKitView window] graphicsContext] eventNumber:0 clickCount:1 pressure:0];
+	[NSApp postEvent:newEvent atStart:NO];
+	
+	newEvent = [NSEvent mouseEventWithType:NSLeftMouseUp location:[NSEvent mouseLocation] modifierFlags:0 timestamp:0 windowNumber:[[self.screen.UIKitView window] windowNumber] context:[[self.screen.UIKitView window] graphicsContext] eventNumber:0 clickCount:1 pressure:0];
+	[NSApp postEvent:newEvent atStart:NO];
+	
+	self.currentToolTipView = nil;
+}
+
+- (void)_stopTrackingPotentiallyNewToolTip {
+	[[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(_showToolTipForView:) object:self.toolTipViewToShow];
+	self.toolTipViewToShow = nil;
+}
+
+- (void)_toolTipViewDidChangeSuperview:(NSNotification *)notification {
+	if(self.currentToolTipView.window.screen.UIKitView.superview == nil || self.currentToolTipView.superview == nil) {
+		[self _hideCurrentToolTip];
+	}
 }
 
 @end

@@ -29,8 +29,11 @@
 
 #import "UITableViewController.h"
 
-@implementation UITableViewController
-@synthesize clearsSelectionOnViewWillAppear=_clearsSelectionOnViewWillAppear;
+@implementation UITableViewController {
+    UITableViewStyle _style;
+    BOOL _hasReloaded;
+}
+@synthesize clearsSelectionOnViewWillAppear = _clearsSelectionOnViewWillAppear;
 
 - (id)init
 {

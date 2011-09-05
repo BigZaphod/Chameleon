@@ -30,8 +30,9 @@
 #import "UISwipeGestureRecognizer.h"
 #import "UIGestureRecognizerSubclass.h"
 
-@implementation UISwipeGestureRecognizer
-@synthesize direction=_direction, numberOfTouchesRequired=_numberOfTouchesRequired;
+@implementation UISwipeGestureRecognizer 
+@synthesize direction = _direction;
+@synthesize numberOfTouchesRequired = _numberOfTouchesRequired;
 
 - (id)initWithTarget:(id)target action:(SEL)action
 {

@@ -27,14 +27,38 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import <UIKit/UIKit.h>
 #import <AddressBook/AddressBook.h>
+#import "AddressBookUI.h"
 
-typedef id ABRecordRef; // is iOS-only
+@protocol ABUnknownPersonViewControllerDelegate;
 
-@interface ABUnknownPersonViewController : NSObject {
-  ABRecordRef _displayedPerson;
+@interface ABUnknownPersonViewController : UIViewController {
+	ABRecordRef displayedPerson;
+	id<ABUnknownPersonViewControllerDelegate> unknownPersonViewDelegate;
+	ABAddressBookRef addressBook;
+	NSString *alternateName;
+	NSString *message;
+	BOOL allowsActions;
+	BOOL allowsAddingToAddressBook;
 }
 
-@property (nonatomic, retain) ABRecordRef displayedPerson;
+@property(nonatomic, readwrite) ABRecordRef displayedPerson;
+@property(nonatomic,assign) id<ABUnknownPersonViewControllerDelegate> unknownPersonViewDelegate;
+@property(nonatomic,readwrite) ABAddressBookRef addressBook;
+@property(nonatomic,copy) NSString *alternateName;
+@property(nonatomic,copy) NSString *message;
+@property(nonatomic) BOOL allowsActions;
+@property(nonatomic) BOOL allowsAddingToAddressBook;
+
+@end
+
+
+@protocol ABUnknownPersonViewControllerDelegate <NSObject>
+
+- (void)unknownPersonViewController:(ABUnknownPersonViewController *)unknownCardViewController didResolveToPerson:(ABRecordRef)person;
+
+@optional
+- (BOOL)unknownPersonViewController:(ABUnknownPersonViewController *)personViewController shouldPerformDefaultActionForPerson:(ABRecordRef)person property:(ABPropertyID)property identifier:(ABMultiValueIdentifier)identifier;
 
 @end

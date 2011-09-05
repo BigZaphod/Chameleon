@@ -30,8 +30,7 @@
 #import "UIDatePicker.h"
 
 
-@implementation UIDatePicker
-
+@implementation UIDatePicker 
 @synthesize calendar = _calendar;
 @synthesize date = _date;
 @synthesize locale = _locale;

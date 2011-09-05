@@ -28,130 +28,170 @@
  */
 
 #import "UITableViewCell+UIPrivate.h"
+#import "UITableViewCellUnhighlightedState.h"
 #import "UITableViewCellSeparator.h"
 #import "UIColor.h"
 #import "UILabel.h"
 #import "UIImageView.h"
 #import "UIFont.h"
+#import "UIGraphics.h"
+#import "UITableView.h"
+#import "UITableView+UIPrivate.h"
+#import "UITableViewCellBackgroundView.h"
+#import "UITableViewCellSelectedBackgroundView.h"
+#import "UITableViewCellLayoutManager.h"
+
+
+static NSString* const kUIContentViewKey = @"UIContentView";
+static NSString* const kUIDetailTextLabelKey = @"UIDetailTextLabel";
+static NSString* const kUIImageViewKey = @"UIImageView";
+static NSString* const kUIReuseIdentifierKey = @"UIReuseIdentifier";
+
 
 extern CGFloat _UITableViewDefaultRowHeight;
 
-@implementation UITableViewCell
-@synthesize accessoryType=_accessoryType, selectionStyle=_selectionStyle, indentationLevel=_indentationLevel;
-@synthesize editingAccessoryType=_editingAccessoryType, selected=_selected, backgroundView=_backgroundView;
-@synthesize selectedBackgroundView=_selectedBackgroundView, highlighted=_highlighted, reuseIdentifier=_reuseIdentifier;
-@synthesize editing = _editing, detailTextLabel = _detailTextLabel, showingDeleteConfirmation = _showingDeleteConfirmation;
-@synthesize indentationWidth=_indentationWidth, accessoryView=_accessoryView;
+@interface UITableViewCell ()
+- (UITableViewCellLayoutManager*) layoutManager;
+- (void) _setSeparatorStyle:(UITableViewCellSeparatorStyle)theStyle color:(UIColor*)theColor;
+- (void) _setTableViewStyle:(NSUInteger)tableViewStyle;
+- (void) showSelectedBackgroundView:(BOOL)selected animated:(BOOL)animated;
+- (void) _setupDefaultSelectedBackgroundView;
+- (void) _setupDefaultAccessoryView;
+@end
 
-- (id)initWithFrame:(CGRect)frame
+
+@implementation UITableViewCell {
+    UITableViewCellSeparator *_separatorView;
+    UITableViewCellStyle _style;
+    CFMutableDictionaryRef _unhighlightedStates;
+    UITableViewCellLayoutManager* _layoutManager;
+
+    struct {
+        BOOL tableViewStyleIsGrouped : 1;
+        BOOL usingDefaultSelectedBackgroundView : 1;
+        BOOL usingDefaultAccessoryView : 1;
+        BOOL highlighted : 1;
+    } _tableCellFlags;
+}
+@synthesize accessoryType=_accessoryType; 
+@synthesize accessoryView=_accessoryView;
+@synthesize backgroundView=_backgroundView;
+@synthesize contentView=_contentView;
+@synthesize detailTextLabel = _detailTextLabel;
+@synthesize editing = _editing;
+@synthesize editingAccessoryType=_editingAccessoryType;
+@synthesize imageView=_imageView;
+@synthesize indentationLevel=_indentationLevel;
+@synthesize indentationWidth=_indentationWidth;
+@synthesize reuseIdentifier=_reuseIdentifier;
+@synthesize sectionLocation=_sectionLocation;
+@synthesize selected=_selected;
+@synthesize selectedBackgroundView=_selectedBackgroundView;
+@synthesize selectionStyle=_selectionStyle;
+@synthesize showingDeleteConfirmation = _showingDeleteConfirmation;
+@synthesize textLabel=_textLabel;
+
+static UIImage* accessoryCheckmarkImage;
+static UIImage* accessoryCheckmarkImageHighlighted;
+static UIImage* accessoryDisclosureIndicatorImage;
+static UIImage* accessoryDisclosureIndicatorImageHighlighted;
+
+static Class kUIButtonClass;
+
++ (void) initialize
 {
-    if ((self=[super initWithFrame:frame])) {
-        _indentationWidth = 10;
-        _style = UITableViewCellStyleDefault;
-        _selectionStyle = UITableViewCellSelectionStyleBlue;
-
-        _seperatorView = [[UITableViewCellSeparator alloc] init];
-        [self addSubview:_seperatorView];
-        
-        self.accessoryType = UITableViewCellAccessoryNone;
-        self.editingAccessoryType = UITableViewCellAccessoryNone;
-    }
-    return self;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSBundle* bundle = [NSBundle bundleForClass:[self class]];
+        accessoryCheckmarkImage = [[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UITableViewCell> accessoryCheckmark"]] retain];
+        accessoryCheckmarkImageHighlighted = [[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UITableViewCell> accessoryCheckmarkHighlighted"]] retain];
+        accessoryDisclosureIndicatorImage = [[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UITableViewCell> accessoryDisclosureIndicator"]] retain];
+        accessoryDisclosureIndicatorImageHighlighted = [[UIImage imageWithContentsOfFile:[bundle pathForImageResource:@"<UITableViewCell> accessoryDisclosureIndicatorHighlighted"]] retain];
+        kUIButtonClass = [UIButton class];
+    });
 }
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+- (void) dealloc
 {
-    if ((self=[self initWithFrame:CGRectMake(0,0,320,_UITableViewDefaultRowHeight)])) {
-        _style = style;
-        _reuseIdentifier = [reuseIdentifier copy];
+    if (_unhighlightedStates) {
+        CFRelease(_unhighlightedStates);
     }
-    return self;
-}
-
-- (void)dealloc
-{
-    [_seperatorView release];
-    [_contentView release];
+	[_separatorView release];
+	[_contentView release];
     [_accessoryView release];
-    [_textLabel release];
+	[_textLabel release];
     [_detailTextLabel release];
-    [_imageView release];
-    [_backgroundView release];
-    [_selectedBackgroundView release];
-    [_reuseIdentifier release];
-    [super dealloc];
+	[_imageView release];
+	[_backgroundView release];
+	[_selectedBackgroundView release];
+	[_reuseIdentifier release];
+	[_layoutManager release];
+    
+	[super dealloc];
 }
 
-- (void)layoutSubviews
+- (void) _commonInitForUITableViewCell
 {
-    [super layoutSubviews];
-
-    const CGRect bounds = self.bounds;
-    BOOL showingSeperator = !_seperatorView.hidden;
-    
-    CGRect contentFrame = CGRectMake(0,0,bounds.size.width,bounds.size.height-(showingSeperator? 1 : 0));
-    CGRect accessoryRect = CGRectMake(bounds.size.width,0,0,0);
-
-    if(_accessoryView) {
-        accessoryRect.size = [_accessoryView sizeThatFits: bounds.size];
-        accessoryRect.origin.x = bounds.size.width - accessoryRect.size.width;
-        accessoryRect.origin.y = round(0.5*(bounds.size.height - accessoryRect.size.height));
-        _accessoryView.frame = accessoryRect;
-        [self addSubview: _accessoryView];
-        contentFrame.size.width = accessoryRect.origin.x - 1;
-    }
-    
-    _backgroundView.frame = contentFrame;
-    _selectedBackgroundView.frame = contentFrame;
-    _contentView.frame = contentFrame;
-    
-    [self sendSubviewToBack:_selectedBackgroundView];
-    [self sendSubviewToBack:_backgroundView];
-    [self bringSubviewToFront:_contentView];
-    [self bringSubviewToFront:_accessoryView];
-    
-    if (showingSeperator) {
-        _seperatorView.frame = CGRectMake(0,bounds.size.height-1,bounds.size.width,1);
-        [self bringSubviewToFront:_seperatorView];
-    }
-    
-    if (_style == UITableViewCellStyleDefault) {
-        const CGFloat padding = 5;
-
-        BOOL showImage = (_imageView.image != nil);
-        _imageView.frame = CGRectMake(padding,0,(showImage? 30:0),contentFrame.size.height);
-        
-        CGRect textRect;
-        textRect.origin = CGPointMake(padding+_imageView.frame.size.width+padding,0);
-        textRect.size = CGSizeMake(MAX(0,contentFrame.size.width-textRect.origin.x-padding),contentFrame.size.height);
-        _textLabel.frame = textRect;
-    }
+    _indentationWidth = 10;
+    _style = UITableViewCellStyleDefault;
+    _accessoryType = UITableViewCellAccessoryNone;
+    _editingAccessoryType = UITableViewCellAccessoryNone;
+    _selectionStyle = UITableViewCellSelectionStyleBlue;
 }
 
-- (UIView *)contentView
+- (void) _configureContentViewAndLayoutManager
 {
+    _layoutManager = [[UITableViewCellLayoutManager layoutManagerForTableViewCellStyle:_style] retain];
     if (!_contentView) {
-        _contentView = [[UIView alloc] init];
-        [self addSubview:_contentView];
-        [self layoutIfNeeded];
+        _contentView = [[UIView alloc] initWithFrame:[_layoutManager contentViewRectForCell:self]];
     }
-    
-    return _contentView;
+    [self addSubview:_contentView];
 }
 
-- (UIImageView *)imageView
+- (id) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)reuseIdentifier
 {
-    if (!_imageView) {
-        _imageView = [[UIImageView alloc] init];
-        _imageView.contentMode = UIViewContentModeCenter;
-        [self.contentView addSubview:_imageView];
-        [self layoutIfNeeded];
-    }
-    
-    return _imageView;
+	if (nil != (self = [super initWithFrame:CGRectMake(0,0,320,_UITableViewDefaultRowHeight)])) {
+        [self _commonInitForUITableViewCell];
+		_style = style;
+		_reuseIdentifier = [reuseIdentifier copy];
+        [self _configureContentViewAndLayoutManager];
+	}
+	return self;
 }
 
-- (UILabel *)textLabel
+- (id) initWithFrame:(CGRect)frame
+{
+	if (nil != (self = [super initWithFrame:frame])) {
+        [self _commonInitForUITableViewCell];
+        [self _configureContentViewAndLayoutManager];
+        
+	}
+	return self;
+}
+
+- (id) initWithCoder:(NSCoder*)coder
+{
+    if (nil != (self = [super initWithCoder:coder])) {
+        [self _commonInitForUITableViewCell];
+        _reuseIdentifier = [[coder decodeObjectForKey:kUIReuseIdentifierKey] retain];
+        _contentView = [[coder decodeObjectForKey:kUIContentViewKey] retain];
+        _detailTextLabel = [[coder decodeObjectForKey:kUIDetailTextLabelKey] retain];
+        _imageView = [[coder decodeObjectForKey:kUIImageViewKey] retain];
+        [self _configureContentViewAndLayoutManager];
+    }
+    return self;
+}
+
+#pragma mark Reusing Cells
+
+- (void) prepareForReuse
+{
+}
+
+
+#pragma mark Managing Text as Cell Content
+
+- (UILabel*) textLabel
 {
     if (!_textLabel) {
         _textLabel = [[UILabel alloc] init];
@@ -160,84 +200,418 @@ extern CGFloat _UITableViewDefaultRowHeight;
         _textLabel.highlightedTextColor = [UIColor whiteColor];
         _textLabel.font = [UIFont boldSystemFontOfSize:17];
         [self.contentView addSubview:_textLabel];
-        [self layoutIfNeeded];
     }
-    
     return _textLabel;
 }
 
-- (void)_setSeparatorStyle:(UITableViewCellSeparatorStyle)theStyle color:(UIColor *)theColor
+- (UILabel*) detailTextLabel
 {
-    [_seperatorView setSeparatorStyle:theStyle color:theColor];
+    if (!_detailTextLabel && _style == UITableViewCellStyleSubtitle) {
+        _detailTextLabel = [[UILabel alloc] init];
+        _detailTextLabel.backgroundColor = [UIColor clearColor];
+        _detailTextLabel.textColor = [UIColor grayColor];
+        _detailTextLabel.highlightedTextColor = [UIColor whiteColor];
+        _detailTextLabel.font = [UIFont boldSystemFontOfSize:14];
+        [self.contentView addSubview:_detailTextLabel];
+    }
+    return _detailTextLabel;
 }
 
-- (void)_setHighlighted:(BOOL)highlighted forViews:(id)subviews
+
+#pragma mark Managing Images as Cell Content
+
+- (UIImageView*) imageView
 {
-    for (id view in subviews) {
-        if ([view respondsToSelector:@selector(setHighlighted:)]) {
-            [view setHighlighted:highlighted];
+    if (!_imageView) {
+        _imageView = [[UIImageView alloc] init];
+        _imageView.contentMode = UIViewContentModeCenter;
+        [self.contentView addSubview:_imageView];
+    }
+    return _imageView;
+}
+
+
+#pragma mark Managing Accessory Views
+
+- (void) setAccessoryType:(UITableViewCellAccessoryType)accessoryType
+{
+    if (_accessoryType != accessoryType) {
+        [_accessoryView removeFromSuperview];
+        [_accessoryView release], _accessoryView = nil;
+        _accessoryType = accessoryType;
+        [self _setupDefaultAccessoryView];
+    }
+}
+
+- (UIView*) accessoryView
+{
+    if (_tableCellFlags.usingDefaultAccessoryView) {
+        return nil;
+    }
+    return _accessoryView;
+}
+
+- (void) setAccessoryView:(UIView*)accessoryView 
+{
+	if (_accessoryView != accessoryView) {
+        [_accessoryView removeFromSuperview];
+        [_accessoryView release], _accessoryView = nil;
+        if (accessoryView) {
+            _tableCellFlags.usingDefaultAccessoryView = NO;
+            _accessoryView = [accessoryView retain];
+            _accessoryView.frame = [_layoutManager accessoryViewRectForCell:self];
+            [self addSubview:_accessoryView];
+        } else {
+            [self _setupDefaultAccessoryView];
         }
-        [self _setHighlighted:highlighted forViews:[view subviews]];
+        [self setNeedsLayout];
+	}
+}
+
+
+#pragma mark Accessing Views of the Cell Object
+
+- (UIView*) contentView
+{
+    if (!_contentView) {
+        _contentView = [[UIView alloc] init];
+		_contentView.backgroundColor = [UIColor clearColor];
+        _contentView.frame = [_layoutManager contentViewRectForCell:self];
+        [self addSubview:_contentView];
+    }
+    return _contentView;
+}
+
+- (UIView*) backgroundView
+{
+    if (!_backgroundView && _tableCellFlags.tableViewStyleIsGrouped) {
+        _backgroundView = [[UITableViewCellBackgroundView alloc] init];
+        [self insertSubview:_backgroundView atIndex:0];
+    }
+    return _backgroundView;
+}
+
+- (void) setBackgroundView:(UIView*)backgroundView
+{
+	if (backgroundView != _backgroundView) {
+		[_backgroundView removeFromSuperview];
+		[_backgroundView release];
+        if (backgroundView) {
+            _backgroundView = [backgroundView retain];
+            [self insertSubview:_backgroundView atIndex:0];
+        }
+	}
+}
+
+- (UIView*) selectedBackgroundView
+{
+    if (_tableCellFlags.usingDefaultSelectedBackgroundView) {
+        return nil;
+    }
+    return _selectedBackgroundView;
+}
+
+- (void) setSelectedBackgroundView:(UIView*)selectedBackgroundView
+{
+	if (selectedBackgroundView != _selectedBackgroundView) {
+		[_selectedBackgroundView removeFromSuperview];
+		[_selectedBackgroundView release];
+
+        _tableCellFlags.usingDefaultSelectedBackgroundView = NO;
+        if (selectedBackgroundView) {
+            _selectedBackgroundView = [selectedBackgroundView retain];
+            if (self.isHighlighted) {
+                if (_backgroundView) {
+                    [self insertSubview:_selectedBackgroundView aboveSubview:_backgroundView];
+                } else {
+                    [self insertSubview:_selectedBackgroundView atIndex:0];
+                }
+                [self setNeedsLayout];
+            }
+        }
+	}
+}
+
+#pragma mark Managing Cell Selection and Highlighting
+
+- (void) setSelectionStyle:(UITableViewCellSelectionStyle)selectionStyle
+{
+    if (_selectionStyle != selectionStyle) {
+        _selectionStyle = selectionStyle;
+        if (_selectedBackgroundView && _tableCellFlags.usingDefaultSelectedBackgroundView) {
+            [(UITableViewCellSelectedBackgroundView*)_selectedBackgroundView setSelectionStyle:selectionStyle];
+        }
     }
 }
 
-- (void)_updateSelectionState
+- (void) setSelected:(BOOL)selected
 {
-    BOOL shouldHighlight = (_highlighted || _selected);
-    _selectedBackgroundView.hidden = !shouldHighlight;
-    [self _setHighlighted:shouldHighlight forViews:[self subviews]];
+	[self setSelected:selected animated:NO];
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+- (void) setSelected:(BOOL)selected animated:(BOOL)animated
 {
-    if (selected != _selected && _selectionStyle != UITableViewCellSelectionStyleNone) {
-        _selected = selected;
-        [self _updateSelectionState];
+	if (selected != _selected) {
+		_selected = selected;
+        [self showSelectedBackgroundView:selected animated:animated];
+	}
+}
+
+- (BOOL) isHighlighted
+{
+    return _tableCellFlags.highlighted;
+}
+
+- (void) setHighlighted:(BOOL)highlighted
+{
+	[self setHighlighted:highlighted animated:NO];
+}
+
+- (void) setHighlighted:(BOOL)highlighted animated:(BOOL)animated
+{
+    [self showSelectedBackgroundView:highlighted animated:animated];
+}
+
+
+#pragma mark Overridden
+
+- (UIColor*) backgroundColor
+{
+    return self.backgroundView.backgroundColor;
+}
+
+- (void) setBackgroundColor:(UIColor*)backgroundColor
+{
+    self.backgroundView.backgroundColor = backgroundColor;
+}
+
+- (void) layoutSubviews
+{
+	[super layoutSubviews];
+        
+	if (_accessoryView) {
+        _accessoryView.frame = [_layoutManager accessoryViewRectForCell:self];
+	}
+	if (_backgroundView) {
+        _backgroundView.frame = [_layoutManager backgroundViewRectForCell:self];
+	}
+    if (_selectedBackgroundView) {
+        _selectedBackgroundView.frame = [_layoutManager backgroundViewRectForCell:self];
+    }
+    if (_contentView) {
+        _contentView.frame = [_layoutManager contentViewRectForCell:self];
+	}
+	if (_separatorView) {
+		_separatorView.frame = [_layoutManager seperatorViewRectForCell:self];
+	}
+    if (_imageView) {
+        _imageView.frame = [_layoutManager imageViewRectForCell:self];
+    }
+    if (_textLabel) {
+        _textLabel.frame = [_layoutManager textLabelRectForCell:self];
+    }
+    if (_detailTextLabel) {
+        _detailTextLabel.frame = [_layoutManager detailTextLabelRectForCell:self];
+	}
+}
+
+
+#pragma mark Internals
+
+- (UITableViewCellLayoutManager*) layoutManager
+{
+    return _layoutManager;
+}
+
+- (void) _setSeparatorStyle:(UITableViewCellSeparatorStyle)style color:(UIColor*)color
+{
+    switch (style) {
+        case UITableViewCellSeparatorStyleNone: {
+            if (_separatorView) {
+                [_separatorView removeFromSuperview];
+                [_separatorView release], _separatorView = nil;
+                [self setNeedsLayout];
+            }
+            break;
+        }
+            
+        case UITableViewCellSeparatorStyleSingleLine:
+        case UITableViewCellSeparatorStyleSingleLineEtched: {
+            if (!_separatorView) {
+                _separatorView = [[UITableViewCellSeparator alloc] init];
+                _separatorView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+                [self addSubview:_separatorView];
+                [self setNeedsLayout];
+            }
+            _separatorView.color = color;
+            _separatorView.style = style;
+            break;
+        }
     }
 }
 
-- (void)setSelected:(BOOL)selected
+- (void) _setTableViewStyle:(NSUInteger)tableViewStyle
 {
-    [self setSelected:selected animated:NO];
-}
-
-- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
-{
-    if (_highlighted != highlighted && _selectionStyle != UITableViewCellSelectionStyleNone) {
-        _highlighted = highlighted;
-        [self _updateSelectionState];
+    if (_tableCellFlags.tableViewStyleIsGrouped != tableViewStyle) {
+        _tableCellFlags.tableViewStyleIsGrouped = tableViewStyle;
+        [self setNeedsLayout];
     }
 }
 
-- (void)setHighlighted:(BOOL)highlighted
+- (void) _saveOpaqueViewState:(UIView*)view
 {
-    [self setHighlighted:highlighted animated:NO];
-}
-
-- (void)setBackgroundView:(UIView *)theBackgroundView
-{
-    if (theBackgroundView != _backgroundView) {
-        [_backgroundView removeFromSuperview];
-        [_backgroundView release];
-        _backgroundView = [theBackgroundView retain];
-        [self addSubview:_backgroundView];
-        self.backgroundColor = [UIColor clearColor];
+    if (![view isKindOfClass:[UITableViewCell class]]) {
+        UITableViewCellUnhighlightedState* state = [[UITableViewCellUnhighlightedState alloc] init];
+        state.highlighted = [view respondsToSelector:@selector(isHighlighted)] ? [(id)view isHighlighted] : NO;
+        state.opaque = [view isOpaque];
+        state.backgroundColor = view.backgroundColor;
+        CFDictionarySetValue(_unhighlightedStates, view, state);
+        [state release];
+    }
+    for (UIView* subview in view.subviews) {
+        [self _saveOpaqueViewState:subview];
     }
 }
 
-- (void)setSelectedBackgroundView:(UIView *)theSelectedBackgroundView
+- (void) _clearOpaqueViewState:(UIView*)view
 {
-    if (theSelectedBackgroundView != _selectedBackgroundView) {
-        [_selectedBackgroundView removeFromSuperview];
-        [_selectedBackgroundView release];
-        _selectedBackgroundView = [theSelectedBackgroundView retain];
-        _selectedBackgroundView.hidden = !_selected;
-        [self addSubview:_selectedBackgroundView];
+    UITableViewCellUnhighlightedState* state;
+    if (CFDictionaryGetValueIfPresent(_unhighlightedStates, view, (const void**)&state)) {
+        if ([view respondsToSelector:@selector(setHighlighted:)]) {
+            [(id)view setHighlighted:state.highlighted];
+        }
+        view.opaque = state.opaque;
+        view.backgroundColor = state.backgroundColor;
+    }
+    for (UIView* subview in view.subviews) {
+        [self _clearOpaqueViewState:subview];
     }
 }
 
-- (void)prepareForReuse
+- (void) _setOpaque:(BOOL)opaque forSubview:(UIView*)view
 {
+    if (view != _selectedBackgroundView) {
+        view.opaque = opaque;
+        view.backgroundColor = opaque ? [UIColor whiteColor] : [UIColor clearColor];
+    }
+    for (UIView* subview in view.subviews) {
+        [self _setOpaque:opaque forSubview:subview];
+    }
+}
+
+- (void) _updateHighlightColorsForView:(UIView*)view highlighted:(BOOL)highlighted
+{
+    if (([view class] != kUIButtonClass)
+     && (![view isKindOfClass:[UITableViewCell class]]) 
+     && ([view respondsToSelector:@selector(setHighlighted:)] && [view respondsToSelector:@selector(isHighlighted)])
+    ) {
+        [(id)view setHighlighted:highlighted];
+    }
+    for (UIView* subview in view.subviews) {
+        [self _updateHighlightColorsForView:subview highlighted:highlighted];
+    }
+}
+
+- (void) _updateHighlightColors
+{
+    [self _updateHighlightColorsForView:self highlighted:_tableCellFlags.highlighted];
+}
+
+- (void) showSelectedBackgroundView:(BOOL)selected animated:(BOOL)animated
+{
+    if (_selectionStyle != UITableViewCellSelectionStyleNone && _tableCellFlags.highlighted != selected) {
+        _tableCellFlags.highlighted = selected;
+
+        if (selected) {
+            if (!_selectedBackgroundView) {
+                [self _setupDefaultSelectedBackgroundView];
+            }
+            if (_backgroundView) {
+                [self insertSubview:_selectedBackgroundView aboveSubview:_backgroundView];
+            } else {
+                [self insertSubview:_selectedBackgroundView atIndex:0];
+            }
+        
+            assert(!_unhighlightedStates);
+            _unhighlightedStates = CFDictionaryCreateMutable(NULL, 0, NULL, &kCFTypeDictionaryValueCallBacks);
+            [self _saveOpaqueViewState:self];
+
+            [self _setOpaque:NO forSubview:self];
+
+            [self _updateHighlightColors];
+        } else {
+            [_selectedBackgroundView removeFromSuperview];
+            if (_tableCellFlags.usingDefaultSelectedBackgroundView) {
+                [_selectedBackgroundView release], _selectedBackgroundView = nil;
+                _tableCellFlags.usingDefaultSelectedBackgroundView = NO;
+            }
+            
+            [self _updateHighlightColors];
+            
+            [self _setOpaque:YES forSubview:self];
+
+            assert(_unhighlightedStates);
+            [self _clearOpaqueViewState:self];
+            CFRelease(_unhighlightedStates), _unhighlightedStates = nil;
+        }
+        
+        [self setNeedsLayout];
+    }
+}
+
+- (void) _setupDefaultSelectedBackgroundView
+{
+    assert(!_selectedBackgroundView);
+    assert(!_tableCellFlags.usingDefaultSelectedBackgroundView);
+    _tableCellFlags.usingDefaultSelectedBackgroundView = YES;
+    UITableViewCellSelectedBackgroundView* selectedBackgroundView = [[UITableViewCellSelectedBackgroundView alloc] initWithFrame:self.bounds];
+    selectedBackgroundView.selectionStyle = self.selectionStyle;
+    _selectedBackgroundView = selectedBackgroundView;
+}
+
+- (void) _setupDefaultAccessoryView
+{
+    assert(!_accessoryView);
+    switch (_accessoryType) {
+        case UITableViewCellAccessoryNone: {
+            break;
+        }
+            
+        case UITableViewCellAccessoryCheckmark: {
+            UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.userInteractionEnabled = NO;
+            [button setImage:accessoryCheckmarkImage forState:UIControlStateNormal];
+            [button setImage:accessoryCheckmarkImageHighlighted forState:UIControlStateHighlighted];
+            _accessoryView = [button retain];
+            break;
+        }
+
+        case UITableViewCellAccessoryDetailDisclosureButton: {
+            UIButton* button = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+            [button addTarget:self action:@selector(_detailDisclosurePressed:) forControlEvents:UIControlEventTouchUpInside];
+            _accessoryView = [button retain];
+            break;
+        }
+
+        case UITableViewCellAccessoryDisclosureIndicator: {
+            UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.userInteractionEnabled = NO;
+            [button setImage:accessoryDisclosureIndicatorImage forState:UIControlStateNormal];
+            [button setImage:accessoryDisclosureIndicatorImageHighlighted forState:UIControlStateHighlighted];
+            _accessoryView = [button retain];
+            break;
+        }
+    }
+    _tableCellFlags.usingDefaultAccessoryView = YES;
+    if (_accessoryView) {
+        [self addSubview:_accessoryView];
+        [self setNeedsLayout];
+    }
+}
+
+- (void) _detailDisclosurePressed:(id)sender
+{   
+    [(UITableView*)[self superview] _accessoryButtonTappedForTableViewCell:self];
 }
 
 @end

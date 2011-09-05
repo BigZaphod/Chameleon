@@ -37,11 +37,8 @@
 
 @protocol UIPickerViewDataSource, UIPickerViewDelegate;
 
-@interface UIPickerView : UIView {
-    __unsafe_unretained id<UIPickerViewDataSource> _dataSource;
-    __unsafe_unretained id<UIPickerViewDelegate>   _delegate;
-    BOOL _showsSelectionIndicator;
-}
+
+@interface UIPickerView : UIView 
 
 @property (nonatomic, assign) id<UIPickerViewDataSource> dataSource;
 @property (nonatomic, assign) id<UIPickerViewDelegate>   delegate;

@@ -30,7 +30,7 @@
 #import "UIPinchGestureRecognizer.h"
 #import "UIGestureRecognizerSubclass.h"
 
-@implementation UIPinchGestureRecognizer
+@implementation UIPinchGestureRecognizer 
 @synthesize scale=_scale;
 
 - (id)initWithTarget:(id)target action:(SEL)action

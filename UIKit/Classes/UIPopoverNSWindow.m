@@ -47,4 +47,10 @@
     [_popoverController _closePopoverWindowIfPossible];
 }
 
+- (void)resignKeyWindow
+{
+    [super resignKeyWindow];
+    [_popoverController _closePopoverWindowIfPossible];
+}
+
 @end

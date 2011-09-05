@@ -30,6 +30,8 @@
 #import "UIPopoverView.h"
 #import "UIImageView.h"
 #import "UIImage+UIPrivate.h"
+#import "UIPopoverController.h"
+#import "UIView+UIPrivate.h"
 #import <QuartzCore/QuartzCore.h>
 
 typedef struct {
@@ -95,46 +97,26 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
     return sqrtf((a*a) + (b*b));
 }
 
-@implementation UIPopoverView
+@implementation UIPopoverView {
+    UIImageView *_backgroundView;
+    UIImageView *_arrowView;
+    UIView *_contentView;
+    UIView *_contentContainerView;
+	UIPopoverController *_popoverController;
+}
+
 @synthesize contentView=_contentView;
 
-+ (UIEdgeInsets)insetForArrows
-{
-    return UIEdgeInsetsMake(17,12,8,12);
-}
-
-+ (CGRect)backgroundRectForBounds:(CGRect)bounds
-{
-    return UIEdgeInsetsInsetRect(bounds, [self insetForArrows]);
-}
-
-+ (CGRect)contentRectForBounds:(CGRect)bounds withNavigationBar:(BOOL)hasNavBar
-{
-    const CGFloat navBarOffset = hasNavBar? 32 : 0;
-    return UIEdgeInsetsInsetRect(CGRectMake(14,9+navBarOffset,bounds.size.width-28,bounds.size.height-28-navBarOffset), [self insetForArrows]);
-}
-
-+ (CGSize)frameSizeForContentSize:(CGSize)contentSize withNavigationBar:(BOOL)hasNavBar
-{
-    UIEdgeInsets insets = [self insetForArrows];
-    CGSize frameSize;
-    
-    frameSize.width = contentSize.width + 28 + insets.left + insets.right;
-    frameSize.height = contentSize.height + 28 + (hasNavBar? 32 : 0) + insets.top + insets.bottom;
-    
-    return frameSize;
-}
-
-
-- (id)initWithContentView:(UIView *)aView size:(CGSize)aSize
+- (id)initWithContentView:(UIView *)aView size:(CGSize)aSize popoverController:(UIPopoverController *)controller
 {	
     if ((self=[super initWithFrame:CGRectMake(0,0,320,480)])) {
         _contentView = [aView retain];
+		
+		_popoverController = controller;
         
-        UIImage *backgroundImage = [UIImage _popoverBackgroundImage];
-        _backgroundView = [[UIImageView alloc] initWithImage:backgroundImage];
+        _backgroundView = [[UIImageView alloc] initWithImage:[[_popoverController class] backgroundImage]];
         
-        _arrowView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        _arrowView = [(UIImageView *)[UIImageView alloc] initWithFrame:CGRectZero];
         
         _contentContainerView = [[UIView alloc] init];
         _contentContainerView.layer.cornerRadius = 3;
@@ -164,8 +146,8 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
     [super layoutSubviews];
 
     const CGRect bounds = self.bounds;	
-    _backgroundView.frame = [isa backgroundRectForBounds:bounds];
-    _contentContainerView.frame = [isa contentRectForBounds:bounds withNavigationBar:NO];
+    _backgroundView.frame = [[_popoverController class] backgroundRectForBounds:bounds];
+    _contentContainerView.frame = [[_popoverController class] contentRectForBounds:bounds withNavigationBar:NO];
     _contentView.frame = _contentContainerView.bounds;
 }
 
@@ -253,19 +235,19 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
     
     if (closestEdge == CGRectMaxXEdge) {
         // right side
-        _arrowView.image = [UIImage _rightPopoverArrowImage];
+        _arrowView.image = [[_popoverController class] rightArrowImage];
         clampVertical = YES;
     } else if (closestEdge == CGRectMaxYEdge) {
         // bottom side
-        _arrowView.image = [UIImage _bottomPopoverArrowImage];
+        _arrowView.image = [[_popoverController class] bottomArrowImage];
         clampVertical = NO;
     } else if (closestEdge == CGRectMinYEdge) {
         // top side
-        _arrowView.image = [UIImage _topPopoverArrowImage];
+        _arrowView.image = [[_popoverController class] topArrowImage];
         clampVertical = NO;
     } else {
         // left side
-        _arrowView.image = [UIImage _leftPopoverArrowImage];
+        _arrowView.image = [[_popoverController class] leftArrowImage];
         clampVertical = YES;
     }
 
@@ -300,7 +282,8 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
         [_contentView removeFromSuperview];
         [_contentView release];
         _contentView = [aView retain];
-        [self addSubview:_contentView];
+        [_contentContainerView addSubview:_contentView];
+        [self setNeedsLayout];
     }
 }
 
@@ -312,8 +295,8 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 - (void)setContentSize:(CGSize)aSize animated:(BOOL)animated
 {
     CGRect frame = self.frame;
-    frame.size = [isa frameSizeForContentSize:aSize withNavigationBar:NO];
-
+    frame.size = [[_popoverController class] frameSizeForContentSize:aSize withNavigationBar:NO];
+    
     [UIView animateWithDuration:animated? 0.2 : 0
                      animations:^(void) {
                          self.frame = frame;

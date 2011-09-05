@@ -29,7 +29,6 @@
 
 #import "UIResponder.h"
 #import "UIWindow+UIPrivate.h"
-#import "UIInputController.h"
 
 @implementation UIResponder
 
@@ -66,29 +65,16 @@
         UIResponder *firstResponder = [window _firstResponder];
         
         if (window && [self canBecomeFirstResponder]) {
-            BOOL didResign = NO;
+            BOOL willBecomeFirstResponder = NO;
             
             if (firstResponder && [firstResponder canResignFirstResponder]) {
-                didResign = [firstResponder resignFirstResponder];
+                willBecomeFirstResponder = [firstResponder resignFirstResponder];
             } else {
-                didResign = YES;
+                willBecomeFirstResponder = YES;
             }
             
-            if (didResign) {
-                [window makeKeyWindow];		// not sure about this :/
+            if (willBecomeFirstResponder) {
                 [window _setFirstResponder:self];
-                
-                // I have no idea how iOS manages this stuff, but here I'm modeling UIMenuController since it also uses the first
-                // responder to do its work. My thinking is that if there were an on-screen keyboard, something here could detect
-                // if self conforms to UITextInputTraits and UIKeyInput and/or UITextInput and then build/fetch the correct keyboard
-                // and assign that to the inputView property which would seperate the keyboard and inputs themselves from the stuff
-                // that actually displays them on screen. Of course on the Mac we don't need an on-screen keyboard, but there's
-                // possibly an argument to be made for supporting custom inputViews anyway.
-                UIInputController *controller = [UIInputController sharedInputController];
-                controller.inputAccessoryView = self.inputAccessoryView;
-                controller.inputView = self.inputView;
-                [controller setInputVisible:YES animated:YES];
-                
                 return YES;
             }
         }
@@ -106,7 +92,6 @@
 {
     if ([self isFirstResponder]) {
         [[self _responderWindow] _setFirstResponder:nil];
-        [[UIInputController sharedInputController] setInputVisible:NO animated:YES];
     }
     
     return YES;

@@ -87,24 +87,15 @@ static CGPoint ScrollDeltaFromNSEvent(NSEvent *theNSEvent)
     
     if (isContinious == 0) {
         CGEventSourceRef source = CGEventCreateSourceFromEvent(cgEvent);
-        double pixelsPerLine;
-        
-        if (source) {
-           pixelsPerLine = CGEventSourceGetPixelsPerLine(source);
-            CFRelease(source);
-        } else {
-            // docs often say things like, "the default is near 10" so it seems reasonable that if the source doesn't work
-            // for some reason to fetch the pixels per line, then 10 is probably a decent fallback value. :)
-            pixelsPerLine = 10;
-        }
-
+        const double pixelsPerLine = CGEventSourceGetPixelsPerLine(source);
         dx = CGEventGetDoubleValueField(cgEvent, kCGScrollWheelEventFixedPtDeltaAxis2) * pixelsPerLine;
         dy = CGEventGetDoubleValueField(cgEvent, kCGScrollWheelEventFixedPtDeltaAxis1) * pixelsPerLine;
+		CFRelease(source);
     } else {
         dx = CGEventGetIntegerValueField(cgEvent, kCGScrollWheelEventPointDeltaAxis2);
         dy = CGEventGetIntegerValueField(cgEvent, kCGScrollWheelEventPointDeltaAxis1);
     }
-
+    
     return CGPointMake(-dx, -dy);
 }
 
@@ -123,9 +114,21 @@ static BOOL TouchIsActive(UITouch *touch)
     return TouchIsActiveGesture(touch) || TouchIsActiveNonGesture(touch);
 }
 
-@implementation UIApplication
-@synthesize keyWindow=_keyWindow, delegate=_delegate, idleTimerDisabled=_idleTimerDisabled, applicationSupportsShakeToEdit=_applicationSupportsShakeToEdit;
-@synthesize applicationIconBadgeNumber = _applicationIconBadgeNumber, applicationState=_applicationState;
+@implementation UIApplication {
+    UIEvent *_currentEvent;
+    NSMutableSet *_visibleWindows;
+    BOOL _networkActivityIndicatorVisible;
+    NSUInteger _ignoringInteractionEvents;
+    NSDate *_backgroundTasksExpirationDate;
+    NSMutableArray *_backgroundTasks;
+}
+@synthesize keyWindow = _keyWindow;
+@synthesize delegate = _delegate;
+@synthesize idleTimerDisabled = _idleTimerDisabled;
+@synthesize applicationSupportsShakeToEdit = _applicationSupportsShakeToEdit;
+@synthesize applicationIconBadgeNumber = _applicationIconBadgeNumber;
+@synthesize applicationState = _applicationState;
+
 
 + (void)initialize
 {
@@ -153,8 +156,8 @@ static BOOL TouchIsActive(UITouch *touch)
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillResignActive:) name:NSApplicationWillResignActiveNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationDidBecomeActive:) name:NSApplicationDidBecomeActiveNotification object:nil];
         
-        [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver:self selector:@selector(_applicationWillResignActive:) name:NSWorkspaceScreensDidSleepNotification object:nil];
-        [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver:self selector:@selector(_applicationDidBecomeActive:) name:NSWorkspaceScreensDidWakeNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillResignActive:) name:NSWorkspaceScreensDidSleepNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationDidBecomeActive:) name:NSWorkspaceScreensDidWakeNotification object:nil];
 
         [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver:self selector:@selector(_computerWillSleep:) name:NSWorkspaceWillSleepNotification object:nil];
         [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver:self selector:@selector(_computerDidWakeUp:) name:NSWorkspaceDidWakeNotification object:nil];
@@ -240,6 +243,10 @@ static BOOL TouchIsActive(UITouch *touch)
 }
 
 - (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle animated:(BOOL)animated
+{
+}
+
+- (void)setStatusBarHidden:(BOOL)hidden withAnimation:(UIStatusBarAnimation)animation
 {
 }
 
@@ -528,7 +535,7 @@ static BOOL TouchIsActive(UITouch *touch)
         // is the first UIResponder (including the UIControl itself) that responds to the action. It starts with the UIControl (sender) and not with
         // whatever UIResponder may have been set with becomeFirstResponder.
         
-        id responder = sender;
+        id responder = [_keyWindow _firstResponder] ?: sender;
         while (responder) {
             if ([responder respondsToSelector:action]) {
                 target = responder;
@@ -599,13 +606,14 @@ static BOOL TouchIsActive(UITouch *touch)
 
 - (BOOL)_sendGlobalKeyboardNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
 {
-    if (![self isIgnoringInteractionEvents]) {
-        UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
-        
-        if (key.type == UIKeyTypeEnter || (key.commandKeyPressed && key.type == UIKeyTypeReturn)) {
-            if ([self _firstResponderCanPerformAction:@selector(commit:) withSender:key fromScreen:theScreen]) {
-                return [self _sendActionToFirstResponder:@selector(commit:) withSender:key fromScreen:theScreen];
-            }
+    if ([self isIgnoringInteractionEvents]) {
+        return YES;
+    }
+    
+    UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
+    if (key.type == UIKeyTypeEnter || (key.commandKeyPressed && key.type == UIKeyTypeReturn)) {
+        if ([self _firstResponderCanPerformAction:@selector(commit:) withSender:key fromScreen:theScreen]) {
+            return [self _sendActionToFirstResponder:@selector(commit:) withSender:key fromScreen:theScreen];
         }
     }
     
@@ -614,18 +622,19 @@ static BOOL TouchIsActive(UITouch *touch)
 
 - (BOOL)_sendKeyboardNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
 {
-    if (![self isIgnoringInteractionEvents]) {
-        if (![self _sendGlobalKeyboardNSEvent:theNSEvent fromScreen:theScreen]) {
-            UIResponder *firstResponder = [self _firstResponderForScreen:theScreen];
+    if ([self isIgnoringInteractionEvents]) {
+        return YES;
+    }
+
+    if (![self _sendGlobalKeyboardNSEvent:theNSEvent fromScreen:theScreen]) {
+        UIResponder *firstResponder = [self _firstResponderForScreen:theScreen];
+        
+        if (firstResponder) {
+            UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
+            UIEvent *event = [[[UIEvent alloc] initWithEventType:UIEventTypeKeyPress] autorelease];
+            [event _setTimestamp:[theNSEvent timestamp]];
             
-            if (firstResponder) {
-                UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
-                UIEvent *event = [[[UIEvent alloc] initWithEventType:UIEventTypeKeyPress] autorelease];
-                [event _setTimestamp:[theNSEvent timestamp]];
-                
-                [firstResponder keyPressed:key withEvent:event];
-                return ![event _isUnhandledKeyPressEvent];
-            }
+            return [firstResponder keyPressed:key withEvent:event];
         }
     }
     
@@ -692,7 +701,7 @@ static BOOL TouchIsActive(UITouch *touch)
                 [touch _updateGesture:_UITouchGestureRotation screenLocation:screenLocation delta:CGPointZero rotation:[theNSEvent rotation] magnification:0 timestamp:timestamp];
                 [self sendEvent:_currentEvent];
                 break;
-                
+				
             case NSEventTypeSwipe:
                 [touch _updateGesture:_UITouchGestureSwipe screenLocation:screenLocation delta:ScrollDeltaFromNSEvent(theNSEvent) rotation:0 magnification:0 timestamp:timestamp];
                 [self sendEvent:_currentEvent];
@@ -814,6 +823,21 @@ static BOOL TouchIsActive(UITouch *touch)
         
         [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidBecomeActiveNotification object:self];
     }
+}
+
+- (void)registerForRemoteNotificationTypes:(UIRemoteNotificationType)types
+{
+	
+}
+
+- (void)unregisterForRemoteNotifications
+{
+	
+}
+
+- (UIRemoteNotificationType)enabledRemoteNotificationTypes
+{
+	return UIRemoteNotificationTypeNone;
 }
 
 @end

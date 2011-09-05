@@ -36,6 +36,10 @@
 #import "UIBezierPath.h"
 #import <QuartzCore/QuartzCore.h>
 
+static NSString* const kUIActivityIndicatorViewStyleKey = @"UIActivityIndicatorViewStyle";
+static NSString* const kUIHidesWhenStoppedKey = @"UIHidesWhenStopped";
+static NSString* const kUIAnimatingKey = @"UIAnimating";
+
 static CGSize UIActivityIndicatorViewStyleSize(UIActivityIndicatorViewStyle style)
 {
     if (style == UIActivityIndicatorViewStyleWhiteLarge) {
@@ -82,7 +86,18 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
     return frameImage;
 }
 
-@implementation UIActivityIndicatorView
+@implementation UIActivityIndicatorView {
+    UIActivityIndicatorViewStyle _activityIndicatorViewStyle;
+    BOOL _hidesWhenStopped;
+    BOOL _animating;
+}
+
+- (void) commonInitForUIActivityIndicatorView
+{
+    _animating = NO;
+    self.hidesWhenStopped = YES;
+    self.opaque = NO;
+}
 
 - (id)initWithActivityIndicatorStyle:(UIActivityIndicatorViewStyle)style
 {
@@ -90,10 +105,8 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
     frame.size = UIActivityIndicatorViewStyleSize(style);
     
     if ((self=[super initWithFrame:frame])) {
-        _animating = NO;
+        [self commonInitForUIActivityIndicatorView];
         self.activityIndicatorViewStyle = style;
-        self.hidesWhenStopped = YES;
-        self.opaque = NO;
     }
 
     return self;
@@ -105,6 +118,23 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
         self.frame = frame;
     }
 
+    return self;
+}
+
+- (id) initWithCoder:(NSCoder*)coder
+{
+    if (nil != (self = [super initWithCoder:coder])) {
+        [self commonInitForUIActivityIndicatorView];
+        if ([coder containsValueForKey:kUIActivityIndicatorViewStyleKey]) {
+            self.activityIndicatorViewStyle = [coder decodeIntegerForKey:kUIActivityIndicatorViewStyleKey];
+        }
+        if ([coder containsValueForKey:kUIHidesWhenStoppedKey]) {
+            self.hidesWhenStopped = [coder decodeBoolForKey:kUIHidesWhenStoppedKey];
+        }
+        if ([coder containsValueForKey:kUIAnimatingKey]) {
+            _animating = [coder decodeBoolForKey:kUIAnimatingKey];
+        }
+    }
     return self;
 }
 

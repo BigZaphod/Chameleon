@@ -30,7 +30,8 @@
 #import "UIPageControl.h"
 
 @implementation UIPageControl
-@synthesize currentPage=_currentPage, numberOfPages=_numberOfPages;
+@synthesize currentPage = _currentPage;
+@synthesize numberOfPages = _numberOfPages;
 
 - (void)setCurrentPage:(NSInteger)page
 {

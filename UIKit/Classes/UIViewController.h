@@ -50,27 +50,7 @@ typedef enum {
 
 @class UINavigationItem, UINavigationController, UIBarButtonItem, UISplitViewController;
 
-@interface UIViewController : UIResponder {
-@private
-    UIView *_view;
-    BOOL _wantsFullScreenLayout;
-    NSString *_title;
-    CGSize _contentSizeForViewInPopover;
-    BOOL _modalInPopover;
-    UINavigationItem *_navigationItem;
-    NSArray *_toolbarItems;
-    UIModalPresentationStyle _modalPresentationStyle;
-    BOOL _editing;
-    BOOL _hidesBottomBarWhenPushed;
-    UIViewController *_parentViewController;
-    UIViewController *_modalViewController;
-    UISearchDisplayController *_searchDisplayController;
-    UIModalTransitionStyle _modalTransitionStyle;
-    NSMutableArray *_childViewControllers;
-    
-    UITabBarItem *_tabBarItem;
-    UITabBarController *_tabBarController;
-}
+@interface UIViewController : UIResponder 
 
 - (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)nibBundle;	// won't load a nib no matter what you do!
 
@@ -101,6 +81,7 @@ typedef enum {
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation;
 
 - (void)addChildViewController:(UIViewController *)childController;
+
 - (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers;
 - (void)didMoveToParentViewController:(UIViewController *)parent;
 - (void)removeFromParentViewController;
@@ -124,8 +105,14 @@ typedef enum {
 - (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion;
 - (void)presentViewController:(UIViewController *)viewControllerToPresent animated:(BOOL)flag completion:(void (^)(void))completion;
 
-@property (nonatomic, readonly, copy) NSString *nibName;		// always returns nil
-@property (nonatomic, readonly, retain) NSBundle *nibBundle;	// always returns nil
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration;
+
+- (UIView *)rotatingHeaderView;     
+- (UIView *)rotatingFooterView; 
+
+@property (nonatomic, readonly, copy) NSString *nibName;
+@property (nonatomic, readonly, retain) NSBundle *nibBundle;
 @property (nonatomic, retain) UIView *view;
 @property (nonatomic, assign) BOOL wantsFullScreenLayout;		// doesn't do anything right now
 @property (nonatomic, copy) NSString *title;
@@ -147,9 +134,7 @@ typedef enum {
 @property (nonatomic, readonly, retain) UISplitViewController *splitViewController;
 @property (nonatomic, readonly, retain) UISearchDisplayController *searchDisplayController; // stub
 
-@property(nonatomic, readonly) NSArray *childViewControllers;
-
-
+@property (nonatomic, readonly) NSArray *childViewControllers;
 
 // stubs
 @property (nonatomic, retain) UITabBarItem *tabBarItem;

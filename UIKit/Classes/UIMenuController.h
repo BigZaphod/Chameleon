@@ -37,16 +37,7 @@ extern NSString *const UIMenuControllerMenuFrameDidChangeNotification;
 
 @class UIView, UIWindow;
 
-@interface UIMenuController : NSObject {
-@private
-    NSArray *_menuItems;
-    NSMutableArray *_enabledMenuItems;
-    id _menu;
-    CGRect _menuFrame;
-    CGPoint _menuLocation;
-    BOOL _rightAlignMenu;
-    UIWindow *_window;
-}
+@interface UIMenuController : NSObject 
 
 + (UIMenuController *)sharedMenuController;
 

@@ -61,30 +61,23 @@ typedef enum {
     UITableViewCellEditingStyleInsert
 } UITableViewCellEditingStyle;
 
+typedef enum {
+    UITableViewCellSectionLocationUnique,
+    UITableViewCellSectionLocationTop,
+    UITableViewCellSectionLocationMiddle,
+	UITableViewCellSectionLocationBottom
+} UITableViewCellSectionLocation;
+
+enum {
+    UITableViewCellStateDefaultMask                     = 0,
+    UITableViewCellStateShowingEditControlMask          = 1 << 0,
+    UITableViewCellStateShowingDeleteConfirmationMask   = 1 << 1
+};
+typedef NSUInteger UITableViewCellStateMask;
+
 @class UITableViewCellSeparator, UILabel, UIImageView;
 
-@interface UITableViewCell : UIView {
-@private
-    UITableViewCellStyle _style;
-    UITableViewCellSeparator *_seperatorView;
-    UIView *_contentView;
-    UILabel *_textLabel;
-    UILabel *_detailTextLabel; // not yet displayed!
-    UIImageView *_imageView;
-    UIView *_backgroundView;
-    UIView *_selectedBackgroundView;
-    UITableViewCellAccessoryType _accessoryType;
-    UIView *_accessoryView;
-    UITableViewCellAccessoryType _editingAccessoryType;
-    UITableViewCellSelectionStyle _selectionStyle;
-    NSInteger _indentationLevel;
-    BOOL _editing;
-    BOOL _selected;
-    BOOL _highlighted;
-    BOOL _showingDeleteConfirmation;
-    NSString *_reuseIdentifier;
-    CGFloat _indentationWidth;
-}
+@interface UITableViewCell : UIView <NSCoding>
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated;
@@ -98,6 +91,7 @@ typedef enum {
 @property (nonatomic, retain) UIView *backgroundView;
 @property (nonatomic, retain) UIView *selectedBackgroundView;
 @property (nonatomic) UITableViewCellSelectionStyle selectionStyle;
+@property (nonatomic) UITableViewCellSectionLocation sectionLocation;
 @property (nonatomic) NSInteger indentationLevel;
 @property (nonatomic) UITableViewCellAccessoryType accessoryType;
 @property (nonatomic, retain) UIView *accessoryView;

@@ -29,13 +29,7 @@
 
 #import "UIGestureRecognizer.h"
 
-@interface UILongPressGestureRecognizer : UIGestureRecognizer {
-@private
-    CFTimeInterval _minimumPressDuration;
-    CGFloat _allowableMovement;
-    NSUInteger _numberOfTapsRequired;
-    NSInteger _numberOfTouchesRequired;
-}
+@interface UILongPressGestureRecognizer : UIGestureRecognizer 
 
 @property (nonatomic) CFTimeInterval minimumPressDuration;
 @property (nonatomic) CGFloat allowableMovement;

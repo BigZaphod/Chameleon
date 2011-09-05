@@ -27,11 +27,5 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-// This probably doesn't belong here, but it's good enough for now
-enum {
-    kSystemSoundID_Vibrate            = 0x0
-};
-
 #import "AVAudioPlayer.h"
 #import "AVAudioSession.h"

@@ -98,7 +98,6 @@
 #import "UIAccelerometer.h"
 #import "UIMenuController.h"
 #import "UIMenuItem.h"
-#import "UIViewAdapter.h"
 #import "UIPageControl.h"
 #import "UIProgressView.h"
 #import "UIPickerView.h"
@@ -107,15 +106,15 @@
 #import "UIRotationGestureRecognizer.h"
 #import "UISwipeGestureRecognizer.h"
 #import "UIDatePicker.h"
+#import "UITextInput.h"
+#import <UIKit/UINib.h>
 
 // non-standard imports
-#import "UIKey.h"
-#import "UIScrollWheelGestureRecognizer.h"
-#import "UINSCellControl.h"
 #import "CALayer+UIKitCompatibility.h"      // only needed on 10.6
 
 // only add if core data is included on 10.6
 #import "NSFetchedResultsController.h"
+#import "NSIndexPath+UITableView.h"
 
 // SystemConfiguration-Helper
 #define kSCNetworkReachabilityFlagsIsWWAN kSCNetworkReachabilityFlagsConnectionOnDemand

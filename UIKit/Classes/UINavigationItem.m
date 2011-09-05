@@ -35,9 +35,16 @@
 
 static void * const UINavigationItemContext = "UINavigationItemContext";
 
-@implementation UINavigationItem
-@synthesize title=_title, rightBarButtonItem=_rightBarButtonItem, titleView=_titleView, hidesBackButton=_hidesBackButton;
-@synthesize leftBarButtonItem=_leftBarButtonItem, backBarButtonItem=_backBarButtonItem, prompt=_prompt;
+@implementation UINavigationItem {
+    UINavigationBar *_navigationBar;
+}
+@synthesize title = _title;
+@synthesize rightBarButtonItem = _rightBarButtonItem;
+@synthesize titleView = _titleView;
+@synthesize hidesBackButton = _hidesBackButton;
+@synthesize leftBarButtonItem = _leftBarButtonItem;
+@synthesize backBarButtonItem = _backBarButtonItem;
+@synthesize prompt = _prompt;
 
 + (NSSet *)_keyPathsTriggeringUIUpdates
 {

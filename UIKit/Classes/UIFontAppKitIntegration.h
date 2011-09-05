@@ -38,4 +38,5 @@
 // these override the use of OSX's default system fonts, set to nil to use OSX default
 + (void)setSystemFontName:(NSString *)aName;
 + (void)setBoldSystemFontName:(NSString *)aName;
++ (void)setItalicSystemFontName:(NSString *)aName;
 @end

@@ -30,8 +30,12 @@
 #import "UIEvent+UIPrivate.h"
 #import "UITouch.h"
 
-@implementation UIEvent
-@synthesize timestamp=_timestamp, type=_type;
+@implementation UIEvent {
+    UITouch *_touch;
+    BOOL _unhandledKeyPressEvent;
+}
+@synthesize timestamp = _timestamp;
+@synthesize type = _type;
 
 - (id)initWithEventType:(UIEventType)type
 {

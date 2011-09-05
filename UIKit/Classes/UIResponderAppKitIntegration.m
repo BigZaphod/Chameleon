@@ -29,6 +29,9 @@
 
 #import "UIResponderAppKitIntegration.h"
 #import "UIEvent+UIPrivate.h"
+#import "UIKey.h"
+#import "UIApplication.h"
+#import <AppKit/NSGraphics.h>
 
 @implementation UIResponder (AppKitIntegration)
 
@@ -57,13 +60,98 @@
     return [[self nextResponder] mouseCursorForEvent:event];
 }
 
-- (void)keyPressed:(UIKey *)key withEvent:(UIEvent *)event
+- (BOOL)keyPressed:(UIKey *)key withEvent:(UIEvent *)event
 {
-    UIResponder *responder = [self nextResponder];
-    if (responder) {
-        [responder keyPressed:key withEvent:event];
+    SEL command = nil;
+    switch (key.type) {
+        case UIKeyTypeReturn:
+        case UIKeyTypeEnter: {
+            command = @selector(insertNewline:);
+            break;
+        }
+        case UIKeyTypeUpArrow: {
+            command = @selector(moveUp:);
+            break;
+        }
+        case UIKeyTypeDownArrow: {
+            command = @selector(moveDown:);
+            break;
+        }
+        case UIKeyTypeLeftArrow: {
+            command = @selector(moveLeft:);
+            break;
+        }
+        case UIKeyTypeRightArrow: {
+            command = @selector(moveRight:);
+            break;
+        }
+        case UIKeyTypePageUp: {
+            command = @selector(pageUp:);
+            break;
+        }
+        case UIKeyTypePageDown: {
+            command = @selector(pageDown:);
+            break;
+        }
+        case UIKeyTypeHome: {
+            command = @selector(scrollToBeginningOfDocument:);
+            break;
+        }
+        case UIKeyTypeEnd: {
+            command = @selector(scrollToEndOfDocument:);
+            break;
+        }
+        case UIKeyTypeInsert: {
+            // TODO something
+            break;
+        }
+        case UIKeyTypeDelete: {
+            command = @selector(deleteForward:);
+            break;
+        }
+        case UIKeyTypeEscape: {
+            command = @selector(cancelOperation:);
+            break;
+        }
+        case UIKeyTypeCharacter: {
+            if (key.keyCode == 48) {
+                if ([key isShiftKeyPressed]) {
+                    command = @selector(insertBacktab:);
+                } else {
+                    command = @selector(insertTab:);
+                }
+            }
+            break;
+        }
+    }
+
+    if (command && [self tryToPerform:command with:self]) {
+        return YES;
     } else {
-        [event _setUnhandledKeyPressEvent];
+        return [[self nextResponder] keyPressed:key withEvent:event];
+    }
+}
+
+- (void) doCommandBySelector:(SEL)selector
+{
+    UIResponder* responder = self;
+    do {
+        if ([responder respondsToSelector:selector]) {
+            [responder performSelector:selector withObject:nil];
+            return;
+        }
+        responder = responder.nextResponder;
+    } while (responder);
+    NSBeep();
+}
+
+- (BOOL) tryToPerform:(SEL)selector with:(id)object
+{
+    if ([self respondsToSelector:selector]) {
+        [self performSelector:selector withObject:nil];
+        return YES;
+    } else {
+        return NO;
     }
 }
 

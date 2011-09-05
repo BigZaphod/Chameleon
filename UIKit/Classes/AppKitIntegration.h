@@ -34,3 +34,14 @@
 #import "UIScreenAppKitIntegration.h"
 #import "UIActionSheetAppKitIntegration.h"
 #import "UIApplicationAppKitIntegration.h"
+#import "UIViewAppKitIntegration.h"
+#import "UIWindowAppKitIntegration.h"
+#import "UITableViewAppKitIntegration.h"
+#import "UIPopoverControllerAppKitIntegration.h"
+
+#import "UIViewAdapter.h"
+#import "UINSCellControl.h"
+#import "UIKey.h"
+#import "UIScrollWheelGestureRecognizer.h"
+
+#import "UIKitView.h"
