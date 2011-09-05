@@ -1,3 +1,7 @@
+<h1> This fork is contains iOS 5 features. It has divereged a little but should remain compatible. 
+It only supports the fragile ABI so it only works with 64bit builds os OS X and only compiles with Clang. </h1>
+
+
 # Chameleon
 
 Chameleon is a port of Apple's UIKit (and some minimal related frameworks) to Mac OS X. It is meant to be as much of a drop-in replacement for the real UIKit as possible. It also adapts some iOS user interface conventions to the Mac (such as UIAlertView being represented by NSAlert) so that apps built using Chameleon have as much chance as possible of feeling at home on the desktop with relatively little porting effort.
