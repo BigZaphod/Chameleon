@@ -63,6 +63,7 @@
 - (void)_textDidChange;
 - (void)_textDidChangeSelection;
 - (void)_textDidReceiveReturnKey;
+- (BOOL)_textShouldDoCommandBySelector:(SEL)selector;
 @end
 
 @interface UITextLayer : CALayer {
@@ -81,6 +82,7 @@
         unsigned int didChange : 1;
         unsigned int didChangeSelection : 1;
         unsigned int didReturnKey : 1;
+		unsigned int doCommandBySelector : 1;
     } textDelegateHas;
 }
 

@@ -27,6 +27,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import <Quartz/Quartz.h>
 #import "UIToolbar.h"
 #import "UIView.h"
 
@@ -40,29 +41,7 @@
 - (void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item;
 @end
 
-@interface UINavigationBar : UIView {
-@private
-    NSMutableArray *_navStack;
-    UIColor *_tintColor;
-    __unsafe_unretained id _delegate;
-    
-    UIView *_leftView;
-    UIView *_centerView;
-    UIView *_rightView;
-    
-    struct {
-        BOOL shouldPushItem : 1;
-        BOOL didPushItem : 1;
-        BOOL shouldPopItem : 1;
-        BOOL didPopItem : 1;
-    } _delegateHas;
-    
-    // ideally this should share the same memory as the above flags structure...
-    struct {
-        unsigned reloadItem : 1;
-        unsigned __RESERVED__ : 31;
-    } _navigationBarFlags;
-}
+@interface UINavigationBar : UIView 
 
 - (void)setItems:(NSArray *)items animated:(BOOL)animated;
 - (void)pushNavigationItem:(UINavigationItem *)item animated:(BOOL)animated;

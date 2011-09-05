@@ -28,6 +28,7 @@
  */
 
 #import "UIPopoverController+UIPrivate.h"
+#import "UIPopoverControllerAppKitIntegration.h"
 #import "UIViewController.h"
 #import "UIWindow.h"
 #import "UIScreen+UIPrivate.h"
@@ -38,6 +39,7 @@
 #import "UIPopoverView.h"
 #import "UIPopoverNSWindow.h"
 #import "UIPopoverOverlayNSView.h"
+#import "UIImage+UIPrivate.h"
 
 
 static BOOL SizeIsLessThanOrEqualSize(NSSize size1, NSSize size2)
@@ -120,10 +122,22 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 }
 
 
-@implementation UIPopoverController
-@synthesize delegate=_delegate, contentViewController=_contentViewController, passthroughViews=_passthroughViews;
-@synthesize popoverArrowDirection=_popoverArrowDirection;
-@synthesize popoverContentSize=_popoverContentSize;
+@implementation UIPopoverController {
+    UIPopoverView *_popoverView;
+    id _popoverWindow;
+    id _overlayWindow;
+    UIWindow* _windowToReactivate;
+    
+    struct {
+        BOOL popoverControllerDidDismissPopover : 1;
+        BOOL popoverControllerShouldDismissPopover : 1;
+    } _delegateHas;	
+}
+@synthesize delegate = _delegate;
+@synthesize contentViewController = _contentViewController;
+@synthesize passthroughViews = _passthroughViews;
+@synthesize popoverArrowDirection = _popoverArrowDirection;
+@synthesize popoverContentSize = _popoverContentSize;
 
 - (id)init
 {
@@ -176,10 +190,17 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 
 - (void)presentPopoverFromRect:(CGRect)rect inView:(UIView *)view permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated
 {
+    [self presentPopoverFromRect:rect inView:view permittedArrowDirections:arrowDirections animated:animated makeKey:YES];
+}
+
+- (void)presentPopoverFromRect:(CGRect)rect inView:(UIView *)view permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated makeKey:(BOOL)shouldMakeKey
+{
     assert(view != nil);
     assert(arrowDirections != UIPopoverArrowDirectionUnknown);
     assert(!CGRectIsNull(rect));
     assert(!CGRectEqualToRect(rect,CGRectZero));
+
+    [_windowToReactivate release], _windowToReactivate = [view.window retain];
     
     NSWindow *viewNSWindow = [[view.window.screen UIKitView] window];
 
@@ -197,16 +218,24 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
         [_overlayWindow setOpaque:NO];
         [(NSWindow *)_overlayWindow setBackgroundColor:[NSColor clearColor]];
         [_overlayWindow setFrameOrigin:windowFrame.origin];
-        [_overlayWindow setContentView:[[(UIPopoverOverlayNSView *)[UIPopoverOverlayNSView alloc] initWithFrame:overlayContentRect popoverController:self] autorelease]];
+        [_overlayWindow setContentView:[[[UIPopoverOverlayNSView alloc] initWithFrame:overlayContentRect popoverController:self] autorelease]];
         [viewNSWindow addChildWindow:_overlayWindow ordered:NSWindowAbove];
 
+		[_contentViewController viewWillAppear:animated];
+		
         // now build the actual popover view which represents the popover's chrome, and since it's a UIView, we need to build a UIKitView 
         // as well to put it in our NSWindow...
-        _popoverView = [[UIPopoverView alloc] initWithContentView:_contentViewController.view size:_contentViewController.contentSizeForViewInPopover];
-        
-        UIKitView *hostingView = [(UIKitView *)[UIKitView alloc] initWithFrame:NSRectFromCGRect([_popoverView bounds])];
+
+        _popoverView = [[UIPopoverView alloc] initWithContentView:_contentViewController.view size:_contentViewController.contentSizeForViewInPopover popoverController:self];
+
+        UIKitView *hostingView = [[UIKitView alloc] initWithFrame:NSRectFromCGRect([_popoverView bounds])];
+
         [[hostingView UIScreen] _setPopoverController:self];
         [[hostingView UIWindow] addSubview:_popoverView];
+        [[hostingView UIWindow] setHidden:NO];
+        if (shouldMakeKey) {
+            [[hostingView UIWindow] makeKeyAndVisible];
+        }
 
         // this prevents a visible flash from sometimes occuring due to the fact that the window is created and added as a child before it has the
         // proper origin set. this means it it ends up flashing at the bottom left corner of the screen sometimes before it
@@ -241,34 +270,44 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
     // finally, let's show it!
     [_popoverWindow setFrameOrigin:PopoverWindowOrigin(_overlayWindow, NSRectFromCGRect(desktopScreenRect), NSSizeFromCGSize(_popoverView.frame.size), arrowDirections, &pointTo, &_popoverArrowDirection)];
     _popoverView.hidden = NO;
-    [_popoverWindow makeKeyWindow];
+    if (shouldMakeKey) {
+        [_popoverWindow makeKeyWindow];
+    }
+    
+    [_contentViewController viewDidAppear:animated];
 
     // the window has to be visible before these coordinate conversions will work correctly (otherwise the UIScreen isn't attached to anything
     // and blah blah blah...)
     // finally, set the arrow position so it points to the right place and looks all purty.
     if (_popoverArrowDirection != UIPopoverArrowDirectionUnknown) {
-        CGPoint screenPointTo = [view.window.screen convertPoint:NSPointToCGPoint(pointTo) fromScreen:nil];
-        CGPoint windowPointTo = [view.window convertPoint:screenPointTo fromWindow:nil];
-        CGPoint viewPointTo = [view convertPoint:windowPointTo fromView:nil];
-        [_popoverView pointTo:viewPointTo inView:view];
+        CGPoint screenPointTo = [_popoverView.window.screen convertPoint:NSPointToCGPoint(pointTo) fromScreen:nil];
+        CGPoint windowPointTo = [_popoverView.window convertPoint:screenPointTo fromWindow:nil];
+        CGPoint viewPointTo = [_popoverView convertPoint:windowPointTo fromView:nil];
+        [_popoverView pointTo:viewPointTo inView:_popoverView];
     }
     
     if (animated) {
         _popoverView.transform = CGAffineTransformMakeScale(0.98f,0.98f);
         _popoverView.alpha = 0.4f;
         
-        [UIView animateWithDuration:0.08 animations:^(void) {
-            _popoverView.transform = CGAffineTransformIdentity;
-        }];
+
+        [UIView animateWithDuration:0.08 
+                         animations:^{
+                             _popoverView.transform = CGAffineTransformIdentity;
+                         }
+         ];
         
-        [UIView animateWithDuration:0.1 animations:^(void) {
-            _popoverView.alpha = 1.f;
-        }];
+        [UIView animateWithDuration:0.1
+                         animations:^{
+                             _popoverView.alpha = 1.f;
+                         }
+         ];
     }
 }
 
 - (void)setPopoverContentSize:(CGSize)size animated:(BOOL)animated {
-    _popoverContentSize = size;
+    //TODO: animate
+    self.popoverContentSize = size;
 }
 
 
@@ -282,37 +321,43 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
     return (_popoverView || _popoverWindow || _overlayWindow);
 }
 
-- (void)_destroyPopover
-{
-	NSWindow *parentWindow = [[_overlayWindow parentWindow] retain];
-
-    [_overlayWindow removeChildWindow:_popoverWindow];
-    [parentWindow removeChildWindow:_overlayWindow];
-
-    [_popoverWindow close];
-    [_overlayWindow close];
-    [_popoverView release];
-
-    _popoverView = nil;
-    _popoverWindow = nil;
-    _overlayWindow = nil;
-    
-    _popoverArrowDirection = UIPopoverArrowDirectionUnknown;
-    
-    [parentWindow makeKeyAndOrderFront:self];
-    [parentWindow release];
-}
 
 - (void)dismissPopoverAnimated:(BOOL)animated
 {
     if ([self isPopoverVisible]) {
-        [UIView animateWithDuration:animated? 0.2 : 0
-                         animations:^(void) {
-                             _popoverView.alpha = 0;
-                         }
-                         completion:^(BOOL finished) {
-                             [self _destroyPopover];
-                         }];
+        id overlayWindow = _overlayWindow;
+        id popoverWindow = _popoverWindow;
+        UIView* popoverView = _popoverView;
+        UIWindow* windowToReactivate = _windowToReactivate; 
+        
+        _overlayWindow = nil;
+        _popoverWindow = nil;
+        _popoverView = nil;
+        _windowToReactivate = nil;
+        _popoverArrowDirection = UIPopoverArrowDirectionUnknown;
+        
+        [UIView animateWithDuration:!animated ? 0.0 : 0.2 
+            animations:^{
+                popoverView.alpha = 0;
+            }
+            completion:^(BOOL finished){
+                NSWindow *parentWindow = [overlayWindow parentWindow];
+                
+                [overlayWindow orderOut:nil];
+                [popoverWindow orderOut:nil];
+
+                [overlayWindow removeChildWindow:popoverWindow];
+                [parentWindow removeChildWindow:overlayWindow];
+                
+                [parentWindow makeKeyWindow];
+                [windowToReactivate makeKeyAndVisible];
+
+                [popoverView release];
+                [popoverWindow release];
+                [overlayWindow release];
+                [windowToReactivate release];
+            }
+        ];
     }
 }
 
@@ -327,6 +372,71 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
             [_delegate popoverControllerDidDismissPopover:self];
         }
     }
+}
+
++ (UIEdgeInsets)insetForArrows
+{
+    return UIEdgeInsetsMake(17,12,8,12);
+}
+
++ (CGRect)backgroundRectForBounds:(CGRect)bounds
+{
+    return UIEdgeInsetsInsetRect(bounds, [self insetForArrows]);
+}
+
++ (CGRect)contentRectForBounds:(CGRect)bounds withNavigationBar:(BOOL)hasNavBar
+{
+    const CGFloat navBarOffset = hasNavBar? 32 : 0;
+    return UIEdgeInsetsInsetRect(CGRectMake(14,9+navBarOffset,bounds.size.width-28,bounds.size.height-28-navBarOffset), [self insetForArrows]);
+}
+
++ (CGSize)frameSizeForContentSize:(CGSize)contentSize withNavigationBar:(BOOL)hasNavBar
+{
+    UIEdgeInsets insets = [self insetForArrows];
+    CGSize frameSize;
+    
+    frameSize.width = contentSize.width + 28 + insets.left + insets.right;
+    frameSize.height = contentSize.height + 28 + (hasNavBar? 32 : 0) + insets.top + insets.bottom;
+    
+    return frameSize;
+}
+
+- (void)setPopoverContentSize:(CGSize)popoverContentSize
+{
+    assert(_contentViewController != nil);
+    if(CGSizeEqualToSize(_contentViewController.contentSizeForViewInPopover, popoverContentSize)) return;
+    
+    _contentViewController.contentSizeForViewInPopover = popoverContentSize;
+    
+    if ([self isPopoverVisible])
+    {
+        // if the popover is visible, show the animation
+        [_popoverView setContentSize:popoverContentSize animated:YES];
+    }
+    else
+    {
+        [_popoverView setContentSize:popoverContentSize animated:NO];
+    }
+}
+
++ (UIImage *)backgroundImage {
+	return [UIImage _popoverBackgroundImage];
+}
+
++ (UIImage *)leftArrowImage {
+	return [UIImage _leftPopoverArrowImage];
+}
+
++ (UIImage *)rightArrowImage {
+	return [UIImage _rightPopoverArrowImage];
+}
+
++ (UIImage *)topArrowImage {
+	return [UIImage _topPopoverArrowImage];
+}
+
++ (UIImage *)bottomArrowImage {
+	return [UIImage _bottomPopoverArrowImage];
 }
 
 @end

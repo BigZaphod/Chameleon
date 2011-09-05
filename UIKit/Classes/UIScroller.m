@@ -74,7 +74,7 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 {
     [_fadeTimer invalidate];
     _fadeTimer = nil;
-
+    
     [UIView animateWithDuration:0.33
                           delay:0
                         options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionTransitionNone | UIViewAnimationOptionAllowUserInteraction
@@ -94,6 +94,7 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 {
     [_fadeTimer invalidate];
     _fadeTimer = nil;
+
 
     [UIView animateWithDuration:0.33
                           delay:0

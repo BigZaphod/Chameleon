@@ -31,8 +31,20 @@
 #import "UIViewAdapter.h"
 #import <WebKit/WebKit.h>
 
-@implementation UIWebView
-@synthesize request=_request, delegate=_delegate, dataDetectorTypes=_dataDetectorTypes, scalesPageToFit=_scalesPageToFit;
+@implementation UIWebView {
+    WebView *_webView;
+    UIViewAdapter *_webViewAdapter;
+    
+    struct {
+        BOOL shouldStartLoadWithRequest : 1;
+        BOOL didFailLoadWithError : 1;
+        BOOL didFinishLoad : 1;
+    } _delegateHas;
+}
+@synthesize request = _request;
+@synthesize delegate = _delegate;
+@synthesize dataDetectorTypes = _dataDetectorTypes;
+@synthesize scalesPageToFit = _scalesPageToFit;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -46,7 +58,7 @@
         [_webView setUIDelegate:self];
         [_webView setDrawsBackground:NO];
 
-        _webViewAdapter = [[UIViewAdapter alloc] initWithFrame:self.bounds];
+        _webViewAdapter = [(UIViewAdapter *)[UIViewAdapter alloc] initWithFrame:self.bounds];
         _webViewAdapter.NSView = _webView;
         _webViewAdapter.scrollEnabled = NO;		// WebView does its own scrolling :/
         
@@ -210,6 +222,21 @@
 - (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems
 {
     return [NSArray array];
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+    return [_webViewAdapter canBecomeFirstResponder];
+}
+
+- (BOOL)becomeFirstResponder
+{
+    return [_webViewAdapter becomeFirstResponder];
+}
+
+- (BOOL)resignFirstResponder
+{
+    return [_webViewAdapter resignFirstResponder];
 }
 
 @end

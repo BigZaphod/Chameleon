@@ -34,16 +34,12 @@
  */
 
 #import "UIView.h"
-#import "UITextField.h"
 
 @protocol UISearchBarDelegate;
+@class UISearchField;
+@class UIKey;
 
-@interface UISearchBar : UIView {
-    UITextField *_searchField;
-    BOOL _showsCancelButton;
-    __unsafe_unretained id<UISearchBarDelegate> _delegate;
-    NSString *_placeholder;
-}
+@interface UISearchBar : UIView 
 
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic,assign) id<UISearchBarDelegate> delegate;

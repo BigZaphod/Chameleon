@@ -33,7 +33,8 @@
 #import "UITouch.h"
 #import "UIColor.h"
 #import "UIResponderAppKitIntegration.h"
-#import <AppKit/NSCursor.h>
+#import <AppKit/AppKit.h>
+
 
 static const CGFloat SplitterPadding = 3;
 
@@ -51,8 +52,8 @@ static const CGFloat SplitterPadding = 3;
 - (id)initWithFrame:(CGRect)frame
 {
     if ((self=[super initWithFrame:frame])) {
-        leftPanel = [[UIView alloc] initWithFrame:CGRectMake(0,0,320,frame.size.height)];
-        rightPanel = [[UIView alloc] initWithFrame:CGRectMake(321,0,MAX(0,frame.size.width-321),frame.size.height)];
+        leftPanel = [(UIView *)[UIView alloc] initWithFrame:CGRectMake(0,0,320,frame.size.height)];
+        rightPanel = [(UIView *)[UIView alloc] initWithFrame:CGRectMake(321,0,MAX(0,frame.size.width-321),frame.size.height)];
         leftPanel.clipsToBounds = rightPanel.clipsToBounds = YES;
         leftPanel.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         rightPanel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -74,8 +75,8 @@ static const CGFloat SplitterPadding = 3;
 - (void)addViewControllers:(NSArray *)viewControllers
 {
     if ([viewControllers count] == 2) {
-        UIView *leftView = [[viewControllers objectAtIndex:0] view];
-        UIView *rightView = [[viewControllers objectAtIndex:1] view];
+        UIView *leftView = (UIView*)[[viewControllers objectAtIndex:0] view];
+        UIView *rightView = (UIView*)[[viewControllers objectAtIndex:1] view];
         
         leftView.autoresizingMask = rightView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
@@ -175,8 +176,15 @@ static const CGFloat SplitterPadding = 3;
 
 
 
-@implementation UISplitViewController
-@synthesize delegate=_delegate, viewControllers=_viewControllers;
+@implementation UISplitViewController {
+    struct {
+        BOOL willPresentViewController : 1;
+        BOOL willHideViewController : 1;
+        BOOL willShowViewController : 1;
+    } _delegateHas;
+}
+@synthesize delegate = _delegate;
+@synthesize viewControllers = _viewControllers;
 
 - (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)nibBundle
 {
@@ -201,7 +209,7 @@ static const CGFloat SplitterPadding = 3;
 
 - (void)loadView
 {
-    self.view = [[[_UISplitViewControllerView alloc] initWithFrame:CGRectMake(0,0,1024,768)] autorelease];
+    self.view = [[(_UISplitViewControllerView *)[_UISplitViewControllerView alloc] initWithFrame:CGRectMake(0,0,1024,768)] autorelease];
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 

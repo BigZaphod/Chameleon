@@ -57,7 +57,10 @@
 // may or may not exist, etc. This will work for now in case it is needed. This is only triggered by keyDown: events and is not extensively
 // implemented or tested at this point. This is sent to the firstResponder in the keyWindow.
 // Note, that the UIEvent here will be an empty non-touch one and has no real purpose in the present implementation :)
-- (void)keyPressed:(UIKey *)key withEvent:(UIEvent *)event;
+- (BOOL)keyPressed:(UIKey *)key withEvent:(UIEvent *)event;
+
+- (void) doCommandBySelector:(SEL)selector;
+- (BOOL) tryToPerform:(SEL)selector with:(id)object;
 
 @end
 
@@ -70,6 +73,20 @@
 // This is mapped to CMD-Return and Enter and does not come from AppKit since it has no such convention as far as I've found. However it seemed like
 // a useful thing to define, really, so that's what I'm doing. :)
 - (void)commit:(id)sender;
+
+- (void) insertNewline:(id)sender;
+- (void) moveUp:(id)sender;
+- (void) moveDown:(id)sender;
+- (void) moveLeft:(id)sender;
+- (void) moveRight:(id)sender;
+- (void) pageUp:(id)sender;
+- (void) pageDown:(id)sender;
+- (void) scrollToBeginningOfDocument:(id)sender;
+- (void) scrollToEndOfDocument:(id)sender;
+- (void) deleteForward:(id)sender;
+- (void) insertBacktab:(id)sender;
+- (void) insertTab:(id)sender;
+
 @end
 
 

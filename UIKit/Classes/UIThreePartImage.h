@@ -31,15 +31,15 @@
 
 @interface UIThreePartImage : UIImage {
 @private
-    id _startCap;
-    id _centerFill;
-    id _endCap;
+    CGImageRef _startCap;
+    CGImageRef _centerFill;
+    CGImageRef _endCap;
     BOOL _vertical;
     UIEdgeInsets _capInsets;
 }
 
-- (id)initWithNSImage:(id)theImage capSize:(NSInteger)capSize vertical:(BOOL)isVertical;
-- (id)initWithNSImage:(id)theImage capTop:(CGFloat)capTop capBottom:(CGFloat)capBottom;
-- (id)initWithNSImage:(id)theImage capLeft:(CGFloat)capLeft capRight:(CGFloat)capRight;
+- (id)initWithCGImage:(CGImageRef)theImage capSize:(NSInteger)capSize vertical:(BOOL)isVertical;
+- (id)initWithCGImage:(CGImageRef)theImage capTop:(CGFloat)capTop capBottom:(CGFloat)capBottom;
+- (id)initWithCGImage:(CGImageRef)theImage capLeft:(CGFloat)capLeft capRight:(CGFloat)capRight;
 
 @end

@@ -38,19 +38,7 @@ enum {
 };
 typedef NSUInteger UIRectCorner;
 
-@interface UIBezierPath : NSObject {
-@private
-    CGPathRef _path;
-    CGFloat _lineWidth;
-    CGLineCap _lineCapStyle;
-    CGLineJoin _lineJoinStyle;
-    CGFloat _miterLimit;
-    CGFloat _flatness;
-    BOOL _usesEvenOddFillRule;
-    CGFloat *_lineDashPattern;
-    NSInteger _lineDashCount;
-    CGFloat _lineDashPhase;
-}
+@interface UIBezierPath : NSObject 
 
 + (UIBezierPath *)bezierPath;
 + (UIBezierPath *)bezierPathWithRect:(CGRect)rect;

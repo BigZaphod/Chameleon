@@ -30,29 +30,38 @@
 #import "UIGraphics.h"
 #import "UIImage.h"
 #import "UIScreen.h"
-#import <AppKit/AppKit.h>
+#import <AppKit/NSGraphicsContext.h>
 
-static NSMutableArray *contextStack = nil;
+
+static NSString* const kUIGraphicsContextStackKey = @"kUIGraphicsContextStackKey";
+
 
 void UIGraphicsPushContext(CGContextRef ctx)
 {
-    if (!contextStack) {
-        contextStack = [[NSMutableArray alloc] initWithCapacity:2];
+    NSMutableDictionary* threadDictionary = [[NSThread currentThread] threadDictionary];
+    NSMutableArray* stack = [threadDictionary objectForKey:kUIGraphicsContextStackKey];
+    if (!stack) {
+        stack = [[NSMutableArray alloc] initWithCapacity:10];
+        [threadDictionary setObject:stack forKey:kUIGraphicsContextStackKey];
+        [stack release];
     }
-    
-    [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:(void *)ctx flipped:YES]];
-    [contextStack addObject:[NSGraphicsContext currentContext]];
+    [stack addObject:(id)ctx];
 }
 
 void UIGraphicsPopContext()
 {
-    [contextStack removeLastObject];
-    [NSGraphicsContext setCurrentContext:[contextStack lastObject]];
+    NSMutableDictionary* threadDictionary = [[NSThread currentThread] threadDictionary];
+    NSMutableArray* stack = [threadDictionary objectForKey:kUIGraphicsContextStackKey];
+    assert(stack.count); // Someone didn't call *push* first.
+    [stack removeLastObject];
 }
 
 CGContextRef UIGraphicsGetCurrentContext()
 {
-    return [[contextStack lastObject] graphicsPort];
+    NSMutableDictionary* threadDictionary = [[NSThread currentThread] threadDictionary];
+    NSMutableArray* stack = [threadDictionary objectForKey:kUIGraphicsContextStackKey];
+    assert(stack.count); // Someone didn't call *push* first.
+    return (CGContextRef)[stack lastObject];
 }
 
 void UIGraphicsBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloat scale)

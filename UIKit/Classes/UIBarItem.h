@@ -32,14 +32,7 @@
 
 @class UIImage;
 
-@interface UIBarItem : NSObject {
-@private
-    BOOL _enabled;
-    UIImage *_image;
-    UIEdgeInsets _imageInsets;
-    NSString *_title;
-    NSInteger _tag;
-}
+@interface UIBarItem : NSObject 
 
 @property (nonatomic, getter=isEnabled) BOOL enabled;
 @property (nonatomic, retain) UIImage *image;

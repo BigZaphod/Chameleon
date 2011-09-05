@@ -31,31 +31,35 @@
 #import "UIColor.h"
 #import "UIFont.h"
 #import "UIGraphics.h"
+#import <AppKit/NSStringDrawing.h>
 
-@implementation UILabel
-@synthesize text=_text, font=_font, textColor=_textColor, textAlignment=_textAlignment, lineBreakMode=_lineBreakMode, enabled=_enabled;
-@synthesize numberOfLines=_numberOfLines, shadowColor=_shadowColor, shadowOffset=_shadowOffset;
-@synthesize baselineAdjustment=_baselineAdjustment, adjustsFontSizeToFitWidth=_adjustsFontSizeToFitWidth;
-@synthesize highlightedTextColor=_highlightedTextColor, minimumFontSize=_minimumFontSize, highlighted=_highlighted;
 
-- (id)initWithFrame:(CGRect)frame
-{
-    if ((self = [super initWithFrame:frame])) {
-        self.userInteractionEnabled = NO;
-        self.textAlignment = UITextAlignmentLeft;
-        self.lineBreakMode = UILineBreakModeTailTruncation;
-        self.textColor = [UIColor blackColor];
-        self.backgroundColor = [UIColor whiteColor];
-        self.enabled = YES;
-        self.font = [UIFont systemFontOfSize:17];
-        self.numberOfLines = 1;
-        self.contentMode = UIViewContentModeLeft;
-        self.clipsToBounds = YES;
-        self.shadowOffset = CGSizeMake(0,-1);
-        self.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
-    }
-    return self;
-}
+static NSString* const kUIFontKey = @"UIFont";
+static NSString* const kUIHighlightedColorKey = @"UIHighlightedColor";
+static NSString* const kUIShadowColorKey = @"UIShadowColor";
+static NSString* const kUIShadowOffsetKey = @"UIShadowOffset";
+static NSString* const kUITextColorKey = @"UITextColor";
+static NSString* const kUITextKey = @"UIText";
+static NSString* const kUIBaselineAdjustmentKey = @"UIBaselineAdjustment";
+static NSString* const kUIAdjustsFontSizeToFitKey = @"UIAdjustsFontSizeToFit";
+
+
+@implementation UILabel 
+@synthesize text = _text;
+@synthesize font = _font;
+@synthesize textColor = _textColor;
+@synthesize textAlignment = _textAlignment;
+@synthesize lineBreakMode = _lineBreakMode;
+@synthesize enabled = _enabled;
+@synthesize numberOfLines = _numberOfLines;
+@synthesize shadowColor = _shadowColor;
+@synthesize shadowOffset = _shadowOffset;
+@synthesize baselineAdjustment = _baselineAdjustment;
+@synthesize adjustsFontSizeToFitWidth = _adjustsFontSizeToFitWidth;
+@synthesize highlightedTextColor = _highlightedTextColor;
+@synthesize minimumFontSize = _minimumFontSize;
+@synthesize highlighted = _highlighted;
+@synthesize attributedText = _attributedText;
 
 - (void)dealloc
 {
@@ -65,6 +69,62 @@
     [_shadowColor release];
     [_highlightedTextColor release];
     [super dealloc];
+}
+
+- (void) _commonInitForUILabel
+{
+    self.userInteractionEnabled = NO;
+    self.textAlignment = UITextAlignmentLeft;
+    self.lineBreakMode = UILineBreakModeTailTruncation;
+    self.textColor = [UIColor blackColor];
+    self.backgroundColor = [UIColor whiteColor];
+    self.enabled = YES;
+    self.font = [UIFont systemFontOfSize:17];
+    self.numberOfLines = 1;
+    self.contentMode = UIViewContentModeLeft;
+    self.clipsToBounds = YES;
+    self.shadowOffset = CGSizeMake(0,-1);
+    self.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
+}
+
+- (id) initWithFrame:(CGRect)frame
+{
+    if (nil != (self = [super initWithFrame:frame])) {
+        [self _commonInitForUILabel];
+    }
+    return self;
+}
+
+- (id) initWithCoder:(NSCoder*)coder
+{
+    if (nil != (self = [super initWithCoder:coder])) {
+        [self _commonInitForUILabel];
+        if ([coder containsValueForKey:kUIFontKey]) {
+            self.font = [coder decodeObjectForKey:kUIFontKey];
+        }
+        if ([coder containsValueForKey:kUIHighlightedColorKey]) {
+            self.highlightedTextColor = [coder decodeObjectForKey:kUIHighlightedColorKey];
+        }
+        if ([coder containsValueForKey:kUIShadowColorKey]) {
+            self.shadowColor = [coder decodeObjectForKey:kUIShadowColorKey];
+        }
+        if ([coder containsValueForKey:kUIShadowOffsetKey]) {
+            self.shadowOffset = [coder decodeCGSizeForKey:kUIShadowOffsetKey];
+        }
+        if ([coder containsValueForKey:kUITextColorKey]) {
+            self.textColor = [coder decodeObjectForKey:kUITextColorKey];
+        }
+        if ([coder containsValueForKey:kUITextKey]) {
+            self.text = [coder decodeObjectForKey:kUITextKey];
+        }
+        if ([coder containsValueForKey:kUIBaselineAdjustmentKey]) {
+            self.baselineAdjustment = [coder decodeIntegerForKey:kUIBaselineAdjustmentKey];
+        }
+        if ([coder containsValueForKey:kUIAdjustsFontSizeToFitKey]) {
+            self.adjustsFontSizeToFitWidth = [coder decodeBoolForKey:kUIAdjustsFontSizeToFitKey];
+        }
+    }
+    return self;
 }
 
 - (void)setText:(NSString *)newText
@@ -199,7 +259,9 @@
         [self drawTextInRect:drawRect];
         
         CGContextRestoreGState(UIGraphicsGetCurrentContext());
-    }
+    } else if(self.attributedText.length > 0) {
+		[self.attributedText drawInRect:NSRectFromCGRect(self.bounds)];
+	}
 }
 
 - (void)setFrame:(CGRect)newFrame

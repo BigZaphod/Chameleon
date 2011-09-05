@@ -60,8 +60,7 @@ typedef enum {
     ((orientation) == UIDeviceOrientationLandscapeLeft || \
     (orientation) == UIDeviceOrientationLandscapeRight)
 
-@interface UIDevice : NSObject {
-}
+@interface UIDevice : NSObject 
 
 + (UIDevice *)currentDevice;
 

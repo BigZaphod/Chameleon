@@ -40,24 +40,7 @@ typedef enum {
 
 @class UILabel, UIImageView, UIImage;
 
-@interface UIButton : UIControl {
-@protected
-    UIButtonType _buttonType;
-@private
-    UILabel *_titleLabel;
-    UIImageView *_imageView;
-    UIImageView *_backgroundImageView;
-    BOOL _reversesTitleShadowWhenHighlighted;
-    BOOL _adjustsImageWhenHighlighted;
-    BOOL _adjustsImageWhenDisabled;
-    BOOL _showsTouchWhenHighlighted;
-    UIEdgeInsets _contentEdgeInsets;
-    UIEdgeInsets _titleEdgeInsets;
-    UIEdgeInsets _imageEdgeInsets;
-    NSMutableDictionary *_content;
-    UIImage *_adjustedHighlightImage;
-    UIImage *_adjustedDisabledImage;
-}
+@interface UIButton : UIControl <NSCoding>
 
 + (id)buttonWithType:(UIButtonType)buttonType;
 

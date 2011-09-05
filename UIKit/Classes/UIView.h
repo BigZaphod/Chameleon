@@ -29,6 +29,7 @@
 
 #import "UIResponder.h"
 #import "UIGeometry.h"
+#import <AppKit/NSView.h>
 
 enum {
     UIViewAutoresizingNone                 = 0,
@@ -101,25 +102,7 @@ typedef NSUInteger UIViewAnimationOptions;
 
 @class UIColor, CALayer, UIViewController, UIGestureRecognizer;
 
-@interface UIView : UIResponder {
-@private
-    UIView *_superview;
-    NSMutableSet *_subviews;
-    BOOL _clearsContextBeforeDrawing;
-    BOOL _autoresizesSubviews;
-    BOOL _userInteractionEnabled;
-    CALayer *_layer;
-    NSInteger _tag;
-    UIViewContentMode _contentMode;
-    UIColor *_backgroundColor;
-    BOOL _implementsDrawRect;
-    BOOL _multipleTouchEnabled;
-    BOOL _exclusiveTouch;
-    UIViewController *_viewController;
-    UIViewAutoresizing _autoresizingMask;
-    BOOL _needsDidAppearOrDisappear;
-    NSMutableSet *_gestureRecognizers;
-}
+@interface UIView : UIResponder <NSCoding>
 
 + (Class)layerClass;
 

@@ -29,6 +29,7 @@
 
 #import "UIToolbarButton.h"
 #import "UIBarButtonItem.h"
+#import "UIBarButtonItem+UIPrivate.h"
 #import "UIImage+UIPrivate.h"
 #import "UILabel.h"
 #import "UIFont.h"

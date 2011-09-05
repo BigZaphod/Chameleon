@@ -33,6 +33,8 @@
 #import "UIColor.h"
 #import <QuartzCore/QuartzCore.h>
 
+static NSString* const kUIImageKey = @"UIImage";
+
 static NSArray *CGImagesWithUIImages(NSArray *images)
 {
     NSMutableArray *CGImages = [NSMutableArray arrayWithCapacity:[images count]];
@@ -42,9 +44,16 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
     return CGImages;
 }
 
-@implementation UIImageView
-@synthesize image=_image, animationImages=_animationImages, animationDuration=_animationDuration, highlightedImage=_highlightedImage, highlighted=_highlighted;
-@synthesize animationRepeatCount=_animationRepeatCount, highlightedAnimationImages=_highlightedAnimationImages;
+@implementation UIImageView {
+    NSInteger _drawMode;
+}
+@synthesize image = _image;
+@synthesize animationImages = _animationImages;
+@synthesize animationDuration = _animationDuration;
+@synthesize highlightedImage = _highlightedImage;
+@synthesize highlighted = _highlighted;
+@synthesize animationRepeatCount = _animationRepeatCount;
+@synthesize highlightedAnimationImages = _highlightedAnimationImages;
 
 + (BOOL)_instanceImplementsDrawRect
 {
@@ -59,6 +68,21 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
         self.opaque = NO;
     }
     return self;
+}
+
+- (id) initWithCoder:(NSCoder*)coder
+{
+    if (nil != (self = [super initWithCoder:coder])) {
+        if ([coder containsValueForKey:kUIImageKey]) {
+            self.image = [coder decodeObjectForKey:kUIImageKey];
+        }
+    }
+    return self;
+}
+
+- (void) encodeWithCoder:(NSCoder*)coder
+{
+    [self doesNotRecognizeSelector:_cmd];
 }
 
 - (id)initWithImage:(UIImage *)theImage

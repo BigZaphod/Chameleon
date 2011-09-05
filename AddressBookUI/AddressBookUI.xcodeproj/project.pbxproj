@@ -12,6 +12,12 @@
 		14C25EF31211ED0400622309 /* AddressBookUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 14C25EF21211ED0400622309 /* AddressBookUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14EFB1BB1211DB5300D19B0C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14EFB1BA1211DB5300D19B0C /* Cocoa.framework */; };
 		14FB132D12302FD900B615ED /* ABUnknownPersonViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14FB132B12302FD900B615ED /* ABUnknownPersonViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63645A9C1396F19F004FA465 /* ABNewPersonViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 63645A971396F19F004FA465 /* ABNewPersonViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63645A9D1396F19F004FA465 /* ABPeoplePickerNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 63645A981396F19F004FA465 /* ABPeoplePickerNavigationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63645A9E1396F19F004FA465 /* ABPersonViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 63645A991396F19F004FA465 /* ABPersonViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63645AA21396F217004FA465 /* ABNewPersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63645AA11396F217004FA465 /* ABNewPersonViewController.m */; };
+		63645AA41396F312004FA465 /* ABPeoplePickerNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63645AA31396F312004FA465 /* ABPeoplePickerNavigationController.m */; };
+		63645AA61396F385004FA465 /* ABPersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63645AA51396F385004FA465 /* ABPersonViewController.m */; };
 		78CB48EA133ABCEB008636DA /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78CB48E9133ABCEB008636DA /* AddressBook.framework */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +47,12 @@
 		14FB132B12302FD900B615ED /* ABUnknownPersonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABUnknownPersonViewController.h; path = Classes/ABUnknownPersonViewController.h; sourceTree = "<group>"; };
 		14FB132C12302FD900B615ED /* ABUnknownPersonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABUnknownPersonViewController.m; path = Classes/ABUnknownPersonViewController.m; sourceTree = "<group>"; };
 		14FB13351230307C00B615ED /* UIKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = UIKit.xcodeproj; path = ../UIKit/UIKit.xcodeproj; sourceTree = SOURCE_ROOT; };
+		63645A971396F19F004FA465 /* ABNewPersonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABNewPersonViewController.h; path = Classes/ABNewPersonViewController.h; sourceTree = "<group>"; };
+		63645A981396F19F004FA465 /* ABPeoplePickerNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABPeoplePickerNavigationController.h; path = Classes/ABPeoplePickerNavigationController.h; sourceTree = "<group>"; };
+		63645A991396F19F004FA465 /* ABPersonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABPersonViewController.h; path = Classes/ABPersonViewController.h; sourceTree = "<group>"; };
+		63645AA11396F217004FA465 /* ABNewPersonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABNewPersonViewController.m; path = Classes/ABNewPersonViewController.m; sourceTree = "<group>"; };
+		63645AA31396F312004FA465 /* ABPeoplePickerNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABPeoplePickerNavigationController.m; path = Classes/ABPeoplePickerNavigationController.m; sourceTree = "<group>"; };
+		63645AA51396F385004FA465 /* ABPersonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABPersonViewController.m; path = Classes/ABPersonViewController.m; sourceTree = "<group>"; };
 		78CB48E9133ABCEB008636DA /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* AddressBookUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AddressBookUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -104,6 +116,12 @@
 			isa = PBXGroup;
 			children = (
 				14C25EF21211ED0400622309 /* AddressBookUI.h */,
+				63645A971396F19F004FA465 /* ABNewPersonViewController.h */,
+				63645AA11396F217004FA465 /* ABNewPersonViewController.m */,
+				63645A981396F19F004FA465 /* ABPeoplePickerNavigationController.h */,
+				63645AA31396F312004FA465 /* ABPeoplePickerNavigationController.m */,
+				63645A991396F19F004FA465 /* ABPersonViewController.h */,
+				63645AA51396F385004FA465 /* ABPersonViewController.m */,
 				14FB132B12302FD900B615ED /* ABUnknownPersonViewController.h */,
 				14FB132C12302FD900B615ED /* ABUnknownPersonViewController.m */,
 			);
@@ -135,6 +153,9 @@
 			files = (
 				14C25EF31211ED0400622309 /* AddressBookUI.h in Headers */,
 				14FB132D12302FD900B615ED /* ABUnknownPersonViewController.h in Headers */,
+				63645A9C1396F19F004FA465 /* ABNewPersonViewController.h in Headers */,
+				63645A9D1396F19F004FA465 /* ABPeoplePickerNavigationController.h in Headers */,
+				63645A9E1396F19F004FA465 /* ABPersonViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,6 +239,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				143B578F1230357600F43562 /* ABUnknownPersonViewController.m in Sources */,
+				63645AA21396F217004FA465 /* ABNewPersonViewController.m in Sources */,
+				63645AA41396F312004FA465 /* ABPeoplePickerNavigationController.m in Sources */,
+				63645AA61396F385004FA465 /* ABPersonViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

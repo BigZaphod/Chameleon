@@ -42,13 +42,7 @@ typedef enum {
 
 @class UITouch, UIWindow, UIView, UIGestureRecognizer;
 
-@interface UIEvent : NSObject {
-@private
-    UIEventType _type;
-    UITouch *_touch;
-    NSTimeInterval _timestamp;
-    BOOL _unhandledKeyPressEvent;
-}
+@interface UIEvent : NSObject 
 
 @property (nonatomic, readonly) NSTimeInterval timestamp;
 

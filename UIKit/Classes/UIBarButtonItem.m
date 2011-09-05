@@ -28,10 +28,15 @@
  */
 
 #import "UIBarButtonItem.h"
-#import "UIView.h"
+#import "UIBarButtonItem+UIPrivate.h"
+#import "UIImage+UIPrivate.h"
 
-@implementation UIBarButtonItem
-@synthesize width=_width, customView=_customView, action=_action, target=_target, style=_style;
+@implementation UIBarButtonItem 
+@synthesize width = _width;
+@synthesize customView = _customView;
+@synthesize action = _action;
+@synthesize target = _target;
+@synthesize style = _style;
 
 - (id)init
 {
@@ -44,14 +49,74 @@
 
 - (id)initWithBarButtonSystemItem:(UIBarButtonSystemItem)systemItem target:(id)target action:(SEL)action
 {
-    if ((self=[self init])) {
-        _isSystemItem = YES;
-        _systemItem = systemItem;
-
-        self.target = target;
-        self.action = action;
-    }
-    return self;
+	if ((self=[self init])) {
+		_isSystemItem = YES;
+		_systemItem = systemItem;
+		
+		self.target = target;
+		self.action = action;
+		
+		switch (systemItem) {
+			case UIBarButtonSystemItemDone:
+				self.title = @"Done";
+				self.style = UIBarButtonItemStyleDone;
+				break;
+			case UIBarButtonSystemItemSave:
+				self.title = @"Save";
+				self.style = UIBarButtonItemStyleDone;
+				break;
+			case UIBarButtonSystemItemCancel:
+				self.title = @"Cancel";
+				self.style = UIBarButtonItemStylePlain;
+				break;
+			case UIBarButtonSystemItemEdit:
+				self.title = @"Edit";
+				self.style = UIBarButtonItemStylePlain;
+				break;
+			case UIBarButtonSystemItemUndo:
+				self.title = @"Undo";
+				self.style = UIBarButtonItemStylePlain;
+				break;
+			case UIBarButtonSystemItemRedo:
+				self.title = @"Redo";
+				self.style = UIBarButtonItemStylePlain;
+				break;
+			case UIBarButtonSystemItemAdd:
+				self.image = [UIImage _buttonBarSystemItemAdd];
+				self.style = UIBarButtonItemStylePlain;
+				break;
+			case UIBarButtonSystemItemAction:
+				self.image = [UIImage _buttonBarSystemItemAction];
+				self.style = UIBarButtonItemStylePlain;
+				break;
+			case UIBarButtonSystemItemCompose:
+				self.image = [UIImage _buttonBarSystemItemCompose];
+				self.style = UIBarButtonItemStylePlain;
+				break;
+			case UIBarButtonSystemItemReply:
+				self.image = [UIImage _buttonBarSystemItemReply];
+				self.style = UIBarButtonItemStylePlain;
+				break;
+            case UIBarButtonSystemItemFlexibleSpace:
+            case UIBarButtonSystemItemOrganize:
+            case UIBarButtonSystemItemBookmarks:
+            case UIBarButtonSystemItemSearch:
+            case UIBarButtonSystemItemRefresh:
+            case UIBarButtonSystemItemStop:
+            case UIBarButtonSystemItemCamera:
+            case UIBarButtonSystemItemTrash:
+            case UIBarButtonSystemItemPlay:
+            case UIBarButtonSystemItemPause:
+            case UIBarButtonSystemItemRewind:
+            case UIBarButtonSystemItemFastForward:
+            case UIBarButtonSystemItemFixedSpace:
+                // TODO: Implement these.
+                break;
+		}
+		
+		
+	}
+	return self;
 }
 
 - (id)initWithCustomView:(UIView *)customView

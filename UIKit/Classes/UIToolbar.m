@@ -29,6 +29,7 @@
 
 #import "UIToolbar.h"
 #import "UIBarButtonItem.h"
+#import "UIBarButtonItem+UIPrivate.h"
 #import "UIToolbarButton.h"
 #import "UIColor.h"
 #import "UIGraphics.h"
@@ -50,7 +51,7 @@
 
 @end
 
-@implementation UIToolbarItem
+@implementation UIToolbarItem 
 @synthesize item, view;
 
 - (id)initWithBarButtonItem:(UIBarButtonItem *)anItem
@@ -94,8 +95,12 @@
 
 
 
-@implementation UIToolbar
-@synthesize barStyle=_barStyle, tintColor=_tintColor, translucent=_translucent;
+@implementation UIToolbar {
+    NSMutableArray *_toolbarItems;
+}
+@synthesize barStyle = _barStyle;
+@synthesize tintColor = _tintColor;
+@synthesize translucent = _translucent;
 
 - (id)init
 {
@@ -222,7 +227,7 @@
     if (![self.items isEqualToArray:newItems]) {
         // if animated, fade old item views out, otherwise just remove them
         for (UIToolbarItem *toolbarItem in _toolbarItems) {
-            UIView *view = toolbarItem.view;
+            UIView* view = toolbarItem.view;
             if (view) {
                 [UIView animateWithDuration:animated? 0.2 : 0
                                  animations:^(void) {
@@ -239,23 +244,18 @@
         for (UIBarButtonItem *item in newItems) {
             UIToolbarItem *toolbarItem = [[UIToolbarItem alloc] initWithBarButtonItem:item];
             [_toolbarItems addObject:toolbarItem];
-            [self addSubview:toolbarItem.view];
-            [toolbarItem release];
-        }
-                
-        // if animated, fade them in
-        if (animated) {
-            for (UIToolbarItem *toolbarItem in _toolbarItems) {
-                UIView *view = toolbarItem.view;
-                if (view) {
-                    view.alpha = 0;
-                    
-                    [UIView animateWithDuration:0.2
-                                     animations:^(void) {
-                                         view.alpha = 1;
-                                     }];
-                }
+
+            UIView* view = toolbarItem.view;
+            if (view) {
+                view.alpha = 0.0;
+                [self addSubview:view];
+                [UIView animateWithDuration:!animated ? 0.0 : 0.2
+                    animations:^(void) {
+                        view.alpha = 1.0;
+                    }
+                ];
             }
+            [toolbarItem release];
         }
     }
 }

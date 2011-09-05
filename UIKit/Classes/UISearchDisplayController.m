@@ -38,8 +38,7 @@
 #import "UIViewController.h"
 
 
-@implementation UISearchDisplayController
-
+@implementation UISearchDisplayController 
 @synthesize searchContentsController = _viewController;
 @synthesize searchBar = _searchBar;
 @synthesize searchResultsTableView = _tableView;

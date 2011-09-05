@@ -49,21 +49,7 @@ typedef NSUInteger UIWebViewNavigationType;
 - (void)webViewDidFinishLoad:(UIWebView *)webView;
 @end
 
-@interface UIWebView : UIView {
-@private
-    __unsafe_unretained id _delegate;
-    NSURLRequest *_request;
-    UIDataDetectorTypes _dataDetectorTypes;
-    WebView *_webView;
-    UIViewAdapter *_webViewAdapter;
-    BOOL _scalesPageToFit;
-    
-    struct {
-        BOOL shouldStartLoadWithRequest : 1;
-        BOOL didFailLoadWithError : 1;
-        BOOL didFinishLoad : 1;
-    } _delegateHas;
-}
+@interface UIWebView : UIView 
 
 - (void)loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL;
 - (void)loadRequest:(NSURLRequest *)request;

@@ -30,10 +30,7 @@
 #import "UIControl.h"
 
 
-@interface UIPageControl : UIControl {
-    NSInteger _currentPage;
-    NSInteger _numberOfPages;
-}
+@interface UIPageControl : UIControl 
 
 @property (nonatomic) NSInteger currentPage;
 @property (nonatomic) NSInteger numberOfPages;
