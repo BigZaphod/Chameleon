@@ -42,7 +42,7 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize);
 
 @interface UIScroller : UIView {
 @private
-    __unsafe_unretained id<_UIScrollerDelegate> _delegate;
+    __weak id<_UIScrollerDelegate> _delegate;
     CGFloat _contentOffset;
     CGFloat _contentSize;
     CGFloat _dragOffset;
@@ -62,7 +62,7 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize);
 - (void)quickFlash;
 
 @property (nonatomic, assign) BOOL alwaysVisible;		// if YES, -flash has no effect on the scroller's alpha, setting YES fades alpha to 1, setting NO fades it out if it was visible
-@property (nonatomic, assign) id<_UIScrollerDelegate> delegate;
+@property (nonatomic, ASSIGNWEAK) id<_UIScrollerDelegate> delegate;
 @property (nonatomic, assign) CGFloat contentSize;		// used to calulate how big the slider knob should be (uses its own frame height/width and compares against this value)
 @property (nonatomic, assign) CGFloat contentOffset;	// set this after contentSize is set or else it'll normalize in unexpected ways
 @property (nonatomic) UIScrollViewIndicatorStyle indicatorStyle;

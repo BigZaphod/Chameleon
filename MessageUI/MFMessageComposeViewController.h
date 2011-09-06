@@ -43,7 +43,7 @@ enum MessageComposeResult {
 typedef enum MessageComposeResult MessageComposeResult;
 
 @interface MFMessageComposeViewController : NSObject {
-  __unsafe_unretained id<MFMessageComposeViewControllerDelegate> _messageComposeDelegate;
+  __weak id<MFMessageComposeViewControllerDelegate> _messageComposeDelegate;
   NSArray *_recipients;
   NSString *_body;
 }

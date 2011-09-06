@@ -53,13 +53,13 @@ typedef enum {
 @interface UITransitionView : UIView {
     UITransition _transition;
     UIView *_view;
-    __unsafe_unretained id<UITransitionViewDelegate> _delegate;
+    __weak id<UITransitionViewDelegate> _delegate;
 }
 
 - (id)initWithFrame:(CGRect)frame view:(UIView *)aView;
 
 @property (nonatomic, retain) UIView *view;
 @property (nonatomic, assign) UITransition transition;
-@property (nonatomic, assign) id<UITransitionViewDelegate> delegate;
+@property (nonatomic, ASSIGNWEAK) id<UITransitionViewDelegate> delegate;
 
 @end

@@ -124,6 +124,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
         [_rootViewController release];
         _rootViewController = [rootViewController retain];
         _rootViewController.view.frame = self.bounds;    // unsure about this
+        _rootViewController.view.autoresizingMask =  UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin |UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
         [self addSubview:_rootViewController.view];
 	}
 }
