@@ -211,11 +211,15 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
 - (CGRect)leftViewRectForBounds:(CGRect)bounds
 {
-    const CGRect frame = _leftView.frame;
-    bounds.origin.x = 0;
-    bounds.origin.y = (bounds.size.height / 2.f) - (frame.size.height/2.f);
-    bounds.size = frame.size;
-    return CGRectIntegral(bounds);
+    if (_leftView) {
+        const CGRect frame = _leftView.frame;
+        bounds.origin.x = 0;
+        bounds.origin.y = (bounds.size.height / 2.f) - (frame.size.height/2.f);
+        bounds.size = frame.size;
+        return CGRectIntegral(bounds);
+    } else {
+        return CGRectZero;
+    }
 }
 
 - (CGRect)placeholderRectForBounds:(CGRect)bounds
@@ -225,11 +229,15 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
 - (CGRect)rightViewRectForBounds:(CGRect)bounds
 {
-    const CGRect frame = _rightView.frame;
-    bounds.origin.x = bounds.size.width - frame.size.width;
-    bounds.origin.y = (bounds.size.height / 2.f) - (frame.size.height/2.f);
-    bounds.size = frame.size;
-    return CGRectIntegral(bounds);
+    if (_rightView) {
+        const CGRect frame = _rightView.frame;
+        bounds.origin.x = bounds.size.width - frame.size.width;
+        bounds.origin.y = (bounds.size.height / 2.f) - (frame.size.height/2.f);
+        bounds.size = frame.size;
+        return CGRectIntegral(bounds);
+    } else {
+        return CGRectZero;
+    }
 }
 
 - (CGRect)textRectForBounds:(CGRect)bounds

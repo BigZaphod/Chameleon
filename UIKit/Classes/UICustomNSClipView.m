@@ -33,12 +33,11 @@
 #import <QuartzCore/CATransaction.h>
 
 @implementation UICustomNSClipView
+@synthesize parentLayer, behaviorDelegate;
 
-- (id)initWithFrame:(NSRect)frame layerParent:(CALayer *)layer behaviorDelegate:(id<UICustomNSClipViewBehaviorDelegate>)aBehaviorDelegate
+- (id)initWithFrame:(NSRect)frame
 {
     if ((self=[super initWithFrame:frame])) {
-        parentLayer = layer;
-        behaviorDelegate = aBehaviorDelegate;
         [self setDrawsBackground:NO];
         [self setWantsLayer:YES];
     }
@@ -61,7 +60,7 @@
 
 - (void)fixupTheLayer
 {
-    if ([self superview]) {
+    if ([self superview] && parentLayer) {
         [CATransaction begin];
         [CATransaction setValue:(id)kCFBooleanTrue
                          forKey:kCATransactionDisableActions];

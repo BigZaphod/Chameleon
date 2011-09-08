@@ -67,8 +67,9 @@
             && [containerView respondsToSelector:@selector(contentSize)]
             && [containerView respondsToSelector:@selector(isScrollEnabled)];
         
-        clipView = [[UICustomNSClipView alloc] initWithFrame:NSMakeRect(0,0,100,100) layerParent:self behaviorDelegate:self];
-        textView = [[UICustomNSTextView alloc] initWithFrame:[clipView frame] secureTextEntry:secureTextEntry isField:isField];
+        clipView = [(UICustomNSClipView *)[UICustomNSClipView alloc] initWithFrame:NSMakeRect(0,0,100,100)];
+        textView = [(UICustomNSTextView *)[UICustomNSTextView alloc] initWithFrame:[clipView frame] secureTextEntry:secureTextEntry isField:isField];
+
         [textView setDelegate:self];
         [clipView setDocumentView:textView];
         
@@ -102,6 +103,9 @@
         [clipView scrollToPoint:NSZeroPoint];
     }
 
+    clipView.parentLayer = self;
+    clipView.behaviorDelegate = self;
+
     [[[containerView window].screen UIKitView] addSubview:clipView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateScrollViewContentOffset) name:NSViewBoundsDidChangeNotification object:clipView];
@@ -117,6 +121,9 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewBoundsDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewDidMoveToSuperviewNotification object:nil];
     
+    clipView.parentLayer = nil;
+    clipView.behaviorDelegate = nil;
+
     [clipView removeFromSuperview];
 }
 
