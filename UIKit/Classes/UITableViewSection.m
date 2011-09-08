@@ -38,11 +38,19 @@
     return rowsHeight + headerHeight + footerHeight;
 }
 
+- (void)setRowHeights:(CGFloat *)newRowHeights
+{
+    if (rowHeights != newRowHeights) {
+        if (rowHeights) free(rowHeights);
+        rowHeights = newRowHeights;
+    }
+}
+
 - (void)dealloc
 {
+    if (rowHeights) free(rowHeights);
     [headerView release];
     [footerView release];
-    [rowHeights release];
     [headerTitle release];
     [footerTitle release];
     [super dealloc];

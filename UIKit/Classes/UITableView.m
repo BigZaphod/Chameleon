@@ -191,21 +191,20 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
                 sectionRecord.footerHeight = 0;
             }
             
-            NSMutableArray *rowHeights = [[NSMutableArray alloc] initWithCapacity:numberOfRowsInSection];
+            CGFloat *rowHeights = malloc(numberOfRowsInSection * sizeof(CGFloat));
             CGFloat totalRowsHeight = 0;
             
             for (NSInteger row=0; row<numberOfRowsInSection; row++) {
                 const CGFloat rowHeight = _delegateHas.heightForRowAtIndexPath? [self.delegate tableView:self heightForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section]] : defaultRowHeight;
-                [rowHeights addObject:[NSNumber numberWithFloat:rowHeight]];
+                rowHeights[row] = rowHeight;
                 totalRowsHeight += rowHeight;
             }
             
             sectionRecord.rowsHeight = totalRowsHeight;
-            sectionRecord.rowHeights = rowHeights;
+            sectionRecord.rowHeights = rowHeights;          // transfers ownership!
             
             [_sections addObject:sectionRecord];
             [sectionRecord release];
-            [rowHeights release];
         }
     }
 }
@@ -269,7 +268,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
     [_cachedCells removeAllObjects];
     
     for (NSInteger section=0; section<numberOfSections; section++) {
-        NSAutoreleasePool *sectionPool = [[NSAutoreleasePool alloc] init];
         CGRect sectionRect = [self rectForSection:section];
         tableHeight += sectionRect.size.height;
         if (CGRectIntersectsRect(sectionRect, visibleBounds)) {
@@ -287,7 +285,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
             }
             
             for (NSInteger row=0; row<numberOfRows; row++) {
-                NSAutoreleasePool *rowPool = [[NSAutoreleasePool alloc] init];
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
                 CGRect rowRect = [self rectForRowAtIndexPath:indexPath];
                 if (CGRectIntersectsRect(rowRect,visibleBounds) && rowRect.size.height > 0) {
@@ -302,10 +299,8 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
                         [self addSubview:cell];
                     }
                 }
-                [rowPool release];
             }
         }
-        [sectionPool release];
     }
     
     // remove old cells, but save off any that might be reusable
@@ -386,16 +381,19 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
     if (indexPath && indexPath.section < [_sections count]) {
         UITableViewSection *sectionRecord = [_sections objectAtIndex:indexPath.section];
+        const NSUInteger row = indexPath.row;
         
-        if (indexPath.row < sectionRecord.numberOfRows) {
+        if (row < sectionRecord.numberOfRows) {
+            CGFloat *rowHeights = sectionRecord.rowHeights;
             CGFloat offset = [self _offsetForSection:indexPath.section];
+
             offset += sectionRecord.headerHeight;
             
-            for (NSInteger row=0; row<indexPath.row; row++) {
-                offset += [[sectionRecord.rowHeights objectAtIndex:row] floatValue];
+            for (NSInteger currentRow=0; currentRow<row; currentRow++) {
+                offset += rowHeights[currentRow];
             }
             
-            return [self _CGRectFromVerticalOffset:offset height:[[sectionRecord.rowHeights objectAtIndex:indexPath.row] floatValue]];
+            return [self _CGRectFromVerticalOffset:offset height:rowHeights[row]];
         }
     }
     
@@ -431,13 +429,14 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
     
     for (NSInteger section=0; section<numberOfSections; section++) {
         UITableViewSection *sectionRecord = [_sections objectAtIndex:section];
+        CGFloat *rowHeights = sectionRecord.rowHeights;
         const NSInteger numberOfRows = sectionRecord.numberOfRows;
         
         offset += sectionRecord.headerHeight;
 
         if (offset + sectionRecord.rowsHeight >= rect.origin.y) {
             for (NSInteger row=0; row<numberOfRows; row++) {
-                const CGFloat height = [[sectionRecord.rowHeights objectAtIndex:row] floatValue];
+                const CGFloat height = rowHeights[row];
                 CGRect simpleRowRect = CGRectMake(rect.origin.x, offset, rect.size.width, height);
                 
                 if (CGRectIntersectsRect(rect,simpleRowRect)) {
