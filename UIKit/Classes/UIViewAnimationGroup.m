@@ -56,6 +56,7 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
         _animationRepeatAutoreverses = NO;
         _animationRepeatCount = 0;
         _animationBeginTime = CACurrentMediaTime();
+        _animatingViews = [[NSMutableSet alloc] initWithCapacity:0];
     }
     return self;
 }
@@ -64,6 +65,7 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 {
     [_name release];
     [_animationDelegate release];
+    [_animatingViews release];
     [super dealloc];
 }
 
@@ -99,6 +101,7 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
             
             [invocation invokeWithTarget:_animationDelegate];
         }
+        [_animatingViews removeAllObjects];
     }
 }
 
@@ -146,8 +149,10 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
     return animation;
 }
 
-- (id)actionForLayer:(CALayer *)layer forKey:(NSString *)keyPath
+- (id)actionForView:(UIView *)view forKey:(NSString *)keyPath
 {
+    [_animatingViews addObject:view];
+    CALayer *layer = view.layer;
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:keyPath];
     animation.fromValue = _animationBeginsFromCurrentState? [layer.presentationLayer valueForKey:keyPath] : [layer valueForKey:keyPath];
     return [self addAnimation:animation];

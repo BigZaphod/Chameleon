@@ -77,14 +77,14 @@ static BOOL _animationsEnabled = YES;
 - (id)initWithFrame:(CGRect)theFrame
 {
     if ((self=[super init])) {
-        _implementsDrawRect = [[self class] _instanceImplementsDrawRect];
+        _implementsDrawRect = [isa _instanceImplementsDrawRect];
         _clearsContextBeforeDrawing = YES;
         _autoresizesSubviews = YES;
         _userInteractionEnabled = YES;
         _subviews = [[NSMutableSet alloc] init];
         _gestureRecognizers = [[NSMutableSet alloc] init];
 
-        _layer = [[[[self class] layerClass] alloc] init];
+        _layer = [[[isa layerClass] alloc] init];
         _layer.delegate = self;
         _layer.layoutManager = [UIViewLayoutManager layoutManager];
 
@@ -98,13 +98,17 @@ static BOOL _animationsEnabled = YES;
 
 - (void)dealloc
 {
-    [_subviews makeObjectsPerformSelector:@selector(_setNilSuperview)];
-    [_subviews release];
+    [[_subviews allObjects] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+
     _layer.layoutManager = nil;
     _layer.delegate = nil;
+    [_layer removeFromSuperlayer];
+
+    [_subviews release];
     [_layer release];
     [_backgroundColor release];
     [_gestureRecognizers release];
+    
     [super dealloc];
 }
 
@@ -194,6 +198,8 @@ static BOOL _animationsEnabled = YES;
 
 - (void)addSubview:(UIView *)subview
 {
+    NSAssert((!subview || [subview isKindOfClass:[UIView class]]), @"the subview must be a UIView");
+
     if (subview && subview.superview != self) {
         UIWindow *oldWindow = subview.window;
         UIWindow *newWindow = self.window;
@@ -267,13 +273,6 @@ static BOOL _animationsEnabled = YES;
     if (subview.superview == self) {
         [_layer insertSublayer:subview.layer atIndex:0];
     }
-}
-
-- (void)_setNilSuperview
-{
-    [self willChangeValueForKey:@"superview"];
-    _superview = nil;
-    [self didChangeValueForKey:@"superview"];
 }
 
 - (void)removeFromSuperview
@@ -561,8 +560,8 @@ static BOOL _animationsEnabled = YES;
 
 - (id)actionForLayer:(CALayer *)theLayer forKey:(NSString *)event
 {
-    if (_animationsEnabled && [_animationGroups lastObject]) {
-        return [[_animationGroups lastObject] actionForLayer:theLayer forKey:event] ?: (id)[NSNull null];
+    if (_animationsEnabled && [_animationGroups lastObject] && theLayer == _layer) {
+        return [[_animationGroups lastObject] actionForView:self forKey:event] ?: (id)[NSNull null];
     } else {
         return [NSNull null];
     }
@@ -640,7 +639,7 @@ static BOOL _animationsEnabled = YES;
 
         if (!CGSizeEqualToSize(oldBounds.size, newBounds.size)) {
             if (_autoresizesSubviews) {
-                for (UIView *subview in _subviews) {
+                for (UIView *subview in [_subviews allObjects]) {
                     [subview _superviewSizeDidChangeFrom:oldBounds.size to:newBounds.size];
                 }
             }
