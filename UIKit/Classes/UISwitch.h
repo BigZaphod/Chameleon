@@ -30,6 +30,7 @@
 #import "UIControl.h"
 
 @interface UISwitch : UIControl {
+    BOOL _on;
 }
 
 - (id)initWithFrame:(CGRect)frame;
