@@ -88,6 +88,14 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
     [_screen release];
     [_undoManager release];
     [_rootViewController release];
+    
+    // since UIView's dealloc is called after this one, it's hard ot say what might happen in there due to all of the subview removal stuff
+    // so it's safer to make sure these things are nil now rather than potential garbage. I don't like how much work UIView's -dealloc is doing
+    // but at the moment I don't see a good way around it...
+    _screen = nil;
+    _undoManager = nil;
+    _rootViewController = nil;
+    
     [super dealloc];
 }
 

@@ -94,7 +94,10 @@ static UIColor *ClearColor = nil;
 
 - (id)initWithNSColor:(NSColor *)aColor
 {
-    if ((self=[super init])) {
+    if (!aColor) {
+        [self release];
+        return nil;
+    } else if ((self=[super init])) {
         NSColor *c = [aColor colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
         CGFloat components[[c numberOfComponents]];
         [c getComponents:components];
@@ -172,7 +175,13 @@ static UIColor *ClearColor = nil;
 
 - (id)initWithCGColor:(CGColorRef)ref
 {
-    return [self initWithNSColor:[NSColor colorWithCIColor:[CIColor colorWithCGColor:ref]]];
+    if (!ref) {
+        [self release];
+        return nil;
+    } else if ((self=[super init])) {
+        _color = CGColorRetain(ref);
+    }
+    return self;
 }
 
 - (id)initWithPatternImage:(UIImage *)patternImage

@@ -45,6 +45,7 @@ static UIEdgeInsets UIToolbarButtonInset = {0,4,0,4};
 
 - (id)initWithBarButtonItem:(UIBarButtonItem *)item
 {
+    NSAssert(item != nil, @"bar button item must not be nil");
     CGRect frame = CGRectMake(0,0,24,24);
     
     if ((self=[super initWithFrame:frame])) {

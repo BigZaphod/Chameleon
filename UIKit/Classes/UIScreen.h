@@ -40,9 +40,9 @@ extern NSString *const UIScreenModeDidChangeNotification;
 @private
     UIImageView *_grabber;
     CALayer *_layer;
-    UIKitView *_UIKitView;
+    __unsafe_unretained UIKitView *_UIKitView;
     UIScreenMode *_currentMode;
-    UIPopoverController *_popoverController;
+    __unsafe_unretained UIPopoverController *_popoverController;
 }
 
 + (UIScreen *)mainScreen;

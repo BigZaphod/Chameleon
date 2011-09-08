@@ -42,6 +42,9 @@
 {
     [self setWantsLayer:YES];
 
+    assert(_screen != nil);
+    assert([self layer] != nil);
+    
     [[self layer] insertSublayer:[_screen _layer] atIndex:0];
     [_screen _layer].frame = [self layer].bounds;
     [_screen _layer].autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
@@ -60,6 +63,7 @@
 {
     [_screen release];
     [_mainWindow release];
+    [_trackingArea release];
     [super dealloc];
 }
 

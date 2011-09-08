@@ -106,6 +106,9 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 
 - (void)dealloc
 {
+    _horizontalScroller.delegate = nil;
+    _verticalScroller.delegate = nil;
+    
     [_panGestureRecognizer release];
     [_scrollWheelGestureRecognizer release];
     [_scrollAnimation release];

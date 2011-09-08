@@ -63,10 +63,16 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
 
 - (id)initWithImage:(UIImage *)theImage
 {
-    CGSize imageSize = theImage.size;
-    if ((self = [self initWithFrame:CGRectMake(0,0,imageSize.width,imageSize.height)])) {
+    CGRect frame = CGRectZero;
+
+    if (theImage) {
+        frame.size = theImage.size;
+    }
+        
+    if ((self = [self initWithFrame:frame])) {
         self.image = theImage;
     }
+
     return self;
 }
 
@@ -81,7 +87,7 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
-    return _image.size;
+    return _image? _image.size : CGSizeZero;
 }
 
 - (void)setHighlighted:(BOOL)h

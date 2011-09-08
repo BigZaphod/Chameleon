@@ -68,6 +68,7 @@ static const CGFloat ToolbarHeight = 28;
 
 - (void)dealloc
 {
+    _navigationBar.delegate = nil;
     [_viewControllers release];
     [_navigationBar release];
     [_toolbar release];

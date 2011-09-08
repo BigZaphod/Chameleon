@@ -32,7 +32,7 @@
 @class UIPopoverController;
 
 @interface UIPopoverNSWindow : NSWindow {
-    UIPopoverController *_popoverController;
+    __unsafe_unretained UIPopoverController *_popoverController;
 }
 
 - (void)setPopoverController:(UIPopoverController *)controller;

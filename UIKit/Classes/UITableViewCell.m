@@ -118,11 +118,13 @@ extern CGFloat _UITableViewDefaultRowHeight;
     if (_style == UITableViewCellStyleDefault) {
         const CGFloat padding = 5;
 
-        BOOL showImage = (_imageView.image != nil);
-        _imageView.frame = CGRectMake(padding,0,(showImage? 30:0),contentFrame.size.height);
+        const BOOL showImage = (_imageView.image != nil);
+        const CGFloat imageWidth = (showImage? 30:0);
+
+        _imageView.frame = CGRectMake(padding,0,imageWidth,contentFrame.size.height);
         
         CGRect textRect;
-        textRect.origin = CGPointMake(padding+_imageView.frame.size.width+padding,0);
+        textRect.origin = CGPointMake(padding+imageWidth+padding,0);
         textRect.size = CGSizeMake(MAX(0,contentFrame.size.width-textRect.origin.x-padding),contentFrame.size.height);
         _textLabel.frame = textRect;
     }

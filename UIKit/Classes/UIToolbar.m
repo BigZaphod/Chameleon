@@ -56,6 +56,8 @@
 - (id)initWithBarButtonItem:(UIBarButtonItem *)anItem
 {
     if ((self=[super init])) {
+        NSAssert((anItem != nil), @"the bar button item must not be nil");
+        
         item = [anItem retain];
         
         if (!item->_isSystemItem && item.customView) {

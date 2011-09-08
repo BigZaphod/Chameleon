@@ -98,9 +98,17 @@ NSMutableArray *_allScreens = nil;
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_allScreens removeObject:[NSValue valueWithNonretainedObject:self]];
+
+    _layer.layoutManager = nil;
+    _layer.delegate = nil;
+
+    [_grabber.layer removeFromSuperlayer];
+    [_layer removeFromSuperlayer];
+
     [_grabber release];
     [_layer release];
     [_currentMode release];
+    
     [super dealloc];
 }
 
@@ -122,10 +130,9 @@ NSMutableArray *_allScreens = nil;
 - (BOOL)_hasResizeIndicator
 {
     NSWindow *realWindow = [_UIKitView window];
+    NSView *contentView = [realWindow contentView];
 
-    if (realWindow && ([realWindow styleMask] & NSResizableWindowMask) && [realWindow showsResizeIndicator] && !NSEqualSizes([realWindow minSize], [realWindow maxSize])) {
-        NSView *contentView = [realWindow contentView];
-        
+    if (_UIKitView && realWindow && contentView && ([realWindow styleMask] & NSResizableWindowMask) && [realWindow showsResizeIndicator] && !NSEqualSizes([realWindow minSize], [realWindow maxSize])) {
         const CGRect myBounds = NSRectToCGRect([_UIKitView bounds]);
         const CGPoint myLowerRight = CGPointMake(CGRectGetMaxX(myBounds),CGRectGetMaxY(myBounds));
         const CGRect contentViewBounds = NSRectToCGRect([contentView frame]);
@@ -186,6 +193,7 @@ NSMutableArray *_allScreens = nil;
             [[NSNotificationCenter defaultCenter] postNotificationName:UIScreenDidConnectNotification object:self];
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_UIKitViewFrameDidChange:) name:NSViewFrameDidChangeNotification object:_UIKitView];
         } else {
+            self.currentMode = nil;
             [_allScreens removeObject:[NSValue valueWithNonretainedObject:self]];
             [[NSNotificationCenter defaultCenter] postNotificationName:UIScreenDidDisconnectNotification object:self];
         }
@@ -194,14 +202,14 @@ NSMutableArray *_allScreens = nil;
 
 - (void)_UIKitViewFrameDidChange:(NSNotification *)note
 {
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:self.currentMode forKey:@"_previousMode"];
+    NSDictionary *userInfo = (self.currentMode)? [NSDictionary dictionaryWithObject:self.currentMode forKey:@"_previousMode"] : nil;
     self.currentMode = [UIScreenMode screenModeWithNSView:_UIKitView];
     [[NSNotificationCenter defaultCenter] postNotificationName:UIScreenModeDidChangeNotification object:self userInfo:userInfo];
 }
 
 - (NSArray *)availableModes
 {
-    return [NSArray arrayWithObject:self.currentMode];
+    return (self.currentMode)? [NSArray arrayWithObject:self.currentMode] : nil;
 }
 
 - (UIView *)_hitTest:(CGPoint)clickPoint event:(UIEvent *)theEvent

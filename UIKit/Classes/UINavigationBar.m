@@ -156,7 +156,7 @@ typedef enum {
         if (_rightView) [previousViews addObject:_rightView];
 
         if (animated) {
-            CGFloat moveCenterBy = self.bounds.size.width - _centerView.frame.origin.x;
+            CGFloat moveCenterBy = self.bounds.size.width - ((_centerView)? _centerView.frame.origin.x : 0);
             CGFloat moveLeftBy = self.bounds.size.width * 0.33f;
 
             if (transition == _UINavigationBarTransitionPush) {
@@ -166,8 +166,8 @@ typedef enum {
             
             [UIView animateWithDuration:kAnimationDuration
                              animations:^(void) {
-                                 _leftView.frame = CGRectOffset(_leftView.frame, moveLeftBy, 0);
-                                 _centerView.frame = CGRectOffset(_centerView.frame, moveCenterBy, 0);
+                                 if (_leftView)     _leftView.frame = CGRectOffset(_leftView.frame, moveLeftBy, 0);
+                                 if (_centerView)   _centerView.frame = CGRectOffset(_centerView.frame, moveCenterBy, 0);
                              }];
             
             [UIView animateWithDuration:kAnimationDuration * 0.8
@@ -242,7 +242,7 @@ typedef enum {
         [self addSubview:_centerView];
 
         if (animated) {
-            CGFloat moveCenterBy = self.bounds.size.width - _centerView.frame.origin.x;
+            CGFloat moveCenterBy = self.bounds.size.width - ((_centerView)? _centerView.frame.origin.x : 0);
             CGFloat moveLeftBy = self.bounds.size.width * 0.33f;
 
             if (transition == _UINavigationBarTransitionPush) {
@@ -250,11 +250,12 @@ typedef enum {
                 moveCenterBy *= -1.f;
             }
 
-            CGRect destinationLeftFrame = _leftView.frame;
-            CGRect destinationCenterFrame = _centerView.frame;
+            CGRect destinationLeftFrame = _leftView? _leftView.frame : CGRectZero;
+            CGRect destinationCenterFrame = _centerView? _centerView.frame : CGRectZero;
             
-            _leftView.frame = CGRectOffset(_leftView.frame, -moveLeftBy, 0);
-            _centerView.frame = CGRectOffset(_centerView.frame, -moveCenterBy, 0);
+            if (_leftView)      _leftView.frame = CGRectOffset(_leftView.frame, -moveLeftBy, 0);
+            if (_centerView)    _centerView.frame = CGRectOffset(_centerView.frame, -moveCenterBy, 0);
+
             _leftView.alpha = 0;
             _rightView.alpha = 0;
             _centerView.alpha = 0;
