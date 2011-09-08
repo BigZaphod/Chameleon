@@ -1,5 +1,5 @@
-<h1> This fork contains iOS 5 features. It has divereged a little but should remain compatible. 
-It only supports the fragile ABI so it only works with 64bit builds of OS X and only compiles with Clang. </h1>
+<h1> This fork contains new unreleased iOS 5 features. It has heavily updated from BigZaphod's version but should remain compatible. 
+The biggest difference is that this version embrasses the non-fragile ABI used by the 64bit Objective-C runtime on OS X so it will not compile on 32bit Objective-C runtimes </h1>
 
 
 # Chameleon
