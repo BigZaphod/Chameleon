@@ -58,6 +58,8 @@ typedef NSUInteger UIPopoverArrowDirection;
     id _popoverWindow;
     id _overlayWindow;
     
+    BOOL _isDismissing;
+    
     __unsafe_unretained id _delegate;
     struct {
         BOOL popoverControllerDidDismissPopover : 1;
