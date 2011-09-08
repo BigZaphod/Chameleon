@@ -40,19 +40,24 @@ void UIGraphicsPushContext(CGContextRef ctx)
         contextStack = [[NSMutableArray alloc] initWithCapacity:2];
     }
     
+    if ([NSGraphicsContext currentContext]) {
+        [contextStack addObject:[NSGraphicsContext currentContext]];
+    }
+
     [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:(void *)ctx flipped:YES]];
-    [contextStack addObject:[NSGraphicsContext currentContext]];
 }
 
 void UIGraphicsPopContext()
 {
-    [contextStack removeLastObject];
-    [NSGraphicsContext setCurrentContext:[contextStack lastObject]];
+    if ([contextStack count] > 0) {
+        [NSGraphicsContext setCurrentContext:[contextStack lastObject]];
+        [contextStack removeLastObject];
+    }
 }
 
 CGContextRef UIGraphicsGetCurrentContext()
 {
-    return [[contextStack lastObject] graphicsPort];
+    return [[NSGraphicsContext currentContext] graphicsPort];
 }
 
 void UIGraphicsBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloat scale)
