@@ -62,7 +62,10 @@ typedef NSUInteger UIPopoverArrowDirection;
     
     CGSize _popoverContentSize;
     
-    id _delegate;
+    BOOL _isDismissing;
+    
+    __unsafe_unretained id _delegate;
+
     struct {
         BOOL popoverControllerDidDismissPopover : 1;
         BOOL popoverControllerShouldDismissPopover : 1;
