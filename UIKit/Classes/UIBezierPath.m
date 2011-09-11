@@ -188,7 +188,7 @@
 - (void)addCurveToPoint:(CGPoint)endPoint controlPoint1:(CGPoint)controlPoint1 controlPoint2:(CGPoint)controlPoint2
 {
     CGMutablePathRef mutablePath = CGPathCreateMutableCopy(_path);
-    CGPathAddCurveToPoint(mutablePath, NULL, endPoint.x, endPoint.y, controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y);
+    CGPathAddCurveToPoint(mutablePath, NULL, controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endPoint.x, endPoint.y);
     self.CGPath = mutablePath;
     CGPathRelease(mutablePath);
 }
@@ -196,7 +196,7 @@
 - (void)addQuadCurveToPoint:(CGPoint)endPoint controlPoint:(CGPoint)controlPoint
 {
     CGMutablePathRef mutablePath = CGPathCreateMutableCopy(_path);
-    CGPathAddQuadCurveToPoint(mutablePath, NULL, endPoint.x, endPoint.y, controlPoint.x, controlPoint.y);
+    CGPathAddQuadCurveToPoint(mutablePath, NULL, controlPoint.x, controlPoint.y, endPoint.x, endPoint.y);
     self.CGPath = mutablePath;
     CGPathRelease(mutablePath);
 }
