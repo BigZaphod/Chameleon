@@ -30,7 +30,9 @@
 #import "UIPopoverNSWindow.h"
 #import "UIPopoverController+UIPrivate.h"
 
-@implementation UIPopoverNSWindow
+@implementation UIPopoverNSWindow {
+    UIPopoverController *_popoverController;
+}
 
 - (void)setPopoverController:(UIPopoverController *)controller
 {

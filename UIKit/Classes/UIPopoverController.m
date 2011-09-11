@@ -124,9 +124,9 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 
 @implementation UIPopoverController {
     UIPopoverView *_popoverView;
-    id _popoverWindow;
-    id _overlayWindow;
-    UIWindow* _windowToReactivate;
+    UIPopoverNSWindow *_popoverWindow;
+    NSWindow *_overlayWindow;
+    UIWindow *_windowToReactivate;
     
     struct {
         BOOL popoverControllerDidDismissPopover : 1;
