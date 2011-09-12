@@ -59,7 +59,20 @@
 
 #import "UIImage+UIPrivate.h"
 
-@interface UINinePartImage : UIImage 
+@interface UINinePartImage : UIImage {
+    UIEdgeInsets _capInsets;
+    
+    CGImageRef _topLeftCorner;
+    CGImageRef _topEdgeFill;
+    CGImageRef _topRightCorner;
+    CGImageRef _leftEdgeFill;
+    CGImageRef _centerFill;
+    CGImageRef _rightEdgeFill;
+    CGImageRef _bottomLeftCorner;
+    CGImageRef _bottomEdgeFill;
+    CGImageRef _bottomRightCorner;
+}
+
 
 - (id)initWithCGImage:(CGImageRef)theImage leftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight;
 

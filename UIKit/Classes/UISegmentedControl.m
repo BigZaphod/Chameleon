@@ -70,10 +70,7 @@ static NSString* const kUIMomentaryKey = @"UIMomentary";
 - (void)_setMetaValue:(id)value forKey:(NSString *)key segmentIndex:(NSUInteger)index;
 @end
 
-@implementation UISegmentedControl {
-    NSMutableArray *_segments;
-    NSMutableDictionary *_segmentMeta;
-}
+@implementation UISegmentedControl 
 @synthesize numberOfSegments = _numberOfSegments;
 @synthesize selectedSegmentIndex = _selectedSegmentIndex;
 @synthesize momentary = _momentary;

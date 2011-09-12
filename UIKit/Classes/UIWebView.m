@@ -31,16 +31,7 @@
 #import "UIViewAdapter.h"
 #import <WebKit/WebKit.h>
 
-@implementation UIWebView {
-    WebView *_webView;
-    UIViewAdapter *_webViewAdapter;
-    
-    struct {
-        BOOL shouldStartLoadWithRequest : 1;
-        BOOL didFailLoadWithError : 1;
-        BOOL didFinishLoad : 1;
-    } _delegateHas;
-}
+@implementation UIWebView 
 @synthesize request = _request;
 @synthesize delegate = _delegate;
 @synthesize dataDetectorTypes = _dataDetectorTypes;

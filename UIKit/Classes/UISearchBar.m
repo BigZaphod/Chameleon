@@ -49,31 +49,17 @@
 - (BOOL)searchBar:(UISearchBar *)searchBar doCommandBySelector:(SEL)selector;
 @end
 
-@implementation UISearchBar {
-    UITextField *_searchField;
-	
-	struct {
-        BOOL shouldBeginEditing : 1;
-        BOOL didBeginEditing : 1;
-        BOOL shouldEndEditing : 1;
-        BOOL didEndEditing : 1;
-        BOOL textDidChange : 1;
-        BOOL shouldChangeText : 1;
-		BOOL searchButtonClicked : 1;
-		BOOL bookmarkButtonClicked : 1;
-		BOOL resultsButtonClicked : 1;
-		BOOL selectedScopeButtonChanged : 1;
-		BOOL doCommandBySelector : 1;
-    } _delegateHas;
-}
+@implementation UISearchBar 
 @synthesize delegate = _delegate;
 @synthesize showsCancelButton = _showsCancelButton;
 @synthesize placeholder = _placeholder;
 
 - (id)initWithFrame:(CGRect)frame
 {
-    if ((self = [super initWithFrame:frame])) {
-        _searchField = [[UISearchField alloc] initWithFrame:frame];
+    self = [super initWithFrame:frame];
+    if (self) {
+        _searchField = [[UISearchField alloc] init];
+        _searchField.frame = frame;
 		_searchField.delegate = self;
 		_searchField.borderStyle = UITextBorderStyleRoundedRect;
 		_searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;

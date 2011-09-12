@@ -37,7 +37,12 @@
 
 @class UIImageView, UIImage;
 
-@interface UISlider : UIControl 
+@interface UISlider : UIControl {
+    float _value;
+    float _minimumValue;
+    float _maximumValue;
+    BOOL _continuous;
+}
 
 @property (nonatomic) float value;
 @property (nonatomic) float minimumValue;

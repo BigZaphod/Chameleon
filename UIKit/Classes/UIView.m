@@ -97,23 +97,8 @@ static NSString* const kUISubviewsKey = @"UISubviews";
 static NSMutableArray *_animationGroups;
 static BOOL _animationsEnabled = YES;
 
-@implementation UIView {
-    BOOL _needsDidAppearOrDisappear;
+@implementation UIView 
 
-    NSMutableSet *_subviews;
-    UIViewController *_viewController;
-    NSMutableSet *_gestureRecognizers;
-    IMP ourDrawRect_;
-    
-    struct {
-        BOOL overridesDisplayLayer : 1;
-        BOOL clearsContextBeforeDrawing : 1;
-        BOOL multipleTouchEnabled : 1;
-        BOOL exclusiveTouch : 1;
-        BOOL userInteractionEnabled : 1;
-        BOOL autoresizesSubviews : 1;
-    } _flags;
-}
 @synthesize layer = _layer;
 @synthesize superview = _superview;
 @synthesize tag = _tag;
@@ -177,11 +162,11 @@ static IMP defaultImplementationOfDisplayLayer;
     return self;
 }
 
-- (id)initWithFrame:(CGRect)theFrame
+- (id)initWithFrame:(CGRect)frame
 {
     if (nil != (self = [super init])) {
         [self _commonInitForUIView];
-        self.frame = theFrame;
+        self.frame = frame;
     }
     return self;
 }

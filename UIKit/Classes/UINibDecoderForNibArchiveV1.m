@@ -41,12 +41,40 @@ static inline float decodeFloat32(void const** p);
 static inline double decodeFloat64(void const** pp);
 
 
-@interface UINibArchiveDataV1 : NSObject 
+@interface UINibArchiveDataV1 : NSObject {
+@public
+    NSData* data_;
+    
+    uint32_t numberOfObjects;
+    UINibDecoderObjectEntry* objects;
+    
+    uint32_t numberOfKeys;
+    NSMutableArray* keys;
+    uint32_t keyForInlinedValue;
+    uint32_t keyForEmpty;
+    
+    uint32_t numberOfValues;
+    UINibDecoderValueEntry* values;
+    
+    uint32_t numberOfClasses;
+    Class* classes;
+}
 - (id) initWithData:(NSData*)data;
 @end
 
 
-@interface UINibArchiveDecoderV1 : NSCoder
+@interface UINibArchiveDecoderV1 : NSCoder {
+    UINibArchiveDataV1* archiveData_;
+    NSPointerArray* objects_;
+    /**/
+    NSBundle* bundle_;
+    id owner_;
+    NSDictionary* externalObjects_;
+    /**/
+    UINibDecoderObjectEntry* objectEntry_;
+    UINibDecoderValueEntry* nextGenericValue_;
+    UINibDecoderValueEntry* lastValue_;
+}
 
 - (id) initWithNibArchiveData:(UINibArchiveDataV1*)archiveData bundle:(NSBundle*)bundle owner:(id)owner externalObjects:(NSDictionary*)externalObjects;
 
@@ -68,9 +96,7 @@ static inline double decodeFloat64(void const** pp);
 @end
 
 
-@implementation UINibDecoderForNibArchiveV1 {
-    UINibArchiveDataV1* archiveData_;
-}
+@implementation UINibDecoderForNibArchiveV1 
 
 - (void) dealloc
 {
@@ -99,24 +125,8 @@ static inline double decodeFloat64(void const** pp);
 @end
 
 
-@implementation UINibArchiveDataV1 {
-@public
-    NSData* data_;
-    
-    uint32_t numberOfObjects;
-    UINibDecoderObjectEntry* objects;
-    
-    uint32_t numberOfKeys;
-    NSMutableArray* keys;
-    uint32_t keyForInlinedValue;
-    uint32_t keyForEmpty;
-    
-    uint32_t numberOfValues;
-    UINibDecoderValueEntry* values;
-    
-    uint32_t numberOfClasses;
-    Class* classes;
-}
+@implementation UINibArchiveDataV1 
+
 
 - (void) dealloc
 {
@@ -334,18 +344,7 @@ static inline double decodeFloat64(void const** pp);
 @end
 
 
-@implementation UINibArchiveDecoderV1 {
-    UINibArchiveDataV1* archiveData_;
-    NSPointerArray* objects_;
-    /**/
-    NSBundle* bundle_;
-    id owner_;
-    NSDictionary* externalObjects_;
-    /**/
-    UINibDecoderObjectEntry* objectEntry_;
-    UINibDecoderValueEntry* nextGenericValue_;
-    UINibDecoderValueEntry* lastValue_;
-}
+@implementation UINibArchiveDecoderV1 
 
 static Class kClassForNSArray;
 static Class kClassForNSMutableArray;

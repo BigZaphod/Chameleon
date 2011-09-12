@@ -51,7 +51,11 @@
 @end
 
 
-@interface UITabBar : UIView 
+@interface UITabBar : UIView {
+    NSArray *_items;
+    id<UITabBarDelegate>  _delegate;
+    NSInteger _selectedItemIndex;
+}
 
 @property (nonatomic, assign) id<UITabBarDelegate>  delegate;
 @property (nonatomic, copy)   NSArray              *items;

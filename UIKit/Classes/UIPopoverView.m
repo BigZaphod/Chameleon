@@ -97,13 +97,7 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
     return sqrtf((a*a) + (b*b));
 }
 
-@implementation UIPopoverView {
-    UIImageView *_backgroundView;
-    UIImageView *_arrowView;
-    UIView *_contentView;
-    UIView *_contentContainerView;
-	UIPopoverController *_popoverController;
-}
+@implementation UIPopoverView 
 
 @synthesize contentView=_contentView;
 

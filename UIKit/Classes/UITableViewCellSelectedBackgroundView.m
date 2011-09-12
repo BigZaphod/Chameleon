@@ -3,21 +3,21 @@
 
 
 @implementation UITableViewCellSelectedBackgroundView
-@synthesize selectionStyle = selectionStyle_;
+@synthesize selectionStyle = _selectionStyle;
 
 - (void) setSelectionStyle:(UITableViewCellSelectionStyle)selectionStyle
 {
-    if (selectionStyle_ != selectionStyle) {
-        selectionStyle_ = selectionStyle;
+    if (_selectionStyle != selectionStyle) {
+        _selectionStyle = selectionStyle;
         [self setNeedsDisplay];
     }
 }
 
 - (void) drawRect:(CGRect)rect
 {
-    if (selectionStyle_ == UITableViewCellSelectionStyleBlue) {
+    if (_selectionStyle == UITableViewCellSelectionStyleBlue) {
         [[UIImage _tableSelection] drawInRect:self.bounds];
-    } else if (selectionStyle_ == UITableViewCellSelectionStyleGray) {
+    } else if (_selectionStyle == UITableViewCellSelectionStyleGray) {
         [[UIImage _tableSelectionGray] drawInRect:self.bounds];
     }
 }

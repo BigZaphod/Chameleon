@@ -63,39 +63,7 @@ static NSString* const kUIStyleKey = @"UIStyle";
 - (NSIndexPath *)_selectRowAtIndexPath:(NSIndexPath *)indexPath exclusively:(BOOL)exclusively sendDelegateMessages:(BOOL)sendDelegateMessage animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition;
 @end
 
-@implementation UITableView {
-    NSMutableDictionary *_cachedCells;
-    NSMutableSet *_reusableCells;
-    NSMutableArray *_sections;
-    NSMutableArray *_selectedRows;
-    UITableViewStyle _style;
-    BOOL _needsReload;
-    
-    struct {
-        BOOL heightForRowAtIndexPath : 1;
-        BOOL heightForHeaderInSection : 1;
-        BOOL heightForFooterInSection : 1;
-        BOOL viewForHeaderInSection : 1;
-        BOOL viewForFooterInSection : 1;
-        BOOL willSelectRowAtIndexPath : 1;
-        BOOL didSelectRowAtIndexPath : 1;
-		BOOL didDoubleClickRowAtIndexPath: 1;
-        BOOL willDeselectRowAtIndexPath : 1;
-        BOOL didDeselectRowAtIndexPath : 1;
-		BOOL willBeginEditingRowAtIndexPath : 1;
-		BOOL didEndEditingRowAtIndexPath : 1;
-		BOOL titleForDeleteConfirmationButtonForRowAtIndexPath : 1;
-        BOOL accessoryButtonTappedForRowWithIndexPath : 1;
-    } _delegateHas;
-    
-    struct {
-        BOOL numberOfSectionsInTableView : 1;
-        BOOL titleForHeaderInSection : 1;
-        BOOL titleForFooterInSection : 1;
-		BOOL commitEditingStyle : 1;
-		BOOL canEditRowAtIndexPath : 1;
-    } _dataSourceHas;
-}
+@implementation UITableView 
 @synthesize style = _style;
 @synthesize dataSource = _dataSource;
 @synthesize rowHeight = _rowHeight;
@@ -1095,6 +1063,10 @@ static NSString* const kUIStyleKey = @"UIStyle";
 - (void) pageDown:(id)sender
 {
     [self scrollRectToVisible:CGRectMake(0.0f, MIN(self.contentOffset.y + self.bounds.size.height, self.contentSize.height), self.bounds.size.width, self.bounds.size.height) animated:YES];
+}
+
+-(void)encodeWithCoder:(NSCoder *)aCoder {
+    //TODO:later
 }
 
 @end

@@ -287,4 +287,8 @@ static NSString* const kUIAdjustsFontSizeToFitKey = @"UIAdjustsFontSizeToFit";
     }
 }
 
+-(void)encodeWithCoder:(NSCoder *)aCoder {
+    //TODO:later
+}
+
 @end

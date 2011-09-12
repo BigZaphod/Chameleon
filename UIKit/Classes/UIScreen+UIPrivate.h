@@ -31,11 +31,6 @@
 
 @class UIView, UIEvent;
 
-@interface UIScreen () {
-    UIKitView *_UIKitView;
-}
-@end
-
 @interface UIScreen (UIPrivate)
 - (void)_setUIKitView:(UIKitView *)theView;
 - (CALayer *)_layer;

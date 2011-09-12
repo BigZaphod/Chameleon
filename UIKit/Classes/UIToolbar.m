@@ -95,9 +95,7 @@
 
 
 
-@implementation UIToolbar {
-    NSMutableArray *_toolbarItems;
-}
+@implementation UIToolbar 
 @synthesize barStyle = _barStyle;
 @synthesize tintColor = _tintColor;
 @synthesize translucent = _translucent;

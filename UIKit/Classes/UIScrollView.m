@@ -72,37 +72,7 @@ static NSString* const kUIScrollIndicatorInsetsKey = @"UIScrollIndicatorInsets";
 @interface UIScrollView () <_UIScrollerDelegate>
 @end
 
-@implementation UIScrollView {
-    UIScroller *_verticalScroller;
-    UIScroller *_horizontalScroller;
-    UIPanGestureRecognizer *_panGestureRecognizer;
-    UIScrollWheelGestureRecognizer *_scrollWheelGestureRecognizer;
-    NSTimer *_dragDelegateTimer;
-    BOOL _bouncesZoom;
-    id _scrollAnimation;
-    NSTimer *_scrollTimer;
-    NSTimeInterval _scrollAnimationTime;
-    
-    BOOL _dragging;
-    BOOL _decelerating;
-    
-    struct {
-        BOOL scrollViewDidScroll : 1;
-        BOOL scrollViewWillBeginDragging : 1;
-        BOOL scrollViewDidEndDragging : 1;
-        BOOL viewForZoomingInScrollView : 1;
-        BOOL scrollViewWillBeginZooming : 1;
-        BOOL scrollViewDidEndZooming : 1;
-        BOOL scrollViewDidZoom : 1;
-        BOOL scrollViewDidEndScrollingAnimation : 1;
-        BOOL scrollViewWillBeginDecelerating : 1;
-        BOOL scrollViewDidEndDecelerating : 1;
-    } _delegateCan;
-    
-    // should be flag struct
-    BOOL _alwaysBounceHorizontal;
-    BOOL _alwaysBounceVertical;
-}
+@implementation UIScrollView 
 @synthesize contentOffset = _contentOffset;
 @synthesize contentInset = _contentInset;
 @synthesize scrollIndicatorInsets = _scrollIndicatorInsets;
@@ -843,6 +813,10 @@ static NSString* const kUIScrollIndicatorInsetsKey = @"UIScrollIndicatorInsets";
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"<%@: %p; frame = (%.0f %.0f; %.0f %.0f); clipsToBounds = %@; layer = %@; contentOffset = {%.0f, %.0f}>", [self className], self, self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.frame.size.height, (self.clipsToBounds ? @"YES" : @"NO"), self.layer, self.contentOffset.x, self.contentOffset.y];
+}
+
+-(void)encodeWithCoder:(NSCoder *)aCoder {
+    //TODO: later
 }
 
 @end

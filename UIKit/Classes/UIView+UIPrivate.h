@@ -34,12 +34,6 @@ extern NSString *const UIViewBoundsDidChangeNotification;
 extern NSString *const UIViewDidMoveToSuperviewNotification;
 extern NSString *const UIViewHiddenDidChangeNotification;
 
-@interface UIView () {
-    UIView *_nextKeyView; // NR
-    UIView *_previousKeyView; // NR
-}
-@end
-
 @interface UIView (UIPrivate)
 - (void)_removeFromSuperview:(BOOL)notifyViewController;
 - (void)_setViewController:(UIViewController *)theViewController;

@@ -39,9 +39,7 @@ static id FirstObjectOrNil(NSArray *items)
     return ([items count] > 0)? [items objectAtIndex:0] : nil;
 }
 
-@implementation UIPasteboard {
-    NSPasteboard *pasteboard;
-}
+@implementation UIPasteboard
 
 - (id)initWithPasteboard:(NSPasteboard *)aPasteboard
 {

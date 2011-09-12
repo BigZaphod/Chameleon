@@ -49,7 +49,25 @@ extern NSString *const UITextViewTextDidEndEditingNotification;
 - (void)textViewDidChangeSelection:(UITextView *)textView;
 @end
 
-@interface UITextView : UIScrollView <NSCoding, UITextInputTraits> 
+@interface UITextView : UIScrollView <NSCoding, UITextInputTraits> {
+@private
+    UITextLayer *_textLayer;
+    UIDataDetectorTypes _dataDetectorTypes;
+
+    UIView *_inputAccessoryView;
+    UIView *_inputView;
+    
+    struct {
+        BOOL shouldBeginEditing : 1;
+        BOOL didBeginEditing : 1;
+        BOOL shouldEndEditing : 1;
+        BOOL didEndEditing : 1;
+        BOOL shouldChangeText : 1;
+        BOOL didChange : 1;
+        BOOL didChangeSelection : 1;
+        BOOL doCommandBySelector : 1;
+    } _delegateHas;
+}
 
 - (void)scrollRangeToVisible:(NSRange)range;
 

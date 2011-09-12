@@ -36,9 +36,12 @@ typedef enum {
     UISwipeGestureRecognizerDirectionDown  = 1 << 3
 } UISwipeGestureRecognizerDirection;
 
-@interface UISwipeGestureRecognizer : UIGestureRecognizer 
+@interface UISwipeGestureRecognizer : UIGestureRecognizer {
+    UISwipeGestureRecognizerDirection _direction;
+    NSUInteger _numberOfTouchesRequired;
+}
 
-@property (nonatomic) UISwipeGestureRecognizerDirection direction;
-@property (nonatomic) NSUInteger numberOfTouchesRequired;
+@property (nonatomic,assign) UISwipeGestureRecognizerDirection direction;
+@property (nonatomic,assign) NSUInteger numberOfTouchesRequired;
 
 @end

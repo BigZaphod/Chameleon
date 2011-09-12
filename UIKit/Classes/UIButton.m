@@ -44,16 +44,7 @@ static NSString* const kUIButtonStatefulContentKey = @"UIButtonStatefulContent";
 static NSString* const kUIButtonTypeKey = @"UIButtonType";
 static NSString* const kUIFontKey = @"UIFont";
 
-@implementation UIButton {
-    UIImageView *_backgroundImageView;
-    NSMutableDictionary *_content;
-    UIImage *_adjustedHighlightImage;
-    UIImage *_adjustedDisabledImage;
-	CGSize originalShadowOffset;
-    struct {
-        UIButtonType buttonType : 8;
-    } _buttonFlags;
-}
+@implementation UIButton 
 @synthesize titleLabel = _titleLabel;
 @synthesize reversesTitleShadowWhenHighlighted = _reversesTitleShadowWhenHighlighted;
 @synthesize adjustsImageWhenHighlighted = _adjustsImageWhenHighlighted;
@@ -108,10 +99,9 @@ inline static NSNumber* _keyForState(NSInteger state)
 {
     switch (buttonType) {
         case UIButtonTypeDetailDisclosure: {
-            CGRect frame = {
-                .size = detailDisclosureButtonImage.size
-            };
-            UIButton* button = [[UIButton alloc] initWithFrame:frame];
+            CGRect frame = CGRectMake(0, 0, detailDisclosureButtonImage.size.width, detailDisclosureButtonImage.size.height);
+            UIButton* button = [[UIButton alloc] init];
+            button.frame = frame;
             [button setImage:detailDisclosureButtonImage forState:UIControlStateNormal];
             [button setImage:detailDisclosureButtonImagePressed forState:UIControlStateHighlighted];
             return [button autorelease];
@@ -538,6 +528,11 @@ inline static NSNumber* _keyForState(NSInteger state)
     // This isn't a strong decision, but there's a few places in Twitterrific where passing a right click through a button doesn't feel right.
     // It also doesn't feel immediately right to treat a right-click on a button as a normal click event, either, so this seems to be a
     // decent way to avoid the problem in general and define a kind of "standard" behavior in this case.
+}
+
+
+-(void)encodeWithCoder:(NSCoder *)coder {
+    // TODO: LATER
 }
 
 @end

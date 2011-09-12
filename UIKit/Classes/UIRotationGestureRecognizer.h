@@ -29,7 +29,9 @@
 
 #import "UIGestureRecognizer.h"
 
-@interface UIRotationGestureRecognizer : UIGestureRecognizer 
+@interface UIRotationGestureRecognizer : UIGestureRecognizer {
+    CGFloat _rotation;
+}
 
 @property (nonatomic) CGFloat rotation;
 @property (nonatomic,readonly) CGFloat velocity;

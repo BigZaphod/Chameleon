@@ -79,9 +79,46 @@ typedef enum {
     UIModalTransitionStylePartialCurl,
 } UIModalTransitionStyle;
 
+typedef enum {
+    UIViewControllerStateDidDisappear,
+    UIViewControllerStateWillAppear,
+    UIViewControllerStateDidAppear,
+    UIViewControllerStateWillDisappear
+} UIViewControllerAppearState;
+
+
 @class UINavigationItem, UINavigationController, UIBarButtonItem, UISplitViewController;
 
-@interface UIViewController : UIResponder 
+@interface UIViewController : UIResponder {
+@private
+    UIView *_view;
+    UINavigationItem *_navigationItem;
+    NSArray *_toolbarItems;
+    UIModalPresentationStyle _modalPresentationStyle;
+    NSString *_title;
+    CGSize _contentSizeForViewInPopover;
+    UIViewController *_parentViewController;
+    UIViewController *_modalViewController;
+    UISearchDisplayController *_searchDisplayController;
+    UIModalTransitionStyle _modalTransitionStyle;
+    
+    UIViewControllerAppearState _appearState;
+    NSMutableArray *_childViewControllers;
+    NSBundle *_nibBundle;
+    NSString *_nibName;
+    
+    struct {
+        BOOL wantsFullScreenLayout : 1;
+        BOOL modalInPopover : 1;
+        BOOL editing : 1;
+        BOOL hidesBottomBarWhenPushed : 1;
+        BOOL isInAnimatedVCTransition : 1;
+        BOOL viewLoadedFromControllerNib : 1;
+    } _flags;
+    
+    UITabBarItem *_tabBarItem;
+    UITabBarController *_tabBarController;
+}
 
 - (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)nibBundle;	// won't load a nib no matter what you do!
 

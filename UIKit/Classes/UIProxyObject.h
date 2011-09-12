@@ -1,6 +1,8 @@
 #import <Foundation/Foundation.h>
 
-@interface UIProxyObject : NSObject <NSCoding>
+@interface UIProxyObject : NSObject <NSCoding> {
+    NSString *_proxiedObjectIdentifier;
+}
 
 @property (retain) NSString* proxiedObjectIdentifier;
 

@@ -41,7 +41,7 @@ enum {
 };
 typedef NSUInteger UIPopoverArrowDirection;
 
-@class UIView, UIViewController, UIPopoverController, UIBarButtonItem, UIPopoverView, UIImage;
+@class UIView, UIViewController, UIPopoverController, UIBarButtonItem, UIPopoverView, UIImage, UIPopoverNSWindow, NSWindow, UIWindow;
 
 @protocol UIPopoverControllerDelegate <NSObject>
 @optional
@@ -49,7 +49,26 @@ typedef NSUInteger UIPopoverArrowDirection;
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController;
 @end
 
-@interface UIPopoverController : NSObject 
+@interface UIPopoverController : NSObject {
+@private
+    UIPopoverView *_popoverView;
+    UIPopoverNSWindow *_popoverWindow;
+    NSWindow *_overlayWindow;
+    UIWindow *_windowToReactivate;
+    
+    UIViewController *_contentViewController;
+    NSArray *_passthroughViews;
+    UIPopoverArrowDirection _popoverArrowDirection;
+    
+    CGSize _popoverContentSize;
+    
+    id _delegate;
+    struct {
+        BOOL popoverControllerDidDismissPopover : 1;
+        BOOL popoverControllerShouldDismissPopover : 1;
+    } _delegateHas;	
+    
+}
 
 
 - (id)initWithContentViewController:(UIViewController *)viewController;

@@ -71,22 +71,7 @@ static NSString* const kUISecureTextEntryKey = @"UISecureTextEntry";
 - (BOOL)textField:(UITextField *)textField doCommandBySelector:(SEL)selector;
 @end
 
-@implementation UITextField {
-    UITextLayer *_textLayer;
-	UITextLayer *_placeholderTextLayer;
-    NSString *_placeholder;
-    
-    struct {
-        BOOL shouldBeginEditing : 1;
-        BOOL didBeginEditing : 1;
-        BOOL shouldEndEditing : 1;
-        BOOL didEndEditing : 1;
-        BOOL shouldChangeCharacters : 1;
-        BOOL shouldClear : 1;
-        BOOL shouldReturn : 1;
-		BOOL doCommandBySelector : 1;
-    } _delegateHas;	
-}
+@implementation UITextField 
 @synthesize delegate = _delegate;
 @synthesize background = _background;
 @synthesize disabledBackground = _disabledBackground;

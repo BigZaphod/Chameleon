@@ -53,7 +53,9 @@ typedef enum {
 } UITabBarSystemItem;
 
 
-@interface UITabBarItem : UIBarItem 
+@interface UITabBarItem : UIBarItem {
+    NSString *_badgeValue;
+}
 
 - (id)initWithTitle:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag;
 - (id)initWithTabBarSystemItem:(UITabBarSystemItem)systemItem tag:(NSInteger)tag;

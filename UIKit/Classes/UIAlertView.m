@@ -38,16 +38,7 @@
 @property (nonatomic, retain) NSMutableArray *buttonTitles;
 @end
 
-@implementation UIAlertView {
-    struct {
-        BOOL clickedButtonAtIndex : 1;
-        BOOL alertViewCancel : 1;
-        BOOL willPresentAlertView : 1;
-        BOOL didPresentAlertView : 1;
-        BOOL willDismissWithButtonIndex : 1;
-        BOOL didDismissWithButtonIndex : 1;
-    } _delegateHas;
-}
+@implementation UIAlertView 
 @synthesize title = _title;
 @synthesize message = _message;
 @synthesize delegate = _delegate;

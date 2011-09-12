@@ -60,19 +60,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 @end
 
 
-@implementation UITableViewCell {
-    UITableViewCellSeparator *_separatorView;
-    UITableViewCellStyle _style;
-    CFMutableDictionaryRef _unhighlightedStates;
-    UITableViewCellLayoutManager* _layoutManager;
-
-    struct {
-        BOOL tableViewStyleIsGrouped : 1;
-        BOOL usingDefaultSelectedBackgroundView : 1;
-        BOOL usingDefaultAccessoryView : 1;
-        BOOL highlighted : 1;
-    } _tableCellFlags;
-}
+@implementation UITableViewCell 
 @synthesize accessoryType=_accessoryType; 
 @synthesize accessoryView=_accessoryView;
 @synthesize backgroundView=_backgroundView;
@@ -143,7 +131,8 @@ static Class kUIButtonClass;
 {
     _layoutManager = [[UITableViewCellLayoutManager layoutManagerForTableViewCellStyle:_style] retain];
     if (!_contentView) {
-        _contentView = [[UIView alloc] initWithFrame:[_layoutManager contentViewRectForCell:self]];
+        _contentView = [[UIView alloc] init];
+        _contentView.frame = [_layoutManager contentViewRectForCell:self];
     }
     [self addSubview:_contentView];
 }
@@ -612,6 +601,10 @@ static Class kUIButtonClass;
 - (void) _detailDisclosurePressed:(id)sender
 {   
     [(UITableView*)[self superview] _accessoryButtonTappedForTableViewCell:self];
+}
+
+-(void)encodeWithCoder:(NSCoder *)aCoder {
+    //TODO:later
 }
 
 @end

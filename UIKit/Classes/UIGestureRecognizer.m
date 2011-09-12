@@ -34,16 +34,7 @@
 #import "UIApplication.h"
 
 
-@implementation UIGestureRecognizer {
-    NSMutableArray *_registeredActions;
-    NSMutableArray *_trackingTouches;
-
-    struct {
-        BOOL shouldBegin : 1;
-        BOOL shouldReceiveTouch : 1;
-        BOOL shouldRecognizeSimultaneouslyWithGestureRecognizer : 1;
-    } _delegateHas;	
-}
+@implementation UIGestureRecognizer 
 @synthesize delegate = _delegate;
 @synthesize delaysTouchesBegan = _delaysTouchesBegan;
 @synthesize delaysTouchesEnded = _delaysTouchesEnded;

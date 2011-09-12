@@ -38,7 +38,13 @@
 // for UIScrollView but it certainly might make using the gesture recognizer in
 // a standalone setting somewhat more annoying. We'll have to see how it plays out.
 
-@interface UIPanGestureRecognizer : UIGestureRecognizer 
+@interface UIPanGestureRecognizer : UIGestureRecognizer {
+    NSUInteger _maximumNumberOfTouches;
+    NSUInteger _minimumNumberOfTouches;
+    CGPoint _translation;
+    CGPoint _velocity;
+    NSTimeInterval _lastMovementTime;
+}
 
 - (CGPoint)translationInView:(UIView *)view;
 - (void)setTranslation:(CGPoint)translation inView:(UIView *)view;

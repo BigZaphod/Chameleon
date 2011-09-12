@@ -36,8 +36,6 @@
 #import "UITextField.h"
 
 
-@interface UISearchField : UITextField {
-
-}
+@interface UISearchField : UITextField 
 
 @end

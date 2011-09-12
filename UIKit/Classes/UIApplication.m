@@ -114,14 +114,7 @@ static BOOL TouchIsActive(UITouch *touch)
     return TouchIsActiveGesture(touch) || TouchIsActiveNonGesture(touch);
 }
 
-@implementation UIApplication {
-    UIEvent *_currentEvent;
-    NSMutableSet *_visibleWindows;
-    BOOL _networkActivityIndicatorVisible;
-    NSUInteger _ignoringInteractionEvents;
-    NSDate *_backgroundTasksExpirationDate;
-    NSMutableArray *_backgroundTasks;
-}
+@implementation UIApplication
 @synthesize keyWindow = _keyWindow;
 @synthesize delegate = _delegate;
 @synthesize idleTimerDisabled = _idleTimerDisabled;

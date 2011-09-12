@@ -46,13 +46,9 @@ NSString *const UIScreenModeDidChangeNotification = @"UIScreenModeDidChangeNotif
 
 NSMutableArray *_allScreens = nil;
 
-@implementation UIScreen {
-    UIImageView *_grabber;
-    CALayer *_layer;
-    UIPopoverController *_popoverController;
-}
-@synthesize currentMode = _currentMode;
-@synthesize UIKitView = _UIKitView;
+@implementation UIScreen
+@synthesize currentMode=_currentMode;
+@synthesize UIKitView=_UIKitView;
 
 + (void)initialize
 {

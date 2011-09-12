@@ -176,13 +176,7 @@ static const CGFloat SplitterPadding = 3;
 
 
 
-@implementation UISplitViewController {
-    struct {
-        BOOL willPresentViewController : 1;
-        BOOL willHideViewController : 1;
-        BOOL willShowViewController : 1;
-    } _delegateHas;
-}
+@implementation UISplitViewController 
 @synthesize delegate = _delegate;
 @synthesize viewControllers = _viewControllers;
 

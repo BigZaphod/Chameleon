@@ -31,7 +31,10 @@
 
 @class UIImage, NSColor;
 
-@interface UIColor : NSObject <NSCoding>
+@interface UIColor : NSObject <NSCoding> {
+@private
+    CGColorRef _color;
+}
 
 - (id)initWithNSColor:(NSColor *)c;
 

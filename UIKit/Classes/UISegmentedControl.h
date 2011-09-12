@@ -57,7 +57,31 @@ enum {
   UISegmentedControlNoSegment = -1   // segment index for no selected segment
 };
 
-@interface UISegmentedControl : UIControl 
+@interface UISegmentedControl : UIControl {
+
+@private
+
+    NSMutableArray *_segments;
+    NSInteger _selectedSegmentIndex;
+    NSUInteger _numberOfSegments;
+    BOOL _momentary;
+    NSMutableDictionary *_segmentMeta;
+
+    UIImage *_buttonImage;
+    UIImage *_highlightedButtonImage;
+    UIImage *_dividerImage;
+    UIImage *_highlightedDividerImage;
+
+    UIFont *_font;
+    UIColor *_textColor;
+    UIColor *_disabledTextColor;
+    UIColor *_textShadowColor;
+    CGSize _textShadowOffset;
+    UIEdgeInsets _textEdgeInsets;
+
+    UISegmentedControlStyle _segmentedControlStyle;
+    UIColor *_tintColor;
+}
 
 @property (nonatomic) UISegmentedControlStyle segmentedControlStyle; // stub
 @property (nonatomic,retain) UIColor *tintColor; // stub

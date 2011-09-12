@@ -75,9 +75,41 @@ enum {
 };
 typedef NSUInteger UITableViewCellStateMask;
 
-@class UITableViewCellSeparator, UILabel, UIImageView;
+@class UITableViewCellSeparator, UILabel, UIImageView, UITableViewCellLayoutManager;
 
-@interface UITableViewCell : UIView <NSCoding>
+@interface UITableViewCell : UIView <NSCoding> {
+@private
+    UITableViewCellStyle _style;
+    UITableViewCellSeparator *_separatorView;
+    UIView *_contentView;
+    UILabel *_textLabel;
+    UILabel *_detailTextLabel; // not yet displayed!
+    UIImageView *_imageView;
+    UIView *_backgroundView;
+    UIView *_selectedBackgroundView;
+    UITableViewCellAccessoryType _accessoryType;
+    UIView *_accessoryView;
+    UITableViewCellAccessoryType _editingAccessoryType;
+    UITableViewCellSelectionStyle _selectionStyle;
+	UITableViewCellSectionLocation _sectionLocation;
+    NSInteger _indentationLevel;
+    BOOL _editing;
+    BOOL _selected;
+    BOOL _showingDeleteConfirmation;
+    NSString *_reuseIdentifier;
+    CGFloat _indentationWidth;
+    
+    
+    CFMutableDictionaryRef _unhighlightedStates;
+    UITableViewCellLayoutManager* _layoutManager;
+    
+    struct {
+        BOOL tableViewStyleIsGrouped : 1;
+        BOOL usingDefaultSelectedBackgroundView : 1;
+        BOOL usingDefaultAccessoryView : 1;
+        BOOL highlighted : 1;
+    } _tableCellFlags;
+}
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated;

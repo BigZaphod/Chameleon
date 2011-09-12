@@ -44,9 +44,7 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
     return CGImages;
 }
 
-@implementation UIImageView {
-    NSInteger _drawMode;
-}
+@implementation UIImageView 
 @synthesize image = _image;
 @synthesize animationImages = _animationImages;
 @synthesize animationDuration = _animationDuration;

@@ -7,17 +7,19 @@ static NSString* const kIBFilesOwnerKey = @"IBFilesOwner";
 static NSString* const kIBFirstResponderKey = @"IBFirstResponder";
 
 
-@interface UIKeyedArchiveNibInflationHelper : NSObject <NSKeyedUnarchiverDelegate>
+@interface UIKeyedArchiveNibInflationHelper : NSObject <NSKeyedUnarchiverDelegate> {
+@private
+    NSBundle* _bundle;
+    id _owner;
+    NSDictionary* _externalObjects;
+}
 
 - (id) initWithBundle:(NSBundle*)bundle owner:(id)owner externalObjects:(NSDictionary*)externalObjects;
 
 @end
 
 
-@implementation UINibDecoderForKeyedArchive {
-    NSData* _data;
-}
-
+@implementation UINibDecoderForKeyedArchive 
 - (void) dealloc
 {
     [_data release];
@@ -43,12 +45,7 @@ static NSString* const kIBFirstResponderKey = @"IBFirstResponder";
 @end
 
 
-@implementation UIKeyedArchiveNibInflationHelper {
-    NSBundle* _bundle;
-    id _owner;
-    NSDictionary* _externalObjects;
-}
-
+@implementation UIKeyedArchiveNibInflationHelper 
 static Class kClassForUIProxyObject;
 static Class kClassForUIImageNibPlaceholder;
 

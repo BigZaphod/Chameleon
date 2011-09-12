@@ -40,9 +40,7 @@ static NSString* const kUIFontTraitsKey = @"UIFontTraits";
 static NSString* const kUISystemFontKey = @"UISystemFont";
 
 
-@implementation UIFont {
-    CTFontRef _font;
-}
+@implementation UIFont 
 
 + (void)setSystemFontName:(NSString *)aName
 {
@@ -92,8 +90,8 @@ static NSString* const kUISystemFontKey = @"UISystemFont";
     if (nil != (self = [super init])) {
         NSString* fontName = [coder decodeObjectForKey:kUIFontNameKey];
         CGFloat fontPointSize = [coder decodeFloatForKey:kUIFontPointSizeKey];
-        BOOL isSystemFont = [coder decodeBoolForKey:kUISystemFontKey];
-        NSInteger fontTraits = [coder decodeIntegerForKey:kUIFontTraitsKey];
+        //BOOL isSystemFont = [coder decodeBoolForKey:kUISystemFontKey];
+        //NSInteger fontTraits = [coder decodeIntegerForKey:kUIFontTraitsKey];
         
         _font = CTFontCreateWithName((CFStringRef)fontName, fontPointSize, NULL);
         if (!_font) {
