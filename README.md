@@ -1,8 +1,5 @@
 <h1> This fork contains new unreleased iOS 5 features. It has diveraged internally from BigZaphod's version a bit but should remain compatible. </h1>
 
-<h2>Please note: This version embraces and requires the non-fragile ABI provided by the 64bit Objective-C runtime on OS X so and makes use of new a few new LLVM 3.0 features in Objective-C. It will not compile for 32bit Objective-C runtimes. It should run on 64bit Snow Leopard and Lion.</h2>
-
-
 # Chameleon
 
 Chameleon is a port of Apple's UIKit (and some minimal related frameworks) to Mac OS X. It is meant to be as much of a drop-in replacement for the real UIKit as possible. It also adapts some iOS user interface conventions to the Mac (such as UIAlertView being represented by NSAlert) so that apps built using Chameleon have as much chance as possible of feeling at home on the desktop with relatively little porting effort.
