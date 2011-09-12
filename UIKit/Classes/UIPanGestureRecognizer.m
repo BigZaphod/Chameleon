@@ -42,11 +42,7 @@ static UITouch *PanTouch(NSSet *touches)
     return nil;
 }
 
-@implementation UIPanGestureRecognizer {
-    CGPoint _translation;
-    CGPoint _velocity;
-    NSTimeInterval _lastMovementTime;
-}
+@implementation UIPanGestureRecognizer 
 @synthesize maximumNumberOfTouches = _maximumNumberOfTouches;
 @synthesize minimumNumberOfTouches = _minimumNumberOfTouches;
 
@@ -139,7 +135,11 @@ static UITouch *PanTouch(NSSet *touches)
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    self.state = UIGestureRecognizerStateFailed;
+    if (self.state == UIGestureRecognizerStatePossible) {
+        self.state = UIGestureRecognizerStateFailed;
+    } else if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
+        self.state = UIGestureRecognizerStateCancelled;
+    }
 }
 
 @end

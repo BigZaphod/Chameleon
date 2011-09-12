@@ -46,13 +46,7 @@ NSString *const UIMenuControllerMenuFrameDidChangeNotification = @"UIMenuControl
 @interface UIMenuController () <NSMenuDelegate>
 @end
 
-@implementation UIMenuController {
-    NSMutableArray *_enabledMenuItems;
-    id _menu;
-    CGPoint _menuLocation;
-    BOOL _rightAlignMenu;
-    UIWindow *_window;
-}
+@implementation UIMenuController 
 @synthesize menuItems = _menuItems;
 @synthesize menuFrame = _menuFrame;
 

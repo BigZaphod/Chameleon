@@ -38,7 +38,14 @@
 @class UISearchBar, UITableView, UIViewController, UIPopoverController;
 @protocol UITableViewDataSource, UITableViewDelegate, UISearchDisplayDelegate;
 
-@interface UISearchDisplayController : NSObject 
+@interface UISearchDisplayController : NSObject {
+  UIViewController           *_viewController;
+  UISearchBar                *_searchBar;
+  UITableView                *_tableView;
+  id<UISearchDisplayDelegate> _delegate;
+  id<UITableViewDataSource>   _tableViewDataSource;
+  id<UITableViewDelegate>     _tableViewDelegate;
+}
 
 - (id)initWithSearchBar:(UISearchBar *)searchBar contentsController:(UIViewController *)viewController;
 

@@ -30,7 +30,11 @@
 #import "UIViewController.h"
 #import "UITableView.h"
 
-@interface UITableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> 
+@interface UITableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
+    BOOL _clearsSelectionOnViewWillAppear;
+    UITableViewStyle _style;
+    BOOL _hasReloaded;
+}
 
 - (id)initWithStyle:(UITableViewStyle)style;
 

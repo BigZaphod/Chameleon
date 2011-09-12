@@ -71,19 +71,7 @@
 #import "UITabBarController.h"
 #import "UINib.h"
 
-@implementation UIViewController {
-    UIViewControllerAppearState _appearState;
-    NSMutableArray *_childViewControllers;
-    
-    struct {
-        BOOL wantsFullScreenLayout : 1;
-        BOOL modalInPopover : 1;
-        BOOL editing : 1;
-        BOOL hidesBottomBarWhenPushed : 1;
-        BOOL isInAnimatedVCTransition : 1;
-        BOOL viewLoadedFromControllerNib : 1;
-    } _flags;
-}
+@implementation UIViewController 
 
 @dynamic wantsFullScreenLayout;
 @dynamic hidesBottomBarWhenPushed;

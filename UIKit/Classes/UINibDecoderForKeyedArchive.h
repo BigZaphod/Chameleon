@@ -1,7 +1,9 @@
 #import "UINibDecoder.h"
 
 
-@interface UINibDecoderForKeyedArchive : UINibDecoder
+@interface UINibDecoderForKeyedArchive : UINibDecoder {
+    NSData* _data;
+}
 
 - (id) initWithData:(NSData*)data;
 

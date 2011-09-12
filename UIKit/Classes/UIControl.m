@@ -33,9 +33,7 @@
 #import "UIApplication.h"
 #import "UIControlAction.h"
 
-@implementation UIControl {
-    NSMutableArray *_registeredActions;
-}
+@implementation UIControl 
 @synthesize tracking = _tracking;
 @synthesize touchInside = _touchInside;
 @synthesize selected = _selected;

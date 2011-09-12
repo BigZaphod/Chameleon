@@ -40,6 +40,7 @@
 #import <AppKit/NSWindow.h>
 #import <QuartzCore/CALayer.h>
 #import <QuartzCore/CATransaction.h>
+#include <tgmath.h>
 
 
 @implementation UIViewAdapter
@@ -223,8 +224,8 @@
 - (void)setContentOffset:(CGPoint)theOffset animated:(BOOL)animated
 {
     // rounding to avoid fuzzy images from subpixel alignment issues
-    theOffset.x = roundf(theOffset.x);
-    theOffset.y = roundf(theOffset.y);
+    theOffset.x = round(theOffset.x);
+    theOffset.y = round(theOffset.y);
 
     [super setContentOffset:theOffset animated:animated];
     [_clipView scrollToPoint:[_clipView constrainScrollPoint:NSPointFromCGPoint(theOffset)]];

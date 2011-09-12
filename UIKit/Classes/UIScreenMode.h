@@ -29,7 +29,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface UIScreenMode : NSObject 
+@interface UIScreenMode : NSObject {
+    CGFloat _pixelAspectRatio;
+    CGSize _size;
+}
 
 @property (readonly,nonatomic) CGFloat pixelAspectRatio;
 @property (readonly,nonatomic) CGSize size;

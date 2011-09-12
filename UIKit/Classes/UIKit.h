@@ -27,13 +27,10 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef IBAction
-#define IBAction void
-#endif
 
-#ifndef IBOutlet
-#define IBOutlet
-#endif
+
+
+#import "UIBase.h"
 
 #import "UIApplicationDelegate.h"
 #import "UIScreen.h"

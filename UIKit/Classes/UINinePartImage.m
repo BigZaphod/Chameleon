@@ -60,23 +60,12 @@
 #import "UINinePartImage.h"
 #import "UIGraphics.h"
 
-@implementation UINinePartImage {
-    UIEdgeInsets _capInsets;
-    
-    CGImageRef _topLeftCorner;
-    CGImageRef _topEdgeFill;
-    CGImageRef _topRightCorner;
-    CGImageRef _leftEdgeFill;
-    CGImageRef _centerFill;
-    CGImageRef _rightEdgeFill;
-    CGImageRef _bottomLeftCorner;
-    CGImageRef _bottomEdgeFill;
-    CGImageRef _bottomRightCorner;
-}
+@implementation UINinePartImage 
 
 - (id)initWithCGImage:(CGImageRef)image edge:(UIEdgeInsets)edge
 {   
-    if (nil != (self = [super initWithCGImage:image])) {
+    self = [super initWithCGImage:image];
+    if (self) {
         _capInsets = edge;
         CGFloat w = CGImageGetWidth(image);
         CGFloat h = CGImageGetHeight(image);
@@ -123,12 +112,8 @@
                 _bottomRightCorner =  CGImageCreateWithImageInRect(image, CGRectMake(w-edge.right, y, edge.right, edge.bottom));
         }
         
-        
-        
     }
     return self;
-    
-
 }
 
 
@@ -136,18 +121,14 @@
 //LEGACY
 - (id)initWithCGImage:(CGImageRef)image leftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight
 {
-    NSParameterAssert(image);
-    NSAssert(leftCapWidth > 0, @"leftCapWidth less than 0");
-    NSAssert(topCapHeight > 0, @"topCapHeight less than 0");
-        
-
-    if (nil != (self = [super initWithCGImage:image])) {
+    self = [super initWithCGImage:image];
+    if (self) {
         CGFloat w = CGImageGetWidth(image);
         CGFloat h = CGImageGetHeight(image);
         
         CGFloat _lcw = MIN(leftCapWidth, w);
         CGFloat _tch = MIN(topCapHeight, h);
-        CGFloat _rcw , _bch;
+        CGFloat _rcw =0, _bch=0;
         
         NSInteger x;
         if (w > leftCapWidth + 1.0) {

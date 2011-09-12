@@ -5,7 +5,7 @@ static NSString* const kUIProxiedObjectIdentifierKey = @"UIProxiedObjectIdentifi
 
 
 @implementation UIProxyObject
-@synthesize proxiedObjectIdentifier;
+@synthesize proxiedObjectIdentifier=_proxiedObjectIdentifier;
 
 - (id) initWithCoder:(NSCoder*)coder
 {

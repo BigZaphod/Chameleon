@@ -63,7 +63,16 @@ typedef enum {
 
 @class UIView, UIImage;
 
-@interface UIBarButtonItem : UIBarItem 
+@interface UIBarButtonItem : UIBarItem {
+@package
+    CGFloat _width;
+    UIView *_customView;
+    id _target;
+    SEL _action;
+    BOOL _isSystemItem;
+    UIBarButtonSystemItem _systemItem;
+    UIBarButtonItemStyle _style;
+}
 
 - (id)initWithBarButtonSystemItem:(UIBarButtonSystemItem)systemItem target:(id)target action:(SEL)action;
 - (id)initWithCustomView:(UIView *)customView;

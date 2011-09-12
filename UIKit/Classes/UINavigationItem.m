@@ -35,9 +35,7 @@
 
 static void * const UINavigationItemContext = "UINavigationItemContext";
 
-@implementation UINavigationItem {
-    UINavigationBar *_navigationBar;
-}
+@implementation UINavigationItem
 @synthesize title = _title;
 @synthesize rightBarButtonItem = _rightBarButtonItem;
 @synthesize titleView = _titleView;

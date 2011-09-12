@@ -54,7 +54,55 @@ extern const float UIScrollViewDecelerationRateFast;
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView;
 @end
 
-@interface UIScrollView : UIView <NSCoding>
+@interface UIScrollView : UIView <NSCoding> {
+@package
+    id _delegate;
+@private
+    CGPoint _contentOffset;
+    CGSize _contentSize;
+    UIEdgeInsets _contentInset;
+    UIEdgeInsets _scrollIndicatorInsets;
+    UIScroller *_verticalScroller;
+    UIScroller *_horizontalScroller;
+    BOOL _scrollEnabled;
+    BOOL _showsVerticalScrollIndicator;
+    BOOL _showsHorizontalScrollIndicator;
+    float _maximumZoomScale;
+    float _minimumZoomScale;
+    BOOL _scrollsToTop;
+    UIScrollViewIndicatorStyle _indicatorStyle;
+    BOOL _canCancelContentTouches;
+    BOOL _pagingEnabled;
+    BOOL _bouncesZoom;
+    BOOL _bounces;
+    BOOL _zooming;
+    id _scrollAnimation;
+    NSTimer *_scrollTimer;
+    float _decelerationRate;
+    
+    BOOL _delaysContentTouches;
+    BOOL _dragging;
+    BOOL _decelerating;
+    UIScrollWheelGestureRecognizer *_scrollWheelGestureRecognizer;
+    UIPanGestureRecognizer *_panGestureRecognizer;
+    
+    struct {
+        BOOL scrollViewDidScroll : 1;
+        BOOL scrollViewWillBeginDragging : 1;
+        BOOL scrollViewDidEndDragging : 1;
+        BOOL viewForZoomingInScrollView : 1;
+        BOOL scrollViewWillBeginZooming : 1;
+        BOOL scrollViewDidEndZooming : 1;
+        BOOL scrollViewDidZoom : 1;
+        BOOL scrollViewDidEndScrollingAnimation : 1;
+        BOOL scrollViewWillBeginDecelerating : 1;
+        BOOL scrollViewDidEndDecelerating : 1;
+    } _delegateCan;
+    
+  // should be flag struct
+  BOOL _alwaysBounceHorizontal;
+  BOOL _alwaysBounceVertical;
+}
 
 - (void)scrollRectToVisible:(CGRect)rect animated:(BOOL)animated;
 

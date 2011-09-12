@@ -6,9 +6,7 @@ static NSString* const kUIImageWidthKey = @"UIImageWidth";
 static NSString* const kUIResourceNameKey = @"UIResourceName";
 
 
-@implementation UIImageNibPlaceholder {
-    CGSize _size;
-}
+@implementation UIImageNibPlaceholder 
 @synthesize resourceName = _resourceName;
 
 - (id) initWithCoder:(NSCoder*)coder

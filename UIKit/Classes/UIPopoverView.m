@@ -97,13 +97,7 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
     return sqrtf((a*a) + (b*b));
 }
 
-@implementation UIPopoverView {
-    UIImageView *_backgroundView;
-    UIImageView *_arrowView;
-    UIView *_contentView;
-    UIView *_contentContainerView;
-	UIPopoverController *_popoverController;
-}
+@implementation UIPopoverView 
 
 @synthesize contentView=_contentView;
 
@@ -271,8 +265,8 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
     [_arrowView sizeToFit];
     _arrowView.center = bestIntersection;
     CGRect arrowFrame = _arrowView.frame;
-    arrowFrame.origin.x = roundf(arrowFrame.origin.x);
-    arrowFrame.origin.y = roundf(arrowFrame.origin.y);
+    arrowFrame.origin.x = round(arrowFrame.origin.x);
+    arrowFrame.origin.y = round(arrowFrame.origin.y);
     _arrowView.frame = arrowFrame;
 }
 

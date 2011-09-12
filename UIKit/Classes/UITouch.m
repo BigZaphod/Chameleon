@@ -45,14 +45,7 @@ static NSArray *GestureRecognizersForView(UIView *view)
     return [recognizers autorelease];
 }
 
-@implementation UITouch {
-    _UITouchGesture _gesture;
-    CGPoint _delta;
-    CGFloat _rotation;
-    CGFloat _magnification;
-    CGPoint _location;
-    CGPoint _previousLocation;
-}
+@implementation UITouch 
 @synthesize timestamp = _timestamp;
 @synthesize tapCount = _tapCount;
 @synthesize phase = _phase;

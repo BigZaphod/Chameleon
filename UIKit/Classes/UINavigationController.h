@@ -37,7 +37,21 @@
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated;
 @end
 
-@interface UINavigationController : UIViewController 
+@interface UINavigationController : UIViewController {
+@private
+    UINavigationBar *_navigationBar;
+    UIToolbar *_toolbar;
+    UIView* _containerView;
+    NSMutableArray *_viewControllers;
+    id _delegate;
+    BOOL _toolbarHidden;
+    BOOL _navigationBarHidden;
+    
+    struct {
+        BOOL didShowViewController : 1;
+        BOOL willShowViewController : 1;
+    } _delegateHas;
+}
 
 - (id)initWithRootViewController:(UIViewController *)rootViewController;
 

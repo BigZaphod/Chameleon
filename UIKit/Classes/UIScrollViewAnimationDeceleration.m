@@ -28,6 +28,7 @@
  */
 
 #import "UIScrollViewAnimationDeceleration.h"
+#include <tgmath.h>
 
 /*
  I attempted to emulate 10.7's behavior here as best I could, however my physics-fu is weak.
@@ -110,7 +111,7 @@ static BOOL BounceComponent(NSTimeInterval t, UIScrollViewAnimationDecelerationC
 
         c->bounced = YES;
 
-        if (fabsf(c->velocity) < minimumBounceVelocityBeforeReturning) {
+        if (fabs(c->velocity) < minimumBounceVelocityBeforeReturning) {
             c->returnFrom = c->position;
             c->returnTime = t;
         }

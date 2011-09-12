@@ -46,13 +46,9 @@ NSString *const UIScreenModeDidChangeNotification = @"UIScreenModeDidChangeNotif
 
 NSMutableArray *_allScreens = nil;
 
-@implementation UIScreen {
-    UIImageView *_grabber;
-    CALayer *_layer;
-    UIPopoverController *_popoverController;
-}
-@synthesize currentMode = _currentMode;
-@synthesize UIKitView = _UIKitView;
+@implementation UIScreen
+@synthesize currentMode=_currentMode;
+@synthesize UIKitView=_UIKitView;
 
 + (void)initialize
 {
@@ -166,7 +162,7 @@ NSMutableArray *_allScreens = nil;
 
 - (CGRect)applicationFrame
 {
-    const float statusBarHeight = [UIApplication sharedApplication].statusBarHidden? 0 : 20;
+    const CGFloat statusBarHeight = [UIApplication sharedApplication].statusBarHidden? 0 : 20;
     const CGSize size = [self bounds].size;
     return CGRectMake(0,statusBarHeight,size.width,size.height-statusBarHeight);
 }

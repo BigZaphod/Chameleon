@@ -31,7 +31,13 @@
 
 @class UIImageView, UIPopoverController;
 
-@interface UIPopoverView : UIView
+@interface UIPopoverView : UIView {
+    UIImageView *_backgroundView;
+    UIImageView *_arrowView;
+    UIView *_contentView;
+    UIView *_contentContainerView;
+	UIPopoverController *_popoverController;
+}
 
 - (id)initWithContentView:(UIView *)aView size:(CGSize)aSize popoverController:(UIPopoverController *)controller;
 

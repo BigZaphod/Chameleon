@@ -1,7 +1,9 @@
 #import "UINibDecoder.h"
 
-
-@interface UINibDecoderForNibArchiveV1 : UINibDecoder
+@class UINibArchiveDataV1;
+@interface UINibDecoderForNibArchiveV1 : UINibDecoder {
+    UINibArchiveDataV1* archiveData_;
+}
 
 - (id) initWithData:(NSData*)data encoderVersion:(NSUInteger)encoderVersion;
 

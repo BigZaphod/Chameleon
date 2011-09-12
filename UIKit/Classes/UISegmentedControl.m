@@ -43,6 +43,7 @@
 #import "UIColor.h"
 #import "UIStringDrawing.h"
 #import "UIGraphics.h"
+#include <tgmath.h>
 
 static NSString* const kUISegmentedControlEnabledKey = @"kUISegmentedControlEnabledKey";
 static NSString* const kUISegmentsKey = @"UISegments";
@@ -70,10 +71,7 @@ static NSString* const kUIMomentaryKey = @"UIMomentary";
 - (void)_setMetaValue:(id)value forKey:(NSString *)key segmentIndex:(NSUInteger)index;
 @end
 
-@implementation UISegmentedControl {
-    NSMutableArray *_segments;
-    NSMutableDictionary *_segmentMeta;
-}
+@implementation UISegmentedControl 
 @synthesize numberOfSegments = _numberOfSegments;
 @synthesize selectedSegmentIndex = _selectedSegmentIndex;
 @synthesize momentary = _momentary;
@@ -156,7 +154,7 @@ static NSString* const kUIMomentaryKey = @"UIMomentary";
         return;
     }
     
-    NSUInteger index = (NSUInteger)floorf((CGFloat)x / (self.frame.size.width / (CGFloat)[self numberOfSegments]));
+    NSUInteger index = (NSUInteger)floor((CGFloat)x / (self.frame.size.width / (CGFloat)[self numberOfSegments]));
     if ([self isEnabledForSegmentAtIndex:index]) {
         self.selectedSegmentIndex = (NSInteger)index;
     }
@@ -212,7 +210,7 @@ static NSString* const kUIMomentaryKey = @"UIMomentary";
     
     NSInteger count = (NSInteger)[self numberOfSegments];
     CGSize size = frame.size;
-    CGFloat segmentWidth = roundf((size.width - count - 1) / (CGFloat)count);
+    CGFloat segmentWidth = round((size.width - count - 1) / (CGFloat)count);
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     for (NSInteger i = 0; i < count; i++) {
@@ -279,7 +277,7 @@ static NSString* const kUIMomentaryKey = @"UIMomentary";
         if ([item isKindOfClass:[NSString class]]) {
             NSString *string = (NSString *)item;
             CGSize textSize = [string sizeWithFont:_font constrainedToSize:CGSizeMake(segmentWidth, size.height) lineBreakMode:UILineBreakModeTailTruncation];
-            CGRect textRect = CGRectMake(x, roundf((size.height - textSize.height) / 2.0f), segmentWidth, size.height);
+            CGRect textRect = CGRectMake(x, round((size.height - textSize.height) / 2.0f), segmentWidth, size.height);
             textRect = UIEdgeInsetsInsetRect(textRect, _textEdgeInsets);
             
             if (enabled) {
@@ -297,8 +295,8 @@ static NSString* const kUIMomentaryKey = @"UIMomentary";
         else if ([item isKindOfClass:[UIImage class]]) {
             UIImage *image = (UIImage *)item;
             CGSize imageSize = image.size;
-            CGRect imageRect = CGRectMake(x + roundf((segmentRect.size.width - imageSize.width) / 2.0f),
-                                          roundf((segmentRect.size.height - imageSize.height) / 2.0f),
+            CGRect imageRect = CGRectMake(x + round((segmentRect.size.width - imageSize.width) / 2.0f),
+                                          round((segmentRect.size.height - imageSize.height) / 2.0f),
                                           imageSize.width, imageSize.height);
             [image drawInRect:imageRect blendMode:kCGBlendModeNormal alpha:enabled ? 1.0f : 0.5f];
         }

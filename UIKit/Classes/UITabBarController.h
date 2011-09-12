@@ -41,7 +41,13 @@
 @end
 
 @class UITabBar;
-@interface UITabBarController : UIViewController 
+@interface UITabBarController : UIViewController {
+@private
+    UITabBar *_tabBar;
+    UIViewController *_selectedViewController;
+    NSArray *_viewControllers;
+    NSUInteger _selectedIndex;
+}
 
 - (void)setViewControllers:(NSArray *)viewController animated:(BOOL)animated;
 

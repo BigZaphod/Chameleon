@@ -93,7 +93,52 @@ typedef enum {
     UITableViewRowAnimationMiddle
 } UITableViewRowAnimation;
 
-@interface UITableView : UIScrollView <NSCoding>
+@interface UITableView : UIScrollView <NSCoding> {
+@private
+    UITableViewStyle _style;
+    id<UITableViewDataSource> _dataSource;
+    BOOL _needsReload;
+    CGFloat _rowHeight;
+    UIColor *_separatorColor;
+    UITableViewCellSeparatorStyle _separatorStyle;
+    UIView *_tableHeaderView;
+    UIView *_tableFooterView;
+    BOOL _allowsSelection;
+    BOOL _allowsSelectionDuringEditing;
+    BOOL _editing;
+    BOOL _allowsMultipleSelection;
+    NSMutableDictionary *_cachedCells;
+    NSMutableSet *_reusableCells;
+    NSMutableArray *_sections;
+    CGFloat _sectionHeaderHeight;
+    CGFloat _sectionFooterHeight;
+    NSMutableArray *_selectedRows;
+    
+    struct {
+        BOOL heightForRowAtIndexPath : 1;
+        BOOL heightForHeaderInSection : 1;
+        BOOL heightForFooterInSection : 1;
+        BOOL viewForHeaderInSection : 1;
+        BOOL viewForFooterInSection : 1;
+        BOOL willSelectRowAtIndexPath : 1;
+        BOOL didSelectRowAtIndexPath : 1;
+		BOOL didDoubleClickRowAtIndexPath: 1;
+        BOOL willDeselectRowAtIndexPath : 1;
+        BOOL didDeselectRowAtIndexPath : 1;
+		BOOL willBeginEditingRowAtIndexPath : 1;
+		BOOL didEndEditingRowAtIndexPath : 1;
+		BOOL titleForDeleteConfirmationButtonForRowAtIndexPath : 1;
+        BOOL accessoryButtonTappedForRowWithIndexPath : 1;
+    } _delegateHas;
+    
+    struct {
+        BOOL numberOfSectionsInTableView : 1;
+        BOOL titleForHeaderInSection : 1;
+        BOOL titleForFooterInSection : 1;
+		BOOL commitEditingStyle : 1;
+		BOOL canEditRowAtIndexPath : 1;
+    } _dataSourceHas;
+}
 
 - (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style;
 - (void)reloadData;

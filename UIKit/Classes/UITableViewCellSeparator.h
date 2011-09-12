@@ -32,7 +32,11 @@
 
 @class UIColor;
 
-@interface UITableViewCellSeparator : UIView 
+@interface UITableViewCellSeparator : UIView {
+@private
+    UITableViewCellSeparatorStyle _style;
+    UIColor *_color;
+}
 @property (nonatomic, assign) UITableViewCellSeparatorStyle style;
 @property (nonatomic, retain) UIColor* color;
 @end

@@ -33,6 +33,7 @@
 #import "UIToolbarButton.h"
 #import "UIColor.h"
 #import "UIGraphics.h"
+#include <tgmath.h>
 
 
 
@@ -95,9 +96,7 @@
 
 
 
-@implementation UIToolbar {
-    NSMutableArray *_toolbarItems;
-}
+@implementation UIToolbar 
 @synthesize barStyle = _barStyle;
 @synthesize tintColor = _tintColor;
 @synthesize translucent = _translucent;
@@ -210,7 +209,7 @@
         if (view) {
             CGRect frame = view.frame;
             frame.origin.x = x;
-            frame.origin.y = floorf(centerY - (frame.size.height / 2.f));
+            frame.origin.y = floor(centerY - (frame.size.height / 2.f));
             view.frame = frame;
         }
 

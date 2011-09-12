@@ -30,11 +30,7 @@
 #import "UIBezierPath.h"
 #import "UIGraphics.h"
 
-@implementation UIBezierPath {
-    CGFloat *_lineDashPattern;
-    NSInteger _lineDashCount;
-    CGFloat _lineDashPhase;
-}
+@implementation UIBezierPath 
 @synthesize lineWidth = _lineWidth;
 @synthesize lineCapStyle = _lineCapStyle;
 @synthesize lineJoinStyle = _lineJoinStyle;

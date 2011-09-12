@@ -41,15 +41,7 @@ static const CGFloat ToolbarHeight = 28;
 - (void) transitionFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController duration:(NSTimeInterval)duration direction:(NSInteger)direction animations:(void (^)(void))animations completion:(void (^)(BOOL))completion;
 @end
 
-@implementation UINavigationController {
-    UIView* _containerView;
-    NSMutableArray *_viewControllers;
-    
-    struct {
-        BOOL didShowViewController : 1;
-        BOOL willShowViewController : 1;
-    } _delegateHas;
-}
+@implementation UINavigationController 
 @synthesize viewControllers = _viewControllers;
 @synthesize delegate = _delegate;
 @synthesize navigationBar = _navigationBar;

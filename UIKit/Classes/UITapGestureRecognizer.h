@@ -29,7 +29,10 @@
 
 #import "UIGestureRecognizer.h"
 
-@interface UITapGestureRecognizer : UIGestureRecognizer 
+@interface UITapGestureRecognizer : UIGestureRecognizer {
+    NSUInteger _numberOfTapsRequired;
+    NSUInteger _numberOfTouchesRequired;
+}
 
 @property (nonatomic) NSUInteger numberOfTapsRequired;
 @property (nonatomic) NSUInteger numberOfTouchesRequired;

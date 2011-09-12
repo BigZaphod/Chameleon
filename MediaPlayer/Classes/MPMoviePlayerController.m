@@ -78,11 +78,11 @@ NSString *const MPMovieDurationAvailableNotification = @"MPMovieDurationAvailabl
 {    
     NSNumber* loadState = [movie attributeForKey: QTMovieLoadStateAttribute];        
     
-    switch ([loadState intValue]) {
+    switch ([loadState integerValue]) {
         case QTMovieLoadStateError:            
         {
             NSLog(@"woo");
-            NSNumber *stopCode = [NSNumber numberWithInt: MPMovieFinishReasonPlaybackError];
+            NSNumber *stopCode = [NSNumber numberWithInteger:MPMovieFinishReasonPlaybackError];
             NSDictionary *userInfo = [NSDictionary dictionaryWithObject: stopCode
                                                                  forKey: MPMoviePlayerPlaybackDidFinishReasonUserInfoKey];
             
@@ -143,7 +143,7 @@ NSString *const MPMovieDurationAvailableNotification = @"MPMovieDurationAvailabl
 
     _playbackState = MPMoviePlaybackStateStopped;
         
-    NSNumber *stopCode = [NSNumber numberWithInt: MPMovieFinishReasonPlaybackEnded];
+    NSNumber *stopCode = [NSNumber numberWithInteger:MPMovieFinishReasonPlaybackEnded];
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject: stopCode
                                                          forKey: MPMoviePlayerPlaybackDidFinishReasonUserInfoKey];
     

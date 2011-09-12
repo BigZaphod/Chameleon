@@ -1,6 +1,8 @@
 #import <UIKit/UIKit.h>
 
 
-@interface UITableViewCellSelectedBackgroundView : UIView 
+@interface UITableViewCellSelectedBackgroundView : UIView  {
+    UITableViewCellSelectionStyle _selectionStyle;
+}
 @property (nonatomic, assign) UITableViewCellSelectionStyle selectionStyle;
 @end

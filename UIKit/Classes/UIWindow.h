@@ -57,7 +57,15 @@ extern NSString *const UIKeyboardBoundsUserInfoKey;
 
 @class UIScreen, UIViewController;
 
-@interface UIWindow : UIView 
+@interface UIWindow : UIView {
+@private
+    UIScreen *_screen;
+    UIResponder *_firstResponder;
+    NSUndoManager *_undoManager;
+    UIViewController *_rootViewController;
+    id _currentToolTipView;
+    id _toolTipViewToShow;
+}
 
 - (CGPoint)convertPoint:(CGPoint)toConvert toWindow:(UIWindow *)toWindow;
 - (CGPoint)convertPoint:(CGPoint)toConvert fromWindow:(UIWindow *)fromWindow;

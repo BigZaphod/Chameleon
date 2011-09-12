@@ -31,7 +31,17 @@
 
 @class UIImage, CAKeyframeAnimation;
 
-@interface UIImageView : UIView <NSCoding>
+@interface UIImageView : UIView <NSCoding>{
+@private
+    UIImage *_image;
+    NSArray *_animationImages;
+    NSArray *_highlightedAnimationImages;
+    NSTimeInterval _animationDuration;
+    NSInteger _animationRepeatCount;
+    UIImage *_highlightedImage;
+    BOOL _highlighted;
+    NSInteger _drawMode;
+}
 
 - (id)initWithImage:(UIImage *)theImage;
 - (void)startAnimating;

@@ -28,5 +28,6 @@
  */
 
 #ifdef __OBJC__
+    #define NS_BUILD_32_LIKE_64 1
     #import <Foundation/Foundation.h>
 #endif

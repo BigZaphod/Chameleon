@@ -35,7 +35,11 @@
 - (void)accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration;
 @end
 
-@interface UIAccelerometer : NSObject 
+@interface UIAccelerometer : NSObject {
+@private
+    id<UIAccelerometerDelegate> _delegate;
+    NSTimeInterval _updateInterval;
+}
 
 + (UIAccelerometer *)sharedAccelerometer;
 

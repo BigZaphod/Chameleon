@@ -31,7 +31,17 @@
 
 @class UIBarButtonItem, UIView, UINavigationBar;
 
-@interface UINavigationItem : NSObject 
+@interface UINavigationItem : NSObject {
+@private
+    NSString *_title;
+    NSString *_prompt;
+    UIBarButtonItem *_backBarButtonItem;
+    UIBarButtonItem *_leftBarButtonItem;
+    UIBarButtonItem *_rightBarButtonItem;
+    UIView *_titleView;
+    BOOL _hidesBackButton;
+    UINavigationBar *_navigationBar;
+}
 
 - (id)initWithTitle:(NSString *)title;
 - (void)setLeftBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated;

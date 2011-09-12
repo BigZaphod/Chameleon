@@ -29,7 +29,9 @@
 
 #import "UIGestureRecognizer.h"
 
-@interface UIPinchGestureRecognizer : UIGestureRecognizer 
+@interface UIPinchGestureRecognizer : UIGestureRecognizer {
+    CGFloat _scale;
+}
 
 @property (nonatomic) CGFloat scale;
 @property (nonatomic, readonly) CGFloat velocity;

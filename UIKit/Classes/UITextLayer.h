@@ -79,10 +79,10 @@
     UITextAlignment textAlignment;
 
     struct {
-        unsigned int didChange : 1;
-        unsigned int didChangeSelection : 1;
-        unsigned int didReturnKey : 1;
-		unsigned int doCommandBySelector : 1;
+        unsigned int didChange:1;
+        unsigned int didChangeSelection:1;
+        unsigned int didReturnKey:1;
+		unsigned int doCommandBySelector:1;
     } textDelegateHas;
 }
 

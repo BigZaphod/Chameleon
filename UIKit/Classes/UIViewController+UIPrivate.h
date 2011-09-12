@@ -29,12 +29,6 @@
 
 #import "UIViewController.h"
 
-typedef enum {
-    UIViewControllerStateDidDisappear,
-    UIViewControllerStateWillAppear,
-    UIViewControllerStateDidAppear,
-    UIViewControllerStateWillDisappear
-} UIViewControllerAppearState;
 
 @interface UIViewController (UIPrivate)
 - (void)_setParentViewController:(UIViewController *)controller;

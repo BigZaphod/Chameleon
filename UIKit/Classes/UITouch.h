@@ -54,7 +54,21 @@ typedef enum {
 
 @class UIView, UIWindow;
 
-@interface UITouch : NSObject 
+@interface UITouch : NSObject {
+@private
+    NSTimeInterval _timestamp;
+    NSUInteger _tapCount;
+    UITouchPhase _phase;
+    _UITouchGesture _gesture;
+    CGPoint _delta;
+    CGFloat _rotation;
+    CGFloat _magnification;
+    CGPoint _location;
+    CGPoint _previousLocation;
+    UIView *_view;
+    UIWindow *_window;
+    NSArray *_gestureRecognizers;
+}
 
 - (CGPoint)locationInView:(UIView *)inView;
 - (CGPoint)previousLocationInView:(UIView *)inView;

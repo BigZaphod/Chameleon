@@ -81,7 +81,16 @@ typedef enum {
     UIControlContentVerticalAlignmentFill    = 3,
 } UIControlContentVerticalAlignment;
 
-@interface UIControl : UIView 
+@interface UIControl : UIView {
+    NSMutableArray *_registeredActions;
+    BOOL _tracking;
+    BOOL _touchInside;
+    BOOL _enabled;
+    BOOL _selected;
+    BOOL _highlighted;
+    UIControlContentHorizontalAlignment _contentHorizontalAlignment;
+    UIControlContentVerticalAlignment _contentVerticalAlignment;
+}
 
 - (void)addTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents;
 - (void)removeTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents;

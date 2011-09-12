@@ -10,11 +10,7 @@
 @end
 
 
-@implementation UINib {
-    NSData* _data;
-    NSBundle* _bundle;
-    UINibDecoder* _decoder;
-}
+@implementation UINib 
 
 + (UINib*) nibWithData:(NSData*)data bundle:(NSBundle*)bundleOrNil
 {

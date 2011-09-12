@@ -1,7 +1,11 @@
 #import <Foundation/Foundation.h>
 
-
-@interface UINib : NSObject
+@class UINibDecoder;
+@interface UINib : NSObject {
+    NSData* _data;
+    NSBundle* _bundle;
+    UINibDecoder* _decoder;
+}
 
 + (UINib*) nibWithData:(NSData*)data bundle:(NSBundle*)bundleOrNil;
 + (UINib*) nibWithNibName:(NSString*)name bundle:(NSBundle*)bundleOrNil;

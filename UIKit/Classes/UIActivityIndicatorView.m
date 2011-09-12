@@ -35,6 +35,7 @@
 #import "UIStringDrawing.h"
 #import "UIBezierPath.h"
 #import <QuartzCore/QuartzCore.h>
+#include <tgmath.h>
 
 static NSString* const kUIActivityIndicatorViewStyleKey = @"UIActivityIndicatorViewStyle";
 static NSString* const kUIHidesWhenStoppedKey = @"UIHidesWhenStopped";
@@ -76,7 +77,7 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
         
         // position and draw the tooth
         CGContextRotateCTM(c, 1 / numberOfTeeth * TWOPI);
-        [[UIBezierPath bezierPathWithRoundedRect:CGRectMake(-toothWidth/2.f,-radius,toothWidth,ceilf(radius*.54f)) cornerRadius:toothWidth/2.f] fill];
+        [[UIBezierPath bezierPathWithRoundedRect:CGRectMake(-toothWidth/2.f,-radius,toothWidth,ceil(radius*.54f)) cornerRadius:toothWidth/2.f] fill];
     }
     
     // hooray!
@@ -86,12 +87,7 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
     return frameImage;
 }
 
-@implementation UIActivityIndicatorView {
-    UIActivityIndicatorViewStyle _activityIndicatorViewStyle;
-    BOOL _hidesWhenStopped;
-    BOOL _animating;
-}
-
+@implementation UIActivityIndicatorView 
 - (void) commonInitForUIActivityIndicatorView
 {
     _animating = NO;

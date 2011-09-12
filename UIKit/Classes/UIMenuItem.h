@@ -29,7 +29,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface UIMenuItem : NSObject 
+@interface UIMenuItem : NSObject {
+@private
+    SEL _action;
+    NSString *_title;
+}
 
 - (id)initWithTitle:(NSString *)title action:(SEL)action;
 

@@ -31,7 +31,23 @@
 
 @protocol UIAlertViewDelegate;
 
-@interface UIAlertView : UIView 
+@interface UIAlertView : UIView {
+@private
+    NSString *_title;
+    NSString *_message;
+    id<UIAlertViewDelegate> _delegate;
+    NSInteger _cancelButtonIndex;
+    NSMutableArray *_buttonTitles;
+    
+    struct {
+        BOOL clickedButtonAtIndex : 1;
+        BOOL alertViewCancel : 1;
+        BOOL willPresentAlertView : 1;
+        BOOL didPresentAlertView : 1;
+        BOOL willDismissWithButtonIndex : 1;
+        BOOL didDismissWithButtonIndex : 1;
+    } _delegateHas;
+}
 
 - (id)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ...;
 
@@ -48,7 +64,7 @@
 
 @end
 
-@protocol UIAlertViewDelegate <NSObject>
+@protocol UIAlertViewDelegate <NSObject> 
 @optional
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
