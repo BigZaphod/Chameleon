@@ -123,7 +123,7 @@
 
 - (void)addSeparator
 {
-    [_separatorIndexes addObject:[NSNumber numberWithInt:[_menuTitles count]]];
+    [_separatorIndexes addObject:[NSNumber numberWithInteger:[_menuTitles count]]];
 }
 
 - (void)setDestructiveButtonIndex:(NSInteger)index
@@ -172,7 +172,7 @@
         [_menu setAllowsContextMenuPlugIns:NO];
         
         for (NSInteger index=0; index<[_menuTitles count]; index++) {
-            if ([_separatorIndexes containsObject:[NSNumber numberWithInt:index]]) {
+            if ([_separatorIndexes containsObject:[NSNumber numberWithInteger:index]]) {
                 [_menu addItem:[NSMenuItem separatorItem]];
             }
             
@@ -287,6 +287,7 @@
 
 - (void)showFromToolbar:(UIToolbar *)view
 {
+    
 }
 
 - (void)showFromTabBar:(UITabBar *)view

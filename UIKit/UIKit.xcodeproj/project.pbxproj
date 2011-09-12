@@ -296,6 +296,7 @@
 		A2E9947013C78C1000B7D49F /* UIViewAppKitIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E9946E13C78C1000B7D49F /* UIViewAppKitIntegration.m */; };
 		A2E9947713C79DBE00B7D49F /* UIWindowAppKitIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = A2E9947513C79DBE00B7D49F /* UIWindowAppKitIntegration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A2E9947813C79DBE00B7D49F /* UIWindowAppKitIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E9947613C79DBE00B7D49F /* UIWindowAppKitIntegration.m */; };
+		D9320C3D141DDB3A00EC2B1C /* UIBase.h in Headers */ = {isa = PBXBuildFile; fileRef = D9320C3C141DDB3900EC2B1C /* UIBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F900793013E7405600DFAF19 /* UISegment.h in Headers */ = {isa = PBXBuildFile; fileRef = F900792E13E7405600DFAF19 /* UISegment.h */; };
 		F900793113E7405600DFAF19 /* UISegment.m in Sources */ = {isa = PBXBuildFile; fileRef = F900792F13E7405600DFAF19 /* UISegment.m */; };
 		F9177F9613BA317200619E3D /* UITableViewCellLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F9177F9413BA317200619E3D /* UITableViewCellLayoutManager.h */; };
@@ -649,6 +650,7 @@
 		A2E9946E13C78C1000B7D49F /* UIViewAppKitIntegration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIViewAppKitIntegration.m; path = Classes/UIViewAppKitIntegration.m; sourceTree = "<group>"; };
 		A2E9947513C79DBE00B7D49F /* UIWindowAppKitIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIWindowAppKitIntegration.h; path = Classes/UIWindowAppKitIntegration.h; sourceTree = "<group>"; };
 		A2E9947613C79DBE00B7D49F /* UIWindowAppKitIntegration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIWindowAppKitIntegration.m; path = Classes/UIWindowAppKitIntegration.m; sourceTree = "<group>"; };
+		D9320C3C141DDB3900EC2B1C /* UIBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBase.h; sourceTree = "<group>"; };
 		F900792E13E7405600DFAF19 /* UISegment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISegment.h; sourceTree = "<group>"; };
 		F900792F13E7405600DFAF19 /* UISegment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISegment.m; sourceTree = "<group>"; };
 		F9177F9413BA317200619E3D /* UITableViewCellLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellLayoutManager.h; sourceTree = "<group>"; };
@@ -848,6 +850,7 @@
 				148984FB12EE2CFE003D4751 /* UIBarButtonItem.m */,
 				148984FC12EE2CFE003D4751 /* UIBarItem.h */,
 				148984FD12EE2CFE003D4751 /* UIBarItem.m */,
+				D9320C3C141DDB3900EC2B1C /* UIBase.h */,
 				148984FE12EE2CFE003D4751 /* UIBezierPath.h */,
 				148984FF12EE2CFE003D4751 /* UIBezierPath.m */,
 				1489850012EE2CFE003D4751 /* UIButton.h */,
@@ -1162,6 +1165,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9320C3D141DDB3A00EC2B1C /* UIBase.h in Headers */,
 				789CF898133A3CD500250AB4 /* NSFetchedResultsController.h in Headers */,
 				F9D9773013B794710086F226 /* UITextInput.h in Headers */,
 				78CB48D9133AB922008636DA /* UISlider.h in Headers */,

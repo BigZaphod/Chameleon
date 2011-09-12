@@ -37,6 +37,7 @@
 #import "UIRoundedRectButton.h"
 #import "UIColor.h"
 #import <AppKit/AppKit.h>
+#include <tgmath.h>
 
 static NSString* const kUIAdjustsImageWhenDisabledKey = @"UIAdjustsImageWhenDisabled";
 static NSString* const kUIAdjustsImageWhenHighlightedKey = @"UIAdjustsImageWhenHighlighted";
@@ -70,7 +71,7 @@ inline static NSNumber* _keyForState(NSInteger state)
         case UIControlStateHighlighted: return kUIControlStateHighlightedKey;
         case UIControlStateDisabled:    return kUIControlStateDisabledKey;
         case UIControlStateSelected:    return kUIControlStateSelectedKey;
-        default:                        return [NSNumber numberWithInt:state];
+        default:                        return [NSNumber numberWithInteger:state];
     }
     return nil;
 }
@@ -418,7 +419,7 @@ inline static NSNumber* _keyForState(NSInteger state)
     
     switch (self.contentHorizontalAlignment) {
         case UIControlContentHorizontalAlignmentCenter:
-            rect.origin.x += floorf((contentRect.size.width/2.f) - (rect.size.width/2.f));
+            rect.origin.x += floor((contentRect.size.width/2.f) - (rect.size.width/2.f));
             break;
             
         case UIControlContentHorizontalAlignmentRight:
@@ -436,7 +437,7 @@ inline static NSNumber* _keyForState(NSInteger state)
     
     switch (self.contentVerticalAlignment) {
         case UIControlContentVerticalAlignmentCenter:
-            rect.origin.y += floorf((contentRect.size.height/2.f) - (rect.size.height/2.f));
+            rect.origin.y += floor((contentRect.size.height/2.f) - (rect.size.height/2.f));
             break;
             
         case UIControlContentVerticalAlignmentBottom:

@@ -59,7 +59,7 @@
 - (void)stop;
 
 @property (readonly, getter=isPlaying) BOOL playing;
-@property float volume;
+@property CGFloat volume;
 @property NSInteger numberOfLoops;
 @property (assign) id <AVAudioPlayerDelegate> delegate;
 @property (readonly) NSTimeInterval duration;

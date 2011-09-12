@@ -265,8 +265,8 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
     [_arrowView sizeToFit];
     _arrowView.center = bestIntersection;
     CGRect arrowFrame = _arrowView.frame;
-    arrowFrame.origin.x = roundf(arrowFrame.origin.x);
-    arrowFrame.origin.y = roundf(arrowFrame.origin.y);
+    arrowFrame.origin.x = round(arrowFrame.origin.x);
+    arrowFrame.origin.y = round(arrowFrame.origin.y);
     _arrowView.frame = arrowFrame;
 }
 

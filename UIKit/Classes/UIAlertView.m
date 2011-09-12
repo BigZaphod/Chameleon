@@ -133,7 +133,7 @@
     for (NSInteger buttonIndex=0; buttonIndex<self.numberOfButtons; buttonIndex++) {
         if (buttonIndex != self.cancelButtonIndex) {
             [alert addButtonWithTitle:[self.buttonTitles objectAtIndex:buttonIndex]];
-            [buttonOrder addObject:[NSNumber numberWithInt:buttonIndex]];
+            [buttonOrder addObject:[NSNumber numberWithInteger:buttonIndex]];
         }
     }
     
@@ -145,7 +145,7 @@
             [btn setKeyEquivalent:@"\033"];		// this should make the escape key trigger the cancel option
         }
 
-        [buttonOrder addObject:[NSNumber numberWithInt:self.cancelButtonIndex]];
+        [buttonOrder addObject:[NSNumber numberWithInteger:self.cancelButtonIndex]];
     }
     
     if (_delegateHas.willPresentAlertView) {
@@ -174,16 +174,16 @@
     
     switch (result) {
         case NSAlertFirstButtonReturn:
-            buttonIndex = [[buttonOrder objectAtIndex:0] intValue];
+            buttonIndex = [[buttonOrder objectAtIndex:0] integerValue];
             break;
         case NSAlertSecondButtonReturn:
-            buttonIndex = [[buttonOrder objectAtIndex:1] intValue];
+            buttonIndex = [[buttonOrder objectAtIndex:1] integerValue];
             break;
         case NSAlertThirdButtonReturn:
-            buttonIndex = [[buttonOrder objectAtIndex:2] intValue];
+            buttonIndex = [[buttonOrder objectAtIndex:2] integerValue];
             break;
         default:
-            buttonIndex = [[buttonOrder objectAtIndex:2+(result-NSAlertThirdButtonReturn)] intValue];
+            buttonIndex = [[buttonOrder objectAtIndex:2+(result-NSAlertThirdButtonReturn)] integerValue];
             break;
     }
     

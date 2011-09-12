@@ -4,6 +4,30 @@
 //
 //  Created by Peter Steinberger on 24.03.11.
 //
+// Contributor: 
+//	Zac Bowling <zac@seatme.com>
+//
+// Copyright (C) 2011 SeatMe, Inc http://www.seatme.com
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 /*
  * Copyright (c) 2011, The Iconfactory. All rights reserved.
  *
@@ -42,11 +66,36 @@
     float _minimumValue;
     float _maximumValue;
     BOOL _continuous;
+    UIColor *_thumbTintColor;
 }
 
 @property (nonatomic) float value;
 @property (nonatomic) float minimumValue;
 @property (nonatomic) float maximumValue;
 @property (nonatomic, getter=isContinuous) BOOL continuous;
+@property (nonatomic, readonly) UIImage *currentMaximumTrackImage;
+@property (nonatomic, readonly) UIImage *currentMinimumTrackImage;
+@property (nonatomic, readonly) UIImage *currentThumbImage;
+
+- (void)setValue:(float)value animated:(BOOL)animated;
+
+- (UIImage *)maximumTrackImageForState:(UIControlState)state;
+- (void)setMaximumTrackImage:(UIImage *)image forState:(UIControlState)state;
+
+- (UIImage *)minimumTrackImageForState:(UIControlState)state;
+- (void)setMinimumTrackImage:(UIImage *)image forState:(UIControlState)state;
+
+
+- (void)setThumbImage:(UIImage *)image forState:(UIControlState)state;
+
+- (UIImage *)thumbImageForState:(UIControlState)state;
+- (CGRect)thumbRectForBounds:(CGRect)bounds trackRect:(CGRect)rect value:(float)value;
+- (CGRect)trackRectForBounds:(CGRect)bounds;
+
+- (CGRect)maximumValueImageRectForBounds:(CGRect)bounds;
+- (CGRect)minimumValueImageRectForBounds:(CGRect)bounds;
+
+
+@property(nonatomic, retain) UIColor *thumbTintColor;
 
 @end

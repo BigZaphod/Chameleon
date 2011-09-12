@@ -338,7 +338,7 @@ BOOL UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(NSString *videoPath)
 
 NSData *UIImageJPEGRepresentation(UIImage *image, CGFloat compressionQuality)
 {
-    return [[image _NSBitmapImageRep] representationUsingType:NSJPEGFileType properties:[NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:compressionQuality] forKey:NSImageCompressionFactor]];
+    return [[image _NSBitmapImageRep] representationUsingType:NSJPEGFileType properties:[NSDictionary dictionaryWithObject:[NSNumber numberWithDouble:compressionQuality] forKey:NSImageCompressionFactor]];
 }
 
 NSData *UIImagePNGRepresentation(UIImage *image)

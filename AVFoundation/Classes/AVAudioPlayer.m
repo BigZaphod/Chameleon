@@ -115,7 +115,7 @@
 
 - (float)volume
 {
-    float v = 0;
+    CGFloat v = 0;
     @synchronized (self) {
         v = [_player volume];
     }

@@ -316,7 +316,7 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
         id spellingValue = [layout temporaryAttribute:NSSpellingStateAttributeName atCharacterIndex:checkRange.location longestEffectiveRange:&effectiveRange inRange:checkRange];
         
         if (spellingValue) {
-            const NSInteger spellingFlag = [spellingValue intValue];
+            const NSInteger spellingFlag = [spellingValue integerValue];
 
             if ((spellingFlag & NSSpellingStateSpellingFlag) == NSSpellingStateSpellingFlag) {
                 NSUInteger count = 0;

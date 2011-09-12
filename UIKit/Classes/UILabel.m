@@ -32,6 +32,7 @@
 #import "UIFont.h"
 #import "UIGraphics.h"
 #import <AppKit/NSStringDrawing.h>
+#include <tgmath.h>
 
 
 static NSString* const kUIFontKey = @"UIFont";
@@ -239,7 +240,7 @@ static NSString* const kUIAdjustsFontSizeToFitKey = @"UIAdjustsFontSizeToFit";
         drawRect.size = [_text sizeWithFont:_font constrainedToSize:maxSize lineBreakMode:_lineBreakMode];
 
         // now vertically center it
-        drawRect.origin.y = roundf((bounds.size.height - drawRect.size.height) / 2.f);
+        drawRect.origin.y = round((bounds.size.height - drawRect.size.height) / 2.f);
         
         // now position it correctly for the width
         // this might be cheating somehow and not how the real thing does it...

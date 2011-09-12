@@ -162,7 +162,7 @@
     
     if (_delegateHas.shouldStartLoadWithRequest) {
         id navTypeObject = [actionInformation objectForKey:WebActionNavigationTypeKey];
-        NSInteger navTypeCode = [navTypeObject intValue];
+        NSInteger navTypeCode = [navTypeObject integerValue];
         UIWebViewNavigationType navType = UIWebViewNavigationTypeOther;
 
         switch (navTypeCode) {

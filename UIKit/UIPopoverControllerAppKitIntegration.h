@@ -1,4 +1,3 @@
-
 #import "UIPopoverController.h"
 
 @interface UIPopoverController (AppKitIntegration)

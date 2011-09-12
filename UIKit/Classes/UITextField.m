@@ -157,7 +157,7 @@ static NSString* const kUISecureTextEntryKey = @"UISecureTextEntry";
             self.clearsOnBeginEditing = [coder decodeBoolForKey:kUIClearsOnBeginEditingKey];
         }
         if ([coder containsValueForKey:kUIMinimumFontSizeKey]) {
-            self.minimumFontSize = [coder decodeFloatForKey:kUIMinimumFontSizeKey];
+            self.minimumFontSize = [coder decodeDoubleForKey:kUIMinimumFontSizeKey];
         }
         if ([coder containsValueForKey:kUIFontKey]) {
             self.font = [coder decodeObjectForKey:kUIFontKey];

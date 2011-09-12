@@ -50,8 +50,8 @@ static CGPatternRef CreateImagePattern(CGImageRef image)
 {
     NSCParameterAssert(image);
     CGImageRetain(image);
-    int width = CGImageGetWidth(image);
-    int height = CGImageGetHeight(image);
+    size_t width = CGImageGetWidth(image);
+    size_t height = CGImageGetHeight(image);
     static const CGPatternCallbacks callbacks = {0, &drawPatternImage, &releasePatternImage};
     return CGPatternCreate (image,
                             CGRectMake (0, 0, width, height),

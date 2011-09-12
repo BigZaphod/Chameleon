@@ -456,7 +456,7 @@ static Class kClassForUIImageNibPlaceholder;
     return [self _extractInt32FromValue:value];
 }
 
-- (int) decodeIntForKey:(NSString*)key
+- (int)decodeIntForKey:(NSString*)key
 {
     assert(key);
     UINibDecoderValueEntry* value = [self _valueEntryForKey:key];

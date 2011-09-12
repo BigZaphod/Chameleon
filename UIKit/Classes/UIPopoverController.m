@@ -40,6 +40,7 @@
 #import "UIPopoverNSWindow.h"
 #import "UIPopoverOverlayNSView.h"
 #import "UIImage+UIPrivate.h"
+#include <tgmath.h>
 
 
 static BOOL SizeIsLessThanOrEqualSize(NSSize size1, NSSize size2)
@@ -115,8 +116,8 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
         windowRect.origin.y = NSMinY(screenRect);
     }
     
-    windowRect.origin.x = roundf(windowRect.origin.x);
-    windowRect.origin.y = roundf(windowRect.origin.y);
+    windowRect.origin.x = round(windowRect.origin.x);
+    windowRect.origin.y = round(windowRect.origin.y);
     
     return windowRect.origin;
 }
@@ -216,7 +217,7 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 
         // now build the actual popover view which represents the popover's chrome, and since it's a UIView, we need to build a UIKitView 
         // as well to put it in our NSWindow...
-        _popoverView = [[UIPopoverView alloc] initWithContentView:_contentViewController.view size:_contentViewController.contentSizeForViewInPopover];
+        _popoverView = [[UIPopoverView alloc] initWithContentView:_contentViewController.view size:_contentViewController.contentSizeForViewInPopover popoverController:self];
 
         // this prevents a visible flash from sometimes occuring due to the fact that the window is created and added as a child before it has the
         // proper origin set. this means it it ends up flashing at the bottom left corner of the screen sometimes before it

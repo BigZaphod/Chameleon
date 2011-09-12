@@ -162,7 +162,7 @@ NSMutableArray *_allScreens = nil;
 
 - (CGRect)applicationFrame
 {
-    const float statusBarHeight = [UIApplication sharedApplication].statusBarHidden? 0 : 20;
+    const CGFloat statusBarHeight = [UIApplication sharedApplication].statusBarHidden? 0 : 20;
     const CGSize size = [self bounds].size;
     return CGRectMake(0,statusBarHeight,size.width,size.height-statusBarHeight);
 }

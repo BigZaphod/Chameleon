@@ -32,9 +32,10 @@
 #import "UIFont+UIPrivate.h"
 #import <AppKit/AppKit.h>
 #import "UIGraphics.h"
+#include <tgmath.h>
 
 static CGFloat CalculateCTFontLineHeight(CTFontRef font) {
-	return ceilf(CTFontGetAscent(font)) - floorf(-CTFontGetDescent(font)) + ceilf(CTFontGetLeading(font));
+	return ceil(CTFontGetAscent(font)) - floor(-CTFontGetDescent(font)) + ceil(CTFontGetLeading(font));
 }
 
 static CTFontRef GetPrimaryFontForAttributedString(NSAttributedString *string) {
@@ -109,7 +110,7 @@ static CFArrayRef CreateCTLinesForAttributedString(NSAttributedString *attribute
             }
             
             if (line) {
-                drawSize.width = MAX(drawSize.width, ceilf(CTLineGetTypographicBounds(line,NULL,NULL,NULL)));
+                drawSize.width = MAX(drawSize.width, ceil(CTLineGetTypographicBounds(line,NULL,NULL,NULL)));
                 
                 CFArrayAppendValue(lines, line);
                 CFRelease(line);
@@ -220,7 +221,7 @@ static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToS
         
         for (CFIndex lineNumber=0; lineNumber<numberOfLines; lineNumber++) {
             CTLineRef line = CFArrayGetValueAtIndex(lines, lineNumber);
-            float flush;
+            CGFloat flush;
             switch (alignment) {
                 case UITextAlignmentCenter:	flush = 0.5;	break;
                 case UITextAlignmentRight:	flush = 1;		break;
