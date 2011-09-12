@@ -204,7 +204,6 @@ typedef enum {
 
 @property (nonatomic, readonly) NSArray *childViewControllers;
 
-// stubs
 @property (nonatomic, retain) UITabBarItem *tabBarItem;
 @property (nonatomic, readonly, retain) UITabBarController *tabBarController;
 

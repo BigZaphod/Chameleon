@@ -321,12 +321,22 @@ NSMutableDictionary *imageCache = nil;
 
 + (UIImage *)_tabBarBackgroundImage
 {
-  return [self _frameworkImageWithName:@"<UITabBar> background.png" leftCapWidth:6 topCapHeight:0];
+    return [self _frameworkImageWithName:@"<UITabBar> background.png" leftCapWidth:3 topCapHeight:5];
 }
 
-+ (UIImage *)_tabBarItemImage
++ (UIImage *)_tabBarButtonImage
 {
-  return [self _frameworkImageWithName:@"<UITabBar> item.png" leftCapWidth:8 topCapHeight:0];
+    return [self _frameworkImageWithName:@"<UITabBar> button.png" leftCapWidth:8 topCapHeight:8];
+}
+
++ (UIImage *)_highlightedTabBarImage
+{
+    return [self _frameworkImageWithName:@"<UITabBarButtonImage> highlighted.png" leftCapWidth:3 topCapHeight:5];
+}
+
++ (UIImage *)_tabBarButtonBadgeImage
+{
+    return [self _frameworkImageWithName:@"<UITabBarButtonBadge> background.png" leftCapWidth:6 topCapHeight:8];
 }
 
 + (UIImage *)_defaultNavigationBarBackgroundImage

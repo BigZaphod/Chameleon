@@ -121,6 +121,7 @@
     [_view release];
     [_nibName release];
     [_nibBundle release];
+    [_tabBarItem release];
     [super dealloc];
 }
 
@@ -245,6 +246,11 @@
     _parentViewController = parentController;
 }
 
+- (void)_setTabBarController:(UITabBarController *)tabBarController
+{
+    _tabBarController = tabBarController;
+}
+
 - (void)setToolbarItems:(NSArray *)theToolbarItems animated:(BOOL)animated
 {
     if (_toolbarItems != theToolbarItems) {
@@ -278,6 +284,22 @@
 {
     // this should really return a fancy bar button item that toggles between edit/done and sends setEditing:animated: messages to this controller
     return nil;
+}
+
+- (void)setTabBarItem:(UITabBarItem *)tabBarItem
+{
+    if (_tabBarItem != tabBarItem) {
+        [_tabBarItem release];
+        _tabBarItem = [tabBarItem retain];
+    }
+}
+
+- (UITabBarItem *)tabBarItem
+{
+    if (!_tabBarItem) {
+        _tabBarItem = [[UITabBarItem alloc] initWithTitle:([self title] ?: @"") image:nil tag:0];
+    }
+    return _tabBarItem;
 }
 
 - (void)presentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated

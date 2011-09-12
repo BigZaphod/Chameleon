@@ -28,6 +28,7 @@
  */
 
 #import "UIViewController.h"
+#import "UITabBarController.h"
 
 
 @interface UIViewController (UIPrivate)
@@ -37,4 +38,5 @@
 - (void)viewDidMoveToWindow:(UIWindow *)window;
 - (BOOL)beginAppearanceTransition:(BOOL)shouldAppear animated:(BOOL)animated;
 - (BOOL)_endAppearanceTransition;
+- (void)_setTabBarController:(UITabBarController *)controller;
 @end

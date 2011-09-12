@@ -35,7 +35,7 @@
 
 #import "UIBarItem.h"
 
-@class UIImage;
+@class UIImage, UIView;
 
 typedef enum {
     UITabBarSystemItemMore,
@@ -52,9 +52,16 @@ typedef enum {
     UITabBarSystemItemMostViewed,
 } UITabBarSystemItem;
 
-
 @interface UITabBarItem : UIBarItem {
+@private
     NSString *_badgeValue;
+
+@package
+    id _target;
+    SEL _action;
+    UIView *_view;
+    BOOL _isSystemItem;
+    UITabBarSystemItem _systemItem;
 }
 
 - (id)initWithTitle:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag;

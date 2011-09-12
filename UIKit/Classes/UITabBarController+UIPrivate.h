@@ -1,9 +1,3 @@
-//
-//  UITabBar.h
-//  UIKit
-//
-//  Created by Peter Steinberger on 23.03.11.
-//
 /*
  * Copyright (c) 2011, The Iconfactory. All rights reserved.
  *
@@ -33,39 +27,8 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIView.h"
+#import "UITabBarController.h"
 
-@class UITabBar, UITabBarItem;
-
-@protocol UITabBarDelegate <NSObject>
-
-@optional
-
-- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item;
-
-// stub
-- (void)tabBar:(UITabBar *)tabBar willBeginCustomizingItems:(NSArray *)items;                     // called before customize sheet is shown. items is current item list
-- (void)tabBar:(UITabBar *)tabBar didBeginCustomizingItems:(NSArray *)items;                      // called after customize sheet is shown. items is current item list
-- (void)tabBar:(UITabBar *)tabBar willEndCustomizingItems:(NSArray *)items changed:(BOOL)changed; // called before customize sheet is hidden. items is new item list
-- (void)tabBar:(UITabBar *)tabBar didEndCustomizingItems:(NSArray *)items changed:(BOOL)changed;  // called after customize sheet is hidden. items is new item list
-
-@end
-
-@interface UITabBar : UIView {
-    NSArray *_items;
-    id<UITabBarDelegate>  _delegate;
-    UITabBarItem *_selectedItem;
-}
-
-@property (nonatomic, assign) id<UITabBarDelegate>  delegate;
-@property (nonatomic, copy)   NSArray              *items;
-@property (nonatomic, assign) UITabBarItem         *selectedItem;
-
-- (void)setItems:(NSArray *)items animated:(BOOL)animated;
-
-// stub
-- (void)beginCustomizingItems:(NSArray *)items;
-- (BOOL)endCustomizingAnimated:(BOOL)animated;
-- (BOOL)isCustomizing;
-
+@interface UITabBarController (UIPrivate)
+- (void)_updateSelectionOnButtonDown:(UITabBarItem *)item;
 @end

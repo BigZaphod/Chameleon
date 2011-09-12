@@ -28,10 +28,13 @@
  */
 
 #import "UIViewController.h"
+#import "UITabBar.h"
 
 @class UITabBarController;
+
 @protocol UITabBarControllerDelegate <NSObject>
 
+@optional
 - (void)tabBarController:(UITabBarController *)tabBarController didEndCustomizingViewControllers:(NSArray *)viewControllers changed:(BOOL)changed;
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController;
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController;
@@ -40,20 +43,23 @@
 
 @end
 
+
 @class UITabBar;
-@interface UITabBarController : UIViewController {
+@interface UITabBarController : UIViewController <UITabBarDelegate> {
 @private
     UITabBar *_tabBar;
     UIViewController *_selectedViewController;
     NSArray *_viewControllers;
-    NSUInteger _selectedIndex;
+    NSDictionary *_viewControllerByTabBarItem;
+    id<UITabBarControllerDelegate> _delegate;
 }
 
-- (void)setViewControllers:(NSArray *)viewController animated:(BOOL)animated;
+- (void)setViewControllers:(NSArray *)viewControllers animated:(BOOL)animated;
 
 @property (nonatomic, assign) UIViewController *selectedViewController;
+@property (nonatomic) NSUInteger selectedIndex;
 @property (nonatomic, copy)   NSArray *viewControllers;
-@property (nonatomic, assign) NSUInteger selectedIndex;
 @property (nonatomic, readonly) UITabBar *tabBar;
+@property (nonatomic, assign) id<UITabBarControllerDelegate> delegate;
 
 @end
