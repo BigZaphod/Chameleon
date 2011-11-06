@@ -657,7 +657,21 @@ static BOOL TouchIsActive(UITouch *touch)
     const NSTimeInterval timestamp = [theNSEvent timestamp];
     const CGPoint screenLocation = ScreenLocationFromNSEvent(theScreen, theNSEvent);
 
-    if (TouchIsActiveNonGesture(touch)) {
+    // NSLeftMouseDown events are handled incorrectly if when using an Apple Magic Mouse the user makes an inadvertent gesture (slight finger drag) as he is clicking the mouse.
+	// In this case TouchIsActiveGesture(touch) returns YES for all NSLeftMouseDown or NSRightMouseDown events until the user lifts the finger from the mouse surface (no matter how many times he clicks the mouse button), 
+	// and the events are ignored as there is no case for NSLeftMouseDown in that switch.
+	// adding the follwing 2 if statements will make sure the MouseDown events don't get ignored. ( we could also remove them from the switch at line 717 as the 2 MouseDown cases will never be called )
+    if (theNSEvent.type == NSLeftMouseDown) {
+		[touch _setPhase:UITouchPhaseBegan screenLocation:screenLocation tapCount:[theNSEvent clickCount] timestamp:timestamp];
+		[self _setCurrentEventTouchedViewWithNSEvent:theNSEvent fromScreen:theScreen];
+		[self sendEvent:_currentEvent];
+		
+	} else if (theNSEvent.type == NSRightMouseDown) {
+		[touch _setDiscreteGesture:_UITouchDiscreteGestureRightClick screenLocation:screenLocation tapCount:[theNSEvent clickCount] delta:CGPointZero timestamp:timestamp];
+		[self _setCurrentEventTouchedViewWithNSEvent:theNSEvent fromScreen:theScreen];
+		[self sendEvent:_currentEvent];
+		
+	} else if (TouchIsActiveNonGesture(touch)) {
         switch ([theNSEvent type]) {
             case NSLeftMouseUp:
                 [touch _updatePhase:UITouchPhaseEnded screenLocation:screenLocation timestamp:timestamp];
