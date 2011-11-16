@@ -49,6 +49,7 @@
 
 // This passed along the responder chain like everything else.
 - (void)mouseMoved:(CGPoint)delta withEvent:(UIEvent *)event;
+- (void)mouseHovered:(NSSet *)touches withEvent:(UIEvent *)event;
 
 // Return an NSCursor if you want to modify it or nil to use the default arrow. Follows responder chain.
 - (id)mouseCursorForEvent:(UIEvent *)event;	// return an NSCursor if you want to modify it, return nil to use default

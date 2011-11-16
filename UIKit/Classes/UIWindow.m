@@ -359,6 +359,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
             } else if (phase == _UITouchPhaseDiscreteGesture && gesture == _UITouchDiscreteGestureMouseMove) {
                 if ([view hitTest:[touch locationInView:view] withEvent:event]) {
                     [view mouseMoved:[touch _delta] withEvent:event];
+                    [view mouseHovered:touches withEvent:event];
                 }
             } else if (phase == _UITouchPhaseDiscreteGesture && gesture == _UITouchDiscreteGestureRightClick) {
                 [view rightClick:touch withEvent:event];

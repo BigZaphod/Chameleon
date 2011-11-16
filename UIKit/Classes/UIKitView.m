@@ -196,6 +196,11 @@
     [[UIApplication sharedApplication] _sendMouseNSEvent:theEvent fromScreen:_screen];
 }
 
+- (void)mouseHovered:(NSEvent *)theEvent
+{
+    [[UIApplication sharedApplication] _sendMouseNSEvent:theEvent fromScreen:_screen];
+}
+
 - (void)mouseDown:(NSEvent *)theEvent
 {
     if ([theEvent modifierFlags] & NSControlKeyMask) {
