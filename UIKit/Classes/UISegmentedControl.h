@@ -60,10 +60,10 @@ enum {
 
 - (id)initWithItems:(NSArray *)items;
 
-//- (void)insertSegmentWithTitle:(NSString *)title atIndex:(NSUInteger)segment animated:(BOOL)animated;
+- (void)insertSegmentWithTitle:(NSString *)title atIndex:(NSUInteger)segment animated:(BOOL)animated;
 //- (void)insertSegmentWithImage:(UIImage *)image  atIndex:(NSUInteger)segment animated:(BOOL)animated;
 //- (void)removeSegmentAtIndex:(NSUInteger)segment animated:(BOOL)animated;
-//- (void)removeAllSegments;
+- (void)removeAllSegments;
 
 - (void)setTitle:(NSString *)title forSegmentAtIndex:(NSUInteger)segment;
 - (NSString *)titleForSegmentAtIndex:(NSUInteger)segment;

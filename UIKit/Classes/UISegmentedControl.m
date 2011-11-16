@@ -286,6 +286,11 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
     return [_segments count];
 }
 
+- (void)removeAllSegments
+{
+    [_segments removeAllObjects];
+    [self setNeedsDisplay];
+}
 
 - (void)setTitle:(NSString *)title forSegmentAtIndex:(NSUInteger)segment
 {
@@ -313,6 +318,10 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
     return nil;
 }
 
+- (void)insertSegmentWithTitle:(NSString *)title atIndex:(NSUInteger)segment animated:(BOOL)animated
+{
+    [self setTitle:title forSegmentAtIndex:segment];
+}
 
 - (void)setImage:(UIImage *)image forSegmentAtIndex:(NSUInteger)segment
 {
