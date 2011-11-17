@@ -187,6 +187,26 @@ NSMutableDictionary *imageCache = nil;
     return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> reply.png" leftCapWidth:0 topCapHeight:0];
 }
 
++ (UIImage *)_segmentedControlButtonImage 
+{
+    return [self _frameworkImageWithName:@"<UISegmentedControl> button.png" leftCapWidth:6 topCapHeight:0];
+}
+
++ (UIImage *)_segmentedControlHighlightedButtonImage 
+{    
+    return [self _frameworkImageWithName:@"<UISegmentedControl> button-highlighted.png" leftCapWidth:6 topCapHeight:0];
+}
+
++ (UIImage *)_segmentedControlDividerImage 
+{    
+    return [self _frameworkImageWithName:@"<UISegmentedControl> divider.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_segmentedControlHighlightedDividerImage
+{
+    return [self _frameworkImageWithName:@"<UISegmentedControl> divider-highlighted.png" leftCapWidth:0 topCapHeight:0];
+}
+
 - (UIImage *)_toolbarImage
 {
     // NOTE.. I don't know where to put this, really, but it seems like the real UIKit reduces image size by 75% if they are too
