@@ -11,6 +11,7 @@
 #import "UIColor.h"
 #import "UIStringDrawing.h"
 #import "UIGraphics.h"
+#import "UIImage+UIPrivate.h"
 
 static NSString *kSSSegmentedControlEnabledKey = @"enabled";
 

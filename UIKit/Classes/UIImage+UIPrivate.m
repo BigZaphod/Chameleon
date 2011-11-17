@@ -207,6 +207,17 @@ NSMutableDictionary *imageCache = nil;
     return [self _frameworkImageWithName:@"<UISegmentedControl> divider-highlighted.png" leftCapWidth:0 topCapHeight:0];
 }
 
++ (UIImage *)_switchOnImage
+{
+    return [self _frameworkImageWithName:@"<UISwitch> on.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_switchOffImage
+{
+    return [self _frameworkImageWithName:@"<UISwitch> off.png" leftCapWidth:0 topCapHeight:0];
+}
+
+
 - (UIImage *)_toolbarImage
 {
     // NOTE.. I don't know where to put this, really, but it seems like the real UIKit reduces image size by 75% if they are too
