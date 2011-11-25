@@ -29,3 +29,8 @@
 
 #import "MPMusicPlayerController.h"
 #import "MPMoviePlayerController.h"
+#import "MPMediaPlayback.h"
+#import "MPMediaItemCollection.h"
+#import "MPMediaEntity.h"
+#import "MPVolumeView.h"
+#import "MPMediaPickerController.h"

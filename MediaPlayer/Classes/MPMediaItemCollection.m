@@ -27,58 +27,22 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "MPMusicPlayerController.h"
+#import "MPMediaItemCollection.h"
+#import "MPMediaEntity.h"
 
-NSString *const MPMusicPlayerControllerPlaybackStateDidChangeNotification = @"MPMusicPlayerControllerPlaybackStateDidChangeNotification";
+@implementation MPMediaItemCollection
+@synthesize items;
+@synthesize representativeItem;
+@synthesize count;
+@synthesize mediaTypes;
 
-@implementation MPMusicPlayerController
-@synthesize shuffleMode;
-@synthesize repeatMode;
+- (id)initWithItems:(NSArray *)items;
+{
+    return (self = [super init]);
+}
 
-+ (MPMusicPlayerController *)iPodMusicPlayer
++ (MPMediaItemCollection *)collectionWithItems:(NSArray *)items
 {
     return nil;
-}
-
-- (MPMusicPlaybackState)playbackState
-{
-    return MPMusicPlaybackStateStopped;
-}
-
-- (void)beginGeneratingPlaybackNotifications
-{
-}
-
-- (void)endGeneratingPlaybackNotifications
-{
-}
-
-+ (MPMusicPlayerController *)applicationMusicPlayer
-{
-    return nil;
-}
-
-- (void)setQueueWithItemCollection:(MPMediaItemCollection *)itemCollection
-{
-    
-}
-
--(MPMusicShuffleMode)shuffleMode
-{
-    return MPMusicShuffleModeDefault;
-}
-
--(MPMusicRepeatMode)repeatMode
-{
-    return MPMusicRepeatModeDefault;
-}
-
--(float)volume
-{
-    return 0;
-}
--(void)setVolume:(float)volume
-{
-    
 }
 @end

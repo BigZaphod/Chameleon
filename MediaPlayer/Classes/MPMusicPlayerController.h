@@ -39,16 +39,38 @@ enum {
 };
 typedef NSInteger MPMusicPlaybackState;
 
+
+enum {
+    MPMusicShuffleModeDefault, // the user's preference for shuffle mode
+    MPMusicShuffleModeOff,
+    MPMusicShuffleModeSongs,
+    MPMusicShuffleModeAlbums
+};
+typedef NSInteger MPMusicShuffleMode;
+
+enum {
+    MPMusicRepeatModeDefault, // the user's preference for repeat mode
+    MPMusicRepeatModeNone,
+    MPMusicRepeatModeOne,
+    MPMusicRepeatModeAll
+};
+typedef NSInteger MPMusicRepeatMode;
+
 extern NSString *const MPMusicPlayerControllerPlaybackStateDidChangeNotification;
+
+@class MPMediaItemCollection;
 
 @interface MPMusicPlayerController : NSObject {
 }
 
 + (MPMusicPlayerController *)iPodMusicPlayer;
++ (MPMusicPlayerController *)applicationMusicPlayer;
 
 - (void)beginGeneratingPlaybackNotifications;
 - (void)endGeneratingPlaybackNotifications;
-
+- (void)setQueueWithItemCollection:(MPMediaItemCollection *)itemCollection;
 @property (nonatomic, readonly) MPMusicPlaybackState playbackState;
-
+@property(nonatomic) MPMusicShuffleMode shuffleMode;
+@property(nonatomic) MPMusicRepeatMode repeatMode;
+@property(nonatomic) float volume;
 @end

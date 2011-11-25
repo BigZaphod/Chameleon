@@ -27,58 +27,39 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "MPMusicPlayerController.h"
+#import <Foundation/Foundation.h>
 
-NSString *const MPMusicPlayerControllerPlaybackStateDidChangeNotification = @"MPMusicPlayerControllerPlaybackStateDidChangeNotification";
-
-@implementation MPMusicPlayerController
-@synthesize shuffleMode;
-@synthesize repeatMode;
-
-+ (MPMusicPlayerController *)iPodMusicPlayer
-{
-    return nil;
-}
-
-- (MPMusicPlaybackState)playbackState
-{
-    return MPMusicPlaybackStateStopped;
-}
-
-- (void)beginGeneratingPlaybackNotifications
-{
-}
-
-- (void)endGeneratingPlaybackNotifications
-{
-}
-
-+ (MPMusicPlayerController *)applicationMusicPlayer
-{
-    return nil;
-}
-
-- (void)setQueueWithItemCollection:(MPMediaItemCollection *)itemCollection
-{
+enum {
+    // audio
+    MPMediaTypeMusic        = 1 << 0,
+    MPMediaTypePodcast      = 1 << 1,
+    MPMediaTypeAudioBook    = 1 << 2,
+    MPMediaTypeAudioITunesU = 1 << 3, // available in iOS 5.0
+    MPMediaTypeAnyAudio     = 0x00ff,
     
-}
-
--(MPMusicShuffleMode)shuffleMode
-{
-    return MPMusicShuffleModeDefault;
-}
-
--(MPMusicRepeatMode)repeatMode
-{
-    return MPMusicRepeatModeDefault;
-}
-
--(float)volume
-{
-    return 0;
-}
--(void)setVolume:(float)volume
-{
+    // video (available in iOS 5.0)
+    MPMediaTypeMovie        = 1 << 8,
+    MPMediaTypeTVShow       = 1 << 9,
+    MPMediaTypeVideoPodcast = 1 << 10,
+    MPMediaTypeMusicVideo   = 1 << 11,
+    MPMediaTypeVideoITunesU = 1 << 12,
+    MPMediaTypeAnyVideo     = 0xff00,
     
-}
+    MPMediaTypeAny          = ~0
+};
+typedef NSInteger MPMediaType;
+
+@interface MPMediaEntity : NSObject 
+
++ (BOOL)canFilterByProperty:(NSString *)property;
+
+- (id)valueForProperty:(NSString *)property;
+
+- (void)enumerateValuesForProperties:(NSSet *)properties usingBlock:(void (^)(NSString *property, id value, BOOL *stop))block ;
+
 @end
+
+
+@interface MPMediaItem : MPMediaEntity
+@end
+

@@ -27,58 +27,24 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "MPMusicPlayerController.h"
+#import "MPMediaEntity.h"
 
-NSString *const MPMusicPlayerControllerPlaybackStateDidChangeNotification = @"MPMusicPlayerControllerPlaybackStateDidChangeNotification";
+NSString *const MPMediaItemPropertyTitle=@"MPMediaItemPropertyTitle";
 
-@implementation MPMusicPlayerController
-@synthesize shuffleMode;
-@synthesize repeatMode;
+@implementation MPMediaEntity 
++ (BOOL)canFilterByProperty:(NSString *)property
+{
+    return NO;
+}
 
-+ (MPMusicPlayerController *)iPodMusicPlayer
+- (id)valueForProperty:(NSString *)property
 {
     return nil;
 }
 
-- (MPMusicPlaybackState)playbackState
-{
-    return MPMusicPlaybackStateStopped;
-}
-
-- (void)beginGeneratingPlaybackNotifications
-{
-}
-
-- (void)endGeneratingPlaybackNotifications
-{
-}
-
-+ (MPMusicPlayerController *)applicationMusicPlayer
-{
-    return nil;
-}
-
-- (void)setQueueWithItemCollection:(MPMediaItemCollection *)itemCollection
-{
-    
-}
-
--(MPMusicShuffleMode)shuffleMode
-{
-    return MPMusicShuffleModeDefault;
-}
-
--(MPMusicRepeatMode)repeatMode
-{
-    return MPMusicRepeatModeDefault;
-}
-
--(float)volume
-{
-    return 0;
-}
--(void)setVolume:(float)volume
+- (void)enumerateValuesForProperties:(NSSet *)properties usingBlock:(void (^)(NSString *property, id value, BOOL *stop))block 
 {
     
 }
 @end
+
