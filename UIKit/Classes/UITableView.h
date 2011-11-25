@@ -175,6 +175,7 @@ typedef enum {
 @property (nonatomic, retain) UIColor *separatorColor;
 @property (nonatomic, retain) UIView *tableHeaderView;
 @property (nonatomic, retain) UIView *tableFooterView;
+@property(nonatomic, readwrite, retain) UIView *backgroundView;
 @property (nonatomic) BOOL allowsSelection;
 @property (nonatomic) BOOL allowsSelectionDuringEditing;	// not implemented
 @property (nonatomic, getter=isEditing) BOOL editing;
