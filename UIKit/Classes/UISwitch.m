@@ -103,6 +103,7 @@
 - (void)setOn:(BOOL)on animated:(BOOL)animated
 {
     _on = on;
+    [self setNeedsDisplay];
 }
 
 - (void)setOn:(BOOL)on
