@@ -81,4 +81,6 @@ typedef NSUInteger UIPopoverArrowDirection;
 @property (nonatomic, copy) NSArray *passthroughViews;
 @property (nonatomic, readonly) UIPopoverArrowDirection popoverArrowDirection;
 
+@property (nonatomic) CGSize popoverContentSize;
+- (void)setPopoverContentSize:(CGSize)size animated:(BOOL)animated;
 @end

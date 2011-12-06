@@ -339,4 +339,16 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
     }
 }
 
+-(CGSize) popoverContentSize
+{
+    return _contentViewController.view.frame.size;
+}
+- (void)setPopoverContentSize:(CGSize)size
+{
+    
+}
+- (void)setPopoverContentSize:(CGSize)size animated:(BOOL)animated
+{
+    
+}
 @end

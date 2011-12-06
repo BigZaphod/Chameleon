@@ -65,7 +65,9 @@ extern NSString *const MPMusicPlayerControllerPlaybackStateDidChangeNotification
 
 + (MPMusicPlayerController *)iPodMusicPlayer;
 + (MPMusicPlayerController *)applicationMusicPlayer;
-
+- (void)play;
+- (void)pause;
+- (void)stop;
 - (void)beginGeneratingPlaybackNotifications;
 - (void)endGeneratingPlaybackNotifications;
 - (void)setQueueWithItemCollection:(MPMediaItemCollection *)itemCollection;

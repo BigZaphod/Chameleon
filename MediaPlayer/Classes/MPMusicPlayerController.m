@@ -81,4 +81,17 @@ NSString *const MPMusicPlayerControllerPlaybackStateDidChangeNotification = @"MP
 {
     
 }
+- (void)play
+{
+    
+}
+- (void)pause
+{
+    
+}
+- (void)stop
+{
+    
+}
+
 @end
