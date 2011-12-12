@@ -384,5 +384,9 @@ NSMutableDictionary *imageCache = nil;
 	return [self _frameworkImageWithName:@"<UINavigationBarBackground> blackOpaque.png" leftCapWidth:0 topCapHeight:0];
 }
 
++ (UIImage *)_tabBarItemImage
+{
+    return [self _frameworkImageWithName:@"<UITabBar> item.png" leftCapWidth:3 topCapHeight:5];
+}
 
 @end
