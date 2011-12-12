@@ -133,7 +133,7 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
     
     NSInteger count = (NSInteger)[self numberOfSegments];
     CGSize size = frame.size;
-    CGFloat segmentWidth = roundf((size.width - count - 1) / (CGFloat)count);
+    CGFloat segmentWidth = round((size.width - count - 1) / (CGFloat)count);
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     for (NSInteger i = 0; i < count; i++) {
@@ -200,7 +200,7 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
         if ([item isKindOfClass:[NSString class]]) {
             NSString *string = (NSString *)item;
             CGSize textSize = [string sizeWithFont:_font constrainedToSize:CGSizeMake(segmentWidth, size.height) lineBreakMode:UILineBreakModeTailTruncation];
-            CGRect textRect = CGRectMake(x, roundf((size.height - textSize.height) / 2.0f), segmentWidth, size.height);
+            CGRect textRect = CGRectMake(x, round((size.height - textSize.height) / 2.0f), segmentWidth, size.height);
             textRect = UIEdgeInsetsInsetRect(textRect, _textEdgeInsets);
             
             if (enabled) {
@@ -218,8 +218,8 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
         else if ([item isKindOfClass:[UIImage class]]) {
             UIImage *image = (UIImage *)item;
             CGSize imageSize = image.size;
-            CGRect imageRect = CGRectMake(x + roundf((segmentRect.size.width - imageSize.width) / 2.0f),
-                                          roundf((segmentRect.size.height - imageSize.height) / 2.0f),
+            CGRect imageRect = CGRectMake(x + round((segmentRect.size.width - imageSize.width) / 2.0f),
+                                          round((segmentRect.size.height - imageSize.height) / 2.0f),
                                           imageSize.width, imageSize.height);
             [image drawInRect:imageRect blendMode:kCGBlendModeNormal alpha:enabled ? 1.0f : 0.5f];
         }
@@ -227,7 +227,6 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
         CGContextRestoreGState(context);
     }
 }
-
 
 - (void)willMoveToSuperview:(UIView *)newSuperview
 {

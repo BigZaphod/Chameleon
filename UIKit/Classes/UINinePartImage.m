@@ -1,3 +1,33 @@
+//
+// UINinePartImage.m
+//
+// Original Author:
+//  The IconFactory
+//
+// Contributor: 
+//	Zac Bowling <zac@seatme.com>
+//
+// Copyright (C) 2010 SeatMe, Inc http://www.seatme.com
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 /*
  * Copyright (c) 2011, The Iconfactory. All rights reserved.
  *
@@ -28,72 +58,254 @@
  */
 
 #import "UINinePartImage.h"
-#import "AppKitIntegration.h"
 #import "UIGraphics.h"
-#import <AppKit/AppKit.h>
 
-@implementation UINinePartImage
+@implementation UINinePartImage 
 
-- (id)initWithNSImage:(id)theImage leftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight
-{
-    if ((self=[super initWithNSImage:theImage])) {
-        const CGSize size = self.size;
-        const CGFloat stretchyWidth = (leftCapWidth < size.width)? 1 : 0;
-        const CGFloat stretchyHeight = (topCapHeight < size.height)? 1 : 0;
-        const CGFloat bottomCapHeight = size.height - topCapHeight - stretchyHeight;
+- (id)initWithCGImage:(CGImageRef)image edge:(UIEdgeInsets)edge
+{   
+    self = [super initWithCGImage:image];
+    if (self) {
+        _capInsets = edge;
+        CGFloat w = CGImageGetWidth(image);
+        CGFloat h = CGImageGetHeight(image);
+        CGRect fullRect = CGRectMake(0, 0, w, h);
+        CGRect middleRect = UIEdgeInsetsInsetRect(fullRect,edge);
         
-        _topLeftCorner = _NSImageCreateSubimage(theImage, CGRectMake(0,0,leftCapWidth,topCapHeight));
-        _topEdgeFill = _NSImageCreateSubimage(theImage, CGRectMake(leftCapWidth,0,stretchyWidth,topCapHeight));
-        _topRightCorner = _NSImageCreateSubimage(theImage, CGRectMake(leftCapWidth+stretchyWidth,0,size.width-leftCapWidth-stretchyWidth,topCapHeight));
         
-        _bottomLeftCorner = _NSImageCreateSubimage(theImage, CGRectMake(0,size.height-bottomCapHeight,leftCapWidth,bottomCapHeight));
-        _bottomEdgeFill = _NSImageCreateSubimage(theImage, CGRectMake(leftCapWidth,size.height-bottomCapHeight,stretchyWidth,bottomCapHeight));
-        _bottomRightCorner = _NSImageCreateSubimage(theImage, CGRectMake(leftCapWidth+stretchyWidth,size.height-bottomCapHeight,size.width-leftCapWidth-stretchyWidth,bottomCapHeight));
-
-        _leftEdgeFill = _NSImageCreateSubimage(theImage, CGRectMake(0,topCapHeight,leftCapWidth,stretchyHeight));
-        _centerFill = _NSImageCreateSubimage(theImage, CGRectMake(leftCapWidth,topCapHeight,stretchyWidth,stretchyHeight));
-        _rightEdgeFill = _NSImageCreateSubimage(theImage, CGRectMake(leftCapWidth+stretchyWidth,topCapHeight,size.width-leftCapWidth-stretchyWidth,stretchyHeight));
+        
+        //TOP 
+        if (edge.top>0)
+        {
+            if (edge.left >0)
+                _topLeftCorner = CGImageCreateWithImageInRect(image, CGRectMake(0.0, 0.0, edge.left, edge.top));
+            
+            _topEdgeFill = CGImageCreateWithImageInRect(image, CGRectMake(edge.left, 0.0, CGRectGetWidth(middleRect), edge.top));
+            
+            if (edge.right >0)
+                _topRightCorner =  CGImageCreateWithImageInRect(image, CGRectMake(w-edge.right, 0.0, edge.right, edge.top));
+        }
+        
+        //MIDDLE
+        {
+            CGFloat y = edge.top;
+            if (edge.left >0)
+                _leftEdgeFill = CGImageCreateWithImageInRect(image, CGRectMake(0.0, y, edge.left, CGRectGetHeight(middleRect)));
+            
+            _centerFill = CGImageCreateWithImageInRect(image, middleRect);
+            
+            if (edge.right >0)
+                _rightEdgeFill =  CGImageCreateWithImageInRect(image, CGRectMake(w-edge.right, y, edge.right, CGRectGetHeight(middleRect)));
+        
+        }
+        
+        //BOTTOM
+        if (edge.bottom>0)
+        {
+            CGFloat y = h-edge.bottom;
+            if (edge.left >0)
+                _bottomLeftCorner = CGImageCreateWithImageInRect(image, CGRectMake(0.0, y, edge.left, edge.bottom));
+            
+            _bottomEdgeFill = CGImageCreateWithImageInRect(image, CGRectMake(edge.left, y, CGRectGetWidth(middleRect), edge.bottom));
+            
+            if (edge.right >0)
+                _bottomRightCorner =  CGImageCreateWithImageInRect(image, CGRectMake(w-edge.right, y, edge.right, edge.bottom));
+        }
+        
     }
     return self;
 }
 
-- (void)dealloc
+
+
+//LEGACY
+- (id)initWithCGImage:(CGImageRef)image leftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight
 {
-    [_topLeftCorner release];
-    [_topEdgeFill release];
-    [_topRightCorner release];
-    [_leftEdgeFill release];
-    [_centerFill release];
-    [_rightEdgeFill release];
-    [_bottomLeftCorner release];
-    [_bottomEdgeFill release];
-    [_bottomRightCorner release];
+    self = [super initWithCGImage:image];
+    if (self) {
+        CGFloat w = CGImageGetWidth(image);
+        CGFloat h = CGImageGetHeight(image);
+        
+        CGFloat _lcw = MIN(leftCapWidth, w);
+        CGFloat _tch = MIN(topCapHeight, h);
+        CGFloat _rcw =0, _bch=0;
+        
+        NSInteger x;
+        if (w > leftCapWidth + 1.0) {
+            x = 2;
+            _rcw = w - 1.0 - leftCapWidth;
+        } else if (w == leftCapWidth + 1.0) {
+            x = 1;
+        } else {
+            x = 0;
+        }
+        
+        NSInteger y;
+        if (h >= topCapHeight + 1.0) {
+            y = 2;
+            _bch = h - 1.0 - topCapHeight;
+        } else if (h == topCapHeight + 1.0) {
+            y = 1;
+        } else {
+            y = 0;
+        }
+        
+        _capInsets = UIEdgeInsetsMake(_tch, _lcw, _bch, _rcw);
+        
+        static NSUInteger const TABLE[3][3] = {
+            { 0001, 0011, 0111 },
+            { 0003, 0033, 0333 },
+            { 0007, 0077, 0777 },
+        };
+        NSUInteger const bits = TABLE[x][y];
+
+        if (bits & 0001) {
+            _topLeftCorner = CGImageCreateWithImageInRect(image, CGRectMake(0.0, 0.0, _lcw, _tch));
+        }
+        if (bits & 0010) {
+            _topEdgeFill = CGImageCreateWithImageInRect(image, CGRectMake(_lcw, 0.0, 1.0, _tch));
+        }
+        if (bits & 0100) {
+            _topRightCorner = CGImageCreateWithImageInRect(image, CGRectMake(_lcw + 1.0, 0.0, _rcw, _tch));
+        }
+        
+        if (bits & 0002) {
+            _leftEdgeFill = CGImageCreateWithImageInRect(image, CGRectMake(0, _tch, _lcw, 1.0));
+        }
+        if (bits & 0020) {
+            _centerFill = CGImageCreateWithImageInRect(image, CGRectMake(_tch, _lcw, 1.0, 1.0));
+        }
+        if (bits & 0200) {
+            _rightEdgeFill = CGImageCreateWithImageInRect(image, CGRectMake(w - _rcw, _tch, _rcw, 1.0));
+        }
+        
+        if (bits & 0004) {
+            _bottomLeftCorner = CGImageCreateWithImageInRect(image, CGRectMake(0.0, h - _bch, _lcw, _bch));
+        }
+        if (bits & 0040) {
+            _bottomEdgeFill = CGImageCreateWithImageInRect(image, CGRectMake(_lcw, h - _bch, 1.0, _bch));
+        }
+        if (bits & 0400) {
+            _bottomRightCorner = CGImageCreateWithImageInRect(image, CGRectMake(_lcw + 1.0, h - _bch, _rcw, _bch));
+        }
+    }
+    return self;
+}
+
+- (void) dealloc
+{
+    if (_topLeftCorner) {
+        CGImageRelease(_topLeftCorner);
+    }
+    if (_topEdgeFill) {
+        CGImageRelease(_topEdgeFill);
+    }
+    if (_topRightCorner) {
+        CGImageRelease(_topRightCorner);
+    }
+    if (_leftEdgeFill) {
+        CGImageRelease(_leftEdgeFill);
+    }
+    if (_centerFill) {
+        CGImageRelease(_centerFill);
+    }
+    if (_rightEdgeFill) {
+        CGImageRelease(_rightEdgeFill);
+    }
+    if (_bottomLeftCorner) {
+        CGImageRelease(_bottomLeftCorner);
+    }
+    if (_bottomEdgeFill) {
+        CGImageRelease(_bottomEdgeFill);
+    }
+    if (_bottomRightCorner) {
+        CGImageRelease(_bottomRightCorner);
+    }
     [super dealloc];
 }
 
-- (NSInteger)leftCapWidth
+
+
+
+- (NSInteger) leftCapWidth
 {
-    return [_topLeftCorner size].width;
+    return _capInsets.left;
 }
 
-- (NSInteger)topCapHeight
+- (NSInteger) topCapHeight
 {
-    return [_topLeftCorner size].height;
+    return _capInsets.top;
 }
 
-- (void)drawInRect:(CGRect)rect
+- (UIEdgeInsets)capInsets 
 {
-    // There aren't enough NSCompositingOperations to map all possible CGBlendModes, so rather than have gaps in the support,
-    // I am drawing the multipart image into a new image context which is then drawn in the usual way which results in the draw
-    // obeying the currently active CGBlendMode and doing the expected thing. This is no doubt more expensive than it could be,
-    // but I suspect it's pretty irrelevant in the grand scheme of things.
-    UIGraphicsBeginImageContext(rect.size);
-    NSDrawNinePartImage(NSMakeRect(0,0,rect.size.width,rect.size.height), _topLeftCorner, _topEdgeFill, _topRightCorner, _leftEdgeFill, _centerFill, _rightEdgeFill, _bottomLeftCorner, _bottomEdgeFill, _bottomRightCorner, NSCompositeCopy, 1, YES);
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+    return _capInsets;
+}
+
+- (void) drawInRect:(CGRect)rect
+{
+    CGContextRef c = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(c);
+    CGContextTranslateCTM(c, rect.origin.x, rect.origin.y + rect.size.height);
+    CGContextScaleCTM(c, 1.0, -1.0);
     
-    [img drawInRect:rect];
+    CGFloat const cw = rect.size.width - (_capInsets.left + _capInsets.right);
+    CGFloat const ch = rect.size.height - (_capInsets.top + _capInsets.bottom);
     
+    CGFloat const ty = rect.origin.y + (rect.size.height - _capInsets.top);
+    CGFloat const cy = rect.origin.y + _capInsets.bottom;
+    CGFloat const by = rect.origin.y;
+
+    CGFloat const lx = rect.origin.x;
+    CGFloat const cx = rect.origin.x + _capInsets.left;
+    CGFloat const rx = rect.origin.x + (rect.size.width - _capInsets.right);
+    
+    if (_topLeftCorner) {
+        CGContextDrawImage(c, CGRectMake(lx, ty, _capInsets.left, _capInsets.top), _topLeftCorner);
+    }
+    if (_topEdgeFill) {
+        if (cw > 1 && _topRightCorner)
+            CGContextDrawTiledImage (c, CGRectMake(cx, ty, cw, _capInsets.top), _topEdgeFill);
+        else
+            CGContextDrawImage(c, CGRectMake(cx, ty, cw, _capInsets.top), _topEdgeFill);
+    }
+    if (_topRightCorner) {
+        CGContextDrawImage(c, CGRectMake(rx, ty, _capInsets.right, _capInsets.top), _topRightCorner);
+    }
+
+    if (_leftEdgeFill) {
+        if (ch > 1 && _bottomLeftCorner)
+            CGContextDrawTiledImage(c, CGRectMake(lx, cy, _capInsets.left, ch), _leftEdgeFill);
+        else
+            CGContextDrawImage(c, CGRectMake(lx, cy, _capInsets.left, ch), _leftEdgeFill);
+    }
+    if (_centerFill) {
+        if (cw > 1 || ch > 1)
+            CGContextDrawTiledImage(c, CGRectMake(cx, cy, cw, ch), _centerFill);
+        else
+            CGContextDrawImage(c, CGRectMake(cx, cy, cw, ch), _centerFill);
+    }
+    if (_rightEdgeFill) {
+        if (ch > 1 && _bottomRightCorner)
+            CGContextDrawTiledImage(c, CGRectMake(rx, cy, _capInsets.right, ch), _rightEdgeFill);
+        else
+            CGContextDrawImage(c, CGRectMake(rx, cy, _capInsets.right, ch), _rightEdgeFill);
+    }
+    
+    if (_bottomLeftCorner) {
+        CGContextDrawImage(c, CGRectMake(lx, by, _capInsets.left, _capInsets.bottom), _bottomLeftCorner);
+    }
+    if (_bottomEdgeFill) {
+        if (cw > 1 && _bottomRightCorner)
+            CGContextDrawTiledImage(c, CGRectMake(cx, by, cw, _capInsets.bottom), _bottomEdgeFill);
+        else
+            CGContextDrawImage(c, CGRectMake(cx, by, cw, _capInsets.bottom), _bottomEdgeFill);
+    }
+    if (_bottomRightCorner) {
+        CGContextDrawImage(c, CGRectMake(rx, by, _capInsets.right, _capInsets.bottom), _bottomRightCorner);
+    }
+    
+    CGContextRestoreGState(c);
 }
 
 @end

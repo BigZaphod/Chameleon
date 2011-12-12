@@ -1,3 +1,33 @@
+//
+// UINinePartImage.h
+//
+// Original Author:
+//  The IconFactory
+//
+// Contributor: 
+//	Zac Bowling <zac@seatme.com>
+//
+// Copyright (C) 2010 SeatMe, Inc http://www.seatme.com
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 /*
  * Copyright (c) 2011, The Iconfactory. All rights reserved.
  *
@@ -30,18 +60,22 @@
 #import "UIImage+UIPrivate.h"
 
 @interface UINinePartImage : UIImage {
-@private
-    id _topLeftCorner;
-    id _topEdgeFill;
-    id _topRightCorner;
-    id _leftEdgeFill;
-    id _centerFill;
-    id _rightEdgeFill;
-    id _bottomLeftCorner;
-    id _bottomEdgeFill;
-    id _bottomRightCorner;
+    UIEdgeInsets _capInsets;
+    
+    CGImageRef _topLeftCorner;
+    CGImageRef _topEdgeFill;
+    CGImageRef _topRightCorner;
+    CGImageRef _leftEdgeFill;
+    CGImageRef _centerFill;
+    CGImageRef _rightEdgeFill;
+    CGImageRef _bottomLeftCorner;
+    CGImageRef _bottomEdgeFill;
+    CGImageRef _bottomRightCorner;
 }
 
-- (id)initWithNSImage:(id)theImage leftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight;
+
+- (id)initWithCGImage:(CGImageRef)theImage leftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight;
+
+- (id)initWithCGImage:(CGImageRef)theImage edge:(UIEdgeInsets)edge;
 
 @end

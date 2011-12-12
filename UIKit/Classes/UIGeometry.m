@@ -29,6 +29,13 @@
 
 #import "UIGeometry.h"
 
+#if CGFLOAT_IS_DOUBLE
+#define kUIEdgeInsetsFormat "{%lg, %lg, %lg, %lg}"
+#else
+#define kUIEdgeInsetsFormat "{%g, %g, %g, %g}"    
+#endif
+
+
 const UIEdgeInsets UIEdgeInsetsZero = {0,0,0,0};
 
 NSString *NSStringFromCGPoint(CGPoint p)
@@ -53,7 +60,26 @@ NSString *NSStringFromCGAffineTransform(CGAffineTransform transform)
 
 NSString *NSStringFromUIEdgeInsets(UIEdgeInsets insets)
 {
-    return [NSString stringWithFormat:@"{%g, %g, %g, %g}", insets.top, insets.left, insets.bottom, insets.right];
+    return [NSString stringWithFormat:@kUIEdgeInsetsFormat, insets.top, insets.left, insets.bottom, insets.right];
+}
+
+UIEdgeInsets UIEdgeInsetsFromString(NSString* string)
+{
+    UIEdgeInsets result = UIEdgeInsetsZero;
+    if (string) {
+        sscanf([string UTF8String], kUIEdgeInsetsFormat, &result.top, &result.left, &result.bottom, &result.right);
+    }
+    return result;
+}
+
+CGRect CGRectFromString(NSString* string)
+{
+    return NSRectToCGRect(NSRectFromString(string));
+}
+
+CGPoint CGPointFromString(NSString* string)
+{
+    return NSPointToCGPoint(NSPointFromString(string));
 }
 
 @implementation NSValue (NSValueUIGeometryExtensions)
@@ -94,26 +120,41 @@ NSString *NSStringFromUIEdgeInsets(UIEdgeInsets insets)
 
 - (UIEdgeInsets)UIEdgeInsetsValue
 {
-    if(strcmp([self objCType], @encode(UIEdgeInsets)) == 0)
-    {
+    if (strcmp([self objCType], @encode(UIEdgeInsets)) == 0) {
         UIEdgeInsets insets;
         [self getValue: &insets];
         return insets;
     }
-    return (UIEdgeInsets){0,0,0,0};
+    return UIEdgeInsetsZero;
 }
+
 @end
 
 @implementation NSCoder (NSCoderUIGeometryExtensions)
-- (void)encodeCGPoint:(CGPoint)point forKey:(NSString *)key
+
+- (void) encodeCGPoint:(CGPoint)point forKey:(NSString *)key
 {
     [self encodePoint:NSPointFromCGPoint(point) forKey:key];
 }
 
-- (CGPoint)decodeCGPointForKey:(NSString *)key
+- (CGPoint) decodeCGPointForKey:(NSString *)key
 {
     return NSPointToCGPoint([self decodePointForKey:key]);
 }
+
+- (CGRect) decodeCGRectForKey:(NSString*)key
+{
+    return NSRectToCGRect([self decodeRectForKey:key]);
+}
+
+- (CGSize) decodeCGSizeForKey:(NSString*)key
+{
+    return NSSizeToCGSize([self decodeSizeForKey:key]);
+}
+
+- (UIEdgeInsets) decodeUIEdgeInsetsForKey:(NSString*)key;
+{
+    return UIEdgeInsetsFromString([self decodeObjectForKey:key]);
+}
+
 @end
-
-

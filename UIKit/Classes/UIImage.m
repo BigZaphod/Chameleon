@@ -1,3 +1,33 @@
+//
+// UIImage.m
+//
+// Original Author:
+//  The IconFactory
+//
+// Contributor: 
+//	Zac Bowling <zac@seatme.com>
+//
+// Copyright (C) 2011 SeatMe, Inc http://www.seatme.com
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 /*
  * Copyright (c) 2011, The Iconfactory. All rights reserved.
  *
@@ -34,7 +64,7 @@
 #import "UIPhotosAlbum.h"
 #import <AppKit/NSImage.h>
 
-@implementation UIImage
+@implementation UIImage 
 
 - (id)initWithNSImage:(NSImage *)theImage
 {
@@ -49,7 +79,15 @@
 - (id)initWithData:(NSData *)data
 {
     if (data) {
-        return [self initWithNSImage:[[[NSImage alloc] initWithData:data] autorelease]];
+        const NSDictionary *options = [NSDictionary dictionaryWithObject:(id)kCFBooleanFalse forKey:(NSString*)kCGImageSourceShouldCache]; // no caching
+        CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)data, (CFDictionaryRef)options);
+        if (!imageSource) {
+            [self release];
+            return nil;
+        }
+        CGImageRef image = (CGImageRef)[(id)CGImageSourceCreateImageAtIndex(imageSource, 0, (CFDictionaryRef)options)autorelease];
+        CFRelease(imageSource);
+        return [self initWithCGImage:image];
     } else {
         [self release];
         return nil;
@@ -58,7 +96,21 @@
 
 - (id)initWithContentsOfFile:(NSString *)path
 {
-    return [self initWithNSImage:[[[NSImage alloc] initWithContentsOfFile:[isa _pathForFile:path]] autorelease]];
+    const NSDictionary *options = [NSDictionary dictionaryWithObject:(id)kCFBooleanFalse forKey:(NSString*)kCGImageSourceShouldCache];
+    NSString *imagePath = [isa _pathForFile:path];
+    if (!imagePath) {
+        [self release];
+        return nil;
+    }
+    NSURL *url = [NSURL fileURLWithPath:imagePath];
+    CGImageSourceRef imageSource = CGImageSourceCreateWithURL((CFURLRef)url, (CFDictionaryRef)options);
+    if (!imageSource) {
+        [self release];
+        return nil;
+    }
+    CGImageRef image = (CGImageRef)[(id)CGImageSourceCreateImageAtIndex(imageSource, 0, NULL) autorelease];
+    CFRelease(imageSource);
+    return [self initWithCGImage:image];
 }
 
 - (id)initWithCGImage:(CGImageRef)imageRef
@@ -72,6 +124,20 @@
     }
     return self;
 }
+
+- (id) initWithCoder:(NSCoder*)coder
+{
+    if (nil != (self = [super init])) {
+        /* XXX: Implement Me */
+    }
+    return self;
+}
+
+- (void) encodeWithCoder:(NSCoder*)coder
+{
+    [self doesNotRecognizeSelector:_cmd];
+}
+
 
 - (void)dealloc
 {
@@ -94,17 +160,25 @@
         if (!cachedImage) {
             // okay, we couldn't find a cached version so now lets first try to make an original with the @mac name.
             // if that fails, try to make it with the original name.
-            NSImage *image = [NSImage imageNamed:macName];
-            if (!image) {
-                image = [NSImage imageNamed:name];
+            NSBundle *bundle = [NSBundle mainBundle];
+            NSString *path = [bundle pathForImageResource:macName];
+            if (!path) {
+                path = [bundle pathForImageResource:name];
             }
-            
-            if (image) {
-                cachedImage = [[[self alloc] initWithNSImage:image] autorelease];
+            if (path) {
+                NSURL *url = [NSURL fileURLWithPath:path];
+                // the UIImage class handles the caching, so we don't need Core Graphics to do it
+                const NSDictionary *options = [NSDictionary dictionaryWithObject:(id)kCFBooleanFalse forKey:(NSString*)kCGImageSourceShouldCache];
+                CGImageSourceRef imageSource = CGImageSourceCreateWithURL((CFURLRef)url, (CFDictionaryRef)options);
+                if (!imageSource) {
+                    return nil; 
+                }
+                CGImageRef image = (CGImageRef)[(id)CGImageSourceCreateImageAtIndex(imageSource, 0, (CFDictionaryRef)options) autorelease];
+                CFRelease(imageSource);
+                cachedImage = [[[self alloc] initWithCGImage:image] autorelease];
                 [self _cacheImage:cachedImage forName:name];
             }
         }
-        
         return cachedImage;
     } else {
         return nil;
@@ -147,11 +221,25 @@
     if ((leftCapWidth == 0 && topCapHeight == 0) || (leftCapWidth >= size.width && topCapHeight >= size.height)) {
         return self;
     } else if (leftCapWidth <= 0 || leftCapWidth >= size.width) {
-        return [[[UIThreePartImage alloc] initWithNSImage:[[[NSImage alloc] initWithCGImage:_image size:NSZeroSize] autorelease] capSize:MIN(topCapHeight,size.height) vertical:YES] autorelease];
+        return [[[UIThreePartImage alloc] initWithCGImage:_image capSize:MIN(topCapHeight,size.height) vertical:YES] autorelease];
     } else if (topCapHeight <= 0 || topCapHeight >= size.height) {
-        return [[[UIThreePartImage alloc] initWithNSImage:[[[NSImage alloc] initWithCGImage:_image size:NSZeroSize] autorelease] capSize:MIN(leftCapWidth,size.width) vertical:NO] autorelease];
+        return [[[UIThreePartImage alloc] initWithCGImage:_image capSize:MIN(leftCapWidth,size.width) vertical:NO] autorelease];
     } else {
-        return [[[UINinePartImage alloc] initWithNSImage:[[[NSImage alloc] initWithCGImage:_image size:NSZeroSize] autorelease] leftCapWidth:leftCapWidth topCapHeight:topCapHeight] autorelease];
+        return [[[UINinePartImage alloc] initWithCGImage:_image leftCapWidth:leftCapWidth topCapHeight:topCapHeight] autorelease];
+    }
+}
+
+- (UIImage *)resizableImageWithCapInsets:(UIEdgeInsets)capInsets 
+{
+    const CGSize size = self.size;
+    if (UIEdgeInsetsEqualToEdgeInsets(UIEdgeInsetsZero, capInsets)) {
+        return self;
+    } else if ((capInsets.left <= 0 || capInsets.left >= size.width) && (capInsets.right <= 0 || capInsets.right >= size.width)){
+        return [[[UIThreePartImage alloc] initWithCGImage:_image capTop:MIN(capInsets.top,size.height) capBottom:MIN(capInsets.bottom,size.height)] autorelease];
+    } else if ((capInsets.top <= 0 || capInsets.top >= size.height) && (capInsets.bottom <= 0 || capInsets.bottom >= size.height)) {
+        return [[[UIThreePartImage alloc] initWithCGImage:_image capLeft:MIN(capInsets.left,size.width) capRight:MIN(capInsets.right,size.width)] autorelease];
+    } else {
+        return [[[UINinePartImage alloc] initWithCGImage:_image edge:capInsets] autorelease];
     }
 }
 
@@ -202,6 +290,11 @@
     return 0;
 }
 
+- (UIEdgeInsets)capInsets 
+{
+    return UIEdgeInsetsZero;
+}
+
 - (CGImageRef)CGImage
 {
     return _image;
@@ -245,7 +338,7 @@ BOOL UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(NSString *videoPath)
 
 NSData *UIImageJPEGRepresentation(UIImage *image, CGFloat compressionQuality)
 {
-    return [[image _NSBitmapImageRep] representationUsingType:NSJPEGFileType properties:[NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:compressionQuality] forKey:NSImageCompressionFactor]];
+    return [[image _NSBitmapImageRep] representationUsingType:NSJPEGFileType properties:[NSDictionary dictionaryWithObject:[NSNumber numberWithDouble:compressionQuality] forKey:NSImageCompressionFactor]];
 }
 
 NSData *UIImagePNGRepresentation(UIImage *image)

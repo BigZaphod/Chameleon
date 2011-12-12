@@ -1,3 +1,33 @@
+//
+// UIView.h
+//
+// Original Author:
+//  The IconFactory
+//
+// Contributor: 
+//	Zac Bowling <zac@seatme.com>
+//
+// Copyright (C) 2011 SeatMe, Inc http://www.seatme.com
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 /*
  * Copyright (c) 2011, The Iconfactory. All rights reserved.
  *
@@ -29,6 +59,7 @@
 
 #import "UIResponder.h"
 #import "UIGeometry.h"
+#import <AppKit/NSView.h>
 
 enum {
     UIViewAutoresizingNone                 = 0,
@@ -93,29 +124,41 @@ enum {
     UIViewAnimationOptionTransitionFlipFromRight   = 2 << 20,		// not currently supported
     UIViewAnimationOptionTransitionCurlUp          = 3 << 20,		// not currently supported
     UIViewAnimationOptionTransitionCurlDown        = 4 << 20,		// not currently supported
+    UIViewAnimationOptionTransitionCrossDissolve   = 5 << 20,       // not currently supported
+    UIViewAnimationOptionTransitionFlipFromTop     = 6 << 20,       // not currently supported
+    UIViewAnimationOptionTransitionFlipFromBottom  = 7 << 20,       // not currently supported
 };
 typedef NSUInteger UIViewAnimationOptions;
 
 @class UIColor, CALayer, UIViewController, UIGestureRecognizer;
 
-@interface UIView : UIResponder {
+@interface UIView : UIResponder <NSCoding> {
 @private
     UIView *_superview;
     NSMutableSet *_subviews;
-    BOOL _clearsContextBeforeDrawing;
-    BOOL _autoresizesSubviews;
-    BOOL _userInteractionEnabled;
     CALayer *_layer;
     NSInteger _tag;
     UIViewContentMode _contentMode;
     UIColor *_backgroundColor;
-    BOOL _implementsDrawRect;
-    BOOL _multipleTouchEnabled;
     BOOL _exclusiveTouch;
     UIViewController *_viewController;
     UIViewAutoresizing _autoresizingMask;
-    BOOL _needsDidAppearOrDisappear;
     NSMutableSet *_gestureRecognizers;
+	BOOL _suppressAppearanceEvents;
+    UIView *_nextKeyView; // NR
+    UIView *_previousKeyView; // NR
+    NSString *_toolTip;
+    
+    IMP ourDrawRect_;
+    
+    struct {
+        BOOL overridesDisplayLayer : 1;
+        BOOL clearsContextBeforeDrawing : 1;
+        BOOL multipleTouchEnabled : 1;
+        BOOL exclusiveTouch : 1;
+        BOOL userInteractionEnabled : 1;
+        BOOL autoresizesSubviews : 1;
+    } _flags;
 }
 
 + (Class)layerClass;
