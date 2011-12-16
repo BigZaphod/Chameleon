@@ -55,7 +55,6 @@
         self.masksToBounds = NO;
         
         containerView = aView;
-        textAlignment = UITextAlignmentLeft;
 
         textDelegateHas.didChange = [containerView respondsToSelector:@selector(_textDidChange)];
         textDelegateHas.didChangeSelection = [containerView respondsToSelector:@selector(_textDidChangeSelection)];
@@ -71,9 +70,9 @@
         textView = [(UICustomNSTextView *)[UICustomNSTextView alloc] initWithFrame:[clipView frame] secureTextEntry:secureTextEntry isField:isField];
 
         [textView setDelegate:self];
-        [textView setAlignment:NSLeftTextAlignment];
         [clipView setDocumentView:textView];
-        
+
+        self.textAlignment = UITextAlignmentLeft;
         [self setNeedsLayout];
     }
     return self;
@@ -267,10 +266,8 @@
     [textView setSelectedRange:range];
 }
 
-- (void)setTextAlignment:(UITextAlignment)value
+- (void)setTextAlignment:(UITextAlignment)textAlignment
 {
-    textAlignment = value;
-
     switch (textAlignment) {
         case UITextAlignmentLeft:
             [textView setAlignment:NSLeftTextAlignment];
@@ -281,14 +278,19 @@
         case UITextAlignmentRight:
             [textView setAlignment:NSRightTextAlignment];
             break;
-        default:
-            break;
     }
 }
 
 - (UITextAlignment)textAlignment
 {
-    return textAlignment;
+    switch ([textView alignment]) {
+        case NSCenterTextAlignment:
+            return UITextAlignmentCenter;
+        case NSRightTextAlignment:
+            return UITextAlignmentRight;
+        default:
+            return UITextAlignmentLeft;
+    }
 }
 
 // this is used to fake out AppKit when the UIView that owns this layer/editor stuff is actually *behind* another UIView. Since the NSViews are
