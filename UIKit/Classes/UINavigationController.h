@@ -37,6 +37,12 @@
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated;
 @end
 
+typedef enum {
+	_UINavigationControllerVisibleControllerTransitionNone = 0,
+	_UINavigationControllerVisibleControllerTransitionPushAnimated,
+	_UINavigationControllerVisibleControllerTransitionPopAnimated
+} _UINavigationControllerVisibleControllerTransition;
+
 @interface UINavigationController : UIViewController {
 @private
     UINavigationBar *_navigationBar;
@@ -46,6 +52,10 @@
     BOOL _toolbarHidden;
     BOOL _navigationBarHidden;
     
+    BOOL _visibleViewControllerNeedsUpdate;
+    _UINavigationControllerVisibleControllerTransition _visibleViewControllerTransition;
+    UIViewController *_visibleViewController;
+
     struct {
         BOOL didShowViewController : 1;
         BOOL willShowViewController : 1;
@@ -62,17 +72,17 @@
 - (NSArray *)popToRootViewControllerAnimated:(BOOL)animated;
 
 - (void)setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated;
-- (void)setToolbarHidden:(BOOL)hidden animated:(BOOL)animated;
+- (void)setToolbarHidden:(BOOL)hidden animated:(BOOL)animated;                    // toolbar support is not really implemented yet
 
-- (void)setNavigationBarHidden:(BOOL)navigationBarHidden animated:(BOOL)animated; // doesn't yet animate
+- (void)setNavigationBarHidden:(BOOL)navigationBarHidden animated:(BOOL)animated; // doesn't animate yet
 
 @property (nonatomic, copy) NSArray *viewControllers;
 @property (nonatomic, readonly, retain) UIViewController *visibleViewController;
 @property (nonatomic, readonly) UINavigationBar *navigationBar;
-@property (nonatomic, readonly) UIToolbar *toolbar;
+@property (nonatomic, readonly) UIToolbar *toolbar;                               // toolbar support is not really implemented yet
 @property (nonatomic, assign) id<UINavigationControllerDelegate> delegate;
 @property (nonatomic, readonly, retain) UIViewController *topViewController;
 @property (nonatomic,getter=isNavigationBarHidden) BOOL navigationBarHidden;
-@property (nonatomic,getter=isToolbarHidden) BOOL toolbarHidden;
+@property (nonatomic,getter=isToolbarHidden) BOOL toolbarHidden;                  // toolbar support is not really implemented yet
 
 @end
