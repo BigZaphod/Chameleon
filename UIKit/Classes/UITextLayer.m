@@ -46,7 +46,7 @@
 @end
 
 @implementation UITextLayer
-@synthesize textColor, font, editable, secureTextEntry, textAlignment;
+@synthesize textColor, font, editable, secureTextEntry;
 
 - (id)initWithContainer:(UIView <UITextLayerContainerViewProtocol, UITextLayerTextDelegate> *)aView isField:(BOOL)isField
 {
@@ -71,6 +71,7 @@
         textView = [(UICustomNSTextView *)[UICustomNSTextView alloc] initWithFrame:[clipView frame] secureTextEntry:secureTextEntry isField:isField];
 
         [textView setDelegate:self];
+        [textView setAlignment:NSLeftTextAlignment];
         [clipView setDocumentView:textView];
         
         [self setNeedsLayout];
@@ -264,6 +265,30 @@
 - (void)setSelectedRange:(NSRange)range
 {
     [textView setSelectedRange:range];
+}
+
+- (void)setTextAlignment:(UITextAlignment)value
+{
+    textAlignment = value;
+
+    switch (textAlignment) {
+        case UITextAlignmentLeft:
+            [textView setAlignment:NSLeftTextAlignment];
+            break;
+        case UITextAlignmentCenter:
+            [textView setAlignment:NSCenterTextAlignment];
+            break;
+        case UITextAlignmentRight:
+            [textView setAlignment:NSRightTextAlignment];
+            break;
+        default:
+            break;
+    }
+}
+
+- (UITextAlignment)textAlignment
+{
+    return textAlignment;
 }
 
 // this is used to fake out AppKit when the UIView that owns this layer/editor stuff is actually *behind* another UIView. Since the NSViews are
