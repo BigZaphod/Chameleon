@@ -335,7 +335,7 @@ static BOOL TouchIsActive(UITouch *touch)
 - (void)_cancelBackgroundTasks
 {
     // if there's any remaining tasks, run their expiration handlers
-    for (UIBackgroundTask *task in _backgroundTasks) {
+    for (UIBackgroundTask *task in [[_backgroundTasks copy] autorelease]) {
         if (task.expirationHandler) {
             task.expirationHandler();
         }
@@ -657,21 +657,19 @@ static BOOL TouchIsActive(UITouch *touch)
     const NSTimeInterval timestamp = [theNSEvent timestamp];
     const CGPoint screenLocation = ScreenLocationFromNSEvent(theScreen, theNSEvent);
 
-    // NSLeftMouseDown events are handled incorrectly if when using an Apple Magic Mouse the user makes an inadvertent gesture (slight finger drag) as he is clicking the mouse.
-	// In this case TouchIsActiveGesture(touch) returns YES for all NSLeftMouseDown or NSRightMouseDown events until the user lifts the finger from the mouse surface (no matter how many times he clicks the mouse button), 
-	// and the events are ignored as there is no case for NSLeftMouseDown in that switch.
-	// adding the follwing 2 if statements will make sure the MouseDown events don't get ignored. ( we could also remove them from the switch at line 717 as the 2 MouseDown cases will never be called )
-    if (theNSEvent.type == NSLeftMouseDown) {
-		[touch _setPhase:UITouchPhaseBegan screenLocation:screenLocation tapCount:[theNSEvent clickCount] timestamp:timestamp];
-		[self _setCurrentEventTouchedViewWithNSEvent:theNSEvent fromScreen:theScreen];
-		[self sendEvent:_currentEvent];
-		
-	} else if (theNSEvent.type == NSRightMouseDown) {
-		[touch _setDiscreteGesture:_UITouchDiscreteGestureRightClick screenLocation:screenLocation tapCount:[theNSEvent clickCount] delta:CGPointZero timestamp:timestamp];
-		[self _setCurrentEventTouchedViewWithNSEvent:theNSEvent fromScreen:theScreen];
-		[self sendEvent:_currentEvent];
-		
-	} else if (TouchIsActiveNonGesture(touch)) {
+    // this is a special case to cancel any existing gestures (as far as the client code is concerned) if a mouse
+    // button is pressed mid-gesture. the reason is that sometimes when using a magic mouse a user will intend to
+    // click but if their finger moves against the surface ever so slightly, it will trigger a touch gesture to
+    // begin instead. without this, the fact that we're in a touch gesture phase effectively overrules everything
+    // else and clicks end up not getting registered. I don't think it's right to allow clicks to pass through when
+    // we're in a gesture state since that'd be somewhat like a multitouch scenerio on a real iOS device and we're
+    // not supporting anything like that at the moment.
+    if (TouchIsActiveGesture(touch) && ([theNSEvent type] == NSLeftMouseDown || [theNSEvent type] == NSRightMouseDown)) {
+        [touch _updatePhase:_UITouchPhaseGestureEnded screenLocation:screenLocation timestamp:timestamp];
+        [self sendEvent:_currentEvent];
+    }
+    
+    if (TouchIsActiveNonGesture(touch)) {
         switch ([theNSEvent type]) {
             case NSLeftMouseUp:
                 [touch _updatePhase:UITouchPhaseEnded screenLocation:screenLocation timestamp:timestamp];
@@ -690,9 +688,9 @@ static BOOL TouchIsActive(UITouch *touch)
                 [self sendEvent:_currentEvent];
                 break;
 
+            case NSScrollWheel:
                 // when captured here, the scroll wheel event had to have been part of a gesture - in other words it is a
                 // touch device scroll event and is therefore mapped to UIPanGestureRecognizer.
-            case NSScrollWheel:
                 [touch _updateGesture:_UITouchGesturePan screenLocation:screenLocation delta:ScrollDeltaFromNSEvent(theNSEvent) rotation:0 magnification:0 timestamp:timestamp];
                 [self sendEvent:_currentEvent];
                 break;
@@ -726,10 +724,10 @@ static BOOL TouchIsActive(UITouch *touch)
                 [self sendEvent:_currentEvent];
                 break;
 
+            case NSScrollWheel:
                 // we should only get a scroll wheel event down here if it was done on a non-touch device or was the result of a momentum
                 // scroll, so they are treated differently so we can tell them apart later in UIPanGestureRecognizer and UIScrollWheelGestureRecognizer
                 // which are both used by UIScrollView.
-            case NSScrollWheel:
                 [touch _setDiscreteGesture:_UITouchDiscreteGestureScrollWheel screenLocation:screenLocation tapCount:0 delta:ScrollDeltaFromNSEvent(theNSEvent) timestamp:timestamp];
                 [self _setCurrentEventTouchedViewWithNSEvent:theNSEvent fromScreen:theScreen];
                 [self sendEvent:_currentEvent];
