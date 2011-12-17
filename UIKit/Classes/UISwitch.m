@@ -42,7 +42,9 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
-    if ((self=[super initWithFrame:frame])) {		// this should enforce the proper size, etc. blah blah...
+    if ((self=[super initWithFrame:frame])) {
+        // UIView's initWithFrame: calls setFrame:, so we'll enforce UISwitch's size invariant down there (see below)
+        
         self.backgroundColor = [UIColor clearColor];
         
         self.onImage  = [UIImage _switchOnImage];
@@ -109,6 +111,12 @@
 - (void)setOn:(BOOL)on
 {
     [self setOn:on animated:NO];
+}
+
+- (void)setFrame:(CGRect)frame
+{
+    frame.size = CGSizeMake(94, 27);
+    [super setFrame:frame];
 }
 
 @end
