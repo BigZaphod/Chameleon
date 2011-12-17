@@ -115,7 +115,7 @@
 
 - (void)setFrame:(CGRect)frame
 {
-    frame.size = CGSizeMake(94, 27);
+    frame.size = CGSizeMake(79, 27);
     [super setFrame:frame];
 }
 
