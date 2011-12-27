@@ -446,7 +446,7 @@ static IMP defaultImplementationOfDisplayLayer;
 
 - (CGPoint)convertPoint:(CGPoint)toConvert fromView:(UIView *)fromView
 {
-    assert(!fromView || fromView.window == self.window);
+    assert(fromView);
     if (fromView) {
         return [fromView.layer convertPoint:toConvert toLayer:self.layer];
     } else {
