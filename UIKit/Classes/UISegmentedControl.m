@@ -371,11 +371,13 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
 - (void)setSelectedSegmentIndex:(NSInteger)index
 {
     if (_selectedSegmentIndex == index) {
+        [self sendActionsForControlEvents:UIControlEventTouchUpInside];
         return;
     }
     
     _selectedSegmentIndex = index;
     [self setNeedsDisplay];
+    [self sendActionsForControlEvents:UIControlEventTouchUpInside];
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
