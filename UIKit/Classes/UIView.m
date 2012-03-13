@@ -762,14 +762,14 @@ static BOOL _animationsEnabled = YES;
 
 - (void)setContentStretch:(CGRect)rect
 {
-    if (!CGRectEqualToRect(rect,_layer.contentsRect)) {
-        _layer.contentsRect = rect;
+    if (!CGRectEqualToRect(rect,_layer.contentsCenter)) {
+        _layer.contentsCenter = rect;
     }
 }
 
 - (CGRect)contentStretch
 {
-    return _layer.contentsRect;
+    return _layer.contentsCenter;
 }
 
 - (void)setHidden:(BOOL)h
