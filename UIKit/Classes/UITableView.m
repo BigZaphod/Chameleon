@@ -554,6 +554,11 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
     _needsReload = NO;
 }
 
+- (void)reloadRowsAtIndexPaths:(NSIndexPath *)indexPath withRowAnimation:(UITableViewRowAnimation)rowAnimation
+{
+    [self reloadData];
+}
+
 - (void)_reloadDataIfNeeded
 {
     if (_needsReload) {
