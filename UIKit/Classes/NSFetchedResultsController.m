@@ -39,6 +39,47 @@
 
 #import "NSIndexPath+UITableView.h"
 
+
+@interface NSArray (FilteredByBlock)
+- (NSArray *)filterByBlock:(BOOL(^)(id elt))filterBlock;
+@end
+
+@implementation NSArray (FilteredByBlock)
+
+- (NSArray *)filterByBlock:(BOOL(^)(id elt))filterBlock {
+    // Create a new array
+    id filteredArray = [NSMutableArray array];
+    // Collect elements matching the block condition
+    for (id elt in self) {
+        if (filterBlock(elt)) [filteredArray addObject:elt];
+    }
+    
+    return filteredArray;
+}
+
+@end
+
+@interface NSFetchedResultsSection ()
+@property (nonatomic, readwrite, copy) NSString *name;
+@property (nonatomic, readwrite, copy) NSString *indexTitle;
+@property (nonatomic, readwrite, retain) NSArray *objects;
+@end
+
+@implementation NSFetchedResultsSection
+@synthesize name, indexTitle, objects;
+
+- (NSUInteger)numberOfObjects {
+    return [self.objects count];
+}
+
+@end
+
+@interface NSFetchedResultsController ()
+@property (nonatomic, retain) NSMutableArray *sortedArray;
+@property (nonatomic, readwrite, retain) NSString *sectionNameKeyPath;
+@property (nonatomic, readwrite, retain) NSArray *sections;
+@end
+
 @implementation NSFetchedResultsController
 
 @synthesize delegate = _delegate;
@@ -46,11 +87,22 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize fetchedObjects = _fetchedObjects;
 @synthesize cacheName = _cacheName, sectionNameKeyPath = _sectionNameKeyPath;
+@synthesize sortedArray = _sortedArray;
 
 - (id)initWithFetchRequest:(NSFetchRequest *)fetchRequest managedObjectContext: (NSManagedObjectContext *)context sectionNameKeyPath:(NSString *)sectionNameKeyPath cacheName:(NSString *)name {
   if ((self = [super init])) {
-    _fetchRequest = [fetchRequest retain];
-    _managedObjectContext = [context retain];
+      _fetchRequest = [fetchRequest retain];
+      _managedObjectContext = [context retain];
+      _sectionNameKeyPath = [sectionNameKeyPath retain];
+      
+      if (_sectionNameKeyPath) {
+          NSMutableArray *sorting = [[_fetchRequest sortDescriptors] mutableCopy];
+          if (!sorting) sorting = [NSMutableArray array];
+          NSSortDescriptor *groupSD = [NSSortDescriptor sortDescriptorWithKey:_sectionNameKeyPath ascending:YES];
+          [sorting insertObject:groupSD atIndex:0];
+          [_fetchRequest setSortDescriptors:sorting];
+          [sorting release];
+      }
   }
   return self;
 }
@@ -66,6 +118,47 @@
 - (BOOL)performFetch:(NSError **)error {
   [_fetchedObjects release];
   _fetchedObjects = [[_managedObjectContext executeFetchRequest:_fetchRequest error:error] retain];
+        
+    if (!self.sectionNameKeyPath) {
+        
+        NSFetchedResultsSection *oneSection = [[[NSFetchedResultsSection alloc] init] autorelease];
+        oneSection.objects = _fetchedObjects;
+        self.sections = [NSArray arrayWithObject:oneSection];
+        
+        return YES;
+    }
+    
+    NSMutableArray *sectionArray = [NSMutableArray array];
+    
+    NSMutableArray *sortedByGrouping = [_fetchedObjects mutableCopy];
+    self.sortedArray = [NSMutableArray arrayWithCapacity:[sortedByGrouping count]];
+    
+    
+    
+    while ([sortedByGrouping count]) 
+    {
+        NSManagedObject *groupLead = [sortedByGrouping objectAtIndex:0];
+        id groupLeadKeyValue = [groupLead valueForKeyPath:self.sectionNameKeyPath];
+        
+        
+        NSArray *group = [sortedByGrouping filterByBlock:^BOOL(id elt) {
+            return [[elt valueForKeyPath:_sectionNameKeyPath] isEqual:groupLeadKeyValue];
+        }];
+        
+        NSFetchedResultsSection *oneSection = [[[NSFetchedResultsSection alloc] init] autorelease];
+        oneSection.objects = group;
+        oneSection.name = [groupLeadKeyValue description];
+        
+        [sectionArray addObject:oneSection];
+        
+        //NSPredicate *groupPredicate = [NSPredicate predicateWithFormat:@"%@ == %@", self.sectionNameKeyPath, groupLeadKeyValue];
+        //NSArray *group = [sortedByGrouping filteredArrayUsingPredicate:groupPredicate];
+        
+        //[self.sortedArray addObjectsFromArray:group];
+        [sortedByGrouping removeObjectsInArray:group];
+    }
+    
+    self.sections = sectionArray;
 
   return YES;
 }
@@ -91,11 +184,6 @@
 }
 
 - (NSArray *)sectionIndexTitles {
-  // stub
-  return [NSArray array];
-}
-
-- (NSArray *)sections {
   // stub
   return [NSArray array];
 }

@@ -89,6 +89,9 @@
 
 @end
 
+@interface NSFetchedResultsSection : NSObject <NSFetchedResultsSectionInfo>
+@end
+
 @protocol NSFetchedResultsControllerDelegate
 
 enum {
