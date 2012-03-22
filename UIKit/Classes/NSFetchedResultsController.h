@@ -38,11 +38,44 @@
 #import <CoreData/CoreData.h>
 
 //#ifdef NSCoreDataVersionNumber10_5
-@protocol NSFetchedResultsControllerDelegate;
 
 @class NSFetchRequest;
 @class NSManagedObjectContext;
+@class NSFetchedResultsController;
+@protocol NSFetchedResultsSectionInfo;
 
+@protocol NSFetchedResultsControllerDelegate <NSObject>
+
+enum {
+    NSFetchedResultsChangeInsert = 1,
+    NSFetchedResultsChangeDelete = 2,
+    NSFetchedResultsChangeMove = 3,
+    NSFetchedResultsChangeUpdate = 4
+    
+};
+typedef NSUInteger NSFetchedResultsChangeType;
+
+@optional
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath;
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type;
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller;
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller;
+
+- (NSString *)controller:(NSFetchedResultsController *)controller sectionIndexTitleForSectionName:(NSString *)sectionName;
+
+@end
+
+@protocol NSFetchedResultsSectionInfo <NSObject>
+
+@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString *indexTitle;
+@property (nonatomic, readonly) NSUInteger numberOfObjects;
+@property (nonatomic, readonly) NSArray *objects;
+
+@end
 
 @interface NSFetchedResultsController : NSObject {
   __unsafe_unretained id <NSFetchedResultsControllerDelegate> _delegate;
@@ -64,7 +97,8 @@
 @property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, readonly) NSString *sectionNameKeyPath;
 @property (nonatomic, readonly) NSString *cacheName;
-@property(nonatomic, assign) id <NSFetchedResultsControllerDelegate> delegate;
+@property (nonatomic, assign) id <NSFetchedResultsControllerDelegate> delegate;
+
 + (void)deleteCacheWithName:(NSString *)name;
 
 // accessing objects
@@ -79,41 +113,8 @@
 
 @end
 
-
-@protocol NSFetchedResultsSectionInfo
-
-@property (nonatomic, readonly) NSString *name;
-@property (nonatomic, readonly) NSString *indexTitle;
-@property (nonatomic, readonly) NSUInteger numberOfObjects;
-@property (nonatomic, readonly) NSArray *objects;
-
-@end
-
 @interface NSFetchedResultsSection : NSObject <NSFetchedResultsSectionInfo>
 @end
 
-@protocol NSFetchedResultsControllerDelegate
-
-enum {
-  NSFetchedResultsChangeInsert = 1,
-  NSFetchedResultsChangeDelete = 2,
-  NSFetchedResultsChangeMove = 3,
-  NSFetchedResultsChangeUpdate = 4
-
-};
-typedef NSUInteger NSFetchedResultsChangeType;
-
-@optional
-
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath;
-
-- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type;
-
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller;
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller;
-
-- (NSString *)controller:(NSFetchedResultsController *)controller sectionIndexTitleForSectionName:(NSString *)sectionName;
-
-@end
 
 //#endif
