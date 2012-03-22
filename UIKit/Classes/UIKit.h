@@ -27,6 +27,10 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef UIKit_Chameleon
+#define UIKit_Chameleon 1
+#endif
+
 #ifndef IBAction
 #define IBAction void
 #endif
