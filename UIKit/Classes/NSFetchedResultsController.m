@@ -60,13 +60,13 @@
 @end
 
 @interface NSFetchedResultsSection ()
-@property (nonatomic, readwrite, copy) NSString *name;
-@property (nonatomic, readwrite, copy) NSString *indexTitle;
-@property (nonatomic, readwrite, retain) NSArray *objects;
+@property (nonatomic, copy, readwrite) NSString *name;
+@property (nonatomic, copy, readwrite) NSString *indexTitle;
+@property (nonatomic, retain, readwrite) NSArray *objects;
 @end
 
 @implementation NSFetchedResultsSection
-@synthesize name, indexTitle, objects;
+@synthesize name=_name, indexTitle=_indexTitle, objects=_objects;
 
 - (NSUInteger)numberOfObjects {
     return [self.objects count];
@@ -75,10 +75,10 @@
 @end
 
 @interface NSFetchedResultsController ()
-@property (nonatomic, readwrite, retain) NSString *sectionNameKeyPath;
-@property (nonatomic, readwrite, retain) NSArray *sections;
-@property (nonatomic, readwrite, retain) NSString *cacheName;
-@property (nonatomic, readwrite, retain) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain, readwrite) NSString *sectionNameKeyPath;
+@property (nonatomic, retain, readwrite) NSArray *sections;
+@property (nonatomic, retain, readwrite) NSString *cacheName;
+@property (nonatomic, retain, readwrite) NSManagedObjectContext *managedObjectContext;
 @end
 
 @implementation NSFetchedResultsController
@@ -88,7 +88,7 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize fetchedObjects = _fetchedObjects;
 @synthesize cacheName = _cacheName, sectionNameKeyPath = _sectionNameKeyPath;
-
+@synthesize sections=_sections;
 
 - (id)initWithFetchRequest:(NSFetchRequest *)fetchRequest managedObjectContext: (NSManagedObjectContext *)context sectionNameKeyPath:(NSString *)sectionNameKeyPath cacheName:(NSString *)name {
     if ((self = [super init])) {
