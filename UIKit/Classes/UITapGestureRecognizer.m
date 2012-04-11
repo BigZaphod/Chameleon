@@ -43,6 +43,11 @@
     return self;
 }
 
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    self.state = UIGestureRecognizerStateRecognized;
+}
+
 - (BOOL)canBePreventedByGestureRecognizer:(UIGestureRecognizer *)preventingGestureRecognizer
 {
     // this logic is here based on a note in the docs for -canBePreventedByGestureRecognizer:
