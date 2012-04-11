@@ -207,6 +207,8 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
     animation.duration = self.animationDuration ?: ([images count] * (1/30.0));
     animation.repeatCount = self.animationRepeatCount ?: HUGE_VALF;
     animation.values = CGImagesWithUIImages(images);
+    animation.removedOnCompletion = NO;
+    animation.fillMode = kCAFillModeBoth;
 
     [self.layer addAnimation:animation forKey:@"contents"];
 }
