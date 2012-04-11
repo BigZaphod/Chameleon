@@ -90,6 +90,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 - (void)dealloc
 {
     [_selectedRow release];
+    [_highlightedRow release];
     [_tableFooterView release];
     [_tableHeaderView release];
     [_cachedCells release];
@@ -292,6 +293,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
                     if (cell) {
                         [_cachedCells setObject:cell forKey:indexPath];
                         [availableCells removeObjectForKey:indexPath];
+                        cell.highlighted = [_highlightedRow isEqual:indexPath];
                         cell.selected = [_selectedRow isEqual:indexPath];
                         cell.frame = rowRect;
                         cell.backgroundColor = self.backgroundColor;
@@ -542,6 +544,8 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
     // clear prior selection
     [_selectedRow release];
     _selectedRow = nil;
+    [_highlightedRow release];
+    _highlightedRow = nil;
     
     // trigger the section cache to be repopulated
     [self _updateSectionsCache];
@@ -711,13 +715,35 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    UITouch *touch = [touches anyObject];
-    CGPoint location = [touch locationInView:self];
-    NSIndexPath *touchedRow = [self indexPathForRowAtPoint:location];
+    if (!_highlightedRow) {
+        UITouch *touch = [touches anyObject];
+        const CGPoint location = [touch locationInView:self];
 
-    if (touchedRow) {
+        _highlightedRow = [[self indexPathForRowAtPoint:location] retain];
+        [self cellForRowAtIndexPath:_highlightedRow].highlighted = YES;
+    }
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    // this isn't quite how iOS seems to do it, but I think it makes sense on OSX
+    if (_highlightedRow) {
+        UITouch *touch = [touches anyObject];
+        const CGPoint location = [touch locationInView:self];
+        
+        if (!CGRectContainsPoint([self rectForRowAtIndexPath:_highlightedRow], location)) {
+            [self cellForRowAtIndexPath:_highlightedRow].highlighted = NO;
+            [_highlightedRow release];
+            _highlightedRow = nil;
+        }
+    }
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (_highlightedRow) {
         NSIndexPath *selectedRow = [self indexPathForSelectedRow];
-
+        
         if (selectedRow) {
             NSIndexPath *rowToDeselect = selectedRow;
             
@@ -731,18 +757,31 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
                 [_delegate tableView:self didDeselectRowAtIndexPath:rowToDeselect];
             }
         }
-
-        NSIndexPath *rowToSelect = touchedRow;
+        
+        NSIndexPath *rowToSelect = _highlightedRow;
         
         if (_delegateHas.willSelectRowAtIndexPath) {
             rowToSelect = [_delegate tableView:self willSelectRowAtIndexPath:rowToSelect];
         }
-
+        
+        [self cellForRowAtIndexPath:_highlightedRow].highlighted = NO;
         [self selectRowAtIndexPath:rowToSelect animated:NO scrollPosition:UITableViewScrollPositionNone];
         
         if (_delegateHas.didSelectRowAtIndexPath) {
             [_delegate tableView:self didSelectRowAtIndexPath:rowToSelect];
         }
+        
+        [_highlightedRow release];
+        _highlightedRow = nil;
+    }
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (_highlightedRow) {
+        [self cellForRowAtIndexPath:_highlightedRow].highlighted = NO;
+        [_highlightedRow release];
+        _highlightedRow = nil;
     }
 }
 
