@@ -58,6 +58,8 @@
 {
     [_onImage release];
     [_offImage release];
+    
+    [super dealloc];
 }
 
 - (void)drawRect:(CGRect)frame
