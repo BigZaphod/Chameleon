@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, The Iconfactory. All rights reserved.
+ * Copyright (c) 2012, The Iconfactory. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,37 +27,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UITabBarController.h"
-#import "UITabBar.h"
+#import "ALAssetsGroup.h"
 
-@implementation UITabBarController
-
-@synthesize selectedViewController = _selectedViewController;
-@synthesize viewControllers = _viewControllers;
-@synthesize selectedIndex = _selectedIndex;
-@synthesize tabBar = _tabBar;
-
-- (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)nibBundle
-{
-    if ((self = [super initWithNibName:nibName bundle:nibBundle])) {
-        _tabBar = [[UITabBar alloc] initWithFrame:CGRectZero];
-    }
-    return self;
-}
-
-- (void)dealloc
-{
-    [_tabBar release];
-    [super dealloc];
-}
-
-- (void)setViewControllers:(NSArray *)viewController animated:(BOOL)animated
-{
-}
-
-- (NSString *)description
-{
-    return [NSString stringWithFormat:@"<%@: %p; selectedViewController = %@; viewControllers = %@; selectedIndex = %lu; tabBar = %@>", [self className], self, self.selectedViewController, self.viewControllers, self.selectedIndex, self.tabBar];
-}
-
+@implementation ALAssetsGroup
 @end

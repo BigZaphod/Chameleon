@@ -390,7 +390,7 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
         return nil;
     }
     
-    NSString *key = [NSString stringWithFormat:@"%i", index];
+    NSString *key = [NSString stringWithFormat:@"%lu", index];
     return [_segmentMeta objectForKey:key];
 }
 
@@ -415,7 +415,7 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
         _segmentMeta = [[NSMutableDictionary alloc] init];
     }
     
-    [_segmentMeta setValue:meta forKey:[NSString stringWithFormat:@"%i", index]];
+    [_segmentMeta setValue:meta forKey:[NSString stringWithFormat:@"%lu", index]];
     [self setNeedsDisplay];
 }
 

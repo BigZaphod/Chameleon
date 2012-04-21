@@ -7,26 +7,38 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		14C25EC21211EBC600622309 /* AVAudioSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 14C25EC01211EBC600622309 /* AVAudioSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		14C25EC31211EBC600622309 /* AVAudioSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C25EC11211EBC600622309 /* AVAudioSession.m */; };
-		14EFB1A11211DADE00D19B0C /* AVAudioPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 14EFB19F1211DADE00D19B0C /* AVAudioPlayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		14EFB1A21211DADE00D19B0C /* AVAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 14EFB1A01211DADE00D19B0C /* AVAudioPlayer.m */; };
-		14EFB1A81211DB0B00D19B0C /* AVFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 14EFB1A71211DB0B00D19B0C /* AVFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		144E375F14D7559600A640AE /* ALAsset.h in Headers */ = {isa = PBXBuildFile; fileRef = 144E375D14D7559600A640AE /* ALAsset.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		144E376014D7559600A640AE /* ALAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 144E375E14D7559600A640AE /* ALAsset.m */; };
+		144E376314D755E300A640AE /* ALAssetRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 144E376114D755E300A640AE /* ALAssetRepresentation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		144E376414D755E300A640AE /* ALAssetRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = 144E376214D755E300A640AE /* ALAssetRepresentation.m */; };
+		144E376714D755FE00A640AE /* ALAssetsFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 144E376514D755FE00A640AE /* ALAssetsFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		144E376814D755FE00A640AE /* ALAssetsFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 144E376614D755FE00A640AE /* ALAssetsFilter.m */; };
+		144E376B14D7561600A640AE /* ALAssetsGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 144E376914D7561600A640AE /* ALAssetsGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		144E376C14D7561600A640AE /* ALAssetsGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 144E376A14D7561600A640AE /* ALAssetsGroup.m */; };
+		14EFB1A11211DADE00D19B0C /* ALAssetsLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = 14EFB19F1211DADE00D19B0C /* ALAssetsLibrary.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		14EFB1A21211DADE00D19B0C /* ALAssetsLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 14EFB1A01211DADE00D19B0C /* ALAssetsLibrary.m */; };
+		14EFB1A81211DB0B00D19B0C /* AssetsLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = 14EFB1A71211DB0B00D19B0C /* AssetsLibrary.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14EFB1BB1211DB5300D19B0C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14EFB1BA1211DB5300D19B0C /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
-		146B1C8C1211D9DA002D85C3 /* AVFoundation_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFoundation_Prefix.pch; sourceTree = "<group>"; };
-		14C25EC01211EBC600622309 /* AVAudioSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AVAudioSession.h; path = Classes/AVAudioSession.h; sourceTree = "<group>"; };
-		14C25EC11211EBC600622309 /* AVAudioSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AVAudioSession.m; path = Classes/AVAudioSession.m; sourceTree = "<group>"; };
-		14EFB19F1211DADE00D19B0C /* AVAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AVAudioPlayer.h; path = Classes/AVAudioPlayer.h; sourceTree = "<group>"; };
-		14EFB1A01211DADE00D19B0C /* AVAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AVAudioPlayer.m; path = Classes/AVAudioPlayer.m; sourceTree = "<group>"; };
-		14EFB1A71211DB0B00D19B0C /* AVFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AVFoundation.h; path = Classes/AVFoundation.h; sourceTree = "<group>"; };
+		144E375D14D7559600A640AE /* ALAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALAsset.h; path = Classes/ALAsset.h; sourceTree = "<group>"; };
+		144E375E14D7559600A640AE /* ALAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALAsset.m; path = Classes/ALAsset.m; sourceTree = "<group>"; };
+		144E376114D755E300A640AE /* ALAssetRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALAssetRepresentation.h; path = Classes/ALAssetRepresentation.h; sourceTree = "<group>"; };
+		144E376214D755E300A640AE /* ALAssetRepresentation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALAssetRepresentation.m; path = Classes/ALAssetRepresentation.m; sourceTree = "<group>"; };
+		144E376514D755FE00A640AE /* ALAssetsFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALAssetsFilter.h; path = Classes/ALAssetsFilter.h; sourceTree = "<group>"; };
+		144E376614D755FE00A640AE /* ALAssetsFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALAssetsFilter.m; path = Classes/ALAssetsFilter.m; sourceTree = "<group>"; };
+		144E376914D7561600A640AE /* ALAssetsGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALAssetsGroup.h; path = Classes/ALAssetsGroup.h; sourceTree = "<group>"; };
+		144E376A14D7561600A640AE /* ALAssetsGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALAssetsGroup.m; path = Classes/ALAssetsGroup.m; sourceTree = "<group>"; };
+		146B1C8C1211D9DA002D85C3 /* AssetsLibrary_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetsLibrary_Prefix.pch; sourceTree = "<group>"; };
+		14EFB19F1211DADE00D19B0C /* ALAssetsLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALAssetsLibrary.h; path = Classes/ALAssetsLibrary.h; sourceTree = "<group>"; };
+		14EFB1A01211DADE00D19B0C /* ALAssetsLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALAssetsLibrary.m; path = Classes/ALAssetsLibrary.m; sourceTree = "<group>"; };
+		14EFB1A71211DB0B00D19B0C /* AssetsLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssetsLibrary.h; path = Classes/AssetsLibrary.h; sourceTree = "<group>"; };
 		14EFB1BA1211DB5300D19B0C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8DC2EF5B0486A6940098B216 /* AVFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8DC2EF5B0486A6940098B216 /* AssetsLibrary.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AssetsLibrary.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,7 +56,7 @@
 		034768DFFF38A50411DB9C8B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8DC2EF5B0486A6940098B216 /* AVFoundation.framework */,
+				8DC2EF5B0486A6940098B216 /* AssetsLibrary.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -82,11 +94,17 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				14EFB19F1211DADE00D19B0C /* AVAudioPlayer.h */,
-				14EFB1A01211DADE00D19B0C /* AVAudioPlayer.m */,
-				14EFB1A71211DB0B00D19B0C /* AVFoundation.h */,
-				14C25EC01211EBC600622309 /* AVAudioSession.h */,
-				14C25EC11211EBC600622309 /* AVAudioSession.m */,
+				144E375D14D7559600A640AE /* ALAsset.h */,
+				144E375E14D7559600A640AE /* ALAsset.m */,
+				144E376114D755E300A640AE /* ALAssetRepresentation.h */,
+				144E376214D755E300A640AE /* ALAssetRepresentation.m */,
+				144E376514D755FE00A640AE /* ALAssetsFilter.h */,
+				144E376614D755FE00A640AE /* ALAssetsFilter.m */,
+				144E376914D7561600A640AE /* ALAssetsGroup.h */,
+				144E376A14D7561600A640AE /* ALAssetsGroup.m */,
+				14EFB19F1211DADE00D19B0C /* ALAssetsLibrary.h */,
+				14EFB1A01211DADE00D19B0C /* ALAssetsLibrary.m */,
+				14EFB1A71211DB0B00D19B0C /* AssetsLibrary.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -94,7 +112,7 @@
 		32C88DFF0371C24200C91783 /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				146B1C8C1211D9DA002D85C3 /* AVFoundation_Prefix.pch */,
+				146B1C8C1211D9DA002D85C3 /* AssetsLibrary_Prefix.pch */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -106,18 +124,21 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14EFB1A11211DADE00D19B0C /* AVAudioPlayer.h in Headers */,
-				14EFB1A81211DB0B00D19B0C /* AVFoundation.h in Headers */,
-				14C25EC21211EBC600622309 /* AVAudioSession.h in Headers */,
+				14EFB1A11211DADE00D19B0C /* ALAssetsLibrary.h in Headers */,
+				14EFB1A81211DB0B00D19B0C /* AssetsLibrary.h in Headers */,
+				144E375F14D7559600A640AE /* ALAsset.h in Headers */,
+				144E376314D755E300A640AE /* ALAssetRepresentation.h in Headers */,
+				144E376714D755FE00A640AE /* ALAssetsFilter.h in Headers */,
+				144E376B14D7561600A640AE /* ALAssetsGroup.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		8DC2EF4F0486A6940098B216 /* AVFoundation */ = {
+		8DC2EF4F0486A6940098B216 /* AssetsLibrary */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1DEB91AD08733DA50010E9CD /* Build configuration list for PBXNativeTarget "AVFoundation" */;
+			buildConfigurationList = 1DEB91AD08733DA50010E9CD /* Build configuration list for PBXNativeTarget "AssetsLibrary" */;
 			buildPhases = (
 				8DC2EF500486A6940098B216 /* Headers */,
 				8DC2EF520486A6940098B216 /* Resources */,
@@ -128,10 +149,10 @@
 			);
 			dependencies = (
 			);
-			name = AVFoundation;
+			name = AssetsLibrary;
 			productInstallPath = "$(HOME)/Library/Frameworks";
 			productName = UIKit;
-			productReference = 8DC2EF5B0486A6940098B216 /* AVFoundation.framework */;
+			productReference = 8DC2EF5B0486A6940098B216 /* AssetsLibrary.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -140,9 +161,9 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0440;
 			};
-			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "AVFoundation" */;
+			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "AssetsLibrary" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -157,7 +178,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8DC2EF4F0486A6940098B216 /* AVFoundation */,
+				8DC2EF4F0486A6940098B216 /* AssetsLibrary */,
 			);
 		};
 /* End PBXProject section */
@@ -177,8 +198,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14EFB1A21211DADE00D19B0C /* AVAudioPlayer.m in Sources */,
-				14C25EC31211EBC600622309 /* AVAudioSession.m in Sources */,
+				14EFB1A21211DADE00D19B0C /* ALAssetsLibrary.m in Sources */,
+				144E376014D7559600A640AE /* ALAsset.m in Sources */,
+				144E376414D755E300A640AE /* ALAssetRepresentation.m in Sources */,
+				144E376814D755FE00A640AE /* ALAssetsFilter.m in Sources */,
+				144E376C14D7561600A640AE /* ALAssetsGroup.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,10 +221,10 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = AVFoundation_Prefix.pch;
+				GCC_PREFIX_HEADER = AssetsLibrary_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
-				PRODUCT_NAME = AVFoundation;
+				PRODUCT_NAME = AssetsLibrary;
 				SYMROOT = ../build;
 				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = framework;
@@ -217,10 +241,10 @@
 				FRAMEWORK_VERSION = A;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = AVFoundation_Prefix.pch;
+				GCC_PREFIX_HEADER = AssetsLibrary_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
-				PRODUCT_NAME = AVFoundation;
+				PRODUCT_NAME = AssetsLibrary;
 				SYMROOT = ../build;
 				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = framework;
@@ -260,7 +284,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1DEB91AD08733DA50010E9CD /* Build configuration list for PBXNativeTarget "AVFoundation" */ = {
+		1DEB91AD08733DA50010E9CD /* Build configuration list for PBXNativeTarget "AssetsLibrary" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB91AE08733DA50010E9CD /* Debug */,
@@ -269,7 +293,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "AVFoundation" */ = {
+		1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "AssetsLibrary" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB91B208733DA50010E9CD /* Debug */,

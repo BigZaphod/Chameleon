@@ -89,16 +89,16 @@ extern const float UIScrollViewDecelerationRateFast;
     NSTimer *_scrollTimer;
     
     struct {
-        BOOL scrollViewDidScroll : 1;
-        BOOL scrollViewWillBeginDragging : 1;
-        BOOL scrollViewDidEndDragging : 1;
-        BOOL viewForZoomingInScrollView : 1;
-        BOOL scrollViewWillBeginZooming : 1;
-        BOOL scrollViewDidEndZooming : 1;
-        BOOL scrollViewDidZoom : 1;
-        BOOL scrollViewDidEndScrollingAnimation : 1;
-        BOOL scrollViewWillBeginDecelerating : 1;
-        BOOL scrollViewDidEndDecelerating : 1;
+        unsigned scrollViewDidScroll : 1;
+        unsigned scrollViewWillBeginDragging : 1;
+        unsigned scrollViewDidEndDragging : 1;
+        unsigned viewForZoomingInScrollView : 1;
+        unsigned scrollViewWillBeginZooming : 1;
+        unsigned scrollViewDidEndZooming : 1;
+        unsigned scrollViewDidZoom : 1;
+        unsigned scrollViewDidEndScrollingAnimation : 1;
+        unsigned scrollViewWillBeginDecelerating : 1;
+        unsigned scrollViewDidEndDecelerating : 1;
     } _delegateCan;
 
   // should be flag struct

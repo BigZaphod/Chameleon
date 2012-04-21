@@ -184,6 +184,8 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
     animation.duration = animationDuration;
     animation.repeatCount = HUGE_VALF;
     animation.values = images;
+    animation.removedOnCompletion = NO;
+    animation.fillMode = kCAFillModeBoth;
     
     [self.layer addAnimation:animation forKey:@"contents"];
     
