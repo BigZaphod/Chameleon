@@ -135,6 +135,7 @@ typedef enum {
 
 - (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style;
 - (void)reloadData;
+- (void)reloadRowsAtIndexPaths:(NSIndexPath *)indexPath withRowAnimation:(UITableViewRowAnimation)rowAnimation;
 - (NSInteger)numberOfSections;
 - (NSInteger)numberOfRowsInSection:(NSInteger)section;
 - (NSArray *)indexPathsForRowsInRect:(CGRect)rect;
