@@ -147,7 +147,7 @@ NSMutableArray *_allScreens = nil;
     return NO;
 }
 
-- (void)layoutSubviews
+- (void)_layoutSubviews
 {
     if ([self _hasResizeIndicator]) {
         const CGSize grabberSize = _grabber.frame.size;

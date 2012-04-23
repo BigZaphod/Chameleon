@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, The Iconfactory. All rights reserved.
+ * Copyright (c) 2012, The Iconfactory. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,17 +27,15 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIView.h"
+#import "UIAppearance.h"
+#import <UIKit/UIAppearanceProperty.h>
 
-extern NSString *const UIViewFrameDidChangeNotification;
-extern NSString *const UIViewBoundsDidChangeNotification;
-extern NSString *const UIViewDidMoveToSuperviewNotification;
-extern NSString *const UIViewHiddenDidChangeNotification;
+@interface UIAppearanceProxy : NSObject {
+    Class<UIAppearance> _targetClass;
+    NSMutableDictionary *_settings;
+}
 
-@interface UIView (UIPrivate)
-- (void)_removeFromSuperview:(BOOL)notifyViewController;
-- (void)_setViewController:(UIViewController *)theViewController;
-- (UIViewController *)_viewController;
-- (void)_superviewSizeDidChangeFrom:(CGSize)oldSize to:(CGSize)newSize;
-- (void)_layoutSubviews;
+- (id)initWithClass:(Class<UIAppearance>)k;
+- (NSDictionary *)_appearancePropertiesAndValues;
+
 @end

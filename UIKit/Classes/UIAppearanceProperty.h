@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, The Iconfactory. All rights reserved.
+ * Copyright (c) 2012, The Iconfactory. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,17 +27,16 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIView.h"
+#import <Foundation/Foundation.h>
 
-extern NSString *const UIViewFrameDidChangeNotification;
-extern NSString *const UIViewBoundsDidChangeNotification;
-extern NSString *const UIViewDidMoveToSuperviewNotification;
-extern NSString *const UIViewHiddenDidChangeNotification;
+@interface UIAppearanceProperty : NSObject <NSCopying> {
+    SEL cmd;
+    NSArray *axisValues;
+}
 
-@interface UIView (UIPrivate)
-- (void)_removeFromSuperview:(BOOL)notifyViewController;
-- (void)_setViewController:(UIViewController *)theViewController;
-- (UIViewController *)_viewController;
-- (void)_superviewSizeDidChangeFrom:(CGSize)oldSize to:(CGSize)newSize;
-- (void)_layoutSubviews;
+- (id)initWithSelector:(SEL)sel axisValues:(NSArray *)values;
+- (void)invokeSetterUsingTarget:(id)target withValue:(NSValue *)value;
+
+@property (nonatomic, readonly) NSArray *axisValues;
+
 @end
