@@ -39,7 +39,6 @@
 #import "UIApplication+UIPrivate.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 #import <QuartzCore/CALayer.h>
-#import <objc/runtime.h>
 
 NSString *const UIViewFrameDidChangeNotification = @"UIViewFrameDidChangeNotification";
 NSString *const UIViewBoundsDidChangeNotification = @"UIViewBoundsDidChangeNotification";
