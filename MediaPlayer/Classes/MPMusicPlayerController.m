@@ -32,6 +32,8 @@
 NSString *const MPMusicPlayerControllerPlaybackStateDidChangeNotification = @"MPMusicPlayerControllerPlaybackStateDidChangeNotification";
 
 @implementation MPMusicPlayerController
+@synthesize shuffleMode;
+@synthesize repeatMode;
 
 + (MPMusicPlayerController *)iPodMusicPlayer
 {
@@ -49,6 +51,47 @@ NSString *const MPMusicPlayerControllerPlaybackStateDidChangeNotification = @"MP
 
 - (void)endGeneratingPlaybackNotifications
 {
+}
+
++ (MPMusicPlayerController *)applicationMusicPlayer
+{
+    return nil;
+}
+
+- (void)setQueueWithItemCollection:(MPMediaItemCollection *)itemCollection
+{
+    
+}
+
+-(MPMusicShuffleMode)shuffleMode
+{
+    return MPMusicShuffleModeDefault;
+}
+
+-(MPMusicRepeatMode)repeatMode
+{
+    return MPMusicRepeatModeDefault;
+}
+
+-(float)volume
+{
+    return 0;
+}
+-(void)setVolume:(float)volume
+{
+    
+}
+- (void)play
+{
+    
+}
+- (void)pause
+{
+    
+}
+- (void)stop
+{
+    
 }
 
 @end

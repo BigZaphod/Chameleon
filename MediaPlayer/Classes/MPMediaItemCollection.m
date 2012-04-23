@@ -27,52 +27,22 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <Foundation/Foundation.h>
+#import "MPMediaItemCollection.h"
+#import "MPMediaEntity.h"
 
-enum {
-    MPMusicPlaybackStateStopped,
-    MPMusicPlaybackStatePlaying,
-    MPMusicPlaybackStatePaused,
-    MPMusicPlaybackStateInterrupted,
-    MPMusicPlaybackStateSeekingForward,
-    MPMusicPlaybackStateSeekingBackward
-};
-typedef NSInteger MPMusicPlaybackState;
+@implementation MPMediaItemCollection
+@synthesize items;
+@synthesize representativeItem;
+@synthesize count;
+@synthesize mediaTypes;
 
-
-enum {
-    MPMusicShuffleModeDefault, // the user's preference for shuffle mode
-    MPMusicShuffleModeOff,
-    MPMusicShuffleModeSongs,
-    MPMusicShuffleModeAlbums
-};
-typedef NSInteger MPMusicShuffleMode;
-
-enum {
-    MPMusicRepeatModeDefault, // the user's preference for repeat mode
-    MPMusicRepeatModeNone,
-    MPMusicRepeatModeOne,
-    MPMusicRepeatModeAll
-};
-typedef NSInteger MPMusicRepeatMode;
-
-extern NSString *const MPMusicPlayerControllerPlaybackStateDidChangeNotification;
-
-@class MPMediaItemCollection;
-
-@interface MPMusicPlayerController : NSObject {
+- (id)initWithItems:(NSArray *)items;
+{
+    return (self = [super init]);
 }
 
-+ (MPMusicPlayerController *)iPodMusicPlayer;
-+ (MPMusicPlayerController *)applicationMusicPlayer;
-- (void)play;
-- (void)pause;
-- (void)stop;
-- (void)beginGeneratingPlaybackNotifications;
-- (void)endGeneratingPlaybackNotifications;
-- (void)setQueueWithItemCollection:(MPMediaItemCollection *)itemCollection;
-@property (nonatomic, readonly) MPMusicPlaybackState playbackState;
-@property(nonatomic) MPMusicShuffleMode shuffleMode;
-@property(nonatomic) MPMusicRepeatMode repeatMode;
-@property(nonatomic) float volume;
++ (MPMediaItemCollection *)collectionWithItems:(NSArray *)items
+{
+    return nil;
+}
 @end

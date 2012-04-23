@@ -27,52 +27,24 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <Foundation/Foundation.h>
+#import "MPMediaEntity.h"
 
-enum {
-    MPMusicPlaybackStateStopped,
-    MPMusicPlaybackStatePlaying,
-    MPMusicPlaybackStatePaused,
-    MPMusicPlaybackStateInterrupted,
-    MPMusicPlaybackStateSeekingForward,
-    MPMusicPlaybackStateSeekingBackward
-};
-typedef NSInteger MPMusicPlaybackState;
+NSString *const MPMediaItemPropertyTitle=@"MPMediaItemPropertyTitle";
 
-
-enum {
-    MPMusicShuffleModeDefault, // the user's preference for shuffle mode
-    MPMusicShuffleModeOff,
-    MPMusicShuffleModeSongs,
-    MPMusicShuffleModeAlbums
-};
-typedef NSInteger MPMusicShuffleMode;
-
-enum {
-    MPMusicRepeatModeDefault, // the user's preference for repeat mode
-    MPMusicRepeatModeNone,
-    MPMusicRepeatModeOne,
-    MPMusicRepeatModeAll
-};
-typedef NSInteger MPMusicRepeatMode;
-
-extern NSString *const MPMusicPlayerControllerPlaybackStateDidChangeNotification;
-
-@class MPMediaItemCollection;
-
-@interface MPMusicPlayerController : NSObject {
+@implementation MPMediaEntity 
++ (BOOL)canFilterByProperty:(NSString *)property
+{
+    return NO;
 }
 
-+ (MPMusicPlayerController *)iPodMusicPlayer;
-+ (MPMusicPlayerController *)applicationMusicPlayer;
-- (void)play;
-- (void)pause;
-- (void)stop;
-- (void)beginGeneratingPlaybackNotifications;
-- (void)endGeneratingPlaybackNotifications;
-- (void)setQueueWithItemCollection:(MPMediaItemCollection *)itemCollection;
-@property (nonatomic, readonly) MPMusicPlaybackState playbackState;
-@property(nonatomic) MPMusicShuffleMode shuffleMode;
-@property(nonatomic) MPMusicRepeatMode repeatMode;
-@property(nonatomic) float volume;
+- (id)valueForProperty:(NSString *)property
+{
+    return nil;
+}
+
+- (void)enumerateValuesForProperties:(NSSet *)properties usingBlock:(void (^)(NSString *property, id value, BOOL *stop))block 
+{
+    
+}
 @end
+

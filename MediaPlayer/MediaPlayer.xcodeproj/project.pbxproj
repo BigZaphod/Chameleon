@@ -7,13 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0762B321147F623F00DF2D65 /* MPMediaPickerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 0762B31D147F623F00DF2D65 /* MPMediaPickerController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0762B322147F623F00DF2D65 /* MPMediaPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0762B31E147F623F00DF2D65 /* MPMediaPickerController.m */; };
+		0762B323147F623F00DF2D65 /* MPVolumeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 0762B31F147F623F00DF2D65 /* MPVolumeView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0762B324147F623F00DF2D65 /* MPVolumeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0762B320147F623F00DF2D65 /* MPVolumeView.m */; };
+		07FAA150147F52480013F785 /* MPMediaEntity.h in Headers */ = {isa = PBXBuildFile; fileRef = 07FAA14C147F52480013F785 /* MPMediaEntity.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		07FAA151147F52480013F785 /* MPMediaEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FAA14D147F52480013F785 /* MPMediaEntity.m */; };
+		07FAA152147F52480013F785 /* MPMediaItemCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 07FAA14E147F52480013F785 /* MPMediaItemCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		07FAA153147F52480013F785 /* MPMediaItemCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FAA14F147F52480013F785 /* MPMediaItemCollection.m */; };
 		14C25EF31211ED0400622309 /* MediaPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 14C25EF21211ED0400622309 /* MediaPlayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14C25F001211ED4C00622309 /* MPMusicPlayerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14C25EFE1211ED4C00622309 /* MPMusicPlayerController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14C25F011211ED4C00622309 /* MPMusicPlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C25EFF1211ED4C00622309 /* MPMusicPlayerController.m */; };
 		14EFB1BB1211DB5300D19B0C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14EFB1BA1211DB5300D19B0C /* Cocoa.framework */; };
 		4C1677D913C70F1A00814195 /* MPMoviePlayerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1677D713C70F1900814195 /* MPMoviePlayerController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C1677DA13C70F1A00814195 /* MPMoviePlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1677D813C70F1900814195 /* MPMoviePlayerController.m */; };
-		4C16781613C71E4900814195 /* MPMediaPlayback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C16781513C71E4900814195 /* MPMediaPlayback.h */; };
+		4C16781613C71E4900814195 /* MPMediaPlayback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C16781513C71E4900814195 /* MPMediaPlayback.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C16781A13C71E6200814195 /* UIInternalMovieView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C16781813C71E6200814195 /* UIInternalMovieView.h */; };
 		4C16781B13C71E6200814195 /* UIInternalMovieView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C16781913C71E6200814195 /* UIInternalMovieView.m */; };
 		4C16787D13C71FB900814195 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C16787C13C71FB900814195 /* UIKit.framework */; };
@@ -32,6 +40,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0762B31D147F623F00DF2D65 /* MPMediaPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPMediaPickerController.h; path = Classes/MPMediaPickerController.h; sourceTree = "<group>"; };
+		0762B31E147F623F00DF2D65 /* MPMediaPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPMediaPickerController.m; path = Classes/MPMediaPickerController.m; sourceTree = "<group>"; };
+		0762B31F147F623F00DF2D65 /* MPVolumeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPVolumeView.h; path = Classes/MPVolumeView.h; sourceTree = "<group>"; };
+		0762B320147F623F00DF2D65 /* MPVolumeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPVolumeView.m; path = Classes/MPVolumeView.m; sourceTree = "<group>"; };
+		07FAA14C147F52480013F785 /* MPMediaEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPMediaEntity.h; path = Classes/MPMediaEntity.h; sourceTree = "<group>"; };
+		07FAA14D147F52480013F785 /* MPMediaEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPMediaEntity.m; path = Classes/MPMediaEntity.m; sourceTree = "<group>"; };
+		07FAA14E147F52480013F785 /* MPMediaItemCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPMediaItemCollection.h; path = Classes/MPMediaItemCollection.h; sourceTree = "<group>"; };
+		07FAA14F147F52480013F785 /* MPMediaItemCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPMediaItemCollection.m; path = Classes/MPMediaItemCollection.m; sourceTree = "<group>"; };
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		14C25EF21211ED0400622309 /* MediaPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MediaPlayer.h; path = Classes/MediaPlayer.h; sourceTree = "<group>"; };
@@ -114,10 +130,18 @@
 			isa = PBXGroup;
 			children = (
 				14C25EF21211ED0400622309 /* MediaPlayer.h */,
+				07FAA14C147F52480013F785 /* MPMediaEntity.h */,
+				07FAA14D147F52480013F785 /* MPMediaEntity.m */,
+				07FAA14E147F52480013F785 /* MPMediaItemCollection.h */,
+				07FAA14F147F52480013F785 /* MPMediaItemCollection.m */,
+				0762B31D147F623F00DF2D65 /* MPMediaPickerController.h */,
+				0762B31E147F623F00DF2D65 /* MPMediaPickerController.m */,
 				14C25EFE1211ED4C00622309 /* MPMusicPlayerController.h */,
 				14C25EFF1211ED4C00622309 /* MPMusicPlayerController.m */,
 				4C1677D713C70F1900814195 /* MPMoviePlayerController.h */,
 				4C1677D813C70F1900814195 /* MPMoviePlayerController.m */,
+				0762B31F147F623F00DF2D65 /* MPVolumeView.h */,
+				0762B320147F623F00DF2D65 /* MPVolumeView.m */,
 				4C16781513C71E4900814195 /* MPMediaPlayback.h */,
 			);
 			name = Classes;
@@ -160,6 +184,10 @@
 				4C1677D913C70F1A00814195 /* MPMoviePlayerController.h in Headers */,
 				4C16781613C71E4900814195 /* MPMediaPlayback.h in Headers */,
 				4C16781A13C71E6200814195 /* UIInternalMovieView.h in Headers */,
+				07FAA150147F52480013F785 /* MPMediaEntity.h in Headers */,
+				07FAA152147F52480013F785 /* MPMediaItemCollection.h in Headers */,
+				0762B321147F623F00DF2D65 /* MPMediaPickerController.h in Headers */,
+				0762B323147F623F00DF2D65 /* MPVolumeView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,6 +275,10 @@
 				14C25F011211ED4C00622309 /* MPMusicPlayerController.m in Sources */,
 				4C1677DA13C70F1A00814195 /* MPMoviePlayerController.m in Sources */,
 				4C16781B13C71E6200814195 /* UIInternalMovieView.m in Sources */,
+				07FAA151147F52480013F785 /* MPMediaEntity.m in Sources */,
+				07FAA153147F52480013F785 /* MPMediaItemCollection.m in Sources */,
+				0762B322147F623F00DF2D65 /* MPMediaPickerController.m in Sources */,
+				0762B324147F623F00DF2D65 /* MPVolumeView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

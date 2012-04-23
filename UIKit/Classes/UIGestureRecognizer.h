@@ -74,7 +74,7 @@ typedef enum {
 
 - (void)requireGestureRecognizerToFail:(UIGestureRecognizer *)otherGestureRecognizer;
 - (CGPoint)locationInView:(UIView *)view;
-
+- (CGPoint)locationOfTouch:(NSUInteger)touchIndex inView:(UIView *)view;
 - (NSUInteger)numberOfTouches;
 
 @property (nonatomic, assign) id<UIGestureRecognizerDelegate> delegate;

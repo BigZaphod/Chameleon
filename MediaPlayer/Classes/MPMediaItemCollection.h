@@ -28,51 +28,35 @@
  */
 
 #import <Foundation/Foundation.h>
-
-enum {
-    MPMusicPlaybackStateStopped,
-    MPMusicPlaybackStatePlaying,
-    MPMusicPlaybackStatePaused,
-    MPMusicPlaybackStateInterrupted,
-    MPMusicPlaybackStateSeekingForward,
-    MPMusicPlaybackStateSeekingBackward
-};
-typedef NSInteger MPMusicPlaybackState;
+#import "MPMediaEntity.h"
 
 
-enum {
-    MPMusicShuffleModeDefault, // the user's preference for shuffle mode
-    MPMusicShuffleModeOff,
-    MPMusicShuffleModeSongs,
-    MPMusicShuffleModeAlbums
-};
-typedef NSInteger MPMusicShuffleMode;
 
-enum {
-    MPMusicRepeatModeDefault, // the user's preference for repeat mode
-    MPMusicRepeatModeNone,
-    MPMusicRepeatModeOne,
-    MPMusicRepeatModeAll
-};
-typedef NSInteger MPMusicRepeatMode;
 
-extern NSString *const MPMusicPlayerControllerPlaybackStateDidChangeNotification;
 
-@class MPMediaItemCollection;
 
-@interface MPMusicPlayerController : NSObject {
-}
+extern NSString *const MPMediaItemPropertyTitle;            // @"title",               NSString,                                     filterable
 
-+ (MPMusicPlayerController *)iPodMusicPlayer;
-+ (MPMusicPlayerController *)applicationMusicPlayer;
-- (void)play;
-- (void)pause;
-- (void)stop;
-- (void)beginGeneratingPlaybackNotifications;
-- (void)endGeneratingPlaybackNotifications;
-- (void)setQueueWithItemCollection:(MPMediaItemCollection *)itemCollection;
-@property (nonatomic, readonly) MPMusicPlaybackState playbackState;
-@property(nonatomic) MPMusicShuffleMode shuffleMode;
-@property(nonatomic) MPMusicRepeatMode repeatMode;
-@property(nonatomic) float volume;
+@interface MPMediaItemCollection : MPMediaEntity
+
+// Creates a media item collection by copying an array of MPMediaItems.
++ (MPMediaItemCollection *)collectionWithItems:(NSArray *)items;
+
+- (id)initWithItems:(NSArray *)items;
+
+// Returns the MPMediaItems in the collection.
+@property(nonatomic, readonly) NSArray *items;
+
+// Returns an item representative of other items in the collection.
+// This item can be used for common item properties in the collection, often more efficiently than fetching an item out of the items array.
+@property(nonatomic, readonly) MPMediaItem *representativeItem;
+
+// Returns the number of items in the collection.
+// In some cases, this is more efficient than fetching the items array and asking for the count.
+@property(nonatomic, readonly) NSUInteger count;
+
+// Returns the types of media which the collection holds.
+@property(nonatomic, readonly) MPMediaType mediaTypes;
+
 @end
+

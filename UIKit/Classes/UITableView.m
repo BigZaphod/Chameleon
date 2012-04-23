@@ -55,6 +55,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 @synthesize tableHeaderView=_tableHeaderView, tableFooterView=_tableFooterView, allowsSelection=_allowsSelection, editing=_editing;
 @synthesize sectionFooterHeight=_sectionFooterHeight, sectionHeaderHeight=_sectionHeaderHeight;
 @synthesize allowsSelectionDuringEditing=_allowsSelectionDuringEditing;
+@synthesize backgroundView=_backgroundView;
 @dynamic delegate;
 
 - (id)initWithFrame:(CGRect)frame
@@ -89,6 +90,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void)dealloc
 {
+    [_backgroundView release];
     [_selectedRow release];
     [_highlightedRow release];
     [_tableFooterView release];

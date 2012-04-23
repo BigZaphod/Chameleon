@@ -56,6 +56,7 @@ typedef enum {
     UIKeyboardTypePhonePad,
     UIKeyboardTypeNamePhonePad,
     UIKeyboardTypeEmailAddress,
+    UIKeyboardTypeDecimalPad,
     UIKeyboardTypeAlphabet = UIKeyboardTypeASCIICapable
 } UIKeyboardType;
 
