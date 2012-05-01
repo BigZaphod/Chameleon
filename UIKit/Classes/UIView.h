@@ -60,6 +60,7 @@
 #import "UIResponder.h"
 #import "UIGeometry.h"
 #import <AppKit/NSView.h>
+#import "UIAppearance.h"
 
 enum {
     UIViewAutoresizingNone                 = 0,
@@ -132,7 +133,7 @@ typedef NSUInteger UIViewAnimationOptions;
 
 @class UIColor, CALayer, UIViewController, UIGestureRecognizer;
 
-@interface UIView : UIResponder <NSCoding> {
+@interface UIView : UIResponder <UIAppearanceContainer, UIAppearance> {
 @private
     UIView *_superview;
     NSMutableSet *_subviews;

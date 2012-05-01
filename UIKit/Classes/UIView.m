@@ -67,12 +67,14 @@
 #import "UIViewAnimationGroup.h"
 #import "UIViewBlockAnimationDelegate.h"
 #import "UIViewController.h"
+#import "UIAppearanceInstance.h"
 #import "UIApplication+UIPrivate.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 #import "UIScreen.h"
 #import "UIGeometry.h"
 #import <QuartzCore/CALayer.h>
 #include <tgmath.h>
+#import <objc/runtime.h>
 
 NSString *const UIViewFrameDidChangeNotification = @"UIViewFrameDidChangeNotification";
 NSString *const UIViewBoundsDidChangeNotification = @"UIViewBoundsDidChangeNotification";
@@ -260,6 +262,11 @@ static IMP defaultImplementationOfDisplayLayer;
     return (UIResponder *)[self _viewController] ?: (UIResponder *)_superview;
 }
 
+- (id)_appearanceContainer
+{
+    return self.superview;
+}
+
 - (NSArray *)subviews
 {
     NSArray *sublayers = _layer.sublayers;
@@ -290,7 +297,7 @@ static IMP defaultImplementationOfDisplayLayer;
             [self resignFirstResponder];
         }
         
-        [_viewController viewWillMoveToWindow:toWindow];
+        [self _setAppearanceNeedsUpdate];
         [self willMoveToWindow:toWindow];
 
         for (UIView *subview in self.subviews) {
@@ -909,6 +916,14 @@ static IMP defaultImplementationOfDisplayLayer;
 
 - (void)layoutSubviews
 {
+}
+
+- (void)_layoutSubviews
+{
+    [self _updateAppearanceIfNeeded];
+    [[self _viewController] viewWillLayoutSubviews];
+    [self layoutSubviews];
+    [[self _viewController] viewDidLayoutSubviews];
 }
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event

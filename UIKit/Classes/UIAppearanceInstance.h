@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, The Iconfactory. All rights reserved.
+ * Copyright (c) 2012, The Iconfactory. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,17 +27,16 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIView.h"
+#import "UIAppearance.h"
 
-extern NSString *const UIViewFrameDidChangeNotification;
-extern NSString *const UIViewBoundsDidChangeNotification;
-extern NSString *const UIViewDidMoveToSuperviewNotification;
-extern NSString *const UIViewHiddenDidChangeNotification;
+@class UIAppearanceProperty;
 
-@interface UIView (UIPrivate)
-- (void)_removeFromSuperview:(BOOL)notifyViewController;
-- (void)_setViewController:(UIViewController *)theViewController;
-- (UIViewController *)_viewController;
-- (void)_superviewSizeDidChangeFrom:(CGSize)oldSize to:(CGSize)newSize;
-- (void)_layoutSubviews;
+@interface NSObject (UIAppearanceInstance)
++ (id)appearance;
++ (id)appearanceWhenContainedIn:(Class <UIAppearanceContainer>)containerClass, ...;
+
+- (void)_appearancePropertyDidChange:(UIAppearanceProperty *)property;
+- (id)_appearanceContainer;
+- (void)_updateAppearanceIfNeeded;
+- (void)_setAppearanceNeedsUpdate;
 @end
