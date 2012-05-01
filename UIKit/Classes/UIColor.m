@@ -49,11 +49,10 @@ static void releasePatternImage(void *info)
 static CGPatternRef CreateImagePattern(CGImageRef image)
 {
     NSCParameterAssert(image);
-    CGImageRetain(image);
     int width = CGImageGetWidth(image);
     int height = CGImageGetHeight(image);
     static const CGPatternCallbacks callbacks = {0, &drawPatternImage, &releasePatternImage};
-    return CGPatternCreate (image,
+    return CGPatternCreate (CGImageRetain(image),
                             CGRectMake (0, 0, width, height),
                             ((floorf(NSAppKitVersionNumber) == NSAppKitVersionNumber10_7)? CGAffineTransformMake (1, 0, 0, -1, 0, height) : CGAffineTransformIdentity),
                             width,

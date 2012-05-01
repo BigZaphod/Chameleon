@@ -37,6 +37,7 @@
 
 
 const UIEdgeInsets UIEdgeInsetsZero = {0,0,0,0};
+const UIOffset UIOffsetZero = {0,0};
 
 NSString *NSStringFromCGPoint(CGPoint p)
 {
@@ -80,6 +81,11 @@ CGRect CGRectFromString(NSString* string)
 CGPoint CGPointFromString(NSString* string)
 {
     return NSPointToCGPoint(NSPointFromString(string));
+}
+
+NSString *NSStringFromUIOffset(UIOffset offset)
+{
+    return [NSString stringWithFormat:@"{%g, %g}", offset.horizontal, offset.vertical];
 }
 
 @implementation NSValue (NSValueUIGeometryExtensions)
@@ -126,6 +132,22 @@ CGPoint CGPointFromString(NSString* string)
         return insets;
     }
     return UIEdgeInsetsZero;
+}
+
++ (NSValue *)valueWithUIOffset:(UIOffset)offset
+{
+    return [NSValue valueWithBytes: &offset objCType: @encode(UIOffset)];
+}
+
+- (UIOffset)UIOffsetValue
+{
+    if(strcmp([self objCType], @encode(UIOffset)) == 0)
+    {
+        UIOffset offset;
+        [self getValue: &offset];
+        return offset;
+    }
+    return UIOffsetZero;
 }
 
 @end

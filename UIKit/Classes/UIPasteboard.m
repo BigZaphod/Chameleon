@@ -81,7 +81,7 @@ static NSPasteboardItem *PasteBoardItemWithDictionary(NSDictionary *item)
         }
     }
     
-    return pasteboardItem;
+    return [pasteboardItem autorelease];
 }
 
 @implementation UIPasteboard

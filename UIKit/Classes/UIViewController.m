@@ -226,6 +226,14 @@
 {
 }
 
+- (void)viewWillLayoutSubviews
+{
+}
+
+- (void)viewDidLayoutSubviews
+{
+}
+
 - (UIInterfaceOrientation)interfaceOrientation
 {
 
@@ -442,17 +450,6 @@
 - (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers 
 {
     return YES;
-}
-
-
-- (void)viewWillLayoutSubviews 
-{
-    
-}
-
-- (void)viewDidLayoutSubviews 
-{
-    
 }
 
 - (BOOL)isMovingToParentViewController

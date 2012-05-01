@@ -145,9 +145,9 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
     // the real UIKit appears to fetch more on-demand than this. so far this has not been a problem.
 
     // remove all previous section header/footer views
-    for (UITableViewSection *sectionRecord in _sections) {
-        [sectionRecord.headerView removeFromSuperview];
-        [sectionRecord.footerView removeFromSuperview];
+    for (UITableViewSection *previousSectionRecord in _sections) {
+        [previousSectionRecord.headerView removeFromSuperview];
+        [previousSectionRecord.footerView removeFromSuperview];
     }
     
     // clear the previous cache
@@ -161,7 +161,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
             const NSInteger numberOfRowsInSection = [self numberOfRowsInSection:section];
             
             UITableViewSection *sectionRecord = [[UITableViewSection alloc] init];
-            sectionRecord.numberOfRows = numberOfRowsInSection;
             sectionRecord.headerView = _delegateHas.viewForHeaderInSection? [self.delegate tableView:self viewForHeaderInSection:section] : nil;
             sectionRecord.footerView = _delegateHas.viewForFooterInSection? [self.delegate tableView:self viewForFooterInSection:section] : nil;
             sectionRecord.headerTitle = _dataSourceHas.titleForHeaderInSection? [self.dataSource tableView:self titleForHeaderInSection:section] : nil;
@@ -202,7 +201,8 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
             }
             
             sectionRecord.rowsHeight = totalRowsHeight;
-            sectionRecord.rowHeights = rowHeights;          // transfers ownership!
+            [sectionRecord setNumberOfRows:numberOfRowsInSection withHeights:rowHeights];
+            free(rowHeights);
             
             [_sections addObject:sectionRecord];
             [sectionRecord release];
