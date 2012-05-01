@@ -73,8 +73,6 @@
 #import "UIScreen.h"
 #import "UIGeometry.h"
 #import <QuartzCore/CALayer.h>
-#include <tgmath.h>
-#import <objc/runtime.h>
 
 NSString *const UIViewFrameDidChangeNotification = @"UIViewFrameDidChangeNotification";
 NSString *const UIViewBoundsDidChangeNotification = @"UIViewBoundsDidChangeNotification";
