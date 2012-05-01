@@ -80,12 +80,12 @@
 		0598DB2F1475728100761579 /* <UISegmentedControl> divider.png in Resources */ = {isa = PBXBuildFile; fileRef = 0598DB2B1475728100761579 /* <UISegmentedControl> divider.png */; };
 		05C5C8B11495AFEA00829B52 /* UIButtonContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 05C5C8AF1495AFEA00829B52 /* UIButtonContent.h */; };
 		05C5C8B21495AFEA00829B52 /* UIButtonContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C5C8B01495AFEA00829B52 /* UIButtonContent.m */; };
-		05CC6E1B154F7A0F00900548 /* UIAppearance.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CC6E14154F7A0F00900548 /* UIAppearance.h */; };
-		05CC6E1C154F7A0F00900548 /* UIAppearanceInstance.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CC6E15154F7A0F00900548 /* UIAppearanceInstance.h */; };
+		05CC6E1B154F7A0F00900548 /* UIAppearance.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CC6E14154F7A0F00900548 /* UIAppearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05CC6E1C154F7A0F00900548 /* UIAppearanceInstance.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CC6E15154F7A0F00900548 /* UIAppearanceInstance.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05CC6E1D154F7A0F00900548 /* UIAppearanceInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CC6E16154F7A0F00900548 /* UIAppearanceInstance.m */; };
-		05CC6E1E154F7A0F00900548 /* UIAppearanceProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CC6E17154F7A0F00900548 /* UIAppearanceProperty.h */; };
+		05CC6E1E154F7A0F00900548 /* UIAppearanceProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CC6E17154F7A0F00900548 /* UIAppearanceProperty.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05CC6E1F154F7A0F00900548 /* UIAppearanceProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CC6E18154F7A0F00900548 /* UIAppearanceProperty.m */; };
-		05CC6E20154F7A0F00900548 /* UIAppearanceProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CC6E19154F7A0F00900548 /* UIAppearanceProxy.h */; };
+		05CC6E20154F7A0F00900548 /* UIAppearanceProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CC6E19154F7A0F00900548 /* UIAppearanceProxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05CC6E21154F7A0F00900548 /* UIAppearanceProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CC6E1A154F7A0F00900548 /* UIAppearanceProxy.m */; };
 		1413D21213D72A06004D77E9 /* UIScrollViewAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 1413D20C13D72A06004D77E9 /* UIScrollViewAnimation.h */; };
 		1413D21313D72A06004D77E9 /* UIScrollViewAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1413D20D13D72A06004D77E9 /* UIScrollViewAnimation.m */; };
@@ -1098,6 +1098,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05CC6E1B154F7A0F00900548 /* UIAppearance.h in Headers */,
+				05CC6E1C154F7A0F00900548 /* UIAppearanceInstance.h in Headers */,
+				05CC6E1E154F7A0F00900548 /* UIAppearanceProperty.h in Headers */,
+				05CC6E20154F7A0F00900548 /* UIAppearanceProxy.h in Headers */,
 				789CF898133A3CD500250AB4 /* NSFetchedResultsController.h in Headers */,
 				78CB48D9133AB922008636DA /* UISlider.h in Headers */,
 				78CB48B4133AA8AF008636DA /* UISegmentedControl.h in Headers */,
@@ -1240,10 +1244,6 @@
 				055467361495B32B00397F4F /* UIRuntimeOutletConnection.h in Headers */,
 				0554673E1495B39100397F4F /* UIProxyObject.h in Headers */,
 				055467421495B3C200397F4F /* UIImageNibPlaceholder.h in Headers */,
-				05CC6E1B154F7A0F00900548 /* UIAppearance.h in Headers */,
-				05CC6E1C154F7A0F00900548 /* UIAppearanceInstance.h in Headers */,
-				05CC6E1E154F7A0F00900548 /* UIAppearanceProperty.h in Headers */,
-				05CC6E20154F7A0F00900548 /* UIAppearanceProxy.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

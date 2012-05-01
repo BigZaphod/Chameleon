@@ -59,7 +59,6 @@
 
 #import "UIResponder.h"
 #import "UIGeometry.h"
-#import <AppKit/NSView.h>
 #import "UIAppearance.h"
 
 enum {
