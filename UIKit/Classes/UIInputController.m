@@ -75,6 +75,9 @@ static UIView *ContainerForView(UIView *view)
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewFrameDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewDidMoveToSuperviewNotification object:nil];
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [_inputWindow release];
