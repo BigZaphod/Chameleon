@@ -11,6 +11,7 @@
 #import "UIColor.h"
 #import "UIStringDrawing.h"
 #import "UIGraphics.h"
+#import "UIImage+UIPrivate.h"
 
 static NSString *kSSSegmentedControlEnabledKey = @"enabled";
 
@@ -109,11 +110,10 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
         _segments = [[NSMutableArray alloc] init];
         _momentary = NO;
         
-        // TODO: add images
-        self.buttonImage = [[UIImage imageNamed:@"UISegmentBarButton.png"] stretchableImageWithLeftCapWidth:6 topCapHeight:0];
-        self.highlightedButtonImage = [[UIImage imageNamed:@"UISegmentBarButtonHighlighted.png"] stretchableImageWithLeftCapWidth:6 topCapHeight:0];
-        self.dividerImage = [UIImage imageNamed:@"UISegmentBarDivider.png"];
-        self.highlightedDividerImage = [UIImage imageNamed:@"UISegmentBarDividerHighlighted.png"];
+        self.buttonImage = [UIImage _segmentedControlButtonImage];
+        self.highlightedButtonImage = [UIImage _segmentedControlHighlightedButtonImage];
+        self.dividerImage = [UIImage _segmentedControlDividerImage];
+        self.highlightedDividerImage = [UIImage _segmentedControlHighlightedDividerImage];
         self.selectedSegmentIndex = UISegmentedControlNoSegment;
         
         _font = [[UIFont boldSystemFontOfSize:12.0f] retain];
@@ -133,7 +133,7 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
     
     NSInteger count = (NSInteger)[self numberOfSegments];
     CGSize size = frame.size;
-    CGFloat segmentWidth = roundf((size.width - count - 1) / (CGFloat)count);
+    CGFloat segmentWidth = round((size.width - count - 1) / (CGFloat)count);
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     for (NSInteger i = 0; i < count; i++) {
@@ -200,7 +200,7 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
         if ([item isKindOfClass:[NSString class]]) {
             NSString *string = (NSString *)item;
             CGSize textSize = [string sizeWithFont:_font constrainedToSize:CGSizeMake(segmentWidth, size.height) lineBreakMode:UILineBreakModeTailTruncation];
-            CGRect textRect = CGRectMake(x, roundf((size.height - textSize.height) / 2.0f), segmentWidth, size.height);
+            CGRect textRect = CGRectMake(x, round((size.height - textSize.height) / 2.0f), segmentWidth, size.height);
             textRect = UIEdgeInsetsInsetRect(textRect, _textEdgeInsets);
             
             if (enabled) {
@@ -218,8 +218,8 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
         else if ([item isKindOfClass:[UIImage class]]) {
             UIImage *image = (UIImage *)item;
             CGSize imageSize = image.size;
-            CGRect imageRect = CGRectMake(x + roundf((segmentRect.size.width - imageSize.width) / 2.0f),
-                                          roundf((segmentRect.size.height - imageSize.height) / 2.0f),
+            CGRect imageRect = CGRectMake(x + round((segmentRect.size.width - imageSize.width) / 2.0f),
+                                          round((segmentRect.size.height - imageSize.height) / 2.0f),
                                           imageSize.width, imageSize.height);
             [image drawInRect:imageRect blendMode:kCGBlendModeNormal alpha:enabled ? 1.0f : 0.5f];
         }
@@ -227,7 +227,6 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
         CGContextRestoreGState(context);
     }
 }
-
 
 - (void)willMoveToSuperview:(UIView *)newSuperview
 {
@@ -286,6 +285,11 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
     return [_segments count];
 }
 
+- (void)removeAllSegments
+{
+    [_segments removeAllObjects];
+    [self setNeedsDisplay];
+}
 
 - (void)setTitle:(NSString *)title forSegmentAtIndex:(NSUInteger)segment
 {
@@ -313,6 +317,10 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
     return nil;
 }
 
+- (void)insertSegmentWithTitle:(NSString *)title atIndex:(NSUInteger)segment animated:(BOOL)animated
+{
+    [self setTitle:title forSegmentAtIndex:segment];
+}
 
 - (void)setImage:(UIImage *)image forSegmentAtIndex:(NSUInteger)segment
 {
@@ -363,11 +371,13 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
 - (void)setSelectedSegmentIndex:(NSInteger)index
 {
     if (_selectedSegmentIndex == index) {
+        [self sendActionsForControlEvents:UIControlEventTouchUpInside];
         return;
     }
     
     _selectedSegmentIndex = index;
     [self setNeedsDisplay];
+    [self sendActionsForControlEvents:UIControlEventTouchUpInside];
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 

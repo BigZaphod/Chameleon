@@ -31,7 +31,7 @@
 
 @class UIImage, CAKeyframeAnimation;
 
-@interface UIImageView : UIView {
+@interface UIImageView : UIView <NSCoding>{
 @private
     UIImage *_image;
     NSArray *_animationImages;

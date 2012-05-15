@@ -1,3 +1,33 @@
+//
+// UIViewController.m
+//
+// Original Author:
+//  The IconFactory
+//
+// Contributor: 
+//	Zac Bowling <zac@seatme.com>
+//
+// Copyright (C) 2011 SeatMe, Inc http://www.seatme.com
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 /*
  * Copyright (c) 2011, The Iconfactory. All rights reserved.
  *
@@ -27,7 +57,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIViewController.h"
+#import "UIViewController+UIPrivate.h"
 #import "UIView+UIPrivate.h"
 #import "UIScreen.h"
 #import "UIWindow.h"
@@ -39,13 +69,33 @@
 #import "UIToolbar.h"
 #import "UIScreen.h"
 #import "UITabBarController.h"
+#import "UINib.h"
 
-@implementation UIViewController
-@synthesize view=_view, wantsFullScreenLayout=_wantsFullScreenLayout, title=_title, contentSizeForViewInPopover=_contentSizeForViewInPopover;
-@synthesize modalInPopover=_modalInPopover, toolbarItems=_toolbarItems, modalPresentationStyle=_modalPresentationStyle, editing=_editing;
-@synthesize modalViewController=_modalViewController, parentViewController=_parentViewController;
-@synthesize modalTransitionStyle=_modalTransitionStyle, hidesBottomBarWhenPushed=_hidesBottomBarWhenPushed;
-@synthesize searchDisplayController=_searchDisplayController, tabBarItem=_tabBarItem, tabBarController=_tabBarController;
+@implementation UIViewController 
+
+@dynamic wantsFullScreenLayout;
+@dynamic hidesBottomBarWhenPushed;
+@dynamic editing;
+@dynamic modalInPopover;
+
+@synthesize navigationItem = _navigationItem;
+@synthesize view = _view;
+@synthesize title = _title;
+@synthesize contentSizeForViewInPopover = _contentSizeForViewInPopover;
+@synthesize toolbarItems = _toolbarItems;
+@synthesize modalPresentationStyle = _modalPresentationStyle;
+
+@synthesize modalViewController = _modalViewController;
+@synthesize parentViewController = _parentViewController;
+@synthesize modalTransitionStyle = _modalTransitionStyle;
+
+@synthesize searchDisplayController = _searchDisplayController;
+@synthesize tabBarItem = _tabBarItem;
+@synthesize tabBarController = _tabBarController;
+@synthesize nibBundle = _nibBundle;
+@synthesize nibName = _nibName;
+
+@synthesize childViewControllers=_childViewControllers;
 
 - (id)init
 {
@@ -54,9 +104,10 @@
 
 - (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)nibBundle
 {
-    if ((self=[super init])) {
+    if (nil != (self = [super init])) {
+        _nibName = [nibName copy];
+        _nibBundle = [nibBundle retain];
         _contentSizeForViewInPopover = CGSizeMake(320,1100);
-        _hidesBottomBarWhenPushed = NO;
     }
     return self;
 }
@@ -68,22 +119,45 @@
     [_navigationItem release];
     [_title release];
     [_view release];
+    [_nibName release];
+    [_nibBundle release];
+    [_tabBarItem release];
     [super dealloc];
-}
-
-- (NSString *)nibName
-{
-    return nil;
-}
-
-- (NSBundle *)nibBundle
-{
-    return nil;
 }
 
 - (UIResponder *)nextResponder
 {
     return _view.superview;
+}
+
+- (BOOL) isModalInPopover
+{
+    return _flags.modalInPopover;
+}
+
+- (void) setModalInPopover:(BOOL)modalInPopover
+{
+    _flags.modalInPopover = modalInPopover;
+}
+
+- (BOOL) wantsFullScreenLayout
+{
+    return _flags.wantsFullScreenLayout;
+}
+
+- (void) setWantsFullScreenLayout:(BOOL)wantsFullScreenLayout
+{
+    _flags.wantsFullScreenLayout = wantsFullScreenLayout;
+}
+
+- (BOOL) hidesBottomBarWhenPushed
+{
+    return _flags.hidesBottomBarWhenPushed;
+}
+
+- (void) setHidesBottomBarWhenPushed:(BOOL)hidesBottomBarWhenPushed
+{
+    _flags.hidesBottomBarWhenPushed = hidesBottomBarWhenPushed;
 }
 
 - (BOOL)isViewLoaded
@@ -93,13 +167,12 @@
 
 - (UIView *)view
 {
-    if ([self isViewLoaded]) {
-        return _view;
-    } else {
+    if (!_flags.viewLoadedFromControllerNib) {
+        _flags.viewLoadedFromControllerNib = YES;
         [self loadView];
         [self viewDidLoad];
-        return _view;
     }
+    return _view;
 }
 
 - (void)setView:(UIView *)aView
@@ -114,7 +187,11 @@
 
 - (void)loadView
 {
-    self.view = [[[UIView alloc] initWithFrame:CGRectMake(0,0,320,480)] autorelease];
+    if (self.nibName) {
+        [[UINib nibWithNibName:self.nibName bundle:self.nibBundle] instantiateWithOwner:self options:nil];
+    } else {
+        self.view = [[[UIView alloc] initWithFrame:CGRectMake(0,0,320,480)] autorelease];
+    }
 }
 
 - (void)viewDidLoad
@@ -122,6 +199,10 @@
 }
 
 - (void)viewDidUnload
+{
+}
+
+- (void)viewWillUnload
 {
 }
 
@@ -155,7 +236,9 @@
 
 - (UIInterfaceOrientation)interfaceOrientation
 {
-    return (UIInterfaceOrientation)UIDeviceOrientationPortrait;
+
+    return (UIInterfaceOrientation) UIDeviceOrientationPortrait;
+
 }
 
 - (UINavigationItem *)navigationItem
@@ -169,6 +252,11 @@
 - (void)_setParentViewController:(UIViewController *)parentController
 {
     _parentViewController = parentController;
+}
+
+- (void)_setTabBarController:(UITabBarController *)tabBarController
+{
+    _tabBarController = tabBarController;
 }
 
 - (void)setToolbarItems:(NSArray *)theToolbarItems animated:(BOOL)animated
@@ -185,9 +273,14 @@
     [self setToolbarItems:theToolbarItems animated:NO];
 }
 
+- (BOOL) isEditing
+{
+    return _flags.editing;
+}
+
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
-    _editing = editing;
+    _flags.editing = editing;
 }
 
 - (void)setEditing:(BOOL)editing
@@ -201,6 +294,22 @@
     return nil;
 }
 
+- (void)setTabBarItem:(UITabBarItem *)tabBarItem
+{
+    if (_tabBarItem != tabBarItem) {
+        [_tabBarItem release];
+        _tabBarItem = [tabBarItem retain];
+    }
+}
+
+- (UITabBarItem *)tabBarItem
+{
+    if (!_tabBarItem) {
+        _tabBarItem = [[UITabBarItem alloc] initWithTitle:([self title] ?: @"") image:nil tag:0];
+    }
+    return _tabBarItem;
+}
+
 - (void)presentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated
 {
     if (!_modalViewController && _modalViewController != self) {
@@ -212,7 +321,7 @@
         UIView *newView = _modalViewController.view;
 
         newView.autoresizingMask = selfView.autoresizingMask;
-        newView.frame = _wantsFullScreenLayout? window.screen.bounds : window.screen.applicationFrame;
+        newView.frame = _flags.wantsFullScreenLayout? window.screen.bounds : window.screen.applicationFrame;
 
         [window addSubview:newView];
         [_modalViewController viewWillAppear:animated];
@@ -255,6 +364,10 @@
     }
 }
 
++ (void)attemptRotationToDeviceOrientation
+{
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
@@ -264,12 +377,53 @@
 {
 }
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+- (void)addChildViewController:(UIViewController *)childController
 {
+    [childController willMoveToParentViewController:self];
+    [childController _setParentViewController:self];
+    [_childViewControllers addObject:childController];
+}
+
+- (void)removeFromParentViewController
+{
+    [self willMoveToParentViewController:nil];
+    [self _setParentViewController:nil];
+}
+
+- (void)willMoveToParentViewController:(UIViewController *)parent
+{
+    
+}
+
+- (void)didMoveToParentViewController:(UIViewController *)parent
+{
+    
+}
+
+- (void)transitionFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
+{
+    [fromViewController beginAppearanceTransition:NO animated:duration > 0];
+    [toViewController beginAppearanceTransition:YES animated:duration > 0];
+    [UIView animateWithDuration:duration
+        animations:animations
+        completion:^(BOOL finished){
+            if (completion) {
+                completion(finished);
+            }
+            [fromViewController _endAppearanceTransition];
+            [toViewController _endAppearanceTransition];
+        }
+     ];
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation 
+                                         duration:(NSTimeInterval)duration
+{
+    
 }
 
 - (id)_nearestParentViewControllerThatIsKindOf:(Class)c
@@ -293,9 +447,150 @@
     return [self _nearestParentViewControllerThatIsKindOf:[UISplitViewController class]];
 }
 
+- (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers 
+{
+    return YES;
+}
+
+- (BOOL)isMovingToParentViewController
+{
+    //TODO
+    return FALSE;
+}
+
+- (BOOL)isMovingFromParentViewController
+{
+    //TODO
+    return FALSE;
+}
+
+- (BOOL)isBeingDismissed 
+{
+    //TODO
+    return FALSE;
+}
+
+- (BOOL)isBeingPresented
+{
+    //TODO
+    return FALSE;
+}
+
+- (BOOL)disablesAutomaticKeyboardDismissal 
+{
+    return FALSE;
+}
+
+- (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion
+{
+    
+}
+
+- (void)presentViewController:(UIViewController *)viewControllerToPresent animated:(BOOL)flag completion:(void (^)(void))completion
+{
+    
+}
+
+- (NSArray *)childViewControllers
+{
+    return [[_childViewControllers retain] autorelease];
+}
+
+- (void)setChildViewControllers:(NSArray *)childViewControllers 
+{
+
+}
+
+
+- (void)_setViewAppearState:(UIViewControllerAppearState)appearState isAnimating:(BOOL)animating
+{
+    if (_appearState != appearState) {
+        _appearState = appearState;
+        switch (_appearState) {
+            case UIViewControllerStateWillAppear: {
+                [self viewWillAppear:animating];
+                break;
+            }
+            case UIViewControllerStateDidAppear: {
+                [self viewDidAppear:animating];
+                break;
+            } 
+            case UIViewControllerStateWillDisappear: {
+                [self viewWillDisappear:animating];
+                break;
+            }  
+            case UIViewControllerStateDidDisappear: {
+                [self viewDidDisappear:animating];
+                break;
+            }
+        }
+    }
+}
+
+- (void)viewWillMoveToWindow:(UIWindow *)window
+{
+    if (!_flags.isInAnimatedVCTransition) {
+        if (window) {
+            [self _setViewAppearState:UIViewControllerStateWillAppear isAnimating:NO];
+        } else {
+            [self _setViewAppearState:UIViewControllerStateWillDisappear isAnimating:NO];
+        }
+    }
+}
+
+- (void)viewDidMoveToWindow:(UIWindow *)window
+{
+    if (!_flags.isInAnimatedVCTransition) {
+        if (window) {
+            [self _setViewAppearState:UIViewControllerStateDidAppear isAnimating:NO];
+        } else {
+            [self _setViewAppearState:UIViewControllerStateDidDisappear isAnimating:NO];
+        }
+    }
+}
+
+- (BOOL)beginAppearanceTransition:(BOOL)shouldAppear animated:(BOOL)animated
+{
+    _flags.isInAnimatedVCTransition = YES;
+    UIViewControllerAppearState appearState;
+    if (shouldAppear) {
+        appearState = UIViewControllerStateWillAppear;
+    } else {
+        appearState = UIViewControllerStateWillDisappear;
+    }
+    [self _setViewAppearState:appearState isAnimating:animated];
+    return YES;
+}
+
+- (BOOL)_endAppearanceTransition
+{
+    if (_flags.isInAnimatedVCTransition) {
+        UIViewControllerAppearState appearState;
+        if (_appearState == UIViewControllerStateWillAppear) {
+            appearState = UIViewControllerStateDidAppear;
+        } else if (_appearState == UIViewControllerStateWillDisappear) {
+            appearState = UIViewControllerStateDidDisappear;
+        } else {
+            return NO;
+        }
+        [self _setViewAppearState:appearState isAnimating:NO];
+        return YES;
+    }
+    return NO;
+}
+
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"<%@: %p; title = %@; view = %@>", [self className], self, self.title, self.view];
 }
+
+- (UIView *)rotatingHeaderView {
+    return nil;
+}
+
+- (UIView *)rotatingFooterView {
+    return nil;
+}
+
 
 @end

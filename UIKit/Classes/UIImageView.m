@@ -33,6 +33,8 @@
 #import "UIColor.h"
 #import <QuartzCore/QuartzCore.h>
 
+static NSString* const kUIImageKey = @"UIImage";
+
 static NSArray *CGImagesWithUIImages(NSArray *images)
 {
     NSMutableArray *CGImages = [NSMutableArray arrayWithCapacity:[images count]];
@@ -42,9 +44,14 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
     return CGImages;
 }
 
-@implementation UIImageView
-@synthesize image=_image, animationImages=_animationImages, animationDuration=_animationDuration, highlightedImage=_highlightedImage, highlighted=_highlighted;
-@synthesize animationRepeatCount=_animationRepeatCount, highlightedAnimationImages=_highlightedAnimationImages;
+@implementation UIImageView 
+@synthesize image = _image;
+@synthesize animationImages = _animationImages;
+@synthesize animationDuration = _animationDuration;
+@synthesize highlightedImage = _highlightedImage;
+@synthesize highlighted = _highlighted;
+@synthesize animationRepeatCount = _animationRepeatCount;
+@synthesize highlightedAnimationImages = _highlightedAnimationImages;
 
 + (BOOL)_instanceImplementsDrawRect
 {
@@ -61,18 +68,27 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
     return self;
 }
 
+- (id) initWithCoder:(NSCoder*)coder
+{
+    if (nil != (self = [super initWithCoder:coder])) {
+        if ([coder containsValueForKey:kUIImageKey]) {
+            self.image = [coder decodeObjectForKey:kUIImageKey];
+        }
+    }
+    return self;
+}
+
+- (void) encodeWithCoder:(NSCoder*)coder
+{
+    [self doesNotRecognizeSelector:_cmd];
+}
+
 - (id)initWithImage:(UIImage *)theImage
 {
-    CGRect frame = CGRectZero;
-
-    if (theImage) {
-        frame.size = theImage.size;
-    }
-        
-    if ((self = [self initWithFrame:frame])) {
+    CGSize imageSize = theImage.size;
+    if ((self = [self initWithFrame:CGRectMake(0,0,imageSize.width,imageSize.height)])) {
         self.image = theImage;
     }
-
     return self;
 }
 
@@ -87,7 +103,7 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
-    return _image? _image.size : CGSizeZero;
+    return _image.size;
 }
 
 - (void)setHighlighted:(BOOL)h

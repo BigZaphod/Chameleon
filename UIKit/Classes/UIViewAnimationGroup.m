@@ -56,7 +56,6 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
         _animationRepeatAutoreverses = NO;
         _animationRepeatCount = 0;
         _animationBeginTime = CACurrentMediaTime();
-        _animatingViews = [[NSMutableSet alloc] initWithCapacity:0];
     }
     return self;
 }
@@ -65,7 +64,6 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 {
     [_name release];
     [_animationDelegate release];
-    [_animatingViews release];
     [super dealloc];
 }
 
@@ -77,10 +75,18 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 - (void)notifyAnimationsDidStopIfNeededUsingStatus:(BOOL)animationsDidFinish
 {
     if (_waitingAnimations == 0) {
-        if ([_animationDelegate respondsToSelector:_animationDidStopSelector]) {
-            NSMethodSignature *signature = [_animationDelegate methodSignatureForSelector:_animationDidStopSelector];
+        SEL animationStoppedSelector = nil;
+        if ([_animationDelegate respondsToSelector:_animationDidStopSelector])
+            animationStoppedSelector = _animationDidStopSelector;
+        else if ([_animationDelegate respondsToSelector:@selector(animationDidStop:finished:context:)])
+            animationStoppedSelector = @selector(animationDidStop:finished:context:);
+        else if ([_animationDelegate respondsToSelector:@selector(animationDidStop:finished:)])
+            animationStoppedSelector = @selector(animationDidStop:finished:);
+        
+        if (animationStoppedSelector) {
+            NSMethodSignature *signature = [_animationDelegate methodSignatureForSelector:animationStoppedSelector];
             NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
-            [invocation setSelector:_animationDidStopSelector];
+            [invocation setSelector:animationStoppedSelector];
             NSInteger remaining = [signature numberOfArguments] - 2;
             
             NSNumber *finishedArgument = [NSNumber numberWithBool:animationsDidFinish];
@@ -101,7 +107,6 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
             
             [invocation invokeWithTarget:_animationDelegate];
         }
-        [_animatingViews removeAllObjects];
     }
 }
 
@@ -149,10 +154,8 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
     return animation;
 }
 
-- (id)actionForView:(UIView *)view forKey:(NSString *)keyPath
+- (id)actionForLayer:(CALayer *)layer forKey:(NSString *)keyPath
 {
-    [_animatingViews addObject:view];
-    CALayer *layer = view.layer;
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:keyPath];
     animation.fromValue = _animationBeginsFromCurrentState? [layer.presentationLayer valueForKey:keyPath] : [layer valueForKey:keyPath];
     return [self addAnimation:animation];

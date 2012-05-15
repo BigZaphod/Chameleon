@@ -103,7 +103,7 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
         [self setAutomaticSpellingCorrectionEnabled:NO];
         [self setContinuousSpellCheckingEnabled:NO];
         [self setAutomaticDashSubstitutionEnabled:NO];
-        [self setAutomaticTextReplacementEnabled:NO];
+        //[self setAutomaticTextReplacementEnabled:NO];
         [self setSmartInsertDeleteEnabled:NO];
         [self setUsesFindPanel:NO];
         [self setAllowsUndo:NO];

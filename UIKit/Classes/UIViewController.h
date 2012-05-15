@@ -1,3 +1,33 @@
+//
+// UIViewController.h
+//
+// Original Author:
+//  The IconFactory
+//
+// Contributor: 
+//	Zac Bowling <zac@seatme.com>
+//
+// Copyright (C) 2011 SeatMe, Inc http://www.seatme.com
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 /*
  * Copyright (c) 2011, The Iconfactory. All rights reserved.
  *
@@ -27,6 +57,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+
 #import "UIResponder.h"
 #import "UIApplication.h"
 #import "UISearchDisplayController.h"
@@ -48,25 +79,43 @@ typedef enum {
     UIModalTransitionStylePartialCurl,
 } UIModalTransitionStyle;
 
+typedef enum {
+    UIViewControllerStateDidDisappear,
+    UIViewControllerStateWillAppear,
+    UIViewControllerStateDidAppear,
+    UIViewControllerStateWillDisappear
+} UIViewControllerAppearState;
+
+
 @class UINavigationItem, UINavigationController, UIBarButtonItem, UISplitViewController;
 
 @interface UIViewController : UIResponder {
 @private
     UIView *_view;
-    BOOL _wantsFullScreenLayout;
-    NSString *_title;
-    CGSize _contentSizeForViewInPopover;
-    BOOL _modalInPopover;
     UINavigationItem *_navigationItem;
     NSArray *_toolbarItems;
     UIModalPresentationStyle _modalPresentationStyle;
-    BOOL _editing;
-    BOOL _hidesBottomBarWhenPushed;
+    NSString *_title;
+    CGSize _contentSizeForViewInPopover;
     UIViewController *_parentViewController;
     UIViewController *_modalViewController;
     UISearchDisplayController *_searchDisplayController;
     UIModalTransitionStyle _modalTransitionStyle;
-
+    
+    UIViewControllerAppearState _appearState;
+    NSMutableArray *_childViewControllers;
+    NSBundle *_nibBundle;
+    NSString *_nibName;
+    
+    struct {
+        BOOL wantsFullScreenLayout : 1;
+        BOOL modalInPopover : 1;
+        BOOL editing : 1;
+        BOOL hidesBottomBarWhenPushed : 1;
+        BOOL isInAnimatedVCTransition : 1;
+        BOOL viewLoadedFromControllerNib : 1;
+    } _flags;
+    
     UITabBarItem *_tabBarItem;
     UITabBarController *_tabBarController;
 }
@@ -77,6 +126,7 @@ typedef enum {
 - (void)loadView;
 - (void)viewDidLoad;
 - (void)viewDidUnload;
+- (void)viewWillUnload;
 
 - (void)viewWillAppear:(BOOL)animated;
 - (void)viewDidAppear:(BOOL)animated;
@@ -94,15 +144,46 @@ typedef enum {
 - (void)setToolbarItems:(NSArray *)toolbarItems animated:(BOOL)animated;
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated;
 - (UIBarButtonItem *)editButtonItem;	// not implemented
+- (BOOL)disablesAutomaticKeyboardDismissal;
 
++ (void)attemptRotationToDeviceOrientation;
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration;
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration;
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation;
 
+- (void)addChildViewController:(UIViewController *)childController;
 
-@property (nonatomic, readonly, copy) NSString *nibName;		// always returns nil
-@property (nonatomic, readonly, retain) NSBundle *nibBundle;	// always returns nil
+- (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers;
+- (void)didMoveToParentViewController:(UIViewController *)parent;
+- (void)removeFromParentViewController;
+- (void)transitionFromViewController:(UIViewController *)fromViewController 
+                    toViewController:(UIViewController *)toViewController 
+                            duration:(NSTimeInterval)duration 
+                             options:(UIViewAnimationOptions)options 
+                          animations:(void (^)(void))animations 
+                          completion:(void (^)(BOOL finished))completion;
+
+- (void)willMoveToParentViewController:(UIViewController *)parent;
+
+- (void)viewWillLayoutSubviews;
+- (void)viewDidLayoutSubviews;
+
+- (BOOL)isMovingToParentViewController;
+- (BOOL)isMovingFromParentViewController;
+- (BOOL)isBeingDismissed;
+- (BOOL)isBeingPresented;
+
+- (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion;
+- (void)presentViewController:(UIViewController *)viewControllerToPresent animated:(BOOL)flag completion:(void (^)(void))completion;
+
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration;
+
+- (UIView *)rotatingHeaderView;     
+- (UIView *)rotatingFooterView; 
+
+@property (nonatomic, readonly, copy) NSString *nibName;
+@property (nonatomic, readonly, retain) NSBundle *nibBundle;
 @property (nonatomic, retain) UIView *view;
 @property (nonatomic, assign) BOOL wantsFullScreenLayout;		// doesn't do anything right now
 @property (nonatomic, copy) NSString *title;
@@ -124,7 +205,8 @@ typedef enum {
 @property (nonatomic, readonly, retain) UISplitViewController *splitViewController;
 @property (nonatomic, readonly, retain) UISearchDisplayController *searchDisplayController; // stub
 
-// stubs
+@property (nonatomic, readonly) NSArray *childViewControllers;
+
 @property (nonatomic, retain) UITabBarItem *tabBarItem;
 @property (nonatomic, readonly, retain) UITabBarController *tabBarController;
 

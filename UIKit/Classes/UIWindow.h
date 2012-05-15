@@ -28,6 +28,7 @@
  */
 
 #import "UIView.h"
+#import "MAZeroingWeakRef.h"
 
 typedef CGFloat UIWindowLevel;
 extern const UIWindowLevel UIWindowLevelNormal;
@@ -60,7 +61,7 @@ extern NSString *const UIKeyboardBoundsUserInfoKey;
 @interface UIWindow : UIView {
 @private
     UIScreen *_screen;
-    UIResponder *_firstResponder;
+    weak(UIResponder *) *_firstResponderWR;
     NSUndoManager *_undoManager;
     UIViewController *_rootViewController;
 }
@@ -80,5 +81,6 @@ extern NSString *const UIKeyboardBoundsUserInfoKey;
 @property (nonatomic, retain) UIScreen *screen;
 @property (nonatomic, assign) UIWindowLevel windowLevel;
 @property (nonatomic,retain) UIViewController *rootViewController;
+@property (nonatomic, retain) weak(UIResponder *) *firstResponderWR;
 
 @end

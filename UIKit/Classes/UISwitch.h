@@ -28,14 +28,21 @@
  */
 
 #import "UIControl.h"
+#import "UIImage.h"
 
 @interface UISwitch : UIControl {
     BOOL _on;
+    
+    //private:
+    UIImage *_offImage;
+    UIImage *_onImage;
 }
 
 - (id)initWithFrame:(CGRect)frame;
 - (void)setOn:(BOOL)on animated:(BOOL)animated;
 
 @property(nonatomic, getter=isOn) BOOL on;
+@property(nonatomic, retain) UIImage *offImage;
+@property(nonatomic, retain) UIImage *onImage;
 
 @end

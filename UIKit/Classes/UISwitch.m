@@ -28,21 +28,86 @@
  */
 
 #import "UISwitch.h"
+#import "UIColor.h"
+#import "UIGraphics.h"
+#import "UITouch.h"
+#import "UIImage+UIPrivate.h"
 
 @implementation UISwitch
 @synthesize on = _on;
+@synthesize onImage = _onImage;
+@synthesize offImage = _offImage;
+
+#pragma mark UIView
 
 - (id)initWithFrame:(CGRect)frame
 {
     if ((self=[super initWithFrame:frame])) {
         // UIView's initWithFrame: calls setFrame:, so we'll enforce UISwitch's size invariant down there (see below)
+        
+        self.backgroundColor = [UIColor clearColor];
+        
+        self.onImage  = [UIImage _switchOnImage];
+        self.offImage = [UIImage _switchOffImage];
+        self.on = NO;
     }
     return self;
 }
 
+- (void) dealloc
+{
+    [_onImage release];
+    [_offImage release];
+    
+    [super dealloc];
+}
+
+- (void)drawRect:(CGRect)frame
+{
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+    
+    
+    CGRect rect = frame;
+    if (self.on)
+        [self.onImage drawInRect:rect];
+    else
+        [self.offImage drawInRect:rect];
+
+    
+    CGContextRestoreGState(context);
+}
+
+
+#pragma mark UIResponder
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    CGFloat x = [touch locationInView:self].x;
+    CGFloat y = [touch locationInView:self].y;
+    
+    // Ignore touches that don't matter
+    if (x < 0 || x > self.frame.size.width
+        || y < 0 || y > self.frame.size.height) {
+        return;
+    }
+    
+    self.on = !self.on;
+    [self setNeedsDisplay];
+    [self sendActionsForControlEvents:UIControlEventValueChanged];
+}
+
+#pragma mark UISwitch
+
 - (void)setOn:(BOOL)on animated:(BOOL)animated
 {
     _on = on;
+    [self setNeedsDisplay];
 }
 
 - (void)setOn:(BOOL)on
@@ -52,7 +117,7 @@
 
 - (void)setFrame:(CGRect)frame
 {
-    frame.size = CGSizeMake(94, 27);
+    frame.size = CGSizeMake(79, 27);
     [super setFrame:frame];
 }
 
