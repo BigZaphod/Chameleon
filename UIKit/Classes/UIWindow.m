@@ -69,6 +69,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 
 @implementation UIWindow
 @synthesize screen=_screen, rootViewController=_rootViewController;
+@synthesize firstResponderWR = _firstResponderWR;
 
 - (id)initWithFrame:(CGRect)theFrame
 {
@@ -95,18 +96,21 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
     _screen = nil;
     _undoManager = nil;
     _rootViewController = nil;
+    self.firstResponderWR = nil;
     
     [super dealloc];
 }
 
 - (UIResponder *)_firstResponder
 {
-    return _firstResponder;
+    return [self.firstResponderWR target];
 }
 
 - (void)_setFirstResponder:(UIResponder *)newFirstResponder
 {
-    _firstResponder = newFirstResponder;
+    MAZeroingWeakRef *zwr = [[MAZeroingWeakRef alloc] initWithTarget:newFirstResponder]; 
+    self.firstResponderWR = zwr;
+    [zwr release];
 }
 
 - (NSUndoManager *)undoManager
