@@ -32,6 +32,7 @@
 #import "UITouch+UIPrivate.h"
 #import "UIAction.h"
 #import "UIApplication.h"
+#import "UIView.h"
 
 @implementation UIGestureRecognizer
 @synthesize delegate=_delegate, delaysTouchesBegan=_delaysTouchesBegan, delaysTouchesEnded=_delaysTouchesEnded, cancelsTouchesInView=_cancelsTouchesInView;
@@ -138,6 +139,8 @@
 
 - (void)setState:(UIGestureRecognizerState)state
 {
+    if (_state == state) return;
+    
     // the docs didn't say explicitly if these state transitions were verified, but I suspect they are. if anything, a check like this
     // should help debug things. it also helps me better understand the whole thing, so it's not a total waste of time :)
 
@@ -193,6 +196,7 @@
 - (void)reset
 {
     _state = UIGestureRecognizerStatePossible;
+    _recognizing = NO;
     [_trackingTouches removeAllObjects];
 }
 
@@ -228,7 +232,8 @@
 
 - (BOOL)_shouldAttemptToRecognize
 {
-    return (self.enabled &&
+    return (_recognizing && 
+            self.enabled &&
             self.state != UIGestureRecognizerStateFailed &&
             self.state != UIGestureRecognizerStateCancelled && 
             self.state != UIGestureRecognizerStateEnded);
@@ -236,36 +241,46 @@
 
 - (void)_recognizeTouches:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if ([self _shouldAttemptToRecognize]) {
-        [_trackingTouches setArray:[touches allObjects]];
-
-        for (UITouch *touch in _trackingTouches) {
-            switch (touch.phase) {
-                case UITouchPhaseBegan:
-                case _UITouchPhaseGestureBegan:
-                case _UITouchPhaseDiscreteGesture:
+    [_trackingTouches setArray:[touches allObjects]];
+    
+    for (UITouch *touch in _trackingTouches) {
+        switch (touch.phase) {
+            case UITouchPhaseBegan:
+            case _UITouchPhaseGestureBegan:
+            case _UITouchPhaseDiscreteGesture:
+                _recognizing = YES;
+                if ([self _shouldAttemptToRecognize]) {
                     [self touchesBegan:touches withEvent:event];
-                    break;
-                    
-                case UITouchPhaseMoved:
-                case _UITouchPhaseGestureChanged:
+                }
+                break;
+            case UITouchPhaseMoved:
+            case _UITouchPhaseGestureChanged:
+                if ([self _shouldAttemptToRecognize]) {
                     [self touchesMoved:touches withEvent:event];
-                    break;
-                    
-                case UITouchPhaseEnded:
-                case _UITouchPhaseGestureEnded:
+                }
+                break;
+            case UITouchPhaseEnded:
+            case _UITouchPhaseGestureEnded:
+                if ([self _shouldAttemptToRecognize]) {
                     [self touchesEnded:touches withEvent:event];
-                    break;
-                    
-                case UITouchPhaseCancelled:
+                }
+                break;
+            case UITouchPhaseCancelled:
+                if ([self _shouldAttemptToRecognize]) {
                     [self touchesCancelled:touches withEvent:event];
-                    break;
-                    
-                default:
-                    break;
-            }
+                }
+                break;
+            default:
+                break;
         }
     }
+    
+    // Cancel touches if the gesture was recognized and required
+    if (self.state == UIGestureRecognizerStateRecognized && self.cancelsTouchesInView) {
+        for (UITouch* touch in touches) {
+            [touch _setTouchPhaseCancelled];
+        }
+    }    
 }
 
 - (NSString *)description

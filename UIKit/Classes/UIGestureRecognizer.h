@@ -57,6 +57,7 @@ typedef enum {
     BOOL _enabled;
     UIGestureRecognizerState _state;
     UIView *_view;
+    BOOL _recognizing;
     NSMutableArray *_registeredActions;
     NSMutableArray *_trackingTouches;
     
