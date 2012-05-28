@@ -313,11 +313,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 {
     if (event.type == UIEventTypeTouches) {
         NSSet *touches = [event touchesForWindow:self];
-        NSMutableSet *gestureRecognizers = [NSMutableSet setWithCapacity:0];
-
-        for (UITouch *touch in touches) {
-            [gestureRecognizers addObjectsFromArray:touch.gestureRecognizers];
-        }
+        NSArray *gestureRecognizers = ((UITouch*)[touches anyObject]).gestureRecognizers;
 
         for (UIGestureRecognizer *recognizer in gestureRecognizers) {
             [recognizer _recognizeTouches:touches withEvent:event];
