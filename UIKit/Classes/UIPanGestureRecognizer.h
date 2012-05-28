@@ -41,6 +41,7 @@
 @interface UIPanGestureRecognizer : UIGestureRecognizer {
     NSUInteger _maximumNumberOfTouches;
     NSUInteger _minimumNumberOfTouches;
+    CGPoint _previousLocation;
     CGPoint _translation;
     CGPoint _velocity;
     NSTimeInterval _lastMovementTime;
