@@ -63,6 +63,7 @@ extern NSString *const UIKeyboardBoundsUserInfoKey;
     UIResponder *_firstResponder;
     NSUndoManager *_undoManager;
     UIViewController *_rootViewController;
+    UIGestureRecognizer* _continuousGestureRecognizer;
 }
 
 - (CGPoint)convertPoint:(CGPoint)toConvert toWindow:(UIWindow *)toWindow;

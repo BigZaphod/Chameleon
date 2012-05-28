@@ -313,10 +313,27 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 {
     if (event.type == UIEventTypeTouches) {
         NSSet *touches = [event touchesForWindow:self];
+        
+        if (_continuousGestureRecognizer) {
+            [_continuousGestureRecognizer _recognizeTouches:touches withEvent:event];
+            UIGestureRecognizerState state = _continuousGestureRecognizer.state;
+            if (state == UIGestureRecognizerStateEnded || state == UIGestureRecognizerStateFailed || state == UIGestureRecognizerStateCancelled) {
+                _continuousGestureRecognizer = nil;
+            } else {
+                return;
+            }
+        }
+        
         NSArray *gestureRecognizers = ((UITouch*)[touches anyObject]).gestureRecognizers;
 
         for (UIGestureRecognizer *recognizer in gestureRecognizers) {
             [recognizer _recognizeTouches:touches withEvent:event];
+            
+            // Continuous gesture detected
+            if (recognizer.state == UIGestureRecognizerStateBegan) { 
+                _continuousGestureRecognizer = recognizer;
+                return; // Don't send touches to other gesture recognizes or the view
+            }
         }
 
         for (UITouch *touch in touches) {
