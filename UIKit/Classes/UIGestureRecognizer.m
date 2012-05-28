@@ -139,8 +139,6 @@
 
 - (void)setState:(UIGestureRecognizerState)state
 {
-    if (_state == state) return;
-    
     // the docs didn't say explicitly if these state transitions were verified, but I suspect they are. if anything, a check like this
     // should help debug things. it also helps me better understand the whole thing, so it's not a total waste of time :)
 
