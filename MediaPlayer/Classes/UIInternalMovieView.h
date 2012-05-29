@@ -13,6 +13,8 @@
 
 
 @interface UIInternalMovieView : UIView {
+    QTMovie* _movie;
+    MPMovieScalingMode _scalingMode;
 @private
     QTMovieLayer *movieLayer;
 }

@@ -77,6 +77,16 @@ extern NSString *const MPMovieDurationAvailableNotification;
 
 @interface MPMoviePlayerController : NSObject <MPMediaPlayback> 
 {
+    UIView *_view;
+    MPMovieLoadState _loadState;
+    NSURL *_contentURL;
+    MPMovieControlStyle _controlStyle;
+    MPMovieSourceType _movieSourceType;
+    UIView *backgroundView;
+    MPMoviePlaybackState _playbackState;
+    MPMovieRepeatMode _repeatMode;
+    BOOL shouldAutoplay;
+    MPMovieScalingMode _scalingMode;
 @private
     UIInternalMovieView *movieView;
     
