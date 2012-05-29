@@ -54,6 +54,8 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(UIEdgeInsets insets1, UIEdgeIns
 
 extern const UIEdgeInsets UIEdgeInsetsZero;
 
+CGPoint CGPointFromString(NSString *string);
+
 NSString *NSStringFromCGPoint(CGPoint p);
 NSString *NSStringFromCGRect(CGRect r);
 NSString *NSStringFromCGSize(CGSize s);

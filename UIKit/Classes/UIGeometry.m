@@ -31,6 +31,10 @@
 
 const UIEdgeInsets UIEdgeInsetsZero = {0,0,0,0};
 
+CGPoint CGPointFromString(NSString *string) {
+    return NSPointToCGPoint(NSPointFromString(string));
+}
+
 NSString *NSStringFromCGPoint(CGPoint p)
 {
     return NSStringFromPoint(NSPointFromCGPoint(p));
