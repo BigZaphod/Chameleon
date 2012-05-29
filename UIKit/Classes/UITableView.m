@@ -635,26 +635,46 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 - (void)_scrollRectToVisible:(CGRect)aRect atScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated
 {
     if (!CGRectIsNull(aRect) && aRect.size.height > 0) {
+        if (UITableViewScrollPositionNone == scrollPosition) {
+            CGRect visibleRect = {
+                .origin = self.contentOffset,
+                .size = self.bounds.size
+            };
+            if (CGRectContainsRect(aRect, visibleRect)) {
+                // Fully contained... Do nothing.
+            } else if (!CGRectIntersectsRect(aRect, visibleRect)) {
+                if (aRect.origin.y > visibleRect.origin.y) {
+                    scrollPosition = UITableViewScrollPositionBottom;
+                } else {
+                    scrollPosition = UITableViewScrollPositionTop;
+                }
+            }
+        }
+
         // adjust the rect based on the desired scroll position setting
         switch (scrollPosition) {
-            case UITableViewScrollPositionNone:
-                break;
-                
-            case UITableViewScrollPositionTop:
+            case UITableViewScrollPositionTop: {
                 aRect.size.height = self.bounds.size.height;
                 break;
+            }
 
-            case UITableViewScrollPositionMiddle:
+            case UITableViewScrollPositionMiddle: {
                 aRect.origin.y -= (self.bounds.size.height / 2.f) - aRect.size.height;
                 aRect.size.height = self.bounds.size.height;
                 break;
+            }
 
-            case UITableViewScrollPositionBottom:
+            case UITableViewScrollPositionBottom: {
                 aRect.origin.y -= self.bounds.size.height - aRect.size.height;
                 aRect.size.height = self.bounds.size.height;
                 break;
+            }
+                
+            case UITableViewScrollPositionNone: {
+                return;
+            }
         }
-        
+
         [self scrollRectToVisible:aRect animated:animated];
     }
 }

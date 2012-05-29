@@ -411,13 +411,28 @@ static const CGFloat ToolbarHeight = 28;
     return self.topViewController.contentSizeForViewInPopover;
 }
 
-- (void)setNavigationBarHidden:(BOOL)navigationBarHidden animated:(BOOL)animated; // doesn't yet animate
+- (void)setNavigationBarHidden:(BOOL)navigationBarHidden animated:(BOOL)animated
 {
-    _navigationBarHidden = navigationBarHidden;
-    
-    // this shouldn't just hide it, but should animate it out of view (if animated==YES) and then adjust the layout
-    // so the main view fills the whole space, etc.
-    _navigationBar.hidden = navigationBarHidden;
+    if (_navigationBarHidden != navigationBarHidden) {
+        _navigationBarHidden = navigationBarHidden;
+        [UIView animateWithDuration:animated ? kAnimationDuration : 0 
+            animations:^{
+                UIView* userView = [self.view.subviews objectAtIndex:0];
+                
+                CGRect oldNavBarFrame = _navigationBar.frame;
+                CGRect oldUserViewFrame = userView.frame;
+                CGFloat yDelta = navigationBarHidden ? -oldNavBarFrame.size.height : oldNavBarFrame.size.height;
+
+                _navigationBar.frame = CGRectOffset(oldNavBarFrame, 0, yDelta);
+                userView.frame = CGRectMake(
+                    oldUserViewFrame.origin.x,
+                    oldUserViewFrame.origin.y + yDelta,
+                    oldUserViewFrame.size.width,
+                    oldUserViewFrame.size.height - yDelta
+                );
+            }
+        ];
+    }
 }
 
 - (void)setNavigationBarHidden:(BOOL)navigationBarHidden
