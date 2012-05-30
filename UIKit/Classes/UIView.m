@@ -944,7 +944,8 @@ static BOOL _animationsEnabled = YES;
     
     // NOTE: As of iOS 5 this is only supposed to block interaction events for the views being animated, not the whole app.
     if (ignoreInteractionEvents) {
-        [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+        // [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+        // Blocking interaction events for the whole app is not the expected behavior
     }
     
     UIViewBlockAnimationDelegate *delegate = [[UIViewBlockAnimationDelegate alloc] init];

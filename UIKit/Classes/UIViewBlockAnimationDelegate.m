@@ -46,7 +46,8 @@
     }
     
     if (_ignoreInteractionEvents) {
-        [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+        // Blocking interaction events for the whole app is not the expected behavior. See UIView.
+        // [[UIApplication sharedApplication] endIgnoringInteractionEvents];
     }	
 }
 
