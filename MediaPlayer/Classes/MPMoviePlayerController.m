@@ -246,6 +246,7 @@ NSString *const MPMovieDurationAvailableNotification = @"MPMovieDurationAvailabl
 - (void)stop
 {
     [movie stop];
+    [movie gotoBeginning];
     _playbackState = MPMoviePlaybackStateStopped;
 }
 
