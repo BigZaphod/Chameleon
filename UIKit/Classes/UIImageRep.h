@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, The Iconfactory. All rights reserved.
+ * Copyright (c) 2012, The Iconfactory. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,12 +27,29 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIImage.h"
+#import <Foundation/Foundation.h>
 
-@class NSImage;
+@interface UIImageRep : NSObject {
+    CGFloat _scale;
+    CGImageSourceRef _imageSource;
+    NSInteger _imageSourceIndex;
+    CGImageRef _image;
+}
 
-@interface UIImage (AppKitIntegration)
-+ (id)imageWithNSImage:(NSImage *)theImage;
-- (id)initWithNSImage:(NSImage *)theImage;
-- (NSImage *)NSImage;
++ (NSArray *)imageRepsWithContentsOfFile:(NSString *)file;
+
+- (id)initWithCGImageSource:(CGImageSourceRef)source imageIndex:(NSUInteger)index scale:(CGFloat)scale;
+- (id)initWithCGImage:(CGImageRef)image scale:(CGFloat)scale;
+- (id)initWithData:(NSData *)data;
+
+// note that the cordinates for fromRect are in the image's *scaled* coordinate system, not in raw pixels
+// so for a 100x100px image with a scale of 2, the largest valid fromRect is of size 50x50.
+- (void)drawInRect:(CGRect)rect fromRect:(CGRect)fromRect;
+
+@property (nonatomic, readonly) CGSize imageSize;
+@property (nonatomic, readonly) CGImageRef CGImage;
+@property (nonatomic, readonly, getter=isLoaded) BOOL loaded;
+@property (nonatomic, readonly) CGFloat scale;
+@property (nonatomic, readonly, getter=isOpaque) BOOL opaque;
+
 @end
