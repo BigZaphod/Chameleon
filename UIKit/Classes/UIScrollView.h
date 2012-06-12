@@ -64,7 +64,6 @@ extern const float UIScrollViewDecelerationRateFast;
     UIEdgeInsets _scrollIndicatorInsets;
     UIScroller *_verticalScroller;
     UIScroller *_horizontalScroller;
-    BOOL _scrollEnabled;
     BOOL _showsVerticalScrollIndicator;
     BOOL _showsHorizontalScrollIndicator;
     float _maximumZoomScale;
