@@ -297,6 +297,8 @@
 		78D533DD133A9434006F17CA /* UISearchDisplayController.h in Headers */ = {isa = PBXBuildFile; fileRef = 78D533DB133A9434006F17CA /* UISearchDisplayController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		78D533DE133A9434006F17CA /* UISearchDisplayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D533DC133A9434006F17CA /* UISearchDisplayController.m */; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
+		FAEF437F163193E3008AA63E /* UINib.h in Headers */ = {isa = PBXBuildFile; fileRef = FAEF437D163193E3008AA63E /* UINib.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAEF4380163193E3008AA63E /* UINib.m in Sources */ = {isa = PBXBuildFile; fileRef = FAEF437E163193E3008AA63E /* UINib.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -595,6 +597,8 @@
 		78D533DC133A9434006F17CA /* UISearchDisplayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISearchDisplayController.m; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* UIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAEF437D163193E3008AA63E /* UINib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINib.h; sourceTree = "<group>"; };
+		FAEF437E163193E3008AA63E /* UINib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINib.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -859,6 +863,8 @@
 				1489856712EE2CFE003D4751 /* UIWebView.m */,
 				1489856812EE2CFE003D4751 /* UIWindow.h */,
 				1489856912EE2CFE003D4751 /* UIWindow.m */,
+				FAEF437D163193E3008AA63E /* UINib.h */,
+				FAEF437E163193E3008AA63E /* UINib.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1122,6 +1128,7 @@
 				14711394156FC83F00251B2E /* UIImageRep.h in Headers */,
 				145BE31D15754F2400C41D70 /* UIColorRep.h in Headers */,
 				145BE3211575523000C41D70 /* UIColor+UIPrivate.h in Headers */,
+				FAEF437F163193E3008AA63E /* UINib.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1333,6 +1340,7 @@
 				14711395156FC83F00251B2E /* UIImageRep.m in Sources */,
 				14E20663156FE88D0040349D /* UIImageAppKitIntegration.m in Sources */,
 				145BE31E15754F2400C41D70 /* UIColorRep.m in Sources */,
+				FAEF4380163193E3008AA63E /* UINib.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

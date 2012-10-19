@@ -122,6 +122,7 @@ typedef NSUInteger UIViewAnimationOptions;
 + (Class)layerClass;
 
 - (id)initWithFrame:(CGRect)frame;
+- (id)initwithCoder:(NSCoder *)coder;
 - (void)addSubview:(UIView *)subview;
 - (void)insertSubview:(UIView *)subview atIndex:(NSInteger)index;
 - (void)insertSubview:(UIView *)subview belowSubview:(UIView *)below;
