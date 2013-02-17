@@ -131,12 +131,32 @@ NSMutableDictionary *imageCache = nil;
 
 + (UIImage *)_buttonBarSystemItemAdd
 {
-    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> add.png" leftCapWidth:0 topCapHeight:0];
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> new.png" leftCapWidth:0 topCapHeight:0];
 }
 
 + (UIImage *)_buttonBarSystemItemReply
 {
     return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> reply.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemPlay
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> play.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemPause
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> pause.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemRefresh
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> refresh.png" leftCapWidth:0 topCapHeight:0];
+}
+
++ (UIImage *)_buttonBarSystemItemAction
+{
+    return [self _frameworkImageWithName:@"<UIBarButtonSystemItem> action.png" leftCapWidth:0 topCapHeight:0];
 }
 
 + (UIImage *)_tabBarBackgroundImage

@@ -62,7 +62,24 @@ static UIEdgeInsets UIToolbarButtonInset = {0,4,0,4};
                     image = [UIImage _buttonBarSystemItemReply];
                     break;
                     
+                case UIBarButtonSystemItemPlay:
+                    image = [UIImage _buttonBarSystemItemPlay];
+                    break;
+                    
+                case UIBarButtonSystemItemPause:
+                    image = [UIImage _buttonBarSystemItemPause];
+                    break;
+                    
+                case UIBarButtonSystemItemRefresh:
+                    image = [UIImage _buttonBarSystemItemRefresh];
+                    break;
+                    
+                case UIBarButtonSystemItemAction:
+                    image = [UIImage _buttonBarSystemItemAction];
+                    break;
+                    
                 default:
+                    NSLog(@"Unsupported toolbar button system item image: %d", item->_systemItem);
                     break;
             }
         } else {
