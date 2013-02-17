@@ -132,6 +132,11 @@
     }
 }
 
+- (void)setTranslucent:(BOOL)translucent {
+    _translucent = translucent;
+    self.opaque = !translucent;
+}
+
 /*
 - (void)_updateItemViews
 {
@@ -277,11 +282,17 @@
     const CGRect bounds = self.bounds;
     
     UIColor *color = _tintColor ?: [UIColor colorWithRed:21/255.f green:21/255.f blue:25/255.f alpha:1];
-
+    if(self.translucent)
+        color = [color colorWithAlphaComponent:0.9];
+    
     [color setFill];
     UIRectFill(bounds);
     
-    [[UIColor blackColor] setFill];
+    color = [UIColor blackColor];
+    if(self.translucent)
+        color = [color colorWithAlphaComponent:0.9];
+
+    [color setFill];
     UIRectFill(CGRectMake(0,0,bounds.size.width,1));
 }
 

@@ -48,6 +48,10 @@
 + (UIImage *)_windowResizeGrabberImage;
 + (UIImage *)_buttonBarSystemItemAdd;
 + (UIImage *)_buttonBarSystemItemReply;
++ (UIImage *)_buttonBarSystemItemPlay;
++ (UIImage *)_buttonBarSystemItemPause;
++ (UIImage *)_buttonBarSystemItemRefresh;
++ (UIImage *)_buttonBarSystemItemAction;
 + (UIImage *)_tabBarBackgroundImage;
 + (UIImage *)_tabBarItemImage;
 
