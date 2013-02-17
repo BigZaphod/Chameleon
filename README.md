@@ -42,9 +42,13 @@ Generally the interfaces to the classes are the same as Apple's documented inter
 
 Right now there's hardly any demos or examples or documentation. There's a simple app called BigApple in the Examples folder which might be enough to get started. It also shows how the UIKit Xcode project can be referenced from another Xcode project and setup as a dependency so that it is built automatically when the BigApple project is built.
 
+The IOSandMac_NoXib example also shows how the same codebase and the same xcode project can be shared -- ios (iphone and ipad) using the apple UIKit, the osx variant using Chameleon.
+It adds a NSStatusItem to emphasize that Cocoa and UIKit can be combined.
+
 ## Authors
 
 The Chameleon project was created by Sean Heber (Twitter: [@BigZaphod](http://twitter.com/BigZaphod/)) of The Iconfactory and he wrote nearly all of the initial version over several months. Craig Hockenberry (Twitter: [@chockenberry](http://twitter.com/chockenberry/)) was the first user/tester of Chameleon and found many holes and edge cases in the first implementation.
+Dominik Pich (Twitter: [@daijdjan](http://twitter.com/daijdjan/)) contributed the IOSandMac_NoXib in 2013 .
 
 ## License
 

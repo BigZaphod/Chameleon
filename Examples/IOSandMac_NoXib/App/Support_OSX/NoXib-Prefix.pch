@@ -1,0 +1,8 @@
+//
+// Prefix header for all source files of the 'IOSandMac_NoXib' target in the 'IOSandMac_NoXib' project
+//
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Cocoa/Cocoa.h>
+#endif
