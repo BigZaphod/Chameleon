@@ -79,7 +79,7 @@
 {
     BOOL r = NO;
     @synchronized (self) {
-        r = _isPaused? [_player resume] : [_player play];
+        r = _isPaused? [(NSSound *)_player resume] : [(NSSound *)_player play];
         _isPaused = NO;
     }
     return r;
