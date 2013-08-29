@@ -31,6 +31,15 @@
 #import "UIViewAdapter.h"
 #import <WebKit/WebKit.h>
 
+@interface WebPreferences (WebPreferencesPrivate)
+- (void)_setLocalStorageDatabasePath:(NSString *)path;
+- (void) setLocalStorageEnabled: (BOOL) localStorageEnabled;
+- (void) setDatabasesEnabled:(BOOL)databasesEnabled;
+- (void) setDeveloperExtrasEnabled:(BOOL)developerExtrasEnabled;
+- (void) setWebGLEnabled:(BOOL)webGLEnabled;
+- (void) setOfflineWebApplicationCacheEnabled:(BOOL)offlineWebApplicationCacheEnabled;
+@end
+
 @implementation UIWebView
 @synthesize request=_request, delegate=_delegate, dataDetectorTypes=_dataDetectorTypes, scalesPageToFit=_scalesPageToFit;
 
@@ -45,6 +54,12 @@
         [_webView setFrameLoadDelegate:self];
         [_webView setUIDelegate:self];
         [_webView setDrawsBackground:NO];
+        
+        WebPreferences *preferences = [WebPreferences standardPreferences];
+        [preferences setOfflineWebApplicationCacheEnabled:YES];
+        [preferences setDeveloperExtrasEnabled:YES];
+        
+        [_webView setPreferences:preferences];
 
         _webViewAdapter = [[UIViewAdapter alloc] initWithFrame:self.bounds];
         _webViewAdapter.NSView = _webView;
