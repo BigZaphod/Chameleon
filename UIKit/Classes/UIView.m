@@ -646,7 +646,7 @@ static BOOL _animationsEnabled = YES;
         } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth)) {
             frame.size.width = floorf(frame.size.width + (frame.size.width / (oldSize.width - frame.origin.x) * delta.width));
         } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin)) {
-            frame.origin.x = floorf(frame.origin.x + (delta.width / 2.f));
+            frame.origin.x = /*floorf*/(frame.origin.x + (delta.width / 2.f));
         } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleWidth)) {
             frame.size.width = floorf(frame.size.width + delta.width);
         } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleLeftMargin)) {
