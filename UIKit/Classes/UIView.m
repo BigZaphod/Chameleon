@@ -88,6 +88,8 @@ static BOOL _animationsEnabled = YES;
         _subviews = [[NSMutableSet alloc] init];
         _gestureRecognizers = [[NSMutableSet alloc] init];
 
+        _frame = CGRectZero;
+        
         _layer = [[[isa layerClass] alloc] init];
         _layer.delegate = self;
         _layer.layoutManager = [UIViewLayoutManager layoutManager];
@@ -618,41 +620,41 @@ static BOOL _animationsEnabled = YES;
          */
 
         if (hasAutoresizingFor(UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin)) {
-            frame.origin.y = floorf(frame.origin.y + (frame.origin.y / oldSize.height * delta.height));
-            frame.size.height = floorf(frame.size.height + (frame.size.height / oldSize.height * delta.height));
+            frame.origin.y += frame.origin.y / oldSize.height * delta.height;
+            frame.size.height += frame.size.height / oldSize.height * delta.height;
         } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleHeight)) {
             const CGFloat t = frame.origin.y + frame.size.height;
-            frame.origin.y = floorf(frame.origin.y + (frame.origin.y / t * delta.height));
-            frame.size.height = floorf(frame.size.height + (frame.size.height / t * delta.height));
+            frame.origin.y += frame.origin.y / t * delta.height;
+            frame.size.height += frame.size.height / t * delta.height;
         } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleHeight)) {
-            frame.size.height = floorf(frame.size.height + (frame.size.height / (oldSize.height - frame.origin.y) * delta.height));
+            frame.size.height += frame.size.height / (oldSize.height - frame.origin.y) * delta.height;
         } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin)) {
-            frame.origin.y = floorf(frame.origin.y + (delta.height / 2.f));
+            frame.origin.y += delta.height / 2.f;
         } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleHeight)) {
-            frame.size.height = floorf(frame.size.height + delta.height);
+            frame.size.height += delta.height;
         } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleTopMargin)) {
-            frame.origin.y = floorf(frame.origin.y + delta.height);
+            frame.origin.y += delta.height;
         } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleBottomMargin)) {
-            frame.origin.y = floorf(frame.origin.y);
+            // nothing required
         }
 
         if (hasAutoresizingFor(UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin)) {
-            frame.origin.x = floorf(frame.origin.x + (frame.origin.x / oldSize.width * delta.width));
-            frame.size.width = floorf(frame.size.width + (frame.size.width / oldSize.width * delta.width));
+            frame.origin.x += frame.origin.x / oldSize.width * delta.width;
+            frame.size.width += frame.size.width / oldSize.width * delta.width;
         } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth)) {
             const CGFloat t = frame.origin.x + frame.size.width;
-            frame.origin.x = floorf(frame.origin.x + (frame.origin.x / t * delta.width));
-            frame.size.width = floorf(frame.size.width + (frame.size.width / t * delta.width));
+            frame.origin.x += frame.origin.x / t * delta.width;
+            frame.size.width += frame.size.width / t * delta.width;
         } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth)) {
-            frame.size.width = floorf(frame.size.width + (frame.size.width / (oldSize.width - frame.origin.x) * delta.width));
+            frame.size.width += frame.size.width / (oldSize.width - frame.origin.x) * delta.width;
         } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin)) {
-            frame.origin.x = floorf(frame.origin.x + (delta.width / 2.f));
+            frame.origin.x += delta.width / 2.f;
         } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleWidth)) {
-            frame.size.width = floorf(frame.size.width + delta.width);
+            frame.size.width += delta.width;
         } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleLeftMargin)) {
-            frame.origin.x = floorf(frame.origin.x + delta.width);
+            frame.origin.x += delta.width;
         } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleRightMargin)) {
-            frame.origin.x = floorf(frame.origin.x);
+            // nothing required
         }
 
         self.frame = frame;
@@ -684,14 +686,17 @@ static BOOL _animationsEnabled = YES;
 
 - (CGRect)frame
 {
-    return _layer.frame;
+    return _frame;
 }
 
 - (void)setFrame:(CGRect)newFrame
 {
-    if (!CGRectEqualToRect(newFrame,_layer.frame)) {
+    _frame = newFrame;
+
+    if (!CGRectEqualToRect(CGRectIntegral(newFrame),CGRectIntegral(_layer.frame))) {
         CGRect oldBounds = _layer.bounds;
-        _layer.frame = newFrame;
+        CGRect roundedFrame = CGRectIntegral(_frame);
+        _layer.frame = roundedFrame;
         [self _boundsDidChangeFrom:oldBounds to:_layer.bounds];
         [[NSNotificationCenter defaultCenter] postNotificationName:UIViewFrameDidChangeNotification object:self];
     }
