@@ -88,6 +88,8 @@ static BOOL _animationsEnabled = YES;
         _subviews = [[NSMutableSet alloc] init];
         _gestureRecognizers = [[NSMutableSet alloc] init];
 
+        _frame = CGRectZero;
+        
         _layer = [[[isa layerClass] alloc] init];
         _layer.delegate = self;
         _layer.layoutManager = [UIViewLayoutManager layoutManager];
@@ -684,14 +686,17 @@ static BOOL _animationsEnabled = YES;
 
 - (CGRect)frame
 {
-    return _layer.frame;
+    return _frame;
 }
 
 - (void)setFrame:(CGRect)newFrame
 {
-    if (!CGRectEqualToRect(newFrame,_layer.frame)) {
+    _frame = newFrame;
+
+    if (!CGRectEqualToRect(CGRectIntegral(newFrame),CGRectIntegral(_layer.frame))) {
         CGRect oldBounds = _layer.bounds;
-        _layer.frame = newFrame;
+        CGRect roundedFrame = CGRectIntegral(_frame);
+        _layer.frame = roundedFrame;
         [self _boundsDidChangeFrom:oldBounds to:_layer.bounds];
         [[NSNotificationCenter defaultCenter] postNotificationName:UIViewFrameDidChangeNotification object:self];
     }

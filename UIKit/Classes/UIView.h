@@ -107,6 +107,7 @@ typedef NSUInteger UIViewAnimationOptions;
     BOOL _autoresizesSubviews;
     BOOL _userInteractionEnabled;
     CALayer *_layer;
+    CGRect _frame;
     NSInteger _tag;
     UIViewContentMode _contentMode;
     UIColor *_backgroundColor;
