@@ -183,6 +183,11 @@ static BOOL TouchIsActive(UITouch *touch)
     return YES;
 }
 
+- (void)setStatusBarHidden:(BOOL)statusBarHidden
+{
+    // do nothing
+}
+
 - (CGRect)statusBarFrame
 {
     return CGRectZero;

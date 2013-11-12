@@ -64,6 +64,16 @@ static UIDevice *theDevice;
     return UIDeviceOrientationPortrait;
 }
 
+- (UIDeviceBatteryState)batteryState
+{
+    return UIDeviceBatteryStateUnknown;
+}
+
+- (float)batteryLevel
+{
+    return -1.f;
+}
+
 - (BOOL)isMultitaskingSupported
 {
     return YES;

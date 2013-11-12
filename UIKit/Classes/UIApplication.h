@@ -64,6 +64,21 @@ typedef enum {
     UIInterfaceOrientationLandscapeRight     = UIDeviceOrientationLandscapeLeft
 } UIInterfaceOrientation;
 
+typedef enum : NSUInteger {
+    UIInterfaceOrientationMaskPortrait = (1 << UIInterfaceOrientationPortrait),
+    UIInterfaceOrientationMaskLandscapeLeft = (1 << UIInterfaceOrientationLandscapeLeft),
+    UIInterfaceOrientationMaskLandscapeRight = (1 << UIInterfaceOrientationLandscapeRight),
+    UIInterfaceOrientationMaskPortraitUpsideDown = (1 << UIInterfaceOrientationPortraitUpsideDown),
+    UIInterfaceOrientationMaskLandscape =
+    (UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight),
+    UIInterfaceOrientationMaskAll =
+    (UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft |
+     UIInterfaceOrientationMaskLandscapeRight | UIInterfaceOrientationMaskPortraitUpsideDown),
+    UIInterfaceOrientationMaskAllButUpsideDown =
+    (UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft |
+     UIInterfaceOrientationMaskLandscapeRight),
+} UIInterfaceOrientationMask;
+
 #define UIInterfaceOrientationIsPortrait(orientation) \
 ((orientation) == UIInterfaceOrientationPortrait || \
 (orientation) == UIInterfaceOrientationPortraitUpsideDown)
@@ -153,7 +168,7 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
 
 @property (nonatomic, readonly) UIWindow *keyWindow;
 @property (nonatomic, readonly) NSArray *windows;
-@property (nonatomic, getter=isStatusBarHidden, readonly) BOOL statusBarHidden;
+@property (nonatomic, getter=isStatusBarHidden) BOOL statusBarHidden;
 @property (nonatomic, readonly) CGRect statusBarFrame;
 @property (nonatomic, getter=isNetworkActivityIndicatorVisible) BOOL networkActivityIndicatorVisible;	// does nothing, always returns NO
 @property (nonatomic) UIInterfaceOrientation statusBarOrientation;

@@ -105,6 +105,8 @@ typedef enum {
 @property (nonatomic, readonly, retain) NSBundle *nibBundle;	// always returns nil
 @property (nonatomic, retain) UIView *view;
 @property (nonatomic, assign) BOOL wantsFullScreenLayout;		// doesn't do anything right now
+@property (nonatomic, assign) BOOL shouldAutorotate;            // always returns NO
+@property (nonatomic, assign) NSUInteger supportedInterfaceOrientations; // always returns UIInterfaceOrientationLandscapeLeft
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, readonly) UIInterfaceOrientation interfaceOrientation;	// always returns UIInterfaceOrientationLandscapeLeft
 @property (nonatomic, readonly, retain) UINavigationItem *navigationItem;

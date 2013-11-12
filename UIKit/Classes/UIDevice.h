@@ -47,6 +47,13 @@ typedef enum {
     UIUserInterfaceIdiomDesktop,
 } UIUserInterfaceIdiom;
 
+typedef enum {
+    UIDeviceBatteryStateUnknown,
+    UIDeviceBatteryStateUnplugged,
+    UIDeviceBatteryStateCharging,
+    UIDeviceBatteryStateFull,
+} UIDeviceBatteryState;
+
 #define UI_USER_INTERFACE_IDIOM() \
     ([[UIDevice currentDevice] respondsToSelector:@selector(userInterfaceIdiom)] ? \
     [[UIDevice currentDevice] userInterfaceIdiom] : \
@@ -68,11 +75,14 @@ typedef enum {
 @property (nonatomic, readonly, retain) NSString *name;
 @property (nonatomic, readonly) UIUserInterfaceIdiom userInterfaceIdiom;					// always returns UIUserInterfaceIdiomDesktop
 @property (nonatomic, readonly) UIDeviceOrientation orientation;							// always returns UIDeviceOrientationPortrait
+@property (nonatomic, readonly) UIDeviceBatteryState batteryState;                          // always returns UIDeviceBatteryStateUnknown
+@property (nonatomic, readonly) float batteryLevel;                                         // always returns -1.0 (unknown)
 @property (nonatomic, readonly,getter=isMultitaskingSupported) BOOL multitaskingSupported;	// always returns YES
 @property (nonatomic, readonly, retain) NSString *systemName;
 @property (nonatomic, readonly, retain) NSString *systemVersion;
 @property (nonatomic, readonly, retain) NSString *model;
 @property (nonatomic, readonly, getter=isGeneratingDeviceOrientationNotifications) BOOL generatesDeviceOrientationNotifications; // aways returns NO
+@property (nonatomic, assign) BOOL batteryMonitoringEnabled;
 
 - (void)beginGeneratingDeviceOrientationNotifications;  // no effect
 - (void)endGeneratingDeviceOrientationNotifications;    // no effect
