@@ -413,9 +413,7 @@
 
 - (BOOL)becomeFirstResponder
 {
-    if ([self shouldBeVisible] && ![clipView superview]) {
-        [self addNSView];
-    }
+    [self updateNSViews];
     
     changingResponderStatus = YES;
     const BOOL result = [[textView window] makeFirstResponder:textView];

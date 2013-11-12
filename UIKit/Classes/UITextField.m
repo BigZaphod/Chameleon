@@ -194,6 +194,11 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     }
 }
 
+- (void)setHidden:(BOOL)hidden
+{
+    [super setHidden:hidden];
+    [_textLayer setHidden:hidden];
+}
 
 - (CGRect)borderRectForBounds:(CGRect)bounds
 {
