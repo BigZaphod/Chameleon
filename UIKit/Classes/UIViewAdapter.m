@@ -113,7 +113,7 @@
     CALayer *clipLayer = [_clipView layer];
     
     // setting these here because I've had bad experiences with NSView changing some layer properties out from under me.
-    clipLayer.geometryFlipped = YES;
+    clipLayer.geometryFlipped = NO;
     
     // always make sure it's at the very bottom
     [layer insertSublayer:clipLayer atIndex:0];
