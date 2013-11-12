@@ -147,7 +147,7 @@
             [self addNSView];
         }
         
-        UIWindow *window = [containerView window];
+        UIWindow *window = [(UIView *)containerView window];
         const CGRect windowRect = [window convertRect:self.frame fromView:containerView];
         const CGRect screenRect = [window convertRect:windowRect toWindow:nil];
         NSRect desiredFrame = NSRectFromCGRect(screenRect);
