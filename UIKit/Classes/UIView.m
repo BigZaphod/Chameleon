@@ -230,7 +230,7 @@ static BOOL _animationsEnabled = YES;
         UIWindow *oldWindow = subview.window;
         UIWindow *newWindow = self.window;
         
-        subview->_needsDidAppearOrDisappear = [self _subviewControllersNeedAppearAndDisappear];
+        subview->_needsDidAppearOrDisappear = YES;//[self _subviewControllersNeedAppearAndDisappear];
         
         if ([subview _viewController] && subview->_needsDidAppearOrDisappear) {
             [[subview _viewController] viewWillAppear:NO];
