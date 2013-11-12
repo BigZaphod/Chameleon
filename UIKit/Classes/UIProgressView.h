@@ -43,5 +43,7 @@ typedef enum {
 
 @property (nonatomic) UIProgressViewStyle progressViewStyle;
 @property (nonatomic) float progress;
+@property (nonatomic, strong) UIColor *progressTintColor;
+@property (nonatomic, strong) UIColor *trackTintColor;
 
 @end
