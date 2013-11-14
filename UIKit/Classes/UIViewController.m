@@ -255,6 +255,28 @@
     }
 }
 
+- (void)presentViewController:(UIViewController *)modalViewController animated:(BOOL)animated completion:(void(^)(void))completion
+{
+    // this isn't exactly right either, but close enough
+    [self presentModalViewController:modalViewController animated:animated];
+    
+    if (completion != NULL) {
+        completion();
+    }
+}
+
+- (void)dismissViewControllerAnimated:(BOOL)animated completion:(void(^)(void))completion
+{
+    // this isn't exactly right either, but close enough
+    [self dismissModalViewControllerAnimated:animated];
+    
+    if (completion != NULL) {
+        completion();
+    }
+}
+
+
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
