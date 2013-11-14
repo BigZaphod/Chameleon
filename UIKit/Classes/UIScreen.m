@@ -243,9 +243,9 @@ NSMutableArray *_allScreens = nil;
     return [NSString stringWithFormat:@"<%@: %p; bounds = %@; mode = %@>", [self className], self, NSStringFromCGRect(self.bounds), self.currentMode];
 }
 
-- (BOOL)mirroredScreen
+- (UIScreen *)mirroredScreen
 {
-    return NO;
+    return nil;
 }
 
 @end

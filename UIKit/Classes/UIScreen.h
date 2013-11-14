@@ -60,7 +60,7 @@ typedef enum {
 @property (nonatomic, retain) UIScreenMode *currentMode;            // ignores any attempt to set this
 @property (nonatomic, readonly) CGFloat scale;
 @property (nonatomic, assign) UIScreenOverscanCompensation overscanCompensation; // has no effect
-@property (nonatomic, assign) BOOL mirroredScreen; // always returns NO
+@property (nonatomic, retain) UIScreen *mirroredScreen; // always returns nil
 @property (nonatomic) CGFloat brightness;         // has no effect; defaults to 0.0
 
 @end
