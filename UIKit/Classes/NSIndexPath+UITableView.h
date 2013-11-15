@@ -30,7 +30,7 @@
 #import <Foundation/Foundation.h>
 
 @interface NSIndexPath (UITableView)
-+ (NSIndexPath *)indexPathForRow:(NSUInteger)row inSection:(NSUInteger)section;
-@property (readonly) NSUInteger row;
-@property (readonly) NSUInteger section;
++ (NSIndexPath *)indexPathForRow:(NSInteger)row inSection:(NSInteger)section;
+@property (readonly) NSInteger row;
+@property (readonly) NSInteger section;
 @end
