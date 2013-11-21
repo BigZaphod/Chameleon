@@ -121,8 +121,16 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
         [style setLineBreakMode:NSLineBreakByTruncatingTail];
     }
     
+    // eliminate the built-in padding around the text field
+    [[self textContainer] setLineFragmentPadding:0];
+    
     [self setDefaultParagraphStyle:style];
     [style release];
+}
+
+// vertically centre the text
+- (NSPoint)textContainerOrigin {
+    return NSMakePoint(0, (self.font.ascender + self.font.descender + self.font.xHeight)/2);
 }
 
 - (void)setSecureTextEntry:(BOOL)isSecure

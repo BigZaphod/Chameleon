@@ -292,8 +292,12 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
 - (void)drawPlaceholderInRect:(CGRect)rect
 {
+    // inset the rect by the offset required to vertically centre the text
+    CGFloat fontHeight = self.font.ascender + self.font.xHeight;
+    CGRect placeholderRect = CGRectInset(rect, 0, (rect.size.height - fontHeight) / 2);
+    
     [[UIColor colorWithWhite:0.7 alpha:1.0] set];
-    [self->_placeholder drawInRect:rect withFont:self.font];
+    [self->_placeholder drawInRect:placeholderRect withFont:self.font];
 }
 
 - (void)drawTextInRect:(CGRect)rect
