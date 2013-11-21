@@ -292,6 +292,8 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
 - (void)drawPlaceholderInRect:(CGRect)rect
 {
+    [[UIColor colorWithWhite:0.7 alpha:1.0] set];
+    [self->_placeholder drawInRect:rect withFont:self.font];
 }
 
 - (void)drawTextInRect:(CGRect)rect
@@ -302,6 +304,10 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 {
     UIImage *background = self.enabled? _background : _disabledBackground;
     [background drawInRect:self.bounds];
+    
+    if ([self.text length] == 0) {
+        [self drawPlaceholderInRect:[self placeholderRectForBounds:self.bounds]];
+    }
 }
 
 
