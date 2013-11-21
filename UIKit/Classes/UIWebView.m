@@ -38,10 +38,21 @@
 - (void) setDeveloperExtrasEnabled:(BOOL)developerExtrasEnabled;
 - (void) setWebGLEnabled:(BOOL)webGLEnabled;
 - (void) setOfflineWebApplicationCacheEnabled:(BOOL)offlineWebApplicationCacheEnabled;
+
+- (NSString *)_localStorageDatabasePath;
+- (void)_setLocalStorageDatabasePath:(NSString *)path;
 @end
 
 @implementation UIWebView
 @synthesize request=_request, delegate=_delegate, dataDetectorTypes=_dataDetectorTypes, scalesPageToFit=_scalesPageToFit;
+
+- (NSString *)_localStorageDatabasePath
+{
+    NSString *appName = [[NSRunningApplication currentApplication] localizedName];
+    NSURL *applicationSupport = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] firstObject];
+    NSString *databasePath = [NSString stringWithFormat:@"%@/%@/WebKit/LocalStorage", [applicationSupport path], appName];
+    return databasePath;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -58,6 +69,8 @@
         WebPreferences *preferences = [WebPreferences standardPreferences];
         [preferences setOfflineWebApplicationCacheEnabled:YES];
         [preferences setDeveloperExtrasEnabled:YES];
+        [preferences _setLocalStorageDatabasePath:[self _localStorageDatabasePath]];
+        [preferences setLocalStorageEnabled:YES];
         
         [_webView setPreferences:preferences];
 
