@@ -102,6 +102,12 @@ static BOOL _animationsEnabled = YES;
     return self;
 }
 
+- (id)initwithCoder:(NSCoder *)coder
+{
+    NSLog(@"Not implemented.");
+    return nil;
+}
+
 - (void)dealloc
 {
     [[_subviews allObjects] makeObjectsPerformSelector:@selector(removeFromSuperview)];
