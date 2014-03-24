@@ -334,7 +334,9 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
                 
                 for (NSUInteger i=0; i<count; i++) {
                     if (NSIntersectsRect(rects[i], rect)) {
-                        [underlinePath moveToPoint:NSMakePoint(rects[i].origin.x, rects[i].origin.y+rects[i].size.height-1.5)];
+                        // XXX: This uses a magic number. Where does this
+                        //      constant come from?
+                        [underlinePath moveToPoint:NSMakePoint(rects[i].origin.x, rects[i].origin.y+rects[i].size.height+5.5)];
                         [underlinePath relativeLineToPoint:NSMakePoint(rects[i].size.width,0)];
                     }
                 }
