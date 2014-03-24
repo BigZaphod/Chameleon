@@ -81,6 +81,7 @@ typedef enum {
     NSString *_placeholder;
     UITextBorderStyle _borderStyle;
     CGFloat _minimumFontSize;
+    UITextAutocorrectionType _autocorrectionType;
 
     UIView *_inputAccessoryView;
     UIView *_inputView;

@@ -244,6 +244,11 @@
     }
 }
 
+- (void)setAutocorrectionType:(UITextAutocorrectionType)type
+{
+    [textView setAutocorrectionType:type];
+}
+
 - (void)setEditable:(BOOL)edit
 {
     if (editable != edit) {

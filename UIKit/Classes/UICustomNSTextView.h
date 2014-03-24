@@ -28,6 +28,7 @@
  */
 
 #import <AppKit/NSTextView.h>
+#import "UITextInputTraits.h"
 
 @class CALayer, UICustomNSTextView;
 
@@ -40,10 +41,12 @@
 @interface UICustomNSTextView: NSTextView {
     BOOL secureTextEntry;
 	BOOL isBecomingFirstResponder;
+    UITextAutocorrectionType autocorrectionType;
 }
 
 - (id)initWithFrame:(NSRect)frame secureTextEntry:(BOOL)isSecure isField:(BOOL)isField;
 - (void)setSecureTextEntry:(BOOL)isSecure;
+- (void)setAutocorrectionType:(UITextAutocorrectionType)type;
 
 - (BOOL)reallyBecomeFirstResponder;
 - (BOOL)reallyResignFirstResponder;

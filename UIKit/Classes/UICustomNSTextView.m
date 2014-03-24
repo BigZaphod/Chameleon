@@ -29,6 +29,7 @@
 
 #import "UICustomNSTextView.h"
 #import "UIBulletGlyphGenerator.h"
+#import "UITextInputTraits.h"
 #import <AppKit/NSLayoutManager.h>
 #import <AppKit/NSTextContainer.h>
 #import <AppKit/NSMenuItem.h>
@@ -82,6 +83,7 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
         [self setDisplaysLinkToolTips:NO];
         [self setAutomaticDataDetectionEnabled:NO];
         [self setSecureTextEntry:isSecure];
+        [self setAutocorrectionType:UITextAutocorrectionTypeDefault];
         
         [self setLayerContentsPlacement:NSViewLayerContentsPlacementTopLeft];
         
@@ -137,6 +139,11 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 {
     secureTextEntry = isSecure;
     [self updateStyles];
+}
+
+- (void)setAutocorrectionType:(UITextAutocorrectionType)type
+{
+    autocorrectionType = type;
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
@@ -275,7 +282,7 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 
 - (void)setNeedsFakeSpellCheck
 {
-    if ([self isContinuousSpellCheckingEnabled]) {
+    if ([self isContinuousSpellCheckingEnabled] && self->autocorrectionType != UITextAutocorrectionTypeNo) {
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(forcedSpellCheck) object:nil];
         [self performSelector:@selector(forcedSpellCheck) withObject:nil afterDelay:0.5];
     }

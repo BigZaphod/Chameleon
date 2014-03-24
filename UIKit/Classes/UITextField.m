@@ -63,6 +63,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
         self.clearButtonMode = UITextFieldViewModeNever;
         self.leftViewMode = UITextFieldViewModeNever;
         self.rightViewMode = UITextFieldViewModeNever;
+        self.autocorrectionType = UITextAutocorrectionTypeDefault;
         self.opaque = NO;
     }
     return self;
@@ -326,11 +327,13 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
 - (UITextAutocorrectionType)autocorrectionType
 {
-    return UITextAutocorrectionTypeDefault;
+    return self->_autocorrectionType;
 }
 
 - (void)setAutocorrectionType:(UITextAutocorrectionType)type
 {
+    self->_autocorrectionType = type;
+    [self->_textLayer setAutocorrectionType:type];
 }
 
 - (BOOL)enablesReturnKeyAutomatically

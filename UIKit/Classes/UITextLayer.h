@@ -30,6 +30,7 @@
 #import <QuartzCore/CALayer.h>
 #import <Foundation/Foundation.h>
 #import "UIStringDrawing.h"
+#import "UITextInputTraits.h"
 
 @class UICustomNSClipView, UICustomNSTextView, UIColor, UIFont, UIScrollView, UIWindow, UIView;
 
@@ -85,6 +86,7 @@
 
 - (id)initWithContainer:(UIView <UITextLayerContainerViewProtocol,UITextLayerTextDelegate> *)aView isField:(BOOL)isField;
 - (void)setContentOffset:(CGPoint)contentOffset;
+- (void)setAutocorrectionType:(UITextAutocorrectionType)type;
 - (void)scrollRangeToVisible:(NSRange)range;
 - (BOOL)becomeFirstResponder;
 - (BOOL)resignFirstResponder;
