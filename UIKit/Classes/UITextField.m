@@ -529,4 +529,6 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     return [NSCursor IBeamCursor];
 }
 
+- (UITextLayer *)textLayer { return _textLayer; }
+
 @end

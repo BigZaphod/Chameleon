@@ -68,6 +68,7 @@
             case NSHomeFunctionKey:				return UIKeyTypeHome;
             case 0x000D:						return UIKeyTypeReturn;
             case 0x0003:						return UIKeyTypeEnter;
+            case NSTabCharacter:                return UIKeyTypeTab;
         }
     }
     

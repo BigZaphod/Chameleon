@@ -28,6 +28,7 @@
  */
 
 #import "UITextLayer.h"
+#import "UITextLayer+Private.h"
 #import "UIScrollView.h"
 #import "UICustomNSTextView.h"
 #import "UICustomNSClipView.h"
@@ -435,5 +436,7 @@
 {
     return ![[UIApplication sharedApplication] _sendGlobalKeyboardNSEvent:event fromScreen:[[containerView window] screen]];
 }
+
+- (id)containerView { return self->containerView; }
 
 @end
