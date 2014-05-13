@@ -370,7 +370,10 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
             NSCursor *newCursor = [view mouseCursorForEvent:event] ?: [NSCursor arrowCursor];
 
             if ([NSCursor currentCursor] != newCursor) {
-                [newCursor set];
+                // Hack: Disabled by Michael Melanson <michael.melanson@toushay.com>
+                // because it was interfering with our use case.
+                
+                //[newCursor set];
             }
             
             [view release];

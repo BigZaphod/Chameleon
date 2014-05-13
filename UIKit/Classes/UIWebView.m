@@ -31,13 +31,35 @@
 #import "UIViewAdapter.h"
 #import <WebKit/WebKit.h>
 
+@interface WebPreferences (WebPreferencesPrivate)
+- (void)_setLocalStorageDatabasePath:(NSString *)path;
+- (void) setLocalStorageEnabled: (BOOL) localStorageEnabled;
+- (void) setDatabasesEnabled:(BOOL)databasesEnabled;
+- (void) setDeveloperExtrasEnabled:(BOOL)developerExtrasEnabled;
+- (void) setWebGLEnabled:(BOOL)webGLEnabled;
+- (void) setOfflineWebApplicationCacheEnabled:(BOOL)offlineWebApplicationCacheEnabled;
+
+- (NSString *)_localStorageDatabasePath;
+- (void)_setLocalStorageDatabasePath:(NSString *)path;
+@end
+
 @implementation UIWebView
 @synthesize request=_request, delegate=_delegate, dataDetectorTypes=_dataDetectorTypes, scalesPageToFit=_scalesPageToFit;
+@synthesize chameleonAllowContextMenu;
+
+- (NSString *)_localStorageDatabasePath
+{
+    NSString *appName = [[NSRunningApplication currentApplication] localizedName];
+    NSURL *applicationSupport = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] firstObject];
+    NSString *databasePath = [NSString stringWithFormat:@"%@/%@/WebKit/LocalStorage", [applicationSupport path], appName];
+    return databasePath;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
     if ((self=[super initWithFrame:frame])) {
         _scalesPageToFit = NO;
+        self.chameleonAllowContextMenu = NO;
         
         _webView = [(WebView *)[WebView alloc] initWithFrame:NSRectFromCGRect(self.bounds)];
         [_webView setAutoresizingMask:(NSViewWidthSizable|NSViewHeightSizable)];
@@ -45,6 +67,14 @@
         [_webView setFrameLoadDelegate:self];
         [_webView setUIDelegate:self];
         [_webView setDrawsBackground:NO];
+        
+        WebPreferences *preferences = [WebPreferences standardPreferences];
+        [preferences setOfflineWebApplicationCacheEnabled:YES];
+        [preferences setDeveloperExtrasEnabled:YES];
+        [preferences _setLocalStorageDatabasePath:[self _localStorageDatabasePath]];
+        [preferences setLocalStorageEnabled:YES];
+        
+        [_webView setPreferences:preferences];
 
         _webViewAdapter = [[UIViewAdapter alloc] initWithFrame:self.bounds];
         _webViewAdapter.NSView = _webView;
@@ -211,7 +241,11 @@
 
 - (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems
 {
-    return [NSArray array];
+    if (self.chameleonAllowContextMenu == YES) {
+        return defaultMenuItems;
+    } else {
+        return [NSArray array];
+    }
 }
 
 - (BOOL)webViewIsResizable:(WebView *)sender

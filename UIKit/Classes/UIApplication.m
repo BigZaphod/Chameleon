@@ -40,6 +40,11 @@
 #import "UIKey+UIPrivate.h"
 #import "UIBackgroundTask.h"
 #import <Cocoa/Cocoa.h>
+#import "UITextLayer.h"
+#import "UITextLayer+Private.h"
+#import "UITextField.h"
+#import "UITextField+Private.h"
+
 
 NSString *const UIApplicationWillChangeStatusBarOrientationNotification = @"UIApplicationWillChangeStatusBarOrientationNotification";
 NSString *const UIApplicationDidChangeStatusBarOrientationNotification = @"UIApplicationDidChangeStatusBarOrientationNotification";
@@ -181,6 +186,11 @@ static BOOL TouchIsActive(UITouch *touch)
 - (BOOL)isStatusBarHidden
 {
     return YES;
+}
+
+- (void)setStatusBarHidden:(BOOL)statusBarHidden
+{
+    // do nothing
 }
 
 - (CGRect)statusBarFrame
@@ -605,6 +615,55 @@ static BOOL TouchIsActive(UITouch *touch)
             if ([self _firstResponderCanPerformAction:@selector(commit:) withSender:key fromScreen:theScreen]) {
                 return [self _sendActionToFirstResponder:@selector(commit:) withSender:key fromScreen:theScreen];
             }
+        }
+        
+        if (key.type == UIKeyTypeTab) {
+            UIResponder *firstResponder = [self _firstResponderForScreen:theScreen];
+
+            // the open list for an interative depth-first traversal
+            NSMutableArray *open = [NSMutableArray array];
+            [open addObjectsFromArray:self.keyWindow.subviews];
+            
+            NSMutableArray *allTextFields = [NSMutableArray array];
+            
+            while(open.count > 0)
+            {
+                UIView *view = [open objectAtIndex:0];
+                [open removeObjectAtIndex:0];
+                [open addObjectsFromArray:view.subviews];
+                
+                if ([view isKindOfClass:[UITextField class]]) {
+                    if ([[(UITextField *)view textLayer] textShouldBeginEditing:nil]) {
+                        [allTextFields addObject:view];
+                    }
+                }
+            }
+            
+            if ([allTextFields count] > 0) {
+                [allTextFields sortUsingComparator:^NSComparisonResult(id fieldOne, id fieldTwo) {
+                    NSRect fieldOneBounds = [(UITextField *)fieldOne bounds];
+                    NSRect fieldTwoBounds = [(UITextField *)fieldTwo bounds];
+                    
+                    NSComparator comparator = ^(NSNumber *obj1, NSNumber *obj2) {
+                        if ([obj1 intValue] == [obj2 intValue]) return NSOrderedSame;
+                        else if ([obj1 intValue] < [obj2 intValue]) return NSOrderedAscending;
+                        else return NSOrderedDescending;
+                    };
+                    
+                    NSComparisonResult horizontalComparison = comparator(@(fieldOneBounds.origin.x), @(fieldTwoBounds.origin.x));
+                    NSComparisonResult verticalComparison = comparator(@(fieldOneBounds.origin.y), @(fieldTwoBounds.origin.y));
+                    
+                    return horizontalComparison == NSOrderedSame ? verticalComparison : horizontalComparison;
+                }];
+                
+                int currentIndex = [allTextFields containsObject:firstResponder] ? (int) [allTextFields indexOfObject:firstResponder] : -1;
+                int nextIndex = (currentIndex + 1) % [allTextFields count];
+                
+                UIResponder *nextResponder = [allTextFields objectAtIndex:nextIndex];
+                [nextResponder becomeFirstResponder];
+            }
+            
+            return YES;
         }
     }
     

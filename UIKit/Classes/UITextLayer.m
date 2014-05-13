@@ -28,6 +28,7 @@
  */
 
 #import "UITextLayer.h"
+#import "UITextLayer+Private.h"
 #import "UIScrollView.h"
 #import "UICustomNSTextView.h"
 #import "UICustomNSClipView.h"
@@ -147,14 +148,14 @@
             [self addNSView];
         }
         
-        UIWindow *window = [containerView window];
+        UIWindow *window = [(UIView *)containerView window];
         const CGRect windowRect = [window convertRect:self.frame fromView:containerView];
         const CGRect screenRect = [window convertRect:windowRect toWindow:nil];
         NSRect desiredFrame = NSRectFromCGRect(screenRect);
 
         [clipView setFrame:desiredFrame];
         [self updateScrollViewContentSize];
-        clipView.layer.geometryFlipped = YES;
+        clipView.layer.geometryFlipped = NO;
     } else {
         [self removeNSView];
     }
@@ -241,6 +242,11 @@
         secureTextEntry = s;
         [textView setSecureTextEntry:secureTextEntry];
     }
+}
+
+- (void)setAutocorrectionType:(UITextAutocorrectionType)type
+{
+    [textView setAutocorrectionType:type];
 }
 
 - (void)setEditable:(BOOL)edit
@@ -413,9 +419,7 @@
 
 - (BOOL)becomeFirstResponder
 {
-    if ([self shouldBeVisible] && ![clipView superview]) {
-        [self addNSView];
-    }
+    [self updateNSViews];
     
     changingResponderStatus = YES;
     const BOOL result = [[textView window] makeFirstResponder:textView];
@@ -437,5 +441,7 @@
 {
     return ![[UIApplication sharedApplication] _sendGlobalKeyboardNSEvent:event fromScreen:[[containerView window] screen]];
 }
+
+- (id)containerView { return self->containerView; }
 
 @end

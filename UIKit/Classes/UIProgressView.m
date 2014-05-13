@@ -28,6 +28,8 @@
  */
 
 #import "UIProgressView.h"
+#import "UIGraphics.h"
+#import "UIColor.h"
 
 @implementation UIProgressView
 @synthesize progressViewStyle=_progressViewStyle, progress=_progress;
@@ -54,6 +56,24 @@
         _progress = MIN(1,MAX(0,p));
         [self setNeedsDisplay];
     }
+}
+
+- (void)drawRect:(CGRect)rect {
+    int totalWidth = self.frame.size.width;
+    int filledWidth = totalWidth * self->_progress;
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+
+    // draw the background part of the bar
+    CGContextSetFillColorWithColor(context, self.trackTintColor.CGColor);
+    CGContextFillRect(context, CGRectMake(0, 0, totalWidth, self.frame.size.height));
+
+    // draw the filled part of the bar
+    CGContextSetFillColorWithColor(context, self.progressTintColor.CGColor);
+    CGContextFillRect(context, CGRectMake(0, 0, filledWidth, self.frame.size.height));
+    
+    CGContextRestoreGState(context);
 }
 
 @end

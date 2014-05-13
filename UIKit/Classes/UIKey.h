@@ -41,6 +41,7 @@ typedef enum {
     UIKeyTypeRightArrow,
     UIKeyTypeReturn,
     UIKeyTypeEnter,
+    UIKeyTypeTab,
     UIKeyTypeHome,
     UIKeyTypeInsert,
     UIKeyTypeDelete,

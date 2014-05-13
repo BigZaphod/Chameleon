@@ -49,5 +49,5 @@ typedef enum {
 
 @property BOOL hidesWhenStopped;
 @property UIActivityIndicatorViewStyle activityIndicatorViewStyle;
-
+@property (retain) UIColor *color;
 @end

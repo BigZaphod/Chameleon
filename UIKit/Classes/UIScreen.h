@@ -34,6 +34,12 @@ extern NSString *const UIScreenDidConnectNotification;
 extern NSString *const UIScreenDidDisconnectNotification;
 extern NSString *const UIScreenModeDidChangeNotification;
 
+typedef enum {
+    UIScreenOverscanCompensationScale,
+    UIScreenOverscanCompensationInsetBounds,
+    UIScreenOverscanCompensationInsetApplicationFrame,
+} UIScreenOverscanCompensation;
+
 @class UIImageView, CALayer, UIKitView, UIScreenMode, UIPopoverController;
 
 @interface UIScreen : NSObject {
@@ -53,5 +59,8 @@ extern NSString *const UIScreenModeDidChangeNotification;
 @property (nonatomic, readonly, copy) NSArray *availableModes;      // only ever returns the currentMode
 @property (nonatomic, retain) UIScreenMode *currentMode;            // ignores any attempt to set this
 @property (nonatomic, readonly) CGFloat scale;
+@property (nonatomic, assign) UIScreenOverscanCompensation overscanCompensation; // has no effect
+@property (nonatomic, retain) UIScreen *mirroredScreen; // always returns nil
+@property (nonatomic) CGFloat brightness;         // has no effect; defaults to 0.0
 
 @end

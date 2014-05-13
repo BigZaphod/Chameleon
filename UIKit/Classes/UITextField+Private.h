@@ -27,20 +27,9 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIAction.h"
+@interface UITextField(Private)
 
-@implementation UIAction
-@synthesize target=_target, action=_action;
-
-- (BOOL)isEqual:(id)object
-{
-    if (object == self) {
-        return YES;
-    } else if ([object isKindOfClass:[self class]]) {
-        return ([object target] == self.target && [object action] == self.action);
-    } else {
-        return NO;
-    }
-}
+- (id)textLayer;
 
 @end
+

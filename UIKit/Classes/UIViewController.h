@@ -89,6 +89,9 @@ typedef enum {
 - (void)presentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated;		// works, but not exactly correctly.
 - (void)dismissModalViewControllerAnimated:(BOOL)animated;												// see comments in dismissModalViewController
 
+- (void)presentViewController:(UIViewController *)modalViewController animated:(BOOL)animated completion:(void(^)(void))completion;
+- (void)dismissViewControllerAnimated:(BOOL)animated completion:(void(^)(void))completion;
+
 - (void)didReceiveMemoryWarning;	// doesn't do anything and is never called...
 
 - (void)setToolbarItems:(NSArray *)toolbarItems animated:(BOOL)animated;
@@ -105,6 +108,8 @@ typedef enum {
 @property (nonatomic, readonly, retain) NSBundle *nibBundle;	// always returns nil
 @property (nonatomic, retain) UIView *view;
 @property (nonatomic, assign) BOOL wantsFullScreenLayout;		// doesn't do anything right now
+@property (nonatomic, assign) BOOL shouldAutorotate;            // always returns NO
+@property (nonatomic, assign) NSUInteger supportedInterfaceOrientations; // always returns UIInterfaceOrientationLandscapeLeft
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, readonly) UIInterfaceOrientation interfaceOrientation;	// always returns UIInterfaceOrientationLandscapeLeft
 @property (nonatomic, readonly, retain) UINavigationItem *navigationItem;
