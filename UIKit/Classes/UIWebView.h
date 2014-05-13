@@ -87,4 +87,7 @@ typedef NSUInteger UIWebViewNavigationType;
 @property (nonatomic, assign) BOOL mediaPlaybackAllowsAirPlay;
 @property (nonatomic, assign) BOOL keyboardDisplayRequiresUserAction;
 
+// Chameleon specific
+@property (nonatomic, assign) BOOL chameleonAllowContextMenu;
+
 @end

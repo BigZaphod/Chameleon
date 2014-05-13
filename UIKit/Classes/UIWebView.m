@@ -45,6 +45,7 @@
 
 @implementation UIWebView
 @synthesize request=_request, delegate=_delegate, dataDetectorTypes=_dataDetectorTypes, scalesPageToFit=_scalesPageToFit;
+@synthesize chameleonAllowContextMenu;
 
 - (NSString *)_localStorageDatabasePath
 {
@@ -58,6 +59,7 @@
 {
     if ((self=[super initWithFrame:frame])) {
         _scalesPageToFit = NO;
+        self.chameleonAllowContextMenu = NO;
         
         _webView = [(WebView *)[WebView alloc] initWithFrame:NSRectFromCGRect(self.bounds)];
         [_webView setAutoresizingMask:(NSViewWidthSizable|NSViewHeightSizable)];
@@ -239,11 +241,11 @@
 
 - (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems
 {
-#if DEBUG
-    return defaultMenuItems;
-#else
-    return [NSArray array];
-#endif
+    if (self.chameleonAllowContextMenu == YES) {
+        return defaultMenuItems;
+    } else {
+        return [NSArray array];
+    }
 }
 
 - (BOOL)webViewIsResizable:(WebView *)sender
