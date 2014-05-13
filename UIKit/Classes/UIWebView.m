@@ -239,7 +239,11 @@
 
 - (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems
 {
+#if DEBUG
+    return defaultMenuItems;
+#else
     return [NSArray array];
+#endif
 }
 
 - (BOOL)webViewIsResizable:(WebView *)sender
