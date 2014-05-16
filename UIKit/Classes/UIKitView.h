@@ -29,22 +29,14 @@
 
 #import <Cocoa/Cocoa.h>
 #import "UIApplicationDelegate.h"
+#import "UIScreen.h"
+#import "UIWindow.h"
 
-@class UIScreen, UIWindow;
+@interface UIKitView : NSView
 
-@interface UIKitView : NSView {
-    UIScreen *_screen;
-    UIWindow *_mainWindow;
-    NSTrackingArea *_trackingArea;
-}
-
-// if UIApplication's keyWindow is on the screen represented by this UIKitView, this will send -canPerformAction:withSender: to the keyWindow's
-// current first responder with the given action and sender and return the result. if the keyWindow is not on this screen, it always returns NO.
-- (BOOL)firstResponderCanPerformAction:(SEL)action withSender:(id)sender;
-
-// if UIApplication's keyWindow is on the screen represented by this UIKitView, this will send the action down the responder chain starting with
-// the keyWindow's first responder. if the keyWindow is not on this screen, nothing happens.
-- (void)sendActionToFirstResponder:(SEL)action from:(id)sender;
+// returns the UIView (or nil) that successfully responds to a -hitTest:withEvent: at the given point.
+// the point is specified in this view's coordinate system (unlike NSView's hitTest method).
+- (UIView *)hitTestUIView:(NSPoint)point;
 
 // this is an optional method
 // it will set the sharedApplication's delegate to appDelegate. if delay is >0, it will then look in the app bundle for
@@ -55,12 +47,15 @@
 // ** IMPORTANT: appDelegate is *not* retained! **
 - (void)launchApplicationWithDelegate:(id<UIApplicationDelegate>)appDelegate afterDelay:(NSTimeInterval)delay;
 
+// these are sort of hacks used internally. I don't know if there's much need for them from the outside, really.
+- (void)cancelTouchesInView:(UIView *)view;
+- (void)sendStationaryTouches;
+
 // this is an optional property to make it quick and easy to get a window to start adding views to.
 // created on-demand to be the size of the UIScreen.bounds, flexible width/height, and calls makeKeyAndVisible when it is first created
-@property (nonatomic, retain, readonly) UIWindow *UIWindow;
+@property (nonatomic, strong, readonly) UIWindow *UIWindow;
 
 // a UIKitView owns a single UIScreen. when the UIKitView is part of an NSWindow hierarchy, the UIScreen appears as a connected screen in
 // [UIScreen screens], etc.
-@property (nonatomic, retain, readonly) UIScreen *UIScreen;
-
+@property (nonatomic, strong, readonly) UIScreen *UIScreen;
 @end

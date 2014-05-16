@@ -43,6 +43,7 @@ extern NSString *const UIKeyboardWillShowNotification;
 extern NSString *const UIKeyboardDidShowNotification;
 extern NSString *const UIKeyboardWillHideNotification;
 extern NSString *const UIKeyboardDidHideNotification;
+extern NSString *const UIKeyboardWillChangeFrameNotification;
 
 extern NSString *const UIKeyboardFrameBeginUserInfoKey;
 extern NSString *const UIKeyboardFrameEndUserInfoKey;
@@ -54,17 +55,9 @@ extern NSString *const UIKeyboardCenterBeginUserInfoKey;
 extern NSString *const UIKeyboardCenterEndUserInfoKey;
 extern NSString *const UIKeyboardBoundsUserInfoKey;
 
-
 @class UIScreen, UIViewController;
 
-@interface UIWindow : UIView {
-@private
-    UIScreen *_screen;
-    UIResponder *_firstResponder;
-    NSUndoManager *_undoManager;
-    UIViewController *_rootViewController;
-}
-
+@interface UIWindow : UIView
 - (CGPoint)convertPoint:(CGPoint)toConvert toWindow:(UIWindow *)toWindow;
 - (CGPoint)convertPoint:(CGPoint)toConvert fromWindow:(UIWindow *)fromWindow;
 - (CGRect)convertRect:(CGRect)toConvert fromWindow:(UIWindow *)fromWindow;
@@ -72,13 +65,20 @@ extern NSString *const UIKeyboardBoundsUserInfoKey;
 
 - (void)makeKeyWindow;
 - (void)makeKeyAndVisible;
+
 - (void)resignKeyWindow;
 - (void)becomeKeyWindow;
+
 - (void)sendEvent:(UIEvent *)event;
 
+// this property returns YES only if the underlying screen's UIKitView is on the AppKit's key window
+// and this UIWindow was made key at some point in the past (and is still key from the point of view
+// of the underlying screen) which is of course rather different from the real UIKit.
+// this is done because unlike iOS, on OSX the user can change the key window at will at any time and
+// we need a way to reconnect key windows when they change. :/
 @property (nonatomic, readonly, getter=isKeyWindow) BOOL keyWindow;
-@property (nonatomic, retain) UIScreen *screen;
-@property (nonatomic, assign) UIWindowLevel windowLevel;
-@property (nonatomic,retain) UIViewController *rootViewController;
 
+@property (nonatomic, strong) UIScreen *screen;
+@property (nonatomic, assign) UIWindowLevel windowLevel;
+@property (nonatomic, strong) UIViewController *rootViewController;
 @end

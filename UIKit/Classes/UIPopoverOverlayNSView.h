@@ -31,9 +31,7 @@
 
 @class UIPopoverController;
 
-@interface UIPopoverOverlayNSView : NSView {
-    UIPopoverController *_popoverController;
-}
+@interface UIPopoverOverlayNSView : NSView
 
 - (id)initWithFrame:(NSRect)frame popoverController:(UIPopoverController *)controller;
 

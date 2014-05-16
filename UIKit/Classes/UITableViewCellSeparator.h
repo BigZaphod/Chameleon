@@ -32,11 +32,7 @@
 
 @class UIColor;
 
-@interface UITableViewCellSeparator : UIView {
-@private
-    UITableViewCellSeparatorStyle _style;
-    UIColor *_color;
-}
+@interface UITableViewCellSeparator : UIView
 
 - (void)setSeparatorStyle:(UITableViewCellSeparatorStyle)theStyle color:(UIColor *)theColor;
 

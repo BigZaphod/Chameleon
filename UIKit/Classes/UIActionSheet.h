@@ -42,35 +42,14 @@
 - (void)actionSheetCancel:(UIActionSheet *)actionSheet;
 @end
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIActionSheetStyle) {
   UIActionSheetStyleAutomatic        = -1,
   UIActionSheetStyleDefault          = UIBarStyleDefault,
   UIActionSheetStyleBlackTranslucent = UIBarStyleBlackTranslucent,
   UIActionSheetStyleBlackOpaque      = UIBarStyleBlackOpaque,
-} UIActionSheetStyle;
+};
 
-@interface UIActionSheet : UIView {
-@private
-    __unsafe_unretained id<UIActionSheetDelegate> _delegate;
-    NSInteger _destructiveButtonIndex;
-    NSInteger _cancelButtonIndex;
-    NSInteger _firstOtherButtonIndex;
-    NSString *_title;
-    NSMutableArray *_menuTitles;
-    NSMutableArray *_separatorIndexes;
-    UIActionSheetStyle _actionSheetStyle;
-    id _menu;
-    
-    struct {
-        unsigned clickedButtonAtIndex : 1;
-        unsigned willPresentActionSheet : 1;
-        unsigned didPresentActionSheet : 1;
-        unsigned willDismissWithButtonIndex : 1;
-        unsigned didDismissWithButtonIndex : 1;
-        unsigned actionSheetCancel : 1;
-    } _delegateHas;
-}
-
+@interface UIActionSheet : UIView
 - (id)initWithTitle:(NSString *)title delegate:(id<UIActionSheetDelegate>)delegate cancelButtonTitle:(NSString *)cancelButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ...;
 - (NSInteger)addButtonWithTitle:(NSString *)title;
 
@@ -91,5 +70,4 @@ typedef enum {
 @property (nonatomic) NSInteger cancelButtonIndex;
 @property (nonatomic, readonly) NSInteger firstOtherButtonIndex;
 @property (nonatomic, readonly) NSInteger numberOfButtons;
-
 @end

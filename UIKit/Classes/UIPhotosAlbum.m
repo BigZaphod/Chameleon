@@ -69,14 +69,9 @@
     if (target) {
         SEL action = NSSelectorFromString([info objectForKey:@"action"]);
         void *context = [[info objectForKey:@"context"] pointerValue];
-        
-        NSMethodSignature *signature = [target methodSignatureForSelector:action];
-        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
-        [invocation setSelector:action];
-        [invocation setArgument:&image atIndex:2];
-        [invocation setArgument:&error atIndex:3];
-        [invocation setArgument:&context atIndex:4];
-        [invocation invokeWithTarget:target];
+        typedef void(*ActionMethod)(id, SEL, id, NSError *, void *);
+        ActionMethod method = (ActionMethod)[target methodForSelector:action];
+        method(target, action, image, error, context);
     }
 }
 

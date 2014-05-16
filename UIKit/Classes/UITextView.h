@@ -30,13 +30,13 @@
 #import "UIStringDrawing.h"
 #import "UIScrollView.h"
 #import "UIDataDetectors.h"
-#import "UITextInputTraits.h"
+#import "UITextInput.h"
 
 extern NSString *const UITextViewTextDidBeginEditingNotification;
 extern NSString *const UITextViewTextDidChangeNotification;
 extern NSString *const UITextViewTextDidEndEditingNotification;
 
-@class UIColor, UIFont, UITextLayer, UITextView;
+@class UIColor, UIFont, UITextView;
 
 @protocol UITextViewDelegate <NSObject, UIScrollViewDelegate>
 @optional
@@ -49,40 +49,18 @@ extern NSString *const UITextViewTextDidEndEditingNotification;
 - (void)textViewDidChangeSelection:(UITextView *)textView;
 @end
 
-@interface UITextView : UIScrollView <UITextInputTraits> {
-@private
-    UITextLayer *_textLayer;
-    UIDataDetectorTypes _dataDetectorTypes;
-
-    UIView *_inputAccessoryView;
-    UIView *_inputView;
-    
-    struct {
-        unsigned shouldBeginEditing : 1;
-        unsigned didBeginEditing : 1;
-        unsigned shouldEndEditing : 1;
-        unsigned didEndEditing : 1;
-        unsigned shouldChangeText : 1;
-        unsigned didChange : 1;
-        unsigned didChangeSelection : 1;
-    } _delegateHas;
-}
-
+@interface UITextView : UIScrollView <UITextInput>
 - (void)scrollRangeToVisible:(NSRange)range;
-
+- (BOOL)hasText;
 
 @property (nonatomic) UITextAlignment textAlignment; // stub, not yet implemented!
 @property (nonatomic) NSRange selectedRange;
 @property (nonatomic, getter=isEditable) BOOL editable;
 @property (nonatomic, copy) NSString *text;
-@property (nonatomic, retain) UIColor *textColor;
-@property (nonatomic, retain) UIFont *font;
+@property (nonatomic, strong) UIColor *textColor;
+@property (nonatomic, strong) UIFont *font;
 @property (nonatomic) UIDataDetectorTypes dataDetectorTypes;
 @property (nonatomic, assign) id<UITextViewDelegate> delegate;
-
-@property (nonatomic, readwrite, retain) UIView *inputAccessoryView;
-@property (nonatomic, readwrite, retain) UIView *inputView;
-
-- (BOOL)hasText;
-
+@property (readwrite, strong) UIView *inputAccessoryView;
+@property (readwrite, strong) UIView *inputView;
 @end

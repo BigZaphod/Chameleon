@@ -41,18 +41,11 @@
 @end
 
 @class UITabBar;
-@interface UITabBarController : UIViewController {
-    UITabBar *_tabBar;
-    __unsafe_unretained UIViewController *_selectedViewController;
-    NSArray *_viewControllers;
-    NSUInteger _selectedIndex;
-}
-
+@interface UITabBarController : UIViewController
 - (void)setViewControllers:(NSArray *)viewController animated:(BOOL)animated;
 
 @property (nonatomic, assign) UIViewController *selectedViewController;
 @property (nonatomic, copy)   NSArray *viewControllers;
 @property (nonatomic, assign) NSUInteger selectedIndex;
 @property (nonatomic, readonly) UITabBar *tabBar;
-
 @end

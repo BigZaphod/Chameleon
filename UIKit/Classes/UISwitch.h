@@ -29,13 +29,9 @@
 
 #import "UIControl.h"
 
-@interface UISwitch : UIControl {
-    BOOL _on;
-}
-
+@interface UISwitch : UIControl
 - (id)initWithFrame:(CGRect)frame;
 - (void)setOn:(BOOL)on animated:(BOOL)animated;
 
 @property(nonatomic, getter=isOn) BOOL on;
-
 @end

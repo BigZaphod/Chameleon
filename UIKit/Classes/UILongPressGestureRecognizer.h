@@ -34,19 +34,16 @@
 // and it doesn't worry about allowableMovement and the other parameters that the regular long
 // press would normally need to be worried about.
 
-@interface UILongPressGestureRecognizer : UIGestureRecognizer {
-@private
-    CFTimeInterval _minimumPressDuration;
-    CGFloat _allowableMovement;
-    NSUInteger _numberOfTapsRequired;
-    NSInteger _numberOfTouchesRequired;
-    CGPoint _beginLocation;
-    BOOL _waiting;
-}
+// Note that technically the long press gesture is continuous but a right click is discrete in Chameleon,
+// so this is sort of a hack as it immediately switches to UIGestureRecognizerStateBegan in that case and
+// ends up never switching to UIGestureRecognizerStateEnded. Since the right click "gesture" is discrete,
+// it ends up getting aborted/reset before that happens. So if you want your long press recognizer to work
+// with right clicks, make sure you take action when the state switches to UIGestureRecognizerStateBegan
+// instead of UIGestureRecognizerStateEnded.
 
+@interface UILongPressGestureRecognizer : UIGestureRecognizer
 @property (nonatomic) CFTimeInterval minimumPressDuration;
 @property (nonatomic) CGFloat allowableMovement;
 @property (nonatomic) NSUInteger numberOfTapsRequired;
 @property (nonatomic) NSInteger numberOfTouchesRequired;
-
 @end

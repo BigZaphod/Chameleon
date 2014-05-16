@@ -49,13 +49,15 @@ static UIColor *OrangeColor = nil;
 static UIColor *PurpleColor = nil;
 static UIColor *BrownColor = nil;
 static UIColor *ClearColor = nil;
+static UIColor *LightTextColor = nil;
 
-@implementation UIColor
+@implementation UIColor {
+    NSArray *_representations;
+}
 
 - (id)initWithNSColor:(NSColor *)aColor
 {
     if (!aColor) {
-        [self release];
         self = nil;
     } else {
         NSColor *c = [aColor colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
@@ -68,40 +70,35 @@ static UIColor *ClearColor = nil;
     return self;
 }
 
-- (void)dealloc
-{
-    [_representations release];
-    [super dealloc];
-}
 
 + (id)colorWithNSColor:(NSColor *)c
 {
-    return [[[self alloc] initWithNSColor:c] autorelease];
+    return [[self alloc] initWithNSColor:c];
 }
 
 + (UIColor *)colorWithWhite:(CGFloat)white alpha:(CGFloat)alpha
 {
-    return [[[self alloc] initWithWhite:white alpha:alpha] autorelease];
+    return [[self alloc] initWithWhite:white alpha:alpha];
 }
 
 + (UIColor *)colorWithHue:(CGFloat)hue saturation:(CGFloat)saturation brightness:(CGFloat)brightness alpha:(CGFloat)alpha
 {
-    return [[[self alloc] initWithHue:hue saturation:saturation brightness:brightness alpha:alpha] autorelease];
+    return [[self alloc] initWithHue:hue saturation:saturation brightness:brightness alpha:alpha];
 }
 
 + (UIColor *)colorWithRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha
 {
-    return [[[self alloc] initWithRed:red green:green blue:blue alpha:alpha] autorelease];
+    return [[self alloc] initWithRed:red green:green blue:blue alpha:alpha];
 }
 
 + (UIColor *)colorWithCGColor:(CGColorRef)ref
 {
-    return [[[self alloc] initWithCGColor:ref] autorelease];
+    return [[self alloc] initWithCGColor:ref];
 }
 
 + (UIColor *)colorWithPatternImage:(UIImage *)patternImage
 {
-    return [[[self alloc] initWithPatternImage:patternImage] autorelease];
+    return [[self alloc] initWithPatternImage:patternImage];
 }
 
 + (UIColor *)blackColor			{ return BlackColor ?: (BlackColor = [[self alloc] initWithNSColor:[NSColor blackColor]]); }
@@ -119,6 +116,8 @@ static UIColor *ClearColor = nil;
 + (UIColor *)purpleColor		{ return PurpleColor ?: (PurpleColor = [[self alloc] initWithNSColor:[NSColor purpleColor]]); }
 + (UIColor *)brownColor			{ return BrownColor ?: (BrownColor = [[self alloc] initWithNSColor:[NSColor brownColor]]); }
 + (UIColor *)clearColor			{ return ClearColor ?: (ClearColor = [[self alloc] initWithNSColor:[NSColor clearColor]]); }
++ (UIColor *)lightTextColor		{ return LightTextColor ?: (LightTextColor = [[self alloc] initWithWhite:1 alpha:0.6]); }
++ (UIColor *)darkTextColor      { return [self blackColor]; }
 
 - (id)initWithWhite:(CGFloat)white alpha:(CGFloat)alpha
 {
@@ -138,7 +137,6 @@ static UIColor *ClearColor = nil;
 - (id)_initWithRepresentations:(NSArray *)reps
 {
     if ([reps count] == 0) {
-        [self release];
         self = nil;
     } else if ((self=[super init])) {
         _representations = [reps copy];
@@ -148,7 +146,7 @@ static UIColor *ClearColor = nil;
 
 - (id)initWithCGColor:(CGColorRef)ref
 {
-    return [self _initWithRepresentations:[NSArray arrayWithObjects:[[[UIColorRep alloc] initWithCGColor:ref] autorelease], nil]];
+    return [self _initWithRepresentations:[NSArray arrayWithObjects:[[UIColorRep alloc] initWithCGColor:ref], nil]];
 }
 
 - (id)initWithPatternImage:(UIImage *)patternImage
@@ -157,7 +155,7 @@ static UIColor *ClearColor = nil;
     NSMutableArray *colorReps = [NSMutableArray arrayWithCapacity:[imageReps count]];
 
     for (UIImageRep *imageRep in imageReps) {
-        [colorReps addObject:[[[UIColorRep alloc] initWithPatternImageRepresentation:imageRep] autorelease]];
+        [colorReps addObject:[[UIColorRep alloc] initWithPatternImageRepresentation:imageRep]];
     }
     
     return [self _initWithRepresentations:colorReps];
@@ -227,7 +225,6 @@ static UIColor *ClearColor = nil;
     const NSInteger numberOfComponents = CGColorGetNumberOfComponents(color);
     const CGFloat *components = CGColorGetComponents(color);
     NSColor *theColor = [NSColor colorWithColorSpace:colorSpace components:components count:numberOfComponents];
-    [colorSpace release];
     return theColor;
 }
 
@@ -239,7 +236,7 @@ static UIColor *ClearColor = nil;
     // Apple doesn't actually define UIDeviceRGBColorSpace or any of the other responses anywhere public,
     // so there isn't any easy way to emulate it.
     CGColorSpaceRef colorSpaceRef = CGColorGetColorSpace(self.CGColor);
-    NSString *colorSpace = [NSString stringWithFormat:@"%@", [(NSString *)CGColorSpaceCopyName(colorSpaceRef) autorelease]];
+    NSString *colorSpace = [NSString stringWithFormat:@"%@", (NSString *)CFBridgingRelease(CGColorSpaceCopyName(colorSpaceRef))];
 
     const size_t numberOfComponents = CGColorGetNumberOfComponents(self.CGColor);
     const CGFloat *components = CGColorGetComponents(self.CGColor);

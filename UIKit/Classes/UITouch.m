@@ -29,197 +29,149 @@
 
 #import "UITouch+UIPrivate.h"
 #import "UIWindow.h"
-#import "UIGestureRecognizerSubclass.h"
-#import <Cocoa/Cocoa.h>
+#import "UIView+UIPrivate.h"
 
-static NSArray *GestureRecognizersForView(UIView *view)
-{
-    NSMutableArray *recognizers = [[NSMutableArray alloc] initWithCapacity:0];
-    
-    while (view) {
-        [recognizers addObjectsFromArray:view.gestureRecognizers];
-        view = [view superview];
-    }
-    
-    return [recognizers autorelease];
+@implementation UITouch {
+    CGPoint _locationOnScreen;
+    CGPoint _previousLocationOnScreen;
+    NSMutableArray *_gestureRecognizers;
+    BOOL _wasDeliveredToView;
+    BOOL _wasCancelledInView;
+    NSTimeInterval _beganPhaseTimestamp;
+    CGPoint _beganPhaseLocationOnScreen;
 }
-
-@implementation UITouch
-@synthesize timestamp=_timestamp, tapCount=_tapCount, phase=_phase, view=_view, window=_window, gestureRecognizers=_gestureRecognizers;
 
 - (id)init
 {
     if ((self=[super init])) {
-        _phase = UITouchPhaseCancelled;
-        _gesture = _UITouchGestureUnknown;
+        _phase = UITouchPhaseBegan;
+        _timestamp = [NSDate timeIntervalSinceReferenceDate];
+        _gestureRecognizers = [NSMutableArray new];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewDidMoveToSuperviewNotification:) name:UIViewDidMoveToSuperviewNotification object:nil];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [_window release];
-    [_view release];
-    [_gestureRecognizers release];
-    [super dealloc];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewDidMoveToSuperviewNotification object:nil];
 }
 
+- (void)_viewDidMoveToSuperviewNotification:(NSNotification *)notification
+{
+    if ([_view isDescendantOfView:[notification object]]) {
+        _view = nil;
+    }
+}
 
+- (void)setTimestamp:(NSTimeInterval)timestamp
+{
+    _timestamp = timestamp;
+    
+    if (_phase == UITouchPhaseBegan) {
+        _beganPhaseTimestamp = timestamp;
+    }
+}
 
+- (void)setTapCount:(NSUInteger)tapCount
+{
+    _tapCount = tapCount;
+}
 
-- (void)_setPhase:(UITouchPhase)phase screenLocation:(CGPoint)screenLocation tapCount:(NSUInteger)tapCount timestamp:(NSTimeInterval)timestamp;
+- (void)setPhase:(UITouchPhase)phase
 {
     _phase = phase;
-    _gesture = _UITouchGestureUnknown;
-    _previousLocation = _location = screenLocation;
-    _tapCount = tapCount;
-    _timestamp = timestamp;
-    _rotation = 0;
-    _magnification = 0;
+    
+    if (phase == UITouchPhaseStationary || phase == UITouchPhaseBegan) {
+        _previousLocationOnScreen = _locationOnScreen;
+    }
 }
 
-- (void)_updatePhase:(UITouchPhase)phase screenLocation:(CGPoint)screenLocation timestamp:(NSTimeInterval)timestamp;
+- (void)setView:(UIView *)view
 {
-    if (!CGPointEqualToPoint(screenLocation, _location)) {
-        _previousLocation = _location;
-        _location = screenLocation;
+    _view = view;
+    _window = view.window;
+}
+
+- (CGPoint)locationOnScreen
+{
+    return _locationOnScreen;
+}
+
+- (void)setLocationOnScreen:(CGPoint)locationOnScreen
+{
+    _previousLocationOnScreen = _locationOnScreen;
+    _locationOnScreen = locationOnScreen;
+
+    if (_phase == UITouchPhaseStationary || _phase == UITouchPhaseBegan) {
+        _previousLocationOnScreen = locationOnScreen;
     }
     
-    _phase = phase;
-    _timestamp = timestamp;
-}
-
-- (void)_updateGesture:(_UITouchGesture)gesture screenLocation:(CGPoint)screenLocation delta:(CGPoint)delta rotation:(CGFloat)rotation magnification:(CGFloat)magnification timestamp:(NSTimeInterval)timestamp;
-{
-    if (!CGPointEqualToPoint(screenLocation, _location)) {
-        _previousLocation = _location;
-        _location = screenLocation;
+    if (_phase == UITouchPhaseBegan) {
+        _beganPhaseLocationOnScreen = locationOnScreen;
     }
-    
-    _phase = _UITouchPhaseGestureChanged;
-    
-    _gesture = gesture;
-    _delta = delta;
-    _rotation = rotation;
-    _magnification = magnification;
-    _timestamp = timestamp;
 }
 
-- (void)_setDiscreteGesture:(_UITouchGesture)gesture screenLocation:(CGPoint)screenLocation tapCount:(NSUInteger)tapCount delta:(CGPoint)delta timestamp:(NSTimeInterval)timestamp;
+- (BOOL)wasDeliveredToView
 {
-    _phase = _UITouchPhaseDiscreteGesture;
-    _gesture = gesture;
-    _previousLocation = _location = screenLocation;
-    _tapCount = tapCount;
-    _delta = delta;
-    _timestamp = timestamp;
-    _rotation = 0;
-    _magnification = 0;
+    return _wasDeliveredToView;
 }
 
-- (_UITouchGesture)_gesture
+- (void)setWasDeliveredToView:(BOOL)wasDeliveredToView
 {
-    return _gesture;
+    _wasDeliveredToView = wasDeliveredToView;
 }
 
-- (void)_setTouchedView:(UIView *)view
+- (BOOL)wasCancelledInView
 {
-    if (_view != view) {
-        [_view release];
-        _view = [view retain];
-    }
-
-    if (_window != view.window) {
-        [_window release];
-        _window = [view.window retain];
-    }
-
-    [_gestureRecognizers release];
-    _gestureRecognizers = [GestureRecognizersForView(_view) copy];
+    return _wasCancelledInView;
 }
 
-- (void)_removeFromView
+- (void)setWasCancelledInView:(BOOL)wasCancelledInView
 {
-    NSMutableArray *remainingRecognizers = [_gestureRecognizers mutableCopy];
-
-    // if the view is being removed from this touch, we need to remove/cancel any gesture recognizers that belong to the view
-    // being removed. this kinda feels like the wrong place for this, but the touch itself has a list of potential gesture
-    // recognizers attached to it so an active touch only considers the recongizers that were present at the point the touch
-    // first touched the screen. it could easily have recognizers attached to it from superviews of the view being removed so
-    // we can't just cancel them all. the view itself could cancel its own recognizers, but then it needs a way to remove them
-    // from an active touch so in a sense we're right back where we started. so I figured we might as well just take care of it
-    // here and see what happens.
-    for (UIGestureRecognizer *recognizer in _gestureRecognizers) {
-        if (recognizer.view == _view) {
-            if (recognizer.state == UIGestureRecognizerStateBegan || recognizer.state == UIGestureRecognizerStateChanged) {
-                recognizer.state = UIGestureRecognizerStateCancelled;
-            }
-            [remainingRecognizers removeObject:recognizer];
-        }
-    }
-    
-    [_gestureRecognizers release];
-    _gestureRecognizers = [remainingRecognizers copy];
-    [remainingRecognizers release];
-    
-    [_view release];
-    _view = nil;
+    _wasCancelledInView = wasCancelledInView;
 }
 
-- (void)_setTouchPhaseCancelled
+- (NSTimeInterval)beganPhaseTimestamp
 {
-    _phase = UITouchPhaseCancelled;
+    return _beganPhaseTimestamp;
 }
 
-- (CGPoint)_delta
+- (CGPoint)beganPhaseLocationOnScreen
 {
-    return _delta;
+    return _beganPhaseLocationOnScreen;
 }
 
-- (CGFloat)_rotation
+- (NSArray *)gestureRecognizers
 {
-    return _rotation;
+    return [_gestureRecognizers copy];
 }
 
-- (CGFloat)_magnification
+- (void)_addGestureRecognizer:(UIGestureRecognizer *)gesture
 {
-    return _magnification;
+    [_gestureRecognizers addObject:gesture];
 }
 
-- (UIWindow *)window
+- (void)_removeGestureRecognizer:(UIGestureRecognizer *)gesture
 {
-    return _window;
-}
-
-- (CGPoint)_convertLocationPoint:(CGPoint)thePoint toView:(UIView *)inView
-{
-    UIWindow *window = self.window;
-    
-    // The stored location should always be in the coordinate space of the UIScreen that contains the touch's window.
-    // So first convert from the screen to the window:
-    CGPoint point = [window convertPoint:thePoint fromWindow:nil];
-    
-    // Then convert to the desired location (if any).
-    if (inView) {
-        point = [inView convertPoint:point fromView:window];
-    }
-    
-    return point;
+    [_gestureRecognizers removeObject:gesture];
 }
 
 - (CGPoint)locationInView:(UIView *)inView
 {
-    return [self _convertLocationPoint:_location toView:inView];
+    return [self.window convertPoint:[self.window convertPoint:_locationOnScreen fromWindow:nil] toView:inView];
 }
 
 - (CGPoint)previousLocationInView:(UIView *)inView
 {
-    return [self _convertLocationPoint:_previousLocation toView:inView];
+    return [self.window convertPoint:[self.window convertPoint:_previousLocationOnScreen fromWindow:nil] toView:inView];
 }
 
 - (NSString *)description
 {
     NSString *phase = @"";
+    
     switch (self.phase) {
         case UITouchPhaseBegan:
             phase = @"Began";
@@ -236,19 +188,8 @@ static NSArray *GestureRecognizersForView(UIView *view)
         case UITouchPhaseCancelled:
             phase = @"Cancelled";
             break;
-        case _UITouchPhaseGestureBegan:
-            phase = @"GestureBegan";
-            break;
-        case _UITouchPhaseGestureChanged:
-            phase = @"GestureChanged";
-            break;
-        case _UITouchPhaseGestureEnded:
-            phase = @"GestureEnded";
-            break;
-        case _UITouchPhaseDiscreteGesture:
-            phase = @"DiscreteGesture";
-            break;
     }
+    
     return [NSString stringWithFormat:@"<%@: %p; timestamp = %e; tapCount = %lu; phase = %@; view = %@; window = %@>", [self className], self, self.timestamp, (unsigned long)self.tapCount, phase, self.view, self.window];
 }
 

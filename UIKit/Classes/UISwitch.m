@@ -30,7 +30,6 @@
 #import "UISwitch.h"
 
 @implementation UISwitch
-@synthesize on = _on;
 
 - (id)initWithFrame:(CGRect)frame
 {

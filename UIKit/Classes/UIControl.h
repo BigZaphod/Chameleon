@@ -29,7 +29,7 @@
 
 #import "UIView.h"
 
-enum {
+typedef NS_OPTIONS(NSUInteger, UIControlEvents) {
     UIControlEventTouchDown           = 1 <<  0,
     UIControlEventTouchDownRepeat     = 1 <<  1,
     UIControlEventTouchDragInside     = 1 <<  2,
@@ -54,9 +54,7 @@ enum {
     UIControlEventAllEvents           = 0xFFFFFFFF
 };
 
-typedef NSUInteger UIControlEvents;
-
-enum {
+typedef NS_OPTIONS(NSUInteger, UIControlState) {
     UIControlStateNormal               = 0,
     UIControlStateHighlighted          = 1 << 0,
     UIControlStateDisabled             = 1 << 1,
@@ -65,34 +63,23 @@ enum {
     UIControlStateReserved             = 0xFF000000
 };
 
-typedef NSUInteger UIControlState;
-
-typedef enum {
+typedef NS_ENUM(NSInteger, UIControlContentHorizontalAlignment) {
     UIControlContentHorizontalAlignmentCenter = 0,
     UIControlContentHorizontalAlignmentLeft    = 1,
     UIControlContentHorizontalAlignmentRight = 2,
     UIControlContentHorizontalAlignmentFill   = 3,
-} UIControlContentHorizontalAlignment;
+};
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIControlContentVerticalAlignment) {
     UIControlContentVerticalAlignmentCenter  = 0,
     UIControlContentVerticalAlignmentTop     = 1,
     UIControlContentVerticalAlignmentBottom  = 2,
     UIControlContentVerticalAlignmentFill    = 3,
-} UIControlContentVerticalAlignment;
+};
 
-@interface UIControl : UIView {
-@protected
-    NSMutableArray *_registeredActions;
-    BOOL _tracking;
-    BOOL _touchInside;
-    BOOL _enabled;
-    BOOL _selected;
-    BOOL _highlighted;
-    UIControlContentHorizontalAlignment _contentHorizontalAlignment;
-    UIControlContentVerticalAlignment _contentVerticalAlignment;
-}
+@class UITouch;
 
+@interface UIControl : UIView
 - (void)addTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents;
 - (void)removeTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents;
 - (NSArray *)actionsForTarget:(id)target forControlEvent:(UIControlEvents)controlEvent;
@@ -117,5 +104,4 @@ typedef enum {
 
 @property (nonatomic) UIControlContentHorizontalAlignment contentHorizontalAlignment;
 @property (nonatomic) UIControlContentVerticalAlignment contentVerticalAlignment;
-
 @end

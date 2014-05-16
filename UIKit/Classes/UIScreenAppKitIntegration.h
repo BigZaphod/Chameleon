@@ -28,10 +28,22 @@
  */
 
 #import "UIScreen.h"
+#import "UIKitView.h"
 
 @interface UIScreen (AppKitIntegration)
+
+// the windows that make this screen their home
+@property (nonatomic, readonly, copy) NSArray *windows;
+
+// the window from the -windows array which is this screen's key window. this is not really how iOS is likely to work
+// as iOS seems to track a single key window for the whole app, but on OSX the user can change the key window out from
+// under the app, so this entire thing has to be managed differently. my design here is that each screen has a potential
+// key window which is what is set when a UIWindow is told to become key. the app's keyWindow (as reported by UIApplication)
+// will be the keyWindow of the screen that's currently on the NSWindow that's key.... yeah... confusing, eh?
+@property (nonatomic, readonly) UIWindow *keyWindow;
+
 // the real NSView that the screen lives on (or nil if there isn't one)
-- (UIKitView *)UIKitView;
+@property (nonatomic, readonly) UIKitView *UIKitView;
 
 // promotes this screen to the main screen
 // this only changes what [UIScreen mainScreen] returns in the future, it doesn't move anything between views, etc.

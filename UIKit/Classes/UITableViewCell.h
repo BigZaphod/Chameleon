@@ -29,78 +29,56 @@
 
 #import "UIView.h"
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UITableViewCellAccessoryType) {
     UITableViewCellAccessoryNone,
     UITableViewCellAccessoryDisclosureIndicator,
     UITableViewCellAccessoryDetailDisclosureButton,
     UITableViewCellAccessoryCheckmark
-} UITableViewCellAccessoryType;
+};
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UITableViewCellSeparatorStyle) {
     UITableViewCellSeparatorStyleNone,
     UITableViewCellSeparatorStyleSingleLine,
     UITableViewCellSeparatorStyleSingleLineEtched
-} UITableViewCellSeparatorStyle;
+};
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UITableViewCellStyle) {
     UITableViewCellStyleDefault,
     UITableViewCellStyleValue1,
     UITableViewCellStyleValue2,
     UITableViewCellStyleSubtitle
-} UITableViewCellStyle;
+};
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UITableViewCellSelectionStyle) {
     UITableViewCellSelectionStyleNone,
     UITableViewCellSelectionStyleBlue,
     UITableViewCellSelectionStyleGray
-} UITableViewCellSelectionStyle;
+};
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UITableViewCellEditingStyle) {
     UITableViewCellEditingStyleNone,
     UITableViewCellEditingStyleDelete,
     UITableViewCellEditingStyleInsert
-} UITableViewCellEditingStyle;
+};
 
-@class UITableViewCellSeparator, UILabel, UIImageView;
+@class UILabel, UIImageView;
 
-@interface UITableViewCell : UIView {
-@private
-    UITableViewCellStyle _style;
-    UITableViewCellSeparator *_seperatorView;
-    UIView *_contentView;
-    UILabel *_textLabel;
-    UILabel *_detailTextLabel; // not yet displayed!
-    UIImageView *_imageView;
-    UIView *_backgroundView;
-    UIView *_selectedBackgroundView;
-    UITableViewCellAccessoryType _accessoryType;
-    UIView *_accessoryView;
-    UITableViewCellAccessoryType _editingAccessoryType;
-    UITableViewCellSelectionStyle _selectionStyle;
-    NSInteger _indentationLevel;
-    BOOL _editing;
-    BOOL _selected;
-    BOOL _highlighted;
-    BOOL _showingDeleteConfirmation;
-    NSString *_reuseIdentifier;
-    CGFloat _indentationWidth;
-}
-
+@interface UITableViewCell : UIView
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated;
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated;
 - (void)prepareForReuse;
 
-@property (nonatomic, readonly, retain) UIView *contentView;
-@property (nonatomic, readonly, retain) UILabel *textLabel;
-@property (nonatomic, readonly, retain) UILabel *detailTextLabel;
-@property (nonatomic, readonly, retain) UIImageView *imageView;
-@property (nonatomic, retain) UIView *backgroundView;
-@property (nonatomic, retain) UIView *selectedBackgroundView;
+@property (nonatomic, readonly, strong) UIView *contentView;
+@property (nonatomic, readonly, strong) UILabel *textLabel;
+@property (nonatomic, readonly, strong) UILabel *detailTextLabel;
+@property (nonatomic, readonly, strong) UIImageView *imageView;
+@property (nonatomic, strong) UIView *backgroundView;
+@property (nonatomic, strong) UIView *selectedBackgroundView;
 @property (nonatomic) UITableViewCellSelectionStyle selectionStyle;
 @property (nonatomic) NSInteger indentationLevel;
 @property (nonatomic) UITableViewCellAccessoryType accessoryType;
-@property (nonatomic, retain) UIView *accessoryView;
+@property (nonatomic, strong) UIView *accessoryView;
 @property (nonatomic) UITableViewCellAccessoryType editingAccessoryType;
 @property (nonatomic, getter=isSelected) BOOL selected;
 @property (nonatomic, getter=isHighlighted) BOOL highlighted;
@@ -108,5 +86,4 @@ typedef enum {
 @property (nonatomic, readonly) BOOL showingDeleteConfirmation;  // not yet implemented
 @property (nonatomic, readonly, copy) NSString *reuseIdentifier;
 @property (nonatomic, assign) CGFloat indentationWidth; // 10 per default
-
 @end

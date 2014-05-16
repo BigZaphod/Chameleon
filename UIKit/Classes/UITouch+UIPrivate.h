@@ -29,19 +29,20 @@
 
 #import "UITouch.h"
 
-@class UIView;
+@class UIGestureRecognizer;
 
 @interface UITouch (UIPrivate)
-- (void)_setPhase:(UITouchPhase)phase screenLocation:(CGPoint)screenLocation tapCount:(NSUInteger)tapCount timestamp:(NSTimeInterval)timestamp;
-- (void)_updatePhase:(UITouchPhase)phase screenLocation:(CGPoint)screenLocation timestamp:(NSTimeInterval)timestamp;
-- (void)_updateGesture:(_UITouchGesture)gesture screenLocation:(CGPoint)screenLocation delta:(CGPoint)delta rotation:(CGFloat)rotation magnification:(CGFloat)magnification timestamp:(NSTimeInterval)timestamp;
-- (void)_setDiscreteGesture:(_UITouchGesture)gesture screenLocation:(CGPoint)screenLocation tapCount:(NSUInteger)tapCount delta:(CGPoint)delta timestamp:(NSTimeInterval)timestamp;
-- (void)_setTouchedView:(UIView *)view; // sets up the window and gesture recognizers as well
-- (void)_removeFromView;                // sets the initial view to nil, but leaves window and gesture recognizers alone - used when a view is removed while touch is active
-- (void)_setTouchPhaseCancelled;
-- (CGPoint)_delta;
-- (CGFloat)_rotation;
-- (CGFloat)_magnification;
-- (UIView *)_previousView;
-- (_UITouchGesture)_gesture;
+@property (nonatomic, readwrite, assign) NSTimeInterval timestamp;      // defaults to now
+@property (nonatomic, readwrite, assign) NSUInteger tapCount;           // defaults to 0
+@property (nonatomic, readwrite, assign) UITouchPhase phase;            // defaults to UITouchPhaseBegan, if changed to UITouchPhaseStationary, also sets previous location to current value of locationInWindow
+@property (nonatomic, readwrite, assign) UIView *view;                  // defaults to nil
+@property (nonatomic, readwrite, assign) CGPoint locationOnScreen;      // if phase is UITouchPhaseBegan or UITouchPhaseStationary, also sets internal previous location to same value
+
+@property (nonatomic, readwrite, assign) BOOL wasDeliveredToView;       // defaults to NO, used to keep things on the up and up with gesture recognizers that can delay and cancel touches (pure evil)
+@property (nonatomic, readwrite, assign) BOOL wasCancelledInView;       // defaults to NO, used to keep things on the up and up with gesture recognizers that can delay and cancel touches (pure evil)
+@property (nonatomic, readonly) NSTimeInterval beganPhaseTimestamp;     // when phase is UITouchPhaseBegan, changes to timestamp property also copied here
+@property (nonatomic, readonly) CGPoint beganPhaseLocationOnScreen;     // when phase is UITouchPhaseBegan, changes to locationOnScreen property also copied here
+
+- (void)_addGestureRecognizer:(UIGestureRecognizer *)recognizer;
+- (void)_removeGestureRecognizer:(UIGestureRecognizer *)recognizer;
 @end

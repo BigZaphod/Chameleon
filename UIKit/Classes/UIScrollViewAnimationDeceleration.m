@@ -121,41 +121,45 @@ static BOOL BounceComponent(NSTimeInterval t, UIScrollViewAnimationDecelerationC
     }
 }
 
-@implementation UIScrollViewAnimationDeceleration
+@implementation UIScrollViewAnimationDeceleration {
+    UIScrollViewAnimationDecelerationComponent _x;
+    UIScrollViewAnimationDecelerationComponent _y;
+    NSTimeInterval _lastMomentumTime;
+}
 
 - (id)initWithScrollView:(UIScrollView *)sv velocity:(CGPoint)v;
 {
     if ((self=[super initWithScrollView:sv])) {
-        lastMomentumTime = beginTime;
+        _lastMomentumTime = self.beginTime;
 
-        x.decelerateTime = beginTime;
-        x.velocity = ClampedVelocty(v.x);
-        x.position = scrollView.contentOffset.x;
-        x.returnFrom = 0;
-        x.returnTime = 0;
-        x.bounced = NO;
+        _x.decelerateTime = self.beginTime;
+        _x.velocity = ClampedVelocty(v.x);
+        _x.position = self.scrollView.contentOffset.x;
+        _x.returnFrom = 0;
+        _x.returnTime = 0;
+        _x.bounced = NO;
 
-        y.decelerateTime = beginTime;
-        y.velocity = ClampedVelocty(v.y);
-        y.position = scrollView.contentOffset.y;
-        y.returnFrom = 0;
-        y.returnTime = 0;
-        y.bounced = NO;
+        _y.decelerateTime = self.beginTime;
+        _y.velocity = ClampedVelocty(v.y);
+        _y.position = self.scrollView.contentOffset.y;
+        _y.returnFrom = 0;
+        _y.returnTime = 0;
+        _y.bounced = NO;
 
         // if the velocity is 0, we're going to assume we just need to return it back to position immediately
         // this works around the case where the content was already at an edge and the user just flicked in
         // such a way that it should bounce a bit and return to the proper offset. not doing something like this
         // (along with the associated code in UIScrollView) results in crazy forces being applied in those cases.
-        if (x.velocity == 0) {
-            x.bounced = YES;
-            x.returnTime = beginTime;
-            x.returnFrom = x.position;
+        if (_x.velocity == 0) {
+            _x.bounced = YES;
+            _x.returnTime = self.beginTime;
+            _x.returnFrom = _x.position;
         }
         
-        if (y.velocity == 0) {
-            y.bounced = YES;
-            y.returnTime = beginTime;
-            y.returnFrom = y.position;
+        if (_y.velocity == 0) {
+            _y.bounced = YES;
+            _y.returnTime = self.beginTime;
+            _y.returnFrom = _y.position;
         }
     }
     return self;
@@ -164,40 +168,40 @@ static BOOL BounceComponent(NSTimeInterval t, UIScrollViewAnimationDecelerationC
 - (BOOL)animate
 {
     const NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
-    const BOOL isFinishedWaitingForMomentumScroll = ((currentTime - lastMomentumTime) > 0.15f);
+    const BOOL isFinishedWaitingForMomentumScroll = ((currentTime - _lastMomentumTime) > 0.15f);
 
     BOOL finished = NO;
 
-    while (!finished && currentTime >= beginTime) {
-        CGPoint confinedOffset = [scrollView _confinedContentOffset:CGPointMake(x.position, y.position)];
+    while (!finished && currentTime >= self.beginTime) {
+        CGPoint confinedOffset = [self.scrollView _confinedContentOffset:CGPointMake(_x.position, _y.position)];
         
-        const BOOL verticalIsFinished   = BounceComponent(beginTime, &y, confinedOffset.y);
-        const BOOL horizontalIsFinished = BounceComponent(beginTime, &x, confinedOffset.x);
+        const BOOL verticalIsFinished   = BounceComponent(self.beginTime, &_y, confinedOffset.y);
+        const BOOL horizontalIsFinished = BounceComponent(self.beginTime, &_x, confinedOffset.x);
         
         finished = (verticalIsFinished && horizontalIsFinished && isFinishedWaitingForMomentumScroll);
 
-        beginTime += physicsTimeStep;
+        self.beginTime += physicsTimeStep;
     }
 
-    [scrollView _setRestrainedContentOffset:CGPointMake(x.position, y.position)];
+    [self.scrollView _setRestrainedContentOffset:CGPointMake(_x.position, _y.position)];
     
     return finished;
 }
 
 - (void)momentumScrollBy:(CGPoint)delta
 {
-    lastMomentumTime = [NSDate timeIntervalSinceReferenceDate];
+    _lastMomentumTime = [NSDate timeIntervalSinceReferenceDate];
     
-    if (!x.bounced) {
-        x.position += delta.x;
-        x.velocity = ClampedVelocty(delta.x / (lastMomentumTime - x.decelerateTime));
-        x.decelerateTime = lastMomentumTime;
+    if (!_x.bounced) {
+        _x.position += delta.x;
+        _x.velocity = ClampedVelocty(delta.x / (_lastMomentumTime - _x.decelerateTime));
+        _x.decelerateTime = _lastMomentumTime;
     }
 
-    if (!y.bounced) {
-        y.position += delta.y;
-        y.velocity = ClampedVelocty(delta.y / (lastMomentumTime - y.decelerateTime));
-        y.decelerateTime = lastMomentumTime;
+    if (!_y.bounced) {
+        _y.position += delta.y;
+        _y.velocity = ClampedVelocty(delta.y / (_lastMomentumTime - _y.decelerateTime));
+        _y.decelerateTime = _lastMomentumTime;
     }
 }
 

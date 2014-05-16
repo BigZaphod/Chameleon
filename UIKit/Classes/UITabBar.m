@@ -40,9 +40,9 @@
 
 #define TABBAR_HEIGHT 60.0
 
-@implementation UITabBar
-
-@synthesize items = _items, delegate = _delegate;
+@implementation UITabBar {
+    NSInteger _selectedItemIndex;
+}
 
 - (id)initWithFrame:(CGRect)rect
 {
@@ -50,19 +50,12 @@
         rect.size.height = TABBAR_HEIGHT; // tabbar is always fixed
         _selectedItemIndex = -1;
         UIImage *backgroundImage = [UIImage _popoverBackgroundImage];
-        UIImageView *backgroundView = [[[UIImageView alloc] initWithImage:backgroundImage] autorelease];
+        UIImageView *backgroundView = [[UIImageView alloc] initWithImage:backgroundImage];
         backgroundView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         backgroundView.frame = rect;
         [self addSubview:backgroundView];
     }
     return self;
-}
-
-- (void)dealloc
-{
-    _delegate = nil;
-    [_items release];
-    [super dealloc];
 }
 
 - (UITabBarItem *)selectedItem

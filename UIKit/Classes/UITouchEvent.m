@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, The Iconfactory. All rights reserved.
+ * Copyright (c) 2013, The Iconfactory. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,27 +27,51 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIViewBlockAnimationDelegate.h"
-#import "UIApplication.h"
+#import "UITouchEvent.h"
+#import "UITouch.h"
+#import "UIGestureRecognizer+UIPrivate.h"
 
-@implementation UIViewBlockAnimationDelegate
-@synthesize completion=_completion, ignoreInteractionEvents=_ignoreInteractionEvents;
+@implementation UITouchEvent
 
-- (void)dealloc
+- (id)initWithTouch:(UITouch *)touch
 {
-    [_completion release];
-    [super dealloc];
+    if ((self=[super init])) {
+        _touch = touch;
+        _touchEventGesture = UITouchEventGestureNone;
+    }
+    return self;
 }
 
-- (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished
+- (NSTimeInterval)timestamp
 {
-    if (_completion) {
-        _completion([finished boolValue]);
+    return _touch.timestamp;
+}
+
+- (NSSet *)allTouches
+{
+    return [NSSet setWithObject:_touch];
+}
+
+- (UIEventType)type
+{
+    return UIEventTypeTouches;
+}
+
+- (BOOL)isDiscreteGesture
+{
+    return (_touchEventGesture == UITouchEventGestureScrollWheel ||
+            _touchEventGesture == UITouchEventGestureRightClick ||
+            _touchEventGesture == UITouchEventGestureMouseMove ||
+            _touchEventGesture == UITouchEventGestureMouseEntered ||
+            _touchEventGesture == UITouchEventGestureMouseExited ||
+            _touchEventGesture == UITouchEventGestureSwipe);
+}
+
+- (void)endTouchEvent
+{
+    for (UIGestureRecognizer *gesture in _touch.gestureRecognizers) {
+        [gesture _endTrackingTouch:_touch withEvent:self];
     }
-    
-    if (_ignoreInteractionEvents) {
-        [[UIApplication sharedApplication] endIgnoringInteractionEvents];
-    }	
 }
 
 @end

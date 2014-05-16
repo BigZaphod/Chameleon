@@ -1,11 +1,5 @@
-//
-//  UINavigationItem+UIPrivate.h
-//  UIKit
-//
-//  Created by Jim Dovey on 11-03-22.
-//
 /*
- * Copyright (c) 2011, The Iconfactory. All rights reserved.
+ * Copyright (c) 2013, The Iconfactory. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -35,9 +29,4 @@
 
 #import "UINavigationItem.h"
 
-@class UINavigationBar;
-
-@interface UINavigationItem (UIPrivate)
-- (void)_setNavigationBar:(UINavigationBar *)navigationBar;
-- (UINavigationBar *)_navigationBar;
-@end
+extern NSString *const UINavigationItemDidChange;

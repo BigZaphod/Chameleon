@@ -28,13 +28,8 @@
  */
 
 #import "UIScrollView.h"
-#import "UIView+UIPrivate.h"
 #import "UIScroller.h"
-#import "UIScreen+UIPrivate.h"
-#import "UIWindow.h"
 #import "UITouch.h"
-#import "UIImageView.h"
-#import "UIImage+UIPrivate.h"
 #import "UIResponderAppKitIntegration.h"
 #import "UIScrollViewAnimationScroll.h"
 #import "UIScrollViewAnimationDeceleration.h"
@@ -52,14 +47,26 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 @interface UIScrollView () <_UIScrollerDelegate>
 @end
 
-@implementation UIScrollView
-@synthesize contentOffset=_contentOffset, contentInset=_contentInset, scrollIndicatorInsets=_scrollIndicatorInsets;
-@synthesize showsHorizontalScrollIndicator=_showsHorizontalScrollIndicator, showsVerticalScrollIndicator=_showsVerticalScrollIndicator, contentSize=_contentSize;
-@synthesize maximumZoomScale=_maximumZoomScale, minimumZoomScale=_minimumZoomScale, scrollsToTop=_scrollsToTop;
-@synthesize indicatorStyle=_indicatorStyle, delaysContentTouches=_delaysContentTouches, delegate=_delegate, pagingEnabled=_pagingEnabled;
-@synthesize canCancelContentTouches=_canCancelContentTouches, bouncesZoom=_bouncesZoom, zooming=_zooming;
-@synthesize alwaysBounceVertical=_alwaysBounceVertical, alwaysBounceHorizontal=_alwaysBounceHorizontal, bounces=_bounces;
-@synthesize decelerationRate=_decelerationRate, scrollWheelGestureRecognizer=_scrollWheelGestureRecognizer, panGestureRecognizer=_panGestureRecognizer;
+@implementation UIScrollView {
+    UIScroller *_verticalScroller;
+    UIScroller *_horizontalScroller;
+
+    UIScrollViewAnimation *_scrollAnimation;
+    NSTimer *_scrollTimer;
+    
+    struct {
+        unsigned scrollViewDidScroll : 1;
+        unsigned scrollViewWillBeginDragging : 1;
+        unsigned scrollViewDidEndDragging : 1;
+        unsigned viewForZoomingInScrollView : 1;
+        unsigned scrollViewWillBeginZooming : 1;
+        unsigned scrollViewDidEndZooming : 1;
+        unsigned scrollViewDidZoom : 1;
+        unsigned scrollViewDidEndScrollingAnimation : 1;
+        unsigned scrollViewWillBeginDecelerating : 1;
+        unsigned scrollViewDidEndDecelerating : 1;
+    } _delegateCan;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -108,12 +115,6 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     _horizontalScroller.delegate = nil;
     _verticalScroller.delegate = nil;
     
-    [_panGestureRecognizer release];
-    [_scrollWheelGestureRecognizer release];
-    [_scrollAnimation release];
-    [_verticalScroller release];
-    [_horizontalScroller release];
-    [super dealloc];
 }
 
 - (void)setDelegate:(id)newDelegate
@@ -194,7 +195,6 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     [_scrollTimer invalidate];
     _scrollTimer = nil;
     
-    [_scrollAnimation release];
     _scrollAnimation = nil;
     
     if (_delegateCan.scrollViewDidEndScrollingAnimation) {
@@ -222,7 +222,8 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 - (void)_setScrollAnimation:(UIScrollViewAnimation *)animation
 {
     [self _cancelScrollAnimation];
-    _scrollAnimation = [animation retain];
+    
+    _scrollAnimation = animation;
 
     if (!_scrollTimer) {
         _scrollTimer = [NSTimer scheduledTimerWithTimeInterval:1/(NSTimeInterval)UIScrollViewScrollAnimationFramesPerSecond target:self selector:@selector(_updateScrollAnimation) userInfo:nil repeats:YES];
@@ -317,27 +318,38 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     [self _bringScrollersToFront];
 }
 
+- (void)_updateBounds
+{
+    CGRect bounds = self.bounds;
+    bounds.origin.x = _contentOffset.x - _contentInset.left;
+    bounds.origin.y = _contentOffset.y - _contentInset.top;
+    self.bounds = bounds;
+    
+    [self _updateScrollers];
+    [self setNeedsLayout];
+}
+
 - (void)setContentOffset:(CGPoint)theOffset animated:(BOOL)animated
 {
     if (animated) {
-        UIScrollViewAnimationScroll *animation = [[UIScrollViewAnimationScroll alloc] initWithScrollView:self
-                                                                                       fromContentOffset:self.contentOffset
-                                                                                         toContentOffset:theOffset
-                                                                                                duration:UIScrollViewAnimationDuration
-                                                                                                   curve:UIScrollViewAnimationScrollCurveLinear];
-        [self _setScrollAnimation:animation];
-        [animation release];
+        UIScrollViewAnimationScroll *animation = nil;
+        
+        if ([_scrollAnimation isKindOfClass:[UIScrollViewAnimationScroll class]]) {
+            animation = (UIScrollViewAnimationScroll *)_scrollAnimation;
+        }
+        
+        if (!animation || !CGPointEqualToPoint(theOffset, animation.endContentOffset)) {
+            [self _setScrollAnimation:[[UIScrollViewAnimationScroll alloc] initWithScrollView:self
+                                                                            fromContentOffset:self.contentOffset
+                                                                              toContentOffset:theOffset
+                                                                                     duration:UIScrollViewAnimationDuration
+                                                                                        curve:UIScrollViewAnimationScrollCurveLinear]];
+        }
     } else {
         _contentOffset.x = roundf(theOffset.x);
         _contentOffset.y = roundf(theOffset.y);
 
-        CGRect bounds = self.bounds;
-        bounds.origin.x = _contentOffset.x+_contentInset.left;
-        bounds.origin.y = _contentOffset.y+_contentInset.top;
-        self.bounds = bounds;
-        
-        [self _updateScrollers];
-        [self setNeedsLayout];
+        [self _updateBounds];
 
         if (_delegateCan.scrollViewDidScroll) {
             [_delegate scrollViewDidScroll:self];
@@ -348,6 +360,20 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 - (void)setContentOffset:(CGPoint)theOffset
 {
     [self setContentOffset:theOffset animated:NO];
+}
+
+- (void)setContentInset:(UIEdgeInsets)contentInset
+{
+    if (!UIEdgeInsetsEqualToEdgeInsets(contentInset, _contentInset)) {
+        const CGFloat x = contentInset.left - _contentInset.left;
+        const CGFloat y = contentInset.top - _contentInset.top;
+        
+        _contentInset = contentInset;
+        _contentOffset.x -= x;
+        _contentOffset.y -= y;
+        
+        [self _updateBounds];
+    }
 }
 
 - (void)setContentSize:(CGSize)newSize
@@ -373,33 +399,6 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 - (BOOL)isTracking
 {
     return NO;
-}
-
-- (void)mouseMoved:(CGPoint)delta withEvent:(UIEvent *)event
-{
-    UITouch *touch = [[event allTouches] anyObject];
-    const CGPoint point = [touch locationInView:self];
-    const CGFloat scrollerSize = UIScrollerWidthForBoundsSize(self.bounds.size);
-    const BOOL shouldShowHorizontal = CGRectContainsPoint(CGRectInset(_horizontalScroller.frame, -scrollerSize, -scrollerSize), point);
-    const BOOL shouldShowVertical = CGRectContainsPoint(CGRectInset(_verticalScroller.frame, -scrollerSize, -scrollerSize), point);
-    const BOOL shouldShowScrollers = (shouldShowVertical || shouldShowHorizontal || _decelerating);
-    
-    _horizontalScroller.alwaysVisible = shouldShowScrollers;
-    _verticalScroller.alwaysVisible = shouldShowScrollers;
-    
-    [super mouseMoved:delta withEvent:event];
-}
-
-- (void)mouseExitedView:(UIView *)exited enteredView:(UIView *)entered withEvent:(UIEvent *)event
-{
-    if (!_decelerating) {
-        if ([exited isDescendantOfView:self] && ![entered isDescendantOfView:self]) {
-            _horizontalScroller.alwaysVisible = NO;
-            _verticalScroller.alwaysVisible = NO;
-        }
-    }
-    
-    [super mouseExitedView:exited enteredView:entered withEvent:event];
 }
 
 - (UIScrollViewAnimation *)_pageSnapAnimation
@@ -428,11 +427,11 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     
     // quickly animate the snap (if necessary)
     if (!CGPointEqualToPoint(finalContentOffset, _contentOffset)) {
-        return [[[UIScrollViewAnimationScroll alloc] initWithScrollView:self
+        return [[UIScrollViewAnimationScroll alloc] initWithScrollView:self
                                                       fromContentOffset:_contentOffset
                                                         toContentOffset:finalContentOffset
                                                                duration:UIScrollViewQuickAnimationDuration
-                                                                  curve:UIScrollViewAnimationScrollCurveQuadraticEaseOut] autorelease];
+                                                                  curve:UIScrollViewAnimationScrollCurveQuadraticEaseOut];
     } else {
         return nil;
     }
@@ -452,8 +451,8 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     }
     
     if (!CGPointEqualToPoint(velocity, CGPointZero) || !CGPointEqualToPoint(confinedOffset, _contentOffset)) {
-        return [[[UIScrollViewAnimationDeceleration alloc] initWithScrollView:self
-                                                                     velocity:velocity] autorelease];
+        return [[UIScrollViewAnimationDeceleration alloc] initWithScrollView:self
+                                                                     velocity:velocity];
     } else {
         return nil;
     }
@@ -473,11 +472,6 @@ const float UIScrollViewDecelerationRateFast = 0.99;
             [_delegate scrollViewWillBeginDragging:self];
         }
     }
-}
-
-- (BOOL)isDragging
-{
-    return _dragging;
 }
 
 - (void)_endDraggingWithDecelerationVelocity:(CGPoint)velocity
@@ -598,9 +592,11 @@ const float UIScrollViewDecelerationRateFast = 0.99;
                 // messages can be preserved perfectly rather than trying to emulate them myself. this results
                 // in a better feeling end product even if the bouncing at the edges isn't quite entirely right.
                 // see notes in UIScrollViewAnimationDeceleration.m for more.
-                if ([_scrollAnimation respondsToSelector:@selector(momentumScrollBy:)]) {
-                    [_scrollAnimation momentumScrollBy:delta];
-                }
+                
+                // updated note: this used to be guarded by respondsToSelector: but I have instead added a blank
+                // implementation of -momentumScrollBy: to UIScrollAnimation's base class. If a specific animation
+                // cannot deal with a momentum scroll, then it will be ignored.
+                [_scrollAnimation momentumScrollBy:delta];
             } else {
                 CGPoint offset = self.contentOffset;
                 offset.x += delta.x;
@@ -643,11 +639,6 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     }
     
     [self _endDraggingWithDecelerationVelocity:CGPointZero];
-}
-
-- (BOOL)isDecelerating
-{
-    return NO;
 }
 
 - (void)scrollRectToVisible:(CGRect)rect animated:(BOOL)animated
@@ -726,6 +717,59 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"<%@: %p; frame = (%.0f %.0f; %.0f %.0f); clipsToBounds = %@; layer = %@; contentOffset = {%.0f, %.0f}>", [self className], self, self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.frame.size.height, (self.clipsToBounds ? @"YES" : @"NO"), self.layer, self.contentOffset.x, self.contentOffset.y];
+}
+
+// after some experimentation, it seems UIScrollView blocks or captures the touch events that fall through and
+// I'm not entirely sure why, but something is certainly going on there so I'm replicating that here. since I
+// suspect it's just stopping everything from going through, I'm also capturing and ignoring some of the
+// mouse-related responder events added by Chameleon rather than passing them along the responder chain, too.
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+}
+
+- (void)scrollWheelMoved:(CGPoint)delta withEvent:(UIEvent *)event
+{
+}
+
+- (void)rightClick:(UITouch *)touch withEvent:(UIEvent *)event
+{
+}
+
+- (void)mouseMoved:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    const CGPoint point = [touch locationInView:self];
+    const CGFloat scrollerSize = UIScrollerWidthForBoundsSize(self.bounds.size);
+    const BOOL shouldShowHorizontal = CGRectContainsPoint(CGRectInset(_horizontalScroller.frame, -scrollerSize, -scrollerSize), point);
+    const BOOL shouldShowVertical = CGRectContainsPoint(CGRectInset(_verticalScroller.frame, -scrollerSize, -scrollerSize), point);
+    const BOOL shouldShowScrollers = (shouldShowVertical || shouldShowHorizontal || _decelerating);
+    
+    _horizontalScroller.alwaysVisible = shouldShowScrollers;
+    _verticalScroller.alwaysVisible = shouldShowScrollers;
+}
+
+- (void)mouseExited:(UIView *)view withEvent:(UIEvent *)event
+{
+    if (!_decelerating) {
+        _horizontalScroller.alwaysVisible = NO;
+        _verticalScroller.alwaysVisible = NO;
+    }
+}
+
+- (id)mouseCursorForEvent:(UIEvent *)event
+{
+    return nil;
 }
 
 @end

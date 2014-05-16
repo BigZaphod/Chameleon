@@ -29,9 +29,9 @@
 
 #import "UIBarItem.h"
 #import "UIImage.h"
+#import "UIAppearanceInstance.h"
 
 @implementation UIBarItem
-@synthesize enabled=_enabled, image=_image, imageInsets=_imageInsets, title=_title, tag=_tag;
 
 - (id)init
 {
@@ -42,12 +42,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_image release];
-    [_title release];
-    [super dealloc];
-}
 
 - (void)setTitleTextAttributes:(NSDictionary *)attributes forState:(UIControlState)state
 {

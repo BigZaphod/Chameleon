@@ -27,95 +27,33 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UINavigationItem.h"
-#import "UIBarButtonItem.h"
 #import "UINavigationItem+UIPrivate.h"
-#import "UINavigationBar.h"
-#import "UINavigationBar+UIPrivate.h"
 
-static void * const UINavigationItemContext = "UINavigationItemContext";
+NSString *const UINavigationItemDidChange = @"UINavigationItemDidChange";
 
 @implementation UINavigationItem
-@synthesize title=_title, rightBarButtonItem=_rightBarButtonItem, titleView=_titleView, hidesBackButton=_hidesBackButton;
-@synthesize leftBarButtonItem=_leftBarButtonItem, backBarButtonItem=_backBarButtonItem, prompt=_prompt;
-
-+ (NSSet *)_keyPathsTriggeringUIUpdates
-{
-    static NSSet * __keyPaths = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        __keyPaths = [[NSSet alloc] initWithObjects:@"title", @"prompt", @"backBarButtonItem", @"leftBarButtonItem", @"rightBarButtonItem", @"titleView", @"hidesBackButton", nil];
-    });
-    return __keyPaths;
-}
 
 - (id)initWithTitle:(NSString *)theTitle
 {
     if ((self=[super init])) {
-        self.title = theTitle;
+        _title = [theTitle copy];
     }
     return self;
 }
 
-- (void)dealloc
+- (void)setBackBarButtonItem:(UIBarButtonItem *)backBarButtonItem
 {
-    // removes automatic observation
-    [self _setNavigationBar:nil];
-    
-    [_backBarButtonItem release];
-    [_leftBarButtonItem release];
-    [_rightBarButtonItem release];
-    [_title release];
-    [_titleView release];
-    [_prompt release];
-    [super dealloc];
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if (context != UINavigationItemContext) {
-        if ([[self superclass] instancesRespondToSelector:_cmd])
-            [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-        return;
+    if (_backBarButtonItem != backBarButtonItem) {
+        _backBarButtonItem = backBarButtonItem;
+        [[NSNotificationCenter defaultCenter] postNotificationName:UINavigationItemDidChange object:self];
     }
-    
-    [[self _navigationBar] _updateNavigationItem:self animated:NO];
-}
-
-- (void)_setNavigationBar:(UINavigationBar *)navigationBar
-{
-    // weak reference
-    if (_navigationBar == navigationBar)
-        return;
-    
-    if (_navigationBar != nil && navigationBar == nil) {
-        // remove observation
-        for (NSString * keyPath in [isa _keyPathsTriggeringUIUpdates]) {
-            [self removeObserver:self forKeyPath:keyPath];
-        }
-    }
-    else if (navigationBar != nil) {
-        // observe property changes to notify UI element
-        for (NSString * keyPath in [isa _keyPathsTriggeringUIUpdates]) {
-            [self addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionNew context:UINavigationItemContext];
-        }
-    }
-    
-    _navigationBar = navigationBar;
-}
-
-- (UINavigationBar *)_navigationBar
-{
-    return _navigationBar;
 }
 
 - (void)setLeftBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated
 {
-    if (item != _leftBarButtonItem) {
-        [self willChangeValueForKey: @"leftBarButtonItem"];
-        [_leftBarButtonItem release];
-        _leftBarButtonItem = [item retain];
-        [self didChangeValueForKey: @"leftBarButtonItem"];
+    if (_leftBarButtonItem != item) {
+        _leftBarButtonItem = item;
+        [[NSNotificationCenter defaultCenter] postNotificationName:UINavigationItemDidChange object:self];
     }
 }
 
@@ -126,11 +64,9 @@ static void * const UINavigationItemContext = "UINavigationItemContext";
 
 - (void)setRightBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated
 {
-    if (item != _rightBarButtonItem) {
-        [self willChangeValueForKey: @"rightBarButtonItem"];
-        [_rightBarButtonItem release];
-        _rightBarButtonItem = [item retain];
-        [self didChangeValueForKey: @"rightBarButtonItem"];
+    if (_rightBarButtonItem != item) {
+        _rightBarButtonItem = item;
+        [[NSNotificationCenter defaultCenter] postNotificationName:UINavigationItemDidChange object:self];
     }
 }
 
@@ -141,9 +77,10 @@ static void * const UINavigationItemContext = "UINavigationItemContext";
 
 - (void)setHidesBackButton:(BOOL)hidesBackButton animated:(BOOL)animated
 {
-    [self willChangeValueForKey: @"hidesBackButton"];
-    _hidesBackButton = hidesBackButton;
-    [self didChangeValueForKey: @"hidesBackButton"];
+    if (_hidesBackButton != hidesBackButton) {
+        _hidesBackButton = hidesBackButton;
+        [[NSNotificationCenter defaultCenter] postNotificationName:UINavigationItemDidChange object:self];
+    }
 }
 
 - (void)setHidesBackButton:(BOOL)hidesBackButton
@@ -151,12 +88,27 @@ static void * const UINavigationItemContext = "UINavigationItemContext";
     [self setHidesBackButton:hidesBackButton animated:NO];
 }
 
-- (UIBarButtonItem *)backBarButtonItem
+- (void)setTitle:(NSString *)title
 {
-    if (_backBarButtonItem) {
-        return _backBarButtonItem;
-    } else {
-        return [[[UIBarButtonItem alloc] initWithTitle:(self.title ?: @"Back") style:UIBarButtonItemStylePlain target:nil action:nil] autorelease];
+    if (![_title isEqual:title]) {
+        _title = [title copy];
+        [[NSNotificationCenter defaultCenter] postNotificationName:UINavigationItemDidChange object:self];
+    }
+}
+
+- (void)setPrompt:(NSString *)prompt
+{
+    if (![_prompt isEqual:prompt]) {
+        _prompt = [prompt copy];
+        [[NSNotificationCenter defaultCenter] postNotificationName:UINavigationItemDidChange object:self];
+    }
+}
+
+- (void)setTitleView:(UIView *)titleView
+{
+    if (_titleView != titleView) {
+        _titleView = titleView;
+        [[NSNotificationCenter defaultCenter] postNotificationName:UINavigationItemDidChange object:self];
     }
 }
 

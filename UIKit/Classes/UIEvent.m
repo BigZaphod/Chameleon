@@ -27,55 +27,22 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIEvent+UIPrivate.h"
+#import "UIEvent.h"
 #import "UITouch.h"
 
 @implementation UIEvent
-@synthesize timestamp=_timestamp, type=_type;
 
-- (id)initWithEventType:(UIEventType)type
+- (id)init
 {
     if ((self=[super init])) {
-        _type = type;
-        _unhandledKeyPressEvent = NO;
+        _timestamp = [NSDate timeIntervalSinceReferenceDate];
     }
     return self;
 }
 
-- (void)dealloc
-{
-    [_touch release];
-    [super dealloc];
-}
-
-- (void)_setTouch:(UITouch *)t
-{
-    if (_touch != t) {
-        [_touch release];
-        _touch = [t retain];
-    }
-}
-
-- (void)_setTimestamp:(NSTimeInterval)timestamp
-{
-    _timestamp = timestamp;
-}
-
-// this is stupid hack so that keyboard events can fall to AppKit's next responder if nothing within UIKit handles it
-// I couldn't come up with a better way at the time. meh.
-- (void)_setUnhandledKeyPressEvent
-{
-    _unhandledKeyPressEvent = YES;
-}
-
-- (BOOL)_isUnhandledKeyPressEvent
-{
-    return _unhandledKeyPressEvent;
-}
-
 - (NSSet *)allTouches
 {
-    return [NSSet setWithObject:_touch];
+    return nil;
 }
 
 - (NSSet *)touchesForView:(UIView *)view
@@ -109,6 +76,11 @@
         }
     }
     return touches;
+}
+
+- (UIEventType)type
+{
+    return -1;
 }
 
 - (UIEventSubtype)subtype

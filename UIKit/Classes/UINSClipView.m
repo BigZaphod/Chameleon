@@ -30,18 +30,19 @@
 #import "UINSClipView.h"
 #import "UIScrollView+UIPrivate.h"
 #import "UIWindow.h"
-#import "UIScreen+UIPrivate.h"
 #import "UIScreenAppKitIntegration.h"
 #import "UIKitView.h"
 #import <AppKit/NSEvent.h>
 
 
-@implementation UINSClipView
+@implementation UINSClipView {
+    UIScrollView *_parentView;
+}
 
 - (id)initWithFrame:(NSRect)frame parentView:(UIScrollView *)aView
 {
     if ((self=[super initWithFrame:frame])) {
-        parentView = aView;
+        _parentView = aView;
         [self setDrawsBackground:NO];
         [self setCopiesOnScroll:NO];
         [self setWantsLayer:YES];
@@ -62,13 +63,13 @@
 
 - (void)scrollWheel:(NSEvent *)event
 {
-    if (parentView.scrollEnabled) {
+    if (_parentView.scrollEnabled) {
         NSPoint offset = [self bounds].origin;
         offset.x -= [event deltaX];
         offset.y -= [event deltaY];
         
-        [parentView _quickFlashScrollIndicators];
-        [parentView setContentOffset:NSPointToCGPoint(offset) animated:NO];
+        [_parentView _quickFlashScrollIndicators];
+        [_parentView setContentOffset:NSPointToCGPoint(offset) animated:NO];
     } else {
         [super scrollWheel:event];
     }
@@ -77,19 +78,19 @@
 - (void)viewDidMoveToSuperview
 {
     [super viewDidMoveToSuperview];
-    [parentView setNeedsLayout];
+    [_parentView setNeedsLayout];
 }
 
 - (void)viewWillDraw
 {
-    [parentView setNeedsLayout];
+    [_parentView setNeedsLayout];
     [super viewWillDraw];
 }
 
 - (void)setFrame:(NSRect)frame
 {
     [super setFrame:frame];
-    [parentView setNeedsLayout];
+    [_parentView setNeedsLayout];
 }
 
 // this is used to fake out AppKit when the UIView that "owns" this NSView's layer is actually *behind* another UIView. Since the NSViews are
@@ -100,15 +101,11 @@
     NSView *hitNSView = [super hitTest:aPoint];
 
     if (hitNSView) {
-        UIScreen *screen = parentView.window.screen;
+        UIScreen *screen = _parentView.window.screen;
         BOOL didHitUIView = NO;
         
         if (screen) {
-            if (![[screen UIKitView] isFlipped]) {
-                aPoint.y = screen.bounds.size.height - aPoint.y - 1;
-            }
-
-            didHitUIView = (parentView == [screen _hitTest:NSPointToCGPoint(aPoint) event:nil]);
+            didHitUIView = (_parentView == [screen.UIKitView hitTestUIView:aPoint]);
         }
         
         if (!didHitUIView) {

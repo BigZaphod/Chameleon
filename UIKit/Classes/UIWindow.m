@@ -31,14 +31,14 @@
 #import "UIView+UIPrivate.h"
 #import "UIScreen+UIPrivate.h"
 #import "UIScreenAppKitIntegration.h"
-#import "UIApplication+UIPrivate.h"
-#import "UIEvent.h"
+#import "UIApplication.h"
 #import "UITouch+UIPrivate.h"
 #import "UIScreenMode.h"
 #import "UIResponderAppKitIntegration.h"
 #import "UIViewController.h"
-#import "UIGestureRecognizerSubclass.h"
 #import "UIGestureRecognizer+UIPrivate.h"
+#import "UITouchEvent.h"
+#import "UIKitView.h"
 #import <AppKit/NSCursor.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -55,6 +55,7 @@ NSString *const UIKeyboardWillShowNotification = @"UIKeyboardWillShowNotificatio
 NSString *const UIKeyboardDidShowNotification = @"UIKeyboardDidShowNotification";
 NSString *const UIKeyboardWillHideNotification = @"UIKeyboardWillHideNotification";
 NSString *const UIKeyboardDidHideNotification = @"UIKeyboardDidHideNotification";
+NSString *const UIKeyboardWillChangeFrameNotification = @"UIKeyboardWillChangeFrameNotification";
 
 NSString *const UIKeyboardFrameBeginUserInfoKey = @"UIKeyboardFrameBeginUserInfoKey";
 NSString *const UIKeyboardFrameEndUserInfoKey = @"UIKeyboardFrameEndUserInfoKey";
@@ -66,9 +67,10 @@ NSString *const UIKeyboardCenterBeginUserInfoKey = @"UIKeyboardCenterBeginUserIn
 NSString *const UIKeyboardCenterEndUserInfoKey = @"UIKeyboardCenterEndUserInfoKey";
 NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 
-
-@implementation UIWindow
-@synthesize screen=_screen, rootViewController=_rootViewController;
+@implementation UIWindow {
+    __weak UIResponder *_firstResponder;
+    NSUndoManager *_undoManager;
+}
 
 - (id)initWithFrame:(CGRect)theFrame
 {
@@ -77,6 +79,9 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
         [self _makeHidden];	// do this first because before the screen is set, it will prevent any visibility notifications from being sent.
         self.screen = [UIScreen mainScreen];
         self.opaque = NO;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_NSWindowDidBecomeKeyNotification:) name:NSWindowDidBecomeKeyNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_NSWindowDidResignKeyNotification:) name:NSWindowDidResignKeyNotification object:nil];
     }
     return self;
 }
@@ -85,9 +90,6 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self _makeHidden];	// I don't really like this here, but the real UIKit seems to do something like this on window destruction as it sends a notification and we also need to remove it from the app's list of windows
-    [_screen release];
-    [_undoManager release];
-    [_rootViewController release];
     
     // since UIView's dealloc is called after this one, it's hard ot say what might happen in there due to all of the subview removal stuff
     // so it's safer to make sure these things are nil now rather than potential garbage. I don't like how much work UIView's -dealloc is doing
@@ -96,7 +98,6 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
     _undoManager = nil;
     _rootViewController = nil;
     
-    [super dealloc];
 }
 
 - (UIResponder *)_firstResponder
@@ -138,11 +139,21 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 {
     if (rootViewController != _rootViewController) {
         [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-        [_rootViewController release];
-        _rootViewController = [rootViewController retain];
-        _rootViewController.view.frame = self.bounds;    // unsure about this
+        
+        const BOOL was = [UIView areAnimationsEnabled];
+        [UIView setAnimationsEnabled:NO];
+        _rootViewController = rootViewController;
+        _rootViewController.view.frame = self.bounds;
         [self addSubview:_rootViewController.view];
+        [self layoutIfNeeded];
+        [UIView setAnimationsEnabled:was];
     }
+}
+
+- (void)setFrame:(CGRect)frame
+{
+    [super setFrame:frame];
+    _rootViewController.view.frame = self.bounds;
 }
 
 - (void)setScreen:(UIScreen *)theScreen
@@ -154,8 +165,7 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
         [self _makeHidden];
 
         [self.layer removeFromSuperlayer];
-        [_screen release];
-        _screen = [theScreen retain];
+        _screen = theScreen;
         [[_screen _layer] addSublayer:self.layer];
 
         if (!wasHidden) {
@@ -232,6 +242,44 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
     return CGRectMake(convertedOrigin.x, convertedOrigin.y, toConvert.size.width, toConvert.size.height);
 }
 
+- (void)makeKeyWindow
+{
+    if (!self.isKeyWindow && self.screen) {
+        // this check is here because if the underlying screen's UIKitView is AppKit's keyWindow, then
+        // we must resign it because UIKit thinks it's currently the key window, too, so we do that here.
+        if ([self.screen.keyWindow isKeyWindow]) {
+            [self.screen.keyWindow resignKeyWindow];
+        }
+        
+        // now we set the screen's key window to ourself - note that this doesn't really make it the key
+        // window yet from an external point of view...
+        [self.screen _setKeyWindow:self];
+        
+        // if it turns out we're now the key window, it means this window is ultimately within a UIKitView
+        // that's the current AppKit key window, too, so we make it so. if we are NOT the key window, we
+        // need to try to tell AppKit to make the UIKitView we're on the key window. If that works out,
+        // we will get a notification and -becomeKeyWindow will be called from there, so we don't have to
+        // do anything else in here.
+        if (self.isKeyWindow) {
+            [self becomeKeyWindow];
+        } else {
+            [[self.screen.UIKitView window] makeFirstResponder:self.screen.UIKitView];
+            [[self.screen.UIKitView window] makeKeyWindow];
+        }
+    }
+}
+
+- (BOOL)isKeyWindow
+{
+    // only return YES if we have a screen and our screen's UIKitView is on the AppKit key window
+    
+    if (self.screen.keyWindow == self) {
+        return [[self.screen.UIKitView window] isKeyWindow];
+    }
+
+    return NO;
+}
+
 - (void)becomeKeyWindow
 {
     if ([[self _firstResponder] respondsToSelector:@selector(becomeKeyWindow)]) {
@@ -240,34 +288,52 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
     [[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidBecomeKeyNotification object:self];
 }
 
-- (void)makeKeyWindow
-{
-    if (!self.isKeyWindow) {
-        [[UIApplication sharedApplication].keyWindow resignKeyWindow];
-        [[UIApplication sharedApplication] _setKeyWindow:self];
-        [self becomeKeyWindow];
-    }
-}
-
-- (BOOL)isKeyWindow
-{
-    return ([UIApplication sharedApplication].keyWindow == self);
-}
-
 - (void)resignKeyWindow
 {
     if ([[self _firstResponder] respondsToSelector:@selector(resignKeyWindow)]) {
         [(id)[self _firstResponder] resignKeyWindow];
     }
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidResignKeyNotification object:self];
+}
+
+- (void)_NSWindowDidBecomeKeyNotification:(NSNotification *)note
+{
+    NSWindow *nativeWindow = [note object];
+
+    // when the underlying screen's NSWindow becomes key, we can use the keyWindow property the screen itself
+    // to know if this UIWindow should become key again now or not. If things match up, we fire off -becomeKeyWindow
+    // again to let the app know this happened. Normally iOS doesn't run into situations where the user can change
+    // the key window out from under the app, so this is going to be somewhat unusual UIKit behavior...
+    if ([[self.screen.UIKitView window] isEqual:nativeWindow]) {
+        if (self.screen.keyWindow == self) {
+            [self becomeKeyWindow];
+        }
+    }
+}
+
+- (void)_NSWindowDidResignKeyNotification:(NSNotification *)note
+{
+    NSWindow *nativeWindow = [note object];
+    
+    // if the resigned key window is the same window that hosts our underlying screen, then we need to resign
+    // this UIWindow, too. note that it does NOT actually unset the keyWindow property for the UIScreen!
+    // this is because if the user clicks back in the screen's window, we need a way to reconnect this UIWindow
+    // as the key window, too, so that's how that is done.
+    if ([[self.screen.UIKitView window] isEqual:nativeWindow]) {
+        if (self.screen.keyWindow == self) {
+            [self resignKeyWindow];
+        }
+    }
 }
 
 - (void)_makeHidden
 {
     if (!self.hidden) {
         [super setHidden:YES];
+        
         if (self.screen) {
-            [[UIApplication sharedApplication] _windowDidBecomeHidden:self];
+            [self.screen _removeWindow:self];
             [[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidBecomeHiddenNotification object:self];
         }
     }
@@ -277,8 +343,9 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 {
     if (self.hidden) {
         [super setHidden:NO];
+
         if (self.screen) {
-            [[UIApplication sharedApplication] _windowDidBecomeVisible:self];
+            [self.screen _addWindow:self];
             [[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidBecomeVisibleNotification object:self];
         }
     }
@@ -311,70 +378,158 @@ NSString *const UIKeyboardBoundsUserInfoKey = @"UIKeyboardBoundsUserInfoKey";
 
 - (void)sendEvent:(UIEvent *)event
 {
-    if (event.type == UIEventTypeTouches) {
-        NSSet *touches = [event touchesForWindow:self];
-        NSMutableSet *gestureRecognizers = [NSMutableSet setWithCapacity:0];
+    if ([event isKindOfClass:[UITouchEvent class]]) {
+        [self _processTouchEvent:(UITouchEvent *)event];
+    }
+}
 
-        for (UITouch *touch in touches) {
-            [gestureRecognizers addObjectsFromArray:touch.gestureRecognizers];
+- (void)_processTouchEvent:(UITouchEvent *)event
+{
+    // we only support a single touch, so there is a *lot* in here that would break or need serious changes
+    // to properly support mulitouch. I still don't really like how all this works - especially with the
+    // gesture recognizers, but I've been struggling to come up with a better way for far too long and just
+    // have to deal with what I've got now.
+    
+    // if there's no touch for this window, return immediately
+    if (event.touch.window != self) {
+        return;
+    }
+    
+    // normally there'd be no need to retain the view here, but this works around a strange problem I ran into.
+    // what can happen is, now that UIView's -removeFromSuperview will remove the view from the active touch
+    // instead of just cancel the touch (which is how I had implemented it previously - which was wrong), the
+    // situation can arise where, in response to a touch event of some kind, the view may remove itself from its
+    // superview in some fashion, which means that the handling of the touchesEnded:withEvent: (or whatever)
+    // methods could somehow result in the view itself being destroyed before the method is even finished running!
+    // a strong reference here works around this problem since the view is kept alive until we're done with it.
+    // If someone can figure out some other, better way to fix this without it having to have this hacky-feeling
+    // stuff here, that'd be cool, but be aware that this is here for a reason and that the problem it prevents is
+    // somewhat contrived but not uncommon.
+    UIView *view = event.touch.view;
+
+    // first deliver new touches to all possible gesture recognizers
+    if (event.touch.phase == UITouchPhaseBegan) {
+        for (UIView *subview = view; subview != nil; subview = [subview superview]) {
+            for (UIGestureRecognizer *gesture in subview.gestureRecognizers) {
+                [gesture _beginTrackingTouch:event.touch withEvent:event];
+            }
         }
+    }
 
-        for (UIGestureRecognizer *recognizer in gestureRecognizers) {
-            [recognizer _recognizeTouches:touches withEvent:event];
-        }
+    BOOL gestureRecognized = NO;
+    BOOL possibleGestures = NO;
+    BOOL delaysTouchesBegan = NO;
+    BOOL delaysTouchesEnded = NO;
+    BOOL cancelsTouches = NO;
 
-        for (UITouch *touch in touches) {
-            // normally there'd be no need to retain the view here, but this works around a strange problem I ran into.
-            // what can happen is, now that UIView's -removeFromSuperview will remove the view from the active touch
-            // instead of just cancel the touch (which is how I had implemented it previously - which was wrong), the
-            // situation can arise where, in response to a touch event of some kind, the view may remove itself from its
-            // superview in some fashion, which means that the handling of the touchesEnded:withEvent: (or whatever)
-            // methods could somehow result in the view itself being destroyed before the method is even finished running!
-            // I ran into this in particular with a load more button in Twitterrific which would crash in UIControl's
-            // touchesEnded: implemention after sending actions to the registered targets (because one of those targets
-            // ended up removing the button from view and thus reducing its retain count to 0). For some reason, even
-            // though I attempted to rearrange stuff in UIControl so that actions were always the last thing done, it'd
-            // still end up crashing when one of the internal methods returned to touchesEnded:, which didn't make sense
-            // to me because there was no code after that (at the time) and therefore it should just have been unwinding
-            // the stack to eventually get back here and all should have been okay. I never figured out exactly why that
-            // crashed in that way, but by putting a retain here it works around this problem and perhaps others that have
-            // gone so-far unnoticed. Converting to ARC should also work with this solution because there will be a local
-            // strong reference to the view retainined throughout the rest of this logic and thus the same protection
-            // against mid-method view destrustion should be provided under ARC. If someone can figure out some other,
-            // better way to fix this without it having to have this hacky-feeling retain here, that'd be cool, but be
-            // aware that this is here for a reason and that the problem it prevents is very rare and somewhat contrived.
-            UIView *view = [touch.view retain];
-
-            const UITouchPhase phase = touch.phase;
-            const _UITouchGesture gesture = [touch _gesture];
+    // then allow all tracking gesture recognizers to have their way with the touches in this event before
+    // anything else is done.
+    for (UIGestureRecognizer *gesture in event.touch.gestureRecognizers) {
+        [gesture _continueTrackingWithEvent:event];
+        
+        const BOOL recognized = (gesture.state == UIGestureRecognizerStateRecognized || gesture.state == UIGestureRecognizerStateBegan);
+        const BOOL possible = (gesture.state == UIGestureRecognizerStatePossible);
+        
+        gestureRecognized |= recognized;
+        possibleGestures |= possible;
+        
+        if (recognized || possible) {
+            delaysTouchesBegan |= gesture.delaysTouchesBegan;
             
-            if (phase == UITouchPhaseBegan) {
-                [view touchesBegan:touches withEvent:event];
-            } else if (phase == UITouchPhaseMoved) {
-                [view touchesMoved:touches withEvent:event];
-            } else if (phase == UITouchPhaseEnded) {
-                [view touchesEnded:touches withEvent:event];
-            } else if (phase == UITouchPhaseCancelled) {
-                [view touchesCancelled:touches withEvent:event];
-            } else if (phase == _UITouchPhaseDiscreteGesture && gesture == _UITouchDiscreteGestureMouseMove) {
-                if ([view hitTest:[touch locationInView:view] withEvent:event]) {
-                    [view mouseMoved:[touch _delta] withEvent:event];
+            // special case for scroll views so that -delaysContentTouches works somewhat as expected
+            // likely this is pretty wrong, but it should work well enough for most normal cases, I suspect.
+            if ([gesture.view isKindOfClass:[UIScrollView class]]) {
+                UIScrollView *scrollView = (UIScrollView *)gesture.view;
+                
+                if ([gesture isEqual:scrollView.panGestureRecognizer] || [gesture isEqual:scrollView.scrollWheelGestureRecognizer]) {
+                    delaysTouchesBegan |= scrollView.delaysContentTouches;
                 }
-            } else if (phase == _UITouchPhaseDiscreteGesture && gesture == _UITouchDiscreteGestureRightClick) {
-                [view rightClick:touch withEvent:event];
-            } else if ((phase == _UITouchPhaseDiscreteGesture && gesture == _UITouchDiscreteGestureScrollWheel) ||
-                       (phase == _UITouchPhaseGestureChanged && gesture == _UITouchGesturePan)) {
-                [view scrollWheelMoved:[touch _delta] withEvent:event];
             }
-            
-            NSCursor *newCursor = [view mouseCursorForEvent:event] ?: [NSCursor arrowCursor];
-
-            if ([NSCursor currentCursor] != newCursor) {
-                [newCursor set];
-            }
-            
-            [view release];
         }
+        
+        if (recognized) {
+            delaysTouchesEnded |= gesture.delaysTouchesEnded;
+            cancelsTouches |= gesture.cancelsTouchesInView;
+        }
+    }
+    
+    if (event.isDiscreteGesture) {
+        // this should prevent delivery of the "touches" down the responder chain in roughly the same way a normal non-
+        // discrete gesture would based on the settings of the in-play gesture recognizers.
+        if (!gestureRecognized || (gestureRecognized && !cancelsTouches && !delaysTouchesBegan)) {
+            if (event.touchEventGesture == UITouchEventGestureRightClick) {
+                [view rightClick:event.touch withEvent:event];
+            } else if (event.touchEventGesture == UITouchEventGestureScrollWheel) {
+                [view scrollWheelMoved:event.translation withEvent:event];
+            } else if (event.touchEventGesture == UITouchEventGestureMouseMove) {
+                [view mouseMoved:event.touch withEvent:event];
+            } else if (event.touchEventGesture == UITouchEventGestureMouseEntered) {
+                [view mouseEntered:event.touch.view withEvent:event];
+            } else if (event.touchEventGesture == UITouchEventGestureMouseExited) {
+                [view mouseExited:event.touch.view withEvent:event];
+            }
+        }
+    } else {
+        if (event.touch.phase == UITouchPhaseBegan) {
+            if ((!gestureRecognized && !possibleGestures) || !delaysTouchesBegan) {
+                [view touchesBegan:event.allTouches withEvent:event];
+                event.touch.wasDeliveredToView = YES;
+            }
+        } else if (delaysTouchesBegan && gestureRecognized && !event.touch.wasDeliveredToView) {
+            // if we were delaying touches began and a gesture gets recognized, and we never sent it to the view,
+            // we need to throw it away and be sure we never send it to the view for the duration of the gesture
+            // so we do this by marking it both delivered and cancelled without actually sending it to the view.
+            event.touch.wasDeliveredToView = YES;
+            event.touch.wasCancelledInView = YES;
+        } else if (delaysTouchesBegan && !gestureRecognized && !possibleGestures && !event.touch.wasDeliveredToView && event.touch.phase != UITouchPhaseCancelled) {
+            // need to fake-send a touches began using the cached time and location in the touch
+            // a followup move or ended or cancelled touch will be sent below if necessary
+            const NSTimeInterval currentTimestamp = event.touch.timestamp;
+            const UITouchPhase currentPhase = event.touch.phase;
+            const CGPoint currentLocation = event.touch.locationOnScreen;
+            
+            event.touch.timestamp = event.touch.beganPhaseTimestamp;
+            event.touch.locationOnScreen = event.touch.beganPhaseLocationOnScreen;
+            event.touch.phase = UITouchPhaseBegan;
+            
+            [view touchesBegan:event.allTouches withEvent:event];
+            event.touch.wasDeliveredToView = YES;
+            
+            event.touch.phase = currentPhase;
+            event.touch.locationOnScreen = currentLocation;
+            event.touch.timestamp = currentTimestamp;
+        }
+        
+        if (event.touch.phase != UITouchPhaseBegan && event.touch.wasDeliveredToView && !event.touch.wasCancelledInView) {
+            if (event.touch.phase == UITouchPhaseCancelled) {
+                [view touchesCancelled:event.allTouches withEvent:event];
+                event.touch.wasCancelledInView = YES;
+            } else if (gestureRecognized && (cancelsTouches || (event.touch.phase == UITouchPhaseEnded && delaysTouchesEnded))) {
+                // since we're supposed to cancel touches, mark it cancelled, send it to the view, and
+                // then change it back to whatever it was because there might be other gesture recognizers
+                // that are still using the touch for whatever reason and aren't going to expect it suddenly
+                // cancelled. (technically cancelled touches are, I think, meant to be a last resort..
+                // the sort of thing that happens when a phone call comes in or a modal window comes up)
+                const UITouchPhase currentPhase = event.touch.phase;
+                
+                event.touch.phase = UITouchPhaseCancelled;
+                
+                [view touchesCancelled:event.allTouches withEvent:event];
+                event.touch.wasCancelledInView = YES;
+                
+                event.touch.phase = currentPhase;
+            } else if (event.touch.phase == UITouchPhaseMoved) {
+                [view touchesMoved:event.allTouches withEvent:event];
+            } else if (event.touch.phase == UITouchPhaseEnded) {
+                [view touchesEnded:event.allTouches withEvent:event];
+            }
+        }
+    }
+    
+    NSCursor *newCursor = [view mouseCursorForEvent:event] ?: [NSCursor arrowCursor];
+    
+    if ([NSCursor currentCursor] != newCursor) {
+        [newCursor set];
     }
 }
 

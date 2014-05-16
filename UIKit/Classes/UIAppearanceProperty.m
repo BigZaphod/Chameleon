@@ -29,69 +29,59 @@
 
 #import "UIAppearanceProperty.h"
 
-@implementation UIAppearanceProperty
-@synthesize axisValues;
+@implementation UIAppearanceProperty {
+    NSInvocation *_invocation;
+}
 
-- (id)initWithSelector:(SEL)sel axisValues:(NSArray *)values
+- (id)initWithInvocation:(NSInvocation *)setterInvocation
 {
     if ((self=[super init])) {
-        cmd = sel;
-        axisValues = [values copy];
+        NSMethodSignature *methodSignature = [setterInvocation methodSignature];
+        _invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
+        
+        // we want to copy every argument except for target (which is argument 0)
+        // so start at 1 and copy...
+        for (int i = 1; i < [methodSignature numberOfArguments]; i++) {
+            const char *valueType = [methodSignature getArgumentTypeAtIndex:i];
+            NSUInteger bufferSize = 0;
+            NSGetSizeAndAlignment(valueType, &bufferSize, NULL);
+            UInt8 valueBuffer[bufferSize];
+            memset(valueBuffer, 0, bufferSize);
+            
+            [setterInvocation getArgument:valueBuffer atIndex:i];
+            [_invocation setArgument:valueBuffer atIndex:i];
+        }
+        
+        // this is very important since we're caching this invocation!
+        [_invocation retainArguments];
     }
     return self;
 }
 
-- (void)dealloc
+- (void)invokeUsingTarget:(id)target
 {
-    [axisValues release];
-    [super dealloc];
+    [_invocation invokeWithTarget:target];
 }
 
-- (BOOL)isEqual:(id)object
+- (void)setReturnValueForInvocation:(NSInvocation *)getterInvocation
 {
-    if (object == self) {
-        return YES;
-    } else if ([object isKindOfClass:[UIAppearanceProperty class]]) {
-        UIAppearanceProperty *entry = (UIAppearanceProperty *)object;
-        return cmd == entry->cmd && [axisValues isEqual:entry->axisValues];
-    } else {
-        return NO;
-    }
-}
-
-- (NSUInteger)hash
-{
-    return [NSStringFromSelector(cmd) hash] ^ [axisValues hash];
-}
-
-- (id)copyWithZone:(NSZone *)zone
-{
-    return [[UIAppearanceProperty alloc] initWithSelector:cmd axisValues:axisValues];
-}
-
-- (void)invokeSetterUsingTarget:(id)target withValue:(NSValue *)value
-{
-    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[target methodSignatureForSelector:cmd]];
-
-    for (int i=0; i<[[invocation methodSignature] numberOfArguments]; i++) {
-        if (i == 0) {
-            [invocation setTarget:target];
-        } else if (i == 1) {
-            [invocation setSelector:cmd];
-        } else {
-            NSValue *v = (i == 2)? value : [axisValues objectAtIndex:i-3];
-            
-            NSUInteger bufferSize = 0;
-            NSGetSizeAndAlignment([v objCType], &bufferSize, NULL);
-            UInt8 argumentBuffer[bufferSize];
-            memset(argumentBuffer, 0, bufferSize);
-            
-            [v getValue:argumentBuffer];
-            [invocation setArgument:argumentBuffer atIndex:i];
-        }
-    }
+    NSMethodSignature *methodSignature = [_invocation methodSignature];
     
-    [invocation invoke];
+    // ensure we have a value to return (which is expected to be at argument index 2)
+    NSAssert([methodSignature numberOfArguments] >= 2, @"stored invocation has no property value");
+
+    // fetch and return the property value from our stored invocation
+    const char *valueType = [methodSignature getArgumentTypeAtIndex:2];
+    NSUInteger bufferSize = 0;
+    NSGetSizeAndAlignment(valueType, &bufferSize, NULL);
+    UInt8 valueBuffer[bufferSize];
+    memset(valueBuffer, 0, bufferSize);
+    [_invocation getArgument:valueBuffer atIndex:2];
+
+    // ensure the property value type's size matches the expected return value's size
+    NSAssert(bufferSize == [[getterInvocation methodSignature] methodReturnLength], @"getter return length not equal to property value size");
+    
+    [getterInvocation setReturnValue:valueBuffer];
 }
 
 @end

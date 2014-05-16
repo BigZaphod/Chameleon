@@ -29,27 +29,27 @@
 
 #import "UIControl.h"
 #import "UIStringDrawing.h"
-#import "UITextInputTraits.h"
+#import "UITextInput.h"
 
 extern NSString *const UITextFieldTextDidBeginEditingNotification;
 extern NSString *const UITextFieldTextDidChangeNotification;
 extern NSString *const UITextFieldTextDidEndEditingNotification;
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UITextBorderStyle) {
     UITextBorderStyleNone,
     UITextBorderStyleLine,
     UITextBorderStyleBezel,
     UITextBorderStyleRoundedRect
-} UITextBorderStyle;
+};
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UITextFieldViewMode) {
     UITextFieldViewModeNever,
     UITextFieldViewModeWhileEditing,
     UITextFieldViewModeUnlessEditing,
     UITextFieldViewModeAlways
-} UITextFieldViewMode;
+};
 
-@class UIFont, UIColor, UITextField, UIImage, UITextLayer;
+@class UIFont, UIColor, UITextField, UIImage;
 
 @protocol UITextFieldDelegate <NSObject>
 @optional
@@ -63,39 +63,7 @@ typedef enum {
 - (BOOL)textFieldShouldReturn:(UITextField *)textField;
 @end
 
-@interface UITextField : UIControl <UITextInputTraits> {
-@private
-    UITextLayer *_textLayer;
-
-    __unsafe_unretained id _delegate;
-    UITextFieldViewMode _clearButtonMode;
-    UIView *_leftView;
-    UITextFieldViewMode _leftViewMode;
-    UIView *_rightView;
-    UITextFieldViewMode _rightViewMode;
-    UIImage *_background;
-    UIImage *_disabledBackground;
-    BOOL _editing;
-    BOOL _clearsOnBeginEditing;
-    BOOL _adjustsFontSizeToFitWidth;
-    NSString *_placeholder;
-    UITextBorderStyle _borderStyle;
-    CGFloat _minimumFontSize;
-
-    UIView *_inputAccessoryView;
-    UIView *_inputView;
-
-    struct {
-        unsigned shouldBeginEditing : 1;
-        unsigned didBeginEditing : 1;
-        unsigned shouldEndEditing : 1;
-        unsigned didEndEditing : 1;
-        unsigned shouldChangeCharacters : 1;
-        unsigned shouldClear : 1;
-        unsigned shouldReturn : 1;
-    } _delegateHas;	
-}
-
+@interface UITextField : UIControl <UITextInput>
 - (CGRect)borderRectForBounds:(CGRect)bounds;
 - (CGRect)clearButtonRectForBounds:(CGRect)bounds;
 - (CGRect)editingRectForBounds:(CGRect)bounds;
@@ -111,24 +79,33 @@ typedef enum {
 @property (nonatomic, assign) UITextAlignment textAlignment;
 @property (nonatomic, copy) NSString *placeholder;
 @property (nonatomic, copy) NSString *text;
-@property (nonatomic, retain) UIFont *font;
+@property (nonatomic, strong) UIFont *font;
 @property (nonatomic) UITextBorderStyle borderStyle;
-@property (nonatomic, retain) UIColor *textColor;
+@property (nonatomic, strong) UIColor *textColor;
 @property (nonatomic, readonly, getter=isEditing) BOOL editing;
 @property (nonatomic) BOOL clearsOnBeginEditing;
 @property (nonatomic) BOOL adjustsFontSizeToFitWidth;
 @property (nonatomic) CGFloat minimumFontSize;
 
-@property (nonatomic, retain) UIImage *background;
-@property (nonatomic, retain) UIImage *disabledBackground;
+@property (nonatomic, strong) UIImage *background;
+@property (nonatomic, strong) UIImage *disabledBackground;
 
 @property (nonatomic) UITextFieldViewMode clearButtonMode;
-@property (nonatomic, retain) UIView *leftView;
+@property (nonatomic, strong) UIView *leftView;
 @property (nonatomic) UITextFieldViewMode leftViewMode;
-@property (nonatomic, retain) UIView *rightView;
+@property (nonatomic, strong) UIView *rightView;
 @property (nonatomic) UITextFieldViewMode rightViewMode;
 
-@property (nonatomic, readwrite, retain) UIView *inputAccessoryView;
-@property (nonatomic, readwrite, retain) UIView *inputView;
-
+@property (readwrite, strong) UIView *inputAccessoryView;
+@property (readwrite, strong) UIView *inputView;
 @end
+
+
+// for unknown reasons, Apple's UIKit actually declares this here (and not in UIView)
+// the documentation makes it sound as if this only resigns text fields, but the comment
+// in UIKit's actual UITextField header file indicates it may only care about first
+// responder status, so that is how I will implement it
+@interface UIView (UITextField)
+- (BOOL)endEditing:(BOOL)force;
+@end
+

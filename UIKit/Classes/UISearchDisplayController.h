@@ -38,15 +38,7 @@
 @class UISearchBar, UITableView, UIViewController, UIPopoverController;
 @protocol UITableViewDataSource, UITableViewDelegate, UISearchDisplayDelegate;
 
-@interface UISearchDisplayController : NSObject {
-  UIViewController           *_viewController;
-  UISearchBar                *_searchBar;
-  UITableView                *_tableView;
-  __unsafe_unretained id<UISearchDisplayDelegate> _delegate;
-  __unsafe_unretained id<UITableViewDataSource>   _tableViewDataSource;
-  __unsafe_unretained id<UITableViewDelegate>     _tableViewDelegate;
-}
-
+@interface UISearchDisplayController : NSObject
 - (id)initWithSearchBar:(UISearchBar *)searchBar contentsController:(UIViewController *)viewController;
 
 @property (nonatomic, assign) id<UISearchDisplayDelegate> delegate;
@@ -57,16 +49,14 @@
 @property (nonatomic, readonly) UISearchBar *searchBar;
 @property (nonatomic, readonly) UIViewController *searchContentsController;
 
-@property (nonatomic,readonly) UITableView *searchResultsTableView;
-@property (nonatomic,assign) id<UITableViewDataSource> searchResultsDataSource;
-@property (nonatomic,assign) id<UITableViewDelegate> searchResultsDelegate;
-
+@property (nonatomic, readonly) UITableView *searchResultsTableView;
+@property (nonatomic, assign) id<UITableViewDataSource> searchResultsDataSource;
+@property (nonatomic, assign) id<UITableViewDelegate> searchResultsDelegate;
 @end
 
 
 
 @protocol UISearchDisplayDelegate <NSObject>
-
 @optional
 
 // when we start/end showing the search UI
@@ -88,5 +78,4 @@
 // return YES to reload table. called when search string/option changes. convenience methods on top UISearchBar delegate methods
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString;
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption;
-
 @end

@@ -30,12 +30,7 @@
 #import "UIAppearance.h"
 #import <UIKit/UIAppearanceProperty.h>
 
-@interface UIAppearanceProxy : NSObject {
-    Class<UIAppearance> _targetClass;
-    NSMutableDictionary *_settings;
-}
-
+@interface UIAppearanceProxy : NSObject
 - (id)initWithClass:(Class<UIAppearance>)k;
 - (NSDictionary *)_appearancePropertiesAndValues;
-
 @end

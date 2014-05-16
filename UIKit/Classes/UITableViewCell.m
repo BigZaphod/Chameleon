@@ -36,12 +36,13 @@
 
 extern CGFloat _UITableViewDefaultRowHeight;
 
-@implementation UITableViewCell
-@synthesize accessoryType=_accessoryType, selectionStyle=_selectionStyle, indentationLevel=_indentationLevel;
-@synthesize editingAccessoryType=_editingAccessoryType, selected=_selected, backgroundView=_backgroundView;
-@synthesize selectedBackgroundView=_selectedBackgroundView, highlighted=_highlighted, reuseIdentifier=_reuseIdentifier;
-@synthesize editing = _editing, detailTextLabel = _detailTextLabel, showingDeleteConfirmation = _showingDeleteConfirmation;
-@synthesize indentationWidth=_indentationWidth, accessoryView=_accessoryView;
+@implementation UITableViewCell {
+    UITableViewCellStyle _style;
+    UITableViewCellSeparator *_seperatorView;
+    UIView *_contentView;
+    UIImageView *_imageView;
+    UILabel *_textLabel;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -68,19 +69,6 @@ extern CGFloat _UITableViewDefaultRowHeight;
     return self;
 }
 
-- (void)dealloc
-{
-    [_seperatorView release];
-    [_contentView release];
-    [_accessoryView release];
-    [_textLabel release];
-    [_detailTextLabel release];
-    [_imageView release];
-    [_backgroundView release];
-    [_selectedBackgroundView release];
-    [_reuseIdentifier release];
-    [super dealloc];
-}
 
 - (void)layoutSubviews
 {
@@ -220,8 +208,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 {
     if (theBackgroundView != _backgroundView) {
         [_backgroundView removeFromSuperview];
-        [_backgroundView release];
-        _backgroundView = [theBackgroundView retain];
+        _backgroundView = theBackgroundView;
         [self addSubview:_backgroundView];
         self.backgroundColor = [UIColor clearColor];
     }
@@ -231,8 +218,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 {
     if (theSelectedBackgroundView != _selectedBackgroundView) {
         [_selectedBackgroundView removeFromSuperview];
-        [_selectedBackgroundView release];
-        _selectedBackgroundView = [theSelectedBackgroundView retain];
+        _selectedBackgroundView = theSelectedBackgroundView;
         _selectedBackgroundView.hidden = !_selected;
         [self addSubview:_selectedBackgroundView];
     }

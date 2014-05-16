@@ -42,7 +42,9 @@
 #import <QuartzCore/CATransaction.h>
 
 
-@implementation UIViewAdapter
+@implementation UIViewAdapter {
+    UINSClipView *_clipView;
+}
 @synthesize NSView=_view;
 
 #pragma mark -
@@ -71,9 +73,6 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIViewHiddenDidChangeNotification object:nil];
-    [_view release];
-    [_clipView release];
-    [super dealloc];
 }
 
 #pragma mark -
@@ -83,7 +82,7 @@
 {
     [_clipView scrollToPoint:NSPointFromCGPoint(self.contentOffset)];
     
-    [[self.window.screen UIKitView] addSubview:_clipView];
+    [self.window.screen.UIKitView addSubview:_clipView];
     
     // all of these notifications are hacks to detect when views or superviews of this view move or change in ways that require
     // the actual NSView to get updated. it's not pretty, but I cannot come up with a better way at this point.
@@ -106,14 +105,10 @@
 - (void)_updateLayers
 {
     [CATransaction begin];
-    [CATransaction setValue:(id)kCFBooleanTrue
-                     forKey:kCATransactionDisableActions];
+    [CATransaction setAnimationDuration:0];
     
     CALayer *layer = self.layer;
     CALayer *clipLayer = [_clipView layer];
-    
-    // setting these here because I've had bad experiences with NSView changing some layer properties out from under me.
-    clipLayer.geometryFlipped = YES;
     
     // always make sure it's at the very bottom
     [layer insertSublayer:clipLayer atIndex:0];
@@ -160,7 +155,7 @@
 - (void)_updateNSViews
 {
     if ([self _NSViewShouldBeVisible]) {
-        if ([_clipView superview] != [self.window.screen UIKitView]) {
+        if ([_clipView superview] != self.window.screen.UIKitView) {
             [self _addNSView];
         }
         
@@ -209,8 +204,7 @@
         [self resignFirstResponder];
         [self _removeNSView];
         
-        [_view release];
-        _view = [aNSView retain];
+        _view = aNSView;
         [_clipView setDocumentView:_view];
         
         [self _updateNSViews];
@@ -257,7 +251,7 @@
     const BOOL didResign = [super resignFirstResponder];
     
     if (didResign && [[_view window] firstResponder] == _view) {
-        [[_view window] makeFirstResponder:[self.window.screen UIKitView]];
+        [[_view window] makeFirstResponder:self.window.screen.UIKitView];
     }
     
     return didResign;

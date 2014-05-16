@@ -31,27 +31,21 @@
 #import "UIView.h"
 
 @implementation UITableViewSection
-@synthesize rowsHeight, headerHeight, footerHeight, rowHeights, numberOfRows, headerView, footerView, headerTitle, footerTitle;
 
 - (CGFloat)sectionHeight
 {
-    return rowsHeight + headerHeight + footerHeight;
+    return self.rowsHeight + self.headerHeight + self.footerHeight;
 }
 
 - (void)setNumberOfRows:(NSInteger)rows withHeights:(CGFloat *)newRowHeights
 {
-    rowHeights = realloc(rowHeights, sizeof(CGFloat) * rows);
-    memcpy(rowHeights, newRowHeights, sizeof(CGFloat) * rows);
-    numberOfRows = rows;
+    _rowHeights = realloc(_rowHeights, sizeof(CGFloat) * rows);
+    memcpy(_rowHeights, newRowHeights, sizeof(CGFloat) * rows);
+    _numberOfRows = rows;
 }
 
 - (void)dealloc
 {
-    if (rowHeights) free(rowHeights);
-    [headerView release];
-    [footerView release];
-    [headerTitle release];
-    [footerTitle release];
-    [super dealloc];
+    if (_rowHeights) free(_rowHeights);
 }
 @end

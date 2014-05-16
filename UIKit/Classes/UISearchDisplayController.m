@@ -38,20 +38,22 @@
 #import "UIViewController.h"
 
 
-@implementation UISearchDisplayController
-
+@implementation UISearchDisplayController {
+    UIViewController *_viewController;
+    __unsafe_unretained UITableView *_tableView;
+    __unsafe_unretained id<UITableViewDataSource> _tableViewDataSource;
+    __unsafe_unretained id<UITableViewDelegate> _tableViewDelegate;
+}
 @synthesize searchContentsController = _viewController;
-@synthesize searchBar = _searchBar;
 @synthesize searchResultsTableView = _tableView;
 @synthesize searchResultsDataSource = _tableViewDataSource;
 @synthesize searchResultsDelegate = _tableViewDelegate;
-@synthesize delegate = _delegate;
 
 - (id)initWithSearchBar:(UISearchBar *)searchBar contentsController:(UIViewController *)viewController
 {
     if ((self = [super init])) {
-        _searchBar = [searchBar retain];
-        _viewController = [viewController retain];
+        _searchBar = searchBar;
+        _viewController = viewController;
     }
     return self;
 }
@@ -61,9 +63,6 @@
     _delegate = nil;
     _tableViewDataSource = nil;
     _tableViewDelegate = nil;
-    [_searchBar release];
-    [_viewController release];
-    [super dealloc];
 }
 
 - (BOOL)isActive

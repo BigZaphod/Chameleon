@@ -30,7 +30,6 @@
 #import "UIProgressView.h"
 
 @implementation UIProgressView
-@synthesize progressViewStyle=_progressViewStyle, progress=_progress;
 
 - (id)initWithProgressViewStyle:(UIProgressViewStyle)style
 {
@@ -48,10 +47,15 @@
     }
 }
 
-- (void)setProgress:(float)p
+- (void)setProgress:(float)progress
 {
-    if (p != _progress) {
-        _progress = MIN(1,MAX(0,p));
+    [self setProgress:progress animated:NO];
+}
+
+- (void)setProgress:(float)progress animated:(BOOL)animated
+{
+    if (progress != _progress) {
+        _progress = MIN(1,MAX(0,progress));
         [self setNeedsDisplay];
     }
 }

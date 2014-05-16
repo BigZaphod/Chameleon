@@ -38,23 +38,15 @@
 
 @protocol UISearchBarDelegate;
 
-@interface UISearchBar : UIView {
-    UITextField *_searchField;
-    BOOL _showsCancelButton;
-    __unsafe_unretained id<UISearchBarDelegate> _delegate;
-    NSString *_placeholder;
-}
-
+@interface UISearchBar : UIView
 @property (nonatomic, copy) NSString *text;
-@property (nonatomic,assign) id<UISearchBarDelegate> delegate;
+@property (nonatomic, assign) id<UISearchBarDelegate> delegate;
 @property (nonatomic) BOOL showsCancelButton;
-@property (nonatomic,copy) NSString *placeholder;
-
+@property (nonatomic, copy) NSString *placeholder;
 @end
 
 
 @protocol UISearchBarDelegate <NSObject>
-
 @optional
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar;
@@ -70,5 +62,4 @@
 - (void)searchBarResultsListButtonClicked:(UISearchBar *)searchBar;
 
 - (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope;
-
 @end

@@ -29,8 +29,9 @@
 
 #import "UILongPressGestureRecognizer.h"
 #import "UIGestureRecognizerSubclass.h"
-#import "UITouch+UIPrivate.h"
-#import "UIEvent.h"
+#import "UITouchEvent.h"
+#import "UITouch.h"
+#import "UIApplicationAppKitIntegration.h"
 
 static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 {
@@ -39,9 +40,10 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
     return sqrtf((a*a) + (b*b));
 }
 
-@implementation UILongPressGestureRecognizer
-@synthesize minimumPressDuration=_minimumPressDuration, allowableMovement=_allowableMovement, numberOfTapsRequired=_numberOfTapsRequired;
-@synthesize numberOfTouchesRequired=_numberOfTouchesRequired;
+@implementation UILongPressGestureRecognizer {
+    CGPoint _beginLocation;
+    BOOL _waiting;
+}
 
 - (id)initWithTarget:(id)target action:(SEL)action
 {
@@ -54,28 +56,12 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
     return self;
 }
 
-- (void)_discreteGestures:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    UITouch *touch = [[event touchesForGestureRecognizer:self] anyObject];
-    
-    if (self.state == UIGestureRecognizerStatePossible && [touch _gesture] == _UITouchDiscreteGestureRightClick) {
-        self.state = UIGestureRecognizerStateBegan;
-        [self performSelector:@selector(_endFakeContinuousGesture) withObject:nil afterDelay:0];
-    }
-}
-
-- (void)_endFakeContinuousGesture
-{
-    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
-        self.state = UIGestureRecognizerStateEnded;
-    }
-}
-
 - (void)_beginGesture
 {
     _waiting = NO;
     if (self.state == UIGestureRecognizerStatePossible) {
         self.state = UIGestureRecognizerStateBegan;
+        UIApplicationSendStationaryTouches();
     }
 }
 
@@ -83,32 +69,42 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 {
     if (_waiting) {
         _waiting = NO;
-        [isa cancelPreviousPerformRequestsWithTarget:self selector:@selector(_beginGesture) object:nil];
+        [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(_beginGesture) object:nil];
     }
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    UITouch *touch = [[event touchesForGestureRecognizer:self] anyObject];
-    
-    if (!_waiting && self.state == UIGestureRecognizerStatePossible && touch.tapCount >= self.numberOfTapsRequired) {
-        _beginLocation = [touch locationInView:self.view];
-        _waiting = YES;
-        [self performSelector:@selector(_beginGesture) withObject:nil afterDelay:self.minimumPressDuration];
+    if ([event isKindOfClass:[UITouchEvent class]]) {
+        UITouchEvent *touchEvent = (UITouchEvent *)event;
+        
+        if (touchEvent.touchEventGesture == UITouchEventGestureRightClick) {
+            self.state = UIGestureRecognizerStateBegan;
+        } else if (touchEvent.touchEventGesture == UITouchEventGestureNone) {
+            if (!_waiting && self.state == UIGestureRecognizerStatePossible && touchEvent.touch.tapCount >= self.numberOfTapsRequired) {
+                _beginLocation = [touchEvent.touch locationInView:self.view];
+                _waiting = YES;
+                [self performSelector:@selector(_beginGesture) withObject:nil afterDelay:self.minimumPressDuration];
+            }
+        } else {
+            self.state = UIGestureRecognizerStateFailed;
+        }
     }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    UITouch *touch = [touches anyObject];
+    const CGFloat distance = DistanceBetweenTwoPoints([touch locationInView:self.view], _beginLocation);
+
     if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
-        UITouch *touch = [[event touchesForGestureRecognizer:self] anyObject];        
-        const CGFloat distance = DistanceBetweenTwoPoints([touch locationInView:self.view], _beginLocation);
-        
         if (distance <= self.allowableMovement) {
             self.state = UIGestureRecognizerStateChanged;
         } else {
             self.state = UIGestureRecognizerStateCancelled;
         }
+    } else if (self.state == UIGestureRecognizerStatePossible && distance > self.allowableMovement) {
+        self.state = UIGestureRecognizerStateFailed;
     }
 }
 
@@ -128,6 +124,12 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
     } else {
         [self _cancelWaiting];
     }
+}
+
+- (void)reset
+{
+    [self _cancelWaiting];
+    [super reset];
 }
 
 @end

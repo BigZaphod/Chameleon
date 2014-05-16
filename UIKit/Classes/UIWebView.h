@@ -27,10 +27,10 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIView.h"
+#import "UIScrollView.h"
 #import "UIDataDetectors.h"
 
-enum {
+typedef NS_ENUM(NSInteger, UIWebViewNavigationType) {
     UIWebViewNavigationTypeLinkClicked,
     UIWebViewNavigationTypeFormSubmitted,
     UIWebViewNavigationTypeBackForward,
@@ -38,9 +38,8 @@ enum {
     UIWebViewNavigationTypeFormResubmitted,
     UIWebViewNavigationTypeOther
 };
-typedef NSUInteger UIWebViewNavigationType;
 
-@class UIWebView, UIViewAdapter, WebView;
+@class UIWebView;
 
 @protocol UIWebViewDelegate <NSObject>
 @optional
@@ -49,22 +48,7 @@ typedef NSUInteger UIWebViewNavigationType;
 - (void)webViewDidFinishLoad:(UIWebView *)webView;
 @end
 
-@interface UIWebView : UIView {
-@private
-    __unsafe_unretained id _delegate;
-    NSURLRequest *_request;
-    UIDataDetectorTypes _dataDetectorTypes;
-    WebView *_webView;
-    UIViewAdapter *_webViewAdapter;
-    BOOL _scalesPageToFit;
-    
-    struct {
-        unsigned shouldStartLoadWithRequest : 1;
-        unsigned didFailLoadWithError : 1;
-        unsigned didFinishLoad : 1;
-    } _delegateHas;
-}
-
+@interface UIWebView : UIView
 - (void)loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL;
 - (void)loadRequest:(NSURLRequest *)request;
 - (void)stopLoading;
@@ -79,7 +63,7 @@ typedef NSUInteger UIWebViewNavigationType;
 @property (nonatomic, readonly, getter=canGoBack) BOOL canGoBack;
 @property (nonatomic, readonly, getter=canGoForward) BOOL canGoForward;
 @property (nonatomic, assign) BOOL scalesPageToFit; // not implemented
-@property (nonatomic, readonly, retain) NSURLRequest *request;
+@property (nonatomic, readonly, strong) NSURLRequest *request;
 @property (nonatomic) UIDataDetectorTypes dataDetectorTypes;
-
+@property (nonatomic, readonly, strong) UIScrollView *scrollView;   // not implemented
 @end

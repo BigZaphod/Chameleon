@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, The Iconfactory. All rights reserved.
+ * Copyright (c) 2013, The Iconfactory. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,16 +27,27 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <Foundation/Foundation.h>
+#import "UINSApplicationDelegate.h"
+#import "UIApplicationAppKitIntegration.h"
 
-@interface UIViewBlockAnimationDelegate : NSObject {
-    void (^_completion)(BOOL finished);
-    BOOL _ignoreInteractionEvents;
+@implementation UINSApplicationDelegate
+
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
+{
+    return [[UIApplication sharedApplication] terminateApplicationBeforeDate:[NSDate dateWithTimeIntervalSinceNow:30]];
 }
 
-@property (nonatomic, copy) void (^completion)(BOOL finished);
-@property (nonatomic, assign) BOOL ignoreInteractionEvents;
+- (void)applicationDidFinishLaunching:(NSNotification *)notification
+{
+    [[NSAppleEventManager sharedAppleEventManager] setEventHandler:self andSelector:@selector(handleURLEvent:withReplyEvent:) forEventClass:kInternetEventClass andEventID:kAEGetURL];
+}
 
-- (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished;
+- (void)handleURLEvent:(NSAppleEventDescriptor*)event withReplyEvent:(NSAppleEventDescriptor*)replyEvent
+{
+    NSURL* url = [NSURL URLWithString:[[event paramDescriptorForKeyword:keyDirectObject] stringValue]];
+    UIApplication *app = [UIApplication sharedApplication];
+    
+    [app.delegate application:app openURL:url sourceApplication:nil annotation:nil];
+}
 
 @end

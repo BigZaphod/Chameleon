@@ -31,15 +31,26 @@
 #import "UIWindow.h"
 #import "UIScreenAppKitIntegration.h"
 #import "UIKitView.h"
-#import "UIApplication+UIPrivate.h"
+#import "UIApplicationAppKitIntegration.h"
 #import "UIBarButtonItem.h"
 #import <AppKit/NSMenu.h>
 #import <AppKit/NSMenuItem.h>
 #import <AppKit/NSEvent.h>
 
-@implementation UIActionSheet
-@synthesize delegate=_delegate, destructiveButtonIndex=_destructiveButtonIndex, cancelButtonIndex=_cancelButtonIndex, title=_title;
-@synthesize firstOtherButtonIndex=_firstOtherButtonIndex, actionSheetStyle = _actionSheetStyle;
+@implementation UIActionSheet {
+    NSMutableArray *_menuTitles;
+    NSMutableArray *_separatorIndexes;
+    NSMenu *_menu;
+    
+    struct {
+        unsigned clickedButtonAtIndex : 1;
+        unsigned willPresentActionSheet : 1;
+        unsigned didPresentActionSheet : 1;
+        unsigned willDismissWithButtonIndex : 1;
+        unsigned didDismissWithButtonIndex : 1;
+        unsigned actionSheetCancel : 1;
+    } _delegateHas;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -67,7 +78,7 @@
             va_list argumentList;
             va_start(argumentList, otherButtonTitles);
 
-            while ((buttonTitle=(__bridge NSString *)va_arg(argumentList, void *))) {
+            while ((buttonTitle=va_arg(argumentList, NSString *))) {
                 [self addButtonWithTitle:buttonTitle];
             }
             
@@ -85,14 +96,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_title release];
-    [_menu release];
-    [_menuTitles release];
-    [_separatorIndexes release];
-    [super dealloc];
-}
 
 - (void)setDelegate:(id<UIActionSheetDelegate>)newDelegate
 {
@@ -180,7 +183,6 @@
                 [theItem setTag:index];
                 [theItem setTarget:self];
                 [_menu addItem:theItem];
-                [theItem release];
             }
         }
 
@@ -242,13 +244,13 @@
     }
 
     // this goes modal... meh.
-    BOOL itemSelected = [_menu popUpMenuPositioningItem:nil atLocation:NSPointFromCGPoint([aPoint CGPointValue]) inView:[self.window.screen UIKitView]];
+    BOOL itemSelected = [_menu popUpMenuPositioningItem:nil atLocation:NSPointFromCGPoint([aPoint CGPointValue]) inView:self.window.screen.UIKitView];
 
     // because of the modal nature of NSMenu, if there's a touch active (like, being held down) when a menu is triggered, the modal NSMenu
     // takes over the event stream and so a mouseUp is never delivered to the UIKitView. This means it never gets to the app and it leaves
     // the "touch" tracking system in an inconsistent state. This triggers the touchesCancelled UIResponder stuff to allow UIKit code to clean
     // itself up after the menu is done.
-    [[UIApplication sharedApplication] _cancelTouches];
+    UIApplicationInterruptTouchesInView(nil);
     
     if (!itemSelected) {
         [self _clickedButtonAtIndex:_cancelButtonIndex];
@@ -302,7 +304,6 @@
     }
     
     // kill off the menu
-    [_menu release];
     _menu = nil;
 
     // remove ourself from the superview that we piggy-backed on

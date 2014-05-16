@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14100F70175FB9C700269BBF /* UINSResponderShim.h in Headers */ = {isa = PBXBuildFile; fileRef = 14100F6E175FB9C700269BBF /* UINSResponderShim.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		14100F71175FB9C700269BBF /* UINSResponderShim.m in Sources */ = {isa = PBXBuildFile; fileRef = 14100F6F175FB9C700269BBF /* UINSResponderShim.m */; };
 		1413D21213D72A06004D77E9 /* UIScrollViewAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 1413D20C13D72A06004D77E9 /* UIScrollViewAnimation.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		1413D21313D72A06004D77E9 /* UIScrollViewAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1413D20D13D72A06004D77E9 /* UIScrollViewAnimation.m */; };
 		1413D21413D72A06004D77E9 /* UIScrollViewAnimationDeceleration.h in Headers */ = {isa = PBXBuildFile; fileRef = 1413D20E13D72A06004D77E9 /* UIScrollViewAnimationDeceleration.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -20,6 +22,7 @@
 		1426A02715701598004C2C9A /* <UIPopoverView> arrow-top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1426A02215701598004C2C9A /* <UIPopoverView> arrow-top@2x.png */; };
 		1426FFDD129ADEA300BD31E5 /* UIControlAction.h in Headers */ = {isa = PBXBuildFile; fileRef = 1426FFDB129ADEA300BD31E5 /* UIControlAction.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		1426FFDE129ADEA300BD31E5 /* UIControlAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 1426FFDC129ADEA300BD31E5 /* UIControlAction.m */; };
+		1434E8661770F4570023F2C5 /* UIViewControllerAppKitIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = 1434E8651770F4570023F2C5 /* UIViewControllerAppKitIntegration.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		144156DB1284A22200532FE2 /* UIToolbarButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 144156D91284A22200532FE2 /* UIToolbarButton.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		144156DC1284A22200532FE2 /* UIToolbarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 144156DA1284A22200532FE2 /* UIToolbarButton.m */; };
 		1443B06C13E06081001D7EC1 /* UIBackgroundTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 1443B06A13E06081001D7EC1 /* UIBackgroundTask.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -36,16 +39,15 @@
 		145335861226F3490005644F /* UICustomNSClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 145335841226F3490005644F /* UICustomNSClipView.m */; };
 		14541DB21360D6F300C1006D /* UIPhotosAlbum.h in Headers */ = {isa = PBXBuildFile; fileRef = 14541DB01360D6F300C1006D /* UIPhotosAlbum.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14541DB31360D6F300C1006D /* UIPhotosAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = 14541DB11360D6F300C1006D /* UIPhotosAlbum.m */; };
-		145576231541DC560029EF4D /* UIAppearanceInstance.h in Headers */ = {isa = PBXBuildFile; fileRef = 145576221541DC560029EF4D /* UIAppearanceInstance.h */; };
+		145576231541DC560029EF4D /* UIAppearanceInstance.h in Headers */ = {isa = PBXBuildFile; fileRef = 145576221541DC560029EF4D /* UIAppearanceInstance.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		145576261541DC830029EF4D /* UIAppearanceInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 145576251541DC830029EF4D /* UIAppearanceInstance.m */; };
-		1457DD3F128DDE610057A7F9 /* UITransitionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1457DD3D128DDE610057A7F9 /* UITransitionView.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		1457DD40128DDE610057A7F9 /* UITransitionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1457DD3E128DDE610057A7F9 /* UITransitionView.m */; };
-		145BE31D15754F2400C41D70 /* UIColorRep.h in Headers */ = {isa = PBXBuildFile; fileRef = 145BE31B15754F2400C41D70 /* UIColorRep.h */; };
+		145BE31D15754F2400C41D70 /* UIColorRep.h in Headers */ = {isa = PBXBuildFile; fileRef = 145BE31B15754F2400C41D70 /* UIColorRep.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		145BE31E15754F2400C41D70 /* UIColorRep.m in Sources */ = {isa = PBXBuildFile; fileRef = 145BE31C15754F2400C41D70 /* UIColorRep.m */; };
-		145BE3211575523000C41D70 /* UIColor+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 145BE3201575523000C41D70 /* UIColor+UIPrivate.h */; };
+		145BE3211575523000C41D70 /* UIColor+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 145BE3201575523000C41D70 /* UIColor+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		145D0B0517949A6800FB569B /* UINavigationItem+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 145D0B0417949A6800FB569B /* UINavigationItem+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		1464960B11FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */; };
 		1464960C11FF7AE500ECEC7A /* <UINavigationBar> back.png in Resources */ = {isa = PBXBuildFile; fileRef = 1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */; };
-		14711394156FC83F00251B2E /* UIImageRep.h in Headers */ = {isa = PBXBuildFile; fileRef = 14711392156FC83F00251B2E /* UIImageRep.h */; };
+		14711394156FC83F00251B2E /* UIImageRep.h in Headers */ = {isa = PBXBuildFile; fileRef = 14711392156FC83F00251B2E /* UIImageRep.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14711395156FC83F00251B2E /* UIImageRep.m in Sources */ = {isa = PBXBuildFile; fileRef = 14711393156FC83F00251B2E /* UIImageRep.m */; };
 		14805D4112A6B0E80080C4BA /* UINSClipView.h in Headers */ = {isa = PBXBuildFile; fileRef = 14805D3F12A6B0E80080C4BA /* UINSClipView.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14805D4212A6B0E80080C4BA /* UINSClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14805D4012A6B0E80080C4BA /* UINSClipView.m */; };
@@ -109,7 +111,7 @@
 		1489859F12EE2CFF003D4751 /* UIImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1489851912EE2CFE003D4751 /* UIImagePickerController.m */; };
 		148985A012EE2CFF003D4751 /* UIImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1489851A12EE2CFE003D4751 /* UIImageView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		148985A112EE2CFF003D4751 /* UIImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1489851B12EE2CFE003D4751 /* UIImageView.m */; };
-		148985A212EE2CFF003D4751 /* UIKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 1489851C12EE2CFE003D4751 /* UIKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		148985A212EE2CFF003D4751 /* UIKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 1489851C12EE2CFE003D4751 /* UIKey.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		148985A312EE2CFF003D4751 /* UIKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 1489851D12EE2CFE003D4751 /* UIKey.m */; };
 		148985A412EE2CFF003D4751 /* UIKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 1489851E12EE2CFE003D4751 /* UIKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		148985A512EE2CFF003D4751 /* UIKitView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1489851F12EE2CFE003D4751 /* UIKitView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -208,7 +210,6 @@
 		148DEEA1156E945800E7B8DE /* <UIToolbar> button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 148DEE94156E945800E7B8DE /* <UIToolbar> button@2x.png */; };
 		1490AFE01219C31C00774286 /* UIPopoverController+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		149148BC12EE45ED00F7C34E /* UIGestureRecognizerSubclass.h in Headers */ = {isa = PBXBuildFile; fileRef = 149148BA12EE45ED00F7C34E /* UIGestureRecognizerSubclass.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		14A726D21213303400648C9B /* UIApplication+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726AF1213303400648C9B /* UIApplication+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726D41213303400648C9B /* UIControl+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B11213303400648C9B /* UIControl+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726D71213303400648C9B /* UIImage+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B41213303400648C9B /* UIImage+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726D81213303400648C9B /* UIImageView+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B51213303400648C9B /* UIImageView+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -216,10 +217,9 @@
 		14A726DC1213303400648C9B /* UITableViewCell+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726B91213303400648C9B /* UITableViewCell+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726DD1213303400648C9B /* UITouch+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BA1213303400648C9B /* UITouch+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726DE1213303400648C9B /* UIView+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BB1213303400648C9B /* UIView+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		14A726DF1213303400648C9B /* UIViewController+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BC1213303400648C9B /* UIViewController+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14A726E01213303400648C9B /* UIWindow+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A726BD1213303400648C9B /* UIWindow+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		14BF16DB12E621EB007DAA01 /* UIViewBlockAnimationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14BF16D912E621EB007DAA01 /* UIViewBlockAnimationDelegate.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		14BF16DC12E621EB007DAA01 /* UIViewBlockAnimationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BF16DA12E621EB007DAA01 /* UIViewBlockAnimationDelegate.m */; };
+		14BA42F217554D0200891B6D /* UITouchEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 14BA42F017554D0200891B6D /* UITouchEvent.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		14BA42F317554D0200891B6D /* UITouchEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BA42F117554D0200891B6D /* UITouchEvent.m */; };
 		14C0715E13CF5A2400B76E35 /* UIAction.h in Headers */ = {isa = PBXBuildFile; fileRef = 14C0715C13CF5A2300B76E35 /* UIAction.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14C0715F13CF5A2400B76E35 /* UIAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C0715D13CF5A2300B76E35 /* UIAction.m */; };
 		14C0716213CF66B800B76E35 /* UIScrollWheelGestureRecognizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 14C0716013CF66B600B76E35 /* UIScrollWheelGestureRecognizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -235,6 +235,8 @@
 		14CC843711EFA8BA005988CC /* <UIScreen> grabber.png in Resources */ = {isa = PBXBuildFile; fileRef = 14CC842F11EFA8BA005988CC /* <UIScreen> grabber.png */; };
 		14CC844111EFA901005988CC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14CC844011EFA901005988CC /* QuartzCore.framework */; };
 		14CC844511EFA91A005988CC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14CC844411EFA91A005988CC /* SystemConfiguration.framework */; };
+		14D0601717303DC100C9A7C6 /* UINSApplicationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14D0601517303DC100C9A7C6 /* UINSApplicationDelegate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		14D0601817303DC100C9A7C6 /* UINSApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D0601617303DC100C9A7C6 /* UINSApplicationDelegate.m */; };
 		14D796381540A5DA00C02139 /* UIAppearanceProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 14D796361540A5DA00C02139 /* UIAppearanceProperty.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14D796391540A5DA00C02139 /* UIAppearanceProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D796371540A5DA00C02139 /* UIAppearanceProperty.m */; };
 		14D8D941135DE90A00FE639A /* UIInputController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14D8D93F135DE90A00FE639A /* UIInputController.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -243,8 +245,6 @@
 		14DD1C361289B4D500DCF231 /* <UIToolbar> button-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 14DD1C341289B4D500DCF231 /* <UIToolbar> button-highlighted.png */; };
 		14DD1C371289B4D500DCF231 /* <UIToolbar> button.png in Resources */ = {isa = PBXBuildFile; fileRef = 14DD1C351289B4D500DCF231 /* <UIToolbar> button.png */; };
 		14E20663156FE88D0040349D /* UIImageAppKitIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = 14E20662156FE88D0040349D /* UIImageAppKitIntegration.m */; };
-		14EEF76712DF67CF00EB7D95 /* UIEvent+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14EEF76512DF67CF00EB7D95 /* UIEvent+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		14EEF7A912DF6D9C00EB7D95 /* UIKey+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 14EEF7A812DF6D9C00EB7D95 /* UIKey+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14F0BC0D1288A67F00BA54F9 /* <UIBarButtonSystemItem> add.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F0BC0B1288A67F00BA54F9 /* <UIBarButtonSystemItem> add.png */; };
 		14F0BC0E1288A67F00BA54F9 /* <UIBarButtonSystemItem> reply.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F0BC0C1288A67F00BA54F9 /* <UIBarButtonSystemItem> reply.png */; };
 		14F56F3D12664D350045EC82 /* <UIPopoverView> arrow-bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F56F3812664D350045EC82 /* <UIPopoverView> arrow-bottom.png */; };
@@ -273,17 +273,15 @@
 		14FDE99C153C9A1800A2D499 /* UIAppearance.h in Headers */ = {isa = PBXBuildFile; fileRef = 14FDE99A153C9A1800A2D499 /* UIAppearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14FDE9A5153CAECA00A2D499 /* UIAppearanceProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 14FDE9A3153CAECA00A2D499 /* UIAppearanceProxy.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		14FDE9A6153CAECA00A2D499 /* UIAppearanceProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 14FDE9A4153CAECA00A2D499 /* UIAppearanceProxy.m */; };
+		14FE493A171C988B009C7794 /* UITextInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 14FE4939171C988B009C7794 /* UITextInput.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		14FE4941171C9989009C7794 /* UITextInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 14FE4940171C9989009C7794 /* UITextInput.m */; };
 		38615C78133A81B900841EEA /* UIFont+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 38615C77133A81B900841EEA /* UIFont+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		38E523B11339680400E041B3 /* UINavigationItem+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 38E523AF1339680400E041B3 /* UINavigationItem+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		38E523B513396B5B00E041B3 /* UINavigationBar+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 38E523B413396B5B00E041B3 /* UINavigationBar+UIPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		537472D5133ADD4B00EBD5EA /* UIInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 537472D3133ADD4B00EBD5EA /* UIInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		537472D6133ADD4B00EBD5EA /* UIInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 537472D4133ADD4B00EBD5EA /* UIInterface.m */; };
 		7011107C133BE0F400C86512 /* UIDatePicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 7011107A133BE0F300C86512 /* UIDatePicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7011107D133BE0F400C86512 /* UIDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7011107B133BE0F300C86512 /* UIDatePicker.m */; };
 		7806ED2A133A1D7500273BC6 /* UITabBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 7806ED28133A1D7500273BC6 /* UITabBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7806ED2B133A1D7500273BC6 /* UITabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7806ED29133A1D7500273BC6 /* UITabBar.m */; };
-		789CF898133A3CD500250AB4 /* NSFetchedResultsController.h in Headers */ = {isa = PBXBuildFile; fileRef = 789CF896133A3CD500250AB4 /* NSFetchedResultsController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		789CF899133A3CD500250AB4 /* NSFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 789CF897133A3CD500250AB4 /* NSFetchedResultsController.m */; };
 		78CB48AC133A9C51008636DA /* UISearchBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 78CB48AA133A9C51008636DA /* UISearchBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		78CB48AD133A9C51008636DA /* UISearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CB48AB133A9C51008636DA /* UISearchBar.m */; };
 		78CB48B0133AA536008636DA /* UITabBarItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 78CB48AE133AA535008636DA /* UITabBarItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -303,6 +301,8 @@
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		14100F6E175FB9C700269BBF /* UINSResponderShim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINSResponderShim.h; sourceTree = "<group>"; };
+		14100F6F175FB9C700269BBF /* UINSResponderShim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINSResponderShim.m; sourceTree = "<group>"; };
 		1413D20C13D72A06004D77E9 /* UIScrollViewAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewAnimation.h; sourceTree = "<group>"; };
 		1413D20D13D72A06004D77E9 /* UIScrollViewAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScrollViewAnimation.m; sourceTree = "<group>"; };
 		1413D20E13D72A06004D77E9 /* UIScrollViewAnimationDeceleration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewAnimationDeceleration.h; sourceTree = "<group>"; };
@@ -316,6 +316,7 @@
 		1426A02215701598004C2C9A /* <UIPopoverView> arrow-top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIPopoverView> arrow-top@2x.png"; path = "Resources/<UIPopoverView> arrow-top@2x.png"; sourceTree = "<group>"; };
 		1426FFDB129ADEA300BD31E5 /* UIControlAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIControlAction.h; sourceTree = "<group>"; };
 		1426FFDC129ADEA300BD31E5 /* UIControlAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIControlAction.m; sourceTree = "<group>"; };
+		1434E8651770F4570023F2C5 /* UIViewControllerAppKitIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerAppKitIntegration.h; sourceTree = "<group>"; };
 		144156D91284A22200532FE2 /* UIToolbarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIToolbarButton.h; sourceTree = "<group>"; };
 		144156DA1284A22200532FE2 /* UIToolbarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIToolbarButton.m; sourceTree = "<group>"; };
 		1443B06A13E06081001D7EC1 /* UIBackgroundTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBackgroundTask.h; sourceTree = "<group>"; };
@@ -334,11 +335,10 @@
 		14541DB11360D6F300C1006D /* UIPhotosAlbum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPhotosAlbum.m; sourceTree = "<group>"; };
 		145576221541DC560029EF4D /* UIAppearanceInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAppearanceInstance.h; sourceTree = "<group>"; };
 		145576251541DC830029EF4D /* UIAppearanceInstance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAppearanceInstance.m; sourceTree = "<group>"; };
-		1457DD3D128DDE610057A7F9 /* UITransitionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITransitionView.h; sourceTree = "<group>"; };
-		1457DD3E128DDE610057A7F9 /* UITransitionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITransitionView.m; sourceTree = "<group>"; };
 		145BE31B15754F2400C41D70 /* UIColorRep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIColorRep.h; sourceTree = "<group>"; };
 		145BE31C15754F2400C41D70 /* UIColorRep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIColorRep.m; sourceTree = "<group>"; };
 		145BE3201575523000C41D70 /* UIColor+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+UIPrivate.h"; sourceTree = "<group>"; };
+		145D0B0417949A6800FB569B /* UINavigationItem+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationItem+UIPrivate.h"; sourceTree = "<group>"; };
 		1464960711FF7AE500ECEC7A /* <UINavigationBar> back-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> back-highlighted.png"; path = "Resources/<UINavigationBar> back-highlighted.png"; sourceTree = "<group>"; };
 		1464960811FF7AE500ECEC7A /* <UINavigationBar> back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UINavigationBar> back.png"; path = "Resources/<UINavigationBar> back.png"; sourceTree = "<group>"; };
 		14711392156FC83F00251B2E /* UIImageRep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageRep.h; sourceTree = "<group>"; };
@@ -504,7 +504,6 @@
 		148DEE94156E945800E7B8DE /* <UIToolbar> button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIToolbar> button@2x.png"; path = "Resources/<UIToolbar> button@2x.png"; sourceTree = "<group>"; };
 		1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIPopoverController+UIPrivate.h"; sourceTree = "<group>"; };
 		149148BA12EE45ED00F7C34E /* UIGestureRecognizerSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIGestureRecognizerSubclass.h; sourceTree = "<group>"; };
-		14A726AF1213303400648C9B /* UIApplication+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+UIPrivate.h"; sourceTree = "<group>"; };
 		14A726B11213303400648C9B /* UIControl+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIControl+UIPrivate.h"; sourceTree = "<group>"; };
 		14A726B41213303400648C9B /* UIImage+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+UIPrivate.h"; sourceTree = "<group>"; };
 		14A726B51213303400648C9B /* UIImageView+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+UIPrivate.h"; sourceTree = "<group>"; };
@@ -512,10 +511,9 @@
 		14A726B91213303400648C9B /* UITableViewCell+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+UIPrivate.h"; sourceTree = "<group>"; };
 		14A726BA1213303400648C9B /* UITouch+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITouch+UIPrivate.h"; sourceTree = "<group>"; };
 		14A726BB1213303400648C9B /* UIView+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+UIPrivate.h"; sourceTree = "<group>"; };
-		14A726BC1213303400648C9B /* UIViewController+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+UIPrivate.h"; sourceTree = "<group>"; };
 		14A726BD1213303400648C9B /* UIWindow+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+UIPrivate.h"; sourceTree = "<group>"; };
-		14BF16D912E621EB007DAA01 /* UIViewBlockAnimationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewBlockAnimationDelegate.h; sourceTree = "<group>"; };
-		14BF16DA12E621EB007DAA01 /* UIViewBlockAnimationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewBlockAnimationDelegate.m; sourceTree = "<group>"; };
+		14BA42F017554D0200891B6D /* UITouchEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITouchEvent.h; sourceTree = "<group>"; };
+		14BA42F117554D0200891B6D /* UITouchEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITouchEvent.m; sourceTree = "<group>"; };
 		14C0715C13CF5A2300B76E35 /* UIAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAction.h; sourceTree = "<group>"; };
 		14C0715D13CF5A2300B76E35 /* UIAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAction.m; sourceTree = "<group>"; };
 		14C0716013CF66B600B76E35 /* UIScrollWheelGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollWheelGestureRecognizer.h; sourceTree = "<group>"; };
@@ -531,6 +529,8 @@
 		14CC842F11EFA8BA005988CC /* <UIScreen> grabber.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIScreen> grabber.png"; path = "Resources/<UIScreen> grabber.png"; sourceTree = "<group>"; };
 		14CC844011EFA901005988CC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		14CC844411EFA91A005988CC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		14D0601517303DC100C9A7C6 /* UINSApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINSApplicationDelegate.h; sourceTree = "<group>"; };
+		14D0601617303DC100C9A7C6 /* UINSApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINSApplicationDelegate.m; sourceTree = "<group>"; };
 		14D796361540A5DA00C02139 /* UIAppearanceProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAppearanceProperty.h; sourceTree = "<group>"; };
 		14D796371540A5DA00C02139 /* UIAppearanceProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAppearanceProperty.m; sourceTree = "<group>"; };
 		14D8D93F135DE90A00FE639A /* UIInputController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIInputController.h; sourceTree = "<group>"; };
@@ -539,8 +539,6 @@
 		14DD1C341289B4D500DCF231 /* <UIToolbar> button-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIToolbar> button-highlighted.png"; path = "Resources/<UIToolbar> button-highlighted.png"; sourceTree = "<group>"; };
 		14DD1C351289B4D500DCF231 /* <UIToolbar> button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIToolbar> button.png"; path = "Resources/<UIToolbar> button.png"; sourceTree = "<group>"; };
 		14E20662156FE88D0040349D /* UIImageAppKitIntegration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageAppKitIntegration.m; sourceTree = "<group>"; };
-		14EEF76512DF67CF00EB7D95 /* UIEvent+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIEvent+UIPrivate.h"; sourceTree = "<group>"; };
-		14EEF7A812DF6D9C00EB7D95 /* UIKey+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIKey+UIPrivate.h"; sourceTree = "<group>"; };
 		14F0BC0B1288A67F00BA54F9 /* <UIBarButtonSystemItem> add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> add.png"; path = "Resources/<UIBarButtonSystemItem> add.png"; sourceTree = "<group>"; };
 		14F0BC0C1288A67F00BA54F9 /* <UIBarButtonSystemItem> reply.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIBarButtonSystemItem> reply.png"; path = "Resources/<UIBarButtonSystemItem> reply.png"; sourceTree = "<group>"; };
 		14F56F3812664D350045EC82 /* <UIPopoverView> arrow-bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "<UIPopoverView> arrow-bottom.png"; path = "Resources/<UIPopoverView> arrow-bottom.png"; sourceTree = "<group>"; };
@@ -569,18 +567,16 @@
 		14FDE99A153C9A1800A2D499 /* UIAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAppearance.h; sourceTree = "<group>"; };
 		14FDE9A3153CAECA00A2D499 /* UIAppearanceProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAppearanceProxy.h; sourceTree = "<group>"; };
 		14FDE9A4153CAECA00A2D499 /* UIAppearanceProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAppearanceProxy.m; sourceTree = "<group>"; };
+		14FE4939171C988B009C7794 /* UITextInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITextInput.h; sourceTree = "<group>"; };
+		14FE4940171C9989009C7794 /* UITextInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITextInput.m; sourceTree = "<group>"; };
 		32DBCF5E0370ADEE00C91783 /* UIKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIKit_Prefix.pch; sourceTree = "<group>"; };
 		38615C77133A81B900841EEA /* UIFont+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+UIPrivate.h"; sourceTree = "<group>"; };
-		38E523AF1339680400E041B3 /* UINavigationItem+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationItem+UIPrivate.h"; sourceTree = "<group>"; };
-		38E523B413396B5B00E041B3 /* UINavigationBar+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+UIPrivate.h"; sourceTree = "<group>"; };
 		537472D3133ADD4B00EBD5EA /* UIInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIInterface.h; sourceTree = "<group>"; };
 		537472D4133ADD4B00EBD5EA /* UIInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIInterface.m; sourceTree = "<group>"; };
 		7011107A133BE0F300C86512 /* UIDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDatePicker.h; sourceTree = "<group>"; };
 		7011107B133BE0F300C86512 /* UIDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIDatePicker.m; sourceTree = "<group>"; };
 		7806ED28133A1D7500273BC6 /* UITabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITabBar.h; sourceTree = "<group>"; };
 		7806ED29133A1D7500273BC6 /* UITabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITabBar.m; sourceTree = "<group>"; };
-		789CF896133A3CD500250AB4 /* NSFetchedResultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSFetchedResultsController.h; sourceTree = "<group>"; };
-		789CF897133A3CD500250AB4 /* NSFetchedResultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSFetchedResultsController.m; sourceTree = "<group>"; };
 		78CB48AA133A9C51008636DA /* UISearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISearchBar.h; sourceTree = "<group>"; };
 		78CB48AB133A9C51008636DA /* UISearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISearchBar.m; sourceTree = "<group>"; };
 		78CB48AE133AA535008636DA /* UITabBarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITabBarItem.h; sourceTree = "<group>"; };
@@ -695,8 +691,6 @@
 			isa = PBXGroup;
 			children = (
 				148984E412EE2CFE003D4751 /* AppKitIntegration.h */,
-				789CF896133A3CD500250AB4 /* NSFetchedResultsController.h */,
-				789CF897133A3CD500250AB4 /* NSFetchedResultsController.m */,
 				148984E512EE2CFE003D4751 /* NSIndexPath+UITableView.h */,
 				148984E612EE2CFE003D4751 /* NSIndexPath+UITableView.m */,
 				148984E712EE2CFE003D4751 /* UIAcceleration.h */,
@@ -759,8 +753,6 @@
 				1489851B12EE2CFE003D4751 /* UIImageView.m */,
 				537472D3133ADD4B00EBD5EA /* UIInterface.h */,
 				537472D4133ADD4B00EBD5EA /* UIInterface.m */,
-				1489851C12EE2CFE003D4751 /* UIKey.h */,
-				1489851D12EE2CFE003D4751 /* UIKey.m */,
 				1489851E12EE2CFE003D4751 /* UIKit.h */,
 				1489851F12EE2CFE003D4751 /* UIKitView.h */,
 				1489852012EE2CFE003D4751 /* UIKitView.m */,
@@ -842,6 +834,8 @@
 				1489855612EE2CFE003D4751 /* UITapGestureRecognizer.m */,
 				1489855712EE2CFE003D4751 /* UITextField.h */,
 				1489855812EE2CFE003D4751 /* UITextField.m */,
+				14FE4939171C988B009C7794 /* UITextInput.h */,
+				14FE4940171C9989009C7794 /* UITextInput.m */,
 				1489855912EE2CFE003D4751 /* UITextInputTraits.h */,
 				1489855A12EE2CFE003D4751 /* UITextView.h */,
 				1489855B12EE2CFE003D4751 /* UITextView.m */,
@@ -855,6 +849,7 @@
 				1489856312EE2CFE003D4751 /* UIViewAdapter.m */,
 				1489856412EE2CFE003D4751 /* UIViewController.h */,
 				1489856512EE2CFE003D4751 /* UIViewController.m */,
+				1434E8651770F4570023F2C5 /* UIViewControllerAppKitIntegration.h */,
 				1489856612EE2CFE003D4751 /* UIWebView.h */,
 				1489856712EE2CFE003D4751 /* UIWebView.m */,
 				1489856812EE2CFE003D4751 /* UIWindow.h */,
@@ -890,10 +885,16 @@
 				14711393156FC83F00251B2E /* UIImageRep.m */,
 				14D8D93F135DE90A00FE639A /* UIInputController.h */,
 				14D8D940135DE90A00FE639A /* UIInputController.m */,
+				1489851C12EE2CFE003D4751 /* UIKey.h */,
+				1489851D12EE2CFE003D4751 /* UIKey.m */,
 				14FA8C47121DA4A000C4264B /* UINinePartImage.h */,
 				14FA8C48121DA4A000C4264B /* UINinePartImage.m */,
+				14D0601517303DC100C9A7C6 /* UINSApplicationDelegate.h */,
+				14D0601617303DC100C9A7C6 /* UINSApplicationDelegate.m */,
 				14805D3F12A6B0E80080C4BA /* UINSClipView.h */,
 				14805D4012A6B0E80080C4BA /* UINSClipView.m */,
+				14100F6E175FB9C700269BBF /* UINSResponderShim.h */,
+				14100F6F175FB9C700269BBF /* UINSResponderShim.m */,
 				14541DB01360D6F300C1006D /* UIPhotosAlbum.h */,
 				14541DB11360D6F300C1006D /* UIPhotosAlbum.m */,
 				14CB384312689907003334AD /* UIPopoverNSWindow.h */,
@@ -924,12 +925,10 @@
 				14FA8C58121DA4A000C4264B /* UIThreePartImage.m */,
 				144156D91284A22200532FE2 /* UIToolbarButton.h */,
 				144156DA1284A22200532FE2 /* UIToolbarButton.m */,
-				1457DD3D128DDE610057A7F9 /* UITransitionView.h */,
-				1457DD3E128DDE610057A7F9 /* UITransitionView.m */,
+				14BA42F017554D0200891B6D /* UITouchEvent.h */,
+				14BA42F117554D0200891B6D /* UITouchEvent.m */,
 				14FA8C59121DA4A000C4264B /* UIViewAnimationGroup.h */,
 				14FA8C5A121DA4A000C4264B /* UIViewAnimationGroup.m */,
-				14BF16D912E621EB007DAA01 /* UIViewBlockAnimationDelegate.h */,
-				14BF16DA12E621EB007DAA01 /* UIViewBlockAnimationDelegate.m */,
 				14FA8C5B121DA4A000C4264B /* UIViewLayoutManager.h */,
 				14FA8C5C121DA4A000C4264B /* UIViewLayoutManager.m */,
 			);
@@ -940,18 +939,14 @@
 		14FA8C44121DA47500C4264B /* Private Categories */ = {
 			isa = PBXGroup;
 			children = (
-				14A726AF1213303400648C9B /* UIApplication+UIPrivate.h */,
 				145BE3201575523000C41D70 /* UIColor+UIPrivate.h */,
 				14A726B11213303400648C9B /* UIControl+UIPrivate.h */,
-				14EEF76512DF67CF00EB7D95 /* UIEvent+UIPrivate.h */,
 				38615C77133A81B900841EEA /* UIFont+UIPrivate.h */,
 				148984A312EE278D003D4751 /* UIGestureRecognizer+UIPrivate.h */,
 				14A726B41213303400648C9B /* UIImage+UIPrivate.h */,
 				14DD1C271289B3C900DCF231 /* UIImage+UIPrivate.m */,
 				14A726B51213303400648C9B /* UIImageView+UIPrivate.h */,
-				14EEF7A812DF6D9C00EB7D95 /* UIKey+UIPrivate.h */,
-				38E523B413396B5B00E041B3 /* UINavigationBar+UIPrivate.h */,
-				38E523AF1339680400E041B3 /* UINavigationItem+UIPrivate.h */,
+				145D0B0417949A6800FB569B /* UINavigationItem+UIPrivate.h */,
 				1490AFDE1219C31C00774286 /* UIPopoverController+UIPrivate.h */,
 				14A726B71213303400648C9B /* UIScreen+UIPrivate.h */,
 				1443DF23121F0D5A00E07C4A /* UIScreenMode+UIPrivate.h */,
@@ -959,7 +954,6 @@
 				14A726B91213303400648C9B /* UITableViewCell+UIPrivate.h */,
 				14A726BA1213303400648C9B /* UITouch+UIPrivate.h */,
 				14A726BB1213303400648C9B /* UIView+UIPrivate.h */,
-				14A726BC1213303400648C9B /* UIViewController+UIPrivate.h */,
 				14A726BD1213303400648C9B /* UIWindow+UIPrivate.h */,
 			);
 			name = "Private Categories";
@@ -981,12 +975,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				789CF898133A3CD500250AB4 /* NSFetchedResultsController.h in Headers */,
 				78CB48D9133AB922008636DA /* UISlider.h in Headers */,
 				78CB48B4133AA8AF008636DA /* UISegmentedControl.h in Headers */,
 				14CC840611EFA8AF005988CC /* UIRoundedRectButton.h in Headers */,
 				78CB48BC133AADD0008636DA /* UIPickerView.h in Headers */,
-				14A726D21213303400648C9B /* UIApplication+UIPrivate.h in Headers */,
 				14A726D41213303400648C9B /* UIControl+UIPrivate.h in Headers */,
 				14A726D71213303400648C9B /* UIImage+UIPrivate.h in Headers */,
 				14A726D81213303400648C9B /* UIImageView+UIPrivate.h in Headers */,
@@ -994,7 +986,6 @@
 				14A726DC1213303400648C9B /* UITableViewCell+UIPrivate.h in Headers */,
 				14A726DD1213303400648C9B /* UITouch+UIPrivate.h in Headers */,
 				14A726DE1213303400648C9B /* UIView+UIPrivate.h in Headers */,
-				14A726DF1213303400648C9B /* UIViewController+UIPrivate.h in Headers */,
 				78CB48B0133AA536008636DA /* UITabBarItem.h in Headers */,
 				14A726E01213303400648C9B /* UIWindow+UIPrivate.h in Headers */,
 				78D533DD133A9434006F17CA /* UISearchDisplayController.h in Headers */,
@@ -1032,7 +1023,6 @@
 				1489859D12EE2CFF003D4751 /* UIImageAppKitIntegration.h in Headers */,
 				1489859E12EE2CFF003D4751 /* UIImagePickerController.h in Headers */,
 				148985A012EE2CFF003D4751 /* UIImageView.h in Headers */,
-				148985A212EE2CFF003D4751 /* UIKey.h in Headers */,
 				148985A412EE2CFF003D4751 /* UIKit.h in Headers */,
 				148985A512EE2CFF003D4751 /* UIKitView.h in Headers */,
 				148985A712EE2CFF003D4751 /* UILabel.h in Headers */,
@@ -1058,24 +1048,20 @@
 				14F56F4412664D430045EC82 /* UIPopoverView.h in Headers */,
 				14CB384512689907003334AD /* UIPopoverNSWindow.h in Headers */,
 				14CB384912689949003334AD /* UIPopoverOverlayNSView.h in Headers */,
-				1457DD3F128DDE610057A7F9 /* UITransitionView.h in Headers */,
 				14805F5A12A6E2AE0080C4BA /* UIScrollView+UIPrivate.h in Headers */,
-				14EEF76712DF67CF00EB7D95 /* UIEvent+UIPrivate.h in Headers */,
-				14EEF7A912DF6D9C00EB7D95 /* UIKey+UIPrivate.h in Headers */,
-				14BF16DB12E621EB007DAA01 /* UIViewBlockAnimationDelegate.h in Headers */,
 				148984A512EE278D003D4751 /* UIGestureRecognizer+UIPrivate.h in Headers */,
-				38E523B11339680400E041B3 /* UINavigationItem+UIPrivate.h in Headers */,
 				14805D4112A6B0E80080C4BA /* UINSClipView.h in Headers */,
 				144156DB1284A22200532FE2 /* UIToolbarButton.h in Headers */,
 				1426FFDD129ADEA300BD31E5 /* UIControlAction.h in Headers */,
 				14C0716213CF66B800B76E35 /* UIScrollWheelGestureRecognizer.h in Headers */,
-				38E523B513396B5B00E041B3 /* UINavigationBar+UIPrivate.h in Headers */,
+				14FE493A171C988B009C7794 /* UITextInput.h in Headers */,
 				14FDE99C153C9A1800A2D499 /* UIAppearance.h in Headers */,
 				38615C78133A81B900841EEA /* UIFont+UIPrivate.h in Headers */,
 				148985B312EE2CFF003D4751 /* UINavigationItem.h in Headers */,
 				148985B512EE2CFF003D4751 /* UINibLoading.h in Headers */,
 				148985B712EE2CFF003D4751 /* UIPageControl.h in Headers */,
 				148985B912EE2CFF003D4751 /* UIPasteboard.h in Headers */,
+				148985A212EE2CFF003D4751 /* UIKey.h in Headers */,
 				148985BB12EE2CFF003D4751 /* UIPinchGestureRecognizer.h in Headers */,
 				148985BD12EE2CFF003D4751 /* UIPopoverController.h in Headers */,
 				148985BF12EE2CFF003D4751 /* UIProgressView.h in Headers */,
@@ -1116,12 +1102,17 @@
 				14D8D941135DE90A00FE639A /* UIInputController.h in Headers */,
 				14541DB21360D6F300C1006D /* UIPhotosAlbum.h in Headers */,
 				14C0715E13CF5A2400B76E35 /* UIAction.h in Headers */,
-				14FDE9A5153CAECA00A2D499 /* UIAppearanceProxy.h in Headers */,
-				14D796381540A5DA00C02139 /* UIAppearanceProperty.h in Headers */,
 				145576231541DC560029EF4D /* UIAppearanceInstance.h in Headers */,
 				14711394156FC83F00251B2E /* UIImageRep.h in Headers */,
 				145BE31D15754F2400C41D70 /* UIColorRep.h in Headers */,
 				145BE3211575523000C41D70 /* UIColor+UIPrivate.h in Headers */,
+				14D0601717303DC100C9A7C6 /* UINSApplicationDelegate.h in Headers */,
+				14BA42F217554D0200891B6D /* UITouchEvent.h in Headers */,
+				14100F70175FB9C700269BBF /* UINSResponderShim.h in Headers */,
+				1434E8661770F4570023F2C5 /* UIViewControllerAppKitIntegration.h in Headers */,
+				145D0B0517949A6800FB569B /* UINavigationItem+UIPrivate.h in Headers */,
+				14FDE9A5153CAECA00A2D499 /* UIAppearanceProxy.h in Headers */,
+				14D796381540A5DA00C02139 /* UIAppearanceProperty.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1153,7 +1144,7 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0510;
 			};
 			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "UIKit" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1222,7 +1213,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				789CF899133A3CD500250AB4 /* NSFetchedResultsController.m in Sources */,
 				78CB48B1133AA536008636DA /* UITabBarItem.m in Sources */,
 				78CB48AD133A9C51008636DA /* UISearchBar.m in Sources */,
 				14CC840711EFA8AF005988CC /* UIRoundedRectButton.m in Sources */,
@@ -1243,10 +1233,8 @@
 				14CB384A12689949003334AD /* UIPopoverOverlayNSView.m in Sources */,
 				144156DC1284A22200532FE2 /* UIToolbarButton.m in Sources */,
 				14DD1C281289B3C900DCF231 /* UIImage+UIPrivate.m in Sources */,
-				1457DD40128DDE610057A7F9 /* UITransitionView.m in Sources */,
 				1426FFDE129ADEA300BD31E5 /* UIControlAction.m in Sources */,
 				14805D4212A6B0E80080C4BA /* UINSClipView.m in Sources */,
-				14BF16DC12E621EB007DAA01 /* UIViewBlockAnimationDelegate.m in Sources */,
 				1489856C12EE2CFF003D4751 /* NSIndexPath+UITableView.m in Sources */,
 				1489856E12EE2CFF003D4751 /* UIAcceleration.m in Sources */,
 				1489857012EE2CFF003D4751 /* UIAccelerometer.m in Sources */,
@@ -1333,6 +1321,10 @@
 				14711395156FC83F00251B2E /* UIImageRep.m in Sources */,
 				14E20663156FE88D0040349D /* UIImageAppKitIntegration.m in Sources */,
 				145BE31E15754F2400C41D70 /* UIColorRep.m in Sources */,
+				14FE4941171C9989009C7794 /* UITextInput.m in Sources */,
+				14D0601817303DC100C9A7C6 /* UINSApplicationDelegate.m in Sources */,
+				14BA42F317554D0200891B6D /* UITouchEvent.m in Sources */,
+				14100F71175FB9C700269BBF /* UINSResponderShim.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1343,6 +1335,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1356,7 +1349,6 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = UIKit;
 				SYMROOT = ../build;
-				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -1365,6 +1357,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1376,7 +1369,6 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = UIKit;
 				SYMROOT = ../build;
-				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
@@ -1384,13 +1376,12 @@
 		1DEB91B208733DA50010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
@@ -1399,13 +1390,12 @@
 		1DEB91B308733DA50010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application";
+				CODE_SIGN_IDENTITY = "Developer ID Application: The Iconfactory";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 			};

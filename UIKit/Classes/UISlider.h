@@ -37,14 +37,24 @@
 
 @class UIImageView, UIImage;
 
-@interface UISlider : UIControl {
-    float _value;
-    float _minimumValue;
-    float _maximumValue;
-}
+@interface UISlider : UIControl
+- (UIImage *)minimumTrackImageForState:(UIControlState)state;
+- (void)setMinimumTrackImage:(UIImage *)image forState:(UIControlState)state;
+- (UIImage *)maximumTrackImageForState:(UIControlState)state;
+- (void)setMaximumTrackImage:(UIImage *)image forState:(UIControlState)state;
+- (UIImage *)thumbImageForState:(UIControlState)state;
+- (void)setThumbImage:(UIImage *)image forState:(UIControlState)state;
 
 @property (nonatomic) float value;
 @property (nonatomic) float minimumValue;
 @property (nonatomic) float maximumValue;
 
+@property (nonatomic, strong) UIImage *minimumValueImage;
+@property (nonatomic, strong) UIImage *maximumValueImage;
+@property (nonatomic, strong) UIColor *minimumTrackTintColor;
+@property (nonatomic, readonly) UIImage *currentMinimumTrackImage;
+@property (nonatomic, strong) UIColor *maximumTrackTintColor;
+@property (nonatomic, readonly) UIImage *currentMaximumTrackImage;
+@property (nonatomic, strong) UIColor *thumbTintColor;
+@property (nonatomic, readonly) UIImage *currentThumbImage;
 @end

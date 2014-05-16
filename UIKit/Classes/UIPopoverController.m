@@ -34,7 +34,7 @@
 #import "UIScreenAppKitIntegration.h"
 #import "UIKitView.h"
 #import "UITouch.h"
-#import "UIApplication+UIPrivate.h"
+#import "UIApplicationAppKitIntegration.h"
 #import "UIPopoverView.h"
 #import "UIPopoverNSWindow.h"
 #import "UIPopoverOverlayNSView.h"
@@ -119,13 +119,18 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
     return windowRect.origin;
 }
 
-@interface UIPopoverController ()
-- (void)_destroyPopover;
-@end
-
-@implementation UIPopoverController
-@synthesize delegate=_delegate, contentViewController=_contentViewController, passthroughViews=_passthroughViews;
-@synthesize popoverArrowDirection=_popoverArrowDirection;
+@implementation UIPopoverController {
+    UIPopoverView *_popoverView;
+    UIPopoverNSWindow *_popoverWindow;
+    NSWindow *_overlayWindow;
+    
+    BOOL _isDismissing;
+    
+    struct {
+        unsigned popoverControllerDidDismissPopover : 1;
+        unsigned popoverControllerShouldDismissPopover : 1;
+    } _delegateHas;
+}
 
 - (id)init
 {
@@ -147,9 +152,6 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 - (void)dealloc
 {
     [self _destroyPopover];
-    [_passthroughViews release];
-    [_contentViewController release];
-    [super dealloc];
 }
 
 - (void)setDelegate:(id<UIPopoverControllerDelegate>)newDelegate
@@ -165,14 +167,23 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
         if ([self isPopoverVisible]) {
             [_popoverView setContentView:controller.view animated:animated];
         }
-        [_contentViewController release];
-        _contentViewController = [controller retain];
+        _contentViewController = controller;
     }
 }
 
 - (void)setContentViewController:(UIViewController *)viewController
 {
     [self setContentViewController:viewController animated:NO];
+}
+
+- (void)setPopoverContentSize:(CGSize)size animated:(BOOL)animated
+{
+    _popoverContentSize = size;
+}
+
+- (void)setPopoverContentSize:(CGSize)size
+{
+    [self setPopoverContentSize:size animated:NO];
 }
 
 - (void)presentPopoverFromRect:(CGRect)rect inView:(UIView *)view permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated
@@ -182,9 +193,9 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
     assert(arrowDirections != UIPopoverArrowDirectionUnknown);
     assert(!CGRectIsNull(rect));
     assert(!CGRectEqualToRect(rect,CGRectZero));
-    assert([[view.window.screen UIKitView] window] != nil);
+    assert([view.window.screen.UIKitView window] != nil);
 
-    NSWindow *viewNSWindow = [[view.window.screen UIKitView] window];
+    NSWindow *viewNSWindow = [view.window.screen.UIKitView window];
 
     // only create new stuff if the popover isn't already visible
     if (![self isPopoverVisible]) {
@@ -198,48 +209,39 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
         NSRect windowFrame = [viewNSWindow frame];
         NSRect overlayContentRect = NSMakeRect(0,0,windowFrame.size.width,windowFrame.size.height);
 
-        UIPopoverOverlayNSView *popoverOverlayNSView = [[UIPopoverOverlayNSView alloc] initWithFrame:overlayContentRect popoverController:self];
-        
         _overlayWindow = [[NSWindow alloc] initWithContentRect:overlayContentRect styleMask:NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES];
-        [_overlayWindow setContentView:popoverOverlayNSView];
+        [_overlayWindow setReleasedWhenClosed:NO];
+        [_overlayWindow setContentView:[[UIPopoverOverlayNSView alloc] initWithFrame:overlayContentRect popoverController:self]];
         [_overlayWindow setIgnoresMouseEvents:NO];
         [_overlayWindow setOpaque:NO];
-        [(NSWindow *)_overlayWindow setBackgroundColor:[NSColor clearColor]];
+        [_overlayWindow setBackgroundColor:[NSColor clearColor]];
         [_overlayWindow setFrameOrigin:windowFrame.origin];
         [viewNSWindow addChildWindow:_overlayWindow ordered:NSWindowAbove];
 
         // now build the actual popover view which represents the popover's chrome, and since it's a UIView, we need to build a UIKitView 
         // as well to put it in our NSWindow...
         _popoverView = [[UIPopoverView alloc] initWithContentView:_contentViewController.view size:_contentViewController.contentSizeForViewInPopover];
+        [_popoverView setHidden:YES];
 
-        // this prevents a visible flash from sometimes occuring due to the fact that the window is created and added as a child before it has the
-        // proper origin set. this means it it ends up flashing at the bottom left corner of the screen sometimes before it
-        // gets down farther in this method where the actual origin is calculated and set. since the window is transparent, simply setting the UIView
-        // hidden gets around the problem since you then can't see any of the actual content that's in the window :)
-        _popoverView.hidden = YES;
-
-        UIKitView *hostingView = [(UIKitView *)[UIKitView alloc] initWithFrame:NSRectFromCGRect([_popoverView bounds])];
-        [[hostingView UIScreen] _setPopoverController:self];
+        UIKitView *hostingView = [[UIKitView alloc] initWithFrame:NSRectFromCGRect([_popoverView bounds])];
         [[hostingView UIWindow] addSubview:_popoverView];
 
         // now finally make the actual popover window itself and attach it to the overlay window
         _popoverWindow = [[UIPopoverNSWindow alloc] initWithContentRect:[hostingView bounds] styleMask:NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES];
-        [(UIPopoverNSWindow *)_popoverWindow setContentView:hostingView];
-        [(UIPopoverNSWindow *)_popoverWindow setPopoverController:self];
-        [(UIPopoverNSWindow *)_popoverWindow setOpaque:NO];
-        [(UIPopoverNSWindow *)_popoverWindow setBackgroundColor:[NSColor clearColor]];
+        [_popoverWindow setReleasedWhenClosed:NO];
+        [_popoverWindow setAlphaValue:0];  // prevents a flash as the window moves from the wrong position into the right position
+        [_popoverWindow setContentView:hostingView];
+        [_popoverWindow setPopoverController:self];
+        [_popoverWindow setOpaque:NO];
+        [_popoverWindow setBackgroundColor:[NSColor clearColor]];
         [_overlayWindow addChildWindow:_popoverWindow ordered:NSWindowAbove];
-        [(UIPopoverNSWindow *)_popoverWindow makeFirstResponder:hostingView];
-
-        [hostingView release];
-        [popoverOverlayNSView release];
     }
 
     // cancel current touches (if any) to prevent the main window from losing track of events (such as if the user was holding down the mouse
     // button and a timer triggered the appearance of this popover. the window would possibly then not receive the mouseUp depending on how
     // all this works out... I first ran into this problem with NSMenus. A NSWindow is a bit different, but I think this makes sense here
     // too so premptively doing it to avoid potential problems.)
-    [[UIApplication sharedApplication] _cancelTouches];
+    UIApplicationInterruptTouchesInView(nil);
     
     // now position the popover window according to the passed in parameters.
     CGRect windowRect = [view convertRect:rect toView:nil];
@@ -249,7 +251,9 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
     
     // finally, let's show it!
     [_popoverWindow setFrameOrigin:PopoverWindowOrigin(_overlayWindow, NSRectFromCGRect(desktopScreenRect), NSSizeFromCGSize(_popoverView.frame.size), arrowDirections, &pointTo, &_popoverArrowDirection)];
-    _popoverView.hidden = NO;
+    [_popoverWindow setAlphaValue:1];
+    [_popoverView setHidden:NO];
+    [_popoverWindow makeFirstResponder:[_popoverWindow contentView]];
     [_popoverWindow makeKeyWindow];
 
     // the window has to be visible before these coordinate conversions will work correctly (otherwise the UIScreen isn't attached to anything
@@ -287,24 +291,21 @@ static NSPoint PopoverWindowOrigin(NSWindow *inWindow, NSRect fromRect, NSSize p
 
 - (void)_destroyPopover
 {
-	NSWindow *parentWindow = [[_overlayWindow parentWindow] retain];
+	NSWindow *parentWindow = [_overlayWindow parentWindow];
 
     [_overlayWindow removeChildWindow:_popoverWindow];
     [parentWindow removeChildWindow:_overlayWindow];
 
-    [_popoverView release];
-    _popoverView = nil;
-
     [_popoverWindow close];
-    _popoverWindow = nil;
-
     [_overlayWindow close];
+    
+    _popoverWindow = nil;
     _overlayWindow = nil;
+    _popoverView = nil;
     
     _popoverArrowDirection = UIPopoverArrowDirectionUnknown;
     
     [parentWindow makeKeyAndOrderFront:self];
-    [parentWindow release];
     
     _isDismissing = NO;
 }

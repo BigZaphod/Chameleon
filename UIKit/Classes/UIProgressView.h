@@ -28,20 +28,20 @@
  */
 
 #import "UIView.h"
+#import "UIImage.h"
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIProgressViewStyle) {
     UIProgressViewStyleDefault,
     UIProgressViewStyleBar,
-} UIProgressViewStyle;
+};
 
-@interface UIProgressView : UIView {
-    UIProgressViewStyle _progressViewStyle;
-    float _progress;
-}
-
+@interface UIProgressView : UIView
 - (id)initWithProgressViewStyle:(UIProgressViewStyle)style;
+- (void)setProgress:(float)progress animated:(BOOL)animated;
 
 @property (nonatomic) UIProgressViewStyle progressViewStyle;
 @property (nonatomic) float progress;
 
+@property (nonatomic, strong) UIImage *progressImage;
+@property (nonatomic, strong) UIImage *trackImage;
 @end

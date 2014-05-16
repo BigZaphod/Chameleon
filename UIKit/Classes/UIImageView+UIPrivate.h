@@ -29,12 +29,12 @@
 
 #import "UIImageView.h"
 
-enum {
+typedef NS_ENUM(NSInteger, _UIImageViewDrawMode) {
     _UIImageViewDrawModeNormal,
     _UIImageViewDrawModeHighlighted,
     _UIImageViewDrawModeDisabled,
 };
 
 @interface UIImageView (UIPrivate)
-- (void)_setDrawMode:(NSInteger)drawMode;
+- (void)_setDrawMode:(_UIImageViewDrawMode)drawMode;
 @end

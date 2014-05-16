@@ -29,11 +29,7 @@
 
 #import "UIImage+UIPrivate.h"
 
-@interface UIThreePartImage : UIImage {
-@private
-    NSInteger _capSize;
-    BOOL _vertical;
-}
+@interface UIThreePartImage : UIImage
 
 - (id)initWithRepresentations:(NSArray *)reps capSize:(NSInteger)capSize vertical:(BOOL)isVertical;
 

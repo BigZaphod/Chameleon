@@ -49,14 +49,17 @@ static UIDevice *theDevice;
     return theDevice;
 }
 
-- (UIUserInterfaceIdiom)userInterfaceIdiom
+- (id)init
 {
-    return UIUserInterfaceIdiomDesktop;
+    if ((self=[super init])) {
+        _userInterfaceIdiom = UIUserInterfaceIdiomDesktop;
+    }
+    return self;
 }
 
 - (NSString *)name
 {
-    return [(__bridge NSString *)SCDynamicStoreCopyComputerName(NULL,NULL) autorelease];
+    return (__bridge_transfer NSString *)SCDynamicStoreCopyComputerName(NULL,NULL);
 }
 
 - (UIDeviceOrientation)orientation

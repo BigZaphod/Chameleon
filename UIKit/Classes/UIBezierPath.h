@@ -29,29 +29,15 @@
 
 #import <Foundation/Foundation.h>
 
-enum {
+typedef NS_OPTIONS(NSUInteger, UIRectCorner) {
     UIRectCornerTopLeft     = 1 << 0,
     UIRectCornerTopRight    = 1 << 1,
     UIRectCornerBottomLeft  = 1 << 2,
     UIRectCornerBottomRight = 1 << 3,
     UIRectCornerAllCorners  = ~0
 };
-typedef NSUInteger UIRectCorner;
 
-@interface UIBezierPath : NSObject {
-@private
-    CGPathRef _path;
-    CGFloat _lineWidth;
-    CGLineCap _lineCapStyle;
-    CGLineJoin _lineJoinStyle;
-    CGFloat _miterLimit;
-    CGFloat _flatness;
-    BOOL _usesEvenOddFillRule;
-    CGFloat *_lineDashPattern;
-    NSInteger _lineDashCount;
-    CGFloat _lineDashPhase;
-}
-
+@interface UIBezierPath : NSObject <NSCopying>
 + (UIBezierPath *)bezierPath;
 + (UIBezierPath *)bezierPathWithRect:(CGRect)rect;
 + (UIBezierPath *)bezierPathWithOvalInRect:(CGRect)rect;
@@ -68,33 +54,24 @@ typedef NSUInteger UIRectCorner;
 - (void)closePath;
 - (void)removeAllPoints;
 - (void)appendPath:(UIBezierPath *)bezierPath;
+- (void)setLineDash:(const CGFloat *)pattern count:(NSInteger)count phase:(CGFloat)phase;
+- (void)getLineDash:(CGFloat *)pattern count:(NSInteger *)count phase:(CGFloat *)phase;
+- (void)fill;
+- (void)fillWithBlendMode:(CGBlendMode)blendMode alpha:(CGFloat)alpha;
+- (void)stroke;
+- (void)strokeWithBlendMode:(CGBlendMode)blendMode alpha:(CGFloat)alpha;
+- (void)addClip;
+- (BOOL)containsPoint:(CGPoint)point;
+- (void)applyTransform:(CGAffineTransform)transform;
 
 @property (nonatomic) CGPathRef CGPath;
 @property (nonatomic, readonly) CGPoint currentPoint;
-
 @property (nonatomic) CGFloat lineWidth;
 @property (nonatomic) CGLineCap lineCapStyle;
 @property (nonatomic) CGLineJoin lineJoinStyle;
 @property (nonatomic) CGFloat miterLimit;
 @property (nonatomic) CGFloat flatness;
 @property (nonatomic) BOOL usesEvenOddFillRule;
-
-- (void)setLineDash:(const CGFloat *)pattern count:(NSInteger)count phase:(CGFloat)phase;
-- (void)getLineDash:(CGFloat *)pattern count:(NSInteger *)count phase:(CGFloat *)phase;
-
-- (void)fill;
-- (void)fillWithBlendMode:(CGBlendMode)blendMode alpha:(CGFloat)alpha;
-
-- (void)stroke;
-- (void)strokeWithBlendMode:(CGBlendMode)blendMode alpha:(CGFloat)alpha;
-
-- (void)addClip;
-
-- (BOOL)containsPoint:(CGPoint)point;
-
 @property (readonly, getter=isEmpty) BOOL empty;
 @property (nonatomic, readonly) CGRect bounds;
-
-- (void)applyTransform:(CGAffineTransform)transform;
-
 @end

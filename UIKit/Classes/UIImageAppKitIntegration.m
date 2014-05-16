@@ -37,14 +37,14 @@ static const char *UIImageAssociatedNSImageKey = "UIImageAssociatedNSImageKey";
 
 static UIImageRep *UIImageRepFromNSImageRep(NSImageRep *rep, NSRect rect, CGFloat scale)
 {
-    return [[[UIImageRep alloc] initWithCGImage:[rep CGImageForProposedRect:&rect context:nil hints:nil] scale:scale] autorelease];
+    return [[UIImageRep alloc] initWithCGImage:[rep CGImageForProposedRect:&rect context:nil hints:nil] scale:scale];
 }
 
 @implementation UIImage (AppKitIntegration)
 
 + (id)imageWithNSImage:(NSImage *)theImage
 {
-    return [[[self alloc] initWithNSImage:theImage] autorelease];
+    return [[self alloc] initWithNSImage:theImage];
 }
 
 - (id)initWithNSImage:(NSImage *)theImage
@@ -75,14 +75,36 @@ static UIImageRep *UIImageRepFromNSImageRep(NSImageRep *rep, NSRect rect, CGFloa
     NSImage *cached = objc_getAssociatedObject(self, UIImageAssociatedNSImageKey);
     
     if (!cached) {
-        cached = [[[NSImage alloc] initWithSize:NSSizeFromCGSize(self.size)] autorelease];
+        cached = [[NSImage alloc] initWithSize:NSSizeFromCGSize(self.size)];
         for (UIImageRep *rep in [self _representations]) {
-            [cached addRepresentation:[[[NSBitmapImageRep alloc] initWithCGImage:rep.CGImage] autorelease]];
+            [cached addRepresentation:[[NSBitmapImageRep alloc] initWithCGImage:rep.CGImage]];
         }
         objc_setAssociatedObject(self, UIImageAssociatedNSImageKey, cached, OBJC_ASSOCIATION_RETAIN);
     }
     
     return cached;
+}
+
++ (id)imageWithScaledImages:(NSArray *)images
+{
+    return [[self alloc] initWithScaledImages:images];
+}
+
+- (id)initWithScaledImages:(NSArray *)images
+{
+    NSMutableArray *reps = [NSMutableArray arrayWithCapacity:[images count]];
+    NSMutableSet *scaleFactors = [NSMutableSet setWithCapacity:[images count]];
+    
+    for (UIImage *img in images) {
+        NSNumber *scale = [NSNumber numberWithFloat:img.scale];
+        assert(CGSizeEqualToSize(img.size, [[images lastObject] size]));
+        assert(![scaleFactors containsObject:scale]);
+        
+        [scaleFactors addObject:scale];
+        [reps addObject:[[UIImageRep alloc] initWithCGImage:img.CGImage scale:img.scale]];
+    }
+    
+    return [self _initWithRepresentations:reps];
 }
 
 @end

@@ -29,13 +29,13 @@
 
 #import "UIScreen.h"
 
-@class UIView, UIEvent;
+@class UIKitView, CALayer;
 
 @interface UIScreen (UIPrivate)
 - (void)_setUIKitView:(UIKitView *)theView;
+- (void)_setKeyWindow:(UIWindow *)window;
+- (void)_addWindow:(UIWindow *)window;
+- (void)_removeWindow:(UIWindow *)window;
 - (CALayer *)_layer;
 - (BOOL)_hasResizeIndicator;
-- (void)_setPopoverController:(UIPopoverController *)controller;
-- (UIPopoverController *)_popoverController;
-- (UIView *)_hitTest:(CGPoint)clickPoint event:(UIEvent *)theEvent;
 @end

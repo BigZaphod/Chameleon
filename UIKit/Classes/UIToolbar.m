@@ -33,14 +33,9 @@
 #import "UIColor.h"
 #import "UIGraphics.h"
 
+static const CGFloat kBarHeight = 28;
 
-
-
-
-@interface UIToolbarItem : NSObject {
-    UIBarButtonItem *item;
-    UIView *view;
-}
+@interface UIToolbarItem : NSObject
 
 - (id)initWithBarButtonItem:(UIBarButtonItem *)anItem;
 
@@ -51,37 +46,30 @@
 @end
 
 @implementation UIToolbarItem
-@synthesize item, view;
 
 - (id)initWithBarButtonItem:(UIBarButtonItem *)anItem
 {
     if ((self=[super init])) {
         NSAssert((anItem != nil), @"the bar button item must not be nil");
         
-        item = [anItem retain];
+        _item = anItem;
         
-        if (!item->_isSystemItem && item.customView) {
-            view = [item.customView retain];
-        } else if (!item->_isSystemItem || (item->_systemItem != UIBarButtonSystemItemFixedSpace && item->_systemItem != UIBarButtonSystemItemFlexibleSpace)) {
-            view = [[UIToolbarButton alloc] initWithBarButtonItem:item];
+        if (!_item->_isSystemItem && _item.customView) {
+            _view = _item.customView;
+        } else if (!_item->_isSystemItem || (_item->_systemItem != UIBarButtonSystemItemFixedSpace && _item->_systemItem != UIBarButtonSystemItemFlexibleSpace)) {
+            _view = [[UIToolbarButton alloc] initWithBarButtonItem:_item];
         }
     }
     return self;
 }
 
-- (void)dealloc
-{
-    [item release];
-    [view release];
-    [super dealloc];
-}
 
 - (CGFloat)width
 {
-    if (view) {
-        return view.frame.size.width;
-    } else if (item->_isSystemItem && item->_systemItem == UIBarButtonSystemItemFixedSpace) {
-        return item.width;
+    if (_view) {
+        return _view.frame.size.width;
+    } else if (_item->_isSystemItem && _item->_systemItem == UIBarButtonSystemItemFixedSpace) {
+        return _item.width;
     } else {
         return -1;
     }
@@ -96,16 +84,14 @@
 
 
 
-@implementation UIToolbar
-@synthesize barStyle=_barStyle, tintColor=_tintColor, translucent=_translucent;
-
-- (id)init
-{
-    return [self initWithFrame:CGRectMake(0,0,320,32)];
+@implementation UIToolbar {
+    NSMutableArray *_toolbarItems;
 }
 
 - (id)initWithFrame:(CGRect)frame
 {
+    frame.size.height = kBarHeight;
+    
     if ((self=[super initWithFrame:frame])) {
         _toolbarItems = [[NSMutableArray alloc] init];
         self.barStyle = UIBarStyleDefault;
@@ -113,13 +99,6 @@
         self.tintColor = nil;
     }
     return self;
-}
-
-- (void)dealloc
-{
-    [_tintColor release];
-    [_toolbarItems release];
-    [super dealloc];
 }
 
 - (void)setBarStyle:(UIBarStyle)newStyle
@@ -242,7 +221,6 @@
             UIToolbarItem *toolbarItem = [[UIToolbarItem alloc] initWithBarButtonItem:item];
             [_toolbarItems addObject:toolbarItem];
             [self addSubview:toolbarItem.view];
-            [toolbarItem release];
         }
                 
         // if animated, fade them in
@@ -300,6 +278,21 @@
             break;
     }
     return [NSString stringWithFormat:@"<%@: %p; barStyle = %@; tintColor = %@, isTranslucent = %@>", [self className], self, barStyle, ([self.tintColor description] ?: @"Default"), (self.translucent ? @"YES" : @"NO")];
+}
+
+- (UIImage *)backgroundImageForToolbarPosition:(UIToolbarPosition)topOrBottom barMetrics:(UIBarMetrics)barMetrics
+{
+    return nil;
+}
+
+- (void)setBackgroundImage:(UIImage *)backgroundImage forToolbarPosition:(UIToolbarPosition)topOrBottom barMetrics:(UIBarMetrics)barMetrics
+{
+}
+
+- (CGSize)sizeThatFits:(CGSize)size
+{
+    size.height = kBarHeight;
+    return size;
 }
 
 @end

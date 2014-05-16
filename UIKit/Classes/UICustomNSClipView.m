@@ -33,7 +33,6 @@
 #import <QuartzCore/CATransaction.h>
 
 @implementation UICustomNSClipView
-@synthesize parentLayer, behaviorDelegate;
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -46,7 +45,7 @@
 
 - (void)scrollWheel:(NSEvent *)event
 {
-    if ([behaviorDelegate clipViewShouldScroll]) {
+    if ([self.behaviorDelegate clipViewShouldScroll]) {
         NSPoint offset = [self bounds].origin;
         offset.x += [event deltaX];
         offset.y -= [event deltaY];
@@ -60,19 +59,18 @@
 
 - (void)fixupTheLayer
 {
-    if ([self superview] && parentLayer) {
+    if ([self superview] && self.parentLayer) {
         [CATransaction begin];
-        [CATransaction setValue:(id)kCFBooleanTrue
-                         forKey:kCATransactionDisableActions];
+        [CATransaction setAnimationDuration:0];
         
         CALayer *layer = [self layer];
 
-        if (parentLayer != layer.superlayer) {
-            [parentLayer addSublayer:layer];
+        if (self.parentLayer != layer.superlayer) {
+            [self.parentLayer addSublayer:layer];
         }
         
-        if (!CGRectEqualToRect(layer.frame, parentLayer.bounds)) {
-            layer.frame = parentLayer.bounds;
+        if (!CGRectEqualToRect(layer.frame, self.parentLayer.bounds)) {
+            layer.frame = self.parentLayer.bounds;
         }
         
         [CATransaction commit];
@@ -107,12 +105,12 @@
 {
     NSView *hit = [super hitTest:aPoint];
 
-    if (hit && behaviorDelegate) {
+    if (hit && self.behaviorDelegate) {
         // call out to the text layer via a delegate or something and ask if this point should be considered a hit or not.
         // if not, then we set hit to nil, otherwise we return it like normal.
         // the purpose of this is to make the NSView act invisible/hidden to clicks when it's visually behind other UIViews.
         // super tricky, eh?
-        if (![behaviorDelegate hitTestForClipViewPoint:aPoint]) {
+        if (![self.behaviorDelegate hitTestForClipViewPoint:aPoint]) {
             hit = nil;
         }
     }

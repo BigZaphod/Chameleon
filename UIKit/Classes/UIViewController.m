@@ -27,7 +27,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIViewController.h"
+#import "UIViewControllerAppKitIntegration.h"
 #import "UIView+UIPrivate.h"
 #import "UIScreen.h"
 #import "UIWindow.h"
@@ -40,12 +40,23 @@
 #import "UIScreen.h"
 #import "UITabBarController.h"
 
-@implementation UIViewController
-@synthesize view=_view, wantsFullScreenLayout=_wantsFullScreenLayout, title=_title, contentSizeForViewInPopover=_contentSizeForViewInPopover;
-@synthesize modalInPopover=_modalInPopover, toolbarItems=_toolbarItems, modalPresentationStyle=_modalPresentationStyle, editing=_editing;
-@synthesize modalViewController=_modalViewController, parentViewController=_parentViewController;
-@synthesize modalTransitionStyle=_modalTransitionStyle, hidesBottomBarWhenPushed=_hidesBottomBarWhenPushed;
-@synthesize searchDisplayController=_searchDisplayController, tabBarItem=_tabBarItem, tabBarController=_tabBarController;
+typedef NS_ENUM(NSInteger, _UIViewControllerParentageTransition) {
+    _UIViewControllerParentageTransitionNone = 0,
+    _UIViewControllerParentageTransitionToParent,
+    _UIViewControllerParentageTransitionFromParent,
+};
+
+@implementation UIViewController {
+    UIView *_view;
+    UINavigationItem *_navigationItem;
+    NSMutableArray *_childViewControllers;
+    __unsafe_unretained UIViewController *_parentViewController;
+    
+    NSUInteger _appearanceTransitionStack;
+    BOOL _appearanceTransitionIsAnimated;
+    BOOL _viewIsAppearing;
+    _UIViewControllerParentageTransition _parentageTransition;
+}
 
 - (id)init
 {
@@ -57,18 +68,15 @@
     if ((self=[super init])) {
         _contentSizeForViewInPopover = CGSizeMake(320,1100);
         _hidesBottomBarWhenPushed = NO;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMemoryWarning) name:UIApplicationDidReceiveMemoryWarningNotification object:[UIApplication sharedApplication]];
     }
     return self;
 }
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidReceiveMemoryWarningNotification object:[UIApplication sharedApplication]];
     [_view _setViewController:nil];
-    [_modalViewController release];
-    [_navigationItem release];
-    [_title release];
-    [_view release];
-    [super dealloc];
 }
 
 - (NSString *)nibName
@@ -86,6 +94,16 @@
     return _view.superview;
 }
 
+- (UIViewController *)defaultResponderChildViewController
+{
+    return nil;
+}
+
+- (UIResponder *)defaultResponder
+{
+    return nil;
+}
+
 - (BOOL)isViewLoaded
 {
     return (_view != nil);
@@ -96,8 +114,11 @@
     if ([self isViewLoaded]) {
         return _view;
     } else {
+        const BOOL wereEnabled = [UIView areAnimationsEnabled];
+        [UIView setAnimationsEnabled:NO];
         [self loadView];
         [self viewDidLoad];
+        [UIView setAnimationsEnabled:wereEnabled];
         return _view;
     }
 }
@@ -106,15 +127,14 @@
 {
     if (aView != _view) {
         [_view _setViewController:nil];
-        [_view release];
-        _view = [aView retain];
+        _view = aView;
         [_view _setViewController:self];
     }
 }
 
 - (void)loadView
 {
-    self.view = [[[UIView alloc] initWithFrame:CGRectMake(0,0,320,480)] autorelease];
+    self.view = [[UIView alloc] initWithFrame:CGRectMake(0,0,320,480)];
 }
 
 - (void)viewDidLoad
@@ -166,16 +186,18 @@
     return _navigationItem;
 }
 
-- (void)_setParentViewController:(UIViewController *)parentController
+- (void)setTitle:(NSString *)title
 {
-    _parentViewController = parentController;
+    if (![_title isEqual:title]) {
+        _title = [title copy];
+        _navigationItem.title = _title;
+    }
 }
 
 - (void)setToolbarItems:(NSArray *)theToolbarItems animated:(BOOL)animated
 {
-    if (_toolbarItems != theToolbarItems) {
-        [_toolbarItems release];
-        _toolbarItems = [theToolbarItems retain];
+    if (![_toolbarItems isEqual:theToolbarItems]) {
+        _toolbarItems = theToolbarItems;
         [self.navigationController.toolbar setItems:_toolbarItems animated:animated];
     }
 }
@@ -201,10 +223,19 @@
     return nil;
 }
 
+- (void)presentViewController:(UIViewController *)viewControllerToPresent animated:(BOOL)flag completion:(void (^)(void))completion
+{
+}
+
+- (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion
+{
+}
+
 - (void)presentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated
 {
+    /*
     if (!_modalViewController && _modalViewController != self) {
-        _modalViewController = [modalViewController retain];
+        _modalViewController = modalViewController;
         [_modalViewController _setParentViewController:self];
 
         UIWindow *window = self.view.window;
@@ -221,13 +252,14 @@
         selfView.hidden = YES;		// I think the real one may actually remove it, which would mean needing to remember the superview, I guess? Not sure...
         [self viewDidDisappear:animated];
 
-
         [_modalViewController viewDidAppear:animated];
     }
+     */
 }
 
 - (void)dismissModalViewControllerAnimated:(BOOL)animated
 {
+    /*
     // NOTE: This is not implemented entirely correctly - the actual dismissModalViewController is somewhat subtle.
     // There is supposed to be a stack of modal view controllers that dismiss in a specific way,e tc.
     // The whole system of related view controllers is not really right - not just with modals, but everything else like
@@ -246,13 +278,13 @@
         
         [_modalViewController.view removeFromSuperview];
         [_modalViewController _setParentViewController:nil];
-        [_modalViewController autorelease];
         _modalViewController = nil;
 
         [self viewDidAppear:animated];
     } else {
         [self.parentViewController dismissModalViewControllerAnimated:animated];
     }
+     */
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -296,6 +328,204 @@
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"<%@: %p; title = %@; view = %@>", [self className], self, self.title, self.view];
+}
+
+
+
+
+
+
+- (BOOL)isMovingFromParentViewController
+{
+    // Docs don't say anything about being required to call super for -willMoveToParentViewController: and people
+    // on StackOverflow seem to tell each other they can override the method without calling super. Based on that,
+    // I have no freakin' idea how this method here is meant to know when to return YES...
+    
+    // I'm inclined to think that the docs are just unclear and that -willMoveToParentViewController: and
+    // -didMoveToParentViewController: must have to do *something* for this to work without ambiguity.
+    
+    // Now that I think about it some more, I suspect that it is far better to assume the docs imply you must call
+    // super when you override a method *unless* it says not to. If that assumption is sound, then in that case it
+    // suggests that when overriding -willMoveToParentViewController: and -didMoveToParentViewController: you are
+    // expected to call super anyway, which means I could put some implementation in the base class versions safely.
+    // Generally docs do tend to say things like, "parent implementation does nothing" when they mean you can skip
+    // the call to super, and the docs currently say no such thing for -will/didMoveToParentViewController:.
+
+    // In all likely hood, all that would happen if you didn't call super from a -will/didMoveToParentViewController:
+    // override is that -isMovingFromParentViewController and -isMovingToParentViewController would return the
+    // wrong answer, and if you never use them, you'll never even notice that bug!
+    
+    return (_appearanceTransitionStack > 0) && (_parentageTransition == _UIViewControllerParentageTransitionFromParent);
+}
+
+- (BOOL)isMovingToParentViewController
+{
+    return (_appearanceTransitionStack > 0) && (_parentageTransition == _UIViewControllerParentageTransitionToParent);
+}
+
+- (BOOL)isBeingPresented
+{
+    // TODO
+    return (_appearanceTransitionStack > 0) && (NO);
+}
+
+- (BOOL)isBeingDismissed
+{
+    // TODO
+    return (_appearanceTransitionStack > 0) && (NO);
+}
+
+- (UIViewController *)presentingViewController
+{
+    // TODO
+    return nil;
+}
+
+- (UIViewController *)presentedViewController
+{
+    // TODO
+    return nil;
+}
+
+- (NSArray *)childViewControllers
+{
+    return [_childViewControllers copy];
+}
+
+- (void)addChildViewController:(UIViewController *)childController
+{
+    NSAssert(childController != nil, @"cannot add nil child view controller");
+    NSAssert(childController.parentViewController == nil, @"thou shalt have no other parent before me");
+    
+    if (!_childViewControllers) {
+        _childViewControllers = [NSMutableArray arrayWithCapacity:1];
+    }
+    
+    [childController willMoveToParentViewController:self];
+    [_childViewControllers addObject:childController];
+    childController->_parentViewController = self;
+}
+
+- (void)_removeFromParentViewController
+{
+    if (_parentViewController) {
+        [_parentViewController->_childViewControllers removeObject:self];
+        
+        if ([_parentViewController->_childViewControllers count] == 0) {
+            _parentViewController->_childViewControllers = nil;
+        }
+        
+        _parentViewController = nil;
+    }
+}
+
+- (void)removeFromParentViewController
+{
+    NSAssert(self.parentViewController != nil, @"view controller has no parent");
+
+    [self _removeFromParentViewController];
+    [self didMoveToParentViewController:nil];
+}
+
+- (BOOL)shouldAutomaticallyForwardRotationMethods
+{
+    return YES;
+}
+
+- (BOOL)shouldAutomaticallyForwardAppearanceMethods
+{
+    return YES;
+}
+
+- (void)transitionFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
+{
+    NSAssert(fromViewController.parentViewController == toViewController.parentViewController && fromViewController.parentViewController != nil, @"child controllers must share common parent");
+    const BOOL animated = (duration > 0);
+    
+    [fromViewController beginAppearanceTransition:NO animated:animated];
+    [toViewController beginAppearanceTransition:YES animated:animated];
+
+    [UIView transitionWithView:self.view
+                      duration:duration
+                       options:options
+                    animations:^{
+                        if (animations) {
+                            animations();
+                        }
+                        
+                        [self.view addSubview:toViewController.view];
+                    }
+                    completion:^(BOOL finished) {
+                        if (completion) {
+                            completion(finished);
+                        }
+
+                        [fromViewController.view removeFromSuperview];
+
+                        [fromViewController endAppearanceTransition];
+                        [toViewController endAppearanceTransition];
+                    }];
+}
+
+- (void)beginAppearanceTransition:(BOOL)isAppearing animated:(BOOL)animated
+{
+    if (_appearanceTransitionStack == 0 || (_appearanceTransitionStack > 0 && _viewIsAppearing != isAppearing)) {
+        _appearanceTransitionStack = 1;
+        _appearanceTransitionIsAnimated = animated;
+        _viewIsAppearing = isAppearing;
+        
+        if ([self shouldAutomaticallyForwardAppearanceMethods]) {
+            for (UIViewController *child in self.childViewControllers) {
+                if ([child isViewLoaded] && [child.view isDescendantOfView:self.view]) {
+                    [child beginAppearanceTransition:isAppearing animated:animated];
+                }
+            }
+        }
+
+        if (_viewIsAppearing) {
+            [self view];    // ensures the view is loaded before viewWillAppear: happens
+            [self viewWillAppear:_appearanceTransitionIsAnimated];
+        } else {
+            [self viewWillDisappear:_appearanceTransitionIsAnimated];
+        }
+    } else {
+        _appearanceTransitionStack++;
+    }
+}
+
+- (void)endAppearanceTransition
+{
+    if (_appearanceTransitionStack > 0) {
+        _appearanceTransitionStack--;
+        
+        if (_appearanceTransitionStack == 0) {
+            if ([self shouldAutomaticallyForwardAppearanceMethods]) {
+                for (UIViewController *child in self.childViewControllers) {
+                    [child endAppearanceTransition];
+                }
+            }
+
+            if (_viewIsAppearing) {
+                [self viewDidAppear:_appearanceTransitionIsAnimated];
+            } else {
+                [self viewDidDisappear:_appearanceTransitionIsAnimated];
+            }
+        }
+    }
+}
+
+- (void)willMoveToParentViewController:(UIViewController *)parent
+{
+    if (parent) {
+        _parentageTransition = _UIViewControllerParentageTransitionToParent;
+    } else {
+        _parentageTransition = _UIViewControllerParentageTransitionFromParent;
+    }
+}
+
+- (void)didMoveToParentViewController:(UIViewController *)parent
+{
+    _parentageTransition = _UIViewControllerParentageTransitionNone;
 }
 
 @end

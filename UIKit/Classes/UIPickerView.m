@@ -37,10 +37,6 @@
 
 @implementation UIPickerView
 
-@synthesize showsSelectionIndicator = _showsSelectionIndicator;
-@synthesize dataSource = _dataSource;
-@synthesize delegate = _delegate;
-
 - (id)initWithFrame:(CGRect)frame
 {
     if ((self = [super initWithFrame:frame])) {
@@ -52,7 +48,6 @@
 {
     _dataSource = nil;
     _delegate = nil;
-    [super dealloc];
 }
 
 - (NSInteger) numberOfComponents

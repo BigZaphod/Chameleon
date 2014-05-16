@@ -72,7 +72,7 @@ CGFloat _UIGraphicsGetContextScaleFactor(CGContextRef ctx)
 void UIGraphicsBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloat scale)
 {
     if (scale == 0.f) {
-        scale = [UIScreen mainScreen].scale;
+        scale = [UIScreen mainScreen].scale ?: 1;
     }
 
     const size_t width = size.width * scale;

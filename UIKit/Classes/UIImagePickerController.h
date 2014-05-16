@@ -29,12 +29,11 @@
 
 #import "UINavigationController.h"
 
-enum {
+typedef NS_ENUM(NSInteger, UIImagePickerControllerSourceType) {
     UIImagePickerControllerSourceTypePhotoLibrary,
     UIImagePickerControllerSourceTypeCamera,
     UIImagePickerControllerSourceTypeSavedPhotosAlbum
 };
-typedef NSUInteger UIImagePickerControllerSourceType;
 
 extern NSString *const UIImagePickerControllerMediaType;
 extern NSString *const UIImagePickerControllerOriginalImage;
@@ -45,17 +44,12 @@ extern NSString *const UIImagePickerControllerMediaURL;
 @protocol UIImagePickerControllerDelegate <NSObject>
 @end
 
-@interface UIImagePickerController : UINavigationController {
-@private
-    UIImagePickerControllerSourceType _sourceType;
-    NSArray *_mediaTypes;
-}
-
+@interface UIImagePickerController : UINavigationController
 + (NSArray *)availableMediaTypesForSourceType:(UIImagePickerControllerSourceType)sourceType;
 + (BOOL)isSourceTypeAvailable:(UIImagePickerControllerSourceType)sourceType;
 
 @property (nonatomic) UIImagePickerControllerSourceType sourceType;
-@property (nonatomic,assign) id <UINavigationControllerDelegate, UIImagePickerControllerDelegate> delegate;
-@property (nonatomic,copy) NSArray *mediaTypes;
-
+@property (nonatomic, assign) id <UINavigationControllerDelegate, UIImagePickerControllerDelegate> delegate;
+@property (nonatomic, copy) NSArray *mediaTypes;
+@property (nonatomic) BOOL allowsEditing;
 @end

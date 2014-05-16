@@ -30,7 +30,6 @@
 #import "UIMenuItem.h"
 
 @implementation UIMenuItem
-@synthesize action=_action, title=_title;
 
 - (id)initWithTitle:(NSString *)title action:(SEL)action
 {
@@ -39,12 +38,6 @@
         self.action = action;
     }
     return self;
-}
-
-- (void)dealloc
-{
-    [_title release];
-    [super dealloc];
 }
 
 @end

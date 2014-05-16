@@ -29,12 +29,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface UIAction : NSObject {
-    __unsafe_unretained id _target;
-    SEL _action;
-}
-
-@property (nonatomic, assign) id target;
+@interface UIAction : NSObject
+@property (nonatomic, weak) id target;
 @property (nonatomic, assign) SEL action;
-
 @end

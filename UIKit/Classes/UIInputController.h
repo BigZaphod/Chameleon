@@ -27,22 +27,20 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <Foundation/Foundation.h>
+#import "UIResponder.h"
+#import "UITextInput.h"
 
 @class UIView, UIWindow;
 
-@interface UIInputController : NSObject {
-    UIWindow *_inputWindow;
-    UIView *_inputAccessoryView;
-    UIView *_inputView;
-}
+@interface UIInputController : NSObject
 
 + (UIInputController *)sharedInputController;
 
 - (void)setInputVisible:(BOOL)visible animated:(BOOL)animated;
 
-@property (nonatomic, retain) UIView *inputAccessoryView;
-@property (nonatomic, retain) UIView *inputView;
+@property (nonatomic, strong) UIView *inputAccessoryView;
+@property (nonatomic, strong) UIView *inputView;
+@property (nonatomic, weak) UIResponder <UIKeyInput> *keyInputResponder;
 @property (nonatomic, assign) BOOL inputVisible;
 
 

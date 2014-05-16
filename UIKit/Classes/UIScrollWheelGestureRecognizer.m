@@ -29,27 +29,31 @@
 
 #import "UIScrollWheelGestureRecognizer.h"
 #import "UIGestureRecognizerSubclass.h"
-#import "UITouch+UIPrivate.h"
-#import "UIEvent.h"
+#import "UITouchEvent.h"
+#import "UITouch.h"
 
-@implementation UIScrollWheelGestureRecognizer
+@implementation UIScrollWheelGestureRecognizer {
+    CGPoint _translation;
+}
 
 - (CGPoint)translationInView:(UIView *)view
 {
     return _translation;
 }
 
-- (void)setTranslation:(CGPoint)translation inView:(UIView *)view
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    _translation = translation;
-}
-
-- (void)_discreteGestures:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    UITouch *touch = [[event touchesForGestureRecognizer:self] anyObject];
-    if (self.state == UIGestureRecognizerStatePossible && [touch _gesture] == _UITouchDiscreteGestureScrollWheel) {
-        [self setTranslation:[touch _delta] inView:touch.view];
-        self.state = UIGestureRecognizerStateRecognized;
+    if (self.state == UIGestureRecognizerStatePossible) {
+        if ([event isKindOfClass:[UITouchEvent class]]) {
+            UITouchEvent *touchEvent = (UITouchEvent *)event;
+            
+            if (touchEvent.touchEventGesture == UITouchEventGestureScrollWheel) {
+                _translation = touchEvent.translation;
+                self.state = UIGestureRecognizerStateRecognized;
+            } else {
+                self.state = UIGestureRecognizerStateFailed;
+            }
+        }
     }
 }
 

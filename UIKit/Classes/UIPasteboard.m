@@ -64,14 +64,12 @@ static NSPasteboardItem *PasteBoardItemWithDictionary(NSDictionary *item)
             // seemed to be the quickest way to get the job done at the time. Copying raw GIF NSData to the
             // pasteboard on iOS and tagging it as kUTTypeGIF seems to work just fine in the few places that
             // accept animated GIFs that I've tested so far on iOS so...... yeah.
-            if (UTTypeEqual((CFStringRef)type, kUTTypeGIF)) {
+            if (UTTypeEqual((__bridge CFStringRef)type, kUTTypeGIF)) {
                 NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initRegularFileWithContents:object];
                 [fileWrapper setPreferredFilename:@"image.gif"];
                 NSTextAttachment *attachment = [[NSTextAttachment alloc] initWithFileWrapper:fileWrapper];
                 NSAttributedString *str = [NSAttributedString attributedStringWithAttachment:attachment];
                 [pasteboardItem setData:[str RTFDFromRange:NSMakeRange(0, [str length]) documentAttributes:nil] forType:(NSString *)kUTTypeFlatRTFD];
-                [attachment release];
-                [fileWrapper release];
             }
             [pasteboardItem setData:object forType:type];
         } else if ([object isKindOfClass:[NSURL class]]) {
@@ -81,23 +79,19 @@ static NSPasteboardItem *PasteBoardItemWithDictionary(NSDictionary *item)
         }
     }
     
-    return [pasteboardItem autorelease];
+    return pasteboardItem;
 }
 
-@implementation UIPasteboard
+@implementation UIPasteboard {
+    NSPasteboard *_pasteboard;
+}
 
 - (id)initWithPasteboard:(NSPasteboard *)aPasteboard
 {
     if ((self=[super init])) {
-        pasteboard = [aPasteboard retain];
+        _pasteboard = aPasteboard;
     }
     return self;
-}
-
-- (void)dealloc
-{
-    [pasteboard release];
-    [super dealloc];
 }
 
 + (UIPasteboard *)generalPasteboard
@@ -113,14 +107,14 @@ static NSPasteboardItem *PasteBoardItemWithDictionary(NSDictionary *item)
 
 - (void)_writeObjects:(NSArray *)objects
 {
-    [pasteboard clearContents];
-    [pasteboard writeObjects:objects];
+    [_pasteboard clearContents];
+    [_pasteboard writeObjects:objects];
 }
 
 - (id)_objectsWithClasses:(NSArray *)types
 {
     NSDictionary *options = [NSDictionary dictionary];
-    return [pasteboard readObjectsForClasses:types options:options];
+    return [_pasteboard readObjectsForClasses:types options:options];
 }
 
 - (void)setStrings:(NSArray *)strings
@@ -180,7 +174,7 @@ static NSPasteboardItem *PasteBoardItemWithDictionary(NSDictionary *item)
     NSMutableArray *images = [NSMutableArray arrayWithCapacity:[rawImages count]];
     
     for (NSImage *image in rawImages) {
-        [images addObject:[[[UIImage alloc] initWithNSImage:image] autorelease]];
+        [images addObject:[[UIImage alloc] initWithNSImage:image]];
     }
     
     return images;
@@ -213,7 +207,7 @@ static NSPasteboardItem *PasteBoardItemWithDictionary(NSDictionary *item)
     NSMutableArray *colors = [NSMutableArray arrayWithCapacity:[rawColors count]];
     
     for (NSColor *color in rawColors) {
-        [colors addObject:[[[UIColor alloc] initWithNSColor:color] autorelease]];
+        [colors addObject:[[UIColor alloc] initWithNSColor:color]];
     }
     
     return colors;
@@ -237,12 +231,12 @@ static NSPasteboardItem *PasteBoardItemWithDictionary(NSDictionary *item)
         [objects addObject:PasteBoardItemWithDictionary(item)];
     }
         
-    [pasteboard writeObjects:objects];
+    [_pasteboard writeObjects:objects];
 }
 
 - (void)setItems:(NSArray *)items
 {
-    [pasteboard clearContents];
+    [_pasteboard clearContents];
     [self addItems:items];
 }
 
@@ -251,13 +245,13 @@ static NSPasteboardItem *PasteBoardItemWithDictionary(NSDictionary *item)
 {
     NSMutableArray *items = [NSMutableArray arrayWithCapacity:0];
     
-    for (NSPasteboardItem *item in [pasteboard pasteboardItems]) {
+    for (NSPasteboardItem *item in [_pasteboard pasteboardItems]) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:0];
         
         for (NSString *type in [item types]) {
             id object = nil;
 
-            if (UTTypeConformsTo((CFStringRef)type, kUTTypeURL)) {
+            if (UTTypeConformsTo((__bridge CFStringRef)type, kUTTypeURL)) {
                 object = [NSURL URLWithString:[item stringForType:type]];
             } else {
                 object = [item propertyListForType:type] ?: [item dataForType:type];
@@ -279,16 +273,16 @@ static NSPasteboardItem *PasteBoardItemWithDictionary(NSDictionary *item)
 - (void)setData:(NSData *)data forPasteboardType:(NSString *)pasteboardType
 {
     if (data && pasteboardType) {
-        [pasteboard clearContents];
-        [pasteboard writeObjects:[NSArray arrayWithObject:PasteBoardItemWithDictionary([NSDictionary dictionaryWithObject:data forKey:pasteboardType])]];
+        [_pasteboard clearContents];
+        [_pasteboard writeObjects:[NSArray arrayWithObject:PasteBoardItemWithDictionary([NSDictionary dictionaryWithObject:data forKey:pasteboardType])]];
     }
 }
 
 - (void)setValue:(id)value forPasteboardType:(NSString *)pasteboardType
 {
     if (pasteboardType && IsUIPasteboardPropertyListType(value)) {
-        [pasteboard clearContents];
-        [pasteboard writeObjects:[NSArray arrayWithObject:PasteBoardItemWithDictionary([NSDictionary dictionaryWithObject:value forKey:pasteboardType])]];
+        [_pasteboard clearContents];
+        [_pasteboard writeObjects:[NSArray arrayWithObject:PasteBoardItemWithDictionary([NSDictionary dictionaryWithObject:value forKey:pasteboardType])]];
     }
 }
 

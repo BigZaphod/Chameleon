@@ -51,18 +51,34 @@ extern NSString *const UIApplicationDidReceiveMemoryWarningNotification;
 
 extern NSString *const UITrackingRunLoopMode;
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIStatusBarStyle) {
   UIStatusBarStyleDefault,
   UIStatusBarStyleBlackTranslucent,
   UIStatusBarStyleBlackOpaque
-} UIStatusBarStyle;
+};
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIStatusBarAnimation) {
+    UIStatusBarAnimationNone,
+    UIStatusBarAnimationFade,
+    UIStatusBarAnimationSlide,
+};
+
+typedef NS_ENUM(NSInteger, UIInterfaceOrientation) {
     UIInterfaceOrientationPortrait           = UIDeviceOrientationPortrait,
     UIInterfaceOrientationPortraitUpsideDown = UIDeviceOrientationPortraitUpsideDown,
     UIInterfaceOrientationLandscapeLeft      = UIDeviceOrientationLandscapeRight,
     UIInterfaceOrientationLandscapeRight     = UIDeviceOrientationLandscapeLeft
-} UIInterfaceOrientation;
+};
+
+typedef NS_OPTIONS(NSUInteger, UIInterfaceOrientationMask) {
+    UIInterfaceOrientationMaskPortrait = (1 << UIInterfaceOrientationPortrait),
+    UIInterfaceOrientationMaskLandscapeLeft = (1 << UIInterfaceOrientationLandscapeLeft),
+    UIInterfaceOrientationMaskLandscapeRight = (1 << UIInterfaceOrientationLandscapeRight),
+    UIInterfaceOrientationMaskPortraitUpsideDown = (1 << UIInterfaceOrientationPortraitUpsideDown),
+    UIInterfaceOrientationMaskLandscape = (UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight),
+    UIInterfaceOrientationMaskAll = (UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight | UIInterfaceOrientationMaskPortraitUpsideDown),
+    UIInterfaceOrientationMaskAllButUpsideDown = (UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight),
+};
 
 #define UIInterfaceOrientationIsPortrait(orientation) \
 ((orientation) == UIInterfaceOrientationPortrait || \
@@ -73,12 +89,13 @@ typedef enum {
 (orientation) == UIInterfaceOrientationLandscapeRight)
 
 // push is not gonna work in mac os, unless you are apple (facetime)
-typedef enum {
-  UIRemoteNotificationTypeNone    = 0,
-  UIRemoteNotificationTypeBadge   = 1 << 0,
-  UIRemoteNotificationTypeSound   = 1 << 1,
-  UIRemoteNotificationTypeAlert   = 1 << 2
-} UIRemoteNotificationType;
+typedef NS_OPTIONS(NSUInteger, UIRemoteNotificationType) {
+    UIRemoteNotificationTypeNone    = 0,
+    UIRemoteNotificationTypeBadge   = 1 << 0,
+    UIRemoteNotificationTypeSound   = 1 << 1,
+    UIRemoteNotificationTypeAlert   = 1 << 2,
+    UIRemoteNotificationTypeNewsstandContentAvailability = 1 << 3
+};
 
 // whenever the NSApplication is no longer "active" from OSX's point of view, your UIApplication instance
 // will switch to UIApplicationStateInactive. This happens when the app is no longer in the foreground, for instance.
@@ -101,11 +118,11 @@ typedef enum {
 // guarentee that your expiration handler will even be called. additionally, the reliability of your network is certainly
 // going to be suspect when entering sleep as well. so be aware - but basically these same constraints exist on iOS so
 // in many respects it shouldn't affect your code much or at all.
-typedef enum {
+typedef NS_ENUM(NSInteger, UIApplicationState) {
   UIApplicationStateActive,
   UIApplicationStateInactive,
   UIApplicationStateBackground
-} UIApplicationState;
+};
 
 typedef NSUInteger UIBackgroundTaskIdentifier;
 
@@ -114,22 +131,7 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
 
 @class UIWindow, UIApplication, UILocalNotification;
 
-@interface UIApplication : UIResponder {
-@private
-    UIEvent *_currentEvent;
-    UIWindow *_keyWindow;
-    NSMutableSet *_visibleWindows;
-    UIApplicationState _applicationState;
-    __unsafe_unretained id<UIApplicationDelegate> _delegate;
-    BOOL _idleTimerDisabled;
-    BOOL _networkActivityIndicatorVisible;
-    BOOL _applicationSupportsShakeToEdit;
-    NSUInteger _ignoringInteractionEvents;
-    NSInteger _applicationIconBadgeNumber;
-    NSDate *_backgroundTasksExpirationDate;
-    NSMutableArray *_backgroundTasks;
-}
-
+@interface UIApplication : UIResponder
 + (UIApplication *)sharedApplication;
 
 - (BOOL)sendAction:(SEL)action to:(id)target from:(id)sender forEvent:(UIEvent *)event;
@@ -139,6 +141,7 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
 - (BOOL)canOpenURL:(NSURL *)URL;
 
 - (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle animated:(BOOL)animated;  // no effect
+- (void)setStatusBarHidden:(BOOL)hidden withAnimation:(UIStatusBarAnimation)animation;
 
 - (void)beginIgnoringInteractionEvents;
 - (void)endIgnoringInteractionEvents;
@@ -148,10 +151,14 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
 - (void)cancelLocalNotification:(UILocalNotification *)notification;
 - (void)cancelAllLocalNotifications;
 
+- (void)registerForRemoteNotificationTypes:(UIRemoteNotificationType)types;
+- (void)unregisterForRemoteNotifications;
+- (UIRemoteNotificationType)enabledRemoteNotificationTypes;
+
 - (UIBackgroundTaskIdentifier)beginBackgroundTaskWithExpirationHandler:(void(^)(void))handler;
 - (void)endBackgroundTask:(UIBackgroundTaskIdentifier)identifier;
 
-@property (nonatomic, readonly) UIWindow *keyWindow;
+@property (nonatomic, weak, readonly) UIWindow *keyWindow;
 @property (nonatomic, readonly) NSArray *windows;
 @property (nonatomic, getter=isStatusBarHidden, readonly) BOOL statusBarHidden;
 @property (nonatomic, readonly) CGRect statusBarFrame;
@@ -166,10 +173,18 @@ extern const NSTimeInterval UIMinimumKeepAliveTimeout;
 @property (nonatomic, readonly) NSTimeInterval backgroundTimeRemaining;     // always 0
 @property (nonatomic) NSInteger applicationIconBadgeNumber;                 // no effect, but does set/get the number correctly
 @property (nonatomic, copy) NSArray *scheduledLocalNotifications;           // no effect, returns nil
-
 @end
-
 
 @interface UIApplication(UIApplicationDeprecated)
 - (void)setStatusBarHidden:(BOOL)hidden animated:(BOOL)animated __attribute__((deprecated)); // use -setStatusBarHidden:withAnimation:
 @end
+
+// This can replace your call to NSApplicationMain. It does not implement NSApplicationMain exactly (and it never calls NSApplicationMain)
+// so you should use this with some caution. It does *not* subclass NSApplication but does allow you to subclass UIApplication if you want,
+// although that's not really tested so it probably wouldn't work very well. It sets NSApplication's delegate to a very simple dummy object
+// which traps -applicationShouldTerminate: to handle background tasks so you don't have to bother with it. Like NSApplicationMain, this
+// looks for a NIB file in the Info.plist identified by the NSMainNibFile key and will load it using AppKit's NIB loading stuff. In an
+// attempt to make this as confusing as possible, when the main NIB is loaded, it uses the UIApplication (NOT THE NSApplication!) as the
+// file's owner! Yep. Insane, I know. I generally do not use NIBs myself, but it's nice for the menu bar. So... yeah...
+// NOTE: This does not use NSPrincipalClass from Info.plist since iOS doesn't either, so if that exists in your Info.plist, it is ignored.
+extern int UIApplicationMain(int argc, char *argv[], NSString *principalClassName, NSString *delegateClassName);

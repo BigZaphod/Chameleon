@@ -66,76 +66,33 @@ extern NSString *const UITableViewIndexSearch;
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath;
 @end
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UITableViewStyle) {
     UITableViewStylePlain,
     UITableViewStyleGrouped
-} UITableViewStyle;
+};
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UITableViewScrollPosition) {
     UITableViewScrollPositionNone,
     UITableViewScrollPositionTop,
     UITableViewScrollPositionMiddle,
     UITableViewScrollPositionBottom
-} UITableViewScrollPosition;
+};
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UITableViewRowAnimation) {
     UITableViewRowAnimationFade,
     UITableViewRowAnimationRight,
     UITableViewRowAnimationLeft,
     UITableViewRowAnimationTop,
     UITableViewRowAnimationBottom,
     UITableViewRowAnimationNone,
-    UITableViewRowAnimationMiddle
-} UITableViewRowAnimation;
+    UITableViewRowAnimationMiddle,
+    UITableViewRowAnimationAutomatic = 100
+};
 
-@interface UITableView : UIScrollView {
-@private
-    UITableViewStyle _style;
-    __unsafe_unretained id<UITableViewDataSource> _dataSource;
-    BOOL _needsReload;
-    CGFloat _rowHeight;
-    UIColor *_separatorColor;
-    UITableViewCellSeparatorStyle _separatorStyle;
-    UIView *_tableHeaderView;
-    UIView *_tableFooterView;
-    UIView *_backgroundView;
-    BOOL _allowsSelection;
-    BOOL _allowsSelectionDuringEditing;
-    BOOL _editing;
-    NSIndexPath *_selectedRow;
-    NSIndexPath *_highlightedRow;
-    NSMutableDictionary *_cachedCells;
-    NSMutableSet *_reusableCells;
-    NSMutableArray *_sections;
-    CGFloat _sectionHeaderHeight;
-    CGFloat _sectionFooterHeight;
-    
-    struct {
-        unsigned heightForRowAtIndexPath : 1;
-        unsigned heightForHeaderInSection : 1;
-        unsigned heightForFooterInSection : 1;
-        unsigned viewForHeaderInSection : 1;
-        unsigned viewForFooterInSection : 1;
-        unsigned willSelectRowAtIndexPath : 1;
-        unsigned didSelectRowAtIndexPath : 1;
-        unsigned willDeselectRowAtIndexPath : 1;
-        unsigned didDeselectRowAtIndexPath : 1;
-        unsigned willBeginEditingRowAtIndexPath : 1;
-        unsigned didEndEditingRowAtIndexPath : 1;
-        unsigned titleForDeleteConfirmationButtonForRowAtIndexPath: 1;
-    } _delegateHas;
-    
-    struct {
-        unsigned numberOfSectionsInTableView : 1;
-        unsigned titleForHeaderInSection : 1;
-        unsigned titleForFooterInSection : 1;
-        unsigned commitEditingStyle : 1;
-        unsigned canEditRowAtIndexPath : 1;
-    } _dataSourceHas;
-}
-
+@interface UITableView : UIScrollView
 - (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style;
 - (void)reloadData;
+- (void)reloadRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation;
 - (NSInteger)numberOfSections;
 - (NSInteger)numberOfRowsInSection:(NSInteger)section;
 - (NSArray *)indexPathsForRowsInRect:(CGRect)rect;
@@ -174,14 +131,13 @@ typedef enum {
 @property (nonatomic, assign) id<UITableViewDataSource> dataSource;
 @property (nonatomic) CGFloat rowHeight;
 @property (nonatomic) UITableViewCellSeparatorStyle separatorStyle;
-@property (nonatomic, retain) UIColor *separatorColor;
-@property (nonatomic, retain) UIView *tableHeaderView;
-@property (nonatomic, retain) UIView *tableFooterView;
-@property (nonatomic, retain) UIView *backgroundView;
+@property (nonatomic, strong) UIColor *separatorColor;
+@property (nonatomic, strong) UIView *tableHeaderView;
+@property (nonatomic, strong) UIView *tableFooterView;
+@property (nonatomic, strong) UIView *backgroundView;
 @property (nonatomic) BOOL allowsSelection;
 @property (nonatomic) BOOL allowsSelectionDuringEditing;	// not implemented
 @property (nonatomic, getter=isEditing) BOOL editing;
 @property (nonatomic) CGFloat sectionHeaderHeight;
 @property (nonatomic) CGFloat sectionFooterHeight;
-
 @end

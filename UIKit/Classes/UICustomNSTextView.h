@@ -37,10 +37,7 @@
 - (BOOL)textView:(UICustomNSTextView *)textView shouldAcceptKeyDown:(NSEvent *)event;
 @end
 
-@interface UICustomNSTextView: NSTextView {
-    BOOL secureTextEntry;
-	BOOL isBecomingFirstResponder;
-}
+@interface UICustomNSTextView: NSTextView
 
 - (id)initWithFrame:(NSRect)frame secureTextEntry:(BOOL)isSecure isField:(BOOL)isField;
 - (void)setSecureTextEntry:(BOOL)isSecure;

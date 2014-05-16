@@ -33,56 +33,8 @@
 #import <objc/runtime.h>
 
 static const char *UIAppearanceClassAssociatedObjectKey = "UIAppearanceClassAssociatedObjectKey";
-static const char *UIAppearanceInstanceAssociatedObjectKey = "UIAppearanceInstanceAssociatedObjectKey";
-
-static NSString * const UIAppearanceInstancePropertiesKey = @"UIAppearanceInstancePropertiesKey";
-static NSString * const UIAppearanceInstanceNeedsUpdateKey = @"UIAppearanceInstanceNeedsUpdateKey";
-
-static NSMutableDictionary *UIAppearanceInstanceDictionary(id object)
-{
-    return objc_getAssociatedObject(object, UIAppearanceInstanceAssociatedObjectKey);
-}
-
-static NSMutableDictionary *UIAppearanceInstanceDictionaryCreateIfNeeded(id object)
-{
-    NSMutableDictionary *info = UIAppearanceInstanceDictionary(object);
-    
-    if (!info) {
-        info = [NSMutableDictionary dictionaryWithCapacity:1];
-        objc_setAssociatedObject(object, UIAppearanceInstanceAssociatedObjectKey, info, OBJC_ASSOCIATION_RETAIN);
-    }
-    
-    return info;
-}
-
-static void UIAppearanceInstanceSetProperties(id object, NSSet *properties)
-{
-    if ([properties count] > 0) {
-        [UIAppearanceInstanceDictionaryCreateIfNeeded(object) setObject:properties forKey:UIAppearanceInstancePropertiesKey];
-    } else {
-        [UIAppearanceInstanceDictionary(object) removeObjectForKey:UIAppearanceInstancePropertiesKey];
-    }
-}
-
-static NSSet *UIAppearanceInstanceProperties(id object)
-{
-    return [UIAppearanceInstanceDictionary(object) objectForKey:UIAppearanceInstancePropertiesKey];
-}
-
-static void UIAppearanceInstancePropertyDidChange(id object, UIAppearanceProperty *property)
-{
-    UIAppearanceInstanceSetProperties(object, [[NSSet setWithObject:property] setByAddingObjectsFromSet:UIAppearanceInstanceProperties(object)]);
-}
-
-static BOOL UIAppearanceInstanceNeedsUpdate(id object)
-{
-    return [[UIAppearanceInstanceDictionary(object) objectForKey:UIAppearanceInstanceNeedsUpdateKey] boolValue];
-}
-
-static void UIAppearanceInstanceSetNeedsUpdate(id object, BOOL needsUpdate)
-{
-    [UIAppearanceInstanceDictionaryCreateIfNeeded(object) setObject:[NSNumber numberWithBool:needsUpdate] forKey:UIAppearanceInstanceNeedsUpdateKey];
-}
+static const char *UIAppearanceChangedPropertiesKey = "UIAppearanceChangedPropertiesKey";
+static const char *UIAppearancePropertiesAreUpToDateKey = "UIAppearancePropertiesAreUpToDateKey";
 
 static NSArray *UIAppearanceHierarchyForClass(Class klass)
 {
@@ -93,7 +45,7 @@ static NSArray *UIAppearanceHierarchyForClass(Class klass)
         klass = [klass superclass];
     }
     
-    return [classes autorelease];
+    return classes;
 }
 
 @implementation NSObject (UIAppearanceInstance)
@@ -124,107 +76,114 @@ static NSArray *UIAppearanceHierarchyForClass(Class klass)
     UIAppearanceProxy *record = [appearanceRules objectForKey:containmentPath];
     
     if (!record) {
-        record = [[[UIAppearanceProxy alloc] initWithClass:self] autorelease];
+        record = [[UIAppearanceProxy alloc] initWithClass:self];
         [appearanceRules setObject:record forKey:containmentPath];
     }
     
     return record;
 }
 
-- (void)_appearancePropertyDidChange:(UIAppearanceProperty *)property
-{
-    UIAppearanceInstancePropertyDidChange(self, property);
-}
-
-- (id)_appearanceContainer
+- (id)_UIAppearanceContainer
 {
     return nil;
 }
 
-- (void)_updateAppearanceIfNeeded
+- (void)_UIAppearanceUpdateIfNeeded
 {
-    if (UIAppearanceInstanceNeedsUpdate(self)) {
-        // first go down our own class heirarchy until we find the root of the UIAppearance protocol
-        // then we'll start at the bottom and work up while checking each class for all relevant rules
-        // that apply to this instance at this time.
+    // check if we are already up to date, if so, return early
+    if (objc_getAssociatedObject(self, UIAppearancePropertiesAreUpToDateKey)) {
+        return;
+    }
+    
+    // first go down our own class heirarchy until we find the root of the UIAppearance protocol
+    // then we'll start at the bottom and work up while checking each class for all relevant rules
+    // that apply to this instance at this time.
+    
+    NSArray *classes = UIAppearanceHierarchyForClass([self class]);
+    NSMutableDictionary *propertiesToSet = [NSMutableDictionary dictionaryWithCapacity:0];
+    
+    for (Class klass in classes) {
+        NSMutableDictionary *rules = objc_getAssociatedObject(klass, UIAppearanceClassAssociatedObjectKey);
         
-        NSArray *classes = UIAppearanceHierarchyForClass([self class]);
-        NSMutableDictionary *propertiesToSet = [NSMutableDictionary dictionaryWithCapacity:0];
-        
-        for (Class klass in classes) {
-            NSMutableDictionary *rules = objc_getAssociatedObject(klass, UIAppearanceClassAssociatedObjectKey);
-            
-            // sorts the rule keys (which are arrays of classes) by length
-            // if the lengths match, it sorts based on the last class being a superclass of the other or vice-versa
-            // if the last classes aren't related at all, it marks them equal (I suspect these cases will always be filtered out in the next step)
-            NSArray *sortedRulePaths = [[rules allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSArray *path1, NSArray *path2) {
-                if ([path1 count] == [path2 count]) {
-                    if ([[path2 lastObject] isKindOfClass:[path1 lastObject]]) {
-                        return (NSComparisonResult)NSOrderedAscending;
-                    } else if ([[path1 lastObject] isKindOfClass:[path2 lastObject]]) {
-                        return (NSComparisonResult)NSOrderedDescending;
-                    } else {
-                        return (NSComparisonResult)NSOrderedSame;
-                    }
-                } else if ([path1 count] < [path2 count]) {
+        // sorts the rule keys (which are arrays of classes) by length
+        // if the lengths match, it sorts based on the last class being a superclass of the other or vice-versa
+        // if the last classes aren't related at all, it marks them equal (I suspect these cases will always be filtered out in the next step)
+        NSArray *sortedRulePaths = [[rules allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSArray *path1, NSArray *path2) {
+            if ([path1 count] == [path2 count]) {
+                if ([[path2 lastObject] isKindOfClass:[path1 lastObject]]) {
                     return (NSComparisonResult)NSOrderedAscending;
-                } else {
+                } else if ([[path1 lastObject] isKindOfClass:[path2 lastObject]]) {
                     return (NSComparisonResult)NSOrderedDescending;
+                } else {
+                    return (NSComparisonResult)NSOrderedSame;
                 }
-            }];
-            
-            // we should now have a list of classes to check for rule settings for this instance, so now we spin
-            // through those and fetch the properties and values and add them to the dictionary of things to do.
-            // before applying a rule's properties, we must make sure this instance is qualified, so we must check
-            // this instance's container hierarchy against ever class that makes up the rule.
-            for (NSArray *rule in sortedRulePaths) {
-                BOOL shouldApplyRule = YES;
-                
-                for (Class klass in [rule reverseObjectEnumerator]) {
-                    id container = [self _appearanceContainer];
-
-                    while (container && ![container isKindOfClass:klass]) {
-                        container = [container _appearanceContainer];
-                    }
-                    
-                    if (!container) {
-                        shouldApplyRule = NO;
-                        break;
-                    }
-                }
-                
-                if (shouldApplyRule) {
-                    UIAppearanceProxy *proxy = [rules objectForKey:rule];
-                    [propertiesToSet addEntriesFromDictionary:[proxy _appearancePropertiesAndValues]];
-                }
+            } else if ([path1 count] < [path2 count]) {
+                return (NSComparisonResult)NSOrderedAscending;
+            } else {
+                return (NSComparisonResult)NSOrderedDescending;
             }
-        }
-        
-        // before setting the actual properties on the instance, save off a copy of the existing modified properties
-        // because the act of setting the UIAppearance properties will end up messing with that set.
-        // after we're done actually applying everything, reset the modified properties set to what it was before.
-        NSSet *originalProperties = [UIAppearanceInstanceProperties(self) copy];
-        
-        // subtract any properties that have been overriden from the list to apply
-        [propertiesToSet removeObjectsForKeys:[originalProperties allObjects]];
-        
-        // now apply everything that's left
-        [propertiesToSet enumerateKeysAndObjectsUsingBlock:^(UIAppearanceProperty *property, NSValue *value, BOOL *stop) {
-            [property invokeSetterUsingTarget:self withValue:value];
         }];
         
-        // now reset our set of changes properties to the original set so we don't count the UIAppearance defaults
-        UIAppearanceInstanceSetProperties(self, originalProperties);
-        [originalProperties release];
-        
-        // done!
-        UIAppearanceInstanceSetNeedsUpdate(self, NO);
+        // we should now have a list of classes to check for rule settings for this instance, so now we spin
+        // through those and fetch the properties and values and add them to the dictionary of things to do.
+        // before applying a rule's properties, we must make sure this instance is qualified, so we must check
+        // this instance's container hierarchy against ever class that makes up the rule.
+        for (NSArray *rule in sortedRulePaths) {
+            BOOL shouldApplyRule = YES;
+            
+            for (Class klass in [rule reverseObjectEnumerator]) {
+                id container = [self _UIAppearanceContainer];
+
+                while (container && ![container isKindOfClass:klass]) {
+                    container = [container _UIAppearanceContainer];
+                }
+                
+                if (!container) {
+                    shouldApplyRule = NO;
+                    break;
+                }
+            }
+            
+            if (shouldApplyRule) {
+                UIAppearanceProxy *proxy = [rules objectForKey:rule];
+                [propertiesToSet addEntriesFromDictionary:[proxy _appearancePropertiesAndValues]];
+            }
+        }
     }
+    
+    // before setting the actual properties on the instance, save off a copy of the existing modified properties
+    // because the act of setting the UIAppearance properties will end up messing with that set.
+    // after we're done actually applying everything, reset the modified properties set to what it was before.
+    NSSet *originalProperties = objc_getAssociatedObject(self, UIAppearanceChangedPropertiesKey);
+    
+    // subtract any properties that have been overriden from the list to apply
+    [propertiesToSet removeObjectsForKeys:[originalProperties allObjects]];
+    
+    // now apply everything that's left
+    for (UIAppearanceProperty *property in [propertiesToSet allValues]) {
+        [property invokeUsingTarget:self];
+    }
+    
+    // now reset our set of changes properties to the original set so we don't count the UIAppearance defaults as overrides
+    objc_setAssociatedObject(self, UIAppearanceChangedPropertiesKey, originalProperties, OBJC_ASSOCIATION_RETAIN);
+    
+    // done!
+    objc_setAssociatedObject(self, UIAppearancePropertiesAreUpToDateKey, @(1), OBJC_ASSOCIATION_RETAIN);
 }
 
-- (void)_setAppearanceNeedsUpdate
+- (void)_UIAppearanceSetNeedsUpdate
 {
-    UIAppearanceInstanceSetNeedsUpdate(self, YES);
+    // this removes UIAppearancePropertiesAreUpToDateKey which will trigger _UIAppearanceUpdateIfNeeded to run (if it is called later)
+    objc_setAssociatedObject(self, UIAppearancePropertiesAreUpToDateKey, nil, OBJC_ASSOCIATION_RETAIN);
+}
+
+- (void)_UIAppearancePropertyDidChange:(id)property
+{
+    // note an overridden property value so we don't override it with a default value in -_UIAppearanceUpdateIfNeeded
+    // this occurs when a value is set directly using a setter on an instance (such as "label.textColor = myColor;")
+    
+    NSSet *changedProperties = [NSSet setWithSet:objc_getAssociatedObject(self, UIAppearanceChangedPropertiesKey)];
+    objc_setAssociatedObject(self, UIAppearanceChangedPropertiesKey, [changedProperties setByAddingObject:property], OBJC_ASSOCIATION_RETAIN);
 }
 
 @end

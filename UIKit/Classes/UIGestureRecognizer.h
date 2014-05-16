@@ -29,7 +29,7 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIGestureRecognizerState) {
     UIGestureRecognizerStatePossible,
     UIGestureRecognizerStateBegan,
     UIGestureRecognizerStateChanged,
@@ -37,7 +37,7 @@ typedef enum {
     UIGestureRecognizerStateCancelled,
     UIGestureRecognizerStateFailed,
     UIGestureRecognizerStateRecognized = UIGestureRecognizerStateEnded
-} UIGestureRecognizerState;
+};
 
 @class UIView, UIGestureRecognizer, UITouch, UIEvent;
 
@@ -48,25 +48,7 @@ typedef enum {
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer;
 @end
 
-@interface UIGestureRecognizer : NSObject {
-@private
-    __unsafe_unretained id _delegate;
-    BOOL _delaysTouchesBegan;
-    BOOL _delaysTouchesEnded;
-    BOOL _cancelsTouchesInView;
-    BOOL _enabled;
-    UIGestureRecognizerState _state;
-    UIView *_view;
-    NSMutableArray *_registeredActions;
-    NSMutableArray *_trackingTouches;
-    
-    struct {
-        unsigned shouldBegin : 1;
-        unsigned shouldReceiveTouch : 1;
-        unsigned shouldRecognizeSimultaneouslyWithGestureRecognizer : 1;
-    } _delegateHas;	
-}
-
+@interface UIGestureRecognizer : NSObject
 - (id)initWithTarget:(id)target action:(SEL)action;
 
 - (void)addTarget:(id)target action:(SEL)action;
@@ -84,5 +66,4 @@ typedef enum {
 @property (nonatomic, getter=isEnabled) BOOL enabled;
 @property (nonatomic, readonly) UIGestureRecognizerState state;
 @property (nonatomic, readonly) UIView *view;
-
 @end

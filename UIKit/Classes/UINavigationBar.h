@@ -40,39 +40,21 @@
 - (void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item;
 @end
 
-@interface UINavigationBar : UIView {
-@private
-    NSMutableArray *_navStack;
-    UIColor *_tintColor;
-    __unsafe_unretained id _delegate;
-    
-    UIView *_leftView;
-    UIView *_centerView;
-    UIView *_rightView;
-    
-    struct {
-        unsigned shouldPushItem : 1;
-        unsigned didPushItem : 1;
-        unsigned shouldPopItem : 1;
-        unsigned didPopItem : 1;
-    } _delegateHas;
-    
-    // ideally this should share the same memory as the above flags structure...
-    struct {
-        unsigned reloadItem : 1;
-        unsigned __RESERVED__ : 31;
-    } _navigationBarFlags;
-}
-
+@interface UINavigationBar : UIView
 - (void)setItems:(NSArray *)items animated:(BOOL)animated;
 - (void)pushNavigationItem:(UINavigationItem *)item animated:(BOOL)animated;
 - (UINavigationItem *)popNavigationItemAnimated:(BOOL)animated;
 
-@property (nonatomic, assign) UIBarStyle barStyle;
-@property (nonatomic, retain) UIColor *tintColor;
-@property (nonatomic, readonly, retain) UINavigationItem *topItem;
-@property (nonatomic, readonly, retain) UINavigationItem *backItem;
-@property (nonatomic, copy) NSArray *items;
-@property (nonatomic, assign) id delegate;
+- (void)setBackgroundImage:(UIImage *)backgroundImage forBarMetrics:(UIBarMetrics)barMetrics;
+- (UIImage *)backgroundImageForBarMetrics:(UIBarMetrics)barMetrics;
+- (void)setTitleVerticalPositionAdjustment:(CGFloat)adjustment forBarMetrics:(UIBarMetrics)barMetrics;
+- (CGFloat)titleVerticalPositionAdjustmentForBarMetrics:(UIBarMetrics)barMetrics;
 
+@property (nonatomic, assign) id delegate;
+@property (nonatomic, copy) NSArray *items;
+@property (nonatomic, assign) UIBarStyle barStyle;
+@property (nonatomic, readonly, strong) UINavigationItem *topItem;
+@property (nonatomic, readonly, strong) UINavigationItem *backItem;
+@property (nonatomic, strong) UIColor *tintColor;
+@property (nonatomic, copy) NSDictionary *titleTextAttributes;
 @end

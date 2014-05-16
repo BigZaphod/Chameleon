@@ -31,7 +31,7 @@
 #import "UIGeometry.h"
 #import "UIAppearance.h"
 
-enum {
+typedef NS_OPTIONS(NSUInteger, UIViewAutoresizing) {
     UIViewAutoresizingNone                 = 0,
     UIViewAutoresizingFlexibleLeftMargin   = 1 << 0,
     UIViewAutoresizingFlexibleWidth        = 1 << 1,
@@ -40,9 +40,8 @@ enum {
     UIViewAutoresizingFlexibleHeight       = 1 << 4,
     UIViewAutoresizingFlexibleBottomMargin = 1 << 5
 };
-typedef NSUInteger UIViewAutoresizing;
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIViewContentMode) {
     UIViewContentModeScaleToFill,
     UIViewContentModeScaleAspectFit,
     UIViewContentModeScaleAspectFill,
@@ -56,24 +55,24 @@ typedef enum {
     UIViewContentModeTopRight,
     UIViewContentModeBottomLeft,
     UIViewContentModeBottomRight,
-} UIViewContentMode;
+};
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIViewAnimationCurve) {
     UIViewAnimationCurveEaseInOut,
     UIViewAnimationCurveEaseIn,
     UIViewAnimationCurveEaseOut,
     UIViewAnimationCurveLinear
-} UIViewAnimationCurve;
+};
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIViewAnimationTransition) {
     UIViewAnimationTransitionNone,
     UIViewAnimationTransitionFlipFromLeft,
     UIViewAnimationTransitionFlipFromRight,
     UIViewAnimationTransitionCurlUp,
     UIViewAnimationTransitionCurlDown,
-} UIViewAnimationTransition;
+};
 
-enum {
+typedef NS_OPTIONS(NSUInteger, UIViewAnimationOptions) {
     UIViewAnimationOptionLayoutSubviews            = 1 <<  0,		// not currently supported
     UIViewAnimationOptionAllowUserInteraction      = 1 <<  1,
     UIViewAnimationOptionBeginFromCurrentState     = 1 <<  2,
@@ -82,46 +81,26 @@ enum {
     UIViewAnimationOptionOverrideInheritedDuration = 1 <<  5,		// not currently supported
     UIViewAnimationOptionOverrideInheritedCurve    = 1 <<  6,		// not currently supported
     UIViewAnimationOptionAllowAnimatedContent      = 1 <<  7,		// not currently supported
-    UIViewAnimationOptionShowHideTransitionViews   = 1 <<  8,		// not currently supported
+    UIViewAnimationOptionShowHideTransitionViews   = 1 <<  8,
     
     UIViewAnimationOptionCurveEaseInOut            = 0 << 16,
     UIViewAnimationOptionCurveEaseIn               = 1 << 16,
     UIViewAnimationOptionCurveEaseOut              = 2 << 16,
     UIViewAnimationOptionCurveLinear               = 3 << 16,
     
-    UIViewAnimationOptionTransitionNone            = 0 << 20,		// not currently supported
-    UIViewAnimationOptionTransitionFlipFromLeft    = 1 << 20,		// not currently supported
-    UIViewAnimationOptionTransitionFlipFromRight   = 2 << 20,		// not currently supported
-    UIViewAnimationOptionTransitionCurlUp          = 3 << 20,		// not currently supported
-    UIViewAnimationOptionTransitionCurlDown        = 4 << 20,		// not currently supported
-    UIViewAnimationOptionTransitionCrossDissolve   = 5 << 20,		// not currently supported
-    UIViewAnimationOptionTransitionFlipFromTop     = 6 << 20,		// not currently supported
-    UIViewAnimationOptionTransitionFlipFromBottom  = 7 << 20,		// not currently supported
+    UIViewAnimationOptionTransitionNone            = 0 << 20,
+    UIViewAnimationOptionTransitionFlipFromLeft    = 1 << 20,
+    UIViewAnimationOptionTransitionFlipFromRight   = 2 << 20,
+    UIViewAnimationOptionTransitionCurlUp          = 3 << 20,
+    UIViewAnimationOptionTransitionCurlDown        = 4 << 20,
+    UIViewAnimationOptionTransitionCrossDissolve   = 5 << 20,
+    UIViewAnimationOptionTransitionFlipFromTop     = 6 << 20,
+    UIViewAnimationOptionTransitionFlipFromBottom  = 7 << 20,
 };
-typedef NSUInteger UIViewAnimationOptions;
 
 @class UIColor, CALayer, UIViewController, UIGestureRecognizer;
 
-@interface UIView : UIResponder <UIAppearanceContainer, UIAppearance> {
-@private
-    UIView *_superview;
-    NSMutableSet *_subviews;
-    BOOL _clearsContextBeforeDrawing;
-    BOOL _autoresizesSubviews;
-    BOOL _userInteractionEnabled;
-    CALayer *_layer;
-    NSInteger _tag;
-    UIViewContentMode _contentMode;
-    UIColor *_backgroundColor;
-    BOOL _implementsDrawRect;
-    BOOL _multipleTouchEnabled;
-    BOOL _exclusiveTouch;
-    UIViewController *_viewController;
-    UIViewAutoresizing _autoresizingMask;
-    BOOL _needsDidAppearOrDisappear;
-    NSMutableSet *_gestureRecognizers;
-}
-
+@interface UIView : UIResponder <UIAppearanceContainer, UIAppearance>
 + (Class)layerClass;
 
 - (id)initWithFrame:(CGRect)frame;
@@ -163,7 +142,6 @@ typedef NSUInteger UIViewAnimationOptions;
 + (void)animateWithDuration:(NSTimeInterval)duration animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion;
 + (void)animateWithDuration:(NSTimeInterval)duration animations:(void (^)(void))animations;
 
-// the block-based transition methods are not currently implemented
 + (void)transitionWithView:(UIView *)view duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion;
 + (void)transitionFromView:(UIView *)fromView toView:(UIView *)toView duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(void (^)(BOOL finished))completion;
 
@@ -205,6 +183,5 @@ typedef NSUInteger UIViewAnimationOptions;
 @property (nonatomic) CGFloat contentScaleFactor;
 @property (nonatomic, getter=isMultipleTouchEnabled) BOOL multipleTouchEnabled;	// state is maintained, but it has no effect
 @property (nonatomic, getter=isExclusiveTouch) BOOL exclusiveTouch; // state is maintained, but it has no effect
-@property (nonatomic,copy) NSArray *gestureRecognizers;
-
+@property (nonatomic, copy) NSArray *gestureRecognizers;
 @end

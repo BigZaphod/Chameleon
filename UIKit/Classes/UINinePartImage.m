@@ -30,7 +30,10 @@
 #import "UINinePartImage.h"
 #import "UIImageRep.h"
 
-@implementation UINinePartImage
+@implementation UINinePartImage {
+    NSInteger _leftCapWidth;
+    NSInteger _topCapHeight;
+}
 
 - (id)initWithRepresentations:(NSArray *)reps leftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight
 {

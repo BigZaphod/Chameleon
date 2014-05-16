@@ -28,7 +28,6 @@
  */
 
 #import "UIResponderAppKitIntegration.h"
-#import "UIEvent+UIPrivate.h"
 
 @implementation UIResponder (AppKitIntegration)
 
@@ -42,29 +41,24 @@
     [[self nextResponder] rightClick:touch withEvent:event];
 }
 
-- (void)mouseExitedView:(UIView *)exited enteredView:(UIView *)entered withEvent:(UIEvent *)event
+- (void)mouseEntered:(UIView *)view withEvent:(UIEvent *)event
 {
-    [[self nextResponder] mouseExitedView:exited enteredView:entered withEvent:event];
+    [[self nextResponder] mouseEntered:view withEvent:event];
 }
 
-- (void)mouseMoved:(CGPoint)delta withEvent:(UIEvent *)event
+- (void)mouseMoved:(UITouch *)touch withEvent:(UIEvent *)event
 {
-    [[self nextResponder] mouseMoved:delta withEvent:event];
+    [[self nextResponder] mouseMoved:touch withEvent:event];
+}
+
+- (void)mouseExited:(UIView *)view withEvent:(UIEvent *)event
+{
+    [[self nextResponder] mouseExited:view withEvent:event];
 }
 
 - (id)mouseCursorForEvent:(UIEvent *)event
 {
     return [[self nextResponder] mouseCursorForEvent:event];
-}
-
-- (void)keyPressed:(UIKey *)key withEvent:(UIEvent *)event
-{
-    UIResponder *responder = [self nextResponder];
-    if (responder) {
-        [responder keyPressed:key withEvent:event];
-    } else {
-        [event _setUnhandledKeyPressEvent];
-    }
 }
 
 @end

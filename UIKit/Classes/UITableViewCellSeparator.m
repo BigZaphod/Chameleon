@@ -31,7 +31,10 @@
 #import "UIColor.h"
 #import "UIGraphics.h"
 
-@implementation UITableViewCellSeparator
+@implementation UITableViewCellSeparator {
+    UITableViewCellSeparatorStyle _style;
+    UIColor *_color;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -42,11 +45,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_color release];
-    [super dealloc];
-}
 
 - (void)setSeparatorStyle:(UITableViewCellSeparatorStyle)theStyle color:(UIColor *)theColor
 {
@@ -56,8 +54,7 @@
     }
 
     if (_color != theColor) {
-        [_color release];
-        _color = [theColor retain];
+        _color = theColor;
         [self setNeedsDisplay];
     }
     

@@ -41,11 +41,12 @@ static NSString *UIButtonContentTypeTitleShadowColor = @"UIButtonContentTypeTitl
 static NSString *UIButtonContentTypeBackgroundImage = @"UIButtonContentTypeBackgroundImage";
 static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 
-@implementation UIButton
-@synthesize buttonType=_buttonType, titleLabel=_titleLabel, reversesTitleShadowWhenHighlighted=_reversesTitleShadowWhenHighlighted;
-@synthesize adjustsImageWhenHighlighted=_adjustsImageWhenHighlighted, adjustsImageWhenDisabled=_adjustsImageWhenDisabled;
-@synthesize showsTouchWhenHighlighted=_showsTouchWhenHighlighted, imageView=_imageView, contentEdgeInsets=_contentEdgeInsets;
-@synthesize titleEdgeInsets=_titleEdgeInsets, imageEdgeInsets=_imageEdgeInsets;
+@implementation UIButton {
+    UIImageView *_backgroundImageView;
+    NSMutableDictionary *_content;
+    UIImage *_adjustedHighlightImage;
+    UIImage *_adjustedDisabledImage;
+}
 
 + (id)buttonWithType:(UIButtonType)buttonType
 {
@@ -55,11 +56,11 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
         case UIButtonTypeInfoLight:
         case UIButtonTypeInfoDark:
         case UIButtonTypeContactAdd:
-            return [[[UIRoundedRectButton alloc] init] autorelease];
+            return [[UIRoundedRectButton alloc] init];
             
         case UIButtonTypeCustom:
         default:
-            return [[[self alloc] init] autorelease];
+            return [[self alloc] init];
     }
 }
 
@@ -87,16 +88,6 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
     return self;
 }
 
-- (void)dealloc
-{
-    [_content release];
-    [_titleLabel release];
-    [_imageView release];
-    [_backgroundImageView release];
-    [_adjustedHighlightImage release];
-    [_adjustedDisabledImage release];
-    [super dealloc];
-}
 
 - (NSString *)currentTitle
 {
@@ -190,7 +181,7 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
     NSMutableDictionary *typeContent = [_content objectForKey:type];
     
     if (!typeContent) {
-        typeContent = [[[NSMutableDictionary alloc] init] autorelease];
+        typeContent = [[NSMutableDictionary alloc] init];
         [_content setObject:typeContent forKey:type];
     }
     
@@ -226,8 +217,6 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 
 - (void)setImage:(UIImage *)image forState:(UIControlState)state
 {
-    [_adjustedHighlightImage release];
-    [_adjustedDisabledImage release];
     _adjustedDisabledImage = _adjustedHighlightImage = nil;
     [self _setContent:image forState:state type:UIButtonContentTypeImage];
 }

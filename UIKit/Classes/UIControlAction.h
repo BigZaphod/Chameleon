@@ -30,10 +30,6 @@
 #import "UIAction.h"
 #import "UIControl.h"
 
-@interface UIControlAction : UIAction {
-    UIControlEvents _controlEvents;
-}
-
+@interface UIControlAction : UIAction
 @property (nonatomic, assign) UIControlEvents controlEvents;
-
 @end

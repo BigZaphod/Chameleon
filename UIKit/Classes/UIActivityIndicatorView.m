@@ -45,7 +45,7 @@ static CGSize UIActivityIndicatorViewStyleSize(UIActivityIndicatorViewStyle styl
     }
 }
 
-static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle style, NSInteger frame, NSInteger numberOfFrames, CGFloat scale)
+static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle style, UIColor *toothColor, NSInteger frame, NSInteger numberOfFrames, CGFloat scale)
 {
     const CGSize frameSize = UIActivityIndicatorViewStyleSize(style);
     const CGFloat radius = frameSize.width / 2.f;
@@ -53,7 +53,9 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
     const CGFloat numberOfTeeth = 12;
     const CGFloat toothWidth = (style == UIActivityIndicatorViewStyleWhiteLarge)? 3.5 : 2;
 
-    UIColor *toothColor = (style == UIActivityIndicatorViewStyleGray)? [UIColor grayColor] : [UIColor whiteColor];
+    if (!toothColor) {
+        toothColor = (style == UIActivityIndicatorViewStyleGray)? [UIColor grayColor] : [UIColor whiteColor];
+    }
     
     UIGraphicsBeginImageContextWithOptions(frameSize, NO, scale);
     CGContextRef c = UIGraphicsGetCurrentContext();
@@ -82,7 +84,11 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
     return frameImage;
 }
 
-@implementation UIActivityIndicatorView
+@implementation UIActivityIndicatorView {
+    BOOL _animating;
+    UIActivityIndicatorViewStyle _activityIndicatorViewStyle;
+    BOOL _hidesWhenStopped;
+}
 
 - (id)initWithActivityIndicatorStyle:(UIActivityIndicatorViewStyle)style
 {
@@ -94,6 +100,7 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
         self.activityIndicatorViewStyle = style;
         self.hidesWhenStopped = YES;
         self.opaque = NO;
+        self.contentMode = UIViewContentModeCenter;
     }
 
     return self;
@@ -110,13 +117,7 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
 
 - (CGSize)sizeThatFits:(CGSize)aSize
 {
-    UIActivityIndicatorViewStyle style;
-    
-    @synchronized (self) {
-        style = _activityIndicatorViewStyle;
-    }
-    
-    return UIActivityIndicatorViewStyleSize(style);
+    return UIActivityIndicatorViewStyleSize(self.activityIndicatorViewStyle);
 }
 
 - (void)setActivityIndicatorViewStyle:(UIActivityIndicatorViewStyle)style
@@ -135,13 +136,9 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
 
 - (UIActivityIndicatorViewStyle)activityIndicatorViewStyle
 {
-    UIActivityIndicatorViewStyle style;
-
     @synchronized (self) {
-        style = _activityIndicatorViewStyle;
+        return _activityIndicatorViewStyle;
     }
-
-    return style;
 }
 
 - (void)setHidesWhenStopped:(BOOL)hides
@@ -159,45 +156,45 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
 
 - (BOOL)hidesWhenStopped
 {
-    BOOL hides;
-
     @synchronized (self) {
-        hides = _hidesWhenStopped;
+        return _hidesWhenStopped;
     }
-
-    return hides;
 }
 
 - (void)_startAnimation
 {
-    const NSInteger numberOfFrames = 12;
-    const CFTimeInterval animationDuration = 0.8;
-    
-    NSMutableArray *images = [[NSMutableArray alloc] initWithCapacity:numberOfFrames];
-    
-    for (NSInteger frameNumber=0; frameNumber<numberOfFrames; frameNumber++) {
-        [images addObject:(__bridge id)UIActivityIndicatorViewFrameImage(_activityIndicatorViewStyle, frameNumber, numberOfFrames, self.contentScaleFactor).CGImage];
+    @synchronized (self) {
+        const NSInteger numberOfFrames = 12;
+        const CFTimeInterval animationDuration = 0.8;
+        
+        NSMutableArray *images = [[NSMutableArray alloc] initWithCapacity:numberOfFrames];
+        
+        for (NSInteger frameNumber=0; frameNumber<numberOfFrames; frameNumber++) {
+            [images addObject:(__bridge id)UIActivityIndicatorViewFrameImage(_activityIndicatorViewStyle, self.color, frameNumber, numberOfFrames, self.contentScaleFactor).CGImage];
+        }
+        
+        CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"contents"];
+        animation.calculationMode = kCAAnimationDiscrete;
+        animation.duration = animationDuration;
+        animation.repeatCount = HUGE_VALF;
+        animation.values = images;
+        animation.removedOnCompletion = NO;
+        animation.fillMode = kCAFillModeBoth;
+        
+        [self.layer addAnimation:animation forKey:@"contents"];
     }
-    
-    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"contents"];
-    animation.calculationMode = kCAAnimationDiscrete;
-    animation.duration = animationDuration;
-    animation.repeatCount = HUGE_VALF;
-    animation.values = images;
-    animation.removedOnCompletion = NO;
-    animation.fillMode = kCAFillModeBoth;
-    
-    [self.layer addAnimation:animation forKey:@"contents"];
-    
-    [images release];
 }
 
 - (void)_stopAnimation
 {
-    [self.layer removeAnimationForKey:@"contents"];
-    
-    if (self.hidesWhenStopped) {
-        self.hidden = YES;
+    @synchronized (self) {
+        [self.layer removeAnimationForKey:@"contents"];
+
+        self.layer.contents = (id)UIActivityIndicatorViewFrameImage(self.activityIndicatorViewStyle, self.color, 0, 1, self.contentScaleFactor).CGImage;
+        
+        if (self.hidesWhenStopped) {
+            self.hidden = YES;
+        }
     }
 }
 
@@ -220,24 +217,16 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
 
 - (BOOL)isAnimating
 {
-    BOOL animating;
-
     @synchronized (self) {
-        animating = _animating;
+        return _animating;
     }
-
-    return animating;
 }
 
-- (void)drawRect:(CGRect)rect
+- (void)didMoveToWindow
 {
-    UIActivityIndicatorViewStyle style;
-
-    @synchronized (self) {
-        style = _activityIndicatorViewStyle;
+    if (!self.isAnimating) {
+        [self _stopAnimation];  // resets the contents to the first frame if needed
     }
-    
-    [UIActivityIndicatorViewFrameImage(style, 0, 1, self.contentScaleFactor) drawInRect:self.bounds];
 }
 
 @end

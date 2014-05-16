@@ -29,19 +29,13 @@
 
 #import "UIView.h"
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIActivityIndicatorViewStyle) {
     UIActivityIndicatorViewStyleWhiteLarge,
     UIActivityIndicatorViewStyleWhite,
     UIActivityIndicatorViewStyleGray,
-} UIActivityIndicatorViewStyle;
+};
 
-@interface UIActivityIndicatorView : UIView {
-@private
-    UIActivityIndicatorViewStyle _activityIndicatorViewStyle;
-    BOOL _hidesWhenStopped;
-    BOOL _animating;
-}
-
+@interface UIActivityIndicatorView : UIView
 - (id)initWithActivityIndicatorStyle:(UIActivityIndicatorViewStyle)style;
 - (void)startAnimating;
 - (void)stopAnimating;
@@ -49,5 +43,5 @@ typedef enum {
 
 @property BOOL hidesWhenStopped;
 @property UIActivityIndicatorViewStyle activityIndicatorViewStyle;
-
+@property (readwrite, nonatomic, retain) UIColor *color;
 @end

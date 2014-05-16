@@ -29,11 +29,13 @@
 
 #import <Foundation/Foundation.h>
 
+@class NSEvent;
+
 // NOTE: This does not come from Apple's UIKit and only exist to solve some current problems.
 // I have no idea what Apple will do with keyboard handling. If they ever expose that stuff publically,
 // then all of this should change to reflect the official API.
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIKeyType) {
     UIKeyTypeCharacter,		// the catch-all/default... I wouldn't depend much on this at this point
     UIKeyTypeUpArrow,
     UIKeyTypeDownArrow,
@@ -47,16 +49,11 @@ typedef enum {
     UIKeyTypeEnd,
     UIKeyTypePageUp,
     UIKeyTypePageDown,
-} UIKeyType;
+    UIKeyTypeEscape,
+};
 
-@interface UIKey : NSObject {
-@private
-    unsigned short _keyCode;
-    NSString *_characters;
-    NSString *_charactersWithModifiers;
-    NSUInteger _modifierFlags;
-    BOOL _repeat;
-}
+@interface UIKey : NSObject
+- (id)initWithNSEvent:(NSEvent *)event;
 
 @property (nonatomic, readonly) UIKeyType type;
 @property (nonatomic, readonly) unsigned short keyCode;
@@ -68,5 +65,5 @@ typedef enum {
 @property (nonatomic, readonly, getter=isControlKeyPressed) BOOL controlKeyPressed;
 @property (nonatomic, readonly, getter=isOptionKeyPressed) BOOL optionKeyPressed;
 @property (nonatomic, readonly, getter=isCommandKeyPressed) BOOL commandKeyPressed;
-
+@property (nonatomic, readonly) SEL action;     // an action associated with the key press, or null
 @end

@@ -95,8 +95,11 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
     return sqrtf((a*a) + (b*b));
 }
 
-@implementation UIPopoverView
-@synthesize contentView=_contentView;
+@implementation UIPopoverView {
+    UIImageView *_backgroundView;
+    UIImageView *_arrowView;
+    UIView *_contentContainerView;
+}
 
 + (UIEdgeInsets)insetForArrows
 {
@@ -129,7 +132,7 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 - (id)initWithContentView:(UIView *)aView size:(CGSize)aSize
 {	
     if ((self=[super initWithFrame:CGRectMake(0,0,320,480)])) {
-        _contentView = [aView retain];
+        _contentView = aView;
         
         UIImage *backgroundImage = [UIImage _popoverBackgroundImage];
         _backgroundView = [[UIImageView alloc] initWithImage:backgroundImage];
@@ -150,22 +153,14 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
     return self;
 }
 
-- (void)dealloc
-{
-    [_backgroundView release];
-    [_arrowView release];
-    [_contentContainerView release];
-    [_contentView release];
-    [super dealloc];
-}
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
 
     const CGRect bounds = self.bounds;	
-    _backgroundView.frame = [isa backgroundRectForBounds:bounds];
-    _contentContainerView.frame = [isa contentRectForBounds:bounds withNavigationBar:NO];
+    _backgroundView.frame = [[self class] backgroundRectForBounds:bounds];
+    _contentContainerView.frame = [[self class] contentRectForBounds:bounds withNavigationBar:NO];
     _contentView.frame = _contentContainerView.bounds;
 }
 
@@ -298,8 +293,7 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 {
     if (aView != _contentView) {
         [_contentView removeFromSuperview];
-        [_contentView release];
-        _contentView = [aView retain];
+        _contentView = aView;
         [self addSubview:_contentView];
     }
 }
@@ -312,7 +306,7 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 - (void)setContentSize:(CGSize)aSize animated:(BOOL)animated
 {
     CGRect frame = self.frame;
-    frame.size = [isa frameSizeForContentSize:aSize withNavigationBar:NO];
+    frame.size = [[self class] frameSizeForContentSize:aSize withNavigationBar:NO];
 
     [UIView animateWithDuration:animated? 0.2 : 0
                      animations:^(void) {

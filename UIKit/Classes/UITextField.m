@@ -44,11 +44,20 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 @interface UITextField () <UITextLayerTextDelegate>
 @end
 
-@implementation UITextField
-@synthesize delegate=_delegate, background=_background, disabledBackground=_disabledBackground, editing=_editing, clearsOnBeginEditing=_clearsOnBeginEditing;
-@synthesize adjustsFontSizeToFitWidth=_adjustsFontSizeToFitWidth, clearButtonMode=_clearButtonMode, leftView=_leftView, rightView=_rightView;
-@synthesize leftViewMode=_leftViewMode, rightViewMode=_rightViewMode, placeholder=_placeholder, borderStyle=_borderStyle;
-@synthesize inputAccessoryView=_inputAccessoryView, inputView=_inputView, minimumFontSize=_minimumFontSize;
+@implementation UITextField {
+    UITextLayer *_textLayer;
+    
+    struct {
+        unsigned shouldBeginEditing : 1;
+        unsigned didBeginEditing : 1;
+        unsigned shouldEndEditing : 1;
+        unsigned didEndEditing : 1;
+        unsigned shouldChangeCharacters : 1;
+        unsigned shouldClear : 1;
+        unsigned shouldReturn : 1;
+    } _delegateHas;
+}
+@synthesize inputAccessoryView, inputView;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -71,15 +80,6 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (void)dealloc
 {
     [_textLayer removeFromSuperlayer];
-    [_textLayer release];
-    [_leftView release];
-    [_rightView release];
-    [_background release];
-    [_disabledBackground release];
-    [_placeholder release];
-    [_inputAccessoryView release];
-    [_inputView release];
-    [super dealloc];
 }
 
 - (BOOL)_isLeftViewVisible
@@ -134,7 +134,6 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (void)setPlaceholder:(NSString *)thePlaceholder
 {
     if (![thePlaceholder isEqualToString:_placeholder]) {
-        [_placeholder release];
         _placeholder = [thePlaceholder copy];
         [self setNeedsDisplay];
     }
@@ -151,8 +150,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (void)setBackground:(UIImage *)aBackground
 {
     if (aBackground != _background) {
-        [_background release];
-        _background = [aBackground retain];
+        _background = aBackground;
         [self setNeedsDisplay];
     }
 }
@@ -160,8 +158,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (void)setDisabledBackground:(UIImage *)aBackground
 {
     if (aBackground != _disabledBackground) {
-        [_disabledBackground release];
-        _disabledBackground = [aBackground retain];
+        _disabledBackground = aBackground;
         [self setNeedsDisplay];
     }
 }
@@ -170,8 +167,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 {
     if (leftView != _leftView) {
         [_leftView removeFromSuperview];
-        [_leftView release];
-        _leftView = [leftView retain];
+        _leftView = leftView;
         [self addSubview:_leftView];
     }
 }
@@ -180,8 +176,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 {
     if (rightView != _rightView) {
         [_rightView removeFromSuperview];
-        [_rightView release];
-        _rightView = [rightView retain];
+        _rightView = rightView;
         [self addSubview:_rightView];
     }
 }
@@ -372,11 +367,13 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
 - (BOOL)becomeFirstResponder
 {
-    if ([super becomeFirstResponder]) {
-        return [_textLayer becomeFirstResponder];
-    } else {
-        return NO;
+    BOOL result = [super becomeFirstResponder];
+    
+    if (result && (result = [_textLayer becomeFirstResponder])) {
+        [self _textDidBeginEditing];
     }
+    
+    return result;
 }
 
 - (BOOL)resignFirstResponder
@@ -512,6 +509,69 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (id)mouseCursorForEvent:(UIEvent *)event
 {
     return [NSCursor IBeamCursor];
+}
+
+- (CGSize)sizeThatFits:(CGSize)size
+{
+    return [_textLayer sizeThatFits:size];
+}
+
+#pragma mark UITextInput
+
+- (void)setSelectedTextRange:(UITextRange *)range
+{
+}
+
+- (UITextRange *)selectedTextRange
+{
+    return nil;
+}
+
+- (UITextRange *)beginningOfDocument
+{
+    return nil;
+}
+
+- (UITextPosition *)endOfDocument
+{
+    return nil;
+}
+
+- (NSInteger)offsetFromPosition:(UITextPosition *)fromPosition toPosition:(UITextPosition *)toPosition
+{
+    return 0;
+}
+
+- (UITextPosition *)positionFromPosition:(UITextPosition *)position offset:(NSInteger)offset
+{
+    return nil;
+}
+
+- (UITextRange *)textRangeFromPosition:(UITextPosition *)fromPosition toPosition:(UITextPosition *)toPosition
+{
+    return nil;
+}
+
+@end
+
+
+@implementation UIView (UITextField)
+
+- (BOOL)endEditing:(BOOL)force
+{
+    if ([self isFirstResponder]) {
+        if (force || [self canResignFirstResponder]) {
+            return [self resignFirstResponder];
+        }
+    } else {
+        for (UIView *view in self.subviews) {
+            if ([view endEditing:force]) {
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
 }
 
 @end

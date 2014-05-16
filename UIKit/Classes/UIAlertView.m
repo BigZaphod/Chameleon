@@ -34,12 +34,18 @@
 #import <AppKit/NSPanel.h>
 #import <AppKit/NSButton.h>
 
-@interface UIAlertView ()
-@property (nonatomic, retain) NSMutableArray *buttonTitles;
-@end
-
-@implementation UIAlertView
-@synthesize title=_title, message=_message, delegate=_delegate, cancelButtonIndex=_cancelButtonIndex, buttonTitles=_buttonTitles;
+@implementation UIAlertView {
+    NSMutableArray *_buttonTitles;
+    
+    struct {
+        unsigned clickedButtonAtIndex : 1;
+        unsigned alertViewCancel : 1;
+        unsigned willPresentAlertView : 1;
+        unsigned didPresentAlertView : 1;
+        unsigned willDismissWithButtonIndex : 1;
+        unsigned didDismissWithButtonIndex : 1;
+    } _delegateHas;
+}
 
 - (id)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ...
 {
@@ -47,7 +53,7 @@
         self.title = title;
         self.message = message;
         self.delegate = delegate;
-        self.buttonTitles = [NSMutableArray arrayWithCapacity:1];
+        _buttonTitles = [NSMutableArray arrayWithCapacity:1];
 
         if (cancelButtonTitle) {
             self.cancelButtonIndex = [self addButtonWithTitle:cancelButtonTitle];
@@ -60,7 +66,7 @@
             va_list argumentList;
             va_start(argumentList, otherButtonTitles);
 
-            while ((buttonTitle=(__bridge NSString *)va_arg(argumentList, void *))) {
+            while ((buttonTitle=va_arg(argumentList, NSString *))) {
                 [self addButtonWithTitle:buttonTitle];
             }
             
@@ -70,13 +76,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_title release];
-    [_message release];
-    [_buttonTitles release];
-    [super dealloc];
-}
 
 - (void)setDelegate:(id<UIAlertViewDelegate>)newDelegate
 {
@@ -91,19 +90,19 @@
 
 - (NSInteger)addButtonWithTitle:(NSString *)title
 {
-    [self.buttonTitles addObject:title];
-    return ([self.buttonTitles count] - 1);
+    [_buttonTitles addObject:title];
+    return ([_buttonTitles count] - 1);
 }
 
 - (NSString *)buttonTitleAtIndex:(NSInteger)buttonIndex
 {
-    return [self.buttonTitles objectAtIndex:buttonIndex];
+    return [_buttonTitles objectAtIndex:buttonIndex];
 }
 
 
 - (NSInteger)numberOfButtons
 {
-    return [self.buttonTitles count];
+    return [_buttonTitles count];
 }
 
 - (void)show
@@ -115,8 +114,8 @@
     // NSAlert does have a mode that doesn't block the runloop, but it has other drawbacks that I didn't like
     // so opting to do it this way here. :/
 
-    NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-    NSMutableArray *buttonOrder = [[[NSMutableArray alloc] initWithCapacity:self.numberOfButtons] autorelease];
+    NSAlert *alert = [[NSAlert alloc] init];
+    NSMutableArray *buttonOrder = [[NSMutableArray alloc] initWithCapacity:self.numberOfButtons];
     
     if (self.title) {
         [alert setMessageText:self.title];
@@ -128,13 +127,13 @@
     
     for (NSInteger buttonIndex=0; buttonIndex<self.numberOfButtons; buttonIndex++) {
         if (buttonIndex != self.cancelButtonIndex) {
-            [alert addButtonWithTitle:[self.buttonTitles objectAtIndex:buttonIndex]];
+            [alert addButtonWithTitle:[_buttonTitles objectAtIndex:buttonIndex]];
             [buttonOrder addObject:[NSNumber numberWithInt:buttonIndex]];
         }
     }
     
     if (self.cancelButtonIndex >= 0) {
-        NSButton *btn = [alert addButtonWithTitle:[self.buttonTitles objectAtIndex:self.cancelButtonIndex]];
+        NSButton *btn = [alert addButtonWithTitle:[_buttonTitles objectAtIndex:self.cancelButtonIndex]];
 
         // only change the key equivelent if there's more than one button, otherwise we lose the "Return" key for triggering the default action
         if (self.numberOfButtons > 1) {

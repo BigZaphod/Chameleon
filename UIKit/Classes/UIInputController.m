@@ -47,8 +47,9 @@ static UIView *ContainerForView(UIView *view)
 }
 
 
-@implementation UIInputController
-@synthesize inputAccessoryView=_inputAccessoryView, inputView=_inputView;
+@implementation UIInputController {
+    UIWindow *_inputWindow;
+}
 
 + (UIInputController *)sharedInputController
 {
@@ -77,17 +78,12 @@ static UIView *ContainerForView(UIView *view)
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-    [_inputWindow release];
-    [_inputAccessoryView release];
-    [_inputView release];
-    [super dealloc];
 }
 
 // finds the first real UIView that the current key window's first responder "belongs" to so we know where to display the input window
 - (UIView *)_referenceView
 {
-    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
-    UIResponder *firstResponder = [keyWindow _firstResponder];
+    UIResponder *firstResponder = self.keyInputResponder;
     
     if (firstResponder) {
         UIResponder *currentResponder = firstResponder;
@@ -143,11 +139,13 @@ static UIView *ContainerForView(UIView *view)
 
 - (void)_viewChangedNotification:(NSNotification *)note
 {
-    UIView *view = [note object];
-    UIView *referenceView = [self _referenceView];
+    if (self.inputVisible) {
+        UIView *view = [note object];
+        UIView *referenceView = [self _referenceView];
 
-    if (self.inputVisible && (view == referenceView || [ContainerForView(referenceView) isDescendantOfView:view])) {
-        [self _repositionInputWindow];
+        if (view == referenceView || [ContainerForView(referenceView) isDescendantOfView:view]) {
+            [self _repositionInputWindow];
+        }
     }
 }
 
@@ -191,9 +189,8 @@ static UIView *ContainerForView(UIView *view)
 {
     if (view != _inputAccessoryView) {
         [_inputAccessoryView removeFromSuperview];
-        [_inputAccessoryView release];
 
-        _inputAccessoryView = [view retain];
+        _inputAccessoryView = view;
         [_inputWindow addSubview:_inputAccessoryView];
     }
 }
@@ -202,9 +199,8 @@ static UIView *ContainerForView(UIView *view)
 {
     if (view != _inputView) {
         [_inputView removeFromSuperview];
-        [_inputView release];
         
-        _inputView = [view retain];
+        _inputView = view;
         [_inputWindow addSubview:_inputView];
     }
 }

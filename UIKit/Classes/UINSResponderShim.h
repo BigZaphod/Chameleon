@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, The Iconfactory. All rights reserved.
+ * Copyright (c) 2013, The Iconfactory. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,8 +27,26 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIViewController.h"
+#import <AppKit/NSResponder.h>
+#import <AppKit/NSUserInterfaceValidation.h>
 
-@interface UIViewController (UIPrivate)
-- (void)_setParentViewController:(UIViewController *)controller;
+// when the shim gets asked if it can respond to a method, it asks the delegate's responder if it can respond
+// to it or not
+//
+// if the shim is sent a message that it needs to forward, it uses the delegate's responder as a starting point
+// and walks the responder chain until it finds the responder to send it to. if it turns out the responder
+// returned cannot respond to the selector, it eventually ends up with a doesNotRecognizeSelector exception.
+//
+// the shim also implements NSUserInterfaceValidations by sending it's responder -canPerformAction:withSender:
+// messages for proposed actions. if the responder says it can perform the action, it validates. this allows
+// native OSX menus and toolbars to reach down into the UIKit responder chain and enable/disable accordingly.
+
+@class UINSResponderShim, UIResponder;
+
+@protocol UINSResponderShimDelegate <NSObject>
+- (UIResponder *)responderForResponderShim:(UINSResponderShim *)shim;
+@end
+
+@interface UINSResponderShim : NSResponder <NSUserInterfaceValidations>
+@property (nonatomic, assign) id<UINSResponderShimDelegate> delegate;
 @end

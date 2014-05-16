@@ -36,7 +36,7 @@
 #import "UIScreenAppKitIntegration.h"
 #import "UIWindow.h"
 #import "UIKitView.h"
-#import "UIApplication+UIPrivate.h"
+#import "UIApplicationAppKitIntegration.h"
 #import <AppKit/NSMenu.h>
 #import <AppKit/NSMenuItem.h>
 #import <AppKit/NSEvent.h>
@@ -46,16 +46,37 @@ NSString *const UITableViewIndexSearch = @"{search}";
 
 const CGFloat _UITableViewDefaultRowHeight = 43;
 
-@interface UITableView ()
-- (void)_setNeedsReload;
-@end
-
-@implementation UITableView
-@synthesize style=_style, dataSource=_dataSource, rowHeight=_rowHeight, separatorStyle=_separatorStyle, separatorColor=_separatorColor;
-@synthesize tableHeaderView=_tableHeaderView, tableFooterView=_tableFooterView, allowsSelection=_allowsSelection, editing=_editing;
-@synthesize sectionFooterHeight=_sectionFooterHeight, sectionHeaderHeight=_sectionHeaderHeight;
-@synthesize allowsSelectionDuringEditing=_allowsSelectionDuringEditing, backgroundView=_backgroundView;
-@dynamic delegate;
+@implementation UITableView {
+    BOOL _needsReload;
+    NSIndexPath *_selectedRow;
+    NSIndexPath *_highlightedRow;
+    NSMutableDictionary *_cachedCells;
+    NSMutableSet *_reusableCells;
+    NSMutableArray *_sections;
+    
+    struct {
+        unsigned heightForRowAtIndexPath : 1;
+        unsigned heightForHeaderInSection : 1;
+        unsigned heightForFooterInSection : 1;
+        unsigned viewForHeaderInSection : 1;
+        unsigned viewForFooterInSection : 1;
+        unsigned willSelectRowAtIndexPath : 1;
+        unsigned didSelectRowAtIndexPath : 1;
+        unsigned willDeselectRowAtIndexPath : 1;
+        unsigned didDeselectRowAtIndexPath : 1;
+        unsigned willBeginEditingRowAtIndexPath : 1;
+        unsigned didEndEditingRowAtIndexPath : 1;
+        unsigned titleForDeleteConfirmationButtonForRowAtIndexPath: 1;
+    } _delegateHas;
+    
+    struct {
+        unsigned numberOfSectionsInTableView : 1;
+        unsigned titleForHeaderInSection : 1;
+        unsigned titleForFooterInSection : 1;
+        unsigned commitEditingStyle : 1;
+        unsigned canEditRowAtIndexPath : 1;
+    } _dataSourceHas;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -87,18 +108,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
     return self;
 }
 
-- (void)dealloc
-{
-    [_selectedRow release];
-    [_highlightedRow release];
-    [_tableFooterView release];
-    [_tableHeaderView release];
-    [_cachedCells release];
-    [_sections release];
-    [_reusableCells release];
-    [_separatorColor release];
-    [super dealloc];
-}
 
 - (void)setDataSource:(id<UITableViewDataSource>)newSource
 {
@@ -117,18 +126,18 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 {
     [super setDelegate:newDelegate];
 
-    _delegateHas.heightForRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)];
-    _delegateHas.heightForHeaderInSection = [_delegate respondsToSelector:@selector(tableView:heightForHeaderInSection:)];
-    _delegateHas.heightForFooterInSection = [_delegate respondsToSelector:@selector(tableView:heightForFooterInSection:)];
-    _delegateHas.viewForHeaderInSection = [_delegate respondsToSelector:@selector(tableView:viewForHeaderInSection:)];
-    _delegateHas.viewForFooterInSection = [_delegate respondsToSelector:@selector(tableView:viewForFooterInSection:)];
-    _delegateHas.willSelectRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)];
-    _delegateHas.didSelectRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)];
-    _delegateHas.willDeselectRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:willDeselectRowAtIndexPath:)];
-    _delegateHas.didDeselectRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:didDeselectRowAtIndexPath:)];
-    _delegateHas.willBeginEditingRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:willBeginEditingRowAtIndexPath:)];
-    _delegateHas.didEndEditingRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:didEndEditingRowAtIndexPath:)];
-    _delegateHas.titleForDeleteConfirmationButtonForRowAtIndexPath = [_delegate respondsToSelector:@selector(tableView:titleForDeleteConfirmationButtonForRowAtIndexPath:)];
+    _delegateHas.heightForRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)];
+    _delegateHas.heightForHeaderInSection = [newDelegate respondsToSelector:@selector(tableView:heightForHeaderInSection:)];
+    _delegateHas.heightForFooterInSection = [newDelegate respondsToSelector:@selector(tableView:heightForFooterInSection:)];
+    _delegateHas.viewForHeaderInSection = [newDelegate respondsToSelector:@selector(tableView:viewForHeaderInSection:)];
+    _delegateHas.viewForFooterInSection = [newDelegate respondsToSelector:@selector(tableView:viewForFooterInSection:)];
+    _delegateHas.willSelectRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)];
+    _delegateHas.didSelectRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)];
+    _delegateHas.willDeselectRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:willDeselectRowAtIndexPath:)];
+    _delegateHas.didDeselectRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:didDeselectRowAtIndexPath:)];
+    _delegateHas.willBeginEditingRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:willBeginEditingRowAtIndexPath:)];
+    _delegateHas.didEndEditingRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:didEndEditingRowAtIndexPath:)];
+    _delegateHas.titleForDeleteConfirmationButtonForRowAtIndexPath = [newDelegate respondsToSelector:@selector(tableView:titleForDeleteConfirmationButtonForRowAtIndexPath:)];
 }
 
 - (void)setRowHeight:(CGFloat)newHeight
@@ -161,36 +170,37 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
             const NSInteger numberOfRowsInSection = [self numberOfRowsInSection:section];
             
             UITableViewSection *sectionRecord = [[UITableViewSection alloc] init];
-            sectionRecord.headerView = _delegateHas.viewForHeaderInSection? [self.delegate tableView:self viewForHeaderInSection:section] : nil;
-            sectionRecord.footerView = _delegateHas.viewForFooterInSection? [self.delegate tableView:self viewForFooterInSection:section] : nil;
             sectionRecord.headerTitle = _dataSourceHas.titleForHeaderInSection? [self.dataSource tableView:self titleForHeaderInSection:section] : nil;
             sectionRecord.footerTitle = _dataSourceHas.titleForFooterInSection? [self.dataSource tableView:self titleForFooterInSection:section] : nil;
             
+            sectionRecord.headerHeight = _delegateHas.heightForHeaderInSection? [self.delegate tableView:self heightForHeaderInSection:section] : _sectionHeaderHeight;
+            sectionRecord.footerHeight = _delegateHas.heightForFooterInSection ? [self.delegate tableView:self heightForFooterInSection:section] : _sectionFooterHeight;
+
+            sectionRecord.headerView = (sectionRecord.headerHeight > 0 && _delegateHas.viewForHeaderInSection)? [self.delegate tableView:self viewForHeaderInSection:section] : nil;
+            sectionRecord.footerView = (sectionRecord.footerHeight > 0 && _delegateHas.viewForFooterInSection)? [self.delegate tableView:self viewForFooterInSection:section] : nil;
+
             // make a default section header view if there's a title for it and no overriding view
-            if (!sectionRecord.headerView && sectionRecord.headerTitle) {
+            if (!sectionRecord.headerView && sectionRecord.headerHeight > 0 && sectionRecord.headerTitle) {
                 sectionRecord.headerView = [UITableViewSectionLabel sectionLabelWithTitle:sectionRecord.headerTitle];
             }
             
             // make a default section footer view if there's a title for it and no overriding view
-            if (!sectionRecord.footerView && sectionRecord.footerTitle) {
+            if (!sectionRecord.footerView && sectionRecord.footerHeight > 0 && sectionRecord.footerTitle) {
                 sectionRecord.footerView = [UITableViewSectionLabel sectionLabelWithTitle:sectionRecord.footerTitle];
             }
-            
-            // if there's a view, then we need to set the height, otherwise it's going to be zero
+
             if (sectionRecord.headerView) {
                 [self addSubview:sectionRecord.headerView];
-                sectionRecord.headerHeight = _delegateHas.heightForHeaderInSection? [self.delegate tableView:self heightForHeaderInSection:section] : _sectionHeaderHeight;
             } else {
                 sectionRecord.headerHeight = 0;
             }
             
             if (sectionRecord.footerView) {
                 [self addSubview:sectionRecord.footerView];
-                sectionRecord.footerHeight = _delegateHas.heightForFooterInSection? [self.delegate tableView:self heightForFooterInSection:section] : _sectionFooterHeight;
             } else {
                 sectionRecord.footerHeight = 0;
             }
-            
+
             CGFloat *rowHeights = malloc(numberOfRowsInSection * sizeof(CGFloat));
             CGFloat totalRowsHeight = 0;
             
@@ -205,7 +215,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
             free(rowHeights);
             
             [_sections addObject:sectionRecord];
-            [sectionRecord release];
         }
     }
 }
@@ -315,7 +324,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
     }
     
     // non-reusable cells should end up dealloced after at this point, but reusable ones live on in _reusableCells.
-    [availableCells release];
     
     // now make sure that all available (but unused) reusable cells aren't on screen in the visible area.
     // this is done becaue when resizing a table view by shrinking it's height in an animation, it looks better. The reason is that
@@ -456,7 +464,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
         offset += sectionRecord.footerHeight;
     }
     
-    return [results autorelease];
+    return results;
 }
 
 - (NSIndexPath *)indexPathForRowAtPoint:(CGPoint)point
@@ -487,7 +495,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (NSArray *)visibleCells
 {
-    NSMutableArray *cells = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *cells = [[NSMutableArray alloc] init];
     for (NSIndexPath *index in [self indexPathsForVisibleRows]) {
         UITableViewCell *cell = [self cellForRowAtIndexPath:index];
         if (cell) {
@@ -501,8 +509,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 {
     if (newHeader != _tableHeaderView) {
         [_tableHeaderView removeFromSuperview];
-        [_tableHeaderView release];
-        _tableHeaderView = [newHeader retain];
+        _tableHeaderView = newHeader;
         [self _setContentSize];
         [self addSubview:_tableHeaderView];
     }
@@ -512,8 +519,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 {
     if (newFooter != _tableFooterView) {
         [_tableFooterView removeFromSuperview];
-        [_tableFooterView release];
-        _tableFooterView = [newFooter retain];
+        _tableFooterView = newFooter;
         [self _setContentSize];
         [self addSubview:_tableFooterView];
     }
@@ -523,8 +529,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 {
     if (_backgroundView != backgroundView) {
         [_backgroundView removeFromSuperview];
-        [_backgroundView release];
-        _backgroundView = [backgroundView retain];
+        _backgroundView = backgroundView;
         [self insertSubview:_backgroundView atIndex:0];
     }
 }
@@ -552,9 +557,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
     [_cachedCells removeAllObjects];
 
     // clear prior selection
-    [_selectedRow release];
     _selectedRow = nil;
-    [_highlightedRow release];
     _highlightedRow = nil;
     
     // trigger the section cache to be repopulated
@@ -562,6 +565,11 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
     [self _setContentSize];
     
     _needsReload = NO;
+}
+
+- (void)reloadRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation
+{
+    [self reloadData];
 }
 
 - (void)_reloadDataIfNeeded
@@ -601,14 +609,14 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (NSIndexPath *)indexPathForSelectedRow
 {
-    return [[_selectedRow retain] autorelease];
+    return _selectedRow;
 }
 
 - (NSIndexPath *)indexPathForCell:(UITableViewCell *)cell
 {
     for (NSIndexPath *index in [_cachedCells allKeys]) {
         if ([_cachedCells objectForKey:index] == cell) {
-            return [[index retain] autorelease];
+            return index;
         }
     }
     
@@ -619,7 +627,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 {
     if (indexPath && [indexPath isEqual:_selectedRow]) {
         [self cellForRowAtIndexPath:_selectedRow].selected = NO;
-        [_selectedRow release];
         _selectedRow = nil;
     }
 }
@@ -633,14 +640,42 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
     
     if (![_selectedRow isEqual:indexPath]) {
         [self deselectRowAtIndexPath:_selectedRow animated:animated];
-        [_selectedRow release];
-        _selectedRow = [indexPath retain];
+        _selectedRow = indexPath;
         [self cellForRowAtIndexPath:_selectedRow].selected = YES;
     }
     
     // I did not verify if the real UIKit will still scroll the selection into view even if the selection itself doesn't change.
     // this behavior was useful for Ostrich and seems harmless enough, so leaving it like this for now.
     [self scrollToRowAtIndexPath:_selectedRow atScrollPosition:scrollPosition animated:animated];
+}
+
+- (void)_setUserSelectedRowAtIndexPath:(NSIndexPath *)rowToSelect
+{
+    if (_delegateHas.willSelectRowAtIndexPath) {
+        rowToSelect = [self.delegate tableView:self willSelectRowAtIndexPath:rowToSelect];
+    }
+    
+    NSIndexPath *selectedRow = [self indexPathForSelectedRow];
+    
+    if (selectedRow && ![selectedRow isEqual:rowToSelect]) {
+        NSIndexPath *rowToDeselect = selectedRow;
+        
+        if (_delegateHas.willDeselectRowAtIndexPath) {
+            rowToDeselect = [self.delegate tableView:self willDeselectRowAtIndexPath:rowToDeselect];
+        }
+        
+        [self deselectRowAtIndexPath:rowToDeselect animated:NO];
+        
+        if (_delegateHas.didDeselectRowAtIndexPath) {
+            [self.delegate tableView:self didDeselectRowAtIndexPath:rowToDeselect];
+        }
+    }
+    
+    [self selectRowAtIndexPath:rowToSelect animated:NO scrollPosition:UITableViewScrollPositionNone];
+    
+    if (_delegateHas.didSelectRowAtIndexPath) {
+        [self.delegate tableView:self didSelectRowAtIndexPath:rowToSelect];
+    }
 }
 
 - (void)_scrollRectToVisible:(CGRect)aRect atScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated
@@ -684,10 +719,15 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 {
     for (UITableViewCell *cell in _reusableCells) {
         if ([cell.reuseIdentifier isEqualToString:identifier]) {
-            [cell retain];
+            UITableViewCell *strongCell = cell;
+            
+            // the above strongCell reference seems totally unnecessary, but without it ARC apparently
+            // ends up releasing the cell when it's removed on this line even though we're referencing it
+            // later in this method by way of the cell variable. I do not like this.
             [_reusableCells removeObject:cell];
-            [cell prepareForReuse];
-            return [cell autorelease];
+
+            [strongCell prepareForReuse];
+            return strongCell;
         }
     }
     
@@ -726,63 +766,25 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (!_highlightedRow) {
-        UITouch *touch = [touches anyObject];
-        const CGPoint location = [touch locationInView:self];
-
-        _highlightedRow = [[self indexPathForRowAtPoint:location] retain];
-        [self cellForRowAtIndexPath:_highlightedRow].highlighted = YES;
-    }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    // this isn't quite how iOS seems to do it, but I think it makes sense on OSX
-    if (_highlightedRow) {
-        UITouch *touch = [touches anyObject];
-        const CGPoint location = [touch locationInView:self];
-        
-        if (!CGRectContainsPoint([self rectForRowAtIndexPath:_highlightedRow], location)) {
-            [self cellForRowAtIndexPath:_highlightedRow].highlighted = NO;
-            [_highlightedRow release];
-            _highlightedRow = nil;
-        }
-    }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    if (!_highlightedRow) {
+        UITouch *touch = [touches anyObject];
+        const CGPoint location = [touch locationInView:self];
+        
+        _highlightedRow = [self indexPathForRowAtPoint:location];
+        [self cellForRowAtIndexPath:_highlightedRow].highlighted = YES;
+    }
+
     if (_highlightedRow) {
-        NSIndexPath *selectedRow = [self indexPathForSelectedRow];
-        
-        if (selectedRow) {
-            NSIndexPath *rowToDeselect = selectedRow;
-            
-            if (_delegateHas.willDeselectRowAtIndexPath) {
-                rowToDeselect = [_delegate tableView:self willDeselectRowAtIndexPath:rowToDeselect];
-            }
-            
-            [self deselectRowAtIndexPath:rowToDeselect animated:NO];
-            
-            if (_delegateHas.didDeselectRowAtIndexPath) {
-                [_delegate tableView:self didDeselectRowAtIndexPath:rowToDeselect];
-            }
-        }
-        
-        NSIndexPath *rowToSelect = _highlightedRow;
-        
-        if (_delegateHas.willSelectRowAtIndexPath) {
-            rowToSelect = [_delegate tableView:self willSelectRowAtIndexPath:rowToSelect];
-        }
-        
         [self cellForRowAtIndexPath:_highlightedRow].highlighted = NO;
-        [self selectRowAtIndexPath:rowToSelect animated:NO scrollPosition:UITableViewScrollPositionNone];
-        
-        if (_delegateHas.didSelectRowAtIndexPath) {
-            [_delegate tableView:self didSelectRowAtIndexPath:rowToSelect];
-        }
-        
-        [_highlightedRow release];
+        [self _setUserSelectedRowAtIndexPath:_highlightedRow];
         _highlightedRow = nil;
     }
 }
@@ -791,7 +793,6 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 {
     if (_highlightedRow) {
         [self cellForRowAtIndexPath:_highlightedRow].highlighted = NO;
-        [_highlightedRow release];
         _highlightedRow = nil;
     }
 }
@@ -808,7 +809,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
         self.editing = YES;
         
         if (_delegateHas.willBeginEditingRowAtIndexPath) {
-            [_delegate tableView:self willBeginEditingRowAtIndexPath:indexPath];
+            [self.delegate tableView:self willBeginEditingRowAtIndexPath:indexPath];
         }
         
         // deferring this because it presents a modal menu and that's what we do everywhere else in Chameleon
@@ -822,7 +823,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
         self.editing = NO;
 
         if (_delegateHas.didEndEditingRowAtIndexPath) {
-            [_delegate tableView:self didEndEditingRowAtIndexPath:indexPath];
+            [self.delegate tableView:self didEndEditingRowAtIndexPath:indexPath];
         }
     }
 }
@@ -836,7 +837,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
         
         // fetch the title for the delete menu item
         if (_delegateHas.titleForDeleteConfirmationButtonForRowAtIndexPath) {
-            menuItemTitle = [_delegate tableView:self titleForDeleteConfirmationButtonForRowAtIndexPath:indexPath];
+            menuItemTitle = [self.delegate tableView:self titleForDeleteConfirmationButtonForRowAtIndexPath:indexPath];
         }
         if ([menuItemTitle length] == 0) {
             menuItemTitle = @"Delete";
@@ -856,12 +857,9 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
         CGPoint screenPoint = [self.window.screen convertPoint:NSPointToCGPoint(mouseLocation) fromScreen:nil];
 
         // modally present a menu with the single delete option on it, if it was selected, then do the delete, otherwise do nothing
-        const BOOL didSelectItem = [menu popUpMenuPositioningItem:nil atLocation:NSPointFromCGPoint(screenPoint) inView:[self.window.screen UIKitView]];
+        const BOOL didSelectItem = [menu popUpMenuPositioningItem:nil atLocation:NSPointFromCGPoint(screenPoint) inView:self.window.screen.UIKitView];
         
-        [menu release];
-        [theItem release];
-        
-        [[UIApplication sharedApplication] _cancelTouches];
+        UIApplicationInterruptTouchesInView(nil);
 
         if (didSelectItem) {
             [_dataSource tableView:self commitEditingStyle:UITableViewCellEditingStyleDelete forRowAtIndexPath:indexPath];
@@ -883,6 +881,73 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
     if (touchedRow && [self _canEditRowAtIndexPath:touchedRow]) {
         [self _beginEditingRowAtIndexPath:touchedRow];
     }
+}
+
+// these can come down to use from AppKit if the table view somehow ends up in the responder chain.
+// arrow keys move the selection, page up/down keys scroll the view
+
+- (void)moveUp:(id)sender
+{
+    NSIndexPath *selection = self.indexPathForSelectedRow;
+    
+    if (selection.row > 0) {
+        selection = [NSIndexPath indexPathForRow:selection.row-1 inSection:selection.section];
+    } else if (selection.row == 0 && selection.section > 0) {
+        for (NSInteger section = selection.section - 1; section >= 0; section--) {
+            const NSInteger rows = [self numberOfRowsInSection:section];
+            
+            if (rows > 0) {
+                selection = [NSIndexPath indexPathForRow:rows-1 inSection:section];
+                break;
+            }
+        }
+    }
+    
+    if (![selection isEqual:self.indexPathForSelectedRow]) {
+        [self _setUserSelectedRowAtIndexPath:selection];
+        [NSCursor setHiddenUntilMouseMoves:YES];
+    }
+}
+
+- (void)moveDown:(id)sender
+{
+    NSIndexPath *selection = self.indexPathForSelectedRow;
+    
+    if ((selection.row + 1) < [self numberOfRowsInSection:selection.section]) {
+        selection = [NSIndexPath indexPathForRow:selection.row+1 inSection:selection.section];
+    } else {
+        for (NSInteger section = selection.section + 1; section < self.numberOfSections; section++) {
+            const NSInteger rows = [self numberOfRowsInSection:section];
+            
+            if (rows > 0) {
+                selection = [NSIndexPath indexPathForRow:0 inSection:section];
+                break;
+            }
+        }
+    }
+    
+    if (![selection isEqual:self.indexPathForSelectedRow]) {
+        [self _setUserSelectedRowAtIndexPath:selection];
+        [NSCursor setHiddenUntilMouseMoves:YES];
+    }
+}
+
+- (void)pageUp:(id)sender
+{
+    NSArray *visibleRows = [self indexPathsForVisibleRows];
+
+    if ([visibleRows count] > 0) {
+        [self scrollToRowAtIndexPath:[visibleRows objectAtIndex:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        [NSCursor setHiddenUntilMouseMoves:YES];
+        [self flashScrollIndicators];
+    }
+}
+
+- (void)pageDown:(id)sender
+{
+	[self scrollToRowAtIndexPath:[[self indexPathsForVisibleRows] lastObject] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    [NSCursor setHiddenUntilMouseMoves:YES];
+	[self flashScrollIndicators];
 }
 
 @end

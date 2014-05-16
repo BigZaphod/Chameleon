@@ -152,7 +152,6 @@ NSMutableDictionary *imageCache = nil;
 - (id)_initWithRepresentations:(NSArray *)reps
 {
     if ([reps count] == 0) {
-        [self release];
         self = nil;
     } else if ((self=[super init])) {
         _representations = [reps copy];

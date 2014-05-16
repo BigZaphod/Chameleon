@@ -30,10 +30,9 @@
 #import "UIGestureRecognizer.h"
 
 @interface UIGestureRecognizer ()
+- (void)ignoreTouch:(UITouch *)touch forEvent:(UIEvent*)event;		// don't override
 
 @property (nonatomic,readwrite) UIGestureRecognizerState state;
-
-- (void)ignoreTouch:(UITouch *)touch forEvent:(UIEvent*)event;		// don't override
 
 // override, but be sure to call super
 - (void)reset;
@@ -43,5 +42,4 @@
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
-
 @end

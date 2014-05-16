@@ -29,31 +29,31 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UILineBreakMode) {
     UILineBreakModeWordWrap = 0,
     UILineBreakModeCharacterWrap,
     UILineBreakModeClip,
     UILineBreakModeHeadTruncation,
     UILineBreakModeTailTruncation,
     UILineBreakModeMiddleTruncation,
-} UILineBreakMode;
+};
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UITextAlignment) {
     UITextAlignmentLeft,
     UITextAlignmentCenter,
     UITextAlignmentRight,
-} UITextAlignment;
+};
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIBaselineAdjustment) {
     UIBaselineAdjustmentAlignBaselines,
     UIBaselineAdjustmentAlignCenters,
     UIBaselineAdjustmentNone,
-} UIBaselineAdjustment;
+};
 
-NSString *const UITextAttributeFont;
-NSString *const UITextAttributeTextColor;
-NSString *const UITextAttributeTextShadowColor;
-NSString *const UITextAttributeTextShadowOffset;
+extern NSString *const UITextAttributeFont;
+extern NSString *const UITextAttributeTextColor;
+extern NSString *const UITextAttributeTextShadowColor;
+extern NSString *const UITextAttributeTextShadowOffset;
 
 @class UIFont;
 

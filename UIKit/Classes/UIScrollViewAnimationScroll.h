@@ -29,18 +29,16 @@
 
 #import "UIScrollViewAnimation.h"
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIScrollViewAnimationScrollCurve) {
     UIScrollViewAnimationScrollCurveLinear,
     UIScrollViewAnimationScrollCurveQuadraticEaseOut
-} UIScrollViewAnimationScrollCurve;
+};
 
-@interface UIScrollViewAnimationScroll : UIScrollViewAnimation {
-    CGPoint beginContentOffset;
-    CGPoint endContentOffset;
-    NSTimeInterval duration;
-    UIScrollViewAnimationScrollCurve curve;
-}
-
+@interface UIScrollViewAnimationScroll : UIScrollViewAnimation
 - (id)initWithScrollView:(UIScrollView *)sv fromContentOffset:(CGPoint)from toContentOffset:(CGPoint)to duration:(NSTimeInterval)d curve:(UIScrollViewAnimationScrollCurve)c;
 
+@property (nonatomic, readonly) CGPoint beginContentOffset;
+@property (nonatomic, readonly) CGPoint endContentOffset;
+@property (nonatomic, readonly) NSTimeInterval duration;
+@property (nonatomic, readonly) UIScrollViewAnimationScrollCurve animationCurve;
 @end

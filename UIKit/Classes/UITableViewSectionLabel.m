@@ -40,7 +40,7 @@
     label.textColor = [UIColor whiteColor];
     label.shadowColor = [UIColor colorWithRed:100/255.f green:105/255.f blue:110/255.f alpha:1];
     label.shadowOffset = CGSizeMake(0,1);
-    return [label autorelease];
+    return label;
 }
 
 - (void)drawRect:(CGRect)rect

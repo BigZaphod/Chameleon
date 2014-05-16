@@ -33,11 +33,6 @@
 // Unlike UIPanGestureRecognizer, this is a discrete recognizer. It is also,
 // obviously, entirely non-standard. :)
 
-@interface UIScrollWheelGestureRecognizer : UIGestureRecognizer {
-    CGPoint _translation;
-}
-
+@interface UIScrollWheelGestureRecognizer : UIGestureRecognizer
 - (CGPoint)translationInView:(UIView *)view;
-- (void)setTranslation:(CGPoint)translation inView:(UIView *)view;
-
 @end

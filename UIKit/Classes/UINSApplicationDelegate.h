@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, The Iconfactory. All rights reserved.
+ * Copyright (c) 2013, The Iconfactory. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,12 +27,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIEvent.h"
+#import <AppKit/NSApplication.h>
 
-@interface UIEvent (UIPrivate)
-- (id)initWithEventType:(UIEventType)type;
-- (void)_setTouch:(UITouch *)touch;
-- (void)_setTimestamp:(NSTimeInterval)timestamp;
-- (void)_setUnhandledKeyPressEvent;
-- (BOOL)_isUnhandledKeyPressEvent;
+@interface UINSApplicationDelegate : NSObject <NSApplicationDelegate>
 @end

@@ -30,9 +30,12 @@
 #import "UIBezierPath.h"
 #import "UIGraphics.h"
 
-@implementation UIBezierPath
-@synthesize lineWidth=_lineWidth, lineCapStyle=_lineCapStyle, lineJoinStyle=_lineJoinStyle, miterLimit=_miterLimit;
-@synthesize flatness=_flatness, usesEvenOddFillRule=_usesEvenOddFillRule, CGPath=_path;
+@implementation UIBezierPath {
+    CGFloat *_lineDashPattern;
+    NSInteger _lineDashCount;
+    CGFloat _lineDashPhase;
+}
+@synthesize CGPath=_path;
 
 - (id)init
 {
@@ -53,7 +56,32 @@
 - (void)dealloc
 {
     if (_path) CGPathRelease(_path);
-    [super dealloc];
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    UIBezierPath *copy = [[self class] new];
+    
+    copy.CGPath = self.CGPath;
+    copy.lineWidth = self.lineWidth;
+    copy.lineCapStyle = self.lineCapStyle;
+    copy.lineJoinStyle = self.lineJoinStyle;
+    copy.miterLimit = self.miterLimit;
+    copy.flatness = self.flatness;
+    copy.usesEvenOddFillRule = self.usesEvenOddFillRule;
+    
+    NSInteger lineDashCount = 0;
+    [self getLineDash:NULL count:&lineDashCount phase:NULL];
+    
+    if (lineDashCount > 0) {
+        CGFloat *lineDashPattern = malloc(sizeof(CGFloat) * lineDashCount);
+        CGFloat lineDashPhase = 0;
+        [self getLineDash:lineDashPattern count:NULL phase:&lineDashPhase];
+        [copy setLineDash:lineDashPattern count:lineDashCount phase:lineDashPhase];
+        free(lineDashPattern);
+    }
+
+    return copy;
 }
 
 + (UIBezierPath *)bezierPathWithCGPath:(CGPathRef)CGPath
@@ -61,14 +89,14 @@
     NSAssert(CGPath != NULL, @"CGPath must not be NULL");
     UIBezierPath *bezierPath = [[self alloc] init];
     bezierPath.CGPath = CGPath;
-    return [bezierPath autorelease];
+    return bezierPath;
 }
 
 + (UIBezierPath *)bezierPath
 {
     UIBezierPath *bezierPath = [[self alloc] init];
     bezierPath->_path = CGPathCreateMutable();
-    return [bezierPath autorelease];
+    return bezierPath;
 }
 
 + (UIBezierPath *)bezierPathWithRect:(CGRect)rect
@@ -78,7 +106,7 @@
 
     UIBezierPath *bezierPath = [[self alloc] init];
     bezierPath->_path = path;
-    return [bezierPath autorelease];
+    return bezierPath;
 }
 
 + (UIBezierPath *)bezierPathWithOvalInRect:(CGRect)rect
@@ -88,7 +116,7 @@
 
     UIBezierPath *bezierPath = [[self alloc] init];
     bezierPath->_path = path;
-    return [bezierPath autorelease];
+    return bezierPath;
 }
 
 + (UIBezierPath *)bezierPathWithRoundedRect:(CGRect)rect cornerRadius:(CGFloat)cornerRadius
@@ -143,7 +171,7 @@
     
     UIBezierPath *bezierPath = [[self alloc] init];
     bezierPath->_path = path;
-    return [bezierPath autorelease];
+    return bezierPath;
 }
 
 + (UIBezierPath *)bezierPathWithArcCenter:(CGPoint)center radius:(CGFloat)radius startAngle:(CGFloat)startAngle endAngle:(CGFloat)endAngle clockwise:(BOOL)clockwise
@@ -153,7 +181,7 @@
     
     UIBezierPath *bezierPath = [[self alloc] init];
     bezierPath->_path = path;
-    return [bezierPath autorelease];
+    return bezierPath;
 }
 
 - (void)moveToPoint:(CGPoint)point

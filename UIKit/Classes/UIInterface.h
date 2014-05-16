@@ -31,13 +31,17 @@
 #import "UIFont.h"
 
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIBarStyle) {
     UIBarStyleDefault = 0,
     UIBarStyleBlack = 1,
     UIBarStyleBlackOpaque = 1, // Deprecated
     UIBarStyleBlackTranslucent = 2 // Deprecated
-} UIBarStyle;
+};
 
+typedef NS_ENUM(NSInteger, UIBarMetrics) {
+    UIBarMetricsDefault,
+    UIBarMetricsLandscapePhone,
+};
 
 @interface UIColor (UIColorSystemColors)
 + (UIColor *)groupTableViewBackgroundColor;

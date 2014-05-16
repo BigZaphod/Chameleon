@@ -31,8 +31,7 @@
 
 @class UIBarButtonItem;
 
-@interface UIToolbarButton : UIButton {
-}
+@interface UIToolbarButton : UIButton
 
 - (id)initWithBarButtonItem:(UIBarButtonItem *)item;
 

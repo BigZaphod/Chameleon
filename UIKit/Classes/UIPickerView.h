@@ -37,17 +37,7 @@
 
 @protocol UIPickerViewDataSource, UIPickerViewDelegate;
 
-@interface UIPickerView : UIView {
-    __unsafe_unretained id<UIPickerViewDataSource> _dataSource;
-    __unsafe_unretained id<UIPickerViewDelegate>   _delegate;
-    BOOL _showsSelectionIndicator;
-}
-
-@property (nonatomic, assign) id<UIPickerViewDataSource> dataSource;
-@property (nonatomic, assign) id<UIPickerViewDelegate>   delegate;
-@property (nonatomic, assign) BOOL                       showsSelectionIndicator;
-@property (nonatomic, readonly) NSInteger                numberOfComponents;
-
+@interface UIPickerView : UIView
 - (NSInteger) numberOfRowsInComponent: (NSInteger) component; // stub
 - (void) reloadAllComponents; // stub
 - (void) reloadComponent: (NSInteger) component; // stub
@@ -56,6 +46,10 @@
 - (void)selectRow:(NSInteger)row inComponent:(NSInteger)component animated:(BOOL)animated; // stub
 - (UIView *) viewForRow: (NSInteger) row inComponent: (NSInteger) component; // stub
 
+@property (nonatomic, assign) id<UIPickerViewDataSource> dataSource;
+@property (nonatomic, assign) id<UIPickerViewDelegate> delegate;
+@property (nonatomic, assign) BOOL showsSelectionIndicator;
+@property (nonatomic, readonly) NSInteger numberOfComponents;
 @end
 
 

@@ -30,14 +30,12 @@
 #import "UIView+UIPrivate.h"
 #import "UIWindow.h"
 #import "UIGraphics.h"
-#import "UIColor.h"
 #import "UIViewLayoutManager.h"
 #import "UIViewAnimationGroup.h"
-#import "UIViewBlockAnimationDelegate.h"
 #import "UIViewController.h"
 #import "UIAppearanceInstance.h"
-#import "UIApplication+UIPrivate.h"
 #import "UIGestureRecognizer+UIPrivate.h"
+#import "UIApplicationAppKitIntegration.h"
 #import "UIScreen.h"
 #import "UIColor+UIPrivate.h"
 #import "UIColorRep.h"
@@ -51,10 +49,13 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
 static NSMutableArray *_animationGroups;
 static BOOL _animationsEnabled = YES;
 
-@implementation UIView
-@synthesize layer=_layer, superview=_superview, clearsContextBeforeDrawing=_clearsContextBeforeDrawing, autoresizesSubviews=_autoresizesSubviews;
-@synthesize tag=_tag, userInteractionEnabled=_userInteractionEnabled, contentMode=_contentMode, backgroundColor=_backgroundColor;
-@synthesize multipleTouchEnabled=_multipleTouchEnabled, exclusiveTouch=_exclusiveTouch, autoresizingMask=_autoresizingMask;
+@implementation UIView {
+    __unsafe_unretained UIView *_superview;
+    __unsafe_unretained UIViewController *_viewController;
+    NSMutableSet *_subviews;
+    BOOL _implementsDrawRect;
+    NSMutableSet *_gestureRecognizers;
+}
 
 + (void)initialize
 {
@@ -81,14 +82,14 @@ static BOOL _animationsEnabled = YES;
 - (id)initWithFrame:(CGRect)theFrame
 {
     if ((self=[super init])) {
-        _implementsDrawRect = [isa _instanceImplementsDrawRect];
+        _implementsDrawRect = [[self class] _instanceImplementsDrawRect];
         _clearsContextBeforeDrawing = YES;
         _autoresizesSubviews = YES;
         _userInteractionEnabled = YES;
         _subviews = [[NSMutableSet alloc] init];
         _gestureRecognizers = [[NSMutableSet alloc] init];
 
-        _layer = [[[isa layerClass] alloc] init];
+        _layer = [[[[self class] layerClass] alloc] init];
         _layer.delegate = self;
         _layer.layoutManager = [UIViewLayoutManager layoutManager];
 
@@ -104,18 +105,12 @@ static BOOL _animationsEnabled = YES;
 
 - (void)dealloc
 {
-    [[_subviews allObjects] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [_gestureRecognizers makeObjectsPerformSelector:@selector(_setView:) withObject:nil];
+    [[_subviews allObjects] makeObjectsPerformSelector:@selector(_removeFromDeallocatedSuperview)];
 
     _layer.layoutManager = nil;
     _layer.delegate = nil;
     [_layer removeFromSuperlayer];
-
-    [_subviews release];
-    [_layer release];
-    [_backgroundColor release];
-    [_gestureRecognizers release];
-    
-    [super dealloc];
 }
 
 - (void)_setViewController:(UIViewController *)theViewController
@@ -138,7 +133,7 @@ static BOOL _animationsEnabled = YES;
     return (UIResponder *)[self _viewController] ?: (UIResponder *)_superview;
 }
 
-- (id)_appearanceContainer
+- (id)_UIAppearanceContainer
 {
     return self.superview;
 }
@@ -172,12 +167,14 @@ static BOOL _animationsEnabled = YES;
             [self resignFirstResponder];
         }
         
-        [self _setAppearanceNeedsUpdate];
+        [self _UIAppearanceSetNeedsUpdate];
         [self willMoveToWindow:toWindow];
 
         for (UIView *subview in self.subviews) {
             [subview _willMoveFromWindow:fromWindow toWindow:toWindow];
         }
+        
+        [[self _viewController] beginAppearanceTransition:(toWindow != nil) animated:NO];
     }
 }
 
@@ -202,22 +199,30 @@ static BOOL _animationsEnabled = YES;
         for (UIView *subview in self.subviews) {
             [subview _didMoveFromWindow:fromWindow toWindow:toWindow];
         }
-    }
-}
+        
+        UIViewController *controller = [self _viewController];
 
-- (BOOL)_subviewControllersNeedAppearAndDisappear
-{
-    UIView *view = self;
+        if (controller) {
+            if ([[self class] _isAnimating]) {
+                void (^completionBlock)(BOOL) = [[self class] _animationCompletionBlock];
 
-    while (view) {
-        if ([view _viewController] != nil) {
-            return NO;
-        } else {
-            view = [view superview];
+                [[self class] _setAnimationCompletionBlock:^(BOOL finished) {
+                    [controller endAppearanceTransition];
+                    
+                    if (completionBlock) {
+                        completionBlock(finished);
+                    }
+                }];
+            } else {
+                // this is sort of strange, but testing against iOS 6 seems to indicate that appearance transitions
+                // that don't occur within an animation block still do something like this.. it waits until the runloop
+                // cycles before really finishing. I can think of some good reasons for this behavior, so I think it
+                // makes sense to try to replicate it, but I know the real thing doesn't do it like this... :/
+                // (although to be fair, the real thing doesn't do anything much like I'm doing it, so...)
+                [controller performSelector:@selector(endAppearanceTransition) withObject:nil afterDelay:0];
+            }
         }
     }
-
-    return YES;
 }
 
 - (void)addSubview:(UIView *)subview
@@ -228,31 +233,19 @@ static BOOL _animationsEnabled = YES;
         UIWindow *oldWindow = subview.window;
         UIWindow *newWindow = self.window;
         
-        subview->_needsDidAppearOrDisappear = [self _subviewControllersNeedAppearAndDisappear];
-        
-        if ([subview _viewController] && subview->_needsDidAppearOrDisappear) {
-            [[subview _viewController] viewWillAppear:NO];
-        }
-
         [subview _willMoveFromWindow:oldWindow toWindow:newWindow];
         [subview willMoveToSuperview:self];
 
-        {
-            [subview retain];
-
-            if (subview.superview) {
-                [subview.layer removeFromSuperlayer];
-                [subview.superview->_subviews removeObject:subview];
-            }
-            
-            [subview willChangeValueForKey:@"superview"];
-            [_subviews addObject:subview];
-            subview->_superview = self;
-            [_layer addSublayer:subview.layer];
-            [subview didChangeValueForKey:@"superview"];
-
-            [subview release];
+        if (subview.superview) {
+            [subview.layer removeFromSuperlayer];
+            [subview.superview->_subviews removeObject:subview];
         }
+        
+        [subview willChangeValueForKey:@"superview"];
+        [_subviews addObject:subview];
+        subview->_superview = self;
+        [_layer addSublayer:subview.layer];
+        [subview didChangeValueForKey:@"superview"];
 
         if (oldWindow.screen != newWindow.screen) {
             [subview _didMoveToScreen];
@@ -264,10 +257,6 @@ static BOOL _animationsEnabled = YES;
         [[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:subview];
 
         [self didAddSubview:subview];
-        
-        if ([subview _viewController] && subview->_needsDidAppearOrDisappear) {
-            [[subview _viewController] viewDidAppear:NO];
-        }
     }
 }
 
@@ -303,19 +292,24 @@ static BOOL _animationsEnabled = YES;
     }
 }
 
+- (void)_abortGestureRecognizers
+{
+    // note - the real UIKit supports multitouch so it only really interruptes the current touch
+    // and not all of them, but this is easier for now since we don't support that anyway.
+    UIApplicationInterruptTouchesInView(self);
+}
+
+- (void)_removeFromDeallocatedSuperview
+{
+    _superview = nil;
+    [self _abortGestureRecognizers];
+}
+
 - (void)removeFromSuperview
 {
     if (_superview) {
-        [self retain];
-        
-        [[UIApplication sharedApplication] _removeViewFromTouches:self];
-        
         UIWindow *oldWindow = self.window;
-        
-        if (_needsDidAppearOrDisappear && [self _viewController]) {
-            [[self _viewController] viewWillDisappear:NO];
-        }
-        
+
         [_superview willRemoveSubview:self];
         [self _willMoveFromWindow:oldWindow toWindow:nil];
         [self willMoveToSuperview:nil];
@@ -325,16 +319,13 @@ static BOOL _animationsEnabled = YES;
         [_superview->_subviews removeObject:self];
         _superview = nil;
         [self didChangeValueForKey:@"superview"];
-        
+
+        [self _abortGestureRecognizers];
+
+        [[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:self];
+
         [self _didMoveFromWindow:oldWindow toWindow:nil];
         [self didMoveToSuperview];
-        [[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:self];
-        
-        if (_needsDidAppearOrDisappear && [self _viewController]) {
-            [[self _viewController] viewDidDisappear:NO];
-        }
-        
-        [self release];
     }
 }
 
@@ -763,9 +754,9 @@ static BOOL _animationsEnabled = YES;
 - (void)setBackgroundColor:(UIColor *)newColor
 {
     if (_backgroundColor != newColor) {
-        [_backgroundColor release];
-        _backgroundColor = [newColor retain];
+        _backgroundColor = newColor;
         self.opaque = [_backgroundColor _isOpaque];
+        [self setNeedsDisplay];
     }
 }
 
@@ -841,10 +832,13 @@ static BOOL _animationsEnabled = YES;
 
 - (void)_layoutSubviews
 {
-    [self _updateAppearanceIfNeeded];
+    const BOOL wereEnabled = [UIView areAnimationsEnabled];
+    [UIView setAnimationsEnabled:NO];
+    [self _UIAppearanceUpdateIfNeeded];
     [[self _viewController] viewWillLayoutSubviews];
     [self layoutSubviews];
     [[self _viewController] viewDidLayoutSubviews];
+    [UIView setAnimationsEnabled:wereEnabled];
 }
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
@@ -852,9 +846,24 @@ static BOOL _animationsEnabled = YES;
     return CGRectContainsPoint(self.bounds, point);
 }
 
+- (BOOL)_isAnimatedUserInteractionEnabled
+{
+    for (UIViewAnimationGroup *group in _animationGroups) {
+        if (!group.allowUserInteraction) {
+            for (UIView *animatingView in group.allAnimatingViews) {
+                if ([self isDescendantOfView:animatingView]) {
+                    return NO;
+                }
+            }
+        }
+    }
+    
+    return YES;
+}
+
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    if (self.hidden || !self.userInteractionEnabled || self.alpha < 0.01 || ![self pointInside:point withEvent:event]) {
+    if (self.hidden || !self.userInteractionEnabled || self.alpha < 0.01 || ![self pointInside:point withEvent:event] || ![self _isAnimatedUserInteractionEnabled]) {
         return nil;
     } else {
         for (UIView *subview in [self.subviews reverseObjectEnumerator]) {
@@ -972,54 +981,54 @@ static BOOL _animationsEnabled = YES;
     return [_gestureRecognizers allObjects];
 }
 
++ (void)_beginAnimationsWithOptions:(UIViewAnimationOptions)options
+{
+    [_animationGroups addObject:[[UIViewAnimationGroup alloc] initWithAnimationOptions:options]];
+}
+
++ (void)_setAnimationName:(NSString *)name context:(void *)context
+{
+    [[_animationGroups lastObject] setName:name];
+    [[_animationGroups lastObject] setContext:context];
+}
+
++ (void)_setAnimationCompletionBlock:(void (^)(BOOL finished))completion
+{
+    [(UIViewAnimationGroup *)[_animationGroups lastObject] setCompletionBlock:completion];
+}
+
++ (void (^)(BOOL))_animationCompletionBlock
+{
+    return [(UIViewAnimationGroup *)[_animationGroups lastObject] completionBlock];
+}
+
++ (void)_setAnimationTransitionView:(UIView *)view
+{
+    [[_animationGroups lastObject] setTransitionView:view shouldCache:NO];
+}
+
++ (BOOL)_isAnimating
+{
+    return ([_animationGroups count] != 0);
+}
+
 + (void)animateWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
 {
-    const BOOL ignoreInteractionEvents = !((options & UIViewAnimationOptionAllowUserInteraction) == UIViewAnimationOptionAllowUserInteraction);
-    const BOOL repeatAnimation = ((options & UIViewAnimationOptionRepeat) == UIViewAnimationOptionRepeat);
-    const BOOL autoreverseRepeat = ((options & UIViewAnimationOptionAutoreverse) == UIViewAnimationOptionAutoreverse);
-    const BOOL beginFromCurrentState = ((options & UIViewAnimationOptionBeginFromCurrentState) == UIViewAnimationOptionBeginFromCurrentState);
-    UIViewAnimationCurve animationCurve;
-    
-    if ((options & UIViewAnimationOptionCurveEaseInOut) == UIViewAnimationOptionCurveEaseInOut) {
-        animationCurve = UIViewAnimationCurveEaseInOut;
-    } else if ((options & UIViewAnimationOptionCurveEaseIn) == UIViewAnimationOptionCurveEaseIn) {
-        animationCurve = UIViewAnimationCurveEaseIn;
-    } else if ((options & UIViewAnimationOptionCurveEaseOut) == UIViewAnimationOptionCurveEaseOut) {
-        animationCurve = UIViewAnimationCurveEaseOut;
-    } else {
-        animationCurve = UIViewAnimationCurveLinear;
-    }
-    
-    // NOTE: As of iOS 5 this is only supposed to block interaction events for the views being animated, not the whole app.
-    if (ignoreInteractionEvents) {
-        [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
-    }
-    
-    UIViewBlockAnimationDelegate *delegate = [[UIViewBlockAnimationDelegate alloc] init];
-    delegate.completion = completion;
-    delegate.ignoreInteractionEvents = ignoreInteractionEvents;
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationCurve:animationCurve];
-    [UIView setAnimationDelay:delay];
-    [UIView setAnimationDuration:duration];
-    [UIView setAnimationBeginsFromCurrentState:beginFromCurrentState];
-    [UIView setAnimationDelegate:delegate];	// this is retained here
-    [UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:)];
-    [UIView setAnimationRepeatCount:(repeatAnimation? FLT_MAX : 0)];
-    [UIView setAnimationRepeatAutoreverses:autoreverseRepeat];
+    [self _beginAnimationsWithOptions:options | UIViewAnimationOptionTransitionNone];
+    [self setAnimationDuration:duration];
+    [self setAnimationDelay:delay];
+    [self _setAnimationCompletionBlock:completion];
     
     animations();
     
-    [UIView commitAnimations];
-    [delegate release];
+    [self commitAnimations];
 }
 
 + (void)animateWithDuration:(NSTimeInterval)duration animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
 {
     [self animateWithDuration:duration
                         delay:0
-                      options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionNone
+                      options:UIViewAnimationOptionCurveEaseInOut
                    animations:animations
                    completion:completion];
 }
@@ -1029,17 +1038,41 @@ static BOOL _animationsEnabled = YES;
     [self animateWithDuration:duration animations:animations completion:NULL];
 }
 
-+ (void)transitionWithView:(UIView *)view duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completio
++ (void)transitionWithView:(UIView *)view duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
 {
+    [self _beginAnimationsWithOptions:options];
+    [self setAnimationDuration:duration];
+    [self _setAnimationCompletionBlock:completion];
+    [self _setAnimationTransitionView:view];
+    
+    if (animations) {
+        animations();
+    }
+    
+    [self commitAnimations];
 }
 
 + (void)transitionFromView:(UIView *)fromView toView:(UIView *)toView duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(void (^)(BOOL finished))completion
 {
+    [self transitionWithView:fromView.superview
+                    duration:duration
+                     options:options
+                  animations:^{
+                      if (UIViewAnimationOptionIsSet(options, UIViewAnimationOptionShowHideTransitionViews)) {
+                          fromView.hidden = YES;
+                          toView.hidden = NO;
+                      } else {
+                          [fromView.superview addSubview:toView];
+                          [fromView removeFromSuperview];
+                      }
+                  }
+                  completion:completion];
 }
 
 + (void)beginAnimations:(NSString *)animationID context:(void *)context
 {
-    [_animationGroups addObject:[UIViewAnimationGroup animationGroupWithName:animationID context:context]];
+    [self _beginAnimationsWithOptions:UIViewAnimationCurveEaseInOut];
+    [self _setAnimationName:animationID context:context];
 }
 
 + (void)commitAnimations
@@ -1052,52 +1085,74 @@ static BOOL _animationsEnabled = YES;
 
 + (void)setAnimationBeginsFromCurrentState:(BOOL)beginFromCurrentState
 {
-    [[_animationGroups lastObject] setAnimationBeginsFromCurrentState:beginFromCurrentState];
+    [[_animationGroups lastObject] setBeginsFromCurrentState:beginFromCurrentState];
 }
 
 + (void)setAnimationCurve:(UIViewAnimationCurve)curve
 {
-    [[_animationGroups lastObject] setAnimationCurve:curve];
+    [[_animationGroups lastObject] setCurve:curve];
 }
 
 + (void)setAnimationDelay:(NSTimeInterval)delay
 {
-    [[_animationGroups lastObject] setAnimationDelay:delay];
+    [[_animationGroups lastObject] setDelay:delay];
 }
 
 + (void)setAnimationDelegate:(id)delegate
 {
-    [[_animationGroups lastObject] setAnimationDelegate:delegate];
+    [[_animationGroups lastObject] setDelegate:delegate];
 }
 
 + (void)setAnimationDidStopSelector:(SEL)selector
 {
-    [[_animationGroups lastObject] setAnimationDidStopSelector:selector];
+    [[_animationGroups lastObject] setDidStopSelector:selector];
 }
 
 + (void)setAnimationDuration:(NSTimeInterval)duration
 {
-    [[_animationGroups lastObject] setAnimationDuration:duration];
+    [[_animationGroups lastObject] setDuration:duration];
 }
 
 + (void)setAnimationRepeatAutoreverses:(BOOL)repeatAutoreverses
 {
-    [[_animationGroups lastObject] setAnimationRepeatAutoreverses:repeatAutoreverses];
+    [[_animationGroups lastObject] setRepeatAutoreverses:repeatAutoreverses];
 }
 
 + (void)setAnimationRepeatCount:(float)repeatCount
 {
-    [[_animationGroups lastObject] setAnimationRepeatCount:repeatCount];
+    [[_animationGroups lastObject] setRepeatCount:repeatCount];
 }
 
 + (void)setAnimationWillStartSelector:(SEL)selector
 {
-    [[_animationGroups lastObject] setAnimationWillStartSelector:selector];
+    [[_animationGroups lastObject] setWillStartSelector:selector];
 }
 
 + (void)setAnimationTransition:(UIViewAnimationTransition)transition forView:(UIView *)view cache:(BOOL)cache
 {
-    [[_animationGroups lastObject] setAnimationTransition:transition forView:view cache:cache];
+    [self _setAnimationTransitionView:view];
+    
+    switch (transition) {
+        case UIViewAnimationTransitionNone:
+            [[_animationGroups lastObject] setTransition:UIViewAnimationGroupTransitionNone];
+            break;
+            
+        case UIViewAnimationTransitionFlipFromLeft:
+            [[_animationGroups lastObject] setTransition:UIViewAnimationGroupTransitionFlipFromLeft];
+            break;
+            
+        case UIViewAnimationTransitionFlipFromRight:
+            [[_animationGroups lastObject] setTransition:UIViewAnimationGroupTransitionFlipFromRight];
+            break;
+            
+        case UIViewAnimationTransitionCurlUp:
+            [[_animationGroups lastObject] setTransition:UIViewAnimationGroupTransitionCurlUp];
+            break;
+            
+        case UIViewAnimationTransitionCurlDown:
+            [[_animationGroups lastObject] setTransition:UIViewAnimationGroupTransitionCurlDown];
+            break;
+    }
 }
 
 + (BOOL)areAnimationsEnabled

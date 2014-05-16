@@ -34,10 +34,10 @@
 - (id)initWithScrollView:(UIScrollView *)sv fromContentOffset:(CGPoint)from toContentOffset:(CGPoint)to duration:(NSTimeInterval)d curve:(UIScrollViewAnimationScrollCurve)c
 {
     if ((self=[super initWithScrollView:sv])) {
-        beginContentOffset = from;
-        endContentOffset = to;
-        duration = d;
-        curve = c;
+        _beginContentOffset = from;
+        _endContentOffset = to;
+        _duration = d;
+        _animationCurve = c;
     }
     return self;
 }
@@ -45,13 +45,13 @@
 - (BOOL)animate
 {
     const NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
-    const NSTimeInterval elapsedTime = currentTime - beginTime;
-    const CGFloat animationPosition = MIN(1, (elapsedTime / duration));
+    const NSTimeInterval elapsedTime = currentTime - self.beginTime;
+    const CGFloat animationPosition = MIN(1, (elapsedTime / _duration));
 
-    CGFloat (*curveFunction)(CGFloat t, CGFloat start, CGFloat end) = (curve == UIScrollViewAnimationScrollCurveLinear)? &UILinearInterpolation : &UIQuadraticEaseOut;
+    CGFloat (*curveFunction)(CGFloat t, CGFloat start, CGFloat end) = (_animationCurve == UIScrollViewAnimationScrollCurveLinear)? &UILinearInterpolation : &UIQuadraticEaseOut;
     
-    scrollView.contentOffset = CGPointMake(curveFunction(animationPosition, beginContentOffset.x, endContentOffset.x),
-                                           curveFunction(animationPosition, beginContentOffset.y, endContentOffset.y));
+    self.scrollView.contentOffset = CGPointMake(curveFunction(animationPosition, _beginContentOffset.x, _endContentOffset.x),
+                                           curveFunction(animationPosition, _beginContentOffset.y, _endContentOffset.y));
 
     return (animationPosition == 1);
 }

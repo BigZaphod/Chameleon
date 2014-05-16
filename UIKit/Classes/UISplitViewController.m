@@ -28,7 +28,6 @@
  */
 
 #import "UISplitViewController.h"
-#import "UIViewController+UIPrivate.h"
 #import "UIView.h"
 #import "UITouch.h"
 #import "UIColor.h"
@@ -64,12 +63,6 @@ static const CGFloat SplitterPadding = 3;
     return self;
 }
 
-- (void)dealloc
-{
-    [leftPanel release];
-    [rightPanel release];
-    [super dealloc];
-}
 
 - (void)addViewControllers:(NSArray *)viewControllers
 {
@@ -175,8 +168,13 @@ static const CGFloat SplitterPadding = 3;
 
 
 
-@implementation UISplitViewController
-@synthesize delegate=_delegate, viewControllers=_viewControllers;
+@implementation UISplitViewController {
+    struct {
+        unsigned willPresentViewController : 1;
+        unsigned willHideViewController : 1;
+        unsigned willShowViewController : 1;
+    } _delegateHas;
+}
 
 - (id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)nibBundle
 {
@@ -185,11 +183,6 @@ static const CGFloat SplitterPadding = 3;
     return self;
 }
 
-- (void)dealloc
-{
-    [_viewControllers release];
-    [super dealloc];
-}
 
 - (void)setDelegate:(id <UISplitViewControllerDelegate>)newDelegate
 {
@@ -201,7 +194,7 @@ static const CGFloat SplitterPadding = 3;
 
 - (void)loadView
 {
-    self.view = [[[_UISplitViewControllerView alloc] initWithFrame:CGRectMake(0,0,1024,768)] autorelease];
+    self.view = [[_UISplitViewControllerView alloc] initWithFrame:CGRectMake(0,0,1024,768)];
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 
@@ -209,6 +202,7 @@ static const CGFloat SplitterPadding = 3;
 {
     assert([newControllers count]==2);
     
+    /*
     if (![newControllers isEqualToArray:_viewControllers]) {
         for (UIViewController *c in _viewControllers) {
             [c _setParentViewController:nil];
@@ -237,11 +231,12 @@ static const CGFloat SplitterPadding = 3;
             }
         }
 
-        [_viewControllers release];
         _viewControllers = [newControllers copy];
     }
+     */
 }
 
+/*
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -274,5 +269,6 @@ static const CGFloat SplitterPadding = 3;
         [c viewDidDisappear:animated];
     }
 }
+ */
 
 @end

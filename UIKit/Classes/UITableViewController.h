@@ -30,16 +30,9 @@
 #import "UIViewController.h"
 #import "UITableView.h"
 
-@interface UITableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
-@private
-    UITableViewStyle _style;
-    BOOL _clearsSelectionOnViewWillAppear;
-    BOOL _hasReloaded;
-}
-
+@interface UITableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 - (id)initWithStyle:(UITableViewStyle)style;
 
-@property (nonatomic, retain) UITableView *tableView;
+@property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic) BOOL clearsSelectionOnViewWillAppear;
-
 @end

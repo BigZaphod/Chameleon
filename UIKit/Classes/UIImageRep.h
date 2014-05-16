@@ -29,12 +29,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface UIImageRep : NSObject {
-    CGFloat _scale;
-    CGImageSourceRef _imageSource;
-    NSInteger _imageSourceIndex;
-    CGImageRef _image;
-}
+@interface UIImageRep : NSObject
 
 + (NSArray *)imageRepsWithContentsOfFile:(NSString *)file;
 

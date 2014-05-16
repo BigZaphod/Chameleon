@@ -56,8 +56,8 @@ CGFloat UIQuadraticEaseOut(CGFloat t, CGFloat start, CGFloat end)
 - (id)initWithScrollView:(UIScrollView *)sv
 {
     if ((self=[super init])) {
-        scrollView = sv;
-        beginTime = [NSDate timeIntervalSinceReferenceDate];
+        _scrollView = sv;
+        _beginTime = [NSDate timeIntervalSinceReferenceDate];
     }
     return self;
 }
@@ -65,6 +65,11 @@ CGFloat UIQuadraticEaseOut(CGFloat t, CGFloat start, CGFloat end)
 - (BOOL)animate
 {
     return YES;
+}
+
+- (void)momentumScrollBy:(CGPoint)delta
+{
+    // does nothing
 }
 
 @end

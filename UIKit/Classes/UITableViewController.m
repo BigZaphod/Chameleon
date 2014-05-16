@@ -29,8 +29,10 @@
 
 #import "UITableViewController.h"
 
-@implementation UITableViewController
-@synthesize clearsSelectionOnViewWillAppear=_clearsSelectionOnViewWillAppear;
+@implementation UITableViewController {
+    UITableViewStyle _style;
+    BOOL _hasReloaded;
+}
 
 - (id)init
 {
@@ -47,7 +49,7 @@
 
 - (void)loadView
 {
-    self.tableView = [[[UITableView alloc] initWithFrame:CGRectMake(0,0,320,480) style:_style] autorelease];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,0,320,480) style:_style];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 }

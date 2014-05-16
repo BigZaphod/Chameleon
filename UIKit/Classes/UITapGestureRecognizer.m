@@ -32,7 +32,6 @@
 #import "UITouch.h"
 
 @implementation UITapGestureRecognizer
-@synthesize numberOfTapsRequired=_numberOfTapsRequired, numberOfTouchesRequired=_numberOfTouchesRequired;
 
 - (id)initWithTarget:(id)target action:(SEL)action
 {

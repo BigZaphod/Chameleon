@@ -28,7 +28,7 @@
  */
 
 #import "UIMenuController.h"
-#import "UIApplication+UIPrivate.h"
+#import "UIApplicationAppKitIntegration.h"
 #import "UIWindow+UIPrivate.h"
 #import "UIScreenAppKitIntegration.h"
 #import "UIKitView.h"
@@ -46,8 +46,13 @@ NSString *const UIMenuControllerMenuFrameDidChangeNotification = @"UIMenuControl
 @interface UIMenuController () <NSMenuDelegate>
 @end
 
-@implementation UIMenuController
-@synthesize menuItems=_menuItems, menuFrame=_menuFrame;
+@implementation UIMenuController {
+    NSMutableArray *_enabledMenuItems;
+    NSMenu *_menu;
+    CGPoint _menuLocation;
+    BOOL _rightAlignMenu;
+    UIWindow *_window;
+}
 
 + (UIMenuController *)sharedMenuController
 {
@@ -61,12 +66,12 @@ NSString *const UIMenuControllerMenuFrameDidChangeNotification = @"UIMenuControl
 
     if (!items) {
         items = [[NSArray alloc] initWithObjects:
-                 [[[UIMenuItem alloc] initWithTitle:@"Cut" action:@selector(cut:)] autorelease],
-                 [[[UIMenuItem alloc] initWithTitle:@"Copy" action:@selector(copy:)] autorelease],
-                 [[[UIMenuItem alloc] initWithTitle:@"Paste" action:@selector(paste:)] autorelease],
-                 [[[UIMenuItem alloc] initWithTitle:@"Delete" action:@selector(delete:)] autorelease],
-                 [[[UIMenuItem alloc] initWithTitle:@"Select" action:@selector(select:)] autorelease],
-                 [[[UIMenuItem alloc] initWithTitle:@"Select All" action:@selector(selectAll:)] autorelease],
+                 [[UIMenuItem alloc] initWithTitle:@"Cut" action:@selector(cut:)],
+                 [[UIMenuItem alloc] initWithTitle:@"Copy" action:@selector(copy:)],
+                 [[UIMenuItem alloc] initWithTitle:@"Paste" action:@selector(paste:)],
+                 [[UIMenuItem alloc] initWithTitle:@"Delete" action:@selector(delete:)],
+                 [[UIMenuItem alloc] initWithTitle:@"Select" action:@selector(select:)],
+                 [[UIMenuItem alloc] initWithTitle:@"Select All" action:@selector(selectAll:)],
                  nil];
     }
 
@@ -84,11 +89,7 @@ NSString *const UIMenuControllerMenuFrameDidChangeNotification = @"UIMenuControl
 
 - (void)dealloc
 {
-    [_menuItems release];
-    [_enabledMenuItems release];
     [_menu cancelTracking];		// this should never really happen since the controller is pretty much always a singleton, but... whatever.
-    [_menu release];
-    [super dealloc];
 }
 
 - (BOOL)isMenuVisible
@@ -114,7 +115,6 @@ NSString *const UIMenuControllerMenuFrameDidChangeNotification = @"UIMenuControl
                 [theItem setTarget:self];
                 [theItem setRepresentedObject:item];
                 [_menu addItem:theItem];
-                [theItem release];
             }
 
             _menuFrame.size = NSSizeToCGSize([_menu size]);
@@ -141,7 +141,6 @@ NSString *const UIMenuControllerMenuFrameDidChangeNotification = @"UIMenuControl
         } else {
             [_menu cancelTrackingWithoutAnimation];
         }
-        [_menu release];
         _menu = nil;
     }
 }
@@ -194,7 +193,7 @@ NSString *const UIMenuControllerMenuFrameDidChangeNotification = @"UIMenuControl
 {
     UIApplication *app = [UIApplication sharedApplication];
     UIResponder *firstResponder = [app.keyWindow _firstResponder];
-    NSArray *allItems = [[isa _defaultMenuItems] arrayByAddingObjectsFromArray:_menuItems];
+    NSArray *allItems = [[[self class] _defaultMenuItems] arrayByAddingObjectsFromArray:_menuItems];
 
     [_enabledMenuItems removeAllObjects];
 
@@ -210,10 +209,10 @@ NSString *const UIMenuControllerMenuFrameDidChangeNotification = @"UIMenuControl
 - (void)_presentMenu
 {
     if (_menu && _window) {
-        NSView *theNSView = [_window.screen UIKitView];
+        NSView *theNSView = _window.screen.UIKitView;
         if (theNSView) {
             [_menu popUpMenuPositioningItem:nil atLocation:NSPointFromCGPoint(_menuFrame.origin) inView:theNSView];
-            [[UIApplication sharedApplication] _cancelTouches];
+            UIApplicationInterruptTouchesInView(nil);
         }
     }
 }
@@ -244,7 +243,6 @@ NSString *const UIMenuControllerMenuFrameDidChangeNotification = @"UIMenuControl
 - (void)menuDidClose:(NSMenu *)menu
 {
     if (menu == _menu) {
-        [_menu release];
         _menu = nil;
     }
 }

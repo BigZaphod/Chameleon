@@ -108,13 +108,17 @@
 #import "UISwipeGestureRecognizer.h"
 #import "UIDatePicker.h"
 #import "UIAppearance.h"
+#import "UITextInput.h"
 
 // non-standard imports
-#import "UIKey.h"
 #import "UIScrollWheelGestureRecognizer.h"
 
-// only add if core data is included on 10.6
-#import "NSFetchedResultsController.h"
+// osx imports
+#import <AppKit/NSParagraphStyle.h>
+#import <AppKit/NSAttributedString.h>
+#import <AppKit/NSShadow.h>
+#import <AppKit/NSText.h>
+#import <AppKit/NSLayoutConstraint.h>
 
 // SystemConfiguration-Helper
 #define kSCNetworkReachabilityFlagsIsWWAN kSCNetworkReachabilityFlagsConnectionOnDemand

@@ -54,7 +54,6 @@
 @protocol UITextLayerTextDelegate <NSObject>
 @required
 - (BOOL)_textShouldBeginEditing;
-- (void)_textDidBeginEditing;
 - (BOOL)_textShouldEndEditing;
 - (void)_textDidEndEditing;
 - (BOOL)_textShouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
@@ -65,34 +64,19 @@
 - (void)_textDidReceiveReturnKey;
 @end
 
-@interface UITextLayer : CALayer {
-    id containerView;
-    BOOL containerCanScroll;
-    UICustomNSTextView *textView;
-    UICustomNSClipView *clipView;
-    BOOL secureTextEntry;
-    BOOL editable;
-    UIColor *textColor;
-    UIFont *font;
-    BOOL changingResponderStatus;
-
-    struct {
-        unsigned didChange : 1;
-        unsigned didChangeSelection : 1;
-        unsigned didReturnKey : 1;
-    } textDelegateHas;
-}
+@interface UITextLayer : CALayer
 
 - (id)initWithContainer:(UIView <UITextLayerContainerViewProtocol,UITextLayerTextDelegate> *)aView isField:(BOOL)isField;
 - (void)setContentOffset:(CGPoint)contentOffset;
 - (void)scrollRangeToVisible:(NSRange)range;
 - (BOOL)becomeFirstResponder;
 - (BOOL)resignFirstResponder;
+- (CGSize)sizeThatFits:(CGSize)size;
 
 @property (nonatomic, assign) NSRange selectedRange;
 @property (nonatomic, copy) NSString *text;
-@property (nonatomic, retain) UIColor *textColor;
-@property (nonatomic, retain) UIFont *font;
+@property (nonatomic, strong) UIColor *textColor;
+@property (nonatomic, strong) UIFont *font;
 @property (nonatomic, assign) BOOL editable;
 @property (nonatomic, getter=isSecureTextEntry) BOOL secureTextEntry;
 @property (nonatomic, assign) UITextAlignment textAlignment;

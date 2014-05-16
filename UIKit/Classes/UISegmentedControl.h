@@ -12,58 +12,36 @@
 // - Setting item content offset is not supported
 
 #import "UIControl.h"
-#import "UIImage.h"
-#import "UIFont.h"
 
-typedef enum {
-  UISegmentedControlStylePlain,     // large plain
-  UISegmentedControlStyleBordered,  // large bordered
-  UISegmentedControlStyleBar,       // small button/nav bar style. tintable
-  UISegmentedControlStyleBezeled,   // large bezeled style. tintable
-} UISegmentedControlStyle;
+@class UIImage;
 
-enum {
-  UISegmentedControlNoSegment = -1   // segment index for no selected segment
+typedef NS_ENUM(NSInteger, UISegmentedControlStyle) {
+    UISegmentedControlStylePlain,     // large plain
+    UISegmentedControlStyleBordered,  // large bordered
+    UISegmentedControlStyleBar,       // small button/nav bar style. tintable
+    UISegmentedControlStyleBezeled,   // large bezeled style. tintable
 };
 
-@interface UISegmentedControl : UIControl {
+enum {
+    UISegmentedControlNoSegment = -1   // segment index for no selected segment
+};
 
-@private
+typedef NS_ENUM(NSInteger, UISegmentedControlSegment) {
+    UISegmentedControlSegmentAny = 0,
+    UISegmentedControlSegmentLeft = 1,
+    UISegmentedControlSegmentCenter = 2,
+    UISegmentedControlSegmentRight = 3,
+    UISegmentedControlSegmentAlone = 4,
+};
 
-    NSMutableArray *_segments;
-    NSInteger _selectedSegmentIndex;
-    NSUInteger _numberOfSegments;
-    BOOL _momentary;
-    NSMutableDictionary *_segmentMeta;
-
-    UIImage *_buttonImage;
-    UIImage *_highlightedButtonImage;
-    UIImage *_dividerImage;
-    UIImage *_highlightedDividerImage;
-
-    UIFont *_font;
-    UIColor *_textColor;
-    UIColor *_disabledTextColor;
-    UIColor *_textShadowColor;
-    CGSize _textShadowOffset;
-    UIEdgeInsets _textEdgeInsets;
-
-    UISegmentedControlStyle _segmentedControlStyle;
-    UIColor *_tintColor;
-}
-
+@interface UISegmentedControl : UIControl
 @property (nonatomic) UISegmentedControlStyle segmentedControlStyle; // stub
-@property (nonatomic,retain) UIColor *tintColor; // stub
+@property (nonatomic,strong) UIColor *tintColor; // stub
 @property (nonatomic, assign, readonly) NSUInteger numberOfSegments;
 @property (nonatomic, assign) NSInteger selectedSegmentIndex;
 @property (nonatomic, getter=isMomentary) BOOL momentary;
 
 - (id)initWithItems:(NSArray *)items;
-
-//- (void)insertSegmentWithTitle:(NSString *)title atIndex:(NSUInteger)segment animated:(BOOL)animated;
-//- (void)insertSegmentWithImage:(UIImage *)image  atIndex:(NSUInteger)segment animated:(BOOL)animated;
-//- (void)removeSegmentAtIndex:(NSUInteger)segment animated:(BOOL)animated;
-//- (void)removeAllSegments;
 
 - (void)setTitle:(NSString *)title forSegmentAtIndex:(NSUInteger)segment;
 - (NSString *)titleForSegmentAtIndex:(NSUInteger)segment;
@@ -71,16 +49,9 @@ enum {
 - (void)setImage:(UIImage *)image forSegmentAtIndex:(NSUInteger)segment;
 - (UIImage *)imageForSegmentAtIndex:(NSUInteger)segment;
 
-//- (void)setWidth:(CGFloat)width forSegmentAtIndex:(NSUInteger)segment;
-//- (CGFloat)widthForSegmentAtIndex:(NSUInteger)segment;
-
-//- (void)setContentOffset:(CGSize)offset forSegmentAtIndex:(NSUInteger)segment;
-//- (CGSize)contentOffsetForSegmentAtIndex:(NSUInteger)segment;
-
 - (void)setEnabled:(BOOL)enabled forSegmentAtIndex:(NSUInteger)segment;
 - (BOOL)isEnabledForSegmentAtIndex:(NSUInteger)segment;
 
 - (void)setTitleTextAttributes:(NSDictionary *)attributes forState:(UIControlState)state;
 - (NSDictionary *)titleTextAttributesForState:(UIControlState)state;
-
 @end

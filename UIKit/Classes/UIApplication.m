@@ -27,18 +27,12 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIApplication+UIPrivate.h"
-#import "UIScreen+UIPrivate.h"
-#import "UIScreenAppKitIntegration.h"
-#import "UIKitView.h"
-#import "UIEvent+UIPrivate.h"
-#import "UITouch+UIPrivate.h"
-#import "UIWindow+UIPrivate.h"
-#import "UIPopoverController+UIPrivate.h"
-#import "UIResponderAppKitIntegration.h"
 #import "UIApplicationAppKitIntegration.h"
-#import "UIKey+UIPrivate.h"
+#import "UIScreenAppKitIntegration.h"
+#import "UIWindow+UIPrivate.h"
+#import "UIKitView.h"
 #import "UIBackgroundTask.h"
+#import "UINSApplicationDelegate.h"
 #import <Cocoa/Cocoa.h>
 
 NSString *const UIApplicationWillChangeStatusBarOrientationNotification = @"UIApplicationWillChangeStatusBarOrientationNotification";
@@ -68,86 +62,31 @@ const NSTimeInterval UIMinimumKeepAliveTimeout = 0;
 
 static UIApplication *_theApplication = nil;
 
-static CGPoint ScreenLocationFromNSEvent(UIScreen *theScreen, NSEvent *theNSEvent)
-{
-    CGPoint screenLocation = NSPointToCGPoint([[theScreen UIKitView] convertPoint:[theNSEvent locationInWindow] fromView:nil]);
-    if (![[theScreen UIKitView] isFlipped]) {
-        // the y coord from the NSView might be inverted
-        screenLocation.y = theScreen.bounds.size.height - screenLocation.y - 1;
-    }
-    return screenLocation;
-}
-
-static CGPoint ScrollDeltaFromNSEvent(NSEvent *theNSEvent)
-{
-    double dx, dy;
-
-    CGEventRef cgEvent = [theNSEvent CGEvent];
-    const int64_t isContinious = CGEventGetIntegerValueField(cgEvent, kCGScrollWheelEventIsContinuous);
-    
-    if (isContinious == 0) {
-        CGEventSourceRef source = CGEventCreateSourceFromEvent(cgEvent);
-        double pixelsPerLine;
-        
-        if (source) {
-           pixelsPerLine = CGEventSourceGetPixelsPerLine(source);
-            CFRelease(source);
-        } else {
-            // docs often say things like, "the default is near 10" so it seems reasonable that if the source doesn't work
-            // for some reason to fetch the pixels per line, then 10 is probably a decent fallback value. :)
-            pixelsPerLine = 10;
-        }
-
-        dx = CGEventGetDoubleValueField(cgEvent, kCGScrollWheelEventFixedPtDeltaAxis2) * pixelsPerLine;
-        dy = CGEventGetDoubleValueField(cgEvent, kCGScrollWheelEventFixedPtDeltaAxis1) * pixelsPerLine;
-    } else {
-        dx = CGEventGetIntegerValueField(cgEvent, kCGScrollWheelEventPointDeltaAxis2);
-        dy = CGEventGetIntegerValueField(cgEvent, kCGScrollWheelEventPointDeltaAxis1);
-    }
-
-    return CGPointMake(-dx, -dy);
-}
-
-static BOOL TouchIsActiveGesture(UITouch *touch)
-{
-    return (touch.phase == _UITouchPhaseGestureBegan || touch.phase == _UITouchPhaseGestureChanged);
-}
-
-static BOOL TouchIsActiveNonGesture(UITouch *touch)
-{
-    return (touch.phase == UITouchPhaseBegan || touch.phase == UITouchPhaseMoved || touch.phase == UITouchPhaseStationary);
-}
-
-static BOOL TouchIsActive(UITouch *touch)
-{
-    return TouchIsActiveGesture(touch) || TouchIsActiveNonGesture(touch);
-}
-
-@implementation UIApplication
-@synthesize keyWindow=_keyWindow, delegate=_delegate, idleTimerDisabled=_idleTimerDisabled, applicationSupportsShakeToEdit=_applicationSupportsShakeToEdit;
-@synthesize applicationIconBadgeNumber = _applicationIconBadgeNumber, applicationState=_applicationState;
-
-+ (void)initialize
-{
-    if (self == [UIApplication class]) {
-        _theApplication = [[UIApplication alloc] init];
-    }
+@implementation UIApplication {
+    NSUInteger _ignoringInteractionEvents;
+    NSDate *_backgroundTasksExpirationDate;
+    NSMutableArray *_backgroundTasks;
 }
 
 + (UIApplication *)sharedApplication
 {
+    if (!_theApplication) {
+        _theApplication = [[self alloc] init];
+    }
+    
     return _theApplication;
 }
 
 - (id)init
 {
     if ((self=[super init])) {
-        _currentEvent = [[UIEvent alloc] initWithEventType:UIEventTypeTouches];
-        [_currentEvent _setTouch:[[[UITouch alloc] init] autorelease]];
-        _visibleWindows = [[NSMutableSet alloc] init];
         _backgroundTasks = [[NSMutableArray alloc] init];
         _applicationState = UIApplicationStateActive;
         _applicationSupportsShakeToEdit = YES;		// yeah... not *really* true, but UIKit defaults to YES :)
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillFinishLaunching:) name:NSApplicationWillFinishLaunchingNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationDidFinishLaunching:) name:NSApplicationDidFinishLaunchingNotification object:nil];
+
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillResignActive:) name:NSApplicationWillResignActiveNotification object:nil];
@@ -166,11 +105,6 @@ static BOOL TouchIsActive(UITouch *touch)
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[[NSWorkspace sharedWorkspace] notificationCenter] removeObserver:self];
-    [_currentEvent release];
-    [_visibleWindows release];
-    [_backgroundTasks release];
-    [_backgroundTasksExpirationDate release];
-    [super dealloc];
 }
 
 - (NSTimeInterval)statusBarOrientationAnimationDuration
@@ -191,11 +125,6 @@ static BOOL TouchIsActive(UITouch *touch)
 - (NSTimeInterval)backgroundTimeRemaining
 {
     return [_backgroundTasksExpirationDate timeIntervalSinceNow];
-}
-
-- (BOOL)isNetworkActivityIndicatorVisible
-{
-    return _networkActivityIndicatorVisible;
 }
 
 - (void)setNetworkActivityIndicatorVisible:(BOOL)b
@@ -243,6 +172,23 @@ static BOOL TouchIsActive(UITouch *touch)
 {
 }
 
+- (void)setStatusBarHidden:(BOOL)hidden withAnimation:(UIStatusBarAnimation)animation
+{
+}
+
+- (void)registerForRemoteNotificationTypes:(UIRemoteNotificationType)types
+{
+}
+
+- (void)unregisterForRemoteNotifications
+{
+}
+
+- (UIRemoteNotificationType)enabledRemoteNotificationTypes
+{
+    return UIRemoteNotificationTypeNone;
+}
+
 - (void)presentLocalNotificationNow:(UILocalNotification *)notification
 {
 }
@@ -266,7 +212,7 @@ static BOOL TouchIsActive(UITouch *touch)
 
 - (UIBackgroundTaskIdentifier)beginBackgroundTaskWithExpirationHandler:(void(^)(void))handler
 {
-    UIBackgroundTask *task = [[[UIBackgroundTask alloc] initWithExpirationHandler:handler] autorelease];
+    UIBackgroundTask *task = [[UIBackgroundTask alloc] initWithExpirationHandler:handler];
     [_backgroundTasks addObject:task];
     return task.taskIdentifier;
 }
@@ -335,7 +281,7 @@ static BOOL TouchIsActive(UITouch *touch)
 - (void)_cancelBackgroundTasks
 {
     // if there's any remaining tasks, run their expiration handlers
-    for (UIBackgroundTask *task in [[_backgroundTasks copy] autorelease]) {
+    for (UIBackgroundTask *task in [_backgroundTasks copy]) {
         if (task.expirationHandler) {
             task.expirationHandler();
         }
@@ -354,8 +300,7 @@ static BOOL TouchIsActive(UITouch *touch)
 {
     [self _enterBackground];
     
-    [_backgroundTasksExpirationDate release];
-    _backgroundTasksExpirationDate = [timeoutDate retain];
+    _backgroundTasksExpirationDate = timeoutDate;
     
     // we will briefly block here for a short time and run the runloop in an attempt to let the background tasks finish up before
     // actually prompting the user with an annoying alert. users are much more used to an app hanging for a brief moment while
@@ -375,7 +320,6 @@ static BOOL TouchIsActive(UITouch *touch)
         [self _cancelBackgroundTasks];
     
         // and reset our timer since we're done
-        [_backgroundTasksExpirationDate release];
         _backgroundTasksExpirationDate = nil;
         
         // and return
@@ -411,7 +355,6 @@ static BOOL TouchIsActive(UITouch *touch)
         [self _cancelBackgroundTasks];
         
         // and reset our timer since we're done
-        [_backgroundTasksExpirationDate release];
         _backgroundTasksExpirationDate = nil;
 
         // now just in case all of this happened too quickly and the user might not have had time to read and understand the alert,
@@ -424,7 +367,6 @@ static BOOL TouchIsActive(UITouch *touch)
             }
         }
 
-        [alert release];
 
         [NSApp endModalSession:session];
         
@@ -436,7 +378,7 @@ static BOOL TouchIsActive(UITouch *touch)
     // because we're probably in that run loop mode due to how -applicationShouldTerminate: does things. I don't
     // know if I could do this same thing with a couple of simple GCD calls, but whatever, this works too. :)
     [self performSelectorOnMainThread:@selector(_runBackgroundTasks:)
-                           withObject:[[taskFinisher copy] autorelease]
+                           withObject:[taskFinisher copy]
                         waitUntilDone:NO
                                 modes:[NSArray arrayWithObjects:NSModalPanelRunLoopMode, NSRunLoopCommonModes, nil]];
     
@@ -453,7 +395,6 @@ static BOOL TouchIsActive(UITouch *touch)
         // the machine is about to go to sleep.. so we'll just do things in a blocking way in this case while still handling
         // any pending background tasks.
 
-        [_backgroundTasksExpirationDate release];
         _backgroundTasksExpirationDate = [[NSDate alloc] initWithTimeIntervalSinceNow:29];
 
         for (;;) {
@@ -465,7 +406,6 @@ static BOOL TouchIsActive(UITouch *touch)
         [self _cancelBackgroundTasks];
 
         // and reset our timer since we're done
-        [_backgroundTasksExpirationDate release];
         _backgroundTasksExpirationDate = nil;
     }
 }
@@ -475,36 +415,26 @@ static BOOL TouchIsActive(UITouch *touch)
     [self _enterForeground];
 }
 
-- (void)_setKeyWindow:(UIWindow *)newKeyWindow
-{
-    _keyWindow = newKeyWindow;
-
-    if (_keyWindow) {
-        // this will make the NSView that the key window lives on the first responder in its NSWindow
-        // highly confusing, but I think this is mostly the correct thing to do
-        // when a UIView is made first responder, it also tells its window to become the key window
-        // which means that we can ultimately end up here and if keyboard stuff is to work as expected
-        // (for example) the underlying NSView really needs to be the first responder as far as AppKit
-        // is concerned. this is all very confusing in my mind right now, but I think it makes sense.
-        [[[_keyWindow.screen UIKitView] window] makeFirstResponder:[_keyWindow.screen UIKitView]];
-    }
-}
-
-- (void)_windowDidBecomeVisible:(UIWindow *)theWindow
-{
-    [_visibleWindows addObject:[NSValue valueWithNonretainedObject:theWindow]];
-}
-
-- (void)_windowDidBecomeHidden:(UIWindow *)theWindow
-{
-    if (theWindow == _keyWindow) [self _setKeyWindow:nil];
-    [_visibleWindows removeObject:[NSValue valueWithNonretainedObject:theWindow]];
-}
-
 - (NSArray *)windows
 {
-    NSSortDescriptor *sort = [[[NSSortDescriptor alloc] initWithKey:@"windowLevel" ascending:YES] autorelease];
-    return [[_visibleWindows valueForKey:@"nonretainedObjectValue"] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sort]];
+    NSMutableArray *windows = [NSMutableArray new];
+    
+    for (UIScreen *screen in [UIScreen screens]) {
+        [windows addObjectsFromArray:screen.windows];
+    }
+    
+    return [windows sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"windowLevel" ascending:YES]]];
+}
+
+- (UIWindow *)keyWindow
+{
+    for (UIWindow *window in self.windows) {
+        if (window.isKeyWindow) {
+            return window;
+        }
+    }
+    
+    return nil;
 }
 
 - (BOOL)sendAction:(SEL)action to:(id)target from:(id)sender forEvent:(UIEvent *)event
@@ -542,47 +472,21 @@ static BOOL TouchIsActive(UITouch *touch)
     }
     
     if (target) {
-        [target performSelector:action withObject:sender withObject:event];
+        typedef void(*EventActionMethod)(id, SEL, id, UIEvent *);
+        EventActionMethod method = (EventActionMethod)[target methodForSelector:action];
+        method(target, action, sender, event);
         return YES;
-    } else {
-        return NO;
-    }
-}
-
-- (UIResponder *)_firstResponderForScreen:(UIScreen *)screen
-{
-    if (_keyWindow.screen == screen) {
-        return [_keyWindow _firstResponder];
-    } else {
-        return nil;
-    }
-}
-
-- (BOOL)_sendActionToFirstResponder:(SEL)action withSender:(id)sender fromScreen:(UIScreen *)theScreen
-{
-    UIResponder *responder = [self _firstResponderForScreen:theScreen];
-    
-    while (responder) {
-        if ([responder respondsToSelector:action]) {
-            [responder performSelector:action withObject:sender];
-            return YES;
-        } else {
-            responder = [responder nextResponder];
-        }
     }
     
     return NO;
 }
 
-- (BOOL)_firstResponderCanPerformAction:(SEL)action withSender:(id)sender fromScreen:(UIScreen *)theScreen
-{
-    return [[self _firstResponderForScreen:theScreen] canPerformAction:action withSender:sender];
-}
-
 - (void)sendEvent:(UIEvent *)event
 {
-    for (UITouch *touch in [event allTouches]) {
-        [touch.window sendEvent:event];
+    if (event.type ==  UIEventTypeTouches) {
+        [self.windows makeObjectsPerformSelector:@selector(sendEvent:) withObject:event];
+    } else {
+        [self.keyWindow sendEvent:event];
     }
 }
 
@@ -596,204 +500,42 @@ static BOOL TouchIsActive(UITouch *touch)
     return (url? [[NSWorkspace sharedWorkspace] URLForApplicationToOpenURL:url] : nil) != nil;
 }
 
-- (BOOL)_sendGlobalKeyboardNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
+- (void)_applicationWillFinishLaunching:(NSNotification *)note
 {
-    if (![self isIgnoringInteractionEvents]) {
-        UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
-        
-        if (key.type == UIKeyTypeEnter || (key.commandKeyPressed && key.type == UIKeyTypeReturn)) {
-            if ([self _firstResponderCanPerformAction:@selector(commit:) withSender:key fromScreen:theScreen]) {
-                return [self _sendActionToFirstResponder:@selector(commit:) withSender:key fromScreen:theScreen];
-            }
-        }
+    NSDictionary *options = nil;
+    
+    if ([_delegate respondsToSelector:@selector(application:willFinishLaunchingOnDesktopWithOptions:)]) {
+        [_delegate application:self willFinishLaunchingOnDesktopWithOptions:options];
     }
     
-    return NO;
-}
-
-- (BOOL)_sendKeyboardNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
-{
-    if (![self isIgnoringInteractionEvents]) {
-        if (![self _sendGlobalKeyboardNSEvent:theNSEvent fromScreen:theScreen]) {
-            UIResponder *firstResponder = [self _firstResponderForScreen:theScreen];
-            
-            if (firstResponder) {
-                UIKey *key = [[[UIKey alloc] initWithNSEvent:theNSEvent] autorelease];
-                UIEvent *event = [[[UIEvent alloc] initWithEventType:UIEventTypeKeyPress] autorelease];
-                [event _setTimestamp:[theNSEvent timestamp]];
-                
-                [firstResponder keyPressed:key withEvent:event];
-                return ![event _isUnhandledKeyPressEvent];
-            }
-        }
-    }
-    
-    return NO;
-}
-
-- (void)_setCurrentEventTouchedViewWithNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
-{
-    const CGPoint screenLocation = ScreenLocationFromNSEvent(theScreen, theNSEvent);
-    UITouch *touch = [[_currentEvent allTouches] anyObject];
-    UIView *previousView = [touch.view retain];
-
-    [touch _setTouchedView:[theScreen _hitTest:screenLocation event:_currentEvent]];
-    
-    if (touch.view != previousView) {
-        [previousView mouseExitedView:previousView enteredView:touch.view withEvent:_currentEvent];
-        [touch.view mouseExitedView:previousView enteredView:touch.view withEvent:_currentEvent];
-    }
-    
-    [previousView release];
-}
-
-- (void)_sendMouseNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen
-{
-    UITouch *touch = [[_currentEvent allTouches] anyObject];
-    
-    [_currentEvent _setTimestamp:[theNSEvent timestamp]];
-
-    const NSTimeInterval timestamp = [theNSEvent timestamp];
-    const CGPoint screenLocation = ScreenLocationFromNSEvent(theScreen, theNSEvent);
-
-    // this is a special case to cancel any existing gestures (as far as the client code is concerned) if a mouse
-    // button is pressed mid-gesture. the reason is that sometimes when using a magic mouse a user will intend to
-    // click but if their finger moves against the surface ever so slightly, it will trigger a touch gesture to
-    // begin instead. without this, the fact that we're in a touch gesture phase effectively overrules everything
-    // else and clicks end up not getting registered. I don't think it's right to allow clicks to pass through when
-    // we're in a gesture state since that'd be somewhat like a multitouch scenerio on a real iOS device and we're
-    // not supporting anything like that at the moment.
-    if (TouchIsActiveGesture(touch) && ([theNSEvent type] == NSLeftMouseDown || [theNSEvent type] == NSRightMouseDown)) {
-        [touch _updatePhase:_UITouchPhaseGestureEnded screenLocation:screenLocation timestamp:timestamp];
-        [self sendEvent:_currentEvent];
-    }
-    
-    if (TouchIsActiveNonGesture(touch)) {
-        switch ([theNSEvent type]) {
-            case NSLeftMouseUp:
-                [touch _updatePhase:UITouchPhaseEnded screenLocation:screenLocation timestamp:timestamp];
-                [self sendEvent:_currentEvent];
-                break;
-                
-            case NSLeftMouseDragged:
-                [touch _updatePhase:UITouchPhaseMoved screenLocation:screenLocation timestamp:timestamp];
-                [self sendEvent:_currentEvent];
-                break;
-        }
-    } else if (TouchIsActiveGesture(touch)) {
-        switch ([theNSEvent type]) {
-            case NSEventTypeEndGesture:
-                [touch _updatePhase:_UITouchPhaseGestureEnded screenLocation:screenLocation timestamp:timestamp];
-                [self sendEvent:_currentEvent];
-                break;
-
-            case NSScrollWheel:
-                // when captured here, the scroll wheel event had to have been part of a gesture - in other words it is a
-                // touch device scroll event and is therefore mapped to UIPanGestureRecognizer.
-                [touch _updateGesture:_UITouchGesturePan screenLocation:screenLocation delta:ScrollDeltaFromNSEvent(theNSEvent) rotation:0 magnification:0 timestamp:timestamp];
-                [self sendEvent:_currentEvent];
-                break;
-                
-            case NSEventTypeMagnify:
-                [touch _updateGesture:_UITouchGesturePinch screenLocation:screenLocation delta:CGPointZero rotation:0 magnification:[theNSEvent magnification] timestamp:timestamp];
-                [self sendEvent:_currentEvent];
-                break;
-                
-            case NSEventTypeRotate:
-                [touch _updateGesture:_UITouchGestureRotation screenLocation:screenLocation delta:CGPointZero rotation:[theNSEvent rotation] magnification:0 timestamp:timestamp];
-                [self sendEvent:_currentEvent];
-                break;
-                
-            case NSEventTypeSwipe:
-                [touch _updateGesture:_UITouchGestureSwipe screenLocation:screenLocation delta:ScrollDeltaFromNSEvent(theNSEvent) rotation:0 magnification:0 timestamp:timestamp];
-                [self sendEvent:_currentEvent];
-                break;
-        }
-    } else if (![self isIgnoringInteractionEvents]) {
-        switch ([theNSEvent type]) {
-            case NSLeftMouseDown:
-                [touch _setPhase:UITouchPhaseBegan screenLocation:screenLocation tapCount:[theNSEvent clickCount] timestamp:timestamp];
-                [self _setCurrentEventTouchedViewWithNSEvent:theNSEvent fromScreen:theScreen];
-                [self sendEvent:_currentEvent];
-                break;
-
-            case NSEventTypeBeginGesture:
-                [touch _setPhase:_UITouchPhaseGestureBegan screenLocation:screenLocation tapCount:0 timestamp:timestamp];
-                [self _setCurrentEventTouchedViewWithNSEvent:theNSEvent fromScreen:theScreen];
-                [self sendEvent:_currentEvent];
-                break;
-
-            case NSScrollWheel:
-                // we should only get a scroll wheel event down here if it was done on a non-touch device or was the result of a momentum
-                // scroll, so they are treated differently so we can tell them apart later in UIPanGestureRecognizer and UIScrollWheelGestureRecognizer
-                // which are both used by UIScrollView.
-                [touch _setDiscreteGesture:_UITouchDiscreteGestureScrollWheel screenLocation:screenLocation tapCount:0 delta:ScrollDeltaFromNSEvent(theNSEvent) timestamp:timestamp];
-                [self _setCurrentEventTouchedViewWithNSEvent:theNSEvent fromScreen:theScreen];
-                [self sendEvent:_currentEvent];
-                break;
-
-            case NSRightMouseDown:
-                [touch _setDiscreteGesture:_UITouchDiscreteGestureRightClick screenLocation:screenLocation tapCount:[theNSEvent clickCount] delta:CGPointZero timestamp:timestamp];
-                [self _setCurrentEventTouchedViewWithNSEvent:theNSEvent fromScreen:theScreen];
-                [self sendEvent:_currentEvent];
-                break;
-
-            case NSMouseMoved:
-            case NSMouseEntered:
-            case NSMouseExited:
-                [touch _setDiscreteGesture:_UITouchDiscreteGestureMouseMove screenLocation:screenLocation tapCount:0 delta:ScrollDeltaFromNSEvent(theNSEvent) timestamp:timestamp];
-                [self _setCurrentEventTouchedViewWithNSEvent:theNSEvent fromScreen:theScreen];
-                [self sendEvent:_currentEvent];
-                break;
-        }
+    if ([_delegate respondsToSelector:@selector(application:willFinishLaunchingWithOptions:)]) {
+        [_delegate application:self willFinishLaunchingWithOptions:options];
     }
 }
 
-// this is used to cause an interruption/cancel of the current touches.
-// Use this when a modal UI element appears (such as a native popup menu), or when a UIPopoverController appears. It seems to make the most sense
-// to call _cancelTouches *after* the modal menu has been dismissed, as this causes UI elements to remain in their "pushed" state while the menu
-// is being displayed. If that behavior isn't desired, the simple solution is to present the menu from touchesEnded: instead of touchesBegan:.
-- (void)_cancelTouches
+- (void)_applicationDidFinishLaunching:(NSNotification *)note
 {
-    UITouch *touch = [[_currentEvent allTouches] anyObject];
-    const BOOL wasActiveTouch = TouchIsActive(touch);
-        
-    [touch _setTouchPhaseCancelled];
-        
-    if (wasActiveTouch) {
-        [self sendEvent:_currentEvent];
-    }
-}
+    NSDictionary *options = nil;
 
-// this sets the touches view property to nil (while retaining the window property setting)
-// this is used when a view is removed from its superview while it may have been the origin
-// of an active touch. after a view is removed, we don't want to deliver any more touch events
-// to it, but we still may need to route the touch itself for the sake of gesture recognizers
-// so we need to retain the touch's original window setting so that events can still be routed.
-//
-// note that the touch itself is not being cancelled here so its phase remains unchanged.
-// I'm not entirely certain if that's the correct thing to do, but I think it makes sense. The
-// touch itself has not gone anywhere - just the view that it first touched. That breaks the
-// delivery of the touch events themselves as far as the usual responder chain delivery is
-// concerned, but that appears to be what happens in the real UIKit when you remove a view out
-// from under an active touch.
-//
-// this whole thing is necessary because otherwise a gesture which may have been initiated over
-// some specific view would end up getting cancelled/failing if the view under it happens to be
-// removed. this is more common than you might expect. a UITableView that is not reusing rows
-// does exactly this as it scrolls - which coincidentally is how I found this bug in the first
-// place. :P
-- (void)_removeViewFromTouches:(UIView *)aView
-{
-    for (UITouch *touch in [_currentEvent allTouches]) {
-        if (touch.view == aView) {
-            [touch _removeFromView];
-        }
+    if ([_delegate respondsToSelector:@selector(application:didFinishLaunchingOnDesktopWithOptions:)]) {
+        [_delegate application:self didFinishLaunchingOnDesktopWithOptions:options];
     }
+
+    if ([_delegate respondsToSelector:@selector(application:didFinishLaunchingWithOptions:)]) {
+        [_delegate application:self didFinishLaunchingWithOptions:options];
+    } else if ([_delegate respondsToSelector:@selector(applicationDidFinishLaunching:)]) {
+        [_delegate applicationDidFinishLaunching:self];
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidFinishLaunchingNotification object:self];
 }
 
 - (void)_applicationWillTerminate:(NSNotification *)note
 {
+    if ([_delegate respondsToSelector:@selector(applicationWillTerminateOnDesktop:)]) {
+        [_delegate applicationWillTerminateOnDesktop:self];
+    }
+    
     if ([_delegate respondsToSelector:@selector(applicationWillTerminate:)]) {
         [_delegate applicationWillTerminate:self];
     }
@@ -827,6 +569,12 @@ static BOOL TouchIsActive(UITouch *touch)
     }
 }
 
+// this is only here because there's a real private API in Apple's UIKit that does something similar
+- (void)_performMemoryWarning
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidReceiveMemoryWarningNotification object:self];
+}
+
 @end
 
 
@@ -837,3 +585,65 @@ static BOOL TouchIsActive(UITouch *touch)
 }
 
 @end
+
+int UIApplicationMain(int argc, char *argv[], NSString *principalClassName, NSString *delegateClassName)
+{
+    @autoreleasepool {
+        UIApplication *app = principalClassName? [NSClassFromString(principalClassName) sharedApplication] : [UIApplication sharedApplication];
+        id<UIApplicationDelegate> delegate = delegateClassName? [NSClassFromString(delegateClassName) new] : nil;
+
+        [app setDelegate:delegate];
+
+        NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+        NSString *mainNibName = [infoDictionary objectForKey:@"NSMainNibFile"];
+        NSArray *topLevelObjects = nil;
+        NSNib *mainNib = [[NSNib alloc] initWithNibNamed:mainNibName bundle:[NSBundle mainBundle]];
+
+        [mainNib instantiateWithOwner:app topLevelObjects:&topLevelObjects];
+        
+        id<NSApplicationDelegate> backgroundTaskCatchingDelegate = [UINSApplicationDelegate new];
+        [[NSApplication sharedApplication] setDelegate:backgroundTaskCatchingDelegate];
+        [[NSApplication sharedApplication] run];
+        
+        // the only purpose of this is to confuse ARC. I'm not sure how else to do it.
+        // without this here, ARC thinks it can dealloc some stuff before we're really done
+        // with it, and since we're never really going to be done with this stuff, it has to
+        // be kept around as long as the app runs, but since the app never actually gets here
+        // it will never be executed but this prevents ARC from preemptively releasing things.
+        // meh.
+        [@[app, delegate, topLevelObjects, backgroundTaskCatchingDelegate] count];
+    }
+    
+    // this never happens
+    return 0;
+}
+
+void UIApplicationSendStationaryTouches(void)
+{
+    for (UIScreen *screen in [UIScreen screens]) {
+        [screen.UIKitView sendStationaryTouches];
+    }
+}
+
+void UIApplicationInterruptTouchesInView(UIView *view)
+{
+    // the intent here was that there needed to be a way to force-cancel touches to somewhat replicate situations that
+    // might arise on OSX that you could kinda/sorta pretend were phonecall-like events where you'd want a touch or
+    // gesture or something to cancel. these situations come up when things like popovers and modal menus are presented,
+    //
+    // If the need arises, my intent here is to send a notification or something on the *next* runloop to all UIKitViews
+    // attached to screens to tell them to kill off their current touch sequence (if any). It seems important that this
+    // happen on the *next* runloop cycle and not immediately because there were cases where the touch cancelling would
+    // happen in response to something like a touch ended event, so we can't just blindly cancel a touch while it's in
+    // the process of being evalulated since that could lead to very inconsistent behavior and really weird edge cases.
+    // by deferring the cancel, it would then be able to take the right action if the touch phase was something *other*
+    // than ended or cancelled by the time it attemped cancellation.
+
+    if (!view) {
+        for (UIScreen *screen in [UIScreen screens]) {
+            [screen.UIKitView performSelector:@selector(cancelTouchesInView:) withObject:nil afterDelay:0];
+        }
+    } else {
+        [view.window.screen.UIKitView performSelector:@selector(cancelTouchesInView:) withObject:view afterDelay:0];
+    }
+}

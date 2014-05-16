@@ -29,21 +29,14 @@
 
 #import "UIPanGestureRecognizer.h"
 #import "UIGestureRecognizerSubclass.h"
-#import "UITouch+UIPrivate.h"
-#import "UIEvent.h"
+#import "UITouchEvent.h"
+#import "UITouch.h"
 
-static UITouch *PanTouch(NSSet *touches)
-{
-    for (UITouch *touch in touches) {
-        if ([touch _gesture] == _UITouchGesturePan) {
-            return touch;
-        }
-    }
-    return nil;
+@implementation UIPanGestureRecognizer {
+    CGPoint _translation;
+    CGPoint _velocity;
+    NSTimeInterval _lastMovementTime;
 }
-
-@implementation UIPanGestureRecognizer
-@synthesize maximumNumberOfTouches=_maximumNumberOfTouches, minimumNumberOfTouches=_minimumNumberOfTouches;
 
 - (id)initWithTarget:(id)target action:(SEL)action
 {
@@ -95,39 +88,53 @@ static UITouch *PanTouch(NSSet *touches)
     return _velocity;
 }
 
-- (void)_gesturesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    UITouch *touch = PanTouch([event touchesForGestureRecognizer:self]);
+    if (self.state == UIGestureRecognizerStatePossible) {
+        if ([event isKindOfClass:[UITouchEvent class]]) {
+            UITouchEvent *touchEvent = (UITouchEvent *)event;
+            
+            if (touchEvent.touchEventGesture != UITouchEventGestureBegin) {
+                self.state = UIGestureRecognizerStateFailed;
+            }
+        }
+    }
+}
 
-    // note that we being the gesture here in the _gesturesMoved:withEvent: method instead of the _gesturesBegan:withEvent:
-    // method because the pan gesture cannot be recognized until the user moves their fingers a bit and OSX won't tag the
-    // gesture as a pan until that movement has actually happened so we have to do the checking here.
-    if (self.state == UIGestureRecognizerStatePossible && touch) {
-        [self setTranslation:[touch _delta] inView:touch.view];
-        _lastMovementTime = event.timestamp;
-        self.state = UIGestureRecognizerStateBegan;
-    } else if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
-        if (touch) {
-            if ([self _translate:[touch _delta] withEvent:event]) {
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if ([event isKindOfClass:[UITouchEvent class]]) {
+        UITouchEvent *touchEvent = (UITouchEvent *)event;
+        
+        if (touchEvent.touchEventGesture == UITouchEventGesturePan) {
+            if (self.state == UIGestureRecognizerStatePossible) {
+                _lastMovementTime = touchEvent.timestamp;
+                [self setTranslation:touchEvent.translation inView:touchEvent.touch.view];
+                self.state = UIGestureRecognizerStateBegan;
+            } else if ([self _translate:touchEvent.translation withEvent:event]) {
                 self.state = UIGestureRecognizerStateChanged;
             }
+        }
+    }
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
+        if ([event isKindOfClass:[UITouchEvent class]]) {
+            UITouchEvent *touchEvent = (UITouchEvent *)event;
+            [self _translate:touchEvent.translation withEvent:touchEvent];
+            self.state = UIGestureRecognizerStateEnded;
         } else {
             self.state = UIGestureRecognizerStateCancelled;
         }
     }
 }
 
-- (void)_gesturesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
     if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
-        UITouch *touch = PanTouch([event touchesForGestureRecognizer:self]);
-        
-        if (touch) {
-            [self _translate:[touch _delta] withEvent:event];
-            self.state = UIGestureRecognizerStateEnded;
-        } else {
-            self.state = UIGestureRecognizerStateCancelled;
-        }
+        self.state = UIGestureRecognizerStateCancelled;
     }
 }
 

@@ -51,21 +51,13 @@
 @end
 
 
-@interface UITabBar : UIView {
-    __unsafe_unretained id<UITabBarDelegate> _delegate;
-    NSArray *_items;
-    NSInteger _selectedItemIndex;
-}
-
-@property (nonatomic, assign) id<UITabBarDelegate>  delegate;
-@property (nonatomic, copy)   NSArray              *items;
-@property (nonatomic, assign) UITabBarItem         *selectedItem;
-
+@interface UITabBar : UIView
 - (void)setItems:(NSArray *)items animated:(BOOL)animated;
-
-// stub
 - (void)beginCustomizingItems:(NSArray *)items;
 - (BOOL)endCustomizingAnimated:(BOOL)animated;
 - (BOOL)isCustomizing;
 
+@property (nonatomic, assign) id<UITabBarDelegate> delegate;
+@property (nonatomic, copy) NSArray *items;
+@property (nonatomic, assign) UITabBarItem *selectedItem;
 @end

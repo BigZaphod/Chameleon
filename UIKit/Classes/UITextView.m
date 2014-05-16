@@ -45,9 +45,20 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 @end
 
 
-@implementation UITextView
-@synthesize dataDetectorTypes=_dataDetectorTypes, inputAccessoryView=_inputAccessoryView, inputView=_inputView;
-@dynamic delegate;
+@implementation UITextView {
+    UITextLayer *_textLayer;
+    
+    struct {
+        unsigned shouldBeginEditing : 1;
+        unsigned didBeginEditing : 1;
+        unsigned shouldEndEditing : 1;
+        unsigned didEndEditing : 1;
+        unsigned shouldChangeText : 1;
+        unsigned didChange : 1;
+        unsigned didChangeSelection : 1;
+    } _delegateHas;
+}
+@synthesize inputAccessoryView, inputView;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -68,10 +79,6 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 - (void)dealloc
 {
     [_textLayer removeFromSuperlayer];
-    [_textLayer release];
-    [_inputAccessoryView release];
-    [_inputView release];
-    [super dealloc];
 }
 
 - (void)layoutSubviews
@@ -326,6 +333,47 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 - (id)mouseCursorForEvent:(UIEvent *)event
 {
     return self.editable? [NSCursor IBeamCursor] : nil;
+}
+
+- (CGSize)sizeThatFits:(CGSize)size
+{
+    return [_textLayer sizeThatFits:size];
+}
+
+#pragma mark UITextInput
+
+- (void)setSelectedTextRange:(UITextRange *)range
+{
+}
+
+- (UITextRange *)selectedTextRange
+{
+    return nil;
+}
+
+- (UITextRange *)beginningOfDocument
+{
+    return nil;
+}
+
+- (UITextPosition *)endOfDocument
+{
+    return nil;
+}
+
+- (NSInteger)offsetFromPosition:(UITextPosition *)fromPosition toPosition:(UITextPosition *)toPosition
+{
+    return 0;
+}
+
+- (UITextPosition *)positionFromPosition:(UITextPosition *)position offset:(NSInteger)offset
+{
+    return nil;
+}
+
+- (UITextRange *)textRangeFromPosition:(UITextPosition *)fromPosition toPosition:(UITextPosition *)toPosition
+{
+    return nil;
 }
 
 @end

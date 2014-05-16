@@ -50,9 +50,14 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 }
 
 
-@implementation UIScroller
-@synthesize delegate=_delegate, contentOffset=_contentOffset, contentSize=_contentSize;
-@synthesize indicatorStyle=_indicatorStyle, alwaysVisible=_alwaysVisible;
+@implementation UIScroller {
+    CGFloat _dragOffset;
+    BOOL _draggingKnob;
+    BOOL _isVertical;
+    CGPoint _lastTouchLocation;
+    NSTimer *_holdTimer;
+    NSTimer *_fadeTimer;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -77,7 +82,7 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 
     [UIView animateWithDuration:0.33
                           delay:0
-                        options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionTransitionNone | UIViewAnimationOptionAllowUserInteraction
+                        options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionTransitionNone | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
                      animations:^(void) {
                          self.alpha = _UIScrollerMinimumAlpha;
                      }
@@ -97,7 +102,7 @@ CGFloat UIScrollerWidthForBoundsSize(CGSize boundsSize)
 
     [UIView animateWithDuration:0.33
                           delay:0
-                        options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionTransitionNone | UIViewAnimationOptionAllowUserInteraction
+                        options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionTransitionNone | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
                      animations:^(void) {
                          self.alpha = 1;
                      }

@@ -28,32 +28,43 @@
  */
 
 #import "UINavigationBar.h"
-#import "UINavigationBar+UIPrivate.h"
 #import "UIGraphics.h"
 #import "UIColor.h"
 #import "UILabel.h"
-#import "UINavigationItem.h"
 #import "UINavigationItem+UIPrivate.h"
 #import "UIFont.h"
 #import "UIImage+UIPrivate.h"
 #import "UIBarButtonItem.h"
 #import "UIButton.h"
 
-static const UIEdgeInsets kButtonEdgeInsets = {0,0,0,0};
+static const UIEdgeInsets kButtonEdgeInsets = {2,2,2,2};
 static const CGFloat kMinButtonWidth = 30;
 static const CGFloat kMaxButtonWidth = 200;
 static const CGFloat kMaxButtonHeight = 24;
+static const CGFloat kBarHeight = 28;
 
 static const NSTimeInterval kAnimationDuration = 0.33;
 
-typedef enum {
+typedef NS_ENUM(NSInteger, _UINavigationBarTransition) {
+    _UINavigationBarTransitionNone = 0,
     _UINavigationBarTransitionPush,
     _UINavigationBarTransitionPop,
-    _UINavigationBarTransitionReload		// explicitly tag reloads from changed UINavigationItem data
-} _UINavigationBarTransition;
+};
 
-@implementation UINavigationBar
-@synthesize tintColor=_tintColor, delegate=_delegate, items=_navStack;
+@implementation UINavigationBar {
+    NSMutableArray *_navStack;
+    
+    UIView *_leftView;
+    UIView *_centerView;
+    UIView *_rightView;
+    
+    struct {
+        unsigned shouldPushItem : 1;
+        unsigned didPushItem : 1;
+        unsigned shouldPopItem : 1;
+        unsigned didPopItem : 1;
+    } _delegateHas;
+}
 
 + (void)_setBarButtonSize:(UIView *)view
 {
@@ -64,14 +75,12 @@ typedef enum {
     view.frame = frame;
 }
 
-+ (UIButton *)_backButtonWithBarButtonItem:(UIBarButtonItem *)item
++ (UIButton *)_backButtonWithTitle:(NSString *)title
 {
-    if (!item) return nil;
-    
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [backButton setBackgroundImage:[UIImage _backButtonImage] forState:UIControlStateNormal];
     [backButton setBackgroundImage:[UIImage _highlightedBackButtonImage] forState:UIControlStateHighlighted];
-    [backButton setTitle:item.title forState:UIControlStateNormal];
+    [backButton setTitle:(title ?: @"Back") forState:UIControlStateNormal];
     backButton.titleLabel.font = [UIFont systemFontOfSize:11];
     backButton.contentEdgeInsets = UIEdgeInsetsMake(0,15,0,7);
     [backButton addTarget:nil action:@selector(_backButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -102,19 +111,21 @@ typedef enum {
 
 - (id)initWithFrame:(CGRect)frame
 {
+    frame.size.height = kBarHeight;
+    
     if ((self=[super initWithFrame:frame])) {
         _navStack = [[NSMutableArray alloc] init];
-        self.tintColor = [UIColor colorWithRed:21/255.f green:21/255.f blue:25/255.f alpha:1];
+        _barStyle = UIBarStyleDefault;
+        _tintColor = [UIColor colorWithRed:21/255.f green:21/255.f blue:25/255.f alpha:1];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_navigationItemDidChange:) name:UINavigationItemDidChange object:nil];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [self.topItem _setNavigationBar: nil];
-    [_navStack release];
-    [_tintColor release];
-    [super dealloc];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)setDelegate:(id)newDelegate
@@ -141,11 +152,6 @@ typedef enum {
     [self popNavigationItemAnimated:YES];
 }
 
-- (void)_removeAnimatedViews:(NSArray *)views
-{
-    [views makeObjectsPerformSelector:@selector(removeFromSuperview)];
-}
-
 - (void)_setViewsWithTransition:(_UINavigationBarTransition)transition animated:(BOOL)animated
 {
     {
@@ -164,12 +170,6 @@ typedef enum {
                 moveLeftBy *= -1.f;
             }
             
-            [UIView animateWithDuration:kAnimationDuration
-                             animations:^(void) {
-                                 if (_leftView)     _leftView.frame = CGRectOffset(_leftView.frame, moveLeftBy, 0);
-                                 if (_centerView)   _centerView.frame = CGRectOffset(_centerView.frame, moveCenterBy, 0);
-                             }];
-            
             [UIView animateWithDuration:kAnimationDuration * 0.8
                                   delay:kAnimationDuration * 0.2
                                 options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionNone
@@ -180,12 +180,17 @@ typedef enum {
                              }
                              completion:NULL];
             
-            [self performSelector:@selector(_removeAnimatedViews:) withObject:previousViews afterDelay:kAnimationDuration];
+            [UIView animateWithDuration:kAnimationDuration
+                             animations:^(void) {
+                                 if (_leftView)     _leftView.frame = CGRectOffset(_leftView.frame, moveLeftBy, 0);
+                                 if (_centerView)   _centerView.frame = CGRectOffset(_centerView.frame, moveCenterBy, 0);
+                             }
+                             completion:^(BOOL finished) {
+                                 [previousViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+                             }];
         } else {
-            [self _removeAnimatedViews:previousViews];
+            [previousViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
         }
-        
-        [previousViews release];
     }
     
     UINavigationItem *topItem = self.topItem;
@@ -193,17 +198,13 @@ typedef enum {
     if (topItem) {
         UINavigationItem *backItem = self.backItem;
         
-        // update weak references
-        [backItem _setNavigationBar: nil];
-        [topItem _setNavigationBar: self];
-
         CGRect leftFrame = CGRectZero;
         CGRect rightFrame = CGRectZero;
         
         if (backItem) {
-            _leftView = [isa _backButtonWithBarButtonItem:backItem.backBarButtonItem];
+            _leftView = [[self class] _backButtonWithTitle:backItem.backBarButtonItem.title ?: backItem.title];
         } else {
-            _leftView = [isa _viewWithBarButtonItem:topItem.leftBarButtonItem];
+            _leftView = [[self class] _viewWithBarButtonItem:topItem.leftBarButtonItem];
         }
 
         if (_leftView) {
@@ -213,7 +214,7 @@ typedef enum {
             [self addSubview:_leftView];
         }
 
-        _rightView = [isa _viewWithBarButtonItem:topItem.rightBarButtonItem];
+        _rightView = [[self class] _viewWithBarButtonItem:topItem.rightBarButtonItem];
 
         if (_rightView) {
             _rightView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
@@ -227,7 +228,7 @@ typedef enum {
         _centerView = topItem.titleView;
 
         if (!_centerView) {
-            UILabel *titleLabel = [[[UILabel alloc] init] autorelease];
+            UILabel *titleLabel = [[UILabel alloc] init];
             titleLabel.text = topItem.title;
             titleLabel.textAlignment = UITextAlignmentCenter;
             titleLabel.backgroundColor = [UIColor clearColor];
@@ -236,10 +237,28 @@ typedef enum {
             _centerView = titleLabel;
         }
 
-        const CGFloat centerPadding = MAX(leftFrame.size.width, rightFrame.size.width);
+        CGRect centerFrame = CGRectZero;
+        
+        centerFrame.origin.y = kButtonEdgeInsets.top;
+        centerFrame.size.height = kMaxButtonHeight;
+
+        if (_leftView && _rightView) {
+            centerFrame.origin.x = CGRectGetMaxX(leftFrame) + kButtonEdgeInsets.left;
+            centerFrame.size.width = CGRectGetMinX(rightFrame) - kButtonEdgeInsets.right - centerFrame.origin.x;
+        } else if (_leftView) {
+            centerFrame.origin.x = CGRectGetMaxX(leftFrame) + kButtonEdgeInsets.left;
+            centerFrame.size.width = CGRectGetWidth(self.bounds) - centerFrame.origin.x - CGRectGetWidth(leftFrame) - kButtonEdgeInsets.right - kButtonEdgeInsets.right;
+        } else if (_rightView) {
+            centerFrame.origin.x = CGRectGetWidth(rightFrame) + kButtonEdgeInsets.left + kButtonEdgeInsets.left;
+            centerFrame.size.width = CGRectGetWidth(self.bounds) - centerFrame.origin.x - CGRectGetWidth(rightFrame) - kButtonEdgeInsets.right - kButtonEdgeInsets.right;
+        } else {
+            centerFrame.origin.x = kButtonEdgeInsets.left;
+            centerFrame.size.width = CGRectGetWidth(self.bounds) - kButtonEdgeInsets.left - kButtonEdgeInsets.right;
+        }
+        
         _centerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        _centerView.frame = CGRectMake(kButtonEdgeInsets.left+centerPadding,kButtonEdgeInsets.top,self.bounds.size.width-kButtonEdgeInsets.right-kButtonEdgeInsets.left-centerPadding-centerPadding,kMaxButtonHeight);
-        [self addSubview:_centerView];
+        _centerView.frame = centerFrame;
+        [self insertSubview:_centerView atIndex:0];
 
         if (animated) {
             CGFloat moveCenterBy = self.bounds.size.width - ((_centerView)? _centerView.frame.origin.x : 0);
@@ -284,8 +303,7 @@ typedef enum {
 - (void)setTintColor:(UIColor *)newColor
 {
     if (newColor != _tintColor) {
-        [_tintColor release];
-        _tintColor = [newColor retain];
+        _tintColor = newColor;
         [self setNeedsDisplay];
     }
 }
@@ -302,15 +320,6 @@ typedef enum {
 - (void)setItems:(NSArray *)items
 {
     [self setItems:items animated:NO];
-}
-
-- (UIBarStyle)barStyle
-{
-    return UIBarStyleDefault;
-}
-
-- (void)setBarStyle:(UIBarStyle)barStyle
-{
 }
 
 - (void)pushNavigationItem:(UINavigationItem *)item animated:(BOOL)animated
@@ -343,7 +352,6 @@ typedef enum {
         }
         
         if (shouldPop) {
-            [previousItem retain];
             [_navStack removeObject:previousItem];
             [self _setViewsWithTransition:_UINavigationBarTransitionPop animated:animated];
             
@@ -351,39 +359,21 @@ typedef enum {
                 [_delegate navigationBar:self didPopItem:previousItem];
             }
             
-            return [previousItem autorelease];
+            return previousItem;
         }
     }
     
     return nil;
 }
 
-- (void)_updateNavigationItem:(UINavigationItem *)item animated:(BOOL)animated	// ignored for now
+- (void)_navigationItemDidChange:(NSNotification *)note
 {
-    // let's sanity-check that the item is supposed to be talking to us
-    if (item != self.topItem) {
-        [item _setNavigationBar:nil];
-        return;
-    }
-    
-    // this is going to remove & re-add all the item views. Not ideal, but simple enough that it's worth profiling.
-    // next step is to add animation support-- that will require changing _setViewsWithTransition:animated:
-    //  such that it won't perform any coordinate translations, only fade in/out
-    
-    // don't just fire the damned thing-- set a flag & mark as needing layout
-    if (_navigationBarFlags.reloadItem == 0) {
-        _navigationBarFlags.reloadItem = 1;
-        [self setNeedsLayout];
-    }
-}
-
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    
-    if (_navigationBarFlags.reloadItem) {
-        _navigationBarFlags.reloadItem = 0;
-        [self _setViewsWithTransition:_UINavigationBarTransitionReload animated:NO];
+    if ([note object] == self.topItem || [note object] == self.backItem) {
+        // this is going to remove & re-add all the item views. Not ideal, but simple enough that it's worth profiling.
+        // next step is to add animation support-- that will require changing _setViewsWithTransition:animated:
+        //  such that it won't perform any coordinate translations, only fade in/out
+        
+        [self _setViewsWithTransition:_UINavigationBarTransitionNone animated:NO];
     }
 }
 
@@ -395,8 +385,32 @@ typedef enum {
     // so that it actually doesn "tint" the image instead of define it. That'd probably work better with the bottom line coloring and stuff, too, but
     // for now hardcoding stuff works well enough.
     
-    [_tintColor setFill];
+    [self.tintColor setFill];
     UIRectFill(bounds);
+}
+
+- (void)setBackgroundImage:(UIImage *)backgroundImage forBarMetrics:(UIBarMetrics)barMetrics
+{
+}
+
+- (UIImage *)backgroundImageForBarMetrics:(UIBarMetrics)barMetrics
+{
+    return nil;
+}
+
+- (void)setTitleVerticalPositionAdjustment:(CGFloat)adjustment forBarMetrics:(UIBarMetrics)barMetrics
+{
+}
+
+- (CGFloat)titleVerticalPositionAdjustmentForBarMetrics:(UIBarMetrics)barMetrics
+{
+    return 0;
+}
+
+- (CGSize)sizeThatFits:(CGSize)size
+{
+    size.height = kBarHeight;
+    return size;
 }
 
 @end

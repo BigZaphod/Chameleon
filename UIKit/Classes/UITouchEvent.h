@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, The Iconfactory. All rights reserved.
+ * Copyright (c) 2013, The Iconfactory. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,20 +27,39 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIApplication.h"
+#import "UIEvent.h"
 
-@class UIWindow, UIScreen, NSEvent, UIPopoverController;
+@class UITouch;
 
-@interface UIApplication (UIPrivate)
-- (void)_setKeyWindow:(UIWindow *)newKeyWindow;
-- (void)_windowDidBecomeVisible:(UIWindow *)theWindow;
-- (void)_windowDidBecomeHidden:(UIWindow *)theWindow;
-- (BOOL)_sendGlobalKeyboardNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen;	// checks for CMD-Return/Enter and returns YES if it was handled, NO if not
-- (BOOL)_sendKeyboardNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen;		// returns YES if it was handled within UIKit (first calls _sendGlobalKeyboardNSEvent:fromScreen:)
-- (void)_sendMouseNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen;
-- (void)_cancelTouches;
-- (void)_removeViewFromTouches:(UIView *)aView;
-- (UIResponder *)_firstResponderForScreen:(UIScreen *)screen;
-- (BOOL)_firstResponderCanPerformAction:(SEL)action withSender:(id)sender fromScreen:(UIScreen *)theScreen;
-- (BOOL)_sendActionToFirstResponder:(SEL)action withSender:(id)sender fromScreen:(UIScreen *)theScreen;
+typedef NS_ENUM(NSInteger, UITouchEventGesture) {
+    UITouchEventGestureNone,        // a normal click-drag touch (not a standard OSX gesture)
+
+    // handle standard OSX gestures
+    UITouchEventGestureBegin,       // when OSX sends the begin gesture event, but hasn't identified the exact gesture yet
+    UITouchEventGesturePinch,
+    UITouchEventGestureRotate,
+    UITouchEventGesturePan,
+    
+    // discrete gestures that violate all the rules
+    UITouchEventGestureScrollWheel,
+    UITouchEventGestureRightClick,
+    UITouchEventGestureMouseMove,
+    UITouchEventGestureMouseEntered,
+    UITouchEventGestureMouseExited,
+    UITouchEventGestureSwipe,
+};
+
+@interface UITouchEvent : UIEvent
+- (id)initWithTouch:(UITouch *)touch;
+- (void)endTouchEvent;
+
+@property (nonatomic, readonly, strong) UITouch *touch;
+@property (nonatomic, readwrite, assign) UITouchEventGesture touchEventGesture;     // default UITouchEventGestureNone
+@property (nonatomic, readonly) BOOL isDiscreteGesture;     // YES for the mouse UITouchEventGesture types
+
+// used for the various OSX gestures
+@property (nonatomic, readwrite, assign) CGPoint translation;
+@property (nonatomic, readwrite, assign) CGFloat rotation;
+@property (nonatomic, readwrite, assign) CGFloat magnification;
+
 @end

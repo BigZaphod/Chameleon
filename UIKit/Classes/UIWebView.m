@@ -31,14 +31,20 @@
 #import "UIViewAdapter.h"
 #import <WebKit/WebKit.h>
 
-@implementation UIWebView
-@synthesize request=_request, delegate=_delegate, dataDetectorTypes=_dataDetectorTypes, scalesPageToFit=_scalesPageToFit;
+@implementation UIWebView {
+    WebView *_webView;
+    UIViewAdapter *_webViewAdapter;
+    
+    struct {
+        unsigned shouldStartLoadWithRequest : 1;
+        unsigned didFailLoadWithError : 1;
+        unsigned didFinishLoad : 1;
+    } _delegateHas;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
     if ((self=[super initWithFrame:frame])) {
-        _scalesPageToFit = NO;
-        
         _webView = [(WebView *)[WebView alloc] initWithFrame:NSRectFromCGRect(self.bounds)];
         [_webView setAutoresizingMask:(NSViewWidthSizable|NSViewHeightSizable)];
         [_webView setPolicyDelegate:self];
@@ -60,9 +66,6 @@
     [_webView setPolicyDelegate:nil];
     [_webView setFrameLoadDelegate:nil];
     [_webView setUIDelegate:nil];
-    [_webViewAdapter release];
-    [_webView release];
-    [super dealloc];
 }
 
 - (void)layoutSubviews
@@ -87,8 +90,7 @@
 - (void)loadRequest:(NSURLRequest *)request
 {
     if (request != _request) {
-        [_request release];
-        _request = [request retain];
+        _request = request;
     }
 
     [[_webView mainFrame] loadRequest:_request];
@@ -146,6 +148,11 @@
 // The only reason this is here is because Flamingo currently tries a hack to get at the web view's internals UIScrollView to get
 // the desk ad view to stop stealing the scrollsToTop event. Lame, yes...
 - (id)valueForUndefinedKey:(NSString *)key
+{
+    return nil;
+}
+
+- (UIScrollView *)scrollView
 {
     return nil;
 }

@@ -73,7 +73,7 @@
 
 - (id)initWithData:(NSData *)data
 {
-    return [self _initWithRepresentations:[NSArray arrayWithObjects:[[[UIImageRep alloc] initWithData:data] autorelease], nil]];
+    return [self _initWithRepresentations:[NSArray arrayWithObjects:[[UIImageRep alloc] initWithData:data], nil]];
 }
 
 - (id)initWithCGImage:(CGImageRef)imageRef
@@ -83,33 +83,28 @@
 
 - (id)initWithCGImage:(CGImageRef)imageRef scale:(CGFloat)scale orientation:(UIImageOrientation)orientation
 {
-    return [self _initWithRepresentations:[NSArray arrayWithObjects:[[[UIImageRep alloc] initWithCGImage:imageRef scale:scale] autorelease], nil]];
+    return [self _initWithRepresentations:[NSArray arrayWithObjects:[[UIImageRep alloc] initWithCGImage:imageRef scale:scale], nil]];
 }
 
-- (void)dealloc
-{
-    [_representations release];
-    [super dealloc];
-}
 
 + (UIImage *)imageWithData:(NSData *)data
 {
-    return [[[self alloc] initWithData:data] autorelease];
+    return [[self alloc] initWithData:data];
 }
 
 + (UIImage *)imageWithContentsOfFile:(NSString *)path
 {
-    return [[[self alloc] initWithContentsOfFile:path] autorelease];
+    return [[self alloc] initWithContentsOfFile:path];
 }
 
 + (UIImage *)imageWithCGImage:(CGImageRef)imageRef
 {
-    return [[[self alloc] initWithCGImage:imageRef] autorelease];
+    return [[self alloc] initWithCGImage:imageRef];
 }
 
 + (UIImage *)imageWithCGImage:(CGImageRef)imageRef scale:(CGFloat)scale orientation:(UIImageOrientation)orientation
 {
-    return [[[self alloc] initWithCGImage:imageRef scale:scale orientation:orientation] autorelease];
+    return [[self alloc] initWithCGImage:imageRef scale:scale orientation:orientation];
 }
 
 - (UIImage *)stretchableImageWithLeftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight
@@ -119,12 +114,17 @@
     if ((leftCapWidth == 0 && topCapHeight == 0) || (leftCapWidth >= size.width && topCapHeight >= size.height)) {
         return self;
     } else if (leftCapWidth <= 0 || leftCapWidth >= size.width) {
-        return [[[UIThreePartImage alloc] initWithRepresentations:[self _representations] capSize:MIN(topCapHeight,size.height) vertical:YES] autorelease];
+        return [[UIThreePartImage alloc] initWithRepresentations:[self _representations] capSize:MIN(topCapHeight,size.height) vertical:YES];
     } else if (topCapHeight <= 0 || topCapHeight >= size.height) {
-        return [[[UIThreePartImage alloc] initWithRepresentations:[self _representations] capSize:MIN(leftCapWidth,size.width) vertical:NO] autorelease];
+        return [[UIThreePartImage alloc] initWithRepresentations:[self _representations] capSize:MIN(leftCapWidth,size.width) vertical:NO];
     } else {
-        return [[[UINinePartImage alloc] initWithRepresentations:[self _representations] leftCapWidth:leftCapWidth topCapHeight:topCapHeight] autorelease];
+        return [[UINinePartImage alloc] initWithRepresentations:[self _representations] leftCapWidth:leftCapWidth topCapHeight:topCapHeight];
     }
+}
+
+- (UIImage *)resizableImageWithCapInsets:(UIEdgeInsets)capInsets
+{
+    return [self stretchableImageWithLeftCapWidth:capInsets.left topCapHeight:capInsets.top];
 }
 
 - (CGSize)size
@@ -133,8 +133,8 @@
     UIImageRep *rep = [_representations lastObject];
     const CGSize repSize = rep.imageSize;
     const CGFloat scale = rep.scale;
-    size.width = repSize.width / scale;
-    size.height = repSize.height / scale;
+    size.width = floorf(repSize.width / scale);
+    size.height = floorf(repSize.height / scale);
     return size;
 }
 
@@ -212,16 +212,10 @@ NSData *UIImageJPEGRepresentation(UIImage *image, CGFloat compressionQuality)
 {
     CFMutableDataRef data = CFDataCreateMutable(NULL, 0);
     CGImageDestinationRef dest = CGImageDestinationCreateWithData(data, kUTTypeJPEG, 1, NULL);
-    CFNumberRef quality = CFNumberCreate(NULL, kCFNumberCGFloatType, &compressionQuality);
-    CFStringRef keys[] = { kCGImageDestinationLossyCompressionQuality };
-    CFTypeRef values[] = { quality };
-    CFDictionaryRef properties = CFDictionaryCreate(NULL, (const void **)&keys, (const void **)&values, 1, NULL, NULL);
-    CGImageDestinationAddImage(dest, image.CGImage, properties);
-    CFRelease(properties);
-    CFRelease(quality);
+    CGImageDestinationAddImage(dest, image.CGImage, (__bridge CFDictionaryRef)@{(__bridge NSString *)kCGImageDestinationLossyCompressionQuality : @(compressionQuality)});
     CGImageDestinationFinalize(dest);
     CFRelease(dest);
-    return [(__bridge NSData *)data autorelease];
+    return (__bridge_transfer NSMutableData *)data;
 }
 
 NSData *UIImagePNGRepresentation(UIImage *image)
@@ -231,5 +225,5 @@ NSData *UIImagePNGRepresentation(UIImage *image)
     CGImageDestinationAddImage(dest, image.CGImage, NULL);
     CGImageDestinationFinalize(dest);
     CFRelease(dest);
-    return [(__bridge NSData *)data autorelease];
+    return (__bridge_transfer NSMutableData *)data;
 }

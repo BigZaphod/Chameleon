@@ -27,16 +27,10 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <Foundation/Foundation.h>
+#import "UIAppearanceProxy.h"
 
-@interface UIAppearanceProperty : NSObject <NSCopying> {
-    SEL cmd;
-    NSArray *axisValues;
-}
-
-- (id)initWithSelector:(SEL)sel axisValues:(NSArray *)values;
-- (void)invokeSetterUsingTarget:(id)target withValue:(NSValue *)value;
-
-@property (nonatomic, readonly) NSArray *axisValues;
-
+@interface UIAppearanceProperty : NSObject
+- (id)initWithInvocation:(NSInvocation *)setterInvocation;
+- (void)invokeUsingTarget:(id)target;
+- (void)setReturnValueForInvocation:(NSInvocation *)getterInvocation;
 @end

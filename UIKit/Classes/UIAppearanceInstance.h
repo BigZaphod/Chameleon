@@ -35,8 +35,8 @@
 + (id)appearance;
 + (id)appearanceWhenContainedIn:(Class <UIAppearanceContainer>)containerClass, ...;
 
-- (void)_appearancePropertyDidChange:(UIAppearanceProperty *)property;
-- (id)_appearanceContainer;
-- (void)_updateAppearanceIfNeeded;
-- (void)_setAppearanceNeedsUpdate;
+- (id)_UIAppearanceContainer;
+- (void)_UIAppearancePropertyDidChange:(id)property;
+- (void)_UIAppearanceUpdateIfNeeded;
+- (void)_UIAppearanceSetNeedsUpdate;
 @end

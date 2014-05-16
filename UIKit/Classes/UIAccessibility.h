@@ -78,3 +78,14 @@ extern UIAccessibilityNotifications UIAccessibilityPageScrolledNotification;
 
 extern void UIAccessibilityPostNotification(UIAccessibilityNotifications notification, id argument);
 extern BOOL UIAccessibilityIsVoiceOverRunning(void);
+
+extern NSString *const UIAccessibilityVoiceOverStatusChanged;
+
+typedef NS_ENUM(NSInteger, UIAccessibilityScrollDirection) {
+    UIAccessibilityScrollDirectionRight = 1,
+    UIAccessibilityScrollDirectionLeft,
+    UIAccessibilityScrollDirectionUp,
+    UIAccessibilityScrollDirectionDown,
+    UIAccessibilityScrollDirectionNext,
+    UIAccessibilityScrollDirectionPrevious
+};

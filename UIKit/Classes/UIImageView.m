@@ -47,9 +47,9 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
     return CGImages;
 }
 
-@implementation UIImageView
-@synthesize image=_image, animationImages=_animationImages, animationDuration=_animationDuration, highlightedImage=_highlightedImage, highlighted=_highlighted;
-@synthesize animationRepeatCount=_animationRepeatCount, highlightedAnimationImages=_highlightedAnimationImages;
+@implementation UIImageView {
+    _UIImageViewDrawMode _drawMode;
+}
 
 + (BOOL)_instanceImplementsDrawRect
 {
@@ -81,14 +81,6 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
     return self;
 }
 
-- (void)dealloc
-{
-    [_animationImages release];
-    [_image release];
-    [_highlightedImage release];
-    [_highlightedAnimationImages release];
-    [super dealloc];
-}
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
@@ -110,8 +102,7 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
 - (void)setImage:(UIImage *)newImage
 {
     if (_image != newImage) {
-        [_image release];
-        _image = [newImage retain];
+        _image = newImage;
         if (!_highlighted || !_highlightedImage) {
             [self setNeedsDisplay];
         }
@@ -121,8 +112,7 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
 - (void)setHighlightedImage:(UIImage *)newImage
 {
     if (_highlightedImage != newImage) {
-        [_highlightedImage release];
-        _highlightedImage = [newImage retain];
+        _highlightedImage = newImage;
         if (_highlighted) {
             [self setNeedsDisplay];
         }
@@ -134,7 +124,7 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
     return (_image.topCapHeight > 0 || _image.leftCapWidth > 0);
 }
 
-- (void)_setDrawMode:(NSInteger)drawMode
+- (void)_setDrawMode:(_UIImageViewDrawMode)drawMode
 {
     if (drawMode != _drawMode) {
         _drawMode = drawMode;

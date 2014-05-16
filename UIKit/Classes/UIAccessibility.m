@@ -48,6 +48,7 @@ UIAccessibilityNotifications UIAccessibilityLayoutChangedNotification = 1001;
 UIAccessibilityNotifications UIAccessibilityAnnouncementNotification = 1002;
 UIAccessibilityNotifications UIAccessibilityPageScrolledNotification = 1003;
 
+NSString *const UIAccessibilityVoiceOverStatusChanged = @"UIAccessibilityVoiceOverStatusChanged";
 
 @implementation NSObject (UIAccessibility)
 - (BOOL)isAccessibilityElement

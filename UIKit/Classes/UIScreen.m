@@ -28,18 +28,16 @@
  */
 
 #import "UIScreen.h"
-#import "UIScreenAppKitIntegration.h"
 #import "UIImage+UIPrivate.h"
 #import "UIImageView.h"
 #import "UIApplication.h"
-#import <QuartzCore/QuartzCore.h>
-#import <AppKit/AppKit.h>
 #import "UIViewLayoutManager.h"
-#import "UIColor.h"
 #import "UIScreenMode+UIPrivate.h"
 #import "UIWindow.h"
 #import "UIKitView.h"
 #import "UIView+UIPrivate.h"
+#import <AppKit/AppKit.h>
+#import <QuartzCore/QuartzCore.h>
 
 NSString *const UIScreenDidConnectNotification = @"UIScreenDidConnectNotification";
 NSString *const UIScreenDidDisconnectNotification = @"UIScreenDidDisconnectNotification";
@@ -47,8 +45,13 @@ NSString *const UIScreenModeDidChangeNotification = @"UIScreenModeDidChangeNotif
 
 NSMutableArray *_allScreens = nil;
 
-@implementation UIScreen
-@synthesize currentMode=_currentMode;
+@implementation UIScreen {
+    UIImageView *_grabber;
+    CALayer *_layer;
+    NSMutableArray *_windows;
+    __weak UIKitView *_UIKitView;
+    __weak UIWindow *_keyWindow;
+}
 
 + (void)initialize
 {
@@ -76,9 +79,12 @@ NSMutableArray *_allScreens = nil;
 - (id)init
 {
     if ((self = [super init])) {
-        _layer = [[CALayer layer] retain];
+        _layer = [CALayer layer];
         _layer.delegate = self;		// required to get the magic of the UIViewLayoutManager...
         _layer.layoutManager = [UIViewLayoutManager layoutManager];
+        
+        _windows = [[NSMutableArray alloc] init];
+        _brightness = 1;
         
         _grabber = [[UIImageView alloc] initWithImage:[UIImage _windowResizeGrabberImage]];
         _grabber.layer.zPosition = 10000;
@@ -97,12 +103,6 @@ NSMutableArray *_allScreens = nil;
 
     [_grabber.layer removeFromSuperlayer];
     [_layer removeFromSuperlayer];
-
-    [_grabber release];
-    [_layer release];
-    [_currentMode release];
-    
-    [super dealloc];
 }
 
 - (CGFloat)scale
@@ -112,16 +112,6 @@ NSMutableArray *_allScreens = nil;
     } else {
         return 1;
     }
-}
-
-- (void)_setPopoverController:(UIPopoverController *)controller
-{
-    _popoverController = controller;
-}
-
-- (UIPopoverController *)_popoverController
-{
-    return _popoverController;
 }
 
 - (BOOL)_hasResizeIndicator
@@ -189,11 +179,7 @@ NSMutableArray *_allScreens = nil;
 
 - (void)_NSScreenDidChange
 {
-    for (UIWindow *window in [[UIApplication sharedApplication].windows reverseObjectEnumerator]) {
-        if (window.screen == self) {
-            [window _didMoveToScreen];
-        }
-    }
+    [self.windows makeObjectsPerformSelector:@selector(_didMoveToScreen)];
 }
 
 - (void)_setUIKitView:(id)theView
@@ -217,24 +203,44 @@ NSMutableArray *_allScreens = nil;
     }
 }
 
+- (UIKitView *)UIKitView
+{
+    return _UIKitView;
+}
+
 - (NSArray *)availableModes
 {
     return (self.currentMode)? [NSArray arrayWithObject:self.currentMode] : nil;
 }
 
-- (UIView *)_hitTest:(CGPoint)clickPoint event:(UIEvent *)theEvent
+- (void)_addWindow:(UIWindow *)window
 {
-    for (UIWindow *window in [[UIApplication sharedApplication].windows reverseObjectEnumerator]) {
-        if (window.screen == self) {
-            CGPoint windowPoint = [window convertPoint:clickPoint fromWindow:nil];
-            UIView *clickedView = [window hitTest:windowPoint withEvent:theEvent];
-            if (clickedView) {
-                return clickedView;
-            }
-        }
+    [_windows addObject:[NSValue valueWithNonretainedObject:window]];
+}
+
+- (void)_removeWindow:(UIWindow *)window
+{
+    if (_keyWindow == window) {
+        _keyWindow = nil;
     }
-    
-    return nil;
+
+    [_windows removeObject:[NSValue valueWithNonretainedObject:window]];
+}
+
+- (NSArray *)windows
+{
+    return [_windows valueForKey:@"nonretainedObjectValue"];
+}
+
+- (UIWindow *)keyWindow
+{
+    return _keyWindow;
+}
+
+- (void)_setKeyWindow:(UIWindow *)window
+{
+    NSAssert([self.windows containsObject:window], @"cannot set key window to a window not on this screen");
+    _keyWindow = window;
 }
 
 - (NSString *)description

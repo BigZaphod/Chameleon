@@ -29,35 +29,29 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIEventType) {
     UIEventTypeTouches,
     UIEventTypeMotion,
-    UIEventTypeKeyPress			// AppKitIntegration
-} UIEventType;
+    
+    // nonstandard
+    UIEventTypeKeyboard,
+    UIEventTypeAction
+};
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIEventSubtype) {
     UIEventSubtypeNone        = 0,
     UIEventSubtypeMotionShake = 1,
-} UIEventSubtype;
+};
 
-@class UITouch, UIWindow, UIView, UIGestureRecognizer;
+@class UIWindow, UIView, UIGestureRecognizer;
 
-@interface UIEvent : NSObject {
-@private
-    UIEventType _type;
-    UITouch *_touch;
-    NSTimeInterval _timestamp;
-    BOOL _unhandledKeyPressEvent;
-}
-
-@property (nonatomic, readonly) NSTimeInterval timestamp;
-
+@interface UIEvent : NSObject
 - (NSSet *)allTouches;
 - (NSSet *)touchesForView:(UIView *)view;
 - (NSSet *)touchesForWindow:(UIWindow *)window;
 - (NSSet *)touchesForGestureRecognizer:(UIGestureRecognizer *)gesture;
 
+@property (nonatomic, readonly) NSTimeInterval timestamp;
 @property (nonatomic, readonly) UIEventType type;
 @property (nonatomic, readonly) UIEventSubtype subtype;
-
 @end

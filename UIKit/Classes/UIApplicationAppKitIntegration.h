@@ -54,3 +54,9 @@ extern NSString *const UIApplicationNetworkActivityIndicatorChangedNotification;
 - (NSApplicationTerminateReply)terminateApplicationBeforeDate:(NSDate *)timeoutDate;
 
 @end
+
+// these are probably more internal the meant to be used publically, but just in case... here they are.
+extern void UIApplicationInterruptTouchesInView(UIView *view);
+extern void UIApplicationSendStationaryTouches(void);
+
+

@@ -30,7 +30,10 @@
 #import "UIThreePartImage.h"
 #import "UIImageRep.h"
 
-@implementation UIThreePartImage
+@implementation UIThreePartImage {
+    NSInteger _capSize;
+    BOOL _vertical;
+}
 
 - (id)initWithRepresentations:(NSArray *)reps capSize:(NSInteger)capSize vertical:(BOOL)isVertical
 {

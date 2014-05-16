@@ -134,20 +134,24 @@ static IMP GetOriginalMethodIMP(id self, SEL cmd)
 // is the reason we have to go through all this trouble overriding stuff in the first place!
 static void DidSetPropertyWithAxisValues(id self, SEL cmd, NSInteger numberOfAxisValues, NSInteger *axisValues)
 {
-    NSMutableArray *values = [NSMutableArray arrayWithCapacity:numberOfAxisValues];
+    NSMutableArray *propertyKey = [NSMutableArray array];
 
+    // IMPORTANT! Must build the property key the same way we do down in -forwardInvocation:
     for (NSInteger i=0; i<numberOfAxisValues; i++) {
-        [values addObject:[NSValue valueWithBytes:&axisValues[i] objCType:@encode(NSInteger)]];
+        [propertyKey addObject:@(axisValues[i])];
     }
-    
-    [self _appearancePropertyDidChange:[[[UIAppearanceProperty alloc] initWithSelector:cmd axisValues:values] autorelease]];
+
+    [propertyKey addObject:NSStringFromSelector(cmd)];
+
+    [self _UIAppearancePropertyDidChange:propertyKey];
 }
 
 // this evil macro is used to generate type-specific setter overrides
 // it currently only supports up to 4 axis values. if more are needed, just add more cases here following the pattern. easy!
 #define UIAppearanceSetterOverride(TYPE) \
 static void UIAppearanceSetterOverride_##TYPE(id self, SEL cmd, TYPE property, ...) { \
-    IMP imp = GetOriginalMethodIMP(self, cmd); \
+    typedef void(*SetterMethod)(id, SEL, TYPE, ...); \
+    SetterMethod imp = (SetterMethod)GetOriginalMethodIMP(self, cmd); \
     const NSInteger numberOfAxisValues = [[self methodSignatureForSelector:cmd] numberOfArguments] - 3; \
     if (imp && numberOfAxisValues >= 0) { \
         va_list args; va_start(args, property); \
@@ -212,7 +216,10 @@ static IMP ImplementationForPropertyType(const char *t)
     }
 }
 
-@implementation UIAppearanceProxy
+@implementation UIAppearanceProxy {
+    Class<UIAppearance> _targetClass;
+    NSMutableDictionary *_settings;
+}
 
 - (id)initWithClass:(Class<UIAppearance>)k
 {
@@ -221,12 +228,6 @@ static IMP ImplementationForPropertyType(const char *t)
         _settings = [[NSMutableDictionary alloc] initWithCapacity:0];
     }
     return self;
-}
-
-- (void)dealloc
-{
-    [_settings release];
-    [super dealloc];
 }
 
 - (void)forwardInvocation:(NSInvocation *)anInvocation
@@ -242,54 +243,75 @@ static IMP ImplementationForPropertyType(const char *t)
     // each axis must be either NSInteger or NSUInteger.
     // throw an exception if other types are used in an axis.
 
+    NSMethodSignature *methodSignature = [anInvocation methodSignature];
+    NSMutableArray *propertyKey = [NSMutableArray array];
+
     // see if this selector is a setter or a getter
-    const BOOL isSetter = [NSStringFromSelector([anInvocation selector]) hasPrefix:@"set"] && [[anInvocation methodSignature] numberOfArguments] > 2 && strcmp([[anInvocation methodSignature] methodReturnType], @encode(void)) == 0;
-    const BOOL isGetter = !isSetter && strcmp([[anInvocation methodSignature] methodReturnType], @encode(void)) != 0;
+    const BOOL isSetter = [NSStringFromSelector([anInvocation selector]) hasPrefix:@"set"] && [methodSignature numberOfArguments] > 2 && strcmp([methodSignature methodReturnType], @encode(void)) == 0;
+    const BOOL isGetter = !isSetter && strcmp([methodSignature methodReturnType], @encode(void)) != 0;
     
     // ensure that the property type is legit
-    const char *propertyType = isSetter? [[anInvocation methodSignature] getArgumentTypeAtIndex:2] : (isGetter? [[anInvocation methodSignature] methodReturnType] : NULL);
+    const char *propertyType = isSetter? [methodSignature getArgumentTypeAtIndex:2] : (isGetter? [methodSignature methodReturnType] : NULL);
     if (!TypeIsPropertyType(propertyType)) {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"property type must be id, NSInteger, NSUInteger, CGFloat, CGPoint, CGSize, CGRect, UIEdgeInsets or UIOffset" userInfo:nil];
     }
-
-    // this will hold the NSValue objects made out of the arguments
-    NSMutableArray *argumentValues = [NSMutableArray arrayWithCapacity:[[anInvocation methodSignature] numberOfArguments]-2];
-
-    // box the arguments
-    for (int i=2; i<[[anInvocation methodSignature] numberOfArguments]; i++) {
-        const char *type = [[anInvocation methodSignature] getArgumentTypeAtIndex:i];
-
-        if ((isSetter && i > 2) || isGetter) {
-            // ensure that the axis arguments are integers
-            if (!TypeIsIntegerType(type)) {
-                @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"axis type must be NSInteger or NSUInteger" userInfo:nil];
-            }
+    
+    // use axis arguments when building the unique key for this property
+    const int axisStartIndex = isSetter? 3 : 2;
+    for (int i=axisStartIndex; i<[methodSignature numberOfArguments]; i++) {
+        const char *type = [methodSignature getArgumentTypeAtIndex:i];
+        
+        // ensure that the axis arguments are integers
+        if (!TypeIsIntegerType(type)) {
+            @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"axis type must be NSInteger or NSUInteger" userInfo:nil];
         }
         
-        // we need a buffer to pull out the argument data, so we'll figure out the size of the data first and then make the buffer
-        NSUInteger bufferSize = 0;
-        NSGetSizeAndAlignment(type, &bufferSize, NULL);
-        UInt8 argumentBuffer[bufferSize];
-        memset(argumentBuffer, 0, bufferSize);
-
-        // fetch the actual value data into our fancy buffer
-        [anInvocation getArgument:argumentBuffer atIndex:i];
-
-        // now box it up and tie it with a bow
-        NSValue *value = [NSValue value:argumentBuffer withObjCType:type];
-
-        if (value) {
-            [argumentValues addObject:value];
-        } else {
-            @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"something terrible has happened" userInfo:nil];
-        }
+        NSInteger axisValue = 0;
+        [anInvocation getArgument:&axisValue atIndex:i];
+        [propertyKey addObject:@(axisValue)];
     }
+    
+    if (isGetter) {
+        // convert the getter's selector into a setter's selector since that's what we actually key the property value with
+        NSMutableString *selectorKeyString = [NSStringFromSelector([anInvocation selector]) mutableCopy];
+        [selectorKeyString replaceCharactersInRange:NSMakeRange(0, 1) withString:[[selectorKeyString substringToIndex:1] uppercaseString]];
+        [selectorKeyString insertString:@"set" atIndex:0];
+        
+        // if the property has 1 or more axis parts, we need to take those into account, too
+        if ([methodSignature numberOfArguments] > 2) {
+            const NSRange colonRange = [selectorKeyString rangeOfString:@":"];
+            const NSRange forRange = [selectorKeyString rangeOfString:@"For"];
+            
+            if (colonRange.location != NSNotFound && forRange.location != NSNotFound && colonRange.location > NSMaxRange(forRange)) {
+                const NSRange axisNameRange = NSMakeRange(forRange.location+3, colonRange.location-forRange.location-3);
+                NSString *axisName = [selectorKeyString substringWithRange:axisNameRange];
+                axisName = [axisName stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:[[axisName substringToIndex:1] uppercaseString]];
+                NSString *axisSelectorPartName = [NSString stringWithFormat:@"for%@:", axisName];
+                [selectorKeyString insertString:axisSelectorPartName atIndex:NSMaxRange(colonRange)];
+                [selectorKeyString replaceCharactersInRange:NSMakeRange(forRange.location, colonRange.location-forRange.location) withString:@""];
+            }
+        } else {
+            [selectorKeyString appendString:@":"];
+        }
 
-    if (isSetter) {
-        // make a key so we can store this particular property value given the axis values
-        UIAppearanceProperty *key = [[UIAppearanceProperty alloc] initWithSelector:[anInvocation selector]
-                                                                        axisValues:[argumentValues subarrayWithRange:NSMakeRange(1, [argumentValues count]-1)]];
-        [_settings setObject:[argumentValues objectAtIndex:0] forKey:key];
+        // finish building the property key now that we have the expected selector name
+        [propertyKey addObject:[selectorKeyString copy]];
+
+        // fetch the current property value using the key and put it in the current invocation
+        // so it can be returned to the caller
+        UIAppearanceProperty *propertyValue = [_settings objectForKey:propertyKey];
+        [propertyValue setReturnValueForInvocation:anInvocation];
+    }
+    else if (isSetter) {
+        NSString *selectorString = NSStringFromSelector([anInvocation selector]);
+
+        // finish building the property key using the selector we have
+        [propertyKey addObject:selectorString];
+        
+        // save the actual property value using the key
+        [_settings setObject:[[UIAppearanceProperty alloc] initWithInvocation:anInvocation] forKey:propertyKey];
+        
+        // WARNING! Swizzling ahead!
         
         // what we're doing here is sneakily overriding the existing implemention with our own so we can track when the setter is called
         // and not have the appearance defaults override if a more local setting has been made.
@@ -302,9 +324,8 @@ static IMP ImplementationForPropertyType(const char *t)
         // for that are either deprecated or marked as "don't use" in the docs. :/ this is the best I could come up with given my
         // current knowledge of how everything works at this abstraction level. abandon all hope, ye who enter here...
         
-        NSString *selectorString = NSStringFromSelector([anInvocation selector]);
         NSMutableDictionary *methodOverrides = objc_getAssociatedObject(_targetClass, UIAppearanceSetterOverridesAssociatedObjectKey);
-
+        
         if (!methodOverrides) {
             methodOverrides = [NSMutableDictionary dictionaryWithCapacity:1];
             objc_setAssociatedObject(_targetClass, UIAppearanceSetterOverridesAssociatedObjectKey, methodOverrides, OBJC_ASSOCIATION_RETAIN);
@@ -315,7 +336,7 @@ static IMP ImplementationForPropertyType(const char *t)
             
             if (method) {
                 IMP implementation = method_getImplementation(method);
-                IMP overrideImplementation =  ImplementationForPropertyType([[anInvocation methodSignature] getArgumentTypeAtIndex:2]);
+                IMP overrideImplementation =  ImplementationForPropertyType([methodSignature getArgumentTypeAtIndex:2]);
                 
                 if (implementation != overrideImplementation) {
                     [methodOverrides setObject:[NSValue valueWithBytes:&implementation objCType:@encode(IMP)] forKey:selectorString];
@@ -323,47 +344,8 @@ static IMP ImplementationForPropertyType(const char *t)
                 }
             }
         }
-        
-        [key release];
-    } else if (isGetter) {
-        // convert the getter's selector into a setter's selector since that's what we keyed on above
-        NSMutableString *selectorString = [NSStringFromSelector([anInvocation selector]) mutableCopy];
-        [selectorString replaceCharactersInRange:NSMakeRange(0, 1) withString:[[selectorString substringToIndex:1] uppercaseString]];
-        [selectorString insertString:@"set" atIndex:0];
-        
-        // if the property has 1 or more axis parts, we need to take those into account, too
-        if ([[anInvocation methodSignature] numberOfArguments] > 2) {
-            const NSRange colonRange = [selectorString rangeOfString:@":"];
-            const NSRange forRange = [selectorString rangeOfString:@"For"];
-            
-            if (colonRange.location != NSNotFound && forRange.location != NSNotFound && colonRange.location > NSMaxRange(forRange)) {
-                const NSRange axisNameRange = NSMakeRange(forRange.location+3, colonRange.location-forRange.location-3);
-                NSString *axisName = [selectorString substringWithRange:axisNameRange];
-                axisName = [axisName stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:[[axisName substringToIndex:1] uppercaseString]];
-                NSString *axisSelectorPartName = [NSString stringWithFormat:@"for%@:", axisName];
-                [selectorString insertString:axisSelectorPartName atIndex:NSMaxRange(colonRange)];
-                [selectorString replaceCharactersInRange:NSMakeRange(forRange.location, colonRange.location-forRange.location) withString:@""];
-            }
-        } else {
-            [selectorString appendString:@":"];
-        }
-        
-        // now build a key based on the generated setter selector and the given axis arguments and fetch the matching stored property value
-        UIAppearanceProperty *key = [[UIAppearanceProperty alloc] initWithSelector:NSSelectorFromString(selectorString) axisValues:argumentValues];
-        NSValue *propertyValue = [_settings objectForKey:key];
-
-        // setup a return data buffer and zero it
-        const NSUInteger returnLength = [[anInvocation methodSignature] methodReturnLength];
-        UInt8 returnData[returnLength];
-        memset(returnData, 0, returnLength);
-
-        // fetch the value and return it - if there is none, this ends up returning a zeroed data structure
-        [propertyValue getValue:returnData];
-        [anInvocation setReturnValue:returnData];
-
-        [key release];
-        [selectorString release];
-    } else {
+    }
+    else {
         // derp
         [self doesNotRecognizeSelector:[anInvocation selector]];
     }
@@ -376,7 +358,7 @@ static IMP ImplementationForPropertyType(const char *t)
 
 - (NSDictionary *)_appearancePropertiesAndValues
 {
-    return [[_settings copy] autorelease];
+    return [_settings copy];
 }
 
 @end

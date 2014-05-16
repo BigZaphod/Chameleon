@@ -29,13 +29,14 @@
 
 #import <Foundation/Foundation.h>
 
-@class UIImage, UIColor, NSPasteboard;
+@class UIImage, UIColor;
 
-@interface UIPasteboard : NSObject {
-    NSPasteboard *pasteboard;
-}
-
+@interface UIPasteboard : NSObject
 + (UIPasteboard *)generalPasteboard;
+
+- (void)addItems:(NSArray *)items;
+- (void)setData:(NSData *)data forPasteboardType:(NSString *)pasteboardType;
+- (void)setValue:(id)value forPasteboardType:(NSString *)pasteboardType;
 
 @property (nonatomic,copy) NSURL *URL;
 @property (nonatomic,copy) NSArray *URLs;
@@ -46,9 +47,4 @@
 @property (nonatomic, copy) UIColor *color;
 @property (nonatomic, copy) NSArray *colors;
 @property (nonatomic, copy) NSArray *items;
-
-- (void)addItems:(NSArray *)items;
-- (void)setData:(NSData *)data forPasteboardType:(NSString *)pasteboardType;
-- (void)setValue:(id)value forPasteboardType:(NSString *)pasteboardType;
-
 @end

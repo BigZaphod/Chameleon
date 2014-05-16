@@ -34,10 +34,6 @@
 #import <AppKit/NSApplication.h>
 
 @implementation UILabel
-@synthesize text=_text, font=_font, textColor=_textColor, textAlignment=_textAlignment, lineBreakMode=_lineBreakMode, enabled=_enabled;
-@synthesize numberOfLines=_numberOfLines, shadowColor=_shadowColor, shadowOffset=_shadowOffset;
-@synthesize baselineAdjustment=_baselineAdjustment, adjustsFontSizeToFitWidth=_adjustsFontSizeToFitWidth;
-@synthesize highlightedTextColor=_highlightedTextColor, minimumFontSize=_minimumFontSize, highlighted=_highlighted;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -58,20 +54,10 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_text release];
-    [_font release];
-    [_textColor release];
-    [_shadowColor release];
-    [_highlightedTextColor release];
-    [super dealloc];
-}
 
 - (void)setText:(NSString *)newText
 {
     if (_text != newText) {
-        [_text release];
         _text = [newText copy];
         [self setNeedsDisplay];
     }
@@ -82,8 +68,7 @@
     assert(newFont != nil);
 
     if (newFont != _font) {
-        [_font release];
-        _font = [newFont retain];
+        _font = newFont;
         [self setNeedsDisplay];
     }
 }
@@ -91,8 +76,7 @@
 - (void)setTextColor:(UIColor *)newColor
 {
     if (newColor != _textColor) {
-        [_textColor release];
-        _textColor = [newColor retain];
+        _textColor = newColor;
         [self setNeedsDisplay];
     }
 }
@@ -100,8 +84,7 @@
 - (void)setShadowColor:(UIColor *)newColor
 {
     if (newColor != _shadowColor) {
-        [_shadowColor release];
-        _shadowColor = [newColor retain];
+        _shadowColor = newColor;
         [self setNeedsDisplay];
     }
 }

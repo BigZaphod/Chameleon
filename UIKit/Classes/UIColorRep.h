@@ -31,10 +31,7 @@
 
 @class UIImageRep;
 
-@interface UIColorRep : NSObject {
-    CGColorRef _CGColor;
-    UIImageRep *_patternImageRep;
-}
+@interface UIColorRep : NSObject
 
 - (id)initWithPatternImageRepresentation:(UIImageRep *)patternImageRep;
 - (id)initWithCGColor:(CGColorRef)color;

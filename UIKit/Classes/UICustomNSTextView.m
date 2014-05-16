@@ -44,7 +44,10 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 @end
 
 
-@implementation UICustomNSTextView
+@implementation UICustomNSTextView {
+    BOOL _secureTextEntry;
+	BOOL _isBecomingFirstResponder;
+}
 
 - (id)initWithFrame:(NSRect)frame secureTextEntry:(BOOL)isSecure isField:(BOOL)isField
 {
@@ -66,11 +69,13 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
             [self setVerticallyResizable:NO];
             [[self textContainer] setWidthTracksTextView:NO];
             [[self textContainer] setContainerSize:maxSize];
+            [self setTextContainerInset:NSMakeSize(0, 0)];
         } else {
             [self setFieldEditor:NO];
             [self setHorizontallyResizable:NO];
             [self setVerticallyResizable:YES];
             [self setAutoresizingMask:NSViewWidthSizable];
+            [self setTextContainerInset:NSMakeSize(3, 8)];
         }
 
         [self setMaxSize:maxSize];
@@ -81,7 +86,9 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
         [self setAllowsImageEditing:NO];
         [self setDisplaysLinkToolTips:NO];
         [self setAutomaticDataDetectionEnabled:NO];
-        [self setSecureTextEntry:isSecure];
+        
+        // same color as iOS
+        [self setInsertionPointColor:[NSColor colorWithCalibratedRed:62/255.f green:100/255.f blue:243/255.f alpha:1]];
         
         [self setLayerContentsPlacement:NSViewLayerContentsPlacementTopLeft];
         
@@ -96,7 +103,7 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setParagraphStyle:[NSParagraphStyle defaultParagraphStyle]];
     
-    if (secureTextEntry) {
+    if (_secureTextEntry) {
         // being all super-paranoid here...
         [self setAutomaticQuoteSubstitutionEnabled:NO];
         [self setGrammarCheckingEnabled:NO];
@@ -107,7 +114,7 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
         [self setSmartInsertDeleteEnabled:NO];
         [self setUsesFindPanel:NO];
         [self setAllowsUndo:NO];
-        [[self layoutManager] setGlyphGenerator:[[[UIBulletGlyphGenerator alloc] init] autorelease]];
+        [[self layoutManager] setGlyphGenerator:[[UIBulletGlyphGenerator alloc] init]];
         [style setLineBreakMode:NSLineBreakByCharWrapping];
     } else {
         [self setAllowsUndo:YES];
@@ -122,18 +129,17 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
     }
     
     [self setDefaultParagraphStyle:style];
-    [style release];
 }
 
 - (void)setSecureTextEntry:(BOOL)isSecure
 {
-    secureTextEntry = isSecure;
+    _secureTextEntry = isSecure;
     [self updateStyles];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {
-    if (secureTextEntry && ([menuItem action] == @selector(copy:) || [menuItem action] == @selector(cut:))) {
+    if (_secureTextEntry && ([menuItem action] == @selector(copy:) || [menuItem action] == @selector(cut:))) {
         return NO;	// don't allow copying/cutting out from a secure field
     } else {
         return [super validateMenuItem:menuItem];
@@ -142,7 +148,7 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 
 - (NSSelectionGranularity)selectionGranularity
 {
-    if (secureTextEntry) {
+    if (_secureTextEntry) {
         return NSSelectByCharacter;		// trying to avoid the secure one giving any hints about what's under it. :/
     } else {
         return [super selectionGranularity];
@@ -152,14 +158,14 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 - (void)startSpeaking:(id)sender
 {
     // only allow speaking if it's not secure
-    if (!secureTextEntry) {
+    if (!_secureTextEntry) {
         [super startSpeaking:sender];
     }
 }
 
 - (id)validRequestorForSendType:(NSString *)sendType returnType:(NSString *)returnType
 {
-    if (secureTextEntry) {
+    if (_secureTextEntry) {
         return nil;
     } else {
         return [super validRequestorForSendType:sendType returnType:returnType];
@@ -173,8 +179,8 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
     // screw it.. why not just remove everything from the context menu if it's a secure field? :)
     // it's possible that various key combos could still allow things like searching in spotlight which
     // then would revel the actual value of the password field, but at least those are sorta obscure :)
-    if (secureTextEntry) {
-        NSArray *items = [[[menu itemArray] copy] autorelease];
+    if (_secureTextEntry) {
+        NSArray *items = [[menu itemArray] copy];
         for (NSMenuItem *item in items) {
             if ([item action] != @selector(paste:)) {
                 [menu removeItem:item];
@@ -198,9 +204,9 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 
 - (BOOL)becomeFirstResponder
 {
-	isBecomingFirstResponder = YES;
+	_isBecomingFirstResponder = YES;
     BOOL result = [[self delegate] textViewBecomeFirstResponder:self];
-	isBecomingFirstResponder = NO;
+	_isBecomingFirstResponder = NO;
 	return result;
 }
 
@@ -211,7 +217,7 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 
 - (BOOL)resignFirstResponder
 {
-	if(isBecomingFirstResponder) return NO;
+	if(_isBecomingFirstResponder) return NO;
 	
     return [[self delegate] textViewResignFirstResponder:self];
 }

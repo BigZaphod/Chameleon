@@ -30,8 +30,6 @@
 #import "UIAccessibilityElement.h"
 
 @implementation UIAccessibilityElement
-@synthesize accessibilityLabel=_accessibilityLabel, accessibilityHint=_accessibilityHint, accessibilityValue=_accessibilityValue;
-@synthesize accessibilityFrame=_accessibilityFrame, accessibilityTraits=_accessibilityTraits;
 
 - (id)initWithAccessibilityContainer:(id)container
 {
@@ -40,12 +38,5 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_accessibilityLabel release];
-    [_accessibilityHint release];
-    [_accessibilityValue release];
-    [super dealloc];
-}
 
 @end

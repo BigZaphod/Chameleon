@@ -31,7 +31,7 @@
 
 extern NSString *const UIDeviceOrientationDidChangeNotification;
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIDeviceOrientation) {
     UIDeviceOrientationUnknown,
     UIDeviceOrientationPortrait,
     UIDeviceOrientationPortraitUpsideDown,
@@ -39,13 +39,13 @@ typedef enum {
     UIDeviceOrientationLandscapeRight,
     UIDeviceOrientationFaceUp,
     UIDeviceOrientationFaceDown
-} UIDeviceOrientation;
+};
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIUserInterfaceIdiom) {
     UIUserInterfaceIdiomPhone,
     UIUserInterfaceIdiomPad,
     UIUserInterfaceIdiomDesktop,
-} UIUserInterfaceIdiom;
+};
 
 #define UI_USER_INTERFACE_IDIOM() \
     ([[UIDevice currentDevice] respondsToSelector:@selector(userInterfaceIdiom)] ? \
@@ -60,21 +60,18 @@ typedef enum {
     ((orientation) == UIDeviceOrientationLandscapeLeft || \
     (orientation) == UIDeviceOrientationLandscapeRight)
 
-@interface UIDevice : NSObject {
-}
-
+@interface UIDevice : NSObject
 + (UIDevice *)currentDevice;
-
-@property (nonatomic, readonly, retain) NSString *name;
-@property (nonatomic, readonly) UIUserInterfaceIdiom userInterfaceIdiom;					// always returns UIUserInterfaceIdiomDesktop
-@property (nonatomic, readonly) UIDeviceOrientation orientation;							// always returns UIDeviceOrientationPortrait
-@property (nonatomic, readonly,getter=isMultitaskingSupported) BOOL multitaskingSupported;	// always returns YES
-@property (nonatomic, readonly, retain) NSString *systemName;
-@property (nonatomic, readonly, retain) NSString *systemVersion;
-@property (nonatomic, readonly, retain) NSString *model;
-@property (nonatomic, readonly, getter=isGeneratingDeviceOrientationNotifications) BOOL generatesDeviceOrientationNotifications; // aways returns NO
 
 - (void)beginGeneratingDeviceOrientationNotifications;  // no effect
 - (void)endGeneratingDeviceOrientationNotifications;    // no effect
 
+@property (nonatomic, readonly, strong) NSString *name;
+@property (nonatomic, assign) UIUserInterfaceIdiom userInterfaceIdiom;                      // default is UIUserInterfaceIdiomDesktop (obviously real UIKit doesn't allow setting this!)
+@property (nonatomic, readonly) UIDeviceOrientation orientation;							// always returns UIDeviceOrientationPortrait
+@property (nonatomic, readonly,getter=isMultitaskingSupported) BOOL multitaskingSupported;	// always returns YES
+@property (nonatomic, readonly, strong) NSString *systemName;
+@property (nonatomic, readonly, strong) NSString *systemVersion;
+@property (nonatomic, readonly, strong) NSString *model;
+@property (nonatomic, readonly, getter=isGeneratingDeviceOrientationNotifications) BOOL generatesDeviceOrientationNotifications; // aways returns NO
 @end

@@ -29,36 +29,21 @@
 
 #import "UIControl.h"
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIButtonType) {
     UIButtonTypeCustom = 0,
     UIButtonTypeRoundedRect,
     UIButtonTypeDetailDisclosure,
     UIButtonTypeInfoLight,
     UIButtonTypeInfoDark,
     UIButtonTypeContactAdd,
-} UIButtonType;
+};
 
 @class UILabel, UIImageView, UIImage;
 
 @interface UIButton : UIControl {
-@protected
+@package
     UIButtonType _buttonType;
-@private
-    UILabel *_titleLabel;
-    UIImageView *_imageView;
-    UIImageView *_backgroundImageView;
-    BOOL _reversesTitleShadowWhenHighlighted;
-    BOOL _adjustsImageWhenHighlighted;
-    BOOL _adjustsImageWhenDisabled;
-    BOOL _showsTouchWhenHighlighted;
-    UIEdgeInsets _contentEdgeInsets;
-    UIEdgeInsets _titleEdgeInsets;
-    UIEdgeInsets _imageEdgeInsets;
-    NSMutableDictionary *_content;
-    UIImage *_adjustedHighlightImage;
-    UIImage *_adjustedDisabledImage;
 }
-
 + (id)buttonWithType:(UIButtonType)buttonType;
 
 - (void)setTitle:(NSString *)title forState:(UIControlState)state;
@@ -79,8 +64,8 @@ typedef enum {
 - (CGRect)imageRectForContentRect:(CGRect)contentRect;
 
 @property (nonatomic, readonly) UIButtonType buttonType;
-@property (nonatomic,readonly,retain) UILabel *titleLabel;
-@property (nonatomic,readonly,retain) UIImageView *imageView;
+@property (nonatomic,readonly,strong) UILabel *titleLabel;
+@property (nonatomic,readonly,strong) UIImageView *imageView;
 @property (nonatomic) BOOL reversesTitleShadowWhenHighlighted;
 @property (nonatomic) BOOL adjustsImageWhenHighlighted;
 @property (nonatomic) BOOL adjustsImageWhenDisabled;
@@ -89,11 +74,9 @@ typedef enum {
 @property (nonatomic) UIEdgeInsets titleEdgeInsets;
 @property (nonatomic) UIEdgeInsets imageEdgeInsets;
 
-@property (nonatomic, readonly, retain) NSString *currentTitle;
-@property (nonatomic, readonly, retain) UIColor *currentTitleColor;
-@property (nonatomic, readonly, retain) UIColor *currentTitleShadowColor;
-@property (nonatomic, readonly, retain) UIImage *currentImage;
-@property (nonatomic, readonly, retain) UIImage *currentBackgroundImage;
-
-
+@property (nonatomic, readonly, strong) NSString *currentTitle;
+@property (nonatomic, readonly, strong) UIColor *currentTitleColor;
+@property (nonatomic, readonly, strong) UIColor *currentTitleShadowColor;
+@property (nonatomic, readonly, strong) UIImage *currentImage;
+@property (nonatomic, readonly, strong) UIImage *currentBackgroundImage;
 @end

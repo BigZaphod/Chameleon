@@ -30,8 +30,11 @@
 #import "UIViewAnimationGroup.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor.h"
+#import "UIApplication.h"
 
-static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIViewAnimationCurve curve)
+static NSMutableSet *runningAnimationGroups = nil;
+
+static inline CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIViewAnimationCurve curve)
 {
     switch (curve) {
         case UIViewAnimationCurveEaseInOut:	return [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
@@ -42,106 +45,161 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
     return nil;
 }
 
-@implementation UIViewAnimationGroup
+BOOL UIViewAnimationOptionIsSet(UIViewAnimationOptions options, UIViewAnimationOptions option)
+{
+    return ((options & option) == option);
+}
 
-- (id)initWithGroupName:(NSString *)theName context:(void *)theContext
+static inline UIViewAnimationOptions UIViewAnimationOptionCurve(UIViewAnimationOptions options)
+{
+    return (options & (UIViewAnimationOptionCurveEaseInOut
+                       | UIViewAnimationOptionCurveEaseIn
+                       | UIViewAnimationOptionCurveEaseOut
+                       | UIViewAnimationOptionCurveLinear));
+}
+
+static inline UIViewAnimationOptions UIViewAnimationOptionTransition(UIViewAnimationOptions options)
+{
+    return (options & (UIViewAnimationOptionTransitionNone
+                       | UIViewAnimationOptionTransitionFlipFromLeft
+                       | UIViewAnimationOptionTransitionFlipFromRight
+                       | UIViewAnimationOptionTransitionCurlUp
+                       | UIViewAnimationOptionTransitionCurlDown
+                       | UIViewAnimationOptionTransitionCrossDissolve
+                       | UIViewAnimationOptionTransitionFlipFromTop
+                       | UIViewAnimationOptionTransitionFlipFromBottom));
+}
+
+@implementation UIViewAnimationGroup {
+    NSUInteger _waitingAnimations;
+    BOOL _didStart;
+    CFTimeInterval _animationBeginTime;
+    UIView *_transitionView;
+    BOOL _transitionShouldCache;
+    NSMutableSet *_animatingViews;
+}
+
++ (void)initialize
+{
+    if (self == [UIViewAnimationGroup class]) {
+        runningAnimationGroups = [NSMutableSet setWithCapacity:1];
+    }
+}
+
+- (id)initWithAnimationOptions:(UIViewAnimationOptions)options
 {
     if ((self=[super init])) {
-        _name = [theName copy];
-        _context = theContext;
         _waitingAnimations = 1;
-        _animationDuration = 0.2;
-        _animationCurve = UIViewAnimationCurveEaseInOut;
-        _animationBeginsFromCurrentState = NO;
-        _animationRepeatAutoreverses = NO;
-        _animationRepeatCount = 0;
         _animationBeginTime = CACurrentMediaTime();
-        _animatingViews = [[NSMutableSet alloc] initWithCapacity:0];
+        _animatingViews = [NSMutableSet setWithCapacity:2];
+        
+        self.duration = 0.2;
+        
+        self.repeatCount = UIViewAnimationOptionIsSet(options, UIViewAnimationOptionRepeat)? FLT_MAX : 0;
+        self.allowUserInteraction = UIViewAnimationOptionIsSet(options, UIViewAnimationOptionAllowUserInteraction);
+        self.repeatAutoreverses = UIViewAnimationOptionIsSet(options, UIViewAnimationOptionAutoreverse);
+        self.beginsFromCurrentState = UIViewAnimationOptionIsSet(options, UIViewAnimationOptionBeginFromCurrentState);
+
+        const UIViewAnimationOptions animationCurve = UIViewAnimationOptionCurve(options);
+        if (animationCurve == UIViewAnimationOptionCurveEaseIn) {
+            self.curve = UIViewAnimationCurveEaseIn;
+        } else if (animationCurve == UIViewAnimationOptionCurveEaseOut) {
+            self.curve = UIViewAnimationCurveEaseOut;
+        } else if (animationCurve == UIViewAnimationOptionCurveLinear) {
+            self.curve = UIViewAnimationCurveLinear;
+        } else {
+            self.curve = UIViewAnimationCurveEaseInOut;
+        }
+        
+        const UIViewAnimationOptions animationTransition = UIViewAnimationOptionTransition(options);
+        if (animationTransition == UIViewAnimationOptionTransitionFlipFromLeft) {
+            self.transition = UIViewAnimationGroupTransitionFlipFromLeft;
+        } else if (animationTransition == UIViewAnimationOptionTransitionFlipFromRight) {
+            self.transition = UIViewAnimationGroupTransitionFlipFromRight;
+        } else if (animationTransition == UIViewAnimationOptionTransitionCurlUp) {
+            self.transition = UIViewAnimationGroupTransitionCurlUp;
+        } else if (animationTransition == UIViewAnimationOptionTransitionCurlDown) {
+            self.transition = UIViewAnimationGroupTransitionCurlDown;
+        } else if (animationTransition == UIViewAnimationOptionTransitionCrossDissolve) {
+            self.transition = UIViewAnimationGroupTransitionCrossDissolve;
+        } else if (animationTransition == UIViewAnimationOptionTransitionFlipFromTop) {
+            self.transition = UIViewAnimationGroupTransitionFlipFromTop;
+        } else if (animationTransition == UIViewAnimationOptionTransitionFlipFromBottom) {
+            self.transition = UIViewAnimationGroupTransitionFlipFromBottom;
+        } else {
+            self.transition = UIViewAnimationGroupTransitionNone;
+        }
     }
     return self;
 }
 
-- (void)dealloc
+- (NSArray *)allAnimatingViews
 {
-    [_name release];
-    [_animationDelegate release];
-    [_animatingViews release];
-    [super dealloc];
+    @synchronized(runningAnimationGroups) {
+        return [_animatingViews allObjects];
+    }
 }
 
-+ (id)animationGroupWithName:(NSString *)theName context:(void *)theContext
+- (void)notifyAnimationsDidStartIfNeeded
 {
-    return [[[self alloc] initWithGroupName:theName context:theContext] autorelease];
+    if (!_didStart) {
+        _didStart = YES;
+        
+        @synchronized(runningAnimationGroups) {
+            [runningAnimationGroups addObject:self];
+        }
+
+        if ([self.delegate respondsToSelector:self.willStartSelector]) {
+            typedef void(*WillStartMethod)(id, SEL, NSString *, void *);
+            WillStartMethod method = (WillStartMethod)[self.delegate methodForSelector:self.willStartSelector];
+            method(self.delegate, self.willStartSelector, self.name, self.context);
+        }
+    }
 }
 
 - (void)notifyAnimationsDidStopIfNeededUsingStatus:(BOOL)animationsDidFinish
 {
     if (_waitingAnimations == 0) {
-        if ([_animationDelegate respondsToSelector:_animationDidStopSelector]) {
-            NSMethodSignature *signature = [_animationDelegate methodSignatureForSelector:_animationDidStopSelector];
-            NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
-            [invocation setSelector:_animationDidStopSelector];
-            NSInteger remaining = [signature numberOfArguments] - 2;
-            
+        if ([self.delegate respondsToSelector:self.didStopSelector]) {
             NSNumber *finishedArgument = [NSNumber numberWithBool:animationsDidFinish];
-            
-            if (remaining > 0) {
-                [invocation setArgument:&_name atIndex:2];
-                remaining--;
-            }
-
-            if (remaining > 0) {
-                [invocation setArgument:&finishedArgument atIndex:3];
-                remaining--;
-            }
-
-            if (remaining > 0) {
-                [invocation setArgument:&_context atIndex:4];
-            }
-            
-            [invocation invokeWithTarget:_animationDelegate];
+            typedef void(*DidFinishMethod)(id, SEL, NSString *, NSNumber *, void *);
+            DidFinishMethod method = (DidFinishMethod)[self.delegate methodForSelector:self.didStopSelector];
+            method(self.delegate, self.didStopSelector, self.name, finishedArgument, self.context);
         }
-        [_animatingViews removeAllObjects];
+        
+        if (self.completionBlock) {
+            self.completionBlock(animationsDidFinish);
+        }
+
+        @synchronized(runningAnimationGroups) {
+            [_animatingViews removeAllObjects];
+            [runningAnimationGroups removeObject:self];
+        }
     }
 }
 
 - (void)animationDidStart:(CAAnimation *)theAnimation
 {
-    if (!_didSendStartMessage) {
-        if ([_animationDelegate respondsToSelector:_animationWillStartSelector]) {
-            NSMethodSignature *signature = [_animationDelegate methodSignatureForSelector:_animationWillStartSelector];
-            NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
-            [invocation setSelector:_animationWillStartSelector];
-            NSInteger remaining = [signature numberOfArguments] - 2;
-            
-            if (remaining > 0) {
-                [invocation setArgument:&_name atIndex:2];
-                remaining--;
-            }
-            
-            if (remaining > 0) {
-                [invocation setArgument:&_context atIndex:3];
-            }
-            
-            [invocation invokeWithTarget:_animationDelegate];
-        }
-        _didSendStartMessage = YES;
-    }
+    NSAssert([NSThread isMainThread], @"expecting this to be on the main thread");
+
+    [self notifyAnimationsDidStartIfNeeded];
 }
 
 - (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
 {
+    NSAssert([NSThread isMainThread], @"expecting this to be on the main thread");
+
     _waitingAnimations--;
     [self notifyAnimationsDidStopIfNeededUsingStatus:flag];
 }
 
 - (CAAnimation *)addAnimation:(CAAnimation *)animation
 {
-    animation.timingFunction = CAMediaTimingFunctionFromUIViewAnimationCurve(_animationCurve);
-    animation.duration = _animationDuration;
-    animation.beginTime = _animationBeginTime + _animationDelay;
-    animation.repeatCount = _animationRepeatCount;
-    animation.autoreverses = _animationRepeatAutoreverses;
+    animation.timingFunction = CAMediaTimingFunctionFromUIViewAnimationCurve(self.curve);
+    animation.duration = self.duration;
+    animation.beginTime = _animationBeginTime + self.delay;
+    animation.repeatCount = self.repeatCount;
+    animation.autoreverses = self.repeatAutoreverses;
     animation.fillMode = kCAFillModeBackwards;
     animation.delegate = self;
     animation.removedOnCompletion = YES;
@@ -151,83 +209,70 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 
 - (id)actionForView:(UIView *)view forKey:(NSString *)keyPath
 {
-    [_animatingViews addObject:view];
-    CALayer *layer = view.layer;
-    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:keyPath];
-    animation.fromValue = _animationBeginsFromCurrentState? [layer.presentationLayer valueForKey:keyPath] : [layer valueForKey:keyPath];
-    return [self addAnimation:animation];
-}
+    @synchronized(runningAnimationGroups) {
+        [_animatingViews addObject:view];
+    }
 
-- (void)setAnimationBeginsFromCurrentState:(BOOL)beginFromCurrentState
-{
-    _animationBeginsFromCurrentState = beginFromCurrentState;
-}
-
-- (void)setAnimationCurve:(UIViewAnimationCurve)curve
-{
-    _animationCurve = curve;
-}
-
-- (void)setAnimationDelay:(NSTimeInterval)delay
-{
-    _animationDelay = delay;
-}
-
-- (void)setAnimationDelegate:(id)delegate
-{
-    if (delegate != _animationDelegate) {
-        [_animationDelegate release];
-        _animationDelegate = [delegate retain];
+    if (_transitionView && self.transition != UIViewAnimationGroupTransitionNone) {
+        return nil;
+    } else {
+        CALayer *layer = view.layer;
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:keyPath];
+        animation.fromValue = self.beginsFromCurrentState? [layer.presentationLayer valueForKey:keyPath] : [layer valueForKey:keyPath];
+        return [self addAnimation:animation];
     }
 }
 
-- (void)setAnimationDidStopSelector:(SEL)selector
+- (void)setTransitionView:(UIView *)view shouldCache:(BOOL)cache;
 {
-    _animationDidStopSelector = selector;
-}
-
-- (void)setAnimationDuration:(NSTimeInterval)newDuration
-{
-    _animationDuration = newDuration;
-}
-
-- (void)setAnimationRepeatAutoreverses:(BOOL)repeatAutoreverses
-{
-    _animationRepeatAutoreverses = repeatAutoreverses;
-}
-
-- (void)setAnimationRepeatCount:(float)repeatCount
-{
-    _animationRepeatCount = repeatCount;
-}
-
-- (void)setAnimationTransition:(UIViewAnimationTransition)transition forView:(UIView *)view cache:(BOOL)cache
-{
-    _transitionLayer = view.layer;
-    _transitionType = transition;
+    _transitionView = view;
     _transitionShouldCache = cache;
-}
-
-- (void)setAnimationWillStartSelector:(SEL)selector
-{
-    _animationWillStartSelector = selector;
 }
 
 - (void)commit
 {
-    if (_transitionLayer) {
+    if (_transitionView && self.transition != UIViewAnimationGroupTransitionNone) {
         CATransition *trans = [CATransition animation];
-        trans.type = kCATransitionMoveIn;
         
-        switch (_transitionType) {
-            case UIViewAnimationTransitionNone:				trans.subtype = nil;						break;
-            case UIViewAnimationTransitionCurlUp:			trans.subtype = kCATransitionFromTop;		break;
-            case UIViewAnimationTransitionCurlDown:			trans.subtype = kCATransitionFromBottom;	break;
-            case UIViewAnimationTransitionFlipFromLeft:		trans.subtype = kCATransitionFromLeft;		break;
-            case UIViewAnimationTransitionFlipFromRight:	trans.subtype = kCATransitionFromRight;		break;
+        switch (self.transition) {
+            case UIViewAnimationGroupTransitionFlipFromLeft:
+                trans.type = kCATransitionPush;
+                trans.subtype = kCATransitionFromLeft;
+                break;
+                
+            case UIViewAnimationGroupTransitionFlipFromRight:
+                trans.type = kCATransitionPush;
+                trans.subtype = kCATransitionFromRight;
+                break;
+                
+            case UIViewAnimationGroupTransitionFlipFromTop:
+                trans.type = kCATransitionPush;
+                trans.subtype = kCATransitionFromTop;
+                break;
+                
+            case UIViewAnimationGroupTransitionFlipFromBottom:
+                trans.type = kCATransitionPush;
+                trans.subtype = kCATransitionFromBottom;
+                break;
+
+            case UIViewAnimationGroupTransitionCurlUp:
+                trans.type = kCATransitionReveal;
+                trans.subtype = kCATransitionFromTop;
+                break;
+                
+            case UIViewAnimationGroupTransitionCurlDown:
+                trans.type = kCATransitionReveal;
+                trans.subtype = kCATransitionFromBottom;
+                break;
+                
+            case UIViewAnimationGroupTransitionCrossDissolve:
+            default:
+                trans.type = kCATransitionFade;
+                break;
         }
         
-        [_transitionLayer addAnimation:[self addAnimation:trans] forKey:kCATransition];
+        [_animatingViews addObject:_transitionView];
+        [_transitionView.layer addAnimation:[self addAnimation:trans] forKey:kCATransition];
     }
     
     _waitingAnimations--;

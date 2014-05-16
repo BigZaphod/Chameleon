@@ -31,11 +31,7 @@
 
 @class UIImage;
 
-@interface UIColor : NSObject {
-@private
-    id _representations;
-}
-
+@interface UIColor : NSObject
 + (UIColor *)colorWithWhite:(CGFloat)white alpha:(CGFloat)alpha;
 + (UIColor *)colorWithHue:(CGFloat)hue saturation:(CGFloat)saturation brightness:(CGFloat)brightness alpha:(CGFloat)alpha;
 + (UIColor *)colorWithRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha;
@@ -58,6 +54,9 @@
 + (UIColor *)brownColor;
 + (UIColor *)clearColor;
 
++ (UIColor *)lightTextColor;
++ (UIColor *)darkTextColor;
+
 - (id)initWithWhite:(CGFloat)white alpha:(CGFloat)alpha;
 - (id)initWithHue:(CGFloat)hue saturation:(CGFloat)saturation brightness:(CGFloat)brightness alpha:(CGFloat)alpha;
 - (id)initWithRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha;
@@ -71,5 +70,4 @@
 - (void)setStroke;
 
 @property (nonatomic, readonly) CGColorRef CGColor;
-
 @end

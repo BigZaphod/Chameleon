@@ -33,11 +33,14 @@
 static CGImageSourceRef CreateCGImageSourceWithFile(NSString *imagePath)
 {
     NSString *macPath = [[[imagePath stringByDeletingPathExtension] stringByAppendingString:@"~mac"] stringByAppendingPathExtension:[imagePath pathExtension]];
-    return CGImageSourceCreateWithURL((CFURLRef)[NSURL fileURLWithPath:macPath], NULL) ?: CGImageSourceCreateWithURL((CFURLRef)[NSURL fileURLWithPath:imagePath], NULL);
+    return CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:macPath], NULL) ?: CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:imagePath], NULL);
 }
 
-@implementation UIImageRep
-@synthesize scale=_scale;
+@implementation UIImageRep {
+    CGImageSourceRef _imageSource;
+    NSInteger _imageSourceIndex;
+    CGImageRef _CGImage;
+}
 
 + (NSArray *)_imageRepsWithContentsOfMultiResolutionFile:(NSString *)imagePath
 {
@@ -57,13 +60,11 @@ static CGImageSourceRef CreateCGImageSourceWithFile(NSString *imagePath)
     if (src1X) {
         UIImageRep *rep = [[UIImageRep alloc] initWithCGImageSource:src1X imageIndex:0 scale:1];
         if (rep) [reps addObject:rep];
-        [rep release];
         CFRelease(src1X);
     }
     if (src2X) {
         UIImageRep *rep = [[UIImageRep alloc] initWithCGImageSource:src2X imageIndex:0 scale:2];
         if (rep) [reps addObject:rep];
-        [rep release];
         CFRelease(src2X);
     }
     
@@ -78,7 +79,6 @@ static CGImageSourceRef CreateCGImageSourceWithFile(NSString *imagePath)
 - (id)initWithCGImageSource:(CGImageSourceRef)source imageIndex:(NSUInteger)index scale:(CGFloat)scale
 {
     if (!source || CGImageSourceGetCount(source) <= index) {
-        [self release];
         self = nil;
     } else if ((self=[super init])) {
         CFRetain(source);
@@ -92,23 +92,21 @@ static CGImageSourceRef CreateCGImageSourceWithFile(NSString *imagePath)
 - (id)initWithCGImage:(CGImageRef)image scale:(CGFloat)scale
 {
     if (!image) {
-        [self release];
         self = nil;
     } else if ((self=[super init])) {
         _scale = scale;
-        _image = CGImageRetain(image);
+        _CGImage = CGImageRetain(image);
     }
     return self;
 }
 
 - (id)initWithData:(NSData *)data
 {
-    CGImageSourceRef src = data? CGImageSourceCreateWithData((CFDataRef)data, NULL) : NULL;
+    CGImageSourceRef src = data? CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL) : NULL;
     if (src) {
         self = [self initWithCGImageSource:src imageIndex:0 scale:1];
         CFRelease(src);
     } else {
-        [self release];
         self = nil;
     }
     
@@ -117,22 +115,21 @@ static CGImageSourceRef CreateCGImageSourceWithFile(NSString *imagePath)
 
 - (void)dealloc
 {
-    if (_image) CGImageRelease(_image);
+    if (_CGImage) CGImageRelease(_CGImage);
     if (_imageSource) CFRelease(_imageSource);
-    [super dealloc];
 }
 
 - (BOOL)isLoaded
 {
-    return (_image != NULL);
+    return (_CGImage != NULL);
 }
 
 - (BOOL)isOpaque
 {
     BOOL opaque = NO;
     
-    if (_image) {
-        CGImageAlphaInfo info = CGImageGetAlphaInfo(_image);
+    if (_CGImage) {
+        CGImageAlphaInfo info = CGImageGetAlphaInfo(_CGImage);
         opaque = (info == kCGImageAlphaNone) || (info == kCGImageAlphaNoneSkipLast) || (info == kCGImageAlphaNoneSkipFirst);
     } else if (_imageSource) {
         CFDictionaryRef info = CGImageSourceCopyPropertiesAtIndex(_imageSource, _imageSourceIndex, NULL);
@@ -147,9 +144,9 @@ static CGImageSourceRef CreateCGImageSourceWithFile(NSString *imagePath)
 {
     CGSize size = CGSizeZero;
     
-    if (_image) {
-        size.width = CGImageGetWidth(_image);
-        size.height = CGImageGetHeight(_image);
+    if (_CGImage) {
+        size.width = CGImageGetWidth(_CGImage);
+        size.height = CGImageGetHeight(_CGImage);
     } else if (_imageSource) {
         CFDictionaryRef info = CGImageSourceCopyPropertiesAtIndex(_imageSource, _imageSourceIndex, NULL);
         CFNumberRef width = CFDictionaryGetValue(info, kCGImagePropertyPixelWidth);
@@ -167,13 +164,13 @@ static CGImageSourceRef CreateCGImageSourceWithFile(NSString *imagePath)
 - (CGImageRef)CGImage
 {
     // lazy load if we only have an image source
-    if (!_image && _imageSource) {
-        _image = CGImageSourceCreateImageAtIndex(_imageSource, _imageSourceIndex, NULL);
+    if (!_CGImage && _imageSource) {
+        _CGImage = CGImageSourceCreateImageAtIndex(_imageSource, _imageSourceIndex, NULL);
         CFRelease(_imageSource);
         _imageSource = NULL;
     }
     
-    return _image;
+    return _CGImage;
 }
 
 - (void)drawInRect:(CGRect)rect fromRect:(CGRect)fromRect

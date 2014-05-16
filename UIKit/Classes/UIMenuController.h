@@ -35,19 +35,9 @@ extern NSString *const UIMenuControllerWillHideMenuNotification;
 extern NSString *const UIMenuControllerDidHideMenuNotification;
 extern NSString *const UIMenuControllerMenuFrameDidChangeNotification;
 
-@class UIView, UIWindow;
+@class UIView;
 
-@interface UIMenuController : NSObject {
-@private
-    NSArray *_menuItems;
-    NSMutableArray *_enabledMenuItems;
-    id _menu;
-    CGRect _menuFrame;
-    CGPoint _menuLocation;
-    BOOL _rightAlignMenu;
-    UIWindow *_window;
-}
-
+@interface UIMenuController : NSObject
 + (UIMenuController *)sharedMenuController;
 
 - (void)setMenuVisible:(BOOL)menuVisible animated:(BOOL)animated;
@@ -62,5 +52,4 @@ extern NSString *const UIMenuControllerMenuFrameDidChangeNotification;
 // the menu is made visible. I have no intenstively tested what the real UIKit does in all the possible
 // situations. You have been warned.
 @property (nonatomic, readonly) CGRect menuFrame;
-
 @end

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, The Iconfactory. All rights reserved.
+ * Copyright (c) 2013, The Iconfactory. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,10 +27,25 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIKey.h"
+#import "UITextInputTraits.h"
 
-@class NSEvent;
+@interface UITextPosition : NSObject
+@end
 
-@interface UIKey (UIPrivate)
-- (id)initWithNSEvent:(NSEvent *)event;
+@interface UITextRange : NSObject
+@property (nonatomic, readonly) UITextPosition *start;
+@property (nonatomic, readonly) UITextPosition *end;
+@property (nonatomic, readonly, getter=isEmpty) BOOL empty;
+@end
+
+@protocol UIKeyInput <UITextInputTraits>
+@end
+
+@protocol UITextInput <UIKeyInput>
+@property (readwrite, copy) UITextRange *selectedTextRange;
+@property (nonatomic, readonly) UITextPosition *beginningOfDocument;
+@property (nonatomic, readonly) UITextPosition *endOfDocument;
+- (NSInteger)offsetFromPosition:(UITextPosition *)fromPosition toPosition:(UITextPosition *)toPosition;
+- (UITextPosition *)positionFromPosition:(UITextPosition *)position offset:(NSInteger)offset;
+- (UITextRange *)textRangeFromPosition:(UITextPosition *)fromPosition toPosition:(UITextPosition *)toPosition;
 @end

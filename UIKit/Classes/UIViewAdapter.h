@@ -31,14 +31,7 @@
 
 @class NSView, UINSClipView;
 
-@interface UIViewAdapter : UIScrollView {
-@private
-    UINSClipView *_clipView;
-    NSView *_view;
-}
-
+@interface UIViewAdapter : UIScrollView
 - (id)initWithNSView:(NSView *)aNSView;
-
-@property (nonatomic, retain) NSView *NSView;
-
+@property (nonatomic, strong) NSView *NSView;
 @end

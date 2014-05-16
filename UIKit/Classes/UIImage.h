@@ -27,9 +27,9 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <Foundation/Foundation.h>
+#import "UIGeometry.h"
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIImageOrientation) {
     UIImageOrientationUp,
     UIImageOrientationDown,   // 180 deg rotation
     UIImageOrientationLeft,   // 90 deg CCW
@@ -39,7 +39,7 @@ typedef enum {
     UIImageOrientationDownMirrored,  // horizontal flip
     UIImageOrientationLeftMirrored,  // vertical flip
     UIImageOrientationRightMirrored, // vertical flip
-} UIImageOrientation;
+};
 
 @interface UIImage : NSObject {
 @private
@@ -58,6 +58,7 @@ typedef enum {
 - (id)initWithCGImage:(CGImageRef)imageRef scale:(CGFloat)scale orientation:(UIImageOrientation)orientation;
 
 - (UIImage *)stretchableImageWithLeftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight;
+- (UIImage *)resizableImageWithCapInsets:(UIEdgeInsets)capInsets;   // not correctly implemented
 
 // the draw methods will all check the scale of the current context and attempt to use the best representation it can
 - (void)drawAtPoint:(CGPoint)point blendMode:(CGBlendMode)blendMode alpha:(CGFloat)alpha;

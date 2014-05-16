@@ -11,63 +11,27 @@
 #import "UIColor.h"
 #import "UIStringDrawing.h"
 #import "UIGraphics.h"
+#import "UIImage.h"
+#import "UIFont.h"
 
 static NSString *kSSSegmentedControlEnabledKey = @"enabled";
 
-@interface UISegmentedControl ()
-@property (nonatomic, retain) UIImage *buttonImage;
-@property (nonatomic, retain) UIImage *highlightedButtonImage;
-@property (nonatomic, retain) UIImage *dividerImage;
-@property (nonatomic, retain) UIImage *highlightedDividerImage;
-
-@property (nonatomic, retain) UIFont *font;
-@property (nonatomic, retain) UIColor *textColor;
-@property (nonatomic, retain) UIColor *disabledTextColor;
-@property (nonatomic, retain) UIColor *textShadowColor;
-@property (nonatomic, assign) CGSize textShadowOffset;
-@property (nonatomic, assign) UIEdgeInsets textEdgeInsets;
-
-- (NSMutableDictionary *)_metaForSegmentIndex:(NSUInteger)index;
-- (id)_metaValueForKey:(NSString *)key segmentIndex:(NSUInteger)index;
-- (void)_setMetaValue:(id)value forKey:(NSString *)key segmentIndex:(NSUInteger)index;
-@end
-
-@implementation UISegmentedControl
-
-@synthesize numberOfSegments = _numberOfSegments;
-@synthesize selectedSegmentIndex = _selectedSegmentIndex;
-@synthesize momentary = _momentary;
-@synthesize buttonImage = _buttonImage;
-@synthesize highlightedButtonImage = _highlightedButtonImage;
-@synthesize dividerImage = _dividerImage;
-@synthesize highlightedDividerImage = _highlightedDividerImage;
-@synthesize font = _font;
-@synthesize textColor = _textColor;
-@synthesize disabledTextColor = _disabledTextColor;
-@synthesize textShadowColor = _textShadowColor;
-@synthesize textShadowOffset = _textShadowOffset;
-@synthesize textEdgeInsets = _textEdgeInsets;
-@synthesize segmentedControlStyle = _segmentedControlStyle;
-@synthesize tintColor = _tintColor;
-
-#pragma mark NSObject
-
-- (void)dealloc
-{
-    [_segments release];
-    [_buttonImage release];
-    [_highlightedButtonImage release];
-    [_dividerImage release];
-    [_highlightedDividerImage release];
-    [_font release];
-    [_textColor release];
-    [_disabledTextColor release];
-    [_textShadowColor release];
-    [_segmentMeta release];
-    [_tintColor release];
-    [super dealloc];
+@implementation UISegmentedControl {
+    NSMutableArray *_segments;
+    NSMutableDictionary *_segmentMeta;
+    
+    UIImage *_buttonImage;
+    UIImage *_highlightedButtonImage;
+    UIImage *_dividerImage;
+    UIImage *_highlightedDividerImage;
+    
+    UIFont *_font;
+    UIColor *_textColor;
+    UIColor *_disabledTextColor;
+    UIColor *_textShadowColor;
+    CGSize _textShadowOffset;
+    UIEdgeInsets _textEdgeInsets;
 }
-
 
 #pragma mark UIResponder
 
@@ -110,16 +74,16 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
         _momentary = NO;
         
         // TODO: add images
-        self.buttonImage = [[UIImage imageNamed:@"UISegmentBarButton.png"] stretchableImageWithLeftCapWidth:6 topCapHeight:0];
-        self.highlightedButtonImage = [[UIImage imageNamed:@"UISegmentBarButtonHighlighted.png"] stretchableImageWithLeftCapWidth:6 topCapHeight:0];
-        self.dividerImage = [UIImage imageNamed:@"UISegmentBarDivider.png"];
-        self.highlightedDividerImage = [UIImage imageNamed:@"UISegmentBarDividerHighlighted.png"];
+        _buttonImage = [[UIImage imageNamed:@"UISegmentBarButton.png"] stretchableImageWithLeftCapWidth:6 topCapHeight:0];
+        _highlightedButtonImage = [[UIImage imageNamed:@"UISegmentBarButtonHighlighted.png"] stretchableImageWithLeftCapWidth:6 topCapHeight:0];
+        _dividerImage = [UIImage imageNamed:@"UISegmentBarDivider.png"];
+        _highlightedDividerImage = [UIImage imageNamed:@"UISegmentBarDividerHighlighted.png"];
         self.selectedSegmentIndex = UISegmentedControlNoSegment;
         
-        _font = [[UIFont boldSystemFontOfSize:12.0f] retain];
-        _textColor = [[UIColor whiteColor] retain];
-        _disabledTextColor = [[UIColor colorWithWhite:0.561f alpha:1.0f] retain];
-        _textShadowColor = [[UIColor colorWithWhite:0.0f alpha:0.5f] retain];
+        _font = [UIFont boldSystemFontOfSize:12.0f];
+        _textColor = [UIColor whiteColor];
+        _disabledTextColor = [UIColor colorWithWhite:0.561f alpha:1.0f];
+        _textShadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
         _textShadowOffset = CGSizeMake(0.0f, -1.0f);
         _textEdgeInsets = UIEdgeInsetsMake(-1.0f, 0.0f, 0.0f, 0.0f);
     }

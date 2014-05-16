@@ -31,7 +31,6 @@
 #import "UIGestureRecognizerSubclass.h"
 
 @implementation UIRotationGestureRecognizer
-@synthesize rotation=_rotation;
 
 - (id)initWithTarget:(id)target action:(SEL)action
 {

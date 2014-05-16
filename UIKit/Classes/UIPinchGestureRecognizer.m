@@ -29,9 +29,9 @@
 
 #import "UIPinchGestureRecognizer.h"
 #import "UIGestureRecognizerSubclass.h"
+#import "UITouchEvent.h"
 
 @implementation UIPinchGestureRecognizer
-@synthesize scale=_scale;
 
 - (id)initWithTarget:(id)target action:(SEL)action
 {
@@ -44,6 +44,56 @@
 - (CGFloat)velocity
 {
     return 0;
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (self.state == UIGestureRecognizerStatePossible) {
+        if ([event isKindOfClass:[UITouchEvent class]]) {
+            UITouchEvent *touchEvent = (UITouchEvent *)event;
+            
+            if (touchEvent.touchEventGesture != UITouchEventGestureBegin) {
+                self.state = UIGestureRecognizerStateFailed;
+            }
+        }
+    }
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if ([event isKindOfClass:[UITouchEvent class]]) {
+        UITouchEvent *touchEvent = (UITouchEvent *)event;
+        
+        if (touchEvent.touchEventGesture == UITouchEventGesturePinch) {
+            if (self.state == UIGestureRecognizerStatePossible) {
+                _scale = touchEvent.magnification;
+                self.state = UIGestureRecognizerStateBegan;
+            } else {
+                _scale = touchEvent.magnification;
+                self.state = UIGestureRecognizerStateChanged;
+            }
+        }
+    }
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
+        if ([event isKindOfClass:[UITouchEvent class]]) {
+            UITouchEvent *touchEvent = (UITouchEvent *)event;
+            _scale = touchEvent.magnification;
+            self.state = UIGestureRecognizerStateEnded;
+        } else {
+            self.state = UIGestureRecognizerStateCancelled;
+        }
+    }
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
+        self.state = UIGestureRecognizerStateCancelled;
+    }
 }
 
 @end

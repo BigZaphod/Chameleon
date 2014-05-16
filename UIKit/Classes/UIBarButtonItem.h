@@ -28,8 +28,9 @@
  */
 
 #import "UIBarItem.h"
+#import "UIInterface.h"
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIBarButtonSystemItem) {
     UIBarButtonSystemItemDone,
     UIBarButtonSystemItemCancel,
     UIBarButtonSystemItemEdit,
@@ -53,25 +54,20 @@ typedef enum {
     UIBarButtonSystemItemFastForward,
     UIBarButtonSystemItemUndo,        // iPhoneOS 3.0
     UIBarButtonSystemItemRedo,        // iPhoneOS 3.0
-} UIBarButtonSystemItem;
+};
 
-typedef enum {
+typedef NS_ENUM(NSInteger, UIBarButtonItemStyle) {
     UIBarButtonItemStylePlain,
     UIBarButtonItemStyleBordered,
     UIBarButtonItemStyleDone,
-} UIBarButtonItemStyle;
+};
 
 @class UIView, UIImage;
 
 @interface UIBarButtonItem : UIBarItem {
 @package
-    CGFloat _width;
-    UIView *_customView;
-    __unsafe_unretained id _target;
-    SEL _action;
     BOOL _isSystemItem;
     UIBarButtonSystemItem _systemItem;
-    UIBarButtonItemStyle _style;
 }
 
 - (id)initWithBarButtonSystemItem:(UIBarButtonSystemItem)systemItem target:(id)target action:(SEL)action;
@@ -79,10 +75,25 @@ typedef enum {
 - (id)initWithTitle:(NSString *)title style:(UIBarButtonItemStyle)style target:(id)target action:(SEL)action;
 - (id)initWithImage:(UIImage *)image style:(UIBarButtonItemStyle)style target:(id)target action:(SEL)action;
 
+- (UIImage *)backButtonBackgroundImageForState:(UIControlState)state barMetrics:(UIBarMetrics)barMetrics;
+- (void)setBackButtonBackgroundImage:(UIImage *)backgroundImage forState:(UIControlState)state barMetrics:(UIBarMetrics)barMetrics;
+- (UIOffset)backButtonTitlePositionAdjustmentForBarMetrics:(UIBarMetrics)barMetrics;
+- (void)setBackButtonTitlePositionAdjustment:(UIOffset)adjustment forBarMetrics:(UIBarMetrics)barMetrics;
+- (CGFloat)backButtonBackgroundVerticalPositionAdjustmentForBarMetrics:(UIBarMetrics)barMetrics;
+- (void)setBackButtonBackgroundVerticalPositionAdjustment:(CGFloat)adjustment forBarMetrics:(UIBarMetrics)barMetrics;
+- (CGFloat)backgroundVerticalPositionAdjustmentForBarMetrics:(UIBarMetrics)barMetrics;
+- (void)setBackgroundVerticalPositionAdjustment:(CGFloat)adjustment forBarMetrics:(UIBarMetrics)barMetrics;
+- (UIImage *)backgroundImageForState:(UIControlState)state barMetrics:(UIBarMetrics)barMetrics;
+- (void)setBackgroundImage:(UIImage *)backgroundImage forState:(UIControlState)state barMetrics:(UIBarMetrics)barMetrics;
+- (UIImage *)backgroundImageForState:(UIControlState)state style:(UIBarButtonItemStyle)style barMetrics:(UIBarMetrics)barMetrics;
+- (void)setBackgroundImage:(UIImage *)backgroundImage forState:(UIControlState)state style:(UIBarButtonItemStyle)style barMetrics:(UIBarMetrics)barMetrics;
+- (UIOffset)titlePositionAdjustmentForBarMetrics:(UIBarMetrics)barMetrics;
+- (void)setTitlePositionAdjustment:(UIOffset)adjustment forBarMetrics:(UIBarMetrics)barMetrics;
+
 @property (nonatomic) UIBarButtonItemStyle style;
 @property (nonatomic) CGFloat width;
-@property (nonatomic, retain) UIView *customView;
+@property (nonatomic, strong) UIView *customView;
 @property (nonatomic, assign) id target;
 @property (nonatomic) SEL action;
-
+@property (nonatomic, strong) UIColor *tintColor;
 @end

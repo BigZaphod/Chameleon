@@ -27,11 +27,12 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIKey+UIPrivate.h"
+#import "UIKey.h"
 #import <AppKit/NSEvent.h>
 
-@implementation UIKey
-@synthesize keyCode=_keyCode, characters=_characters, charactersWithModifiers=_charactersWithModifiers, repeat=_repeat;
+@implementation UIKey {
+    NSUInteger _modifierFlags;
+}
 
 - (id)initWithNSEvent:(NSEvent *)event
 {
@@ -45,15 +46,13 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_characters release];
-    [_charactersWithModifiers release];
-    [super dealloc];
-}
 
 - (UIKeyType)type
 {
+    if (_keyCode == 53) {
+        return UIKeyTypeEscape;
+    }
+    
     if ([_characters length] > 0) {
         switch ([_characters characterAtIndex:0]) {
             case NSUpArrowFunctionKey:			return UIKeyTypeUpArrow;
@@ -97,6 +96,19 @@
 - (BOOL)isCommandKeyPressed
 {
     return (_modifierFlags & NSCommandKeyMask) == NSCommandKeyMask;
+}
+
+- (SEL)action
+{
+    if (self.type == UIKeyTypeEnter || (self.type == UIKeyTypeReturn && self.commandKeyPressed)) {
+        return @selector(commitOperation:);
+    }
+    
+    if (self.type == UIKeyTypeEscape || (self.commandKeyPressed && [self.characters isEqual:@"."])) {
+        return @selector(cancelOperation:);
+    }
+    
+    return NULL;
 }
 
 @end

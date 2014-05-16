@@ -30,7 +30,9 @@
 #import "UIPopoverOverlayNSView.h"
 #import "UIPopoverController+UIPrivate.h"
 
-@implementation UIPopoverOverlayNSView
+@implementation UIPopoverOverlayNSView {
+    __unsafe_unretained UIPopoverController *_popoverController;
+}
 
 - (id)initWithFrame:(NSRect)frame popoverController:(UIPopoverController *)controller
 {

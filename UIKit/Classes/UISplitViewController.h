@@ -31,21 +31,9 @@
 
 @protocol UISplitViewControllerDelegate;
 
-@interface UISplitViewController : UIViewController {
-@private
-    __unsafe_unretained id <UISplitViewControllerDelegate> _delegate;
-    NSArray *_viewControllers;
-    
-    struct {
-        unsigned willPresentViewController : 1;
-        unsigned willHideViewController : 1;
-        unsigned willShowViewController : 1;
-    } _delegateHas;
-}
-
+@interface UISplitViewController : UIViewController
 @property (nonatomic, assign) id <UISplitViewControllerDelegate> delegate;
 @property (nonatomic, copy) NSArray *viewControllers;
-
 @end
 
 @class UIPopoverController;
