@@ -78,6 +78,7 @@ typedef NS_ENUM(NSInteger, UITextFieldViewMode) {
 @property (nonatomic, assign) id<UITextFieldDelegate> delegate;
 @property (nonatomic, assign) UITextAlignment textAlignment;
 @property (nonatomic, copy) NSString *placeholder;
+@property (nonatomic, copy) NSAttributedString *attributedPlaceholder;
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, strong) UIFont *font;
 @property (nonatomic) UITextBorderStyle borderStyle;

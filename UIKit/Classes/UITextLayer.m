@@ -76,6 +76,10 @@
         
         _clipView = [(UICustomNSClipView *)[UICustomNSClipView alloc] initWithFrame:NSMakeRect(0,0,100,100)];
         _textView = [(UICustomNSTextView *)[UICustomNSTextView alloc] initWithFrame:[_clipView frame] secureTextEntry:_secureTextEntry isField:isField];
+        
+        if (isField) {
+            _textView.textContainer.lineFragmentPadding = 0;
+        }
 
         [_textView setDelegate:self];
         [_clipView setDocumentView:_textView];
@@ -279,18 +283,28 @@
         case UITextAlignmentRight:
             [_textView setAlignment:NSRightTextAlignment];
             break;
+        case UITextAlignmentJustified:
+            [_textView setAlignment:NSRightTextAlignment];
+            break;
+        case UITextAlignmentNatural:
+            [_textView setAlignment:NSRightTextAlignment];
+            break;
     }
 }
 
 - (UITextAlignment)textAlignment
 {
     switch ([_textView alignment]) {
+        case NSLeftTextAlignment:
+            return UITextAlignmentLeft;
         case NSCenterTextAlignment:
             return UITextAlignmentCenter;
         case NSRightTextAlignment:
             return UITextAlignmentRight;
+        case NSJustifiedTextAlignment:
+            return UITextAlignmentJustified;
         default:
-            return UITextAlignmentLeft;
+            return UITextAlignmentNatural;
     }
 }
 

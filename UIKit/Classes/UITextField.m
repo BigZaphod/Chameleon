@@ -32,6 +32,7 @@
 #import "UIColor.h"
 #import "UIFont.h"
 #import "UIImage.h"
+#import "UILabel.h"
 #import <AppKit/NSCursor.h>
 
 NSString *const UITextFieldTextDidBeginEditingNotification = @"UITextFieldTextDidBeginEditingNotification";
@@ -45,6 +46,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 @end
 
 @implementation UITextField {
+    UILabel *_placeholderLabel;
     UITextLayer *_textLayer;
     
     struct {
@@ -62,8 +64,13 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (id)initWithFrame:(CGRect)frame
 {
     if ((self=[super initWithFrame:frame])) {
+        _placeholderLabel = [[UILabel alloc] initWithFrame:self.bounds];
+        _placeholderLabel.textColor = [UIColor colorWithRed:199.0/255.0 green:199.0/255.0 blue:205.0/255.0 alpha:1.0];
+        _placeholderLabel.hidden = NO;
+        [self addSubview:_placeholderLabel];
+        
         _textLayer = [[UITextLayer alloc] initWithContainer:self isField:YES];
-        [self.layer insertSublayer:_textLayer atIndex:0];
+        [self.layer addSublayer:_textLayer];
 
         self.textAlignment = UITextAlignmentLeft;
         self.font = [UIFont systemFontOfSize:17];
@@ -101,7 +108,9 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     [super layoutSubviews];
     const CGRect bounds = self.bounds;
     _textLayer.frame = [self textRectForBounds:bounds];
-
+    _placeholderLabel.frame = _textLayer.frame;
+    [_placeholderLabel sizeToFit];
+    
     if ([self _isLeftViewVisible]) {
         _leftView.hidden = NO;
         _leftView.frame = [self leftViewRectForBounds:bounds];
@@ -131,12 +140,23 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     }
 }
 
-- (void)setPlaceholder:(NSString *)thePlaceholder
+- (NSString *)placeholder
 {
-    if (![thePlaceholder isEqualToString:_placeholder]) {
-        _placeholder = [thePlaceholder copy];
-        [self setNeedsDisplay];
-    }
+    return _placeholderLabel.text;
+}
+
+- (void)setPlaceholder:(NSString *)placeholder
+{
+    _placeholderLabel.text = placeholder;
+}
+
+- (void)setAttributedPlaceholder:(NSAttributedString *)attributedPlaceholder
+{
+    _placeholderLabel.attributedText = attributedPlaceholder;
+}
+- (NSAttributedString *)attributedPlaceholder
+{
+    return _placeholderLabel.attributedText;
 }
 
 - (void)setBorderStyle:(UITextBorderStyle)style
@@ -423,6 +443,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (void)setText:(NSString *)newText
 {
     _textLayer.text = newText;
+    _placeholderLabel.hidden = ([self.text length] > 0);
 }
 
 - (BOOL)_textShouldBeginEditing
@@ -479,6 +500,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
 - (void)_textDidChange
 {
+    _placeholderLabel.hidden = ([self.text length] > 0);
     [[NSNotificationCenter defaultCenter] postNotificationName:UITextFieldTextDidChangeNotification object:self];
 }
 
@@ -501,6 +523,12 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
             break;
         case UITextAlignmentRight:
             textAlignment = @"Right";
+            break;
+        case UITextAlignmentJustified:
+            textAlignment = @"Justified";
+            break;
+        case UITextAlignmentNatural:
+            textAlignment = @"Natural";
             break;
     }
     return [NSString stringWithFormat:@"<%@: %p; textAlignment = %@; editing = %@; textColor = %@; font = %@; delegate = %@>", [self className], self, textAlignment, (self.editing ? @"YES" : @"NO"), self.textColor, self.font, self.delegate];

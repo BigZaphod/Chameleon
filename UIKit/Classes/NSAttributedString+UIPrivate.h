@@ -27,33 +27,11 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIView.h"
-#import "UIStringDrawing.h"
+#import <Foundation/Foundation.h>
 
-@class UIFont, UIColor;
+@interface NSAttributedString (UIPrivate)
 
-@interface UILabel : UIView
-
-- (CGRect)textRectForBounds:(CGRect)bounds limitedToNumberOfLines:(NSInteger)numberOfLines;
-- (void)drawTextInRect:(CGRect)rect;
-
-@property (nonatomic, copy) NSString *text;
-@property (nonatomic, copy) NSAttributedString *attributedText;
-@property (nonatomic, strong) UIFont *font;
-@property (nonatomic, strong) UIColor *textColor;
-@property (nonatomic, strong) UIColor *highlightedTextColor;
-@property (nonatomic, strong) UIColor *shadowColor;
-@property (nonatomic) CGSize shadowOffset;
-@property (nonatomic) UITextAlignment textAlignment;
-@property (nonatomic) UILineBreakMode lineBreakMode;
-@property (nonatomic, getter=isEnabled) BOOL enabled;
-@property (nonatomic) NSInteger numberOfLines;
-@property (nonatomic) UIBaselineAdjustment baselineAdjustment;
-@property (nonatomic) BOOL adjustsFontSizeToFitWidth;
-@property (nonatomic) CGFloat minimumScaleFactor;
-@property (nonatomic, getter=isHighlighted) BOOL highlighted;
-
-@property (nonatomic) BOOL adjustsLetterSpacingToFitWidth; // deprecated & ignored
-@property (nonatomic) CGFloat minimumFontSize; // deprecated & ignored
+- (NSAttributedString *)NSCompatibleAttributedString;
+- (NSAttributedString *)UICompatibleAttributedString;
 
 @end
