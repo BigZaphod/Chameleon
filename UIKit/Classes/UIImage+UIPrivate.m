@@ -38,21 +38,26 @@ NSMutableDictionary *imageCache = nil;
 
 @implementation UIImage (UIPrivate)
 
-+ (void)load
++ (NSMutableDictionary *)imageCache
 {
-    imageCache = [[NSMutableDictionary alloc] init];
+    static NSMutableDictionary *imageCache = nil;
+    static dispatch_once_t imageCacheOnce = 0;
+    dispatch_once(&imageCacheOnce, ^{
+        imageCache = [[NSMutableDictionary alloc] init];
+    });
+    return imageCache;
 }
 
 + (void)_cacheImage:(UIImage *)image forName:(NSString *)name
 {
     if (image && name) {
-        [imageCache setObject:image forKey:name];
+        [[self imageCache] setObject:image forKey:name];
     }
 }
 
 + (UIImage *)_cachedImageForName:(NSString *)name
 {
-    return [imageCache objectForKey:name];
+    return [[self imageCache] objectForKey:name];
 }
 
 + (UIImage *)_frameworkImageWithName:(NSString *)name leftCapWidth:(NSUInteger)leftCapWidth topCapHeight:(NSUInteger)topCapHeight
