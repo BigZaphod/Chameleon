@@ -34,6 +34,17 @@
 
 @implementation UICustomNSClipView
 
+- (BOOL)isFlipped
+{
+    return YES;
+}
+- (CALayer *)makeBackingLayer
+{
+    CALayer *layer = [super makeBackingLayer];
+    layer.geometryFlipped = YES;
+    return layer;
+}
+
 - (id)initWithFrame:(NSRect)frame
 {
     if ((self=[super initWithFrame:frame])) {
