@@ -46,6 +46,7 @@
 @implementation UITextLayer {
     UIView <UITextLayerContainerViewProtocol, UITextLayerTextDelegate> *_containerView;
     BOOL _containerCanScroll;
+    BOOL _isField;
     UICustomNSTextView *_textView;
     UICustomNSClipView *_clipView;
     BOOL _changingResponderStatus;
@@ -73,11 +74,15 @@
             && [_containerView respondsToSelector:@selector(setContentSize:)]
             && [_containerView respondsToSelector:@selector(contentSize)]
             && [_containerView respondsToSelector:@selector(isScrollEnabled)];
+        _isField = isField;
         
-        _clipView = [(UICustomNSClipView *)[UICustomNSClipView alloc] initWithFrame:NSMakeRect(0,0,100,100)];
-        _textView = [(UICustomNSTextView *)[UICustomNSTextView alloc] initWithFrame:[_clipView frame] secureTextEntry:_secureTextEntry isField:isField];
+        _clipView = [(UICustomNSClipView *)[UICustomNSClipView alloc] initWithFrame:aView.bounds];
+        _textView = [(UICustomNSTextView *)[UICustomNSTextView alloc] initWithFrame:aView.bounds secureTextEntry:_secureTextEntry isField:isField];
         
-        _textView.textContainer.lineFragmentPadding = 0;
+        // this is really strange if set to 0 then using a return key will not track
+        // the text view top to bottom, maybe because then all lines are 0 width?
+        // Since field mode doesn't want top to bottom tracking we can leave as zero
+        _textView.textContainer.lineFragmentPadding = (_isField) ? 0.0 : 0.001;
         
         [_textView setDelegate:self];
         [_clipView setDocumentView:_textView];
@@ -154,15 +159,27 @@
         }
         
         UIWindow *window = [_containerView window];
-        const CGRect windowRect = [window convertRect:self.frame fromView:_containerView];
+        const CGRect frameRect = self.frame;
+        const CGRect windowRect = [window convertRect:frameRect fromView:_containerView];
         const CGRect screenRect = [window convertRect:windowRect toWindow:nil];
         NSRect desiredFrame = NSRectFromCGRect(screenRect);
 
         [_clipView setFrame:desiredFrame];
+        
+        // this ensures scrolling is properly clamped to match iOS behavior where text fields
+        // only track left to right and text views track top to bottom
+        if (_isField) {
+            [_textView setFrameSize:CGSizeMake(_textView.frame.size.width, _clipView.frame.size.height)];
+        } else {
+            [_textView setFrameSize:CGSizeMake(_clipView.frame.size.width, _textView.frame.size.height)];
+        }
+        
         [self updateScrollViewContentSize];
     } else {
         [self removeNSView];
     }
+    
+    NSLog(@"%@ => %@ => %@", NSStringFromCGRect(_clipView.frame), NSStringFromCGRect(_textView.frame), NSStringFromCGRect(_clipView.documentRect));
 }
 
 - (void)layoutSublayers
@@ -357,7 +374,7 @@
 
     if (_textDelegateHas.didChange) {
         [_containerView _textDidChange];
-    }
+    } 
 }
 
 - (void)textViewDidChangeSelection:(NSNotification *)aNotification

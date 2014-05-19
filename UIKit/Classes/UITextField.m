@@ -294,7 +294,10 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
         }
     }
     
-    return CGRectIntegral(bounds);
+    textRect.size.height = [_textLayer sizeThatFits:bounds.size].height;
+    textRect.origin.y = (bounds.size.height - textRect.size.height) / 2.0;
+    
+    return CGRectIntegral(textRect);
 }
 
 
