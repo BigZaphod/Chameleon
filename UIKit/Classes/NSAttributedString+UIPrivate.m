@@ -7,16 +7,20 @@
 
 @implementation NSAttributedString (UIPrivate)
 
-- (NSAttributedString *)NSCompatibleAttributedString
+- (NSAttributedString *)NSCompatibleAttributedStringWithOptions:(NSAttributedStringConversionOptions)options
 {
+    if (options == 0) {
+        return [self copy];
+    }
+    
     // convert UIColor and UIFont to NS counterparts
     NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:self.string];
     [self enumerateAttributesInRange:NSMakeRange(0, str.length) options:0 usingBlock:^(NSDictionary *attrs, NSRange range, BOOL *stop) {
         NSMutableDictionary *convertedAttrs = [NSMutableDictionary dictionaryWithCapacity:[attrs count]];
         [attrs enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-            if ([obj isKindOfClass:[UIColor class]]) {
+            if ([obj isKindOfClass:[UIColor class]] && (options & NSAttributedStringConversionOptionColors)) {
                 obj = [(UIColor *)obj NSColor];
-            } else if ([obj isKindOfClass:[UIFont class]]) {
+            } else if ([obj isKindOfClass:[UIFont class]] && (options & NSAttributedStringConversionOptionFonts)) {
                 obj = [(UIFont *)obj NSFont];
             }
             
@@ -26,16 +30,20 @@
     }];
     return str;
 }
-- (NSAttributedString *)UICompatibleAttributedString
+- (NSAttributedString *)UICompatibleAttributedStringWithOptions:(NSAttributedStringConversionOptions)options
 {
+    if (options == 0) {
+        return [self copy];
+    }
+    
     // convert NSColor and NSFont to UI counterparts
     NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:self.string];
     [self enumerateAttributesInRange:NSMakeRange(NSNotFound, 0) options:0 usingBlock:^(NSDictionary *attrs, NSRange range, BOOL *stop) {
         NSMutableDictionary *convertedAttrs = [NSMutableDictionary dictionaryWithCapacity:[attrs count]];
         [attrs enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-            if ([obj isKindOfClass:[NSColor class]]) {
+            if ([obj isKindOfClass:[NSColor class]] && (options & NSAttributedStringConversionOptionColors)) {
                 obj = [UIColor colorWithNSColor:obj];
-            } else if ([obj isKindOfClass:[NSFont class]]) {
+            } else if ([obj isKindOfClass:[NSFont class]] && (options & NSAttributedStringConversionOptionFonts)) {
                 obj = [UIFont fontWithNSFont:obj];
             }
             

@@ -29,9 +29,14 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, NSAttributedStringConversionOptions) {
+    NSAttributedStringConversionOptionColors   = 1 << 0,
+    NSAttributedStringConversionOptionFonts    = 1 << 1
+};
+
 @interface NSAttributedString (UIPrivate)
 
-- (NSAttributedString *)NSCompatibleAttributedString;
-- (NSAttributedString *)UICompatibleAttributedString;
+- (NSAttributedString *)NSCompatibleAttributedStringWithOptions:(NSAttributedStringConversionOptions)options;
+- (NSAttributedString *)UICompatibleAttributedStringWithOptions:(NSAttributedStringConversionOptions)options;
 
 @end
