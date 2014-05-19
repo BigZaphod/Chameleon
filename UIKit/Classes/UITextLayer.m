@@ -178,8 +178,6 @@
     } else {
         [self removeNSView];
     }
-    
-    NSLog(@"%@ => %@ => %@", NSStringFromCGRect(_clipView.frame), NSStringFromCGRect(_textView.frame), NSStringFromCGRect(_clipView.documentRect));
 }
 
 - (void)layoutSublayers
