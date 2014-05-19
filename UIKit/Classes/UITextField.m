@@ -108,7 +108,10 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     [super layoutSubviews];
     const CGRect bounds = self.bounds;
     _textLayer.frame = [self textRectForBounds:bounds];
+    
     _placeholderLabel.frame = [self placeholderRectForBounds:bounds];
+    [_placeholderLabel sizeToFit];
+    
     
     if ([self _isLeftViewVisible]) {
         _leftView.hidden = NO;
