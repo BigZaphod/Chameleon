@@ -200,34 +200,80 @@ static inline NSDictionary * NSAttributedStringAttributesFromLabel(UILabel *labe
 }
 
 static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstraints(CTFramesetterRef framesetter, NSAttributedString *attributedString, CGSize size, NSUInteger numberOfLines) {
-    CFRange rangeToSize = CFRangeMake(0, (CFIndex)[attributedString length]);
-    CGSize constraints = CGSizeMake(size.width, UILABEL_FLOAT_MAX);
+    // 10.7+ has a good typesetter suggestion algorithm but 10.6 is absolutely aweful
+    // and regularly cuts off the last line ( which is really bad for SINGLE lines )
+    // we're going to do it a bit more work in 10.6 to help get it right
     
-    if (numberOfLines == 1) {
-        // If there is one line, the size that fits is the full width of the line
-        constraints = CGSizeMake(UILABEL_FLOAT_MAX, UILABEL_FLOAT_MAX);
-    } else if (numberOfLines > 0) {
-        // If the line count of the label more than 1, limit the range to size to the number of lines that have been set
+    // setup suggested size
+    CGSize suggestedSize = CGSizeZero;
+    
+    // 10.6 +
+    if (&kCTFramePathFillRuleAttributeName == nil) {
+        CGSize constraints = CGSizeMake(UILABEL_FLOAT_MAX, UILABEL_FLOAT_MAX);
+        
+        if (numberOfLines > 0) {
+            constraints.width = size.width;
+        }
+        
         CGMutablePathRef path = CGPathCreateMutable();
         CGPathAddRect(path, NULL, CGRectMake(0.0f, 0.0f, constraints.width, UILABEL_FLOAT_MAX));
         CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), path, NULL);
         CFArrayRef lines = CTFrameGetLines(frame);
         
-        if (CFArrayGetCount(lines) > 0) {
-            NSInteger lastVisibleLineIndex = MIN((CFIndex)numberOfLines, CFArrayGetCount(lines)) - 1;
-            CTLineRef lastVisibleLine = CFArrayGetValueAtIndex(lines, lastVisibleLineIndex);
-            
-            CFRange rangeToLayout = CTLineGetStringRange(lastVisibleLine);
-            rangeToSize = CFRangeMake(0, rangeToLayout.location + rangeToLayout.length);
+        CGFloat totalLinesHeights = 0;
+        
+        if(CFArrayGetCount(lines) > 0) {
+            for (NSInteger i = 0; i < CFArrayGetCount(lines); i++) {
+                if (i >= numberOfLines) {
+                    break;
+                }
+                
+                CTLineRef line = CFArrayGetValueAtIndex(lines, i);
+                CGFloat a, d, l;
+                CTLineGetTypographicBounds(line, &a, &d, &l);
+                
+                totalLinesHeights += a + d + l;
+            }
         }
         
         CFRelease(frame);
         CFRelease(path);
+        
+        suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, constraints, NULL);
+        suggestedSize.height = totalLinesHeights;
+    }
+    // 10.7 +
+    else {
+        CFRange rangeToSize = CFRangeMake(0, 0);
+        CGSize constraints = CGSizeMake(UILABEL_FLOAT_MAX, UILABEL_FLOAT_MAX);
+        
+        if (numberOfLines > 0) {
+            constraints.width = size.width;
+            
+            CGMutablePathRef path = CGPathCreateMutable();
+            CGPathAddRect(path, NULL, CGRectMake(0.0f, 0.0f, constraints.width, UILABEL_FLOAT_MAX));
+            CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), path, NULL);
+            CFArrayRef lines = CTFrameGetLines(frame);
+            
+            if(CFArrayGetCount(lines) > 0) {
+                NSInteger lastVisibleLineIndex = MIN((CFIndex)numberOfLines, CFArrayGetCount(lines)) - 1;
+                CTLineRef lastVisibleLine = CFArrayGetValueAtIndex(lines, lastVisibleLineIndex);
+                
+                CFRange rangeToLayout = CTLineGetStringRange(lastVisibleLine);
+                rangeToSize = CFRangeMake(0, rangeToLayout.location + rangeToLayout.length);
+            }
+            
+            CFRelease(frame);
+            CFRelease(path);
+        }
+        
+        suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, rangeToSize, NULL, constraints, NULL);
+        
     }
     
-    CGSize suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, rangeToSize, NULL, constraints, NULL);
+    suggestedSize = CGSizeMake(CGFloat_ceil(suggestedSize.width), CGFloat_ceil(suggestedSize.height));
     
-    return CGSizeMake(CGFloat_ceil(suggestedSize.width), CGFloat_ceil(suggestedSize.height));
+    return suggestedSize;
 }
 
 @interface UILabel() {
@@ -606,7 +652,6 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
                 CTLineDraw(truncatedLine, c);
                 
                 CFRelease(truncatedLine);
-//                CFRelease(truncationLine);
                 CFRelease(truncationToken);
             } else {
                 CGFloat penOffset = (CGFloat)CTLineGetPenOffsetForFlush(line, flushFactor, rect.size.width);
@@ -761,7 +806,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
                 // Use text color, or default to black
                 id color = attributes[NSStrikethroughColorAttributeName];
                 if (color) {
-                    if ([color isKindOfClass:[UIColor class]] || [color isKindOfClass:[NSColor class]]) {
+                    if ([color isKindOfClass:[UIColor class]]) {
                         CGContextSetStrokeColorWithColor(c, [color CGColor]);
                     } else {
                         CGContextSetStrokeColorWithColor(c, (__bridge CGColorRef)color);
@@ -799,7 +844,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 - (NSAttributedString *)attributedTextForDrawing
 {
     if (_attributedText) {
-        _attributedTextForDrawing = [_attributedText NSCompatibleAttributedString];
+        _attributedTextForDrawing = [_attributedText NSCompatibleAttributedStringWithOptions:NSAttributedStringConversionOptionFonts];
     } else {
         _attributedTextForDrawing = [[NSAttributedString alloc] initWithString:_text attributes:NSAttributedStringAttributesFromLabel(self)];
     }
