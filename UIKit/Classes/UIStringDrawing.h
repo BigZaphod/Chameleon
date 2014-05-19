@@ -44,6 +44,12 @@ typedef NS_ENUM(NSInteger, UITextAlignment) {
     UITextAlignmentRight,
     UITextAlignmentJustified,
     UITextAlignmentNatural,
+    
+    NSTextAlignmentLeft = UITextAlignmentLeft,
+    NSTextAlignmentCenter = UITextAlignmentCenter,
+    NSTextAlignmentRight = UITextAlignmentRight,
+    NSTextAlignmentJustified = UITextAlignmentJustified,
+    NSTextAlignmentNatural = UITextAlignmentNatural
 };
 
 typedef NS_ENUM(NSInteger, UIBaselineAdjustment) {
