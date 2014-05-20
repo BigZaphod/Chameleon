@@ -207,8 +207,15 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     // setup suggested size
     CGSize suggestedSize = CGSizeZero;
     
+    // safety checks
+    if(!framesetter) {
+        return suggestedSize;
+    }
+    
+    CFRetain(framesetter);
+    
     // 10.6 +
-    if (&kCTFramePathFillRuleAttributeName == nil) {
+    if (NSAppKitVersionNumber < NSAppKitVersionNumber10_7) {
         CGSize constraints = CGSizeMake(UILABEL_FLOAT_MAX, UILABEL_FLOAT_MAX);
         
         if (numberOfLines > 0) {
@@ -218,29 +225,33 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         CGMutablePathRef path = CGPathCreateMutable();
         CGPathAddRect(path, NULL, CGRectMake(0.0f, 0.0f, constraints.width, UILABEL_FLOAT_MAX));
         CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), path, NULL);
-        CFArrayRef lines = CTFrameGetLines(frame);
         
-        CGFloat totalLinesHeights = 0;
-        
-        if(CFArrayGetCount(lines) > 0) {
-            for (NSInteger i = 0; i < CFArrayGetCount(lines); i++) {
-                if (i >= numberOfLines) {
-                    break;
+        if (frame) {
+            CFArrayRef lines = CTFrameGetLines(frame);
+            
+            CGFloat totalLinesHeights = 0;
+            
+            if(lines && CFArrayGetCount(lines) > 0) {
+                for (NSInteger i = 0; i < CFArrayGetCount(lines); i++) {
+                    if (i >= numberOfLines) {
+                        break;
+                    }
+                    
+                    CTLineRef line = CFArrayGetValueAtIndex(lines, i);
+                    CGFloat a, d, l;
+                    CTLineGetTypographicBounds(line, &a, &d, &l);
+                    
+                    totalLinesHeights += a + d + l;
                 }
-                
-                CTLineRef line = CFArrayGetValueAtIndex(lines, i);
-                CGFloat a, d, l;
-                CTLineGetTypographicBounds(line, &a, &d, &l);
-                
-                totalLinesHeights += a + d + l;
             }
+            
+            CFRelease(frame);
+            
+            suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, constraints, NULL);
+            suggestedSize.height = totalLinesHeights;
         }
         
-        CFRelease(frame);
         CFRelease(path);
-        
-        suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, constraints, NULL);
-        suggestedSize.height = totalLinesHeights;
     }
     // 10.7 +
     else {
@@ -255,7 +266,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
             CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), path, NULL);
             CFArrayRef lines = CTFrameGetLines(frame);
             
-            if(CFArrayGetCount(lines) > 0) {
+            if(lines && CFArrayGetCount(lines) > 0) {
                 NSInteger lastVisibleLineIndex = MIN((CFIndex)numberOfLines, CFArrayGetCount(lines)) - 1;
                 CTLineRef lastVisibleLine = CFArrayGetValueAtIndex(lines, lastVisibleLineIndex);
                 
@@ -272,6 +283,8 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     }
     
     suggestedSize = CGSizeMake(CGFloat_ceil(suggestedSize.width), CGFloat_ceil(suggestedSize.height));
+    
+    CFRelease(framesetter);
     
     return suggestedSize;
 }
@@ -473,12 +486,19 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
-    if (!self.attributedTextForDrawing.length) {
+    if (self.attributedTextForDrawing.length <= 0) {
         return CGSizeZero;
     }
     
     size = CTFramesetterSuggestFrameSizeForAttributedStringWithConstraints([self framesetter], self.attributedTextForDrawing, size, (NSUInteger)self.numberOfLines);
     return size;
+}
+- (void)sizeToFit
+{
+    CGSize size = (self.numberOfLines == 1) ? CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX) : CGSizeMake(self.bounds.size.width, CGFLOAT_MAX);
+    CGRect frame = self.frame;
+    frame.size = [self sizeThatFits:size];
+    self.frame = frame;
 }
 
 #pragma mark -
@@ -836,7 +856,8 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 - (NSAttributedString *)renderedAttributedText
 {
     if (!_renderedAttributedText) {
-        self.renderedAttributedText = NSAttributedStringBySettingColorFromContext(self.attributedTextForDrawing, self.textColor);
+        _renderedAttributedText = NSAttributedStringBySettingColorFromContext(self.attributedTextForDrawing, self.textColor);
+        _renderedAttributedText = [_renderedAttributedText NSCompatibleAttributedStringWithOptions:NSAttributedStringConversionOptionColors];
     }
     return _renderedAttributedText;
 }
