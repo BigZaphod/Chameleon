@@ -236,4 +236,10 @@
     // DO NOTHING to prevent WebView resize window
 }
 
+- (void)webViewClose:(WebView *)sender
+{
+    // end modal session if we are in one
+    [NSApp endSheet:sender.window returnCode:NSOKButton];
+}
+
 @end
