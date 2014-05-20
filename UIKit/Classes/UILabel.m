@@ -846,7 +846,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     if (_attributedText) {
         _attributedTextForDrawing = [_attributedText NSCompatibleAttributedStringWithOptions:NSAttributedStringConversionOptionFonts];
     } else {
-        _attributedTextForDrawing = [[NSAttributedString alloc] initWithString:_text attributes:NSAttributedStringAttributesFromLabel(self)];
+        _attributedTextForDrawing = [[NSAttributedString alloc] initWithString:(_text) ? _text : @"" attributes:NSAttributedStringAttributesFromLabel(self)];
     }
     return _attributedTextForDrawing;
 }
