@@ -203,9 +203,12 @@ typedef NS_ENUM(NSInteger, _UINavigationBarTransition) {
         
         if (backItem) {
             _leftView = [[self class] _backButtonWithTitle:backItem.backBarButtonItem.title ?: backItem.title];
+            _leftView.hidden = backItem.hidesBackButton;
         } else {
             _leftView = [[self class] _viewWithBarButtonItem:topItem.leftBarButtonItem];
         }
+        
+        
 
         if (_leftView) {
             leftFrame = _leftView.frame;
