@@ -473,7 +473,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
-    if (!self.attributedTextForDrawing) {
+    if (!self.attributedTextForDrawing.length) {
         return CGSizeZero;
     }
     
