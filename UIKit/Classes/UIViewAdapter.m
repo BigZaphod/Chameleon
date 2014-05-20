@@ -110,6 +110,8 @@
     CALayer *layer = self.layer;
     CALayer *clipLayer = [_clipView layer];
     
+    clipLayer.geometryFlipped = NO;
+    
     // always make sure it's at the very bottom
     [layer insertSublayer:clipLayer atIndex:0];
     
