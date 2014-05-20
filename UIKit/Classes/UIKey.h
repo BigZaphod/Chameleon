@@ -50,6 +50,7 @@ typedef NS_ENUM(NSInteger, UIKeyType) {
     UIKeyTypePageUp,
     UIKeyTypePageDown,
     UIKeyTypeEscape,
+    UIKeyTypeTab,
 };
 
 @interface UIKey : NSObject
