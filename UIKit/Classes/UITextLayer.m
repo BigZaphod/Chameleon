@@ -55,6 +55,7 @@
         unsigned didChange : 1;
         unsigned didChangeSelection : 1;
         unsigned didReturnKey : 1;
+        unsigned didTabKey : 1;
     } _textDelegateHas;
 }
 
@@ -68,6 +69,7 @@
         _textDelegateHas.didChange = [_containerView respondsToSelector:@selector(_textDidChange)];
         _textDelegateHas.didChangeSelection = [_containerView respondsToSelector:@selector(_textDidChangeSelection)];
         _textDelegateHas.didReturnKey = [_containerView respondsToSelector:@selector(_textDidReceiveReturnKey)];
+        _textDelegateHas.didTabKey = [_containerView respondsToSelector:@selector(_textDidReceiveTabKey)];
         
         _containerCanScroll = [_containerView respondsToSelector:@selector(setContentOffset:)]
             && [_containerView respondsToSelector:@selector(contentOffset)]
@@ -404,13 +406,20 @@
     }
 }
 
-- (BOOL)textView:(NSTextView *)aTextView doCommandBySelector:(SEL)aSelector
+- (BOOL)textView:(NSTextView *)aTextView doCommandBySelector:(SEL)selector
 {
     // this makes sure there's no newlines added when in field editing mode.
     // it also allows us to handle when return/enter is pressed differently for fields. Dunno if there's a better way or not.
-    if ([_textView isFieldEditor] && ((aSelector == @selector(insertNewline:) || (aSelector == @selector(insertNewlineIgnoringFieldEditor:))))) {
+    if ([_textView isFieldEditor] && ((selector == @selector(insertNewline:) || (selector == @selector(insertNewlineIgnoringFieldEditor:))))) {
         if (_textDelegateHas.didReturnKey) {
             [_containerView _textDidReceiveReturnKey];
+        }
+        return YES;
+    }
+    
+    if ([_textView isFieldEditor] && ((selector == @selector(insertTab:) || (selector == @selector(insertTabIgnoringFieldEditor:))))) {
+        if (_textDelegateHas.didTabKey) {
+            [_containerView _textDidReceiveTabKey];
         }
         return YES;
     }

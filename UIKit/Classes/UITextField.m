@@ -517,6 +517,13 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     }
 }
 
+- (void)_textDidReceiveTabKey
+{
+    if (_delegateHas.shouldReturn) {
+        [_delegate textFieldShouldReturn:self];
+    }
+}
+
 - (NSString *)description
 {
     NSString *textAlignment = @"";
