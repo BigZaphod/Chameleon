@@ -107,6 +107,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 {
     [super layoutSubviews];
     const CGRect bounds = self.bounds;
+    
     _textLayer.frame = [self textRectForBounds:bounds];
     
     _placeholderLabel.frame = [self placeholderRectForBounds:bounds];
@@ -297,8 +298,8 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
         }
     }
     
-    textRect.size.height = [_textLayer sizeThatFits:bounds.size].height;
-    textRect.origin.y = (bounds.size.height - textRect.size.height) / 2.0;
+    textRect.size.height = [_textLayer sizeThatFits:textRect.size].height;
+    textRect.origin.y = textRect.origin.y + (bounds.size.height - textRect.size.height) / 2.0;
     
     return CGRectIntegral(textRect);
 }
