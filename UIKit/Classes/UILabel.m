@@ -490,8 +490,10 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         return CGSizeZero;
     }
     
-    size = CTFramesetterSuggestFrameSizeForAttributedStringWithConstraints([self framesetter], self.attributedTextForDrawing, size, (NSUInteger)self.numberOfLines);
-    return size;
+    CGSize suggestedSize = CTFramesetterSuggestFrameSizeForAttributedStringWithConstraints([self framesetter], self.attributedTextForDrawing, size, (NSUInteger)self.numberOfLines);
+    suggestedSize.width = MIN(size.width, suggestedSize.width);
+    suggestedSize.height = MIN(size.height, suggestedSize.height);
+    return suggestedSize;
 }
 - (void)sizeToFit
 {
