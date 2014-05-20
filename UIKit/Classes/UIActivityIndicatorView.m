@@ -39,7 +39,7 @@
 static CGSize UIActivityIndicatorViewStyleSize(UIActivityIndicatorViewStyle style)
 {
     if (style == UIActivityIndicatorViewStyleWhiteLarge) {
-        return CGSizeMake(37,37);
+        return CGSizeMake(38,38);
     } else {
         return CGSizeMake(20,20);
     }
