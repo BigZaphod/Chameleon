@@ -216,14 +216,18 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         constraints.width = size.width;
     }
     
+    // setup range sizing
+    CFRange rangeToSize = CFRangeMake(0, 0);
+    
     // create frame
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathAddRect(path, NULL, CGRectMake(0.0f, 0.0f, constraints.width, UILABEL_FLOAT_MAX));
-    CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), path, NULL);
+    CTFrameRef frame = CTFramesetterCreateFrame(framesetter, rangeToSize, path, NULL);
     
     // get lines
     CFArrayRef lines = CTFrameGetLines(frame);
     NSInteger linesCount = (lines) ? CFArrayGetCount(lines) : 0;
+    
     if(linesCount > 0) {
         CGPoint *linesOrigins = malloc(linesCount * sizeof(CGPoint));
         CTFrameGetLineOrigins(frame, CFRangeMake(0, 0), linesOrigins);
@@ -236,11 +240,15 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
             CGFloat width = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
             CGFloat trailingWidth = CTLineGetTrailingWhitespaceWidth(line);
             
-            CGFloat lineWidth = origin.x + width - trailingWidth;
+            CGFloat lineWidth = width - trailingWidth;
             CGFloat lineMaxY = constraints.height - origin.y + descent;
+            CFRange lineRange = CTLineGetStringRange(line);
             
             suggestedSize.width = MAX(suggestedSize.width, lineWidth);
             suggestedSize.height = MAX(suggestedSize.height, lineMaxY);
+            
+            
+            rangeToSize.length = lineRange.location + lineRange.length;
             
             if (numberOfLines > 0 && i + 1 == numberOfLines) {
                 break;
@@ -251,7 +259,11 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         free(linesOrigins);
     }
   
-    suggestedSize = CGSizeMake(CGFloat_ceil(suggestedSize.width), CGFloat_ceil(suggestedSize.height));
+    CGSize coreText = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, rangeToSize, NULL, constraints, NULL);
+    coreText.width = MIN(constraints.width, coreText.width);
+    coreText.height = MIN(size.height, coreText.height);
+    
+    suggestedSize = CGSizeMake(suggestedSize.width, CGFloat_round(suggestedSize.height));
     suggestedSize.width = MIN(constraints.width, suggestedSize.width);
     suggestedSize.height = MIN(size.height, suggestedSize.height);
     
@@ -444,11 +456,9 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
                                                                                       self.attributedTextForDrawing,
                                                                                       textRect.size,
                                                                                       self.numberOfLines);
-    textSize = CGSizeMake(CGFloat_ceil(textSize.width), CGFloat_ceil(textSize.height)); // Fix for iOS 4, CTFramesetterSuggestFrameSizeWithConstraints sometimes returns fractional sizes
     
     if (textSize.height < textRect.size.height) {
-        CGFloat yOffset = CGFloat_ceil((bounds.size.height - textSize.height) / 2.0f);
-        textRect.origin.y -= yOffset;
+        textRect.origin.y -= (bounds.size.height - textSize.height) / 2.0f;
         textRect.size.height = textSize.height;
     }
     
@@ -462,8 +472,8 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     }
     
     CGSize suggestedSize = CTFramesetterSuggestFrameSizeForAttributedStringWithConstraints([self framesetter], self.attributedTextForDrawing, size, (NSUInteger)self.numberOfLines);
-    suggestedSize.width = MIN(size.width, suggestedSize.width);
-    suggestedSize.height = MIN(size.height, suggestedSize.height);
+    suggestedSize.width = CGFloat_ceil(MIN(size.width, suggestedSize.width));
+    suggestedSize.height = CGFloat_ceil(MIN(size.height, suggestedSize.height));
     return suggestedSize;
 }
 - (void)sizeToFit
@@ -476,352 +486,22 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 #pragma mark -
 
-- (void)drawTextInRect:(CGRect)rect
-{
-    if ([self.attributedTextForDrawing length] == 0) {
-        return;
-    }
-    
-    NSAttributedString *originalAttributedText = nil;
-    
-    // Adjust the font size to fit width, if necessarry
-    if (self.adjustsFontSizeToFitWidth && self.numberOfLines > 0) {
-        // Use infinite width to find the max width, which will be compared to availableWidth if needed.
-        CGSize maxSize = (self.numberOfLines > 1) ? CGSizeMake(UILABEL_FLOAT_MAX, UILABEL_FLOAT_MAX) : CGSizeZero;
-        
-        CGFloat textWidth = [self sizeThatFits:maxSize].width;
-        CGFloat availableWidth = self.frame.size.width * self.numberOfLines;
-        if (self.numberOfLines > 1 && self.lineBreakMode == UILineBreakModeWordWrap) {
-            textWidth *= kUILabelLineBreakWordWrapTextWidthScalingFactor;
-        }
-        
-        if (textWidth > availableWidth && textWidth > 0.0f) {
-            originalAttributedText = [self.attributedTextForDrawing copy];
-            
-            CGFloat scaleFactor = availableWidth / textWidth;
-            if ([self respondsToSelector:@selector(minimumScaleFactor)] && self.minimumScaleFactor > scaleFactor) {
-                scaleFactor = self.minimumScaleFactor;
-            }
-            
-            self.attributedTextForDrawing = NSAttributedStringByScalingFontSize(self.attributedTextForDrawing, scaleFactor);
-        }
-    }
-    
-    CGContextRef c = UIGraphicsGetCurrentContext();
-    CGContextSaveGState(c);
-    {
-        CGContextSetTextMatrix(c, CGAffineTransformIdentity);
-        
-        // Inverts the CTM to match iOS coordinates (otherwise text draws upside-down; Mac OS's system is different)
-        CGContextScaleCTM(c, 1.0f, -1.0f);
-        
-        CFRange textRange = CFRangeMake(0, (CFIndex)[self.attributedTextForDrawing length]);
-        
-        // First, get the text rect (which takes vertical centering into account)
-        CGRect textRect = [self textRectForBounds:rect limitedToNumberOfLines:self.numberOfLines];
-        
-        // CoreText draws it's text aligned to the bottom, so we move the CTM here to take our vertical offsets into account
-        CGContextTranslateCTM(c, 0.0, textRect.origin.y - textRect.size.height);
-        
-        // Second, trace the shadow before the actual text, if we have one
-        if (self.shadowColor && !self.highlighted) {
-            CGContextSetShadowWithColor(c, self.shadowOffset, 0, [self.shadowColor CGColor]);
-        }
-        
-        // Finally, draw the text or highlighted text itself (on top of the shadow, if there is one)
-        if (self.highlightedTextColor && self.highlighted) {
-            NSMutableAttributedString *highlightAttributedString = [self.renderedAttributedText mutableCopy];
-            [highlightAttributedString addAttribute:(__bridge NSString *)kCTForegroundColorAttributeName value:(id)[self.highlightedTextColor CGColor] range:NSMakeRange(0, highlightAttributedString.length)];
-            
-            if (![self highlightFramesetter]) {
-                CTFramesetterRef highlightFramesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)highlightAttributedString);
-                [self setHighlightFramesetter:highlightFramesetter];
-                CFRelease(highlightFramesetter);
-            }
-            
-            [self drawFramesetter:[self highlightFramesetter] attributedString:highlightAttributedString textRange:textRange inRect:textRect context:c];
-        } else {
-            [self drawFramesetter:[self framesetter] attributedString:self.renderedAttributedText textRange:textRange inRect:textRect context:c];
-        }
-        
-        // If we adjusted the font size, set it back to its original size
-        if (originalAttributedText) {
-            // Use ivar directly to avoid clearing out framesetter and renderedAttributedText
-            self.attributedTextForDrawing = originalAttributedText;
-        }
-    }
-    CGContextRestoreGState(c);
-}
-
 - (void)drawRect:(CGRect)rect
 {
-    [self drawTextInRect:self.bounds];
-}
-
-- (void)drawFramesetter:(CTFramesetterRef)framesetter
-       attributedString:(NSAttributedString *)attributedString
-              textRange:(CFRange)textRange
-                 inRect:(CGRect)rect
-                context:(CGContextRef)c
-{
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGPathAddRect(path, NULL, rect);
-    CTFrameRef frame = CTFramesetterCreateFrame(framesetter, textRange, path, NULL);
-    
-    [self drawBackground:frame inRect:rect context:c];
-    
-    CFArrayRef lines = CTFrameGetLines(frame);
-    NSInteger numberOfLines = self.numberOfLines > 0 ? MIN(self.numberOfLines, CFArrayGetCount(lines)) : CFArrayGetCount(lines);
-    BOOL truncateLastLine = (self.lineBreakMode == UILineBreakModeHeadTruncation || self.lineBreakMode == UILineBreakModeMiddleTruncation || self.lineBreakMode == UILineBreakModeTailTruncation);
-    
-    CGPoint lineOrigins[numberOfLines];
-    CTFrameGetLineOrigins(frame, CFRangeMake(0, numberOfLines), lineOrigins);
-    
-    for (CFIndex lineIndex = 0; lineIndex < numberOfLines; lineIndex++) {
-        CGPoint lineOrigin = lineOrigins[lineIndex];
-        lineOrigin = CGPointMake(CGFloat_ceil(lineOrigin.x), CGFloat_ceil(lineOrigin.y));
-        
-        CGContextSetTextPosition(c, lineOrigin.x, lineOrigin.y);
-        CTLineRef line = CFArrayGetValueAtIndex(lines, lineIndex);
-        
-        CGFloat descent = 0.0f;
-        CGFloat leading = 0.0f;
-        CTLineGetTypographicBounds((CTLineRef)line, NULL, &descent, &leading);
-        
-        // Adjust pen offset for flush depending on text alignment
-        CGFloat flushFactor = UILabelFlushFactorForTextAlignment(self.textAlignment);
-        
-        if (lineIndex == numberOfLines - 1 && truncateLastLine) {
-            // Check if the range of text in the last line reaches the end of the full attributed string
-            CFRange lastLineRange = CTLineGetStringRange(line);
-            
-            if (!(lastLineRange.length == 0 && lastLineRange.location == 0) && lastLineRange.location + lastLineRange.length < textRange.location + textRange.length) {
-                // Get correct truncationType and attribute position
-                CTLineTruncationType truncationType;
-                CFIndex truncationAttributePosition = lastLineRange.location;
-                UILineBreakMode lineBreakMode = self.lineBreakMode;
-                
-                switch (lineBreakMode) {
-                    case UILineBreakModeHeadTruncation:
-                        truncationType = kCTLineTruncationStart;
-                        break;
-                    case UILineBreakModeMiddleTruncation:
-                        truncationType = kCTLineTruncationMiddle;
-                        truncationAttributePosition += (lastLineRange.length / 2);
-                        break;
-                    case UILineBreakModeTailTruncation:
-                    default:
-                        truncationType = kCTLineTruncationEnd;
-                        truncationAttributePosition += (lastLineRange.length - 1);
-                        break;
-                }
-                
-                NSString *truncationTokenString = @"\u2026"; // Unicode Character 'HORIZONTAL ELLIPSIS' (U+2026)
-                NSDictionary *truncationTokenStringAttributes = [attributedString attributesAtIndex:(NSUInteger)truncationAttributePosition effectiveRange:NULL];
-                
-                NSAttributedString *attributedTokenString = [[NSAttributedString alloc] initWithString:truncationTokenString attributes:truncationTokenStringAttributes];
-                CTLineRef truncationToken = CTLineCreateWithAttributedString((__bridge CFAttributedStringRef)attributedTokenString);
-                
-                // both these methods seem to work just fine
-                // except that in 10.6/10.7 the CTLineGetBoundsWithOptions isn't available
-                // figure the newer method is more accurate and thus am using it as appropriate
-                CGFloat lineWidth = rect.size.width;
-                if(&CTLineGetBoundsWithOptions) {
-                    lineWidth = CTLineGetBoundsWithOptions(line, kCTLineBoundsUseGlyphPathBounds).size.width;
-                } else {
-                    lineWidth = CTLineGetImageBounds(line, c).size.width;
-                }
-                
-                // Truncate the line in case it is too long.
-                CTLineRef truncatedLine = CTLineCreateTruncatedLine(line, MIN(rect.size.width, lineWidth), truncationType, truncationToken);
-                if (!truncatedLine) {
-                    // If the line is not as wide as the truncationToken, truncatedLine is NULL
-                    truncatedLine = CFRetain(line);
-                }
-                
-                CGFloat penOffset = (CGFloat)CTLineGetPenOffsetForFlush(truncatedLine, flushFactor, rect.size.width);
-                CGContextSetTextPosition(c, penOffset, lineOrigin.y - descent - self.font.descender);
-                
-                CTLineDraw(truncatedLine, c);
-                
-                CFRelease(truncatedLine);
-                CFRelease(truncationToken);
-            } else {
-                CGFloat penOffset = (CGFloat)CTLineGetPenOffsetForFlush(line, flushFactor, rect.size.width);
-                CGContextSetTextPosition(c, penOffset, lineOrigin.y - descent - self.font.descender);
-                CTLineDraw(line, c);
-            }
-        } else {
-            CGFloat penOffset = (CGFloat)CTLineGetPenOffsetForFlush(line, flushFactor, rect.size.width);
-            CGContextSetTextPosition(c, penOffset, lineOrigin.y - descent - self.font.descender);
-            CTLineDraw(line, c);
-        }
+    CGContextSaveGState(UIGraphicsGetCurrentContext());
+    CTFramesetterRef framesetter = [self framesetter];
+    if(framesetter) {
+        CGRect bounds = [self textRectForBounds:self.bounds limitedToNumberOfLines:self.numberOfLines];
+        CGMutablePathRef path = CGPathCreateMutable();
+        CGPathAddRect(path, NULL, CGRectMake(0, 0, bounds.size.width, bounds.size.height));
+        CGContextConcatCTM(UIGraphicsGetCurrentContext(), CGAffineTransformMake(1, 0, 0, -1, 0, self.bounds.size.height));
+        CGContextTranslateCTM(UIGraphicsGetCurrentContext(), bounds.origin.x, -bounds.origin.y);
+        CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), path, NULL);
+        CFRelease(path);
+        CTFrameDraw(frame, UIGraphicsGetCurrentContext());
+        CFRelease(frame);
     }
-    
-    [self drawStrike:frame inRect:rect context:c];
-    
-    CFRelease(frame);
-    CFRelease(path);
-}
-- (void)drawBackground:(CTFrameRef)frame
-                inRect:(CGRect)rect
-               context:(CGContextRef)c
-{
-    NSArray *lines = (__bridge NSArray *)CTFrameGetLines(frame);
-    CGPoint origins[[lines count]];
-    CTFrameGetLineOrigins(frame, CFRangeMake(0, 0), origins);
-    
-    // Adjust pen offset for flush depending on text alignment
-    CGFloat flushFactor = UILabelFlushFactorForTextAlignment(self.textAlignment);
-    
-    CFIndex lineIndex = 0;
-    for (id line in lines) {
-        CGFloat ascent = 0.0f, descent = 0.0f, leading = 0.0f;
-        CGFloat width = (CGFloat)CTLineGetTypographicBounds((__bridge CTLineRef)line, &ascent, &descent, &leading) ;
-        CGRect lineBounds = CGRectMake(rect.origin.x, rect.origin.y, width, ascent + descent + leading) ;
-        
-        CGFloat penOffset = (CGFloat)CTLineGetPenOffsetForFlush((__bridge CTLineRef)line, flushFactor, rect.size.width);
-        
-        lineBounds.origin.x += origins[lineIndex].x;
-        lineBounds.origin.y += origins[lineIndex].y;
-        
-        for (id glyphRun in (__bridge NSArray *)CTLineGetGlyphRuns((__bridge CTLineRef)line)) {
-            NSDictionary *attributes = (__bridge NSDictionary *)CTRunGetAttributes((__bridge CTRunRef) glyphRun);
-            CGColorRef fillColor = [[attributes objectForKey:NSBackgroundColorAttributeName] CGColor];
-            
-            if (fillColor) {
-                CGRect runBounds = CGRectZero;
-                CGFloat runAscent = 0.0f;
-                CGFloat runDescent = 0.0f;
-                
-                runBounds.size.width = (CGFloat)CTRunGetTypographicBounds((__bridge CTRunRef)glyphRun, CFRangeMake(0, 0), &runAscent, &runDescent, NULL);
-                runBounds.size.height = runAscent + runDescent;
-                
-                CGFloat xOffset = 0.0f;
-                CFRange glyphRange = CTRunGetStringRange((__bridge CTRunRef)glyphRun);
-                switch (CTRunGetStatus((__bridge CTRunRef)glyphRun)) {
-                    case kCTRunStatusRightToLeft:
-                        xOffset = CTLineGetOffsetForStringIndex((__bridge CTLineRef)line, glyphRange.location + glyphRange.length, NULL);
-                        break;
-                    default:
-                        xOffset = CTLineGetOffsetForStringIndex((__bridge CTLineRef)line, glyphRange.location, NULL);
-                        break;
-                }
-                
-                runBounds.origin.x = penOffset + rect.origin.x + xOffset - rect.origin.x;
-                runBounds.origin.y = origins[lineIndex].y + rect.origin.y - rect.origin.y;
-                runBounds.origin.y -= runDescent;
-                
-                // Don't draw higlightedLinkBackground too far to the right
-                if (CGRectGetWidth(runBounds) > CGRectGetWidth(lineBounds)) {
-                    runBounds.size.width = CGRectGetWidth(lineBounds);
-                }
-                
-                if (fillColor) {
-                    CGRect r = runBounds;
-                    r.size.width += 1;
-                    r.origin.x -= 1;
-                    r.origin.y -= 0.5;
-                    CGContextSetFillColorWithColor(c, fillColor);
-                    CGContextFillRect(c, r);
-                    CGContextFillPath(c);
-                }
-            }
-        }
-        
-        lineIndex++;
-    }
-}
-- (void)drawStrike:(CTFrameRef)frame
-            inRect:(__unused CGRect)rect
-           context:(CGContextRef)c
-{
-    NSArray *lines = (__bridge NSArray *)CTFrameGetLines(frame);
-    CGPoint origins[[lines count]];
-    CTFrameGetLineOrigins(frame, CFRangeMake(0, 0), origins);
-    
-    // Adjust pen offset for flush depending on text alignment
-    CGFloat flushFactor = UILabelFlushFactorForTextAlignment(self.textAlignment);
-    
-    CFIndex lineIndex = 0;
-    for (id line in lines) {
-        CGFloat ascent = 0.0f, descent = 0.0f, leading = 0.0f;
-        CGFloat width = (CGFloat)CTLineGetTypographicBounds((__bridge CTLineRef)line, &ascent, &descent, &leading) ;
-        CGRect lineBounds = CGRectMake(0.0f, 0.0f, width, ascent + descent + leading) ;
-        lineBounds.origin.x = origins[lineIndex].x;
-        lineBounds.origin.y = origins[lineIndex].y;
-        
-        CGFloat penOffset = (CGFloat)CTLineGetPenOffsetForFlush((__bridge CTLineRef)line, flushFactor, rect.size.width);
-        
-        for (id glyphRun in (__bridge NSArray *)CTLineGetGlyphRuns((__bridge CTLineRef)line)) {
-            NSDictionary *attributes = (__bridge NSDictionary *)CTRunGetAttributes((__bridge CTRunRef) glyphRun);
-            BOOL strikeOut = (attributes[NSStrikethroughStyleAttributeName] != NSUnderlineStyleNone);
-            NSInteger superscriptStyle = [attributes[NSSuperscriptAttributeName] integerValue];
-            
-            if (strikeOut) {
-                CGRect runBounds = CGRectZero;
-                CGFloat runAscent = 0.0f;
-                CGFloat runDescent = 0.0f;
-                
-                runBounds.size.width = (CGFloat)CTRunGetTypographicBounds((__bridge CTRunRef)glyphRun, CFRangeMake(0, 0), &runAscent, &runDescent, NULL);
-                runBounds.size.height = runAscent + runDescent;
-                
-                CGFloat xOffset = 0.0f;
-                CFRange glyphRange = CTRunGetStringRange((__bridge CTRunRef)glyphRun);
-                switch (CTRunGetStatus((__bridge CTRunRef)glyphRun)) {
-                    case kCTRunStatusRightToLeft:
-                        xOffset = CTLineGetOffsetForStringIndex((__bridge CTLineRef)line, glyphRange.location + glyphRange.length, NULL);
-                        break;
-                    default:
-                        xOffset = CTLineGetOffsetForStringIndex((__bridge CTLineRef)line, glyphRange.location, NULL);
-                        break;
-                }
-                runBounds.origin.x = penOffset + xOffset;
-                runBounds.origin.y = origins[lineIndex].y;
-                runBounds.origin.y -= runDescent;
-                
-                // Don't draw strikeout too far to the right
-                if (CGRectGetWidth(runBounds) > CGRectGetWidth(lineBounds)) {
-                    runBounds.size.width = CGRectGetWidth(lineBounds);
-                }
-                
-				switch (superscriptStyle) {
-					case 1:
-						runBounds.origin.y -= runAscent * 0.47f;
-						break;
-					case -1:
-						runBounds.origin.y += runAscent * 0.25f;
-						break;
-					default:
-						break;
-				}
-                
-                // Use text color, or default to black
-                id color = attributes[NSStrikethroughColorAttributeName];
-                if (color) {
-                    if ([color isKindOfClass:[UIColor class]]) {
-                        CGContextSetStrokeColorWithColor(c, [color CGColor]);
-                    } else {
-                        CGContextSetStrokeColorWithColor(c, (__bridge CGColorRef)color);
-                    }
-                } else {
-                    CGContextSetGrayStrokeColor(c, 0.0f, 1.0);
-                }
-                
-                CTFontRef font = CTFontCreateWithName((__bridge CFStringRef)self.font.fontName, self.font.pointSize, NULL);
-                CGContextSetLineWidth(c, CTFontGetUnderlineThickness(font));
-                CFRelease(font);
-                
-                CGFloat y = CGFloat_round(runBounds.origin.y + runBounds.size.height / 2.0f);
-                CGContextMoveToPoint(c, runBounds.origin.x, y);
-                CGContextAddLineToPoint(c, runBounds.origin.x + runBounds.size.width, y);
-                
-                CGContextStrokePath(c);
-            }
-        }
-        
-        lineIndex++;
-    }
+    CGContextRestoreGState(UIGraphicsGetCurrentContext());
 }
 
 #pragma mark - 
