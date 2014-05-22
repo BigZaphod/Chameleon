@@ -200,10 +200,6 @@ static inline NSDictionary * NSAttributedStringAttributesFromLabel(UILabel *labe
 }
 
 static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstraints(CTFramesetterRef framesetter, NSAttributedString *attributedString, CGSize size, NSUInteger numberOfLines) {
-    // 10.7+ has a good typesetter suggestion algorithm but 10.6 is absolutely aweful
-    // and regularly cuts off the last line ( which is really bad for SINGLE lines )
-    // we're going to do it a bit more work in 10.6 to help get it right
-    
     // setup suggested size
     CGSize suggestedSize = CGSizeZero;
     
@@ -214,75 +210,50 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     
     CFRetain(framesetter);
     
-    // 10.6 +
-    if (NSAppKitVersionNumber < NSAppKitVersionNumber10_7) {
-        CGSize constraints = CGSizeMake(UILABEL_FLOAT_MAX, UILABEL_FLOAT_MAX);
-        
-        if (numberOfLines > 0) {
-            constraints.width = size.width;
-        }
-        
-        CGMutablePathRef path = CGPathCreateMutable();
-        CGPathAddRect(path, NULL, CGRectMake(0.0f, 0.0f, constraints.width, UILABEL_FLOAT_MAX));
-        CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), path, NULL);
-        
-        if (frame) {
-            CFArrayRef lines = CTFrameGetLines(frame);
-            
-            CGFloat totalLinesHeights = 0;
-            
-            if(lines && CFArrayGetCount(lines) > 0) {
-                for (NSInteger i = 0; i < CFArrayGetCount(lines); i++) {
-                    if (i >= numberOfLines) {
-                        break;
-                    }
-                    
-                    CTLineRef line = CFArrayGetValueAtIndex(lines, i);
-                    CGFloat a, d, l;
-                    CTLineGetTypographicBounds(line, &a, &d, &l);
-                    
-                    totalLinesHeights += a + d + l;
-                }
-            }
-            
-            CFRelease(frame);
-            
-            suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, constraints, NULL);
-            suggestedSize.height = totalLinesHeights;
-        }
-        
-        CFRelease(path);
-    }
-    // 10.7 +
-    else {
-        CFRange rangeToSize = CFRangeMake(0, 0);
-        CGSize constraints = CGSizeMake(UILABEL_FLOAT_MAX, UILABEL_FLOAT_MAX);
-        
-        if (numberOfLines > 0) {
-            constraints.width = size.width;
-            
-            CGMutablePathRef path = CGPathCreateMutable();
-            CGPathAddRect(path, NULL, CGRectMake(0.0f, 0.0f, constraints.width, UILABEL_FLOAT_MAX));
-            CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), path, NULL);
-            CFArrayRef lines = CTFrameGetLines(frame);
-            
-            if(lines && CFArrayGetCount(lines) > 0) {
-                NSInteger lastVisibleLineIndex = MIN((CFIndex)numberOfLines, CFArrayGetCount(lines)) - 1;
-                CTLineRef lastVisibleLine = CFArrayGetValueAtIndex(lines, lastVisibleLineIndex);
-                
-                CFRange rangeToLayout = CTLineGetStringRange(lastVisibleLine);
-                rangeToSize = CFRangeMake(0, rangeToLayout.location + rangeToLayout.length);
-            }
-            
-            CFRelease(frame);
-            CFRelease(path);
-        }
-        
-        suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, rangeToSize, NULL, constraints, NULL);
-        
+    // setup constraints
+    CGSize constraints = CGSizeMake(UILABEL_FLOAT_MAX, UILABEL_FLOAT_MAX);
+    if (numberOfLines > 0) {
+        constraints.width = size.width;
     }
     
+    // create frame
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathAddRect(path, NULL, CGRectMake(0.0f, 0.0f, constraints.width, UILABEL_FLOAT_MAX));
+    CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), path, NULL);
+    
+    // get lines
+    CFArrayRef lines = CTFrameGetLines(frame);
+    NSInteger linesCount = (lines) ? CFArrayGetCount(lines) : 0;
+    if(linesCount > 0) {
+        CGPoint *linesOrigins = malloc(linesCount * sizeof(CGPoint));
+        CTFrameGetLineOrigins(frame, CFRangeMake(0, 0), linesOrigins);
+        
+        for(NSInteger i = 0; i < linesCount; ++i) {
+            CTLineRef line = CFArrayGetValueAtIndex(lines, i);
+            
+            CGPoint origin = linesOrigins[i];
+            CGFloat ascent, descent, leading;
+            CGFloat width = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
+            CGFloat trailingWidth = CTLineGetTrailingWhitespaceWidth(line);
+            
+            CGFloat lineWidth = origin.x + width - trailingWidth;
+            CGFloat lineMaxY = constraints.height - origin.y + descent;
+            
+            suggestedSize.width = MAX(suggestedSize.width, lineWidth);
+            suggestedSize.height = MAX(suggestedSize.height, lineMaxY);
+            
+            if (numberOfLines > 0 && i + 1 == numberOfLines) {
+                break;
+            }
+            
+        }
+        
+        free(linesOrigins);
+    }
+  
     suggestedSize = CGSizeMake(CGFloat_ceil(suggestedSize.width), CGFloat_ceil(suggestedSize.height));
+    suggestedSize.width = MIN(constraints.width, suggestedSize.width);
+    suggestedSize.height = MIN(size.height, suggestedSize.height);
     
     CFRelease(framesetter);
     
@@ -476,7 +447,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     textSize = CGSizeMake(CGFloat_ceil(textSize.width), CGFloat_ceil(textSize.height)); // Fix for iOS 4, CTFramesetterSuggestFrameSizeWithConstraints sometimes returns fractional sizes
     
     if (textSize.height < textRect.size.height) {
-        CGFloat yOffset = CGFloat_floor((bounds.size.height - textSize.height) / 2.0f);
+        CGFloat yOffset = CGFloat_ceil((bounds.size.height - textSize.height) / 2.0f);
         textRect.origin.y -= yOffset;
         textRect.size.height = textSize.height;
     }
