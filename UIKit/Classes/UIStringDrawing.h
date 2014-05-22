@@ -39,11 +39,11 @@ typedef NS_ENUM(NSInteger, UILineBreakMode) {
 };
 
 typedef NS_ENUM(NSInteger, UITextAlignment) {
-    UITextAlignmentLeft,
-    UITextAlignmentCenter,
-    UITextAlignmentRight,
-    UITextAlignmentJustified,
-    UITextAlignmentNatural,
+    UITextAlignmentLeft = 0,
+    UITextAlignmentRight = 1,
+    UITextAlignmentCenter = 2,
+    UITextAlignmentJustified = 3,
+    UITextAlignmentNatural = 4,
     
     NSTextAlignmentLeft = UITextAlignmentLeft,
     NSTextAlignmentCenter = UITextAlignmentCenter,
