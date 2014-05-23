@@ -486,22 +486,26 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 #pragma mark -
 
-- (void)drawRect:(CGRect)rect
+- (void)drawTextInRect:(CGRect)rect
 {
     CGContextSaveGState(UIGraphicsGetCurrentContext());
     CTFramesetterRef framesetter = [self framesetter];
     if(framesetter) {
-        CGRect bounds = [self textRectForBounds:self.bounds limitedToNumberOfLines:self.numberOfLines];
         CGMutablePathRef path = CGPathCreateMutable();
-        CGPathAddRect(path, NULL, CGRectMake(0, 0, bounds.size.width, bounds.size.height));
+        CGPathAddRect(path, NULL, CGRectMake(0, 0, rect.size.width, rect.size.height));
         CGContextConcatCTM(UIGraphicsGetCurrentContext(), CGAffineTransformMake(1, 0, 0, -1, 0, self.bounds.size.height));
-        CGContextTranslateCTM(UIGraphicsGetCurrentContext(), bounds.origin.x, -bounds.origin.y);
+        CGContextTranslateCTM(UIGraphicsGetCurrentContext(), rect.origin.x, -rect.origin.y);
         CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), path, NULL);
         CFRelease(path);
         CTFrameDraw(frame, UIGraphicsGetCurrentContext());
         CFRelease(frame);
     }
     CGContextRestoreGState(UIGraphicsGetCurrentContext());
+}
+- (void)drawRect:(CGRect)rect
+{
+    CGRect bounds = [self textRectForBounds:self.bounds limitedToNumberOfLines:self.numberOfLines];
+    [self drawTextInRect:bounds];
 }
 
 #pragma mark - 
