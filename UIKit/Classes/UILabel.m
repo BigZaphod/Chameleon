@@ -263,7 +263,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     coreText.width = MIN(constraints.width, coreText.width);
     coreText.height = MIN(size.height, coreText.height);
     
-    suggestedSize = CGSizeMake(suggestedSize.width, CGFloat_round(suggestedSize.height));
+    suggestedSize = CGSizeMake(suggestedSize.width, CGFloat_ceil(suggestedSize.height));
     suggestedSize.width = MIN(constraints.width, suggestedSize.width);
     suggestedSize.height = MIN(size.height, suggestedSize.height);
     
