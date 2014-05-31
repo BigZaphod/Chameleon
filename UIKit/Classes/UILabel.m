@@ -491,14 +491,20 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     CGContextSaveGState(UIGraphicsGetCurrentContext());
     CTFramesetterRef framesetter = [self framesetter];
     if(framesetter) {
+        CFRetain(framesetter);
         CGMutablePathRef path = CGPathCreateMutable();
         CGPathAddRect(path, NULL, CGRectMake(0, 0, rect.size.width, rect.size.height));
-        CGContextConcatCTM(UIGraphicsGetCurrentContext(), CGAffineTransformMake(1, 0, 0, -1, 0, self.bounds.size.height));
-        CGContextTranslateCTM(UIGraphicsGetCurrentContext(), rect.origin.x, -rect.origin.y);
-        CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), path, NULL);
-        CFRelease(path);
-        CTFrameDraw(frame, UIGraphicsGetCurrentContext());
-        CFRelease(frame);
+        if(path) {
+            CGContextConcatCTM(UIGraphicsGetCurrentContext(), CGAffineTransformMake(1, 0, 0, -1, 0, self.bounds.size.height));
+            CGContextTranslateCTM(UIGraphicsGetCurrentContext(), rect.origin.x, -rect.origin.y);
+            CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), path, NULL);
+            CFRelease(path);
+            if(frame) {
+                CTFrameDraw(frame, UIGraphicsGetCurrentContext());
+                CFRelease(frame);
+            }
+        }
+        CFRelease(framesetter);
     }
     CGContextRestoreGState(UIGraphicsGetCurrentContext());
 }
