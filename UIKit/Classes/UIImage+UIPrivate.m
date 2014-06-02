@@ -69,7 +69,7 @@ NSMutableDictionary *imageCache = nil;
         NSString *mainFile = [[mainBundle resourcePath] stringByAppendingPathComponent:name];
         image = [self imageWithContentsOfFile:mainFile];
         if(!image) {
-            NSBundle *frameworkBundle = [NSBundle bundleWithIdentifier:@"org.chameleonproject.UIKit"];
+            NSBundle *frameworkBundle = [NSBundle bundleForClass:[self class]];
             NSString *frameworkFile = [[frameworkBundle resourcePath] stringByAppendingPathComponent:name];
             image = [self imageWithContentsOfFile:frameworkFile];
         }
