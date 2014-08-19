@@ -275,6 +275,10 @@
     }
 }
 
+- (UIViewController *)topViewController
+{
+    return self.modalViewController;
+}
 
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
