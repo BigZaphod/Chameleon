@@ -124,7 +124,7 @@ typedef enum {
 @property (nonatomic, assign) UIModalPresentationStyle modalPresentationStyle;
 @property (nonatomic, assign) UIModalTransitionStyle modalTransitionStyle;		// not used right now
 
-@property (nonatomic, readonly) UIViewController *topViewController;
+@property (nonatomic, readonly) UIViewController *presentedViewController;
 
 @property (nonatomic, readonly) UIViewController *parentViewController;
 @property (nonatomic, readonly, retain) UINavigationController *navigationController;

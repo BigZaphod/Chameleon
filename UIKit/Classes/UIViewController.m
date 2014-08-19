@@ -275,7 +275,7 @@
     }
 }
 
-- (UIViewController *)topViewController
+- (UIViewController *)presentedViewController
 {
     return self.modalViewController;
 }
