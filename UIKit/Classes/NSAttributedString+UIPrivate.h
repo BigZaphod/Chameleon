@@ -29,42 +29,14 @@
 
 #import <Foundation/Foundation.h>
 
-@class NSEvent;
-
-// NOTE: This does not come from Apple's UIKit and only exist to solve some current problems.
-// I have no idea what Apple will do with keyboard handling. If they ever expose that stuff publically,
-// then all of this should change to reflect the official API.
-
-typedef NS_ENUM(NSInteger, UIKeyType) {
-    UIKeyTypeCharacter,		// the catch-all/default... I wouldn't depend much on this at this point
-    UIKeyTypeUpArrow,
-    UIKeyTypeDownArrow,
-    UIKeyTypeLeftArrow,
-    UIKeyTypeRightArrow,
-    UIKeyTypeReturn,
-    UIKeyTypeEnter,
-    UIKeyTypeHome,
-    UIKeyTypeInsert,
-    UIKeyTypeDelete,
-    UIKeyTypeEnd,
-    UIKeyTypePageUp,
-    UIKeyTypePageDown,
-    UIKeyTypeEscape,
-    UIKeyTypeTab,
+typedef NS_ENUM(NSInteger, NSAttributedStringConversionOptions) {
+    NSAttributedStringConversionOptionColors   = 1 << 0,
+    NSAttributedStringConversionOptionFonts    = 1 << 1
 };
 
-@interface UIKey : NSObject
-- (id)initWithNSEvent:(NSEvent *)event;
+@interface NSAttributedString (UIPrivate)
 
-@property (nonatomic, readonly) UIKeyType type;
-@property (nonatomic, readonly) unsigned short keyCode;
-@property (nonatomic, readonly) NSString *characters;
-@property (nonatomic, readonly) NSString *charactersWithModifiers;
-@property (nonatomic, readonly, getter=isRepeat) BOOL repeat;
-@property (nonatomic, readonly, getter=isCapslockEnabled) BOOL capslockEnabled;
-@property (nonatomic, readonly, getter=isShiftKeyPressed) BOOL shiftKeyPressed;
-@property (nonatomic, readonly, getter=isControlKeyPressed) BOOL controlKeyPressed;
-@property (nonatomic, readonly, getter=isOptionKeyPressed) BOOL optionKeyPressed;
-@property (nonatomic, readonly, getter=isCommandKeyPressed) BOOL commandKeyPressed;
-@property (nonatomic, readonly) SEL action;     // an action associated with the key press, or null
+- (NSAttributedString *)NSCompatibleAttributedStringWithOptions:(NSAttributedStringConversionOptions)options;
+- (NSAttributedString *)UICompatibleAttributedStringWithOptions:(NSAttributedStringConversionOptions)options;
+
 @end

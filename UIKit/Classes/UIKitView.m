@@ -85,13 +85,19 @@
     [self configureScreenLayer];
 }
 
+- (CALayer *)makeBackingLayer
+{
+    CALayer *layer = [super makeBackingLayer];
+    layer.geometryFlipped = YES;
+    return layer;
+}
+
 - (void)configureScreenLayer
 {
     [self setWantsLayer:YES];
     
     CALayer *screenLayer = [_UIScreen _layer];
     CALayer *myLayer = [self layer];
-    
     [myLayer addSublayer:screenLayer];
     screenLayer.frame = myLayer.bounds;
     screenLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;

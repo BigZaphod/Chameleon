@@ -59,7 +59,7 @@
     
     if (!img) {
         // as per the iOS docs, if it fails to find a match with the bare name, it re-tries by appending a png file extension
-        img = [self _imageNamed:name] ?: [self _imageNamed:[name stringByAppendingPathExtension:@"png"]];
+        img = [self _imageNamed:name] ?: [self _imageNamed:[name stringByAppendingPathExtension:@"png"]] ?: [self _imageNamed:[name stringByAppendingPathExtension:@"tiff"]];
         [self _cacheImage:img forName:name];
     }
     

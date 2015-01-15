@@ -110,6 +110,12 @@
     CALayer *layer = self.layer;
     CALayer *clipLayer = [_clipView layer];
     
+    if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_8) {
+        clipLayer.geometryFlipped = NO;
+    } else {
+        clipLayer.geometryFlipped = YES;
+    }
+    
     // always make sure it's at the very bottom
     [layer insertSublayer:clipLayer atIndex:0];
     

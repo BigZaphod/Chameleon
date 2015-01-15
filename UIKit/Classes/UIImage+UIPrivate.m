@@ -38,21 +38,26 @@ NSMutableDictionary *imageCache = nil;
 
 @implementation UIImage (UIPrivate)
 
-+ (void)load
++ (NSMutableDictionary *)imageCache
 {
-    imageCache = [[NSMutableDictionary alloc] init];
+    static NSMutableDictionary *imageCache = nil;
+    static dispatch_once_t imageCacheOnce = 0;
+    dispatch_once(&imageCacheOnce, ^{
+        imageCache = [[NSMutableDictionary alloc] init];
+    });
+    return imageCache;
 }
 
 + (void)_cacheImage:(UIImage *)image forName:(NSString *)name
 {
     if (image && name) {
-        [imageCache setObject:image forKey:name];
+        [[self imageCache] setObject:image forKey:name];
     }
 }
 
 + (UIImage *)_cachedImageForName:(NSString *)name
 {
-    return [imageCache objectForKey:name];
+    return [[self imageCache] objectForKey:name];
 }
 
 + (UIImage *)_frameworkImageWithName:(NSString *)name leftCapWidth:(NSUInteger)leftCapWidth topCapHeight:(NSUInteger)topCapHeight
@@ -60,9 +65,15 @@ NSMutableDictionary *imageCache = nil;
     UIImage *image = [self _cachedImageForName:name];
 
     if (!image) {
-        NSBundle *frameworkBundle = [NSBundle bundleWithIdentifier:@"org.chameleonproject.UIKit"];
-        NSString *frameworkFile = [[frameworkBundle resourcePath] stringByAppendingPathComponent:name];
-        image = [[self imageWithContentsOfFile:frameworkFile] stretchableImageWithLeftCapWidth:leftCapWidth topCapHeight:topCapHeight];
+        NSBundle *mainBundle = [NSBundle mainBundle];
+        NSString *mainFile = [[mainBundle resourcePath] stringByAppendingPathComponent:name];
+        image = [self imageWithContentsOfFile:mainFile];
+        if(!image) {
+            NSBundle *frameworkBundle = [NSBundle bundleForClass:[self class]];
+            NSString *frameworkFile = [[frameworkBundle resourcePath] stringByAppendingPathComponent:name];
+            image = [self imageWithContentsOfFile:frameworkFile];
+        }
+        image = [image stretchableImageWithLeftCapWidth:leftCapWidth topCapHeight:topCapHeight];
         [self _cacheImage:image forName:name];
     }
 

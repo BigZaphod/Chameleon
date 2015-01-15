@@ -29,6 +29,7 @@
 
 #import "UIKey.h"
 #import <AppKit/NSEvent.h>
+#import <AppKit/NSText.h>
 
 @implementation UIKey {
     NSUInteger _modifierFlags;
@@ -65,8 +66,9 @@
             case NSDeleteFunctionKey:			return UIKeyTypeDelete;
             case NSInsertFunctionKey:			return UIKeyTypeInsert;
             case NSHomeFunctionKey:				return UIKeyTypeHome;
-            case 0x000D:						return UIKeyTypeReturn;
-            case 0x0003:						return UIKeyTypeEnter;
+            case NSCarriageReturnCharacter:		return UIKeyTypeReturn;
+            case NSEnterCharacter:				return UIKeyTypeEnter;
+            case NSTabCharacter:                return UIKeyTypeTab;
         }
     }
     

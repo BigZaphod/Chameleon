@@ -68,6 +68,7 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
             [self setHorizontallyResizable:YES];
             [self setVerticallyResizable:NO];
             [[self textContainer] setWidthTracksTextView:NO];
+            [[self textContainer] setHeightTracksTextView:NO];
             [[self textContainer] setContainerSize:maxSize];
             [self setTextContainerInset:NSMakeSize(0, 0)];
         } else {

@@ -62,6 +62,7 @@
 - (void)_textDidChange;
 - (void)_textDidChangeSelection;
 - (void)_textDidReceiveReturnKey;
+- (void)_textDidReceiveTabKey;
 @end
 
 @interface UITextLayer : CALayer
