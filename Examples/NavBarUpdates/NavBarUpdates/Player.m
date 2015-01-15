@@ -21,7 +21,7 @@
     
     [circlePV.button setBackgroundColor:[UIColor lightGrayColor]];
     [circlePV.button addTarget:self action:@selector(refresh) forControlEvents:UIControlEventTouchUpInside];
-    [circlePV.button setTitle:@"Tap to refresh" forState:UIControlStateNormal];
+    [circlePV.button setTitle:@"text" forState:UIControlStateNormal];
     circlePV.button.layer.borderColor = [UIColor darkGrayColor].CGColor;
     circlePV.frame = CGRectMake(10, 10, self.bounds.size.height - 20, self.bounds.size.height - 20);
     
@@ -43,12 +43,12 @@
     
     
     duration = 2.00;
-    lblProgress = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, 200, 30)];
+    lblProgress = [[UILabel alloc] initWithFrame:CGRectMake(100, 0, 200, 30)];
     lblProgress.textAlignment = NSTextAlignmentCenter;
     lblProgress.lineBreakMode = NSLineBreakByClipping;
     lblProgress.backgroundColor = [UIColor clearColor];
-    lblProgress.text = @"Progress";
-    lblProgress.textColor = [UIColor blackColor];
+    lblProgress.text = @"Artist";
+    lblProgress.textColor = [UIColor whiteColor];
     [self addSubview:lblProgress];
     
     lblDuration = [[UILabel alloc] initWithFrame:CGRectMake(0, 170, 300, 30)];

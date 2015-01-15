@@ -28,6 +28,7 @@
 		83DB3E331A6767B4006711B5 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB3E321A6767B4006711B5 /* Player.m */; };
 		83DB3E391A676819006711B5 /* PRTween.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB3E361A676819006711B5 /* PRTween.m */; };
 		83DB3E3A1A676819006711B5 /* PRTweenTimingFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB3E381A676819006711B5 /* PRTweenTimingFunctions.m */; };
+		83DB3E3D1A676B3A006711B5 /* Real_Pixels.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 83DB3E3C1A676B3A006711B5 /* Real_Pixels.jpg */; };
 		F4556120133A5D3B0021B1A6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3825F4661339775C005A267D /* UIKit.framework */; };
 		F455612E133A5D830021B1A6 /* UIKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 3825F4661339775C005A267D /* UIKit.framework */; };
 /* End PBXBuildFile section */
@@ -107,6 +108,7 @@
 		83DB3E361A676819006711B5 /* PRTween.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRTween.m; sourceTree = "<group>"; };
 		83DB3E371A676819006711B5 /* PRTweenTimingFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRTweenTimingFunctions.h; sourceTree = "<group>"; };
 		83DB3E381A676819006711B5 /* PRTweenTimingFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRTweenTimingFunctions.m; sourceTree = "<group>"; };
+		83DB3E3C1A676B3A006711B5 /* Real_Pixels.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Real_Pixels.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,29 +174,30 @@
 		38E523CB1339731100E041B3 /* NavBarUpdates */ = {
 			isa = PBXGroup;
 			children = (
-				83DB3E341A676819006711B5 /* PRTween */,
-				83DB3E311A6767B4006711B5 /* Player.h */,
-				83DB3E321A6767B4006711B5 /* Player.m */,
+				83DB3E071A674D83006711B5 /* AbstractCustomCell.h */,
+				83DB3E081A674D83006711B5 /* AbstractCustomCell.m */,
+				83DB3E211A675DB0006711B5 /* AppDelegate */,
+				83DB3E111A675288006711B5 /* BGCONST.h */,
+				83DB3E121A6752CD006711B5 /* Categories */,
+				83DB3E091A674D83006711B5 /* CustomCellBackgroundView.h */,
+				83DB3E0A1A674D83006711B5 /* CustomCellBackgroundView.m */,
+				83DB3E0D1A6751C1006711B5 /* HMSegmentedControl */,
+				83DB3E3B1A676B3A006711B5 /* Images */,
 				83DB3E2D1A676765006711B5 /* KACircleProgressView */,
-				83DB3E2A1A676578006711B5 /* TitleBarView.h */,
-				83DB3E2B1A676578006711B5 /* TitleBarView.m */,
-				83DB3E271A67644A006711B5 /* MyWindow.h */,
-				83DB3E281A67644A006711B5 /* MyWindow.m */,
+				38E523DA1339731100E041B3 /* MainMenu.xib */,
 				83DB3E221A675FE6006711B5 /* MyTitleBarViewController.h */,
 				83DB3E231A675FE6006711B5 /* MyTitleBarViewController.m */,
 				83DB3E241A675FE6006711B5 /* MyTitleBarViewController.xib */,
-				83DB3E211A675DB0006711B5 /* AppDelegate */,
-				83DB3E121A6752CD006711B5 /* Categories */,
-				83DB3E111A675288006711B5 /* BGCONST.h */,
-				83DB3E0D1A6751C1006711B5 /* HMSegmentedControl */,
-				83DB3E071A674D83006711B5 /* AbstractCustomCell.h */,
-				83DB3E081A674D83006711B5 /* AbstractCustomCell.m */,
-				83DB3E091A674D83006711B5 /* CustomCellBackgroundView.h */,
-				83DB3E0A1A674D83006711B5 /* CustomCellBackgroundView.m */,
+				83DB3E271A67644A006711B5 /* MyWindow.h */,
+				83DB3E281A67644A006711B5 /* MyWindow.m */,
+				83DB3E311A6767B4006711B5 /* Player.h */,
+				83DB3E321A6767B4006711B5 /* Player.m */,
+				83DB3E341A676819006711B5 /* PRTween */,
+				38E523CC1339731100E041B3 /* Supporting Files */,
 				388BF780133978CB006EC779 /* TestViewController.h */,
 				388BF781133978CB006EC779 /* TestViewController.m */,
-				38E523DA1339731100E041B3 /* MainMenu.xib */,
-				38E523CC1339731100E041B3 /* Supporting Files */,
+				83DB3E2A1A676578006711B5 /* TitleBarView.h */,
+				83DB3E2B1A676578006711B5 /* TitleBarView.m */,
 			);
 			path = NavBarUpdates;
 			sourceTree = "<group>";
@@ -258,6 +261,14 @@
 				83DB3E381A676819006711B5 /* PRTweenTimingFunctions.m */,
 			);
 			path = PRTween;
+			sourceTree = "<group>";
+		};
+		83DB3E3B1A676B3A006711B5 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				83DB3E3C1A676B3A006711B5 /* Real_Pixels.jpg */,
+			);
+			path = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -329,6 +340,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83DB3E3D1A676B3A006711B5 /* Real_Pixels.jpg in Resources */,
 				38E523D01339731100E041B3 /* InfoPlist.strings in Resources */,
 				83DB3E261A675FE6006711B5 /* MyTitleBarViewController.xib in Resources */,
 				38E523D61339731100E041B3 /* Credits.rtf in Resources */,

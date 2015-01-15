@@ -33,7 +33,7 @@
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.view.backgroundColor = [UIColor whiteColor];
     
-    HMSegmentedControl *segmentedControl = [[HMSegmentedControl alloc] initWithSectionTitles:@[@"All >"]];
+    HMSegmentedControl *segmentedControl = [[HMSegmentedControl alloc] initWithSectionTitles:@[@"All >", @"ok"]];
     [segmentedControl setFrame:CGRectMake(0, 0, self.view.bounds.size.width, 45)];
     
     segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -50,6 +50,10 @@
     //   containerView0 = [[HMSegmentedControlContainerView alloc] initWithHMSegmentedControl:segmentedControl];
     [self.view addSubview:segmentedControl];
     segmentedControl.selectedSegmentIndex = 0;
+}
+
+- (void)segmentedControlChangedValue:(HMSegmentedControl *)segmentedControl {
+    NSLog(@"Selected index %i (via UIControlEventValueChanged)", segmentedControl.selectedSegmentIndex);
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -70,12 +74,15 @@
     cell.detailTextLabel.textColor = [UIColor whiteColor];
     
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    [cell setSelectedColor:[UIColor redColor]];
+    [cell setSelectedColor:[UIColor lightGrayColor]];
     return cell;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [self.navigationItem performSelector:@selector(setTitle:) withObject:@"New Title" afterDelay:5.0];
+  //  [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"Real_Pixels.jpg"]  forBarMetrics:UIBarMetricsDefault];
+    
+    
 }
 
 @end

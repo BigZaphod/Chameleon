@@ -10,6 +10,7 @@
     window.backgroundColor = [UIColor whiteColor];
     window.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
+    [[UINavigationBar appearance] setTintColor:[UIColor lightGrayColor]];
     TestViewController *controller = [[TestViewController alloc] initWithNibName:nil bundle:nil];
     controller.title = @"Initial Title";
     
