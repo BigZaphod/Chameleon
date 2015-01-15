@@ -16,6 +16,10 @@
 		38E523D91339731100E041B3 /* NavBarUpdatesAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E523D81339731100E041B3 /* NavBarUpdatesAppDelegate.m */; };
 		38E523DC1339731100E041B3 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38E523DA1339731100E041B3 /* MainMenu.xib */; };
 		7884CAA8133AC90400D050CF /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7884CAA7133AC90400D050CF /* Quartz.framework */; };
+		83DB3E0B1A674D83006711B5 /* AbstractCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB3E081A674D83006711B5 /* AbstractCustomCell.m */; };
+		83DB3E0C1A674D83006711B5 /* CustomCellBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB3E0A1A674D83006711B5 /* CustomCellBackgroundView.m */; };
+		83DB3E101A6751C1006711B5 /* HMSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB3E0F1A6751C1006711B5 /* HMSegmentedControl.m */; };
+		83DB3E151A6752CD006711B5 /* UIColor+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB3E141A6752CD006711B5 /* UIColor+Extension.m */; };
 		F4556120133A5D3B0021B1A6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3825F4661339775C005A267D /* UIKit.framework */; };
 		F455612E133A5D830021B1A6 /* UIKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 3825F4661339775C005A267D /* UIKit.framework */; };
 /* End PBXBuildFile section */
@@ -71,6 +75,15 @@
 		38E523D81339731100E041B3 /* NavBarUpdatesAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NavBarUpdatesAppDelegate.m; sourceTree = "<group>"; };
 		38E523DB1339731100E041B3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		7884CAA7133AC90400D050CF /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
+		83DB3E071A674D83006711B5 /* AbstractCustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractCustomCell.h; sourceTree = "<group>"; };
+		83DB3E081A674D83006711B5 /* AbstractCustomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractCustomCell.m; sourceTree = "<group>"; };
+		83DB3E091A674D83006711B5 /* CustomCellBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCellBackgroundView.h; sourceTree = "<group>"; };
+		83DB3E0A1A674D83006711B5 /* CustomCellBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomCellBackgroundView.m; sourceTree = "<group>"; };
+		83DB3E0E1A6751C1006711B5 /* HMSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMSegmentedControl.h; sourceTree = "<group>"; };
+		83DB3E0F1A6751C1006711B5 /* HMSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMSegmentedControl.m; sourceTree = "<group>"; };
+		83DB3E111A675288006711B5 /* BGCONST.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BGCONST.h; sourceTree = "<group>"; };
+		83DB3E131A6752CD006711B5 /* UIColor+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Extension.h"; sourceTree = "<group>"; };
+		83DB3E141A6752CD006711B5 /* UIColor+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Extension.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +149,13 @@
 		38E523CB1339731100E041B3 /* NavBarUpdates */ = {
 			isa = PBXGroup;
 			children = (
+				83DB3E121A6752CD006711B5 /* Categories */,
+				83DB3E111A675288006711B5 /* BGCONST.h */,
+				83DB3E0D1A6751C1006711B5 /* HMSegmentedControl */,
+				83DB3E071A674D83006711B5 /* AbstractCustomCell.h */,
+				83DB3E081A674D83006711B5 /* AbstractCustomCell.m */,
+				83DB3E091A674D83006711B5 /* CustomCellBackgroundView.h */,
+				83DB3E0A1A674D83006711B5 /* CustomCellBackgroundView.m */,
 				38E523D71339731100E041B3 /* NavBarUpdatesAppDelegate.h */,
 				38E523D81339731100E041B3 /* NavBarUpdatesAppDelegate.m */,
 				388BF77D13397877006EC779 /* ChameleonAppDelegate.h */,
@@ -158,6 +178,24 @@
 				38E523D41339731100E041B3 /* Credits.rtf */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		83DB3E0D1A6751C1006711B5 /* HMSegmentedControl */ = {
+			isa = PBXGroup;
+			children = (
+				83DB3E0E1A6751C1006711B5 /* HMSegmentedControl.h */,
+				83DB3E0F1A6751C1006711B5 /* HMSegmentedControl.m */,
+			);
+			path = HMSegmentedControl;
+			sourceTree = "<group>";
+		};
+		83DB3E121A6752CD006711B5 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				83DB3E131A6752CD006711B5 /* UIColor+Extension.h */,
+				83DB3E141A6752CD006711B5 /* UIColor+Extension.m */,
+			);
+			path = Categories;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -242,10 +280,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83DB3E0B1A674D83006711B5 /* AbstractCustomCell.m in Sources */,
 				38E523D31339731100E041B3 /* main.m in Sources */,
 				38E523D91339731100E041B3 /* NavBarUpdatesAppDelegate.m in Sources */,
+				83DB3E151A6752CD006711B5 /* UIColor+Extension.m in Sources */,
+				83DB3E101A6751C1006711B5 /* HMSegmentedControl.m in Sources */,
 				388BF77F13397877006EC779 /* ChameleonAppDelegate.m in Sources */,
 				388BF782133978CB006EC779 /* TestViewController.m in Sources */,
+				83DB3E0C1A674D83006711B5 /* CustomCellBackgroundView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
