@@ -8,17 +8,18 @@
 
 #import <Cocoa/Cocoa.h>
 #import <UIKit/UIKit.h>
+#import "MyWindow.h"
 
 @class ChameleonAppDelegate;
 
 @interface NavBarUpdatesAppDelegate : NSObject <NSApplicationDelegate> {
 @private
-    NSWindow *window;
+    MyWindow *window;
     UIKitView *chameleonNSView;
     ChameleonAppDelegate *chameleonApp;
 }
 
-@property (assign) IBOutlet NSWindow *window;
+@property (assign) IBOutlet MyWindow *window;
 @property (assign) IBOutlet UIKitView *chameleonNSView;
 
 @end

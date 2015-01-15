@@ -7,7 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "KACircleProgressView.h"
 
 @interface Player : UIView
-
+{
+    UISlider *slider0;
+    UISlider *slider1;
+    UILabel *lblProgress;
+    UILabel *lblDuration;
+    double duration;
+    double currentValue;
+    KACircleProgressView *circlePV;
+}
 @end

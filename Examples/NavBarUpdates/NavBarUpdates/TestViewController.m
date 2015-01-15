@@ -9,7 +9,7 @@
 #import "TestViewController.h"
 #import "AbstractCustomCell.h"
 #import "HMSegmentedControl.h"
-
+#import "Player.h"
 
 @implementation TestViewController
 
@@ -23,8 +23,8 @@
     myTableView.autoresizesSubviews = YES;
     [self.view addSubview:myTableView];
     
-    UIView *footer = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.bounds.size.height - 100, self.view.bounds.size.width, 100)];
-    footer.backgroundColor = [UIColor blackColor];
+    Player *footer = [[Player alloc]initWithFrame:CGRectMake(0, self.view.bounds.size.height - 100, self.view.bounds.size.width, 100)];
+    footer.backgroundColor = IOS7DETAILABEL;
     footer.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     [self.view addSubview:footer];
     
@@ -61,18 +61,14 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     AbstractCustomCell *cell = [[AbstractCustomCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"test"];
     cell.textLabel.text = @"Title";
-    cell.textLabel.textColor = [UIColor whiteColor];
-    
     cell.detailTextLabel.text = @"Subtitle";
     cell.detailTextLabel.textColor = [UIColor whiteColor];
-    //  cell.contentView.backgroundColor = [UIColor blackColor];
+    
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     [cell setSelectedColor:[UIColor redColor]];
     return cell;
