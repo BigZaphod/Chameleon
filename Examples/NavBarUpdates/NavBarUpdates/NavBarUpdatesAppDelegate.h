@@ -1,6 +1,7 @@
 #import <Cocoa/Cocoa.h>
 #import <UIKit/UIKit.h>
-#import "WAYWindow.h"
+#import "MyWindow.h"
+
 
 @class ChameleonAppDelegate;
 
@@ -8,7 +9,7 @@
     ChameleonAppDelegate *chameleonApp;
 }
 
-@property (assign) IBOutlet WAYWindow *window;
+@property (assign) IBOutlet MyWindow *window;
 @property (assign) IBOutlet UIKitView *chameleonNSView;
 
 @end

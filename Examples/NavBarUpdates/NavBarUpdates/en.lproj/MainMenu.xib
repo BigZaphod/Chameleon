@@ -1312,7 +1312,7 @@
 				<string key="NSWindowRect">{{928, 0}, {512, 800}}</string>
 				<int key="NSWTFlags">1954021376</int>
 				<string key="NSWindowTitle">Navbar Updates</string>
-				<string key="NSWindowClass">WAYWindow</string>
+				<string key="NSWindowClass">MyWindow</string>
 				<nil key="NSViewClass"/>
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<object class="NSView" key="NSWindowView" id="439893737">

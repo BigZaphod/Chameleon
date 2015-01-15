@@ -11,8 +11,32 @@
 #import <UIKit/UIKitView.h>
 
 
-@interface ToolbarView : NSView
+@interface BlackTitlebarView : NSView
+@end
+@implementation BlackTitlebarView
 
+
+- (void)drawString:(NSString *)string inRect:(NSRect)rect {
+    static NSDictionary *att = nil;
+    if (!att) {
+        NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        [style setLineBreakMode:NSLineBreakByTruncatingTail];
+        [style setAlignment:NSCenterTextAlignment];
+        att = [[NSDictionary alloc] initWithObjectsAndKeys:style, NSParagraphStyleAttributeName, [NSColor whiteColor], NSForegroundColorAttributeName, [NSFont fontWithName:@"Helvetica" size:18], NSFontAttributeName, nil];
+    }
+    
+    NSRect titlebarRect = NSMakeRect(rect.origin.x + 20, rect.origin.y - 4, rect.size.width, rect.size.height);
+    
+    
+    [string drawInRect:titlebarRect withAttributes:att];
+}
+
+- (void)drawRect:(NSRect)dirtyRect {
+    [[NSColor darkGrayColor] set];
+    NSRectFill(dirtyRect);
+    
+    [self drawString:@"My Title" inRect:dirtyRect];
+}
 
 @end
 @implementation ToolbarView
@@ -29,12 +53,13 @@
 
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    //  [window supportsVibrantAppearances];
-    // [window setContentViewAppearanceVibrantDark];
-    [window setTitleBarHeight:200];
-    window.hidesTitle = NO;
-    ToolbarView *test = [[ToolbarView alloc]initWithFrame:CGRectMake(0, 0, 300, 200)];
-    [window.titleBarView addSubview:test];
+    NSRect boundsRect = [[[window contentView] superview] bounds];
+    BlackTitlebarView *titleview = [[BlackTitlebarView alloc] initWithFrame:boundsRect];
+    [titleview setAutoresizingMask:(NSViewWidthSizable | NSViewHeightSizable)];
+    
+    [[[window contentView] superview] addSubview:titleview positioned:NSWindowBelow relativeTo:[[[[window contentView] superview] subviews] objectAtIndex:0]];
+    
+    
     
     chameleonApp = [[ChameleonAppDelegate alloc] init];
     [chameleonNSView launchApplicationWithDelegate:chameleonApp afterDelay:1];
