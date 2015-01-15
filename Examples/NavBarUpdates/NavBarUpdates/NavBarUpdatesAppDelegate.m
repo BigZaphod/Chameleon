@@ -9,39 +9,35 @@
 #import "NavBarUpdatesAppDelegate.h"
 #import "ChameleonAppDelegate.h"
 #import <UIKit/UIKitView.h>
-#import "TitleBarView.h"
-#import "MyTitleBarViewController.h"
 
 
+@interface ToolbarView : NSView
+
+
+@end
+@implementation ToolbarView
+
+- (void)drawRect:(NSRect)dirtyRect {
+    [[NSColor redColor]set];
+}
+
+@end
 @implementation NavBarUpdatesAppDelegate
 
 @synthesize window, chameleonNSView;
 
-- (void)configureTitleBar {
-    NSView *themeView = [[window contentView] superview];
-    
-    NSArray *array = [themeView subviews];
-    NSView *subview2 = [array objectAtIndex:0];
-    NSView *subsubView1 = [subview2 subviews].firstObject;
-    NSButton *testbtn = [[NSButton alloc] initWithFrame:CGRectMake(50, 50, 40, 20)];
-    [testbtn setTitle:@"test"];
-    TitleBackGroudView *titleBgView = [[[TitleBackGroudView alloc] initWithFrame:CGRectMake(0, 0, 400, 137)] autorelease];
-    
-    //    [themeView addSubview:titleBgView positioned:NSWindowBelow relativeTo:subview2];
-    [subview2 addSubview:titleBgView positioned:NSWindowBelow relativeTo:subsubView1];
-    
-    [window.titleBarVc.view addSubview:testbtn];
-}
+
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    [self configureTitleBar];
+    //  [window supportsVibrantAppearances];
+    // [window setContentViewAppearanceVibrantDark];
+    [window setTitleBarHeight:200];
+    window.hidesTitle = NO;
+    ToolbarView *test = [[ToolbarView alloc]initWithFrame:CGRectMake(0, 0, 300, 200)];
+    [window.titleBarView addSubview:test];
+    
     chameleonApp = [[ChameleonAppDelegate alloc] init];
     [chameleonNSView launchApplicationWithDelegate:chameleonApp afterDelay:1];
-}
-
-- (void)dealloc {
-    [chameleonApp release];
-    [super dealloc];
 }
 
 @end

@@ -18,17 +18,10 @@
     navController.view.frame = window.bounds;
     navController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     navController.view.autoresizesSubviews = YES;
-    [controller release];
     
     [window addSubview:navController.view];
     
     [window makeKeyAndVisible];
-}
-
-- (void)dealloc {
-    [window release];
-    [navController release];
-    [super dealloc];
 }
 
 @end
