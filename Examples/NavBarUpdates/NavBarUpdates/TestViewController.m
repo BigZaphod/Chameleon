@@ -79,10 +79,7 @@
     cell.detailTextLabel.textColor = [UIColor whiteColor];
     
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    [cell setSelectedColor:[UIColor lightGrayColor]];
-    
-    
-    
+    [cell setSelectedColor:IOS7BLUE];
     return cell;
 }
 

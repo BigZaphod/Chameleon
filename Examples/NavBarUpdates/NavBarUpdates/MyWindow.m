@@ -24,7 +24,7 @@
 }
 
 - (void)customTitleBar {
-    self.titleVisibility = NSWindowTitleHidden;
+    self.titleVisibility = NSWindowTitleVisible;
     self.titlebarAppearsTransparent = YES;
     
     MyTitleBarViewController *vc = [[MyTitleBarViewController alloc] initWithNibName:@"MyTitleBarViewController" bundle:NULL];

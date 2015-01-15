@@ -18,10 +18,10 @@
 @synthesize window, chameleonNSView;
 
 - (void)configureTitleBar {
-    NSView *windowView = [window contentView];
-    NSView *themeView = [windowView superview];
+    NSView *themeView = [[window contentView] superview];
+    
     NSArray *array = [themeView subviews];
-    NSView *subview2 = [array objectAtIndex:1];
+    NSView *subview2 = [array objectAtIndex:0];
     NSView *subsubView1 = [subview2 subviews].firstObject;
     NSButton *testbtn = [[NSButton alloc] initWithFrame:CGRectMake(50, 50, 40, 20)];
     [testbtn setTitle:@"test"];
@@ -34,6 +34,7 @@
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    [self configureTitleBar];
     chameleonApp = [[ChameleonAppDelegate alloc] init];
     [chameleonNSView launchApplicationWithDelegate:chameleonApp afterDelay:1];
 }

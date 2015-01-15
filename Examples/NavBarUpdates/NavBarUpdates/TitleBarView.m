@@ -11,27 +11,24 @@
 
 
 
-
 NS_INLINE bool INRunningLion() {
     return (NSInteger)NSAppKitVersionNumber >= NSAppKitVersionNumber10_7;
 }
 
 @implementation TitleBarView
 
-- (void)drawRect:(NSRect)dirtyRect
-{
-//    [[NSColor colorWithDeviceRed:22.0f/255.0f green:188.0f/255.0f blue:92.0f/255.0f alpha:1.0] set];
+- (void)drawRect:(NSRect)dirtyRect {
+    // [[NSColor colorWithDeviceRed:22.0f / 255.0f green:188.0f / 255.0f blue:92.0f / 255.0f alpha:1.0] set];
     [[NSColor clearColor] set];
     NSRectFill(dirtyRect);
 }
+
 @end
 
 @implementation TitleBackGroudView
 
-- (void)drawRect:(NSRect)dirtyRect
-{
-    [[NSColor colorWithDeviceRed:22.0f/255.0f green:188.0f/255.0f blue:92.0f/255.0f alpha:1.0] set];
-//    [[NSColor redColor] set];
+- (void)drawRect:(NSRect)dirtyRect {
+    [[NSColor redColor] set];
     NSRectFill(dirtyRect);
 }
 

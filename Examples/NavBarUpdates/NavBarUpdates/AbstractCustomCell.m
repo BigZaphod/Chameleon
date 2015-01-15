@@ -21,12 +21,42 @@
 
 - (void)mouseEntered:(UIView *)view withEvent:(UIEvent *)event {
     NSLog(@"mouseEntered");
-    [self setBackgroundColor:[UIColor lightGrayColor]];
+    
+    [self setHighlighted:YES animated:YES];
+    self.backgroundColor = IOS7BLUE;
 }
 
 - (void)mouseExited:(UIView *)view withEvent:(UIEvent *)event {
     NSLog(@"mouseExited");
-    [self setBackgroundColor:[UIColor whiteColor]];
+    [self setHighlighted:NO animated:YES];
+    self.backgroundColor = [UIColor whiteColor];
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+    
+    // Configure the view for the selected state
+    if (selected) {
+        //make all fonts to light
+        self.textLabel.textColor = [UIColor whiteColor];
+        [self setNeedsDisplay];
+    }
+    else {
+        self.textLabel.textColor = IOS7BLUE;
+    }
+}
+
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
+    [super setHighlighted:highlighted animated:animated];
+    
+    if (highlighted) {
+        //make all fonts to light
+        self.textLabel.textColor = [UIColor whiteColor];
+    }
+    else {
+        self.textLabel.textColor = IOS7BLUE;
+    }
+    [self setNeedsDisplay];
 }
 
 @end
