@@ -66,8 +66,7 @@
     UINSResponderShim *_responderShim;
 }
 
-- (id)initWithFrame:(NSRect)frame
-{
+- (id)initWithFrame:(NSRect)frame {
     if ((self = [super initWithFrame:frame])) {
         _mouseMoveTouch = [[UITouch alloc] init];
         _UIScreen = [[UIScreen alloc] init];
@@ -80,20 +79,17 @@
     return self;
 }
 
-- (void)awakeFromNib
-{
+- (void)awakeFromNib {
     [self configureScreenLayer];
 }
 
-- (CALayer *)makeBackingLayer
-{
+- (CALayer *)makeBackingLayer {
     CALayer *layer = [super makeBackingLayer];
     layer.geometryFlipped = YES;
     return layer;
 }
 
-- (void)configureScreenLayer
-{
+- (void)configureScreenLayer {
     [self setWantsLayer:YES];
     
     CALayer *screenLayer = [_UIScreen _layer];
@@ -103,8 +99,7 @@
     screenLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
 }
 
-- (UIWindow *)UIWindow
-{
+- (UIWindow *)UIWindow {
     if (!_UIWindow) {
         _UIWindow = [[UIWindow alloc] initWithFrame:_UIScreen.bounds];
         _UIWindow.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -115,13 +110,11 @@
     return _UIWindow;
 }
 
-- (BOOL)isFlipped
-{
+- (BOOL)isFlipped {
     return YES;
 }
 
-- (BOOL)acceptsFirstResponder
-{
+- (BOOL)acceptsFirstResponder {
     // we want to accept, but we have to make sure one of our NSView children isn't already the first responder
     // because we don't want to let the mouse just steal that away here. If a pure-UIKit object gets clicked on
     // and decides to become first responder, it'll take it itself and things should sort itself out from there
@@ -137,11 +130,12 @@
     // view and set it for this UIKitView which causes the inputAccessoryView to disappear!
     
     NSResponder *responder = [(NSWindow *)[self window] firstResponder];
- 
+    
     while (responder) {
         if (responder == self) {
             return NO;
-        } else {
+        }
+        else {
             responder = [responder nextResponder];
         }
     }
@@ -149,33 +143,28 @@
     return YES;
 }
 
-- (void)updateUIKitView
-{
-    [_UIScreen _setUIKitView:(self.superview && self.window)? self : nil];
+- (void)updateUIKitView {
+    [_UIScreen _setUIKitView:(self.superview && self.window) ? self:nil];
 }
 
-- (void)viewDidMoveToSuperview
-{
+- (void)viewDidMoveToSuperview {
     [super viewDidMoveToSuperview];
     [self updateUIKitView];
 }
 
-- (void)viewDidMoveToWindow
-{
+- (void)viewDidMoveToWindow {
     [super viewDidMoveToWindow];
     [self updateUIKitView];
 }
 
-- (void)updateTrackingAreas
-{
+- (void)updateTrackingAreas {
     [super updateTrackingAreas];
     [self removeTrackingArea:_trackingArea];
-    _trackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds options:NSTrackingCursorUpdate|NSTrackingMouseMoved|NSTrackingInVisibleRect|NSTrackingActiveInKeyWindow|NSTrackingMouseEnteredAndExited owner:self userInfo:nil];
+    _trackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds options:NSTrackingCursorUpdate | NSTrackingMouseMoved | NSTrackingInVisibleRect | NSTrackingActiveInKeyWindow | NSTrackingMouseEnteredAndExited owner:self userInfo:nil];
     [self addTrackingArea:_trackingArea];
 }
 
-- (UIView *)hitTestUIView:(NSPoint)point
-{
+- (UIView *)hitTestUIView:(NSPoint)point {
     NSMutableArray *sortedWindows = [_UIScreen.windows mutableCopy];
     [sortedWindows sortUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"windowLevel" ascending:NO]]];
     
@@ -188,14 +177,14 @@
     return nil;
 }
 
-- (void)launchApplicationWithDefaultWindow:(UIWindow *)defaultWindow
-{
+- (void)launchApplicationWithDefaultWindow:(UIWindow *)defaultWindow {
     UIApplication *app = [UIApplication sharedApplication];
-    id<UIApplicationDelegate> appDelegate = app.delegate;
+    id <UIApplicationDelegate> appDelegate = app.delegate;
     
     if ([appDelegate respondsToSelector:@selector(application:didFinishLaunchingWithOptions:)]) {
         [appDelegate application:app didFinishLaunchingWithOptions:nil];
-    } else if ([appDelegate respondsToSelector:@selector(applicationDidFinishLaunching:)]) {
+    }
+    else if ([appDelegate respondsToSelector:@selector(applicationDidFinishLaunching:)]) {
         [appDelegate applicationDidFinishLaunching:app];
     }
     
@@ -210,8 +199,7 @@
     defaultWindow.hidden = YES;
 }
 
-- (void)launchApplicationWithDelegate:(id<UIApplicationDelegate>)appDelegate afterDelay:(NSTimeInterval)delay
-{
+- (void)launchApplicationWithDelegate:(id <UIApplicationDelegate> )appDelegate afterDelay:(NSTimeInterval)delay {
     [[UIApplication sharedApplication] setDelegate:appDelegate];
     
     if (delay) {
@@ -219,29 +207,28 @@
         UIImageView *defaultImageView = [[UIImageView alloc] initWithImage:defaultImage];
         defaultImageView.contentMode = UIViewContentModeCenter;
         
-        UIWindow *defaultWindow = [(UIWindow *)[UIWindow alloc] initWithFrame:_UIScreen.bounds];
+        UIWindow *defaultWindow = [(UIWindow *)[UIWindow alloc] initWithFrame : _UIScreen.bounds];
         defaultWindow.userInteractionEnabled = NO;
         defaultWindow.screen = _UIScreen;
-        defaultWindow.backgroundColor = [UIColor blackColor];	// dunno..
+        defaultWindow.backgroundColor = [UIColor blackColor];   // dunno..
         defaultWindow.opaque = YES;
         [defaultWindow addSubview:defaultImageView];
         [defaultWindow makeKeyAndVisible];
         [self performSelector:@selector(launchApplicationWithDefaultWindow:) withObject:defaultWindow afterDelay:delay];
-    } else {
+    }
+    else {
         [self launchApplicationWithDefaultWindow:nil];
     }
 }
 
 #pragma mark responder chain muckery
 
-- (void)setNextResponder:(NSResponder *)aResponder
-{
+- (void)setNextResponder:(NSResponder *)aResponder {
     [super setNextResponder:_responderShim];
     [_responderShim setNextResponder:aResponder];
 }
 
-- (UIResponder *)responderForResponderShim:(UINSResponderShim *)shim
-{
+- (UIResponder *)responderForResponderShim:(UINSResponderShim *)shim {
     UIWindow *keyWindow = _UIScreen.keyWindow;
     UIResponder *responder = [keyWindow _firstResponder];
     
@@ -254,12 +241,14 @@
             // returns nil all the time anyway, but what the heck, eh?
             if (controller.presentedViewController) {
                 controller = controller.presentedViewController;
-            } else {
+            }
+            else {
                 UIViewController *childController = [controller defaultResponderChildViewController];
                 
                 if (childController) {
                     controller = childController;
-                } else {
+                }
+                else {
                     break;
                 }
             }
@@ -273,8 +262,7 @@
 
 #pragma mark touch utilities
 
-- (UITouch *)touchForEvent:(NSEvent *)theEvent
-{
+- (UITouch *)touchForEvent:(NSEvent *)theEvent {
     const NSPoint location = [self convertPoint:[theEvent locationInWindow] fromView:nil];
     
     UITouch *touch = [[UITouch alloc] init];
@@ -285,14 +273,12 @@
     return touch;
 }
 
-- (void)updateTouchLocation:(UITouch *)touch withEvent:(NSEvent *)theEvent
-{
+- (void)updateTouchLocation:(UITouch *)touch withEvent:(NSEvent *)theEvent {
     _touchEvent.touch.locationOnScreen = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
     _touchEvent.touch.timestamp = [theEvent timestamp];
 }
 
-- (void)cancelTouchesInView:(UIView *)view
-{
+- (void)cancelTouchesInView:(UIView *)view {
     if (_touchEvent && _touchEvent.touch.phase != UITouchPhaseEnded && _touchEvent.touch.phase != UITouchPhaseCancelled) {
         if (!view || [view isDescendantOfView:_touchEvent.touch.view]) {
             _touchEvent.touch.phase = UITouchPhaseCancelled;
@@ -304,8 +290,7 @@
     }
 }
 
-- (void)sendStationaryTouches
-{
+- (void)sendStationaryTouches {
     if (_touchEvent && _touchEvent.touch.phase != UITouchPhaseEnded && _touchEvent.touch.phase != UITouchPhaseCancelled) {
         _touchEvent.touch.phase = UITouchPhaseStationary;
         _touchEvent.touch.timestamp = [NSDate timeIntervalSinceReferenceDate];
@@ -315,8 +300,7 @@
 
 #pragma mark pseudo touch handling
 
-- (void)mouseDown:(NSEvent *)theEvent
-{
+- (void)mouseDown:(NSEvent *)theEvent {
     if ([theEvent modifierFlags] & NSControlKeyMask) {
         // I don't really like this, but it seemed to be necessary.
         // If I override the menuForEvent: method, when you control-click it *still* sends mouseDown:, so I don't
@@ -353,12 +337,11 @@
     }
 }
 
-- (void)mouseUp:(NSEvent *)theEvent
-{
+- (void)mouseUp:(NSEvent *)theEvent {
     if (_touchEvent && _touchEvent.touchEventGesture == UITouchEventGestureNone) {
         _touchEvent.touch.phase = UITouchPhaseEnded;
         [self updateTouchLocation:_touchEvent.touch withEvent:theEvent];
-
+        
         [[UIApplication sharedApplication] sendEvent:_touchEvent];
         
         [_touchEvent endTouchEvent];
@@ -366,34 +349,31 @@
     }
 }
 
-- (void)mouseDragged:(NSEvent *)theEvent
-{
+- (void)mouseDragged:(NSEvent *)theEvent {
     if (_touchEvent && _touchEvent.touchEventGesture == UITouchEventGestureNone) {
         _touchEvent.touch.phase = UITouchPhaseMoved;
         [self updateTouchLocation:_touchEvent.touch withEvent:theEvent];
-
+        
         [[UIApplication sharedApplication] sendEvent:_touchEvent];
     }
 }
 
 #pragma mark touch gestures
 
-- (void)beginGestureWithEvent:(NSEvent *)theEvent
-{
+- (void)beginGestureWithEvent:(NSEvent *)theEvent {
     if (!_touchEvent) {
         _touchEvent = [[UITouchEvent alloc] initWithTouch:[self touchForEvent:theEvent]];
         _touchEvent.touchEventGesture = UITouchEventGestureBegin;
-
+        
         [[UIApplication sharedApplication] sendEvent:_touchEvent];
     }
 }
 
-- (void)endGestureWithEvent:(NSEvent *)theEvent
-{
+- (void)endGestureWithEvent:(NSEvent *)theEvent {
     if (_touchEvent && _touchEvent.touchEventGesture != UITouchEventGestureNone) {
         _touchEvent.touch.phase = UITouchPhaseEnded;
         [self updateTouchLocation:_touchEvent.touch withEvent:theEvent];
-
+        
         [[UIApplication sharedApplication] sendEvent:_touchEvent];
         
         [_touchEvent endTouchEvent];
@@ -401,34 +381,31 @@
     }
 }
 
-- (void)rotateWithEvent:(NSEvent *)theEvent
-{
+- (void)rotateWithEvent:(NSEvent *)theEvent {
     if (_touchEvent && (_touchEvent.touchEventGesture == UITouchEventGestureBegin || _touchEvent.touchEventGesture == UITouchEventGestureRotate)) {
         _touchEvent.touch.phase = UITouchPhaseMoved;
         [self updateTouchLocation:_touchEvent.touch withEvent:theEvent];
         
         _touchEvent.touchEventGesture = UITouchEventGestureRotate;
         _touchEvent.rotation = [theEvent rotation];
-
+        
         [[UIApplication sharedApplication] sendEvent:_touchEvent];
     }
 }
 
-- (void)magnifyWithEvent:(NSEvent *)theEvent
-{
+- (void)magnifyWithEvent:(NSEvent *)theEvent {
     if (_touchEvent && (_touchEvent.touchEventGesture == UITouchEventGestureBegin || _touchEvent.touchEventGesture == UITouchEventGesturePinch)) {
         _touchEvent.touch.phase = UITouchPhaseMoved;
         [self updateTouchLocation:_touchEvent.touch withEvent:theEvent];
         
         _touchEvent.touchEventGesture = UITouchEventGesturePinch;
         _touchEvent.magnification = [theEvent magnification];
-
+        
         [[UIApplication sharedApplication] sendEvent:_touchEvent];
     }
 }
 
-- (void)swipeWithEvent:(NSEvent *)theEvent
-{
+- (void)swipeWithEvent:(NSEvent *)theEvent {
     // it seems as if the swipe gesture actually is discrete as far as OSX is concerned and does not occur between gesture begin/end messages
     // which is sort of different.. but.. here we go. :) As a result, I'll require there to not be an existing touchEvent in play before a
     // swipe gesture is recognized.
@@ -444,8 +421,7 @@
 
 #pragma mark scroll/pan gesture
 
-- (void)scrollWheel:(NSEvent *)theEvent
-{
+- (void)scrollWheel:(NSEvent *)theEvent {
     double dx, dy;
     
     CGEventRef cgEvent = [theEvent CGEvent];
@@ -458,7 +434,8 @@
         if (source) {
             pixelsPerLine = CGEventSourceGetPixelsPerLine(source);
             CFRelease(source);
-        } else {
+        }
+        else {
             // docs often say things like, "the default is near 10" so it seems reasonable that if the source doesn't work
             // for some reason to fetch the pixels per line, then 10 is probably a decent fallback value. :)
             pixelsPerLine = 10;
@@ -466,13 +443,14 @@
         
         dx = CGEventGetDoubleValueField(cgEvent, kCGScrollWheelEventFixedPtDeltaAxis2) * pixelsPerLine;
         dy = CGEventGetDoubleValueField(cgEvent, kCGScrollWheelEventFixedPtDeltaAxis1) * pixelsPerLine;
-    } else {
+    }
+    else {
         dx = CGEventGetIntegerValueField(cgEvent, kCGScrollWheelEventPointDeltaAxis2);
         dy = CGEventGetIntegerValueField(cgEvent, kCGScrollWheelEventPointDeltaAxis1);
     }
     
     CGPoint translation = CGPointMake(-dx, -dy);
-
+    
     // if this happens within an actual OSX gesture sequence, it is a pan touch gesture event
     // if it happens outside of a gesture, it is a normal mouse event instead
     // if it somehow happens during any other touch sequence, ignore it (someone might be click-dragging with the mouse and also using a wheel)
@@ -484,12 +462,13 @@
             
             _touchEvent.touchEventGesture = UITouchEventGesturePan;
             _touchEvent.translation = translation;
-
+            
             [[UIApplication sharedApplication] sendEvent:_touchEvent];
         }
-    } else {
+    }
+    else {
         UITouchEvent *mouseEvent = [[UITouchEvent alloc] initWithTouch:[self touchForEvent:theEvent]];
-        mouseEvent.touchEventGesture = UITouchEventGestureScrollWheel;        
+        mouseEvent.touchEventGesture = UITouchEventGestureScrollWheel;
         mouseEvent.translation = translation;
         [[UIApplication sharedApplication] sendEvent:mouseEvent];
         [mouseEvent endTouchEvent];
@@ -498,8 +477,7 @@
 
 #pragma mark discrete mouse events
 
-- (void)rightMouseDown:(NSEvent *)theEvent
-{
+- (void)rightMouseDown:(NSEvent *)theEvent {
     if (!_touchEvent) {
         UITouchEvent *mouseEvent = [[UITouchEvent alloc] initWithTouch:[self touchForEvent:theEvent]];
         mouseEvent.touchEventGesture = UITouchEventGestureRightClick;
@@ -509,8 +487,8 @@
     }
 }
 
-- (void)mouseMoved:(NSEvent *)theEvent
-{
+- (void)mouseMoved:(NSEvent *)theEvent {
+    NSLog(@"UIKitView > mouseMoved");
     if (!_touchEvent) {
         const NSPoint location = [self convertPoint:[theEvent locationInWindow] fromView:nil];
         UIView *currentView = [self hitTestUIView:location];
@@ -525,7 +503,7 @@
             moveEvent.touchEventGesture = UITouchEventGestureMouseMove;
             [[UIApplication sharedApplication] sendEvent:moveEvent];
             [moveEvent endTouchEvent];
-
+            
             UITouchEvent *exitEvent = [[UITouchEvent alloc] initWithTouch:_mouseMoveTouch];
             exitEvent.touchEventGesture = UITouchEventGestureMouseExited;
             [[UIApplication sharedApplication] sendEvent:exitEvent];
@@ -550,13 +528,17 @@
     }
 }
 
-- (void)mouseEntered:(NSEvent *)theEvent
-{
+- (void)mouseEntered:(NSEvent *)theEvent {
+    NSLog(@"mouseEntered");
     [self mouseMoved:theEvent];
 }
 
-- (void)mouseExited:(NSEvent *)theEvent
-{
+- (void)mouseMoved:(UITouch *)touch withEvent:(UIEvent *)event {
+    NSLog(@"mouseMoved");
+}
+
+- (void)mouseExited:(NSEvent *)theEvent {
+    NSLog(@"mouseExited");
     if (!_touchEvent) {
         _mouseMoveTouch.phase = UITouchPhaseMoved;
         [self updateTouchLocation:_mouseMoveTouch withEvent:theEvent];
@@ -571,22 +553,24 @@
         [[UIApplication sharedApplication] sendEvent:exitEvent];
         [exitEvent endTouchEvent];
         
+        
+        
         _mouseMoveTouch.view = nil;
     }
 }
 
 #pragma keyboard events
 
-- (void)keyDown:(NSEvent *)theEvent
-{
+- (void)keyDown:(NSEvent *)theEvent {
     UIKey *key = [[UIKey alloc] initWithNSEvent:theEvent];
     
     // this is not the correct way to handle keys.. iOS 7 finally added a way to handle key commands
-    // but this was implemented well before that. for now, this gets what we want to happen to happen.    
+    // but this was implemented well before that. for now, this gets what we want to happen to happen.
     
     if (key.action) {
         [self doCommandBySelector:key.action];
-    } else {
+    }
+    else {
         [super keyDown:theEvent];
     }
 }

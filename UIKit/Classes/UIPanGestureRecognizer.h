@@ -37,8 +37,19 @@
 // of the gestureBegin/gestureEnded sequence. This turned out to be somewhat handy
 // for UIScrollView but it certainly might make using the gesture recognizer in
 // a standalone setting somewhat more annoying. We'll have to see how it plays out.
+@class UIPanGestureRecognizer;
+
 
 @interface UIPanGestureRecognizer : UIGestureRecognizer
+- (CGPoint)translationInView:(UIView *)view;
+- (void)setTranslation:(CGPoint)translation inView:(UIView *)view;
+- (CGPoint)velocityInView:(UIView *)view;
+
+@property (nonatomic) NSUInteger maximumNumberOfTouches;
+@property (nonatomic) NSUInteger minimumNumberOfTouches;
+@end
+
+@interface UIMouseMoveGestureRecognizer : UIGestureRecognizer
 - (CGPoint)translationInView:(UIView *)view;
 - (void)setTranslation:(CGPoint)translation inView:(UIView *)view;
 - (CGPoint)velocityInView:(UIView *)view;

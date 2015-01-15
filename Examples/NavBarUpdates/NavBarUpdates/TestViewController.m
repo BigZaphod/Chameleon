@@ -10,6 +10,8 @@
 #import "AbstractCustomCell.h"
 #import "HMSegmentedControl.h"
 #import "Player.h"
+#import <UIKit/UIPanGestureRecognizer.h>
+
 
 @implementation TestViewController
 
@@ -22,6 +24,9 @@
     myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     myTableView.autoresizesSubviews = YES;
     [self.view addSubview:myTableView];
+    
+    
+    
     
     Player *footer = [[Player alloc]initWithFrame:CGRectMake(0, self.view.bounds.size.height - 100, self.view.bounds.size.width, 100)];
     footer.backgroundColor = IOS7DETAILABEL;
@@ -75,14 +80,15 @@
     
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     [cell setSelectedColor:[UIColor lightGrayColor]];
+    
+    
+    
     return cell;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [self.navigationItem performSelector:@selector(setTitle:) withObject:@"New Title" afterDelay:5.0];
-  //  [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"Real_Pixels.jpg"]  forBarMetrics:UIBarMetricsDefault];
-    
-    
+    //  [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"Real_Pixels.jpg"]  forBarMetrics:UIBarMetricsDefault];
 }
 
 @end
