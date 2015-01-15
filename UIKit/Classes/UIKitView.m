@@ -529,7 +529,6 @@
 }
 
 - (void)mouseEntered:(NSEvent *)theEvent {
-    NSLog(@"mouseEntered");
     [self mouseMoved:theEvent];
 }
 
@@ -538,7 +537,6 @@
 }
 
 - (void)mouseExited:(NSEvent *)theEvent {
-    NSLog(@"mouseExited");
     if (!_touchEvent) {
         _mouseMoveTouch.phase = UITouchPhaseMoved;
         [self updateTouchLocation:_mouseMoveTouch withEvent:theEvent];

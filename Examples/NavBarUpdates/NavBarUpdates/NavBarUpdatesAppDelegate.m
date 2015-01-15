@@ -11,10 +11,28 @@
 #import <UIKit/UIKitView.h>
 
 
-@interface BlackTitlebarView : NSView
+@interface BlackTitlebarView : NSView {
+    BOOL highlighted;
+}
 @end
 @implementation BlackTitlebarView
 
+- (id)initWithFrame:(NSRect)frameRect {
+    self = [super initWithFrame:frameRect];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"isActive" object:nil queue:[NSOperationQueue mainQueue] usingBlock: ^(NSNotification *note) {
+        NSLog(@"ok");
+        highlighted = YES;
+        [self setNeedsDisplay:YES];
+    }];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"isInactive" object:nil queue:[NSOperationQueue mainQueue] usingBlock: ^(NSNotification *note) {
+        NSLog(@"ok");
+        highlighted = NO;
+        [self setNeedsDisplay:YES];
+    }];
+    return self;
+}
 
 - (void)drawString:(NSString *)string inRect:(NSRect)rect {
     static NSDictionary *att = nil;
@@ -22,7 +40,7 @@
         NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         [style setLineBreakMode:NSLineBreakByTruncatingTail];
         [style setAlignment:NSCenterTextAlignment];
-        att = [[NSDictionary alloc] initWithObjectsAndKeys:style, NSParagraphStyleAttributeName, [NSColor whiteColor], NSForegroundColorAttributeName, [NSFont fontWithName:@"Helvetica" size:18], NSFontAttributeName, nil];
+        att = [[NSDictionary alloc] initWithObjectsAndKeys:style, NSParagraphStyleAttributeName, [NSColor whiteColor], NSForegroundColorAttributeName, [NSFont fontWithName:@"Helvetica" size:22], NSFontAttributeName, nil];
     }
     
     NSRect titlebarRect = NSMakeRect(rect.origin.x + 20, rect.origin.y - 4, rect.size.width, rect.size.height);
@@ -32,7 +50,13 @@
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
-    [[NSColor darkGrayColor] set];
+    if (highlighted) {
+        [[NSColor darkGrayColor] set];
+    }
+    else {
+        [[NSColor lightGrayColor] set];
+    }
+    
     NSRectFill(dirtyRect);
     
     [self drawString:@"My Title" inRect:dirtyRect];
@@ -50,7 +74,13 @@
 
 @synthesize window, chameleonNSView;
 
+- (void)applicationDidResignActive:(NSNotification *)notification {
+    [[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:) withObject:[NSNotification notificationWithName:@"isInactive"   object:self userInfo:nil] waitUntilDone:NO];
+}
 
+- (void)applicationDidBecomeActive:(NSNotification *)notification {
+    [[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:) withObject:[NSNotification notificationWithName:@"isActive"   object:self userInfo:nil] waitUntilDone:NO];
+}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     NSRect boundsRect = [[[window contentView] superview] bounds];

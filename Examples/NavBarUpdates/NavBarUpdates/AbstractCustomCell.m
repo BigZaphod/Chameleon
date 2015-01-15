@@ -23,7 +23,7 @@
     NSLog(@"mouseEntered");
     
     [self setHighlighted:YES animated:YES];
-    self.backgroundColor = IOS7BLUE;
+    self.backgroundColor = IOS7SELECTEDGRAY;
 }
 
 - (void)mouseExited:(UIView *)view withEvent:(UIEvent *)event {

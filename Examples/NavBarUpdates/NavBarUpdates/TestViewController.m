@@ -79,12 +79,12 @@
     cell.detailTextLabel.textColor = [UIColor whiteColor];
     
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    [cell setSelectedColor:IOS7BLUE];
+    [cell setSelectedColor:IOS7SELECTEDGRAY];
     return cell;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    [self.navigationItem performSelector:@selector(setTitle:) withObject:@"New Title" afterDelay:5.0];
+    //   [self.navigationItem performSelector:@selector(setTitle:) withObject:@"New Title" afterDelay:5.0];
     //  [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"Real_Pixels.jpg"]  forBarMetrics:UIBarMetricsDefault];
 }
 
