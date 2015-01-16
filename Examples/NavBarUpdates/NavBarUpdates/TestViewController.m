@@ -61,8 +61,39 @@
     NSLog(@"Selected index %i (via UIControlEventValueChanged)", segmentedControl.selectedSegmentIndex);
 }
 
+- (UIView *)tableView:(UITableView *)theTableView viewForHeaderInSection:(NSInteger)section {
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 23)];
+    view.backgroundColor = IOS7BLUE;
+    
+    UILabel *lblSection = [TestViewController labelWithFrame:CGRectMake(5, 0, 320, 22)
+                                                        text:@"Title"
+                                                   textColor:[UIColor whiteColor]
+                                                        font:[UIFont boldSystemFontOfSize:14]];
+    
+    [view addSubview:lblSection];
+    
+    return view;
+}
+
++ (UILabel *)labelWithFrame:(CGRect)frame
+                       text:(NSString *)text
+                  textColor:(UIColor *)textColor
+                       font:(UIFont *)font {
+    UILabel *label = [[UILabel alloc] initWithFrame:frame];
+    label.text = text;
+    label.textColor = textColor;
+    label.backgroundColor = [UIColor clearColor];
+    label.textAlignment = NSTextAlignmentLeft;
+    label.font = font;
+    return label;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 10;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 100;
+    return 10;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
