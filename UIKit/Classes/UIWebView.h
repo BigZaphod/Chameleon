@@ -44,7 +44,7 @@ typedef NS_ENUM(NSInteger, UIWebViewNavigationType) {
 @protocol UIWebViewDelegate <NSObject>
 @optional
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
-- (void)webView:(UIWebView *)aWebView didFailLoadWithError:(NSError *)error;
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error;
 - (void)webViewDidFinishLoad:(UIWebView *)webView;
 @end
 

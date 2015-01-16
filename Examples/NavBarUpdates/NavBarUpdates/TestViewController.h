@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@interface TestViewController : UIViewController {
+@interface TestViewController : UIViewController <UITableViewDataSource, UITableViewDelegate> {
 @private
+    UITableView *myTableView;
     
 }
 

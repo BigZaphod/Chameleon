@@ -50,7 +50,7 @@ extern const float UIScrollViewDecelerationRateFast;
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView;
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView;
 - (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view;
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale;
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale;
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView;
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView;
 @end

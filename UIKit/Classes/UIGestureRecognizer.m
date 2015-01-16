@@ -46,15 +46,14 @@
     } _delegateHas;
 }
 
-- (id)initWithTarget:(id)target action:(SEL)action
-{
-    if ((self=[super init])) {
+- (id)initWithTarget:(id)target action:(SEL)action {
+    if ((self = [super init])) {
         _state = UIGestureRecognizerStatePossible;
         _cancelsTouchesInView = YES;
         _delaysTouchesBegan = NO;
         _delaysTouchesEnded = YES;
         _enabled = YES;
-
+        
         _registeredActions = [[NSMutableArray alloc] initWithCapacity:1];
         _trackingTouches = [[NSMutableArray alloc] initWithCapacity:1];
         
@@ -63,16 +62,14 @@
     return self;
 }
 
-- (void)_setView:(UIView *)v
-{
+- (void)_setView:(UIView *)v {
     if (v != _view) {
         [self reset]; // not sure about this, but I think it makes sense
         _view = v;
     }
 }
 
-- (void)setDelegate:(id<UIGestureRecognizerDelegate>)aDelegate
-{
+- (void)setDelegate:(id <UIGestureRecognizerDelegate> )aDelegate {
     if (aDelegate != _delegate) {
         _delegate = aDelegate;
         _delegateHas.shouldBegin = [_delegate respondsToSelector:@selector(gestureRecognizerShouldBegin:)];
@@ -81,8 +78,7 @@
     }
 }
 
-- (void)addTarget:(id)target action:(SEL)action
-{
+- (void)addTarget:(id)target action:(SEL)action {
     NSAssert(target != nil, @"target must not be nil");
     NSAssert(action != NULL, @"action must not be NULL");
     
@@ -92,25 +88,21 @@
     [_registeredActions addObject:actionRecord];
 }
 
-- (void)removeTarget:(id)target action:(SEL)action
-{
+- (void)removeTarget:(id)target action:(SEL)action {
     UIAction *actionRecord = [[UIAction alloc] init];
     actionRecord.target = target;
     actionRecord.action = action;
     [_registeredActions removeObject:actionRecord];
 }
 
-- (void)requireGestureRecognizerToFail:(UIGestureRecognizer *)otherGestureRecognizer
-{
+- (void)requireGestureRecognizerToFail:(UIGestureRecognizer *)otherGestureRecognizer {
 }
 
-- (NSUInteger)numberOfTouches
-{
+- (NSUInteger)numberOfTouches {
     return [_trackingTouches count];
 }
 
-- (CGPoint)locationInView:(UIView *)view
-{
+- (CGPoint)locationInView:(UIView *)view {
     // by default, this should compute the centroid of all the involved points
     // of course as of this writing, Chameleon only supports one point but at least
     // it may be semi-correct if that ever changes. :D YAY FOR COMPLEXITY!
@@ -127,19 +119,18 @@
     }
     
     if (k > 0) {
-        return CGPointMake(x/k, y/k);
-    } else {
+        return CGPointMake(x / k, y / k);
+    }
+    else {
         return CGPointZero;
     }
 }
 
-- (CGPoint)locationOfTouch:(NSUInteger)touchIndex inView:(UIView *)view
-{
+- (CGPoint)locationOfTouch:(NSUInteger)touchIndex inView:(UIView *)view {
     return [[_trackingTouches objectAtIndex:touchIndex] locationInView:view];
 }
 
-- (void)setState:(UIGestureRecognizerState)state
-{
+- (void)setState:(UIGestureRecognizerState)state {
     if (_delegateHas.shouldBegin && _state == UIGestureRecognizerStatePossible && (state == UIGestureRecognizerStateRecognized || state == UIGestureRecognizerStateBegan)) {
         if (![_delegate gestureRecognizerShouldBegin:self]) {
             state = UIGestureRecognizerStateFailed;
@@ -148,36 +139,36 @@
     
     // the docs didn't say explicitly if these state transitions were verified, but I suspect they are. if anything, a check like this
     // should help debug things. it also helps me better understand the whole thing, so it's not a total waste of time :)
-
+    
     typedef struct { UIGestureRecognizerState fromState, toState; BOOL shouldNotify; } StateTransition;
-
-    #define NumberOfStateTransitions 9
+    
+#define NumberOfStateTransitions 9
     static const StateTransition allowedTransitions[NumberOfStateTransitions] = {
         // discrete gestures
-        {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateRecognized,     YES},
-        {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateFailed,          NO},
-
+        { UIGestureRecognizerStatePossible,      UIGestureRecognizerStateRecognized,     YES },
+        { UIGestureRecognizerStatePossible,      UIGestureRecognizerStateFailed,          NO },
+        
         // continuous gestures
-        {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateBegan,          YES},
-        {UIGestureRecognizerStateBegan,			UIGestureRecognizerStateChanged,        YES},
-        {UIGestureRecognizerStateBegan,			UIGestureRecognizerStateCancelled,      YES},
-        {UIGestureRecognizerStateBegan,			UIGestureRecognizerStateEnded,          YES},
-        {UIGestureRecognizerStateChanged,		UIGestureRecognizerStateChanged,        YES},
-        {UIGestureRecognizerStateChanged,		UIGestureRecognizerStateCancelled,      YES},
-        {UIGestureRecognizerStateChanged,		UIGestureRecognizerStateEnded,          YES}
+        { UIGestureRecognizerStatePossible,      UIGestureRecognizerStateBegan,          YES },
+        { UIGestureRecognizerStateBegan,         UIGestureRecognizerStateChanged,        YES },
+        { UIGestureRecognizerStateBegan,         UIGestureRecognizerStateCancelled,      YES },
+        { UIGestureRecognizerStateBegan,         UIGestureRecognizerStateEnded,          YES },
+        { UIGestureRecognizerStateChanged,       UIGestureRecognizerStateChanged,        YES },
+        { UIGestureRecognizerStateChanged,       UIGestureRecognizerStateCancelled,      YES },
+        { UIGestureRecognizerStateChanged,       UIGestureRecognizerStateEnded,          YES }
     };
     
     const StateTransition *transition = NULL;
-
-    for (NSUInteger t=0; t<NumberOfStateTransitions; t++) {
+    
+    for (NSUInteger t = 0; t < NumberOfStateTransitions; t++) {
         if (allowedTransitions[t].fromState == _state && allowedTransitions[t].toState == state) {
             transition = &allowedTransitions[t];
             break;
         }
     }
-
+    
     NSAssert2((transition != NULL), @"invalid state transition from %ld to %ld", _state, state);
-
+    
     if (transition) {
         _state = transition->toState;
         
@@ -193,8 +184,7 @@
     }
 }
 
-- (void)reset
-{
+- (void)reset {
     // note - this is also supposed to ignore any currently tracked touches
     // the touches themselves may not have gone away, so we don't just remove them from tracking, I think,
     // but instead just mark them as ignored by this gesture until the touches eventually end themselves.
@@ -204,38 +194,31 @@
     _state = UIGestureRecognizerStatePossible;
 }
 
-- (BOOL)canPreventGestureRecognizer:(UIGestureRecognizer *)preventedGestureRecognizer
-{
+- (BOOL)canPreventGestureRecognizer:(UIGestureRecognizer *)preventedGestureRecognizer {
     return YES;
 }
 
-- (BOOL)canBePreventedByGestureRecognizer:(UIGestureRecognizer *)preventingGestureRecognizer
-{
+- (BOOL)canBePreventedByGestureRecognizer:(UIGestureRecognizer *)preventingGestureRecognizer {
     return YES;
 }
 
-- (void)ignoreTouch:(UITouch *)touch forEvent:(UIEvent*)event
-{
+- (void)ignoreTouch:(UITouch *)touch forEvent:(UIEvent *)event {
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    NSLog(@"ok");
 }
 
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 }
 
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
-{
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
 }
 
-- (void)_beginTrackingTouch:(UITouch *)touch withEvent:(UITouchEvent *)event
-{
+- (void)_beginTrackingTouch:(UITouch *)touch withEvent:(UITouchEvent *)event {
     if (self.enabled) {
         if (!_delegateHas.shouldReceiveTouch || [_delegate gestureRecognizer:self shouldReceiveTouch:touch]) {
             [touch _addGestureRecognizer:self];
@@ -244,8 +227,7 @@
     }
 }
 
-- (void)_continueTrackingWithEvent:(UITouchEvent *)event
-{
+- (void)_continueTrackingWithEvent:(UITouchEvent *)event {
     NSMutableSet *began = [NSMutableSet new];
     NSMutableSet *moved = [NSMutableSet new];
     NSMutableSet *ended = [NSMutableSet new];
@@ -256,23 +238,27 @@
         if (touch.phase == UITouchPhaseBegan) {
             multitouchSequenceIsEnded = NO;
             [began addObject:touch];
-        } else if (touch.phase == UITouchPhaseMoved) {
+        }
+        else if (touch.phase == UITouchPhaseMoved) {
             multitouchSequenceIsEnded = NO;
             [moved addObject:touch];
-        } else if (touch.phase == UITouchPhaseStationary) {
+        }
+        else if (touch.phase == UITouchPhaseStationary) {
             multitouchSequenceIsEnded = NO;
-        } else if (touch.phase == UITouchPhaseEnded) {
+        }
+        else if (touch.phase == UITouchPhaseEnded) {
             [ended addObject:touch];
-        } else if (touch.phase == UITouchPhaseCancelled) {
+        }
+        else if (touch.phase == UITouchPhaseCancelled) {
             [cancelled addObject:touch];
         }
     }
-
+    
     if (_state == UIGestureRecognizerStatePossible || _state == UIGestureRecognizerStateBegan || _state == UIGestureRecognizerStateChanged) {
         if ([began count]) {
             [self touchesBegan:began withEvent:event];
         }
-
+        
         if ([moved count]) {
             [self touchesMoved:moved withEvent:event];
         }
@@ -296,31 +282,34 @@
     }
 }
 
-- (void)_endTrackingTouch:(UITouch *)touch withEvent:(UITouchEvent *)event
-{
+- (void)_endTrackingTouch:(UITouch *)touch withEvent:(UITouchEvent *)event {
     [touch _removeGestureRecognizer:self];
     [_trackingTouches removeObject:touch];
 }
 
-- (NSString *)description
-{
+- (NSString *)description {
     NSString *state = @"";
     switch (self.state) {
         case UIGestureRecognizerStatePossible:
             state = @"Possible";
             break;
+            
         case UIGestureRecognizerStateBegan:
             state = @"Began";
             break;
+            
         case UIGestureRecognizerStateChanged:
             state = @"Changed";
             break;
+            
         case UIGestureRecognizerStateEnded:
             state = @"Ended";
             break;
+            
         case UIGestureRecognizerStateCancelled:
             state = @"Cancelled";
             break;
+            
         case UIGestureRecognizerStateFailed:
             state = @"Failed";
             break;

@@ -16,6 +16,18 @@
 		38E523D91339731100E041B3 /* NavBarUpdatesAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E523D81339731100E041B3 /* NavBarUpdatesAppDelegate.m */; };
 		38E523DC1339731100E041B3 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38E523DA1339731100E041B3 /* MainMenu.xib */; };
 		7884CAA8133AC90400D050CF /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7884CAA7133AC90400D050CF /* Quartz.framework */; };
+		83AA7CBD1A67CA9800919356 /* MyWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 83AA7CBC1A67CA9800919356 /* MyWindow.m */; };
+		83AA7CC21A67CC1E00919356 /* MyTitleBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 83AA7CC01A67CC1E00919356 /* MyTitleBarViewController.m */; };
+		83AA7CC31A67CC1E00919356 /* MyTitleBarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83AA7CC11A67CC1E00919356 /* MyTitleBarViewController.xib */; };
+		83DB3E0B1A674D83006711B5 /* AbstractCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB3E081A674D83006711B5 /* AbstractCustomCell.m */; };
+		83DB3E0C1A674D83006711B5 /* CustomCellBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB3E0A1A674D83006711B5 /* CustomCellBackgroundView.m */; };
+		83DB3E101A6751C1006711B5 /* HMSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB3E0F1A6751C1006711B5 /* HMSegmentedControl.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		83DB3E151A6752CD006711B5 /* UIColor+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB3E141A6752CD006711B5 /* UIColor+Extension.m */; };
+		83DB3E301A676765006711B5 /* KACircleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB3E2F1A676765006711B5 /* KACircleProgressView.m */; };
+		83DB3E331A6767B4006711B5 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB3E321A6767B4006711B5 /* Player.m */; };
+		83DB3E391A676819006711B5 /* PRTween.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB3E361A676819006711B5 /* PRTween.m */; };
+		83DB3E3A1A676819006711B5 /* PRTweenTimingFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB3E381A676819006711B5 /* PRTweenTimingFunctions.m */; };
+		83DB3E3D1A676B3A006711B5 /* Real_Pixels.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 83DB3E3C1A676B3A006711B5 /* Real_Pixels.jpg */; };
 		F4556120133A5D3B0021B1A6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3825F4661339775C005A267D /* UIKit.framework */; };
 		F455612E133A5D830021B1A6 /* UIKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 3825F4661339775C005A267D /* UIKit.framework */; };
 /* End PBXBuildFile section */
@@ -71,6 +83,29 @@
 		38E523D81339731100E041B3 /* NavBarUpdatesAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NavBarUpdatesAppDelegate.m; sourceTree = "<group>"; };
 		38E523DB1339731100E041B3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		7884CAA7133AC90400D050CF /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
+		83AA7CBB1A67CA9800919356 /* MyWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyWindow.h; sourceTree = "<group>"; };
+		83AA7CBC1A67CA9800919356 /* MyWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyWindow.m; sourceTree = "<group>"; };
+		83AA7CBF1A67CC1E00919356 /* MyTitleBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTitleBarViewController.h; sourceTree = "<group>"; };
+		83AA7CC01A67CC1E00919356 /* MyTitleBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTitleBarViewController.m; sourceTree = "<group>"; };
+		83AA7CC11A67CC1E00919356 /* MyTitleBarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyTitleBarViewController.xib; sourceTree = "<group>"; };
+		83DB3E071A674D83006711B5 /* AbstractCustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractCustomCell.h; sourceTree = "<group>"; };
+		83DB3E081A674D83006711B5 /* AbstractCustomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractCustomCell.m; sourceTree = "<group>"; };
+		83DB3E091A674D83006711B5 /* CustomCellBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCellBackgroundView.h; sourceTree = "<group>"; };
+		83DB3E0A1A674D83006711B5 /* CustomCellBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomCellBackgroundView.m; sourceTree = "<group>"; };
+		83DB3E0E1A6751C1006711B5 /* HMSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMSegmentedControl.h; sourceTree = "<group>"; };
+		83DB3E0F1A6751C1006711B5 /* HMSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMSegmentedControl.m; sourceTree = "<group>"; };
+		83DB3E111A675288006711B5 /* BGCONST.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BGCONST.h; sourceTree = "<group>"; };
+		83DB3E131A6752CD006711B5 /* UIColor+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Extension.h"; sourceTree = "<group>"; };
+		83DB3E141A6752CD006711B5 /* UIColor+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Extension.m"; sourceTree = "<group>"; };
+		83DB3E2E1A676765006711B5 /* KACircleProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KACircleProgressView.h; sourceTree = "<group>"; };
+		83DB3E2F1A676765006711B5 /* KACircleProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KACircleProgressView.m; sourceTree = "<group>"; };
+		83DB3E311A6767B4006711B5 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		83DB3E321A6767B4006711B5 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
+		83DB3E351A676819006711B5 /* PRTween.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRTween.h; sourceTree = "<group>"; };
+		83DB3E361A676819006711B5 /* PRTween.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRTween.m; sourceTree = "<group>"; };
+		83DB3E371A676819006711B5 /* PRTweenTimingFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRTweenTimingFunctions.h; sourceTree = "<group>"; };
+		83DB3E381A676819006711B5 /* PRTweenTimingFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRTweenTimingFunctions.m; sourceTree = "<group>"; };
+		83DB3E3C1A676B3A006711B5 /* Real_Pixels.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Real_Pixels.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,14 +171,26 @@
 		38E523CB1339731100E041B3 /* NavBarUpdates */ = {
 			isa = PBXGroup;
 			children = (
-				38E523D71339731100E041B3 /* NavBarUpdatesAppDelegate.h */,
-				38E523D81339731100E041B3 /* NavBarUpdatesAppDelegate.m */,
-				388BF77D13397877006EC779 /* ChameleonAppDelegate.h */,
-				388BF77E13397877006EC779 /* ChameleonAppDelegate.m */,
+				83AA7CBE1A67CC1E00919356 /* MyTitleBar */,
+				83DB3E071A674D83006711B5 /* AbstractCustomCell.h */,
+				83AA7CBB1A67CA9800919356 /* MyWindow.h */,
+				83AA7CBC1A67CA9800919356 /* MyWindow.m */,
+				83DB3E081A674D83006711B5 /* AbstractCustomCell.m */,
+				83DB3E211A675DB0006711B5 /* AppDelegate */,
+				83DB3E111A675288006711B5 /* BGCONST.h */,
+				83DB3E121A6752CD006711B5 /* Categories */,
+				83DB3E091A674D83006711B5 /* CustomCellBackgroundView.h */,
+				83DB3E0A1A674D83006711B5 /* CustomCellBackgroundView.m */,
+				83DB3E0D1A6751C1006711B5 /* HMSegmentedControl */,
+				83DB3E3B1A676B3A006711B5 /* Images */,
+				83DB3E2D1A676765006711B5 /* KACircleProgressView */,
+				38E523DA1339731100E041B3 /* MainMenu.xib */,
+				83DB3E311A6767B4006711B5 /* Player.h */,
+				83DB3E321A6767B4006711B5 /* Player.m */,
+				83DB3E341A676819006711B5 /* PRTween */,
+				38E523CC1339731100E041B3 /* Supporting Files */,
 				388BF780133978CB006EC779 /* TestViewController.h */,
 				388BF781133978CB006EC779 /* TestViewController.m */,
-				38E523DA1339731100E041B3 /* MainMenu.xib */,
-				38E523CC1339731100E041B3 /* Supporting Files */,
 			);
 			path = NavBarUpdates;
 			sourceTree = "<group>";
@@ -158,6 +205,73 @@
 				38E523D41339731100E041B3 /* Credits.rtf */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		83AA7CBE1A67CC1E00919356 /* MyTitleBar */ = {
+			isa = PBXGroup;
+			children = (
+				83AA7CBF1A67CC1E00919356 /* MyTitleBarViewController.h */,
+				83AA7CC01A67CC1E00919356 /* MyTitleBarViewController.m */,
+				83AA7CC11A67CC1E00919356 /* MyTitleBarViewController.xib */,
+			);
+			path = MyTitleBar;
+			sourceTree = "<group>";
+		};
+		83DB3E0D1A6751C1006711B5 /* HMSegmentedControl */ = {
+			isa = PBXGroup;
+			children = (
+				83DB3E0E1A6751C1006711B5 /* HMSegmentedControl.h */,
+				83DB3E0F1A6751C1006711B5 /* HMSegmentedControl.m */,
+			);
+			path = HMSegmentedControl;
+			sourceTree = "<group>";
+		};
+		83DB3E121A6752CD006711B5 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				83DB3E131A6752CD006711B5 /* UIColor+Extension.h */,
+				83DB3E141A6752CD006711B5 /* UIColor+Extension.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		83DB3E211A675DB0006711B5 /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				388BF77D13397877006EC779 /* ChameleonAppDelegate.h */,
+				388BF77E13397877006EC779 /* ChameleonAppDelegate.m */,
+				38E523D71339731100E041B3 /* NavBarUpdatesAppDelegate.h */,
+				38E523D81339731100E041B3 /* NavBarUpdatesAppDelegate.m */,
+			);
+			name = AppDelegate;
+			sourceTree = "<group>";
+		};
+		83DB3E2D1A676765006711B5 /* KACircleProgressView */ = {
+			isa = PBXGroup;
+			children = (
+				83DB3E2E1A676765006711B5 /* KACircleProgressView.h */,
+				83DB3E2F1A676765006711B5 /* KACircleProgressView.m */,
+			);
+			path = KACircleProgressView;
+			sourceTree = "<group>";
+		};
+		83DB3E341A676819006711B5 /* PRTween */ = {
+			isa = PBXGroup;
+			children = (
+				83DB3E351A676819006711B5 /* PRTween.h */,
+				83DB3E361A676819006711B5 /* PRTween.m */,
+				83DB3E371A676819006711B5 /* PRTweenTimingFunctions.h */,
+				83DB3E381A676819006711B5 /* PRTweenTimingFunctions.m */,
+			);
+			path = PRTween;
+			sourceTree = "<group>";
+		};
+		83DB3E3B1A676B3A006711B5 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				83DB3E3C1A676B3A006711B5 /* Real_Pixels.jpg */,
+			);
+			path = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -229,8 +343,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83DB3E3D1A676B3A006711B5 /* Real_Pixels.jpg in Resources */,
 				38E523D01339731100E041B3 /* InfoPlist.strings in Resources */,
 				38E523D61339731100E041B3 /* Credits.rtf in Resources */,
+				83AA7CC31A67CC1E00919356 /* MyTitleBarViewController.xib in Resources */,
 				38E523DC1339731100E041B3 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -242,10 +358,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83DB3E0B1A674D83006711B5 /* AbstractCustomCell.m in Sources */,
 				38E523D31339731100E041B3 /* main.m in Sources */,
 				38E523D91339731100E041B3 /* NavBarUpdatesAppDelegate.m in Sources */,
+				83DB3E331A6767B4006711B5 /* Player.m in Sources */,
+				83DB3E3A1A676819006711B5 /* PRTweenTimingFunctions.m in Sources */,
+				83DB3E151A6752CD006711B5 /* UIColor+Extension.m in Sources */,
+				83DB3E301A676765006711B5 /* KACircleProgressView.m in Sources */,
+				83AA7CBD1A67CA9800919356 /* MyWindow.m in Sources */,
+				83DB3E101A6751C1006711B5 /* HMSegmentedControl.m in Sources */,
+				83AA7CC21A67CC1E00919356 /* MyTitleBarViewController.m in Sources */,
 				388BF77F13397877006EC779 /* ChameleonAppDelegate.m in Sources */,
 				388BF782133978CB006EC779 /* TestViewController.m in Sources */,
+				83DB3E0C1A674D83006711B5 /* CustomCellBackgroundView.m in Sources */,
+				83DB3E391A676819006711B5 /* PRTween.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,6 +465,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -358,6 +485,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (

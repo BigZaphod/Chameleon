@@ -71,6 +71,8 @@ typedef NS_ENUM(NSInteger, UIImageOrientation) {
 @property (nonatomic, readonly) NSInteger topCapHeight;
 @property (nonatomic, readonly) UIImageOrientation imageOrientation;	// not implemented
 
+@property (nonatomic, readonly) NSArray *images; // not not implemented
+
 // note that these properties return always the 2x represention if it exists!
 @property (nonatomic, readonly) CGImageRef CGImage;
 @property (nonatomic, readonly) CGFloat scale;
