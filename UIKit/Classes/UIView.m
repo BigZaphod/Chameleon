@@ -233,7 +233,9 @@ static BOOL _animationsEnabled = YES;
         subview->_needsDidAppearOrDisappear = YES;//[self _subviewControllersNeedAppearAndDisappear];
         
         if ([subview _viewController] && subview->_needsDidAppearOrDisappear) {
-            [[subview _viewController] viewWillAppear:NO];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[subview _viewController] viewWillAppear:NO];
+            });
         }
 
         [subview _willMoveFromWindow:oldWindow toWindow:newWindow];
@@ -268,7 +270,9 @@ static BOOL _animationsEnabled = YES;
         [self didAddSubview:subview];
         
         if ([subview _viewController] && subview->_needsDidAppearOrDisappear) {
-            [[subview _viewController] viewDidAppear:NO];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[subview _viewController] viewDidAppear:NO];
+            });
         }
     }
 }
