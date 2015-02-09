@@ -207,5 +207,6 @@ typedef NSUInteger UIViewAnimationOptions;
 @property (nonatomic, getter=isMultipleTouchEnabled) BOOL multipleTouchEnabled;	// state is maintained, but it has no effect
 @property (nonatomic, getter=isExclusiveTouch) BOOL exclusiveTouch; // state is maintained, but it has no effect
 @property (nonatomic,copy) NSArray *gestureRecognizers;
+@property (nonatomic, assign) BOOL translatesAutoresizingMaskIntoConstraints;
 
 @end
