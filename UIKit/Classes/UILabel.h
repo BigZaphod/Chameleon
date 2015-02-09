@@ -40,7 +40,7 @@
     UIColor *_highlightedTextColor;
     UIColor *_shadowColor;
     CGSize _shadowOffset;
-    UITextAlignment _textAlignment;
+    NSTextAlignment _textAlignment;
     UILineBreakMode _lineBreakMode;
     BOOL _enabled;
     NSInteger _numberOfLines;
@@ -56,7 +56,7 @@
 @property (nonatomic, retain) UIColor *highlightedTextColor;
 @property (nonatomic, retain) UIColor *shadowColor;
 @property (nonatomic) CGSize shadowOffset;
-@property (nonatomic) UITextAlignment textAlignment;
+@property (nonatomic) NSTextAlignment textAlignment;
 @property (nonatomic) UILineBreakMode lineBreakMode;
 @property (nonatomic, getter=isEnabled) BOOL enabled;
 @property (nonatomic) NSInteger numberOfLines;					// currently only supports 0 or 1

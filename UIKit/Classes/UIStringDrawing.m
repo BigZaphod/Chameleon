@@ -173,7 +173,7 @@ static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToS
     return [self drawAtPoint:point forWidth:width withFont:font fontSize:[font pointSize] lineBreakMode:lineBreakMode baselineAdjustment:UIBaselineAdjustmentNone];
 }
  
-- (CGSize)drawInRect:(CGRect)rect withFont:(UIFont *)font lineBreakMode:(UILineBreakMode)lineBreakMode alignment:(UITextAlignment)alignment
+- (CGSize)drawInRect:(CGRect)rect withFont:(UIFont *)font lineBreakMode:(UILineBreakMode)lineBreakMode alignment:(NSTextAlignment)alignment
 {
     CGSize actualSize = CGSizeZero;
     CFArrayRef lines = CreateCTLinesForString(self,rect.size,font,lineBreakMode,&actualSize);
@@ -192,9 +192,9 @@ static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToS
             CTLineRef line = CFArrayGetValueAtIndex(lines, lineNumber);
             float flush;
             switch (alignment) {
-                case UITextAlignmentCenter:	flush = 0.5;	break;
-                case UITextAlignmentRight:	flush = 1;		break;
-                case UITextAlignmentLeft:
+                case NSCenterTextAlignment:	flush = 0.5;	break;
+                case NSRightTextAlignment:	flush = 1;		break;
+                case NSLeftTextAlignment:
                 default:					flush = 0;		break;
             }
             
@@ -217,12 +217,12 @@ static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToS
 
 - (CGSize)drawInRect:(CGRect)rect withFont:(UIFont *)font
 {
-    return [self drawInRect:rect withFont:font lineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentLeft];
+    return [self drawInRect:rect withFont:font lineBreakMode:UILineBreakModeWordWrap alignment:NSLeftTextAlignment];
 }
 
 - (CGSize)drawInRect:(CGRect)rect withFont:(UIFont *)font lineBreakMode:(UILineBreakMode)lineBreakMode
 {
-    return [self drawInRect:rect withFont:font lineBreakMode:lineBreakMode alignment:UITextAlignmentLeft];
+    return [self drawInRect:rect withFont:font lineBreakMode:lineBreakMode alignment:NSLeftTextAlignment];
 }
 
 @end

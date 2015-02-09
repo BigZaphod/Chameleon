@@ -72,7 +72,7 @@
         [textView setDelegate:self];
         [clipView setDocumentView:textView];
 
-        self.textAlignment = UITextAlignmentLeft;
+        self.textAlignment = NSLeftTextAlignment;
         [self setNeedsLayout];
     }
     return self;
@@ -272,31 +272,24 @@
     [textView setSelectedRange:range];
 }
 
-- (void)setTextAlignment:(UITextAlignment)textAlignment
+- (void)setTextAlignment:(NSTextAlignment)textAlignment
 {
     switch (textAlignment) {
-        case UITextAlignmentLeft:
+        case NSLeftTextAlignment:
             [textView setAlignment:NSLeftTextAlignment];
             break;
-        case UITextAlignmentCenter:
+        case NSCenterTextAlignment:
             [textView setAlignment:NSCenterTextAlignment];
             break;
-        case UITextAlignmentRight:
+        case NSRightTextAlignment:
             [textView setAlignment:NSRightTextAlignment];
             break;
     }
 }
 
-- (UITextAlignment)textAlignment
+- (NSTextAlignment)textAlignment
 {
-    switch ([textView alignment]) {
-        case NSCenterTextAlignment:
-            return UITextAlignmentCenter;
-        case NSRightTextAlignment:
-            return UITextAlignmentRight;
-        default:
-            return UITextAlignmentLeft;
-    }
+    return [textView alignment];
 }
 
 // this is used to fake out AppKit when the UIView that owns this layer/editor stuff is actually *behind* another UIView. Since the NSViews are

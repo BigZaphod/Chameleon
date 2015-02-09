@@ -71,7 +71,7 @@ extern NSString *const UITextViewTextDidEndEditingNotification;
 - (void)scrollRangeToVisible:(NSRange)range;
 
 
-@property (nonatomic) UITextAlignment textAlignment; // stub, not yet implemented!
+@property (nonatomic) NSTextAlignment textAlignment; // stub, not yet implemented!
 @property (nonatomic) NSRange selectedRange;
 @property (nonatomic, getter=isEditable) BOOL editable;
 @property (nonatomic, copy) NSString *text;

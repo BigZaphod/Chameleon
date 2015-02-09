@@ -10,15 +10,8 @@ Pod::Spec.new do |s|
   s.platform    = :osx, '10.6'
   s.frameworks  = 'IOKit', 'QuartzCore', 'SystemConfiguration', 'AppKit', 'Foundation', 'QTKit', 'WebKit'
 
-  s.prefix_header_contents = "// If ARC is not enabled, declare empty ARC directives to supress compiler errors
-  #ifndef __has_feature
-      #define __has_feature(x) 0 // Compatibility with non-clang compilers.
-  #endif
-
-  #if !__has_feature(objc_arc)
-      #define __unsafe_unretained
-      #define __bridge
-  #endif"
+  s.requires_arc = false
+  s.compiler_flags = '-fno-objc-arc'
 
   s.subspec 'UIKit' do |sb|
     sb.source_files = 'UIKit/Classes/*.{h,m}'

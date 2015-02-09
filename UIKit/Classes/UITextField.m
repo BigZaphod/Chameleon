@@ -56,7 +56,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
         _textLayer = [[UITextLayer alloc] initWithContainer:self isField:YES];
         [self.layer insertSublayer:_textLayer atIndex:0];
 
-        self.textAlignment = UITextAlignmentLeft;
+        self.textAlignment = NSLeftTextAlignment;
         self.font = [UIFont systemFontOfSize:17];
         self.borderStyle = UITextBorderStyleNone;
         self.textColor = [UIColor blackColor];
@@ -426,12 +426,12 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     _textLayer.textColor = newColor;
 }
 
-- (UITextAlignment)textAlignment
+- (NSTextAlignment)textAlignment
 {
     return _textLayer.textAlignment;
 }
 
-- (void)setTextAlignment:(UITextAlignment)textAlignment
+- (void)setTextAlignment:(NSTextAlignment)textAlignment
 {
     _textLayer.textAlignment = textAlignment;
 }
@@ -514,13 +514,13 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 {
     NSString *textAlignment = @"";
     switch (self.textAlignment) {
-        case UITextAlignmentLeft:
+        case NSLeftTextAlignment:
             textAlignment = @"Left";
             break;
-        case UITextAlignmentCenter:
+        case NSCenterTextAlignment:
             textAlignment = @"Center";
             break;
-        case UITextAlignmentRight:
+        case NSRightTextAlignment:
             textAlignment = @"Right";
             break;
     }

@@ -78,7 +78,7 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
         self.opaque = NO;
         _titleLabel.lineBreakMode = UILineBreakModeMiddleTruncation;
         _titleLabel.backgroundColor = [UIColor clearColor];
-        _titleLabel.textAlignment = UITextAlignmentLeft;
+        _titleLabel.textAlignment = NSLeftTextAlignment;
         _titleLabel.shadowOffset = CGSizeZero;
         [self addSubview:_backgroundImageView];
         [self addSubview:_imageView];

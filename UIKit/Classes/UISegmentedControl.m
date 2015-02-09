@@ -205,13 +205,13 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
             
             if (enabled) {
                 [_textShadowColor set];                
-                [string drawInRect:CGRectOffset(textRect, _textShadowOffset.width, _textShadowOffset.height) withFont:_font lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentCenter];
+                [string drawInRect:CGRectOffset(textRect, _textShadowOffset.width, _textShadowOffset.height) withFont:_font lineBreakMode:UILineBreakModeTailTruncation alignment:NSCenterTextAlignment];
                 [_textColor set];
             } else {
                 [_disabledTextColor set];
             }
             
-            [string drawInRect:textRect withFont:_font lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentCenter];
+            [string drawInRect:textRect withFont:_font lineBreakMode:UILineBreakModeTailTruncation alignment:NSCenterTextAlignment];
         }
         
         // Images

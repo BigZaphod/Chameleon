@@ -97,6 +97,6 @@
 @property (nonatomic, retain) UIFont *font;
 @property (nonatomic, assign) BOOL editable;
 @property (nonatomic, getter=isSecureTextEntry) BOOL secureTextEntry;
-@property (nonatomic, assign) UITextAlignment textAlignment;
+@property (nonatomic, assign) NSTextAlignment textAlignment;
 
 @end

@@ -199,12 +199,12 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
     _textLayer.textColor = newColor;
 }
 
-- (UITextAlignment)textAlignment
+- (NSTextAlignment)textAlignment
 {
     return _textLayer.textAlignment;
 }
 
-- (void)setTextAlignment:(UITextAlignment)textAlignment
+- (void)setTextAlignment:(NSTextAlignment)textAlignment
 {
     _textLayer.textAlignment = textAlignment;
 }
@@ -310,14 +310,20 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 {
     NSString *textAlignment = @"";
     switch (self.textAlignment) {
-        case UITextAlignmentLeft:
+        case NSLeftTextAlignment:
             textAlignment = @"Left";
             break;
-        case UITextAlignmentCenter:
+        case NSCenterTextAlignment:
             textAlignment = @"Center";
             break;
-        case UITextAlignmentRight:
+        case NSRightTextAlignment:
             textAlignment = @"Right";
+            break;
+        case NSJustifiedTextAlignment:
+            textAlignment = @"Justified";
+            break;
+        case NSNaturalTextAlignment:
+            textAlignment = @"Natural";
             break;
     }
     return [NSString stringWithFormat:@"<%@: %p; textAlignment = %@; selectedRange = %@; editable = %@; textColor = %@; font = %@; delegate = %@>", [self className], self, textAlignment, NSStringFromRange(self.selectedRange), (self.editable ? @"YES" : @"NO"), self.textColor, self.font, self.delegate];

@@ -229,7 +229,7 @@ typedef enum {
         if (!_centerView) {
             UILabel *titleLabel = [[[UILabel alloc] init] autorelease];
             titleLabel.text = topItem.title;
-            titleLabel.textAlignment = UITextAlignmentCenter;
+            titleLabel.textAlignment = NSCenterTextAlignment;
             titleLabel.backgroundColor = [UIColor clearColor];
             titleLabel.textColor = [UIColor whiteColor];
             titleLabel.font = [UIFont boldSystemFontOfSize:14];
