@@ -308,13 +308,17 @@
     if (delay) {
         UIImage *defaultImage = [UIImage imageNamed:@"Default-Landscape.png"];
         UIImageView *defaultImageView = [[[UIImageView alloc] initWithImage:defaultImage] autorelease];
-        defaultImageView.contentMode = UIViewContentModeCenter;
+        defaultImageView.contentMode = UIViewContentModeScaleAspectFill;
+        defaultImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        defaultImageView.frame = _screen.bounds;
         
         UIWindow *defaultWindow = [(UIWindow *)[UIWindow alloc] initWithFrame:_screen.bounds];
         defaultWindow.userInteractionEnabled = NO;
         defaultWindow.screen = _screen;
         defaultWindow.backgroundColor = [UIColor blackColor];	// dunno..
         defaultWindow.opaque = YES;
+        defaultWindow.autoresizesSubviews = YES;
+        defaultWindow.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [defaultWindow addSubview:defaultImageView];
         [defaultWindow makeKeyAndVisible];
         [self performSelector:@selector(_launchApplicationWithDefaultWindow:) withObject:defaultWindow afterDelay:delay];
