@@ -67,7 +67,7 @@
 @end
 
 @interface UITextLayer : CALayer {
-    id containerView;
+    UIView *containerView;
     BOOL containerCanScroll;
     UICustomNSTextView *textView;
     UICustomNSClipView *clipView;
